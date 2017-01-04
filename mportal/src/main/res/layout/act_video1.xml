@@ -1,0 +1,92 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main_rl"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#f0000000"
+    android:paddingBottom="@dimen/item_padding_bottom"
+    android:paddingTop="@dimen/item_padding_top"
+    tools:context=".VideoActivity" >
+
+    <ImageView
+        android:id="@+id/video_back"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:onClick="onClick"
+        android:src="@drawable/top_back_btn" />
+    <!-- android:background="@drawable/sufaceview_bg" -->
+
+    <SurfaceView
+        android:id="@+id/main_sv"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@id/video_back" />
+
+    <RelativeLayout
+        android:id="@+id/gesture_volume_layout"
+        android:layout_width="120dip"
+        android:layout_height="120dip"
+        android:layout_centerInParent="true"
+        android:background="@drawable/souhu_player_gesture_bg"
+        android:gravity="center"
+        android:visibility="invisible" >
+
+        <ImageView
+            android:id="@+id/gesture_iv_player_volume"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:src="@drawable/souhu_player_volume" />
+
+        <TextView
+            android:id="@+id/geture_tv_volume_percentage"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/gesture_iv_player_volume"
+            android:layout_centerHorizontal="true"
+            android:gravity="right"
+            android:text="80%"
+            android:textColor="#ffececec" />
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/gesture_progress_layout"
+        android:layout_width="120dip"
+        android:layout_height="80dip"
+        android:layout_centerInParent="true"
+        android:background="@drawable/souhu_player_gesture_bg"
+        android:gravity="center"
+        android:visibility="invisible" >
+
+        <ImageView
+            android:id="@+id/gesture_iv_progress"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:src="@drawable/souhu_player_backward" />
+
+        <TextView
+            android:id="@+id/geture_tv_progress_time"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/gesture_iv_progress"
+            android:layout_centerHorizontal="true"
+            android:gravity="right"
+            android:textColor="#ffececec" />
+    </RelativeLayout>
+
+    <LinearLayout
+        android:id="@+id/video_progressBar"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="#00000000"
+        android:gravity="center"
+        android:orientation="vertical" >
+
+        <ProgressBar
+            android:layout_width="50dip"
+            android:layout_height="50dip"
+            android:layout_gravity="center" />
+    </LinearLayout>
+
+</RelativeLayout>

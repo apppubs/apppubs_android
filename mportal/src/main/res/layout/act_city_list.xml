@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:mportal="http://schemas.android.com/apk/res/com.mportal.client"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#10000000"
+    android:orientation="vertical" >
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="6dip"
+        android:layout_marginLeft="6dp"
+        android:layout_marginRight="6dp"
+        android:gravity="center_vertical"
+        android:orientation="horizontal" >
+
+        <com.mportal.client.view.EditTextWithDel
+            android:id="@+id/et"
+            android:layout_width="0dp"
+            android:layout_height="40dp"
+            android:layout_weight="1"
+            android:background="@drawable/input_bg"
+            android:hint="我在..."
+            android:padding="8dip"
+            android:singleLine="true"
+            android:textColorHint="@color/common_hint"
+            android:textSize="14sp" />
+
+        <ImageView
+            android:id="@+id/city_search_btn"
+            android:layout_width="40dip"
+            android:layout_height="40dip"
+            android:layout_marginLeft="-2dp"
+            android:background="#ccc"
+            android:onClick="onClick"
+            android:src="@drawable/sel_search_bg" />
+    </LinearLayout>
+
+    <!-- <TextView -->
+    <!-- android:id="@+id/weather_gps" -->
+    <!-- android:layout_width="match_parent" -->
+    <!-- android:layout_height="wrap_content" -->
+    <!-- android:layout_marginBottom="4dp" -->
+    <!-- android:text="定位到的城市：" -->
+    <!-- android:textSize="14sp" -->
+    <!-- android:textColor="#000" -->
+    <!-- android:onClick="onClick" -->
+    <!-- android:gravity="left" -->
+    <!-- android:padding="@dimen/nullshow_hight" -->
+    <!-- android:background="@drawable/sel_weather_city_gps_bg" /> -->
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" >
+
+        <RelativeLayout
+            android:id="@+id/city_layout"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:orientation="vertical" >
+
+            <ListView
+                android:id="@+id/city_list"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:background="@android:color/white"
+                android:cacheColorHint="#00000000"
+                android:divider="@null"
+                android:scrollbars="none" />
+
+            <com.mportal.client.view.LetterListView
+                android:id="@+id/cityLetterListView"
+                android:layout_width="30dip"
+                android:layout_height="fill_parent"
+                android:layout_alignParentRight="true"
+                android:background="#10000000" />
+        </RelativeLayout>
+
+        <TextView
+            android:id="@+id/overlay"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:background="#ffffff"
+            android:gravity="center"
+            android:maxWidth="80dp"
+            android:minWidth="80dp"
+            android:textColor="#3399ff"
+            android:textSize="70sp"
+            android:visibility="invisible" />
+    </FrameLayout>
+
+</LinearLayout>

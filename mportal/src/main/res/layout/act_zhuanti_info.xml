@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:orientation="vertical"
+    android:layout_height="match_parent" >
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+       android:layout_height="40dip"
+        android:background="@color/title_bg" >
+
+        <ImageView
+            android:id="@+id/bodyzhuanti_back"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/top_back_btn" />
+
+        <TextView
+            android:id="@+id/bodyzhuanti_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:textColor="#fff" />
+    </RelativeLayout>
+  <ListView 
+      android:id="@+id/bodyzhuanti_lv"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      ></ListView>
+</LinearLayout>

@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:paddingLeft="@dimen/item_padding_left_narrow"
+    android:paddingRight="@dimen/item_padding_right_narrow"
+    android:paddingBottom="@dimen/item_padding_bottom_narrow"
+    android:paddingTop="@dimen/item_padding_top_narrow"
+    android:background="#ffffff"
+     >
+
+    <com.mportal.client.view.CircularImage
+        android:id="@+id/comment_item_pic"
+        android:layout_width="35dp"
+        android:src="@drawable/default_user_image"
+        android:layout_height="35dp"
+        android:scaleType="centerInside" >
+    </com.mportal.client.view.CircularImage>
+
+    <LinearLayout
+        android:layout_marginLeft="@dimen/item_padding_right_narrow"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_toRightOf="@id/comment_item_pic"
+        android:orientation="vertical" >
+
+        <TextView
+            android:id="@+id/comment_item_username"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/title_bg"
+            android:text="匿名网友"
+            android:textSize="17dp" />
+
+        <TextView
+            android:id="@+id/comment_item_time"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/list_item_magin_top"
+            android:textColor="@color/common_text_gray"
+            android:textSize="12dp"
+             />
+
+        <TextView
+            android:id="@+id/comment_item_content"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/list_item_magin_top"
+            android:textSize="17dp" />
+    </LinearLayout>
+
+</RelativeLayout>

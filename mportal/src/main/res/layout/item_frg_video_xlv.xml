@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:mportal="http://schemas.android.com/apk/res/com.mportal.client"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:layout_marginTop="@dimen/app_pic_gv_padding"
+     >
+
+    <com.mportal.client.view.RatioLayout
+        
+        android:id="@+id/item_frg_video_lay"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        mportal:ratio="0.56" >
+
+        <ImageView
+            android:id="@+id/item_frg_video_pic"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_centerInParent="true"
+            android:scaleType="centerCrop" />
+
+        <ImageView
+            android:id="@+id/item_frg_video_pic_timelength"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:src="@drawable/video_layer" />
+    </com.mportal.client.view.RatioLayout>
+
+    <TextView
+        android:id="@+id/item_frg_video_title"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="@dimen/list_item_magin_top"
+        android:textColor="@color/button_black_hight_color"
+        android:textSize="15sp" 
+        android:background="@android:color/white"
+        />
+
+ 
+
+    <ImageView
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginBottom="@dimen/app_pic_gv_padding"
+    android:scaleType="centerInside"
+    android:src="#CDC9C9" 
+    />
+
+
+    <!-- <TextView -->
+    <!-- android:id="@+id/item_frg_video_time" -->
+    <!-- android:layout_width="wrap_content" -->
+    <!-- android:layout_height="wrap_content" -->
+    <!-- android:padding="@dimen/list_item_magin_top" -->
+    <!-- android:text="开放假了" -->
+    <!-- android:layout_gravity="center" -->
+    <!-- android:gravity="center" -->
+    <!-- android:textColor="@color/button_black_hight_color" -->
+    <!-- android:textSize="16sp" /> -->
+    <!-- </LinearLayout> -->
+
+</LinearLayout>

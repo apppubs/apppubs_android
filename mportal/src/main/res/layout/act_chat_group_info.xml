@@ -1,0 +1,156 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res/com.mportal.client"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/app_common_bg" >
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/app_common_bg"
+        android:orientation="vertical" >
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="15dp"
+            android:background="#FFFFFF"
+            android:orientation="vertical" >
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="40dp"
+                android:paddingLeft="@dimen/item_padding_left"
+                android:paddingRight="@dimen/item_padding_right" >
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:gravity="center_vertical"
+                    android:text="群成员"
+                    android:textSize="15dp" />
+
+                <TextView
+                    android:id="@+id/chat_group_info_total_num_tv"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_alignParentRight="true"
+                    android:gravity="center_vertical"
+                    android:text="共0人"
+                    android:textColor="@color/common_text_gray_light"
+                    android:textSize="13dp" >
+                </TextView>
+            </RelativeLayout>
+
+            <com.mportal.client.view.FlowLayout
+                android:id="@+id/chat_group_info_users_fl"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingLeft="@dimen/item_padding_left"
+                android:paddingRight="@dimen/item_padding_right"
+                app:hspace="10dp"
+                app:vspace="8dp" >
+            </com.mportal.client.view.FlowLayout>
+        </LinearLayout>
+
+        <RelativeLayout
+            android:id="@+id/chat_group_info_add_user_rl"
+            android:layout_width="match_parent"
+            android:layout_height="45dp"
+            android:layout_marginTop="1dp"
+            android:background="@drawable/sel_common_item"
+            android:onClick="onClick"
+            android:paddingLeft="@dimen/item_padding_left"
+            android:paddingRight="@dimen/item_padding_right" >
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:gravity="center"
+                android:text="添加群成员"
+                android:textSize="15dp" />
+
+            <ImageView
+                android:id="@+id/arrow"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:layout_centerVertical="true"
+                android:src="@drawable/left_arrow" />
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:id="@+id/chat_group_info_delete_user_rl"
+            android:layout_width="match_parent"
+            android:layout_height="45dp"
+            android:layout_marginTop="1dp"
+            android:background="@drawable/sel_common_item"
+            android:onClick="onClick"
+            android:paddingLeft="@dimen/item_padding_left"
+            android:paddingRight="@dimen/item_padding_right"
+            android:visibility="gone" >
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:gravity="center"
+                android:text="删除群成员"
+                android:textSize="15dp" />
+
+            <ImageView
+                android:id="@+id/arrow"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:layout_centerVertical="true"
+                android:src="@drawable/left_arrow" />
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:id="@+id/chat_group_info_group_name_rl"
+            android:layout_width="match_parent"
+            android:layout_height="45dp"
+            android:layout_marginTop="15dp"
+            android:background="#FFFFFF"
+            android:onClick="onClick"
+            android:paddingLeft="@dimen/item_padding_left"
+            android:paddingRight="@dimen/item_padding_right" >
+
+            <TextView
+                android:id="@+id/chat_group_info_group_name_label_tv"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:gravity="center"
+                android:text="群名称"
+                android:textSize="15dp" />
+
+            <TextView
+                android:id="@+id/chat_group_info_group_name_tv"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:layout_centerVertical="true"
+                android:layout_toRightOf="@id/chat_group_info_group_name_label_tv"
+                android:gravity="right"
+                android:paddingLeft="10dp"
+                android:text="微门户官方"
+                android:textColor="@color/common_text_gray_light"
+                android:textSize="13dp" />
+        </RelativeLayout>
+
+        <TextView
+            android:id="@+id/chat_group_info_exit_tv"
+            android:layout_width="match_parent"
+            android:layout_height="45dp"
+            android:layout_marginTop="50dp"
+            android:layout_marginBottom="50dp"
+            android:background="@drawable/sel_common_item"
+            android:clickable="true"
+            android:gravity="center"
+            android:onClick="onClick"
+            android:text="退出此群"
+            android:textSize="15dp" />
+    </LinearLayout>
+
+</ScrollView>

@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:mportal="http://schemas.android.com/apk/res/com.mportal.client"
+    android:layout_width="match_parent"
+    android:layout_height="@dimen/menu_bar_height"
+    android:layout_alignParentBottom="true" >
+
+    <FrameLayout
+        android:id="@+id/bottom_menubar_four"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="#C0C0C0"
+        android:visibility="gone" >
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginTop="1px"
+            android:background="@color/menu_bar_bg"
+            android:orientation="horizontal" >
+
+            <com.mportal.client.view.ImageButton
+                android:id="@+id/menubar_back"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:onClick="onClick"
+                android:padding="7dp"
+                android:src="@drawable/menubar_back"
+                mportal:defaultColor="@color/imagebtn_default"
+                mportal:highlightColor="@color/button_white_hight_color" />
+
+            <com.mportal.client.view.ImageButton
+                android:id="@+id/menubar_forword"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:onClick="onClick"
+                android:padding="7dp"
+                android:src="@drawable/menubar_forward"
+                mportal:defaultColor="@color/imagebtn_default"
+                mportal:highlightColor="@color/button_white_hight_color" />
+
+            <com.mportal.client.view.ImageButton
+                android:id="@+id/menubar_refresh"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:onClick="onClick"
+                android:padding="7dp"
+                android:scaleType="centerInside"
+                android:src="@drawable/query_refresh"
+                mportal:defaultColor="@color/imagebtn_default"
+                mportal:highlightColor="@color/button_white_hight_color" />
+
+            <com.mportal.client.view.ImageButton
+                android:id="@+id/menubar_browser"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:onClick="onClick"
+                android:padding="7dp"
+                android:src="@drawable/query_homepage1"
+                mportal:defaultColor="@color/imagebtn_default"
+                mportal:highlightColor="@color/button_white_hight_color" />
+        </LinearLayout>
+    </FrameLayout>
+
+    <LinearLayout
+        android:id="@+id/bottom_menubar_one"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical" >
+
+        <ImageView
+            android:id="@+id/bottom_menubar_one_back"
+            android:layout_width="45dp"
+            android:layout_height="match_parent"
+            android:background="@drawable/sel_com_image_btn_bg"
+            android:onClick="onClick"
+            android:padding="7dp"
+            android:src="@drawable/menubar_back" />
+    </LinearLayout>
+
+</FrameLayout>

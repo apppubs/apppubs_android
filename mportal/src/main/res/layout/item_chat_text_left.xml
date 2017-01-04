@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:paddingBottom="@dimen/item_padding_left_narrow"
+    android:paddingLeft="@dimen/item_padding_right_narrow"
+    android:paddingTop="@dimen/item_padding_top_narrow" >
+
+    <TextView
+        android:id="@+id/chat_time_tv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="24dp"
+        android:background="@drawable/save_time_bg"
+        android:paddingBottom="3dp"
+        android:paddingLeft="8dp"
+        android:paddingRight="8dp"
+        android:paddingTop="3dp"
+        android:text="2015/2/28"
+        android:textColor="@android:color/white"
+        android:textSize="12dp" />
+    
+    <ImageView
+        android:id="@+id/chat_icon_left_iv"
+        android:layout_width="38dp"
+        android:layout_height="38dp"
+        android:layout_alignParentLeft="true"
+        android:layout_below="@id/chat_time_tv"
+        android:src="@drawable/profile_default_icon" />
+
+    <TextView
+        android:id="@+id/chat_content_left_name_tv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="10dp"
+        android:layout_marginBottom="3dp"
+        android:layout_below="@id/chat_time_tv"
+        android:layout_toRightOf="@id/chat_icon_left_iv"
+        android:text="姓名"
+        android:textColor="@color/common_text_gray"
+        android:textSize="13dp" />
+
+    <TextView
+        android:id="@+id/chat_content_left_tv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_toRightOf="@id/chat_icon_left_iv"
+        android:layout_below="@id/chat_content_left_name_tv"
+        android:background="@drawable/chat_messagecontent_bg_left"
+        android:maxWidth="220dp"
+        android:paddingBottom="8dp"
+        android:paddingLeft="15dp"
+        android:paddingRight="10dp"
+        android:paddingTop="8dp"
+        android:text="了撒啊的收费了接口连接"
+        android:textColor="#000"
+        android:textSize="13dp" />
+
+    <ProgressBar
+        android:layout_width="20dp"
+        android:layout_height="20dp"
+        android:layout_centerVertical="true"
+        android:layout_marginLeft="5dp"
+        android:layout_toRightOf="@id/chat_content_left_tv"
+        android:visibility="gone" />
+
+</RelativeLayout>

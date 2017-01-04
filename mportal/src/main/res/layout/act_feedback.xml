@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:mportal="http://schemas.android.com/apk/res/com.mportal.client"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/app_common_bg"
+    android:orientation="vertical" >
+
+    <EditText
+        android:id="@+id/feedback_editText1"
+        style="@style/app_common_edittext"
+        android:layout_width="match_parent"
+        android:layout_height="100dp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:layout_marginTop="20dp"
+        android:ems="20"
+        android:gravity="top"
+        android:hint="我们的成长需要您的力量！"
+        android:inputType="textMultiLine"
+        android:padding="10dp"
+        android:textColorHint="@color/common_hint"
+        android:textSize="14sp" >
+    </EditText>
+
+    <EditText
+        android:layout_below="@id/feedback_editText1"
+        android:id="@+id/feedback_editText2"
+        style="@style/app_common_edittext"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="10dp"
+        android:ems="10"
+        android:hint="联系方式  以便我们更好沟通"
+        android:inputType="textEmailAddress"
+        android:padding="10dp"
+        android:textColorHint="@color/common_hint"
+        android:textSize="14sp" />
+
+    <Button
+        android:layout_below="@id/feedback_editText2"
+        android:id="@+id/suggestion_submit_btn"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="10dp"
+        android:onClick="onClick"
+        android:padding="10dp"
+        android:text="提交反馈"
+        android:textColor="#fff"
+        android:textSize="14sp" />
+
+
+</RelativeLayout>

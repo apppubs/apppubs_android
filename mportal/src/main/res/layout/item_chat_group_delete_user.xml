@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:mportal="http://schemas.android.com/apk/res/com.mportal.client"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+     >
+
+    <TextView
+        android:id="@+id/alpha"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:background="#20000000"
+        android:clickable="false"
+        android:focusable="false"
+        android:paddingLeft="@dimen/item_padding_top"
+        android:textAppearance="?android:textAppearanceMedium" 
+        android:visibility="gone"
+        />
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/alpha"
+        android:background="@drawable/sel_cityname_bg"
+         >
+	
+        <ImageView 
+            android:id="@+id/chat_group_delete_user_checkbox_unchecked_iv"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:src="@drawable/check_box_circle_uncheck"
+            android:layout_marginLeft="@dimen/item_padding_left"
+            android:layout_centerVertical="true"
+            android:layout_alignParentLeft="true"
+            />
+        <ImageView
+            android:id="@+id/chat_group_delete_user_checkbox_checked_iv"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:src="@drawable/check_box_circle_checked"
+            android:layout_marginLeft="@dimen/item_padding_left"
+            android:layout_centerVertical="true"
+            android:layout_alignParentLeft="true"
+            android:visibility="gone"
+            />
+        <ImageView
+            android:id="@+id/chat_group_delete_user_checkbox_prechecked_iv"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:src="@drawable/check_box_circle_checked"
+            android:layout_marginLeft="@dimen/item_padding_left"
+            android:layout_centerVertical="true"
+            android:layout_alignParentLeft="true"
+            android:visibility="gone"
+            />
+        <TextView 
+            android:id="@+id/chat_group_delete_user_icon_tv"
+            android:layout_width="35dp"
+            android:layout_height="35dp"
+            android:layout_toRightOf="@id/chat_group_delete_user_checkbox_unchecked_iv"
+            android:layout_marginLeft="10dp"
+            android:gravity="center"
+            android:layout_centerVertical="true"
+            android:textSize="14dp"
+            android:textColor="#FFFFFF"
+            android:text="无"
+            />
+        <TextView
+            android:id="@+id/chat_group_delete_user_name_tv"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:paddingLeft="10dp"
+            android:paddingTop="@dimen/item_padding_top"
+            android:paddingBottom="@dimen/item_padding_bottom"
+           android:layout_toRightOf="@id/chat_group_delete_user_icon_tv"
+            android:singleLine="true"
+            android:text="name"
+            android:textAppearance="?android:textAppearanceMedium"
+            android:textColor="@color/common_text"
+            android:textSize="@dimen/item_text_size" />
+
+        <TextView
+            android:id="@+id/number"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignLeft="@id/chat_group_delete_user_name_tv"
+            android:layout_alignWithParentIfMissing="true"
+            android:layout_below="@id/chat_group_delete_user_name_tv"
+            android:ellipsize="marquee"
+            android:singleLine="true"
+            android:text="number"
+            android:textAppearance="?android:textAppearanceSmall"
+            android:textColor="#AAAAAA"
+            android:visibility="gone" />
+        <View
+            android:layout_alignParentBottom="true"
+            android:id="@+id/item_city_list_devider"
+            android:layout_width="match_parent"
+            android:layout_height="1px"
+            android:layout_marginLeft="@dimen/item_padding_left"
+            android:background="@color/common_divider" />
+    </RelativeLayout>
+
+</RelativeLayout>

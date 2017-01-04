@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:padding="@dimen/app_padding_right" >
+
+    <ImageView
+        android:id="@+id/item_usercard_contact_call"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_centerVertical="true"
+ />
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_centerVertical="true"
+        android:layout_marginLeft="@dimen/item_padding_left"
+        android:layout_toRightOf="@id/item_usercard_contact_call" >
+
+        <LinearLayout
+            android:id="@+id/item_usercard_contact_lya1"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:visibility="gone" >
+
+            <TextView
+                android:id="@+id/item_usercard_contact_contact"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="18210205212"
+                android:textColor="@color/common_text_gray" />
+
+            <TextView
+                android:id="@+id/item_usercard_contact_contact_des"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/menu_right_magin"
+                android:text="身体或"
+                android:textColor="@color/common_text_gray" />
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/item_usercard_contact_alone"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="18210205212"
+            android:textColor="@color/common_text_gray" />
+    </FrameLayout>
+
+    <ImageView
+        android:id="@+id/item_usercard_contact_message"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_centerVertical="true"
+      />
+
+</RelativeLayout>

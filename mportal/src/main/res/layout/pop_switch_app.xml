@@ -1,0 +1,163 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#70000000"
+    android:orientation="vertical"
+    android:gravity="center_vertical"
+     >
+    
+<LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="#fff"
+        android:orientation="vertical" 
+        android:padding="10dp"
+        >
+
+        <TextView
+            android:id="@+id/firstlogin_title_tv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="12dip"
+            android:gravity="center"
+            android:text="Switch App"
+            android:textColor="?attr/appDefaultTextColor"
+            android:textSize="20dp" />
+
+        <RelativeLayout
+            android:layout_width="260dp"
+            android:layout_height="40dp"
+            android:layout_gravity="center"
+            android:layout_marginTop="12dip"
+            android:orientation="horizontal" >
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:text="IP :"
+                android:textColor="#666"
+                android:textSize="14dp" />
+
+            <EditText
+                android:id="@+id/switch_ip_et"
+                android:layout_width="200dp"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:layout_centerVertical="true"
+                android:layout_gravity="right"
+                android:background="@drawable/input_bg"
+                android:inputType="textPersonName"
+                android:padding="4dp"
+                android:textSize="14dp"
+                android:singleLine="true" />
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:layout_width="260dp"
+            android:layout_height="40dp"
+            android:layout_gravity="center"
+            android:orientation="horizontal" >
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:text="CODE :"
+                android:textColor="#666"
+                android:textSize="14dp" />
+
+            <EditText
+                android:id="@+id/switch_code_et"
+                android:layout_width="200dp"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:layout_centerVertical="true"
+                android:layout_gravity="right"
+                android:background="@drawable/input_bg"
+                android:inputType="textPersonName"
+                android:textSize="14dp"
+                android:padding="4dip"
+                android:singleLine="true" />
+        </RelativeLayout>
+
+   <!--      <RelativeLayout
+            android:layout_width="260dp"
+            android:layout_height="20dp"
+            android:layout_gravity="center"
+            android:orientation="horizontal"
+            android:paddingRight="10dp"
+             >
+
+            <TextView
+                android:id="@+id/firstlogin_auto_tv"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:layout_centerVertical="true"
+                android:text="自动登录"
+                android:textColor="@color/app_common_hint"
+                android:textSize="13dp" />
+
+            <CheckBox
+                android:id="@+id/firstlogin_ckb"
+                android:layout_width="18dp"
+                android:layout_height="18dp"
+                android:layout_centerVertical="true"
+                android:layout_marginRight="10dp"
+                android:layout_toLeftOf="@id/firstlogin_auto_tv" 
+                android:background="@drawable/checkbox_bg"
+                android:button="@null"
+                style="@null"
+                />
+
+            <TextView
+                android:id="@+id/frist_login_new"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentLeft="true"
+                android:layout_marginLeft="61dp"
+                android:text="新用户"
+                android:onClick="onClick"
+                android:layout_centerVertical="true"
+                android:textColor="@color/app_common_text_blue_tint"
+                android:textSize="13dp" />
+        </RelativeLayout> -->
+
+        <RelativeLayout
+            android:layout_width="260dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginTop="10dp"
+            android:layout_marginBottom="20dp"
+            >
+
+			<TextView
+                android:id="@+id/switch_reset_btn"
+                android:layout_width="80dp"
+                android:layout_height="35dip"
+                android:onClick="onClick"
+                android:clickable="true"
+                android:background="#999"
+                android:gravity="center"
+                android:layout_alignParentLeft="true"
+                android:textSize="16dp"
+                android:text="Reset"
+                android:textColor="#fff" />
+            <Button
+                android:id="@+id/switch_submit_btn"
+                android:layout_width="match_parent"
+                android:layout_height="35dip"
+                android:onClick="onClick"
+                android:layout_marginLeft="20dp"
+                android:layout_toRightOf="@id/switch_reset_btn"
+                android:layout_alignParentRight="true"
+                android:textSize="16dp"
+                android:text="OK"
+                android:textColor="#fff" />
+            
+        </RelativeLayout>
+    </LinearLayout>
+</LinearLayout>

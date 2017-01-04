@@ -1,0 +1,183 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent" >
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/window_color"
+        android:scrollbars="none" >
+
+        <LinearLayout
+            android:id="@+id/userinfosc_re"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical" >
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:padding="@dimen/item_padding_left" >
+
+                <TextView
+                    android:id="@+id/service_no_name_tv"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentLeft="true"
+                    android:gravity="center_vertical"
+                    android:text=""
+                    android:textColor="@color/common_text"
+                    android:textSize="@dimen/item_text_size_big"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/service_no_createdate_tv"
+                    android:layout_width="190dp"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentLeft="true"
+                    android:layout_below="@+id/service_no_name_tv"
+                    android:layout_centerHorizontal="true"
+                    android:layout_marginTop="10dp"
+                    android:gravity="center_vertical"
+                    android:text="创建时间：2014-09-08"
+                    android:textColor="@color/common_text_gray"
+                    android:textSize="@dimen/item_text_size_small" />
+
+                <com.mportal.client.view.CircularImage
+                    android:id="@+id/service_no_icon_iv"
+                    android:layout_width="60dp"
+                    android:layout_height="60dp"
+                    android:layout_alignParentRight="true"
+                    android:layout_centerVertical="true"
+                    android:src="@drawable/profile_default_icon" />
+            </RelativeLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1px"
+                android:background="@color/common_divider" />
+
+            <RelativeLayout
+                android:id="@+id/service_no_lay"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/sel_common_item"
+                android:clickable="true"
+                android:onClick="onClick"
+                android:paddingBottom="12dp"
+                android:paddingLeft="@dimen/item_padding_left"
+                android:paddingRight="@dimen/item_padding_left"
+                android:paddingTop="12dp" >
+
+                <TextView
+                    android:id="@+id/textView1"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentLeft="true"
+                    android:text="描述"
+                    android:textColor="@color/common_text"
+                    android:textSize="@dimen/item_text_size" />
+
+                <TextView
+                    android:id="@+id/service_no_des_tv"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignTop="@+id/textView1"
+                    android:layout_marginLeft="10dp"
+                    android:layout_toRightOf="@id/textView1"
+                    android:gravity="center_vertical"
+                    android:text="描述"
+                    android:textColor="@color/common_text_gray"
+                    android:textSize="@dimen/item_text_size" />
+            </RelativeLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal" >
+
+                <View
+                    android:layout_width="@dimen/item_padding_left"
+                    android:layout_height="1px"
+                    android:background="@android:color/white" />
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1px"
+                    android:background="@color/common_divider_light" />
+            </LinearLayout>
+
+            <RelativeLayout
+                android:id="@+id/service_no_history_rl"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/sel_common_item"
+                android:clickable="true"
+                android:onClick="onClick"
+                android:paddingBottom="12dp"
+                android:paddingLeft="@dimen/item_padding_left"
+                android:paddingRight="@dimen/item_padding_left"
+                android:paddingTop="12dp" >
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentLeft="true"
+                    android:layout_centerVertical="true"
+                    android:gravity="center_vertical"
+                    android:text="查看历史消息"
+                    android:textColor="@color/common_text"
+                    android:textSize="@dimen/item_text_size" />
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:layout_centerVertical="true"
+                    android:src="@drawable/left_arrow" />
+            </RelativeLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal" >
+            </LinearLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1px"
+                android:background="@color/common_divider" />
+
+            <Button
+                android:id="@+id/service_no_attention"
+                android:layout_width="match_parent"
+                android:layout_height="40dp"
+                android:layout_marginLeft="@dimen/item_padding_left"
+                android:layout_marginRight="@dimen/item_padding_right"
+                android:layout_marginTop="@dimen/item_group_spacing"
+                android:visibility="gone"
+                android:onClick="onClick"
+                android:text="关注"
+                android:textSize="15dp"
+                 />
+        </LinearLayout>
+    </ScrollView>
+
+    <LinearLayout
+        android:id="@+id/service_no_progress_ll"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/btn_bg_h"
+        android:gravity="center"
+        android:orientation="vertical"
+        android:visibility="gone" >
+
+        <ProgressBar
+            android:layout_width="50dip"
+            android:layout_height="50dip"
+            android:layout_gravity="center" />
+    </LinearLayout>
+
+</RelativeLayout>

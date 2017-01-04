@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:id="@+id/frg_papreissurelist_list_relaybout"
+    android:descendantFocusability="blocksDescendants"
+    android:orientation="vertical" >
+
+    <TextView
+        android:id="@+id/frg_papreissurelist_list_ban"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingLeft="@dimen/text_padding"
+        android:paddingTop="@dimen/text_padding"
+        android:paddingBottom="@dimen/text_padding"
+        android:background="@color/bottom_info_bar_bg"
+        android:textSize="15sp"
+        android:textStyle="bold" />
+
+    <com.mportal.client.view.MyListView
+        android:id="@+id/frg_papreissurelist_list_lv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/frg_papreissurelist_list_ban"
+        android:divider="@null"
+        android:clickable="false"
+        android:focusable="false" >
+    </com.mportal.client.view.MyListView>
+     
+
+</RelativeLayout>

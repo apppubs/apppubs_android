@@ -1,0 +1,260 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/login_bg" >
+
+    <ImageView
+        android:id="@+id/firstlogin_bg_iv"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:scaleType="fitXY" />
+
+    <LinearLayout
+        android:id="@+id/firstlogin_container_ll"
+        android:layout_width="300dp"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:layout_margin="20dp"
+        android:background="@drawable/login_container_bg"
+        android:orientation="vertical"
+        android:padding="10dp" >
+
+        <TextView
+            android:id="@+id/firstlogin_title_tv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="12dip"
+            android:gravity="center"
+            android:text="微门户"
+            android:textColor="?attr/appDefaultColor"
+            android:textSize="20dp" />
+
+        <RelativeLayout
+            android:id="@+id/firstlogin_username_container_rl"
+            android:layout_width="260dp"
+            android:layout_height="40dp"
+            android:layout_gravity="center"
+            android:layout_marginTop="12dip"
+            android:orientation="horizontal" >
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:text="用户名 :"
+                android:textColor="#666"
+                android:textSize="14dp" />
+
+            <EditText
+                android:id="@+id/fristregist_name"
+                android:layout_width="200dp"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:layout_centerVertical="true"
+                android:layout_gravity="right"
+                android:background="@drawable/input_bg"
+                android:inputType="textUri|textMultiLine"
+                android:paddingBottom="4dp"
+                android:paddingLeft="8dp"
+                android:paddingTop="4dp"
+                android:singleLine="true"
+                android:textSize="14dp" />
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:id="@+id/firstlogin_password_container_rl"
+            android:layout_width="260dp"
+            android:layout_height="40dp"
+            android:layout_gravity="center"
+            android:orientation="horizontal" >
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:text="密  码 :"
+                android:textColor="#666"
+                android:textSize="14dp" />
+
+            <EditText
+                android:id="@+id/fristregist_password"
+                android:layout_width="200dp"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:layout_centerVertical="true"
+                android:layout_gravity="right"
+                android:background="@drawable/input_bg"
+                android:inputType="textPassword"
+                android:paddingBottom="4dp"
+                android:paddingLeft="8dp"
+                android:paddingTop="4dp"
+                android:singleLine="true"
+                android:textSize="14dp" />
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:id="@+id/firstlogin_phone_container_rl"
+            android:layout_width="260dp"
+            android:layout_height="40dp"
+            android:layout_gravity="center"
+            android:layout_marginTop="12dip"
+            android:orientation="horizontal"
+            android:visibility="gone" >
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:text="手机号 :"
+                android:textColor="#666"
+                android:textSize="14dp" />
+
+            <EditText
+                android:id="@+id/firstlogin_phone_et"
+                android:layout_width="200dp"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:layout_centerVertical="true"
+                android:layout_gravity="right"
+                android:background="@drawable/input_bg"
+                android:inputType="phone"
+                android:paddingBottom="4dp"
+                android:paddingLeft="8dp"
+                android:paddingTop="4dp"
+                android:singleLine="true"
+                android:textSize="14dp" />
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:id="@+id/firstlogin_username_login_container_rl"
+            android:layout_width="260dp"
+            android:layout_height="40dp"
+            android:layout_gravity="center"
+            android:layout_marginTop="12dip"
+            android:orientation="horizontal"
+            android:visibility="gone" >
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:text="用户名 :"
+                android:textColor="#666"
+                android:textSize="14dp" />
+
+            <EditText
+                android:id="@+id/firstlogin_username_et"
+                android:layout_width="200dp"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:layout_centerVertical="true"
+                android:layout_gravity="right"
+                android:background="@drawable/input_bg"
+                android:paddingBottom="4dp"
+                android:paddingLeft="8dp"
+                android:paddingTop="4dp"
+                android:singleLine="true"
+                android:textSize="14dp" />
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:id="@+id/firstlogin_orgcode_container_rl"
+            android:layout_width="260dp"
+            android:layout_height="40dp"
+            android:layout_gravity="center"
+            android:orientation="horizontal"
+            android:visibility="gone"
+             >
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:text="机构码:"
+                android:textColor="#666"
+                android:textSize="14dp" />
+
+            <EditText
+                android:id="@+id/firstlogin_orgcode_et"
+                android:layout_width="200dp"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:layout_centerVertical="true"
+                android:layout_gravity="right"
+                android:background="@drawable/input_bg"
+                android:paddingBottom="4dp"
+                android:paddingLeft="8dp"
+                android:paddingTop="4dp"
+                android:singleLine="true"
+                android:textSize="14dp" />
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:id="@+id/firstlogin_autologin_register_rl"
+            android:layout_width="260dp"
+            android:layout_height="20dp"
+            android:layout_gravity="center"
+            android:orientation="horizontal"
+            android:paddingRight="10dp" >
+
+            <TextView
+                android:id="@+id/firstlogin_auto_tv"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:layout_centerVertical="true"
+                android:text="自动登录"
+                android:textColor="@color/common_hint"
+                android:textSize="13dp" />
+
+            <CheckBox
+                android:id="@+id/firstlogin_ckb"
+                style="@null"
+                android:layout_width="18dp"
+                android:layout_height="18dp"
+                android:layout_centerVertical="true"
+                android:layout_marginRight="10dp"
+                android:layout_toLeftOf="@id/firstlogin_auto_tv"
+                android:background="@drawable/sel_com_checkbox"
+                android:button="@null" />
+
+            <TextView
+                android:id="@+id/frist_login_reg"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentLeft="true"
+                android:layout_centerVertical="true"
+                android:layout_marginLeft="61dp"
+                android:onClick="onClick"
+                android:text="新用户"
+                android:textColor="?attr/appDefaultColor"
+                android:textSize="13dp" />
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:layout_width="260dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginBottom="20dp"
+            android:layout_marginTop="10dp" >
+
+            <Button
+                android:id="@+id/frist_login_login"
+                android:layout_width="match_parent"
+                android:layout_height="35dip"
+                android:layout_alignParentRight="true"
+                android:onClick="onClick"
+                android:text="登录"
+                android:textColor="#fff"
+                android:textSize="16dp" />
+        </RelativeLayout>
+    </LinearLayout>
+	<WebView 
+	    android:id="@+id/first_login_wv"
+	    android:layout_width="match_parent"
+	    android:layout_height="match_parent"
+	    android:visibility="gone"
+	    />
+</RelativeLayout>

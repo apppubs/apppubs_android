@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content" >
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+         >
+
+        <TextView
+            android:id="@+id/name"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:paddingLeft="@dimen/item_padding_left"
+            android:paddingTop="@dimen/item_padding_top"
+            android:paddingBottom="@dimen/item_padding_bottom"
+            android:background="@drawable/sel_cityname_bg"
+            android:singleLine="true"
+            android:text="name"
+            android:textAppearance="?android:textAppearanceMedium"
+            android:textColor="@color/common_text"
+            android:textSize="@dimen/item_text_size" />
+
+        <TextView
+            android:id="@+id/number"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignLeft="@id/name"
+            android:layout_alignWithParentIfMissing="true"
+            android:layout_below="@id/name"
+            android:ellipsize="marquee"
+            android:singleLine="true"
+            android:text="number"
+            android:textAppearance="?android:textAppearanceSmall"
+            android:textColor="#AAAAAA"
+            android:visibility="gone" />
+        <View
+            android:layout_alignParentBottom="true"
+            android:id="@+id/item_city_list_devider"
+            android:layout_width="match_parent"
+            android:layout_height="1px"
+            android:layout_marginLeft="@dimen/item_padding_left"
+            android:background="@color/common_divider" />
+    </RelativeLayout>
+
+</RelativeLayout>

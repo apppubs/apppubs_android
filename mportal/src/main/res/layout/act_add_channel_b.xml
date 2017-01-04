@@ -1,0 +1,9 @@
+<com.mportal.client.view.commonlist.CommonListView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:mportal="http://schemas.android.com/apk/res-auto"
+    android:background="@android:color/white"
+    android:id="@+id/add_channel_ll"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:dividerHeight="1px"
+    mportal:list_sel="@drawable/sel_common_item" />

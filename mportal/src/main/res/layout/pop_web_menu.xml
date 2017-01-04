@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical" 
+    android:paddingTop="15dp"
+    android:paddingBottom="15dp"
+    android:paddingLeft="10dp"
+    android:paddingRight="10dp"
+    android:background="?attr/appDefaultColor"
+    >
+	<LinearLayout
+	    android:id="@+id/pop_ref_ll"
+	    android:layout_width="match_parent"
+	    android:layout_height="40dp"
+	    android:orientation="horizontal"
+	    android:visibility="gone"
+	    >
+	    <ImageView 
+	        android:layout_width="35dp"
+	        android:layout_height="35dp"
+	        android:padding="5dp"
+	        android:src="@drawable/query_refresh"
+	        />
+	    <TextView 
+	        android:layout_width="wrap_content"
+	        android:layout_height="match_parent"
+	        android:text="刷新    "
+	        android:textColor="#fff"
+	        android:gravity="center"
+	        />
+	    
+	</LinearLayout>
+	<LinearLayout
+	    android:id="@+id/pop_browser_ll"
+	    android:layout_width="match_parent"
+	    android:layout_height="40dp"
+	    android:orientation="horizontal"
+	    android:visibility="gone"
+	    >
+	    <ImageView 
+	        android:layout_width="35dp"
+	        android:layout_height="35dp"
+	        android:padding="5dp"
+	        android:src="@drawable/query_homepage1"
+	        />
+	    <TextView 
+	        android:layout_width="wrap_content"
+	        android:layout_height="match_parent"
+	        android:text="从浏览器打开"
+	        android:textColor="#fff"
+	        android:gravity="center"
+	        />
+	    
+	</LinearLayout>
+	<LinearLayout
+	    android:id="@+id/pop_share_ll"
+	    android:layout_width="match_parent"
+	    android:layout_height="40dp"
+	    android:orientation="horizontal"
+	    android:visibility="gone"
+	    >
+	    <ImageView 
+	        android:layout_width="35dp"
+	        android:layout_height="35dp"
+	        android:padding="5dp"
+	        android:src="@drawable/pop_share"
+	        />
+	    <TextView 
+	        android:layout_width="wrap_content"
+	        android:layout_height="match_parent"
+	        android:text="分享   "
+	        android:textColor="#fff"
+	        android:gravity="center"
+	        
+	        />
+	    
+	</LinearLayout>
+</LinearLayout>

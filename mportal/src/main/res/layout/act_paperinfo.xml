@@ -1,0 +1,70 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+   >
+
+
+<!--     <LinearLayout -->
+<!--         android:id="@+id/paperinfo_menubar" -->
+<!--         android:layout_width="match_parent" -->
+<!--         android:layout_height="@dimen/menu_bar_height" -->
+<!--         android:layout_alignParentBottom="true" -->
+<!--         android:background="@color/menu_bar_bg" -->
+<!--         android:gravity="center_vertical" -->
+<!--         android:orientation="horizontal" > -->
+
+<!--         <com.mportal.client.view.ImageButton -->
+<!--             android:id="@+id/paperinfo_back" -->
+<!--             android:layout_width="0dp" -->
+<!--             android:layout_height="match_parent" -->
+<!--             android:layout_weight="1" -->
+<!--             android:padding="8dp" -->
+<!--             android:src="@drawable/menubar_back"  -->
+<!--             mportal:highlightColor="@color/button_white_hight_color" -->
+<!--             /> -->
+
+<!--         <com.mportal.client.view.ImageButton -->
+<!--             android:id="@+id/paperinfo_collect_iv" -->
+<!--             android:layout_width="0dp" -->
+<!--             android:layout_height="match_parent" -->
+<!--             android:layout_weight="1" -->
+<!--             android:padding="8dp" -->
+<!--             mportal:highlightColor="@color/button_white_hight_color" -->
+<!--             android:src="@drawable/menubar_favorite" /> -->
+
+<!--         <com.mportal.client.view.ImageButton -->
+<!--             android:id="@+id/paperinfo_share" -->
+<!--             android:layout_width="0dp" -->
+<!--             android:layout_height="match_parent" -->
+<!--             android:layout_weight="1" -->
+<!--             mportal:highlightColor="@color/button_white_hight_color" -->
+<!--             android:padding="8dp" -->
+<!--             android:src="@drawable/menubar_share" /> -->
+
+       
+<!--     </LinearLayout> -->
+
+
+    <WebView
+        android:id="@+id/paperinfo_wv"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        />
+
+    <LinearLayout
+        android:id="@+id/paperinfo_progressBar"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="#00000000"
+        android:gravity="center"
+        android:orientation="vertical"
+        android:visibility="gone"
+         >
+
+        <ProgressBar
+            android:layout_width="50dip"
+            android:layout_height="50dip"
+            android:layout_gravity="center" />
+    </LinearLayout>
+
+</RelativeLayout>

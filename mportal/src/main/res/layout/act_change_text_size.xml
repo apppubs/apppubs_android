@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout 
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical" >
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1px"
+        android:layout_marginTop="20dip"
+        android:background="@color/common_divider" />
+
+    <RelativeLayout
+        android:id="@+id/changeword_small"
+        style="@style/item_menu_lv"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/item_min_height"
+        android:onClick="onClick" >
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:text="小"
+            android:textColor="#000"
+            android:textSize="12sp" />
+
+        <ImageView
+            android:id="@+id/changeword_smalliv"
+            android:layout_width="35dip"
+            android:layout_height="35dip"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:layout_marginRight="10dip"
+            android:scaleType="centerInside"
+            android:src="@drawable/form_checkbox_selected" />
+    </RelativeLayout>
+
+    <View
+        android:layout_width="@dimen/item_padding_left"
+        android:layout_height="1px"
+        android:background="#ffffff" />
+
+    <RelativeLayout
+        android:id="@+id/changeword_middlel"
+        style="@style/item_menu_lv"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/item_min_height"
+        android:onClick="onClick"
+        android:padding="6dip" >
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:text="中"
+            android:textColor="#000"
+            android:textSize="14sp"
+            android:textStyle="bold" />
+
+        <ImageView
+            android:id="@+id/changeword_middleliv"
+            android:layout_width="35dip"
+            android:layout_height="35dip"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:layout_marginRight="10dip"
+            android:scaleType="centerInside"
+            android:src="@drawable/form_checkbox_selected"
+            android:visibility="gone" />
+    </RelativeLayout>
+
+    <View
+        android:layout_width="@dimen/item_padding_left"
+        android:layout_height="1px"
+        android:background="#ffffff" />
+
+    <RelativeLayout
+        android:id="@+id/changeword_big"
+        style="@style/item_menu_lv"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/item_min_height"
+        android:onClick="onClick" >
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:text="大"
+            android:textColor="#000"
+            android:textSize="18sp"
+            android:textStyle="bold" />
+
+        <ImageView
+            android:id="@+id/changeword_bigiv"
+            android:layout_width="35dip"
+            android:layout_height="35dip"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:layout_marginRight="10dip"
+            android:scaleType="centerInside"
+            android:src="@drawable/form_checkbox_selected"
+            android:visibility="gone" />
+    </RelativeLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1px"
+        android:background="@color/common_divider" />
+
+</LinearLayout>

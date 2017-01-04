@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    style="@style/item_menu_lv_withpic"
+    android:orientation="horizontal" 
+    >
+   <TextView 
+        android:id="@+id/my_file_name_tv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="@color/common_text"
+        android:textSize="@dimen/item_text_size"
+        />
+	<TextView 
+	    android:id="@+id/my_file_time_tv"
+	    android:layout_width="wrap_content"
+	    android:layout_height="wrap_content"
+	    android:layout_below="@id/my_file_name_tv"
+	    android:textColor="@color/common_text_gray"
+	    android:textSize="@dimen/item_text_size_small"
+	    android:layout_marginTop="3dp"
+	    android:text="2016-01-01"
+	    />
+
+	<TextView
+	    android:id="@+id/my_file_delete_tv"
+	    android:layout_width="wrap_content"
+	    android:layout_height="wrap_content"
+	    android:layout_alignParentRight="true"
+	    android:layout_centerVertical="true"
+	    android:text="删除"
+	    android:textColor="@color/common_text_gray" />
+
+</RelativeLayout>

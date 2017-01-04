@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout 
+    xmlns:android="http://schemas.android.com/apk/res/android"
+     xmlns:app="http://schemas.android.com/apk/res/com.mportal.client"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@android:color/white"
+    android:orientation="vertical">
+    <com.mportal.client.view.RatioLayout
+       
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:ratio="0.56"
+        >
+        <ImageView 
+            android:id="@+id/single_pic_iv"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:scaleType="centerCrop"
+            
+            />
+    </com.mportal.client.view.RatioLayout>
+	<TextView
+	    android:id="@+id/single_pic_title_tv"
+	    android:layout_width="match_parent"
+	    android:layout_height="wrap_content"
+	    android:paddingLeft="@dimen/app_padding_left"
+	    android:paddingTop="@dimen/app_padding_left"
+	    android:paddingBottom="@dimen/app_padding_left"
+	    android:textColor="@color/common_text"
+	    android:textSize="15dp"
+	    />
+</LinearLayout>

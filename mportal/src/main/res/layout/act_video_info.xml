@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:mportal="http://schemas.android.com/apk/res/com.mportal.client"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent" >
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical" >
+
+        <com.mportal.client.view.RatioLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="#000"
+            mportal:ratio="0.56" >
+
+            <ImageView
+                android:id="@+id/video_pic_iv"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_centerInParent="true"
+                android:layout_gravity="center"
+                android:onClick="onClick" />
+
+            <ImageView
+                android:id="@+id/video_layer_pic_iv"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:layout_gravity="center"
+                android:src="@drawable/video_layer" />
+        </com.mportal.client.view.RatioLayout>
+
+        <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" >
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:paddingLeft="@dimen/app_padding_left"
+                android:paddingRight="@dimen/app_padding_right" >
+
+                <TextView
+                    android:id="@+id/video_title_tv"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="10dp"
+                    android:textColor="#000"
+                    android:textSize="16dp" />
+
+                <TextView
+                    android:id="@+id/video_time_tv"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="10dip"
+                    android:textColor="@color/common_text_gray" />
+
+                <TextView
+                    android:id="@+id/video_content"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="10dip"
+                    android:textColor="@color/common_text"
+                    android:textSize="14dp" />
+            </LinearLayout>
+        </ScrollView>
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/video_progressBar_ll"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/app_common_bg"
+        android:gravity="center"
+        android:orientation="vertical" >
+
+        <ProgressBar
+            android:layout_width="50dip"
+            android:layout_height="50dip"
+            android:layout_gravity="center" />
+    </LinearLayout>
+
+</RelativeLayout>

@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent" >
+
+    <RelativeLayout
+        android:id="@+id/frg_usernames_layout"
+        android:layout_width="match_parent"
+        android:layout_height="fill_parent"
+        android:orientation="vertical" >
+
+        <com.mportal.client.view.LetterListView
+            android:id="@+id/frg_usernames_cityLetterListView"
+            android:layout_width="30dip"
+            android:layout_height="fill_parent"
+            android:layout_alignParentRight="true"
+            android:background="#FFFFFF"
+             />
+         <ListView
+            android:id="@+id/frg_usernames_list"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@android:color/white"
+            android:cacheColorHint="#00000000"
+            android:clickable="true"
+            android:divider="@null"
+            android:scrollbars="none"
+            android:layout_toLeftOf="@id/frg_usernames_cityLetterListView"
+             />
+    </RelativeLayout>
+
+    <TextView
+        android:id="@+id/frg_usernames_overlay"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:background="#ffffff"
+        android:gravity="center"
+        android:maxWidth="80dp"
+        android:minWidth="80dp"
+        android:textColor="#3399ff"
+        android:textSize="70sp"
+        android:visibility="invisible" />
+
+</RelativeLayout>

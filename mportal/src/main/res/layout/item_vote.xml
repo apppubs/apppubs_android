@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="3dip"
+    android:background="#fff"
+     xmlns:android="http://schemas.android.com/apk/res/android">
+    <ImageView 
+        android:layout_width="40dip"
+        android:layout_height="40dip"
+        android:id="@+id/voteitem_iv"
+        />
+    <LinearLayout 
+        android:layout_toRightOf="@id/voteitem_iv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        >
+        <TextView 
+            android:textSize="16sp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/voteitem_name"
+            />
+        <TextView 
+            android:textSize="12sp"
+            android:layout_marginTop="8dip"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/voteitem_desp"
+            />
+    </LinearLayout>
+</RelativeLayout>

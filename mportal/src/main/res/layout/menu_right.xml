@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="?attr/appSlideMenuBg"
+    android:padding="20dp"
+     >
+
+    <LinearLayout
+        android:onClick="onClick"
+        android:id="@+id/menu_right_login"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_centerInParent="true"
+        android:layout_gravity="center"
+        android:gravity="center"
+        android:orientation="vertical" 
+        android:layout_marginTop="30dp"
+        >
+
+        <ImageView
+            android:layout_width="60dip"
+            android:layout_height="60dip"
+            android:gravity="center_vertical"
+            android:src="@drawable/default_user_image" />
+
+        <TextView
+             android:id="@+id/menu_right_username"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dip"
+            android:gravity="center"
+            android:text="点击登录"
+            android:textColor="#fff"
+            android:textSize="14sp" />
+    </LinearLayout>
+
+    <GridView
+        android:id="@+id/menu_right_gv"
+        android:padding="10dp"
+        android:layout_width="@dimen/menu_right_gv_width"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/menu_right_login"
+        android:layout_gravity="center"
+        android:layout_marginTop="16dip"
+        android:layout_centerInParent="true"
+        android:gravity="right"
+        android:listSelector="@drawable/sel_menu_list_cir"
+        android:numColumns="3"
+        android:verticalSpacing="20dip"
+         >
+    </GridView>
+  <RelativeLayout 
+      android:id="@+id/menu_right_update"
+      android:layout_alignParentRight="true"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:layout_alignParentBottom="true"
+      android:layout_marginBottom="@dimen/title_text_size"
+      android:layout_marginRight="@dimen/title_text_size"
+      >
+      <TextView 
+          android:layout_alignParentRight="true"
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:id="@+id/menu_right_curversion"
+          android:layout_marginLeft="@dimen/menu_right_magin"
+          android:textColor="@android:color/white"
+          android:gravity="top"
+          />
+      <ImageView 
+          android:layout_toLeftOf="@id/menu_right_curversion"
+          android:id="@+id/menu_right_newcursion"
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:layout_centerVertical="true"
+          android:visibility="gone"
+          android:src="@drawable/point_selected"
+          />
+  </RelativeLayout>
+</RelativeLayout>

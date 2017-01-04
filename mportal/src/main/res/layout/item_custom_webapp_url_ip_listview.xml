@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="horizontal"
+    android:background="#FFFFFF"
+    android:focusable="false"
+     >
+    <TextView 
+        android:id="@+id/item_menu_name_tv"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:gravity="center_vertical"
+        android:textColor="@color/common_text"
+        android:maxWidth="160dp"
+        android:textSize="15dp"
+        android:paddingLeft="@dimen/item_padding_left"
+        android:paddingTop="@dimen/item_padding_top"
+        android:paddingBottom="@dimen/item_padding_bottom"
+        android:text="待办公文 （需要vpn）"
+        android:singleLine="true"
+        android:ellipsize="end"
+        />
+	<EditText 
+	    android:id="@+id/item_menu_custom_ip_et"
+	    android:layout_width="match_parent"
+	    android:layout_height="match_parent"
+	    android:background="@null"
+	    android:layout_toRightOf="@id/item_menu_name_tv"
+	    android:layout_alignParentRight="true"
+	    android:layout_centerVertical="true"
+	    android:textColor="@color/common_text"
+	    android:singleLine="true"
+	    android:hint="http://www.example.com"
+	    android:paddingRight="@dimen/item_padding_right"
+	    android:textSize="14dp"
+	    android:gravity="right"
+	    />
+</RelativeLayout>

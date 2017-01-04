@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@android:color/white"
+    android:orientation="vertical" >
+
+    <com.mportal.client.view.DragSortListView
+        xmlns:dslv="http://schemas.android.com/apk/res/com.mportal.client"
+        android:id="@+id/sort_channel_dsll"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:dividerHeight="1px"
+        android:listSelector="@drawable/sel_common_item"
+        dslv:collapsed_height="2dp"
+        dslv:drag_enabled="true"
+        dslv:drag_handle_id="@+id/drag_handle"
+        dslv:drag_scroll_start="0.33"
+        dslv:drag_start_mode="onDown"
+        dslv:float_background_color="#f0f0f0"
+        dslv:float_alpha="0.4"
+        dslv:max_drag_scroll_speed="0.8"
+        dslv:remove_enabled="false"
+        dslv:remove_mode="clickRemove"
+        dslv:slide_shuffle_speed="0.3"
+        dslv:sort_enabled="true"
+        dslv:track_drag_sort="true"
+        dslv:use_default_controller="true" />
+
+</LinearLayout>

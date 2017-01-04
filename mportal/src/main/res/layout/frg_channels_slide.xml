@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:mportal="http://schemas.android.com/apk/res/com.mportal.client"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#F6F6F6"
+     >
+
+    <com.mportal.client.view.NewsViewPager
+        android:id="@+id/channels_vp"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginTop="40dp" />
+
+    <LinearLayout
+        android:id="@+id/channels_column_fl"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginTop="40dp"
+        android:background="#F5F7F7F7"
+        android:orientation="vertical"
+        android:visibility="gone" >
+
+        <com.mportal.client.view.DraggableGridView
+            android:id="@+id/channels_dgv"
+            android:layout_width="match_parent"
+            android:layout_height="200dp"
+            android:orientation="vertical"
+            android:padding="10dp"
+            mportal:item_height="35dp"
+            mportal:item_padding="10dp"
+            mportal:item_width="75dp"
+             />
+
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="30dp"
+            android:background="#E7E7E7"
+            android:gravity="center_vertical"
+            android:paddingLeft="10dp"
+            android:text="点击添加"
+            android:textColor="#1B1B1B" />
+
+        <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1" >
+
+            <com.mportal.client.view.AlternativeChannelLayout
+                android:id="@+id/channels_alter_acl"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="10dp"
+                mportal:child_height="35dp"
+                mportal:child_padding="10dp"
+                mportal:child_width="75dp"
+                 />
+        </ScrollView>
+    </LinearLayout>
+
+    <com.mportal.client.view.ScrollTabs
+        android:id="@+id/channels_ct"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:background="#ffffff"
+        mportal:selectedTextColor="?attr/appDefaultTextColor"
+        mportal:selectedTextSize="17dp"
+        mportal:tabMinWidth="80dp"
+        mportal:textColor="#6B6B6B"
+        mportal:textSize="14dp" />
+
+</RelativeLayout>

@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:mportal="http://schemas.android.com/apk/res/com.mportal.client"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent" >
+    <ImageView 
+        android:id="@+id/splash_iv"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:scaleType="fitXY"
+        />
+    <com.mportal.client.view.ImageButton 
+        android:id="@+id/splash_back"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:onClick="onClick"
+        android:src="@drawable/back_left"
+        mportal:highlightColor="@color/button_black_hight_color"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentRight="true"
+        android:layout_marginRight="20dip"
+        android:layout_marginBottom="20dp"
+        />
+</RelativeLayout>

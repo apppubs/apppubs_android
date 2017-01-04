@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    style="@style/item_with_narrow_padding"
+     >
+    <ImageView 
+        android:id="@+id/pic_text_iv"
+        android:layout_width="@dimen/list_item_image_width"
+        android:layout_height="@dimen/list_item_image_height"
+        android:layout_marginRight="10dp"
+        android:scaleType="centerCrop"
+        android:layout_centerVertical="true"
+        />
+    <TextView
+        android:id="@+id/pic_text_title_tv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_toRightOf="@id/pic_text_iv"
+        android:layout_marginRight="5dp"
+        android:lines="2"
+        android:ellipsize="end"
+        android:textColor="#333"
+        android:textSize="16dp" />
+	
+	<TextView 
+	    android:id="@+id/pic_text_pubtime_tv"
+	    android:layout_width="wrap_content"
+	    android:layout_height="wrap_content"
+	    android:layout_below="@+id/pic_text_title_tv"
+	    
+	    android:layout_alignLeft="@id/pic_text_title_tv"
+	    android:textSize="13dp"
+	    android:textColor="#A8A8A8"
+	    android:paddingRight="1px"
+	    android:paddingLeft="1px"
+	    android:paddingBottom="8dp"
+	    />
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1px"
+        android:layout_below="@+id/pic_text_title_tv"
+        android:layout_marginTop="1dp"
+        android:layout_alignParentBottom="true"
+        android:background="@color/common_divider"
+        
+        />
+</RelativeLayout>

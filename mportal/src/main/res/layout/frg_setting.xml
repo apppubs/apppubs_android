@@ -1,0 +1,462 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/window_color" >
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical" >
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1px"
+            android:layout_marginTop="20dip"
+            android:background="@color/common_divider" />
+
+        <RelativeLayout
+            style="@style/item_menu_lv"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" >
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_marginTop="2dip"
+                android:gravity="center"
+                android:text="消息提醒"
+                android:textColor="@color/common_text"
+                android:textSize="@dimen/item_text_size" />
+
+            <ToggleButton
+                android:id="@+id/setting_push_tb"
+                android:layout_width="66dp"
+                android:layout_height="22dp"
+                android:layout_alignParentRight="true"
+                android:layout_centerVertical="true"
+                android:background="@drawable/sel_toggle"
+                android:onClick="onClick"
+                android:textOff=""
+                android:textOn="" />
+        </RelativeLayout>
+
+        <View
+            android:layout_width="@dimen/item_padding_left"
+            android:layout_height="1px"
+            android:background="#ffffff" />
+
+        <RelativeLayout
+            style="@style/item_menu_lv"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" >
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:gravity="center"
+                android:text="2G/3G/4G网络下载图片"
+                android:textColor="@color/common_text"
+                android:textSize="@dimen/item_text_size" />
+
+            <ToggleButton
+                android:id="@+id/settings_network_tb"
+                android:layout_width="66dp"
+                android:layout_height="22dp"
+                android:layout_alignParentRight="true"
+                android:layout_centerVertical="true"
+                android:background="@drawable/sel_toggle"
+                android:onClick="onClick"
+                android:textOff=""
+                android:textOn="" />
+        </RelativeLayout>
+
+        <View
+            android:layout_width="@dimen/item_padding_left"
+            android:layout_height="1px"
+            android:background="#ffffff" />
+
+        <RelativeLayout
+            android:id="@+id/settingliline"
+            style="@style/item_menu_lv"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:onClick="onClick"
+            android:visibility="gone" >
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:gravity="center"
+                android:text="离线阅读"
+                android:textColor="@color/common_text"
+                android:textSize="@dimen/item_text_size" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_alignParentRight="true"
+                android:gravity="center_vertical"
+                android:paddingRight="15dp"
+                android:textColor="#000"
+                android:textSize="14sp" />
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:id="@+id/settings_cache"
+            style="@style/item_menu_lv"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:onClick="onClick" >
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:gravity="center"
+                android:text="清除缓存"
+                android:textColor="@color/common_text"
+                android:textSize="@dimen/item_text_size" />
+
+            <TextView
+                android:id="@+id/settings_cache_tv"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_alignParentRight="true"
+                android:gravity="center_vertical"
+                android:paddingRight="15dp"
+                android:text="29.2M"
+                android:textColor="@color/common_text"
+                android:textSize="@dimen/item_text_size" />
+        </RelativeLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1px"
+            android:background="@color/common_divider" />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1px"
+            android:layout_marginTop="20dip"
+            android:background="@color/common_divider" />
+
+        <RelativeLayout
+            android:id="@+id/settings_feed"
+            style="@style/item_menu_lv"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:onClick="onClick" >
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_marginTop="2dip"
+                android:gravity="center"
+                android:text="意见反馈"
+                android:textColor="@color/common_text"
+                android:textSize="@dimen/item_text_size" />
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:layout_centerVertical="true"
+                android:src="@drawable/left_arrow" />
+        </RelativeLayout>
+
+        <View
+            android:layout_width="@dimen/item_padding_left"
+            android:layout_height="1px"
+            android:background="#ffffff" />
+
+        <RelativeLayout
+            android:id="@+id/settings_about"
+            style="@style/item_menu_lv"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:onClick="onClick" >
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:gravity="center"
+                android:text="关于我们"
+                android:textColor="@color/common_text"
+                android:textSize="@dimen/item_text_size" />
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:layout_centerVertical="true"
+                android:src="@drawable/left_arrow" />
+        </RelativeLayout>
+
+        <View
+            android:layout_width="@dimen/item_padding_left"
+            android:layout_height="1px"
+            android:background="#ffffff" />
+
+        <RelativeLayout
+            android:id="@+id/settings_welcome"
+            style="@style/item_menu_lv"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:onClick="onClick"
+            android:visibility="gone" >
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:gravity="center"
+                android:text="欢迎图"
+                android:textColor="@color/common_text"
+                android:textSize="@dimen/item_text_size" />
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:layout_centerVertical="true"
+                android:src="@drawable/left_arrow" />
+        </RelativeLayout>
+
+        <View
+            android:id="@+id/settings_welcome_line"
+            android:layout_width="@dimen/item_padding_left"
+            android:layout_height="1px"
+            android:background="#ffffff"
+            android:visibility="gone" />
+
+        <RelativeLayout
+            android:id="@+id/settings_update"
+            style="@style/item_menu_lv"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:onClick="onClick" >
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:gravity="center"
+                android:text="检查更新"
+                android:textColor="@color/common_text"
+                android:textSize="@dimen/item_text_size" />
+
+            <ImageView
+                android:id="@+id/left_arrow"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:layout_centerVertical="true"
+                android:layout_marginLeft="@dimen/menu_right_magin"
+                android:src="@drawable/left_arrow" />
+
+            <TextView
+                android:id="@+id/settting_update_version"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_marginRight="@dimen/menu_right_magin"
+                android:layout_toLeftOf="@id/left_arrow"
+                android:gravity="center"
+                android:text="V1"
+                android:textColor="@color/common_text"
+                android:textSize="@dimen/item_text_size" />
+
+            <ImageView
+                android:id="@+id/settting_update_newcursion"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_toLeftOf="@id/settting_update_version"
+                android:src="@drawable/point_selected"
+                android:visibility="gone" />
+        </RelativeLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1px"
+            android:background="@color/common_divider" />
+
+        <LinearLayout
+            android:id="@+id/setting_segment3"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:visibility="gone" >
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1px"
+                android:layout_marginTop="20dp"
+                android:background="@color/common_divider" />
+
+            <RelativeLayout
+                android:id="@+id/setting_custom_webapp_url_ip_rl"
+                style="@style/item_menu_lv"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:onClick="onClick" >
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:gravity="center"
+                    android:text="服务地址配置"
+                    android:textColor="@color/common_text"
+                    android:textSize="@dimen/item_text_size" />
+
+                <ImageView
+                    android:id="@+id/left_arrow"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:layout_centerVertical="true"
+                    android:layout_marginLeft="@dimen/menu_right_magin"
+                    android:src="@drawable/left_arrow" />
+            </RelativeLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1px"
+                android:background="@color/common_divider" />
+        </LinearLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1px"
+            android:layout_marginTop="20dp" />
+
+        <LinearLayout
+            android:id="@+id/setting_hidden_ll"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:visibility="gone" >
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1px"
+                android:background="@color/common_divider" />
+
+            <RelativeLayout
+                android:id="@+id/settings_switch"
+                style="@style/item_menu_lv"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:onClick="onClick" >
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:gravity="center"
+                    android:text="切换样式"
+                    android:textColor="@color/common_text"
+                    android:textSize="@dimen/item_text_size" />
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:layout_centerVertical="true"
+                    android:src="@drawable/left_arrow" />
+            </RelativeLayout>
+
+            <View
+                android:layout_width="@dimen/item_padding_left"
+                android:layout_height="1px"
+                android:background="#ffffff" />
+
+            <RelativeLayout
+                android:id="@+id/settings_switch_color"
+                style="@style/item_menu_lv"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:onClick="onClick" >
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:gravity="center"
+                    android:text="切换主题"
+                    android:textColor="@color/common_text"
+                    android:textSize="@dimen/item_text_size" />
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:layout_centerVertical="true"
+                    android:src="@drawable/left_arrow" />
+            </RelativeLayout>
+
+            <View
+                android:layout_width="@dimen/item_padding_left"
+                android:layout_height="1px"
+                android:layout_alignParentTop="true"
+                android:background="#ffffff" />
+
+            <RelativeLayout
+                android:id="@+id/settings_switch_app"
+                style="@style/item_menu_lv"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:onClick="onClick" >
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:gravity="center"
+                    android:text="切换应用"
+                    android:textColor="@color/common_text"
+                    android:textSize="@dimen/item_text_size" />
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:layout_centerVertical="true"
+                    android:src="@drawable/left_arrow" />
+            </RelativeLayout>
+            <View
+                android:layout_width="@dimen/item_padding_left"
+                android:layout_height="1px"
+                android:layout_alignParentTop="true"
+                android:background="#ffffff" />
+
+            <RelativeLayout
+                android:id="@+id/settings_logs_rl"
+                style="@style/item_menu_lv"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:onClick="onClick" >
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:gravity="center"
+                    android:text="查看日志"
+                    android:textColor="@color/common_text"
+                    android:textSize="@dimen/item_text_size" />
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:layout_centerVertical="true"
+                    android:src="@drawable/left_arrow" />
+            </RelativeLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1px"
+                android:background="@color/common_divider" />
+        </LinearLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1px"
+            android:layout_marginTop="20dp" />
+    </LinearLayout>
+
+</ScrollView>

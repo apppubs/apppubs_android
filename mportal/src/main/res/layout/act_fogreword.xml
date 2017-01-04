@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:mportal="http://schemas.android.com/apk/res/com.mportal.client"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#fff" >
+
+    <com.mportal.client.view.TitleBar
+        android:id="@+id/fogword_tb"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/title_height"
+        android:background="?attr/appDefaultColor"
+        mportal:leftImgSrc="@drawable/top_back_btn"
+        mportal:mTitle="找回密码"
+        mportal:titleSize="@dimen/title_text_size" >
+    </com.mportal.client.view.TitleBar>
+
+    <LinearLayout
+        android:id="@+id/fogre_layi"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/fogword_tb"
+        android:layout_margin="16dp"
+        android:background="@drawable/input_bg"
+        android:orientation="vertical"
+        android:paddingLeft="6dp" >
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/input_bg"
+            android:orientation="horizontal" >
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:padding="3dp"
+                android:text="用  户  名  "
+                android:textSize="14sp" />
+
+            <EditText
+                android:id="@+id/fogre_username"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@null"
+                android:hint="请输入用户名"
+                android:padding="10dip"
+                android:textSize="12sp" />
+        </LinearLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@color/bottom_bar_bg" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal" >
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:layout_gravity="center"
+                android:padding="3dp"
+                android:text="电子邮箱  "
+                android:textSize="14sp" />
+
+            <EditText
+                android:id="@+id/fogre_email"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dip"
+                android:background="@null"
+                android:hint="请输入常用邮箱"
+                android:inputType="textPassword"
+                android:padding="10dip"
+                android:textSize="12sp"
+                android:windowSoftInputMode="stateHidden" />
+        </LinearLayout>
+
+        <Button
+            android:id="@+id/fogre_summit"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_marginLeft="@dimen/item_padding_left"
+            android:layout_marginRight="@dimen/item_padding_right"
+            android:layout_marginTop="@dimen/item_padding_top"
+            android:background="?attr/appDefaultColor"
+            android:text="提交"
+            android:textColor="#fff"
+            android:textSize="16sp" />
+    </LinearLayout>
+
+</RelativeLayout>

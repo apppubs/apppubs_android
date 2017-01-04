@@ -1,0 +1,4 @@
+include ':shareSDK'
+include ':oneKeyShare'
+include ':sugar_orm'
+include ':mportal'

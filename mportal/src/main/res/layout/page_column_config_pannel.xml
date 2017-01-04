@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:mportal="http://schemas.android.com/apk/res/com.mportal.client"
+    android:id="@+id/channels_column_fl"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_marginTop="40dp"
+    android:background="#F5F7F7F7"
+    android:clickable="true"
+    android:orientation="vertical" >
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="40dp" >
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:gravity="center_vertical"
+            android:paddingLeft="10dp"
+            android:text="点击取消订阅，长按后拖动可进行排序" />
+
+        <ImageView
+            android:id="@+id/page_up_arrow_iv"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_alignParentRight="true"
+            android:src="@drawable/page_up_arrow" />
+    </RelativeLayout>
+
+    <com.mportal.client.view.DraggableGridView
+        android:id="@+id/page_dgv"
+        android:layout_width="match_parent"
+        android:layout_height="200dp"
+        android:orientation="vertical"
+        android:padding="10dp"
+        mportal:item_height="35dp"
+        mportal:item_padding="10dp"
+        mportal:item_width="75dp" />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="30dp"
+        android:background="#E7E7E7"
+        android:gravity="center_vertical"
+        android:paddingLeft="10dp"
+        android:text="点击添加"
+        android:textColor="#1B1B1B" />
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1" >
+
+        <LinearLayout
+            android:id="@+id/page_column_unselect_container_ll"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:paddingLeft="10dp"
+            android:paddingRight="10dp"
+             >
+        </LinearLayout>
+    </ScrollView>
+
+</LinearLayout>

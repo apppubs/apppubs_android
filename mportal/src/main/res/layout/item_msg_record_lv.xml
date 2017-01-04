@@ -1,0 +1,230 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- 消息列表item -->
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android" >
+
+    <com.daimajia.swipe.SwipeLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:swipe="http://schemas.android.com/apk/res-auto"
+        xmlns:app="http://schemas.android.com/apk/res/com.mportal.client"
+        android:id="@+id/swipe"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:clickToClose="true"
+        swipe:leftEdgeSwipeOffset="0dp"
+        swipe:rightEdgeSwipeOffset="0dp" >
+
+        <LinearLayout
+            android:id="@+id/delete"
+            android:layout_width="80dp"
+            android:layout_height="match_parent"
+            android:background="#FF5534"
+            android:gravity="center"
+            android:weightSum="10" >
+
+            <ImageView
+                android:layout_width="0dp"
+                android:layout_height="30dp"
+                android:layout_weight="4"
+                android:scaleType="centerInside"
+                android:src="@drawable/trasn" />
+        </LinearLayout>
+
+        <RelativeLayout
+            android:id="@+id/front"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/sel_common_item"
+            android:paddingLeft="@dimen/item_padding_left_narrow"
+            android:paddingTop="@dimen/item_padding_top_narrow" >
+
+            <ImageView
+                android:id="@+id/message_item_iv"
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                android:layout_centerVertical="true"
+                android:scaleType="fitXY"
+                android:src="@drawable/default_user_image" />
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/item_padding_bottom_narrow"
+                android:layout_below="@id/message_item_iv" />
+
+            <RelativeLayout
+                android:id="@+id/message_item_title_rl"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:layout_marginTop="4dp"
+                android:layout_toRightOf="@id/message_item_iv" >
+
+                <TextView
+                    android:id="@+id/message_item_title_tv"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="名称"
+                    android:textSize="15dp" />
+
+                <TextView
+                    android:id="@+id/message_item_time_tv"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:paddingRight="@dimen/item_padding_right_narrow"
+                    android:singleLine="true"
+                    android:text="20:20"
+                    android:textColor="@color/common_text_gray_light"
+                    android:textSize="12dp" />
+            </RelativeLayout>
+
+            <TextView
+                android:id="@+id/msg_record_item_unread_tv"
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:layout_alignParentRight="true"
+                android:layout_below="@+id/message_item_title_rl"
+                android:layout_marginRight="@dimen/item_padding_right_narrow"
+                android:background="@drawable/view_red_dot"
+                android:gravity="center"
+                android:singleLine="true"
+                android:text="0"
+                android:textColor="@android:color/white"
+                android:textSize="12dp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/message_item_des_tv"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignLeft="@+id/message_item_title_rl"
+                android:layout_below="@id/message_item_title_rl"
+                android:layout_marginTop="4dp"
+                android:layout_toLeftOf="@id/msg_record_item_unread_tv"
+                android:paddingRight="10dp"
+                android:singleLine="true"
+                android:text="今天早点休息吧"
+                android:textColor="@color/common_text_gray"
+                android:textSize="13dp" />
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1px"
+                android:layout_alignParentBottom="true"
+                android:background="@color/common_divider" />
+        </RelativeLayout>
+    </com.daimajia.swipe.SwipeLayout>
+
+    <com.daimajia.swipe.SwipeLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:swipe="http://schemas.android.com/apk/res-auto"
+        xmlns:app="http://schemas.android.com/apk/res/com.mportal.client"
+        android:id="@+id/swipe1"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:visibility="gone"
+        app:clickToClose="true"
+        swipe:leftEdgeSwipeOffset="0dp"
+        swipe:rightEdgeSwipeOffset="0dp" >
+
+        <LinearLayout
+            android:id="@+id/delete"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:background="#FF5534"
+            android:gravity="center"
+            android:weightSum="10" >
+
+            <ImageView
+                android:layout_width="0dp"
+                android:layout_height="30dp"
+                android:layout_weight="4"
+                android:scaleType="centerInside"
+                android:src="@drawable/trasn" />
+        </LinearLayout>
+
+        <RelativeLayout
+            android:id="@+id/front"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/sel_common_item"
+            android:paddingLeft="@dimen/item_padding_left_narrow"
+            android:paddingTop="@dimen/item_padding_top_narrow" >
+
+            <ImageView
+                android:id="@+id/message_item_iv1"
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                android:layout_centerVertical="true"
+                android:scaleType="fitXY"
+                android:src="@drawable/default_user_image" />
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/item_padding_bottom_narrow"
+                android:layout_below="@id/message_item_iv1" />
+
+            <RelativeLayout
+                android:id="@+id/message_item_title_rl"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:layout_marginTop="4dp"
+                android:layout_toRightOf="@id/message_item_iv1" >
+
+                <TextView
+                    android:id="@+id/message_item_title_tv1"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="名称"
+                    android:textSize="15dp" />
+
+                <TextView
+                    android:id="@+id/message_item_time_tv1"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:paddingRight="@dimen/item_padding_right_narrow"
+                    android:singleLine="true"
+                    android:text="20:20"
+                    android:textColor="@color/common_text_gray_light"
+                    android:textSize="12dp" />
+            </RelativeLayout>
+
+            <TextView
+                android:id="@+id/msg_record_item_unread_tv1"
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:layout_alignParentRight="true"
+                android:layout_below="@+id/message_item_title_rl"
+                android:layout_marginRight="@dimen/item_padding_right_narrow"
+                android:background="@drawable/view_red_dot"
+                android:gravity="center"
+                android:singleLine="true"
+                android:text="0"
+                android:textColor="@android:color/white"
+                android:textSize="12dp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/message_item_des_tv1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignLeft="@+id/message_item_title_rl"
+                android:layout_below="@id/message_item_title_rl"
+                android:layout_marginTop="4dp"
+                android:layout_toLeftOf="@id/msg_record_item_unread_tv1"
+                android:paddingRight="10dp"
+                android:singleLine="true"
+                android:text="今天早点休息吧"
+                android:textColor="@color/common_text_gray"
+                android:textSize="13dp" />
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1px"
+                android:layout_alignParentBottom="true"
+                android:background="@color/common_divider" />
+        </RelativeLayout>
+    </com.daimajia.swipe.SwipeLayout>
+
+</FrameLayout>

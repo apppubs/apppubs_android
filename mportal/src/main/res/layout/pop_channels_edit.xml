@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="horizontal" 
+    android:paddingTop="35dp"
+    android:paddingBottom="20dp"
+    android:paddingLeft="50dp"
+    android:paddingRight="50dp"
+    android:background="?attr/appDefaultColor"
+    >
+    <LinearLayout
+        android:id="@+id/channels_edit_order_ll" 
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_weight="1"
+        android:layout_marginRight="50dp"
+       	android:orientation="vertical"
+        >
+        
+	    <ImageView 
+	        android:layout_width="match_parent"
+	        android:layout_height="0dp"
+	        android:layout_marginBottom="20dp"
+	        android:layout_weight="1"
+	        android:src="@drawable/channel_order"
+	        />
+        <TextView 
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_horizontal"
+            android:text="频道排序"
+            android:textColor="#fff"
+            />
+    </LinearLayout>
+    <LinearLayout
+        android:id="@+id/channels_edit_del_ll" 
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_weight="1"
+        android:layout_marginLeft="50dp"
+       	android:orientation="vertical"
+        >
+        
+	    <ImageView 
+	        android:layout_width="match_parent"
+	        android:layout_height="0dp"
+	        android:layout_marginBottom="20dp"
+	        android:layout_weight="1"
+	        android:src="@drawable/channel_delete"
+	        />
+        <TextView 
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:text="删除频道"
+            android:textColor="#fff"
+            />
+    </LinearLayout>
+
+</LinearLayout>

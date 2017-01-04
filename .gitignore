@@ -1,0 +1,12 @@
+.gradle/
+*.iml
+build/
+gradle/
+gradlew
+gradlew.bat
+import-summary.txta
+local.properties
+mportal/build/
+oneKeyShare/build
+shareSDK/build
+sugar_orm/build

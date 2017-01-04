@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:mportal="http://schemas.android.com/apk/res/com.mportal.client"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/app_common_bg"
+    android:orientation="vertical" >
+
+    <com.mportal.client.view.TitleBar
+        android:id="@+id/survey_tb"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/title_height"
+        android:background="?attr/appDefaultColor"
+        mportal:leftImgSrc="@drawable/top_back_btn"
+        mportal:mTitle="调查"
+        mportal:titleSize="@dimen/title_text_size" />
+
+    <com.mportal.client.view.commonlist.CommonListView
+        android:id="@+id/survey_xlv"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/survey_tb"
+        android:divider="@drawable/home_top_divide" />
+
+</RelativeLayout>

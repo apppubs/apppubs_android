@@ -1,0 +1,175 @@
+<!-- <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="0dp"
+    android:layout_weight="1"
+    android:background="#c7c7c7" > -->
+
+    <LinearLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="horizontal" >
+
+        <LinearLayout
+            android:layout_width="80dp"
+            android:layout_height="match_parent"
+            android:background="#e0e0e0"
+            android:orientation="vertical"
+            android:paddingBottom="20dp"
+            android:paddingLeft="@dimen/app_padding_left"
+            android:paddingRight="@dimen/app_padding_right"
+            android:paddingTop="25dp" >
+
+            <LinearLayout
+                android:id="@+id/themeSwitch_blue_rl"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:layout_weight="1"
+                android:onClick="onClick"
+                android:orientation="vertical" >
+
+                <com.mportal.client.view.CircularImage
+                    android:layout_width="60dp"
+                    android:layout_height="60dp"
+                    android:layout_gravity="center_horizontal"
+                    android:src="@drawable/slidemenu_bg_blue" />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:paddingTop="5dp"
+                    android:text="蓝色"
+                    android:textColor="@color/app_default"
+                    android:textSize="14dp" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/themeSwitch_indigo_rl"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:onClick="onClick"
+                android:orientation="vertical" >
+
+                <com.mportal.client.view.CircularImage
+                    android:layout_width="60dp"
+                    android:layout_height="60dp"
+                    android:layout_gravity="center_horizontal"
+                    android:src="@drawable/slidemenu_bg_indigo" />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:paddingTop="5dp"
+                    android:text="靛蓝"
+                    android:textColor="@color/app_default_i"
+                    android:textSize="14dp" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/themeSwitch_red_rl"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:onClick="onClick"
+                android:orientation="vertical" >
+
+                <com.mportal.client.view.CircularImage
+                    android:layout_width="60dp"
+                    android:layout_height="60dp"
+                    android:layout_gravity="center_horizontal"
+                    android:src="@drawable/slidemenu_bg_r" />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:paddingTop="5dp"
+                    android:text="红色"
+                    android:textColor="@color/app_default_r"
+                    android:textSize="14dp" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/themeSwitch_brown_rl"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:onClick="onClick"
+                android:orientation="vertical" >
+
+                <com.mportal.client.view.CircularImage
+                    android:layout_width="60dp"
+                    android:layout_height="60dp"
+                    android:layout_gravity="center_horizontal"
+                    android:src="@drawable/slidemenu_bg_brown" />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:paddingTop="5dp"
+                    android:text="棕色"
+                    android:textColor="@color/app_default_brown"
+                    android:textSize="14dp" />
+            </LinearLayout>
+        </LinearLayout>
+
+        <LinearLayout 
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            >
+                    <View
+            android:id="@+id/line"
+            android:layout_width="match_parent"
+            android:layout_height="1px"
+            android:background="@color/common_divider" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:gravity="center"
+            android:text="主题预览"
+            android:textSize="14dp" />
+
+        <ImageView
+            android:id="@+id/switch_iv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginLeft="40dp"
+            android:layout_marginRight="40dp"
+            android:layout_marginTop="20dp"
+            android:adjustViewBounds="true"
+            android:maxHeight="300dp"
+            android:maxWidth="260dp"
+            android:scaleType="fitXY"
+            android:src="@drawable/theme_img2" />
+
+        <Button
+            android:id="@+id/switch_btn"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="50dp"
+            android:layout_marginRight="50dp"
+            android:layout_marginTop="30dp"
+            android:background="@drawable/sel_com_btn_w"
+            android:gravity="center"
+            android:onClick="onClick"
+            android:padding="10dp"
+            android:text="使用此主题"
+            android:textColor="@color/app_default"
+            android:textSize="14dp" />
+            
+            
+            
+        </LinearLayout>
+
+    </LinearLayout>
+<!-- 
+</ScrollView> -->

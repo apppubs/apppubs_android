@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<selector xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:state_checked="true" android:drawable="@drawable/checkbox_check">
+        
+        <shape xmlns:android="http://schemas.android.com/apk/res/android" android:shape="rectangle">
+            <solid android:color="#00000000" />
+
+            <stroke android:width="1px" android:color="#C7C7C7"></stroke>
+        </shape>
+     
+     </item>
+	<item  android:state_checked="false">
+            <shape xmlns:android="http://schemas.android.com/apk/res/android" android:shape="rectangle">
+            	<solid android:color="#00000000" />
+            <stroke android:width="1px" android:color="#C7C7C7"/>
+            
+        </shape>
+    
+	</item>  
+    <item android:drawable="@drawable/transparent"/>  
+  
+</selector>  

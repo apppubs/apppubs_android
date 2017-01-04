@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:mportal="http://schemas.android.com/apk/res/com.mportal.client"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@android:color/white" >
+
+    <com.mportal.client.view.commonlist.CommonListView
+        android:id="@+id/frg_peter__xlv"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="#ffffff"
+        mportal:list_sel="@drawable/sel_common_item" >
+    </com.mportal.client.view.commonlist.CommonListView>
+
+    <include
+        layout="@layout/nullshow_collection"
+        android:visibility="gone" />
+
+    <LinearLayout
+        android:id="@+id/frg_peter_progress_ll"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="center"
+        android:orientation="vertical" >
+
+        <ProgressBar
+            android:layout_width="50dip"
+            android:layout_height="50dip"
+            android:layout_gravity="center" />
+    </LinearLayout>
+
+</RelativeLayout>

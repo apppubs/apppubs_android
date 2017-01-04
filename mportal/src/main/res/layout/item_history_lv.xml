@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/app_common_bg"
+    android:paddingBottom="@dimen/item_padding_bottom"
+    android:paddingLeft="@dimen/item_padding_left"
+    android:paddingRight="@dimen/item_padding_right"
+    android:paddingTop="@dimen/item_padding_top" >
+
+    <TextView
+        android:id="@+id/searchitem_time"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="24dp"
+        android:background="@drawable/save_time_bg"
+        android:paddingTop="@dimen/list_item_magin_top"
+        android:paddingLeft="@dimen/wether_gps_text_padding"
+        android:text="2015/2/28"
+        android:paddingRight="@dimen/wether_gps_text_padding"
+        android:paddingBottom="@dimen/list_item_magin_top"
+        android:textColor="@android:color/white"
+        android:textSize="10sp" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/searchitem_time"
+        android:background="@drawable/input_bg"
+        android:orientation="vertical"
+        android:padding="10dp"
+        android:paddingLeft="@dimen/item_padding_left"
+        android:paddingRight="@dimen/item_padding_right" >
+
+        <TextView
+            android:id="@+id/searchitem_topic"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:ellipsize="end"
+            android:gravity="left"
+            android:textColor="#333"
+            android:textSize="14dp" />
+
+        <TextView
+            android:id="@+id/history_item_time"
+            android:layout_marginTop="6dp"
+            android:layout_marginBottom="6dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="2月2日"
+            android:textColor="@color/item_bg"
+            android:textSize="12sp" />
+        <ImageView 
+            android:id="@+id/item_history_imagview"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:scaleType="centerInside"
+            />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_marginTop="8dip"
+            android:background="#efefef" />
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dip" >
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:ellipsize="end"
+                android:text="阅读全文"
+                android:textColor="#000"
+                android:textSize="14dp" />
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:src="@drawable/left_arrow" />
+        </RelativeLayout>
+    </LinearLayout>
+
+</RelativeLayout>

@@ -1,0 +1,1 @@
+alter table user add org_code varchar(30)

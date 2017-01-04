@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:paddingLeft="14dp"
+    android:paddingRight="14dp"
+     >
+
+<!--     android:paddingLeft="@dimen/list_item_padding_left"
+    android:paddingRight="@dimen/list_item_padding_right"
+    android:paddingTop="@dimen/list_item_padding_top" -->
+    
+    <com.mportal.client.view.CircularImage
+        android:id="@+id/channel_add_iv"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_marginTop="14dp"
+        android:layout_alignParentLeft="true"
+        android:layout_centerVertical="true"
+        android:adjustViewBounds="false"
+        android:scaleType="centerInside"
+        android:clickable="false"
+         />
+
+    <TextView
+        android:id="@+id/channel_add_tv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerVertical="true"
+        android:layout_marginLeft="14dp"
+        android:textSize="15dp"
+        android:layout_toRightOf="@id/channel_add_iv"
+        android:textAppearance="?android:attr/textAppearanceMedium" />
+    <ToggleButton
+        android:id="@+id/channel_add_tgb"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_alignParentRight="true"
+        android:layout_centerVertical="true"
+        android:background="@drawable/sel_toggle_add_column"
+        android:textOff=""
+        android:textOn="" />
+    <View
+        android:layout_marginTop="@dimen/item_padding_bottom"
+        android:layout_width="match_parent"
+        android:layout_height="1px"
+        android:layout_alignParentBottom="true"
+        android:background="@color/common_divider" 
+        android:layout_marginBottom="14dp"
+        />
+</RelativeLayout>

@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>  
+    <attr name="appDefaultColor" format="color" />  
+    <attr name="appDefaultTextColor" format="color" />  
+    <attr name="appSlideMenuBg" format="reference"></attr>
+    <attr name="floatValue" format="float" />  
+    <attr name="integerValue" format="integer" />  
+    <attr name="booleanValue" format="boolean" />  
+    <attr name="dimensionValue" format="dimension" />  
+    <attr name="stringValue" format="string" />  
+    <attr name="referenceValue" format="reference" />  
+    
+</resources> 

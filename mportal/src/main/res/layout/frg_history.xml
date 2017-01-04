@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:mportal="http://schemas.android.com/apk/res/com.mportal.client"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/app_common_bg" >
+
+    <com.mportal.client.view.commonlist.CommonListView
+        android:id="@+id/history_xlv"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:divider="@null"
+        mportal:list_sel="@drawable/sel_common_item" >
+    </com.mportal.client.view.commonlist.CommonListView>
+
+
+    <TextView 
+        android:id="@+id/history_empty_tv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="还没有历史消息！"
+        android:textColor="@color/common_text_gray"
+        android:textSize="14dp"
+        android:visibility="gone"
+        />
+</RelativeLayout>

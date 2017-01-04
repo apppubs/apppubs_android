@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical" >
+
+    <ListView
+        android:id="@+id/serviceno_lv"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:divider="@null" >
+    </ListView>
+
+    <LinearLayout
+        android:id="@+id/serviceno_progress_ll"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/btn_bg_h"
+        android:gravity="center"
+        android:orientation="vertical" >
+
+        <ProgressBar
+            android:layout_width="50dip"
+            android:layout_height="50dip"
+            android:layout_gravity="center" />
+    </LinearLayout>
+
+    <TextView
+        
+        android:id="@+id/serviceno_empty_tv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:text="还没有关注任何服务号！"
+        android:textColor="@color/common_text_gray" 
+        android:visibility="gone"
+        />
+
+</RelativeLayout>

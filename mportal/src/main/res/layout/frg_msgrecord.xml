@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.fortysevendeg.swipelistview.SwipeListView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:swipe="http://schemas.android.com/apk/res/com.mportal.client"
+    android:id="@+id/example_lv_list"
+    android:layout_width="fill_parent"
+    android:layout_height="wrap_content"
+    android:listSelector="#00000000"
+    swipe:swipeActionLeft="dismiss"
+    swipe:swipeActionRight="reveal"
+    swipe:swipeAnimationTime="200"
+    swipe:swipeBackView="@+id/back"
+    swipe:swipeCloseAllItemsWhenMoveList="true"
+    swipe:swipeFrontView="@+id/front"
+    swipe:swipeMode="right"
+    swipe:swipeOffsetLeft="100dp"
+    swipe:swipeOffsetRight="100dp"
+    swipe:swipeOpenOnLongPress="true" >
+
+</com.fortysevendeg.swipelistview.SwipeListView>

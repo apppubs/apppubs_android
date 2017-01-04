@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:paddingLeft="20dp" >
+
+    <LinearLayout
+        android:id="@+id/user_item_icon_ll"
+        android:layout_width="wrap_content"
+        android:layout_height="@dimen/item_min_height"
+        android:layout_alignParentRight="true"
+        android:orientation="horizontal"
+        android:paddingRight="20dp" >
+
+        <TextView
+            android:id="@+id/user_item_tel"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:gravity="center_vertical"
+            android:text=""
+            android:textColor="@color/common_text_gray"
+            android:textSize="14dp" />
+
+        <TextView
+            android:id="@+id/user_item_mobile"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:gravity="center_vertical"
+            android:text=""
+            android:textColor="@color/common_text_gray"
+            android:textSize="14dp" />
+
+        <ImageView
+            android:id="@+id/arrow"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="5dp"
+            android:layout_gravity="center_vertical"
+            android:src="@drawable/left_arrow" />
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/user_item_name_tv"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_centerVertical="true"
+        android:layout_toLeftOf="@+id/user_item_icon_ll"
+        android:text="dddd"
+        android:textColor="@color/common_text"
+        android:textSize="@dimen/item_text_size" >
+    </TextView>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1px"
+        android:layout_alignParentBottom="true"
+        android:background="@color/common_divider" />
+
+</RelativeLayout>

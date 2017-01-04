@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="?attr/appDefaultColor"
+    android:orientation="vertical" >
+
+    <LinearLayout
+        android:id="@+id/pop_msg_record_add_service_ll"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/sel_common_trans_item"
+        android:orientation="horizontal"
+        android:padding="8dp"
+        >
+
+        <ImageView
+            android:layout_width="35dp"
+            android:layout_height="35dp"
+            android:padding="5dp"
+            android:src="@drawable/new_service" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:text="服务号    "
+            android:textSize="@dimen/item_text_size_small"
+            android:textColor="#fff" />
+    </LinearLayout>
+
+ 	<View
+        android:layout_width="120dp"
+        android:layout_height="1px"
+        android:background="@color/common_divider_light"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+         />
+
+    <LinearLayout
+        android:id="@+id/pop_msg_record_add_chat_ll"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/sel_common_trans_item"
+        android:orientation="horizontal"
+        android:padding="8dp"
+         >
+
+        <ImageView
+            android:layout_width="35dp"
+            android:layout_height="35dp"
+            android:layout_gravity="center_vertical"
+            android:padding="5dp"
+            android:src="@drawable/single_chat" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:text="开始新聊天"
+            android:textSize="@dimen/item_text_size_small"
+            android:textColor="#fff" />
+        
+    </LinearLayout>
+ 	<View
+        android:layout_width="120dp"
+        android:layout_height="1px"
+        android:background="@color/common_divider_light"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+         />
+
+    <LinearLayout
+        android:id="@+id/pop_msg_record_add_group_chat_ll"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/sel_common_trans_item"
+        android:orientation="horizontal"
+        android:padding="8dp"
+         >
+
+        <ImageView
+            android:layout_width="35dp"
+            android:layout_height="35dp"
+            android:layout_gravity="center_vertical"
+            android:padding="5dp"
+            android:src="@drawable/new_chat" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:text="发起群聊"
+            android:textSize="@dimen/item_text_size_small"
+            android:textColor="#fff" />
+        
+    </LinearLayout>
+
+</LinearLayout>

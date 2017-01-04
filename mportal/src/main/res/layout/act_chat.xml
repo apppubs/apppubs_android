@@ -1,0 +1,211 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res/com.mportal.client"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent" >
+
+    <ImageView
+        android:id="@+id/conversation_bg_imageview"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:src="@color/window_color" />
+
+    <FrameLayout
+        android:id="@+id/chat_more_fl"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+       
+         >
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1px"
+            android:background="@color/common_divider" />
+
+        <com.mportal.client.view.FlowLayout
+            android:id="@+id/chat_more_flow"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_gravity="center"
+            android:visibility="gone"
+            android:padding="10dp"
+             >
+        </com.mportal.client.view.FlowLayout>
+
+        <!-- <RelativeLayout -->
+        <!-- android:id="@+id/faceLayout" -->
+        <!-- android:layout_width="match_parent" -->
+        <!-- android:layout_height="1dip" > -->
+
+
+        <!-- <ViewFlipper -->
+        <!-- android:layout_centerInParent="true" -->
+        <!-- android:id="@+id/faceFlipper" -->
+        <!-- android:layout_width="match_parent" -->
+        <!-- android:layout_height="wrap_content" -->
+        <!-- android:background="#d0d3d5" > -->
+        <!-- </ViewFlipper> -->
+
+
+        <!-- <LinearLayout -->
+        <!-- android:id="@+id/fill_the_gap" -->
+        <!-- android:layout_width="match_parent" -->
+        <!-- android:layout_height="1dip" -->
+        <!-- android:background="#272b34" -->
+        <!-- android:orientation="horizontal" > -->
+        <!-- </LinearLayout> -->
+
+
+        <!-- <LinearLayout -->
+        <!-- android:id="@+id/pagePoint" -->
+        <!-- android:layout_width="match_parent" -->
+        <!-- android:layout_height="1dip" -->
+        <!-- android:layout_below="@id/faceFlipper" -->
+        <!-- android:background="#d0d3d5" -->
+        <!-- android:gravity="center" -->
+        <!-- android:orientation="horizontal" > -->
+        <!-- </LinearLayout> -->
+        <!-- </RelativeLayout> -->
+    </FrameLayout>
+
+    <LinearLayout
+        android:id="@+id/chat_menubar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_above="@id/chat_more_fl"
+        android:orientation="horizontal"
+        android:padding="5dp" >
+
+        <ImageView
+            android:id="@+id/chat_voice_iv"
+            android:layout_width="28dp"
+            android:layout_height="28dp"
+            android:layout_gravity="center_vertical"
+            android:background="@drawable/sel_com_list"
+            android:onClick="onClick"
+            android:src="@drawable/chat_sound" />
+
+        <ImageView
+            android:id="@+id/chat_more_iv"
+            android:layout_width="28dp"
+            android:layout_height="28dp"
+            android:layout_gravity="center_vertical"
+            android:layout_marginLeft="@dimen/menu_right_magin"
+            android:background="@drawable/sel_com_list"
+            android:onClick="onClick"
+            android:src="@drawable/chat_plus" />
+
+        <FrameLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:layout_marginLeft="5dp"
+            android:layout_weight="1" >
+
+            <TextView
+                android:id="@+id/chat_count_voice_tv"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/sel_chat_voice_ing"
+                android:clickable="true"
+                android:gravity="center"
+                android:padding="@dimen/list_item_magin_top"
+                android:text="按住 说话"
+                android:visibility="gone" />
+
+            <com.mportal.client.view.MyEditText
+                android:id="@+id/chat_content_et"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/input_bg"
+                android:gravity="left"
+                android:textSize="@dimen/item_text_size"
+                android:padding="@dimen/list_item_magin_top" 
+                android:onClick="onClick"
+                android:maxLines="4"
+                />
+        </FrameLayout>
+
+        <TextView
+            android:id="@+id/chat_content_send"
+            android:layout_width="wrap_content"
+            android:layout_height="30dp"
+            android:layout_marginLeft="10dp"
+            android:layout_gravity="center_vertical"
+            android:background="@drawable/sel_contact_bg"
+            android:clickable="true"
+            android:gravity="center"
+            android:onClick="onClick"
+            android:paddingLeft="10dp"
+            android:paddingRight="10dp"
+            android:text="发送"
+            android:textColor="#333" />
+    </LinearLayout>
+
+    <View
+        android:id="@+id/line"
+        android:layout_width="match_parent"
+        android:layout_height="1px"
+        android:layout_above="@id/chat_menubar"
+        android:background="@color/common_divider" />
+
+    <ListView
+        android:id="@+id/chat_lv"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_above="@id/chat_menubar"
+        android:choiceMode="none"
+        android:transcriptMode="normal"
+        android:divider="@null"
+        android:listSelector="@android:color/transparent"
+        android:overScrollMode="never"
+        android:stackFromBottom="true" >
+    </ListView>
+
+    <RelativeLayout
+        android:id="@+id/chat_voice_lay_rl"
+        android:layout_width="150dp"
+        android:layout_height="150dp"
+        android:layout_centerInParent="true"
+        android:background="@drawable/chat_sound_wave_bg"
+        android:visibility="gone"
+        >
+
+        <ImageView
+            android:id="@+id/voice_flag"
+            android:layout_width="50dp"
+            android:layout_height="80dp"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="18dp"
+            android:src="@drawable/mport_recording_flag" />
+
+        <ImageView
+            android:id="@+id/chat_voice_ing_changpic"
+            android:layout_width="40dp"
+            android:layout_height="80dp"
+            android:layout_centerVertical="true"
+            android:layout_toRightOf="@+id/voice_flag"
+            android:src="@drawable/oy" />
+
+        <TextView
+            android:id="@+id/chat_voice_send_flag"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_centerHorizontal="true"
+            android:textSize="12dp"
+            android:layout_marginBottom="5dp"
+            android:text="手指上滑 ,取消发送"
+            android:textColor="@android:color/white" />
+    </RelativeLayout>
+    
+    <ImageView 
+        android:id="@+id/chat_image_lay"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:scaleType="fitCenter"
+        android:visibility="gone"
+        />
+
+</RelativeLayout>

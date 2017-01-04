@@ -1,0 +1,222 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/app_common_bg"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingLeft="10dp"
+        android:paddingRight="10dp"
+        android:paddingTop="20dp"
+        android:scrollbarStyle="outsideOverlay"
+         >
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical" >
+
+            <EditText
+                android:id="@+id/baoliao_title"
+                style="@style/app_common_edittext"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:ems="10"
+                android:hint="报料标题（30字以内）"
+                android:padding="10dp"
+                android:textColorHint="@color/common_hint"
+                android:textSize="14sp" />
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1px"
+                android:background="#CBCBCB" />
+
+            <EditText
+                android:id="@+id/baoliao_count"
+                style="@style/app_common_edittext"
+                android:layout_width="match_parent"
+                android:layout_height="100dp"
+                android:ems="20"
+                android:gravity="top"
+                android:hint="报料内容（400字以内）"
+                android:inputType="textMultiLine"
+                android:padding="10dp"
+                android:textColorHint="@color/common_hint"
+                android:textSize="14sp" />
+
+            <ImageView
+                android:id="@+id/baoliao_pic_iv"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:onClick="onClick"
+                android:padding="4dip"
+                android:src="@drawable/icon_pic" />
+
+            <com.mportal.client.view.RatioLayout
+                android:id="@+id/baoliao_pic_con_ratio_layout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:ratio="0.56"
+                android:visibility="gone"
+                >
+                <ImageView
+                    android:id="@+id/baoliao_pic_con_iv"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent" />
+            </com.mportal.client.view.RatioLayout>
+
+            <LinearLayout
+                android:id="@+id/baoliao_apppic_lin"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="#fff"
+                android:orientation="horizontal"
+                android:visibility="gone" >
+
+                <ImageView
+                    android:id="@+id/baoliao_addpic"
+                    android:layout_width="65dp"
+                    android:layout_height="65dp"
+                    android:layout_gravity="center"
+                    android:onClick="onClick"
+                    android:padding="4dip"
+                    android:src="@drawable/up_img"
+                    android:visibility="gone" />
+
+                <com.mportal.client.view.FlowLayout
+                    android:id="@+id/chicepicss"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="6dip" >
+                </com.mportal.client.view.FlowLayout>
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/baoliao_people"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical" >
+
+                <EditText
+                    android:id="@+id/baoliao_name"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:background="#fff"
+                    android:hint="您的名字"
+                    android:padding="10dp"
+                    android:singleLine="true"
+                    android:textColorHint="@color/common_hint"
+                    android:textSize="14sp" />
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1px"
+                    android:background="#CBCBCB" />
+
+                <EditText
+                    android:id="@+id/baoliao_email"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:background="#fff"
+                    android:hint="邮箱"
+                    android:padding="10dp"
+                    android:singleLine="true"
+                    android:textColorHint="@color/common_hint"
+                    android:textSize="14sp" />
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1px"
+                    android:background="#CBCBCB" />
+
+                <EditText
+                    android:id="@+id/baoliao_phone"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="#fff"
+                    android:hint="常用手机"
+                    android:padding="10dp"
+                    android:singleLine="true"
+                    android:soundEffectsEnabled="false"
+                    android:textColorHint="@color/common_hint"
+                    android:textSize="13sp" />
+            </LinearLayout>
+        </LinearLayout>
+    </ScrollView>
+
+    <LinearLayout
+        android:id="@+id/pop_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:background="@android:color/white"
+        android:gravity="center_horizontal"
+        android:orientation="vertical"
+        android:visibility="gone" >
+
+        <Button
+            android:id="@+id/btn_take_photo"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="10dip"
+            android:layout_marginRight="10dip"
+            android:layout_marginTop="10dip"
+            android:background="@drawable/baoliao_paizhao_popu_bg"
+            android:onClick="onClick"
+            android:padding="10dip"
+            android:text="拍照"
+             android:textColor="#666"
+            android:textSize="14dp" />
+
+        <Button
+            android:id="@+id/btn_pick_photo"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="10dip"
+            android:layout_marginRight="10dip"
+            android:layout_marginTop="5dip"
+            android:background="@drawable/baoliao_paizhao_popu_bg"
+            android:onClick="onClick"
+            android:padding="10dip"
+            android:text="从相册选择"
+             android:textColor="#666"
+            android:textSize="14dp" />
+
+        <Button
+            android:id="@+id/btn_cancel"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="15dip"
+            android:layout_marginLeft="10dip"
+            android:layout_marginRight="10dip"
+            android:layout_marginTop="14dip"
+            android:background="@drawable/baoliao_paizhao_popu_bg"
+            android:onClick="onClick"
+            android:padding="10dip"
+            android:textColor="#666"
+            android:text="取消"
+            android:textSize="14dp" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/baoliao_progress_ll"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="#90000000"
+        android:gravity="center"
+        android:orientation="vertical"
+        android:visibility="gone" >
+
+        <ProgressBar
+            android:layout_width="50dip"
+            android:layout_height="50dip"
+            android:layout_gravity="center" />
+    </LinearLayout>
+
+</RelativeLayout>

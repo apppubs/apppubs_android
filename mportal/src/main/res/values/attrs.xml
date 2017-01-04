@@ -1,0 +1,198 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <attr name="rightPadding" format="dimension"></attr>
+
+    <declare-styleable name="SlidingMenu1">
+        <attr name="rightPadding"></attr>
+    </declare-styleable>
+
+    <!-- 标题栏属性 -->
+    <declare-styleable name="TitleViewAttrs">
+
+        <!-- reference引用格式 -->
+        <attr name="rightImageSrc" format="reference" />
+        <attr name="leftImageSrc" format="reference" />
+        <attr name="centerValue" format="string" />
+        <attr name="rightValue" format="string" />
+    </declare-styleable>
+    <declare-styleable name="TitleBar">
+        <attr name="leftText" format="string" />
+        <attr name="leftBackground" format="reference" />
+        <attr name="leftImgSrc" format="reference"></attr>
+        <attr name="leftTextColor" format="reference|color" />
+        <attr name="rightText" format="string" />
+        <attr name="rightTextSize" format="dimension" />
+        <attr name="rightBackground" format="reference" />
+        <attr name="rightImgSrc" format="reference"></attr>
+        <attr name="conterBackground" format="reference" />
+        <attr name="rightTextColor" format="color|reference" />
+        <attr name="mTitle" format="string"></attr>
+        <attr name="titleColor" format="color|reference"></attr>
+        <attr name="titleSize" format="dimension"></attr>
+    </declare-styleable>
+    <declare-styleable name="FlowLayout">
+        <attr name="hspace" format="dimension" />
+        <attr name="vspace" format="dimension" />
+    </declare-styleable>
+    <declare-styleable name="FlowLayout_Layout">
+        <attr name="layout_space" format="dimension" />
+    </declare-styleable>
+
+    <attr name="textColor" format="color|reference"></attr>
+    <attr name="textSize" format="dimension"></attr>
+    <attr name="needCursor" format="boolean"></attr>
+    <attr name="selectedTextColor" format="color|reference"></attr>
+
+    <declare-styleable name="ScrollTabs">
+        <attr name="textColor"></attr>
+        <attr name="textSize"></attr>
+        <attr name="selectedTextColor"></attr>
+        <attr name="selectedTextSize" format="dimension"></attr>
+        <attr name="tabMinWidth" format="dimension"></attr>
+    </declare-styleable>
+    <declare-styleable name="Tabs">
+        <attr name="textColor"></attr>
+        <attr name="textSize"></attr>
+        <attr name="selectedTextColor"></attr>
+    </declare-styleable>
+    <declare-styleable name="StaggeredGridView">
+        <attr name="drawSelectorOnTop" format="boolean" />
+        <attr name="numColumns" format="integer" />
+        <attr name="itemMargin" format="dimension" />
+    </declare-styleable>
+    <declare-styleable name="AlternativeChannelLayout">
+        <attr name="child_height" format="dimension" />
+        <attr name="child_width" format="dimension" />
+        <attr name="child_padding" format="dimension"></attr>
+    </declare-styleable>
+    <declare-styleable name="DraggableGridView">
+        <attr name="item_height" format="dimension" />
+        <attr name="item_width" format="dimension" />
+        <attr name="item_padding" format="dimension"></attr>
+    </declare-styleable>
+    <declare-styleable name="CommonListView">
+        <attr name="list_sel" format="reference" />
+        <attr name="empty_string" format="string"></attr>
+        
+    </declare-styleable>
+    <declare-styleable name="SlidingMenu">
+        <attr name="mode">
+            <enum name="left" value="0" />
+            <enum name="right" value="1" />
+        </attr>
+        <attr name="viewAbove" format="reference" />
+        <attr name="viewBehind" format="reference" />
+        <attr name="behindOffset" format="dimension" />
+        <attr name="behindWidth" format="dimension" />
+        <attr name="behindScrollScale" format="float" />
+        <attr name="touchModeAbove">
+            <enum name="margin" value="0" />
+            <enum name="fullscreen" value="1" />
+            <enum name="none" value="2" />
+        </attr>
+        <attr name="touchModeBehind">
+            <enum name="margin" value="0" />
+            <enum name="fullscreen" value="1" />
+            <enum name="none" value="2" />
+        </attr>
+        <attr name="shadowDrawable" format="reference" />
+        <attr name="shadowWidth" format="dimension" />
+        <attr name="fadeEnabled" format="boolean" />
+        <attr name="fadeDegree" format="float" />
+        <attr name="selectorEnabled" format="boolean" />
+        <attr name="selectorDrawable" format="reference" />
+    </declare-styleable>
+    <declare-styleable name="DragSortListView">
+        <attr name="collapsed_height" format="dimension" />
+        <attr name="drag_scroll_start" format="float" />
+        <attr name="max_drag_scroll_speed" format="float" />
+        <attr name="float_background_color" format="color" />
+        <attr name="remove_mode">
+            <enum name="clickRemove" value="0" />
+            <enum name="flingRemove" value="1" />
+        </attr>
+        <attr name="track_drag_sort" format="boolean" />
+        <attr name="float_alpha" format="float" />
+        <attr name="slide_shuffle_speed" format="float" />
+        <attr name="remove_animation_duration" format="integer" />
+        <attr name="drop_animation_duration" format="integer" />
+        <attr name="drag_enabled" format="boolean" />
+        <attr name="sort_enabled" format="boolean" />
+        <attr name="remove_enabled" format="boolean" />
+        <attr name="drag_start_mode">
+            <enum name="onDown" value="0" />
+            <enum name="onMove" value="1" />
+            <enum name="onLongPress" value="2" />
+        </attr>
+        <attr name="drag_handle_id" format="integer" />
+        <attr name="fling_handle_id" format="integer" />
+        <attr name="click_remove_id" format="integer" />
+        <attr name="use_default_controller" format="boolean" />
+    </declare-styleable>
+    <declare-styleable name="RatioLayout">
+        <attr name="ratio" format="float"></attr>
+    </declare-styleable>
+    <declare-styleable name="ImageButton">
+        <attr name="highlightColor" format="reference|color"></attr>
+        <attr name="defaultColor" format="reference|color"></attr>
+    </declare-styleable>
+    <declare-styleable name="HoloCircularProgressBar">
+        <attr name="stroke_width" format="dimension" />
+        <attr name="progress" format="float" />
+        <attr name="marker_progress" format="float" />
+        <attr name="progress_color" format="color" />
+        <attr name="progress_background_color" format="color" />
+        <attr name="thumb_visible" format="boolean" />
+        <attr name="marker_visible" format="boolean" />
+        <attr name="android:gravity" />
+    </declare-styleable>
+
+    <attr name="circularProgressBarStyle" format="reference" />
+
+    <declare-styleable name="SwipeListView">
+        <attr name="swipeOpenOnLongPress" format="boolean" />
+        <attr name="swipeAnimationTime" format="integer" />
+        <attr name="swipeOffsetLeft" format="dimension" />
+        <attr name="swipeOffsetRight" format="dimension" />
+        <attr name="swipeCloseAllItemsWhenMoveList" format="boolean" />
+        <attr name="swipeFrontView" format="reference" />
+        <attr name="swipeBackView" format="reference" />
+        <attr name="swipeMode" format="enum">
+            <enum name="none" value="0" />
+            <enum name="both" value="1" />
+            <enum name="right" value="2" />
+            <enum name="left" value="3" />
+        </attr>
+        <attr name="swipeActionLeft" format="enum">
+            <enum name="reveal" value="0" />
+            <enum name="dismiss" value="1" />
+            <enum name="choice" value="2" />
+        </attr>
+        <attr name="swipeActionRight" format="enum">
+            <enum name="reveal" value="0" />
+            <enum name="dismiss" value="1" />
+            <enum name="choice" value="2" />
+        </attr>
+        <attr name="swipeDrawableChecked" format="reference" />
+        <attr name="swipeDrawableUnchecked" format="reference" />
+    </declare-styleable>
+    
+	<declare-styleable name="SwipeLayout">
+        <attr name="drag_edge">
+            <flag name="left" value="1" />
+            <flag name="right" value="2" />
+            <flag name="top" value="4" />
+            <flag name="bottom" value="8" />
+        </attr>
+        <attr name="leftEdgeSwipeOffset" format="dimension" />
+        <attr name="rightEdgeSwipeOffset" format="dimension" />
+        <attr name="topEdgeSwipeOffset" format="dimension" />
+        <attr name="bottomEdgeSwipeOffset" format="dimension" />
+        <attr name="show_mode" format="enum">
+            <enum name="lay_down" value="0" />
+            <enum name="pull_out" value="1" />
+        </attr>
+        <attr name="clickToClose" format="boolean" />
+    </declare-styleable>
+</resources>

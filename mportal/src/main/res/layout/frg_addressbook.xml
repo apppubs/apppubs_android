@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res/com.mportal.client">
+    <android.support.v7.widget.SearchView 
+        android:id="@+id/addressbook_sv"
+        android:layout_width="match_parent"
+        android:layout_height="45dp"
+        app:iconifiedByDefault="false"
+        app:queryHint="搜索"
+        android:background="#FFFFFF"
+        ></android.support.v7.widget.SearchView>
+    <FrameLayout 
+        android:id="@+id/fragment_container"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@id/addressbook_sv"
+        ></FrameLayout>
+	<ListView
+	    android:id="@+id/addressbook_search_result_lv"
+	    android:layout_width="match_parent"
+	    android:layout_height="match_parent"
+	    android:layout_below="@id/addressbook_sv"
+	    android:background="@color/app_common_bg" 
+	    android:divider="@null"
+	    android:visibility="gone"
+	    ></ListView>
+</RelativeLayout>

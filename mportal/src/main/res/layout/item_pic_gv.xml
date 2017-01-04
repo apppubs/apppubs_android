@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:mportal="http://schemas.android.com/apk/res/com.mportal.client"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@drawable/sel_common_item"
+    android:orientation="vertical" >
+
+    <com.mportal.client.view.RatioLayout
+        android:id="@+id/right_gv_item"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="#fff"
+        mportal:ratio="0.56" >
+
+        <ImageView
+            android:id="@+id/pic_iv"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:scaleType="centerCrop" />
+    </com.mportal.client.view.RatioLayout>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" 
+        >
+        <TextView
+            android:id="@+id/pic_tv"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="6dp"
+            android:singleLine="true"
+            android:textColor="@color/common_text_gray"
+            android:textSize="14sp" />
+         <TextView 
+             android:id="@+id/pic_item_pic_count_tv"
+            android:layout_width="wrap_content"
+            android:layout_height="13dp"
+            android:textSize="12dp"
+            android:textColor="@color/common_text_gray_light"
+            android:layout_centerVertical="true"
+            android:layout_alignParentRight="true"
+            android:layout_marginBottom="1dp"
+            android:layout_marginRight="@dimen/app_padding_right"
+            android:text="4"
+            />
+        <ImageView 
+            android:layout_width="14dp"
+            android:layout_height="14dp"
+            android:src="@drawable/pic_list_pic_count"
+            android:layout_centerVertical="true"
+            android:layout_toLeftOf="@id/pic_item_pic_count_tv"
+            android:layout_marginRight="5dp"
+            />
+       
+    </RelativeLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1px"
+        android:background="@color/common_divider" />
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="10dp"
+        android:background="@color/app_common_bg" />
+
+</LinearLayout>

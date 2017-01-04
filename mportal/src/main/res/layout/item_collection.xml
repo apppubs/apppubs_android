@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    	xmlns:mportal="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/saveitem_lay"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@drawable/sel_common_item"
+    android:orientation="horizontal"
+    android:paddingLeft="@dimen/item_padding_left"
+    android:paddingTop="@dimen/item_padding_top"
+    
+     >
+    <com.mportal.client.view.ImageButton
+       
+        android:id="@+id/collection_item_delete_iv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_centerVertical="true"
+        android:layout_gravity="center_vertical"
+        android:layout_marginRight="@dimen/item_padding_right"
+        android:padding="5dp"
+        android:src="@drawable/delete"
+        android:visibility="gone" 
+        mportal:defaultColor="?appDefaultColor"
+        />
+    <LinearLayout
+        android:id="@+id/collection_content_ll"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:paddingRight="@dimen/item_padding_right"
+        android:layout_toRightOf="@+id/collection_item_delete_iv"
+        android:orientation="vertical" >
+        
+
+        <TextView
+            android:id="@+id/collection_item_title_tv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:ellipsize="end"
+            android:gravity="left"
+            android:singleLine="true"
+            android:textColor="#333"
+            android:textSize="16dp" />
+
+        <TextView 
+            android:id="@+id/collection_item_type_time_tv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:layout_marginBottom="@dimen/item_padding_bottom"
+            android:text="报纸-2014/12/12"
+            android:textSize="13dp"
+            android:textColor="@color/common_text_gray"
+            />
+    </LinearLayout>
+
+
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1px"
+        android:layout_alignParentBottom="true"
+        android:background="@color/common_divider" />
+
+</RelativeLayout>

@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:mportal="http://schemas.android.com/apk/res/com.mportal.client"
+    android:id="@+id/menu_left_rl"
+    android:layout_width="160dip"
+    android:layout_height="match_parent"
+    android:background="?attr/appSlideMenuBg" >
+
+    <RelativeLayout
+        android:id="@+id/menu_left_weather"
+        android:layout_width="wrap_content"
+        android:layout_height="70dp"
+        android:layout_alignParentTop="true"
+        android:layout_centerInParent="true"
+        android:layout_marginTop="20dp"
+        android:gravity="center"
+        android:onClick="onClick" >
+
+        <ImageView
+            android:id="@+id/menu_left_weather_pic"
+            android:layout_width="70dp"
+            android:layout_height="match_parent"
+            android:layout_centerVertical="true"
+            android:src="@drawable/biz_pc_plugin_weather_xiaoxue" />
+
+        <TextView
+            android:id="@+id/menu_left_weather_temp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="3dp"
+            android:layout_marginTop="13dp"
+            android:layout_toRightOf="@id/menu_left_weather_pic"
+            android:text="1°/0°"
+            android:textColor="@android:color/white"
+            android:textSize="14sp" />
+
+        <TextView
+            android:id="@+id/menu_left_weather_cityname"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_marginBottom="13dp"
+            android:layout_marginLeft="3dp"
+            android:layout_toRightOf="@id/menu_left_weather_pic"
+            android:text="北京"
+            android:textColor="@android:color/white"
+            android:textSize="14dp" />
+    </RelativeLayout>
+
+    <com.mportal.client.view.ImageButton
+        android:id="@+id/left_back_splash"
+        android:layout_width="30dip"
+        android:layout_height="30dip"
+        android:layout_alignParentBottom="true"
+        android:layout_marginBottom="20dp"
+        android:layout_marginLeft="20dip"
+        android:onClick="onClick"
+        android:scaleType="centerInside"
+        android:src="@drawable/biz_main_ad_show_arrow"
+        mportal:highlightColor="@color/button_black_hight_color" />
+
+    <RelativeLayout
+        android:id="@+id/left_setting"
+        android:layout_width="wrap_content"
+        android:layout_height="40dp"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="20dp"
+        android:gravity="center_vertical"
+        android:onClick="onClick" >
+
+        <ImageView
+            android:id="@+id/id_img4"
+            android:layout_width="18dp"
+            android:layout_height="18dp"
+            android:layout_centerVertical="true"
+            android:layout_marginTop="10dp"
+            android:scaleType="centerInside"
+            android:src="@drawable/left_menu_setup_normal" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:layout_marginLeft="10dp"
+            android:layout_toRightOf="@id/id_img4"
+            android:text="设置"
+            android:textColor="@drawable/sel_com_text"
+            android:textSize="15sp" />
+    </RelativeLayout>
+
+    <ListView
+        android:id="@+id/menu_left_lv"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_above="@id/left_setting"
+        android:layout_marginTop="100dp"
+        android:divider="@null"
+        android:gravity="center"
+        android:listSelector="@drawable/sel_menu_list" >
+    </ListView>
+
+</RelativeLayout>

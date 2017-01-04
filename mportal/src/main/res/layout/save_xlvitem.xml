@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/saveitem_lay"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal"
+    android:background="@color/app_common_bg"
+    android:paddingBottom="@dimen/item_padding_bottom"
+    android:paddingLeft="@dimen/item_padding_left"
+    android:paddingRight="@dimen/item_padding_right"
+    android:paddingTop="@dimen/item_padding_top" >
+
+    <LinearLayout
+        android:layout_weight="1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical" >
+
+        <TextView
+            android:id="@+id/saveitem_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:ellipsize="end"
+            android:gravity="left"
+            android:singleLine="true"
+            android:textColor="#333"
+            android:textSize="16sp" />
+
+        <TextView
+            android:id="@+id/saveitem_desp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dip"
+            android:ellipsize="end"
+            android:maxLines="2"
+            android:textColor="#A8A8A8"
+            android:textSize="14sp" />
+    </LinearLayout>
+
+    <ImageView
+        android:id="@+id/saveitem_delsete"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:padding="5dp"
+        android:layout_gravity="center_vertical"
+        android:visibility="gone"
+        android:src="@drawable/delete" />
+
+</LinearLayout>

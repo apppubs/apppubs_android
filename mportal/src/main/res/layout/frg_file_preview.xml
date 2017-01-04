@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent" >
+
+    <LinearLayout
+        android:id="@+id/file_preview_info_con_ll"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingBottom="40dp"
+        android:layout_centerInParent="true"
+        android:gravity="center_horizontal"
+        android:orientation="vertical"
+         >
+        <TextView
+            android:id="@+id/file_preview_filename"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:paddingLeft="20dp"
+            android:paddingRight="20dp"
+            android:text="文件名"
+            android:textColor="@color/common_text_gray"
+            android:textSize="15dp" />
+        <ImageView
+            android:id="@+id/file_preview_iv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:src="@drawable/file_preview_unknow" />
+
+        <TextView
+            android:id="@+id/file_preview_progress_tv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:text="0%"
+            android:textColor="@color/common_text_gray_light"
+            android:textSize="12dp" />
+    </LinearLayout>
+	<Button 
+	    android:id="@+id/file_preview_pre_btn"
+	    android:layout_width="match_parent"
+	    android:layout_height="40dp"
+	    android:layout_marginLeft="20dp"
+	    android:layout_marginRight="20dp"
+	    android:layout_below="@id/file_preview_info_con_ll"
+	    android:textSize="15dp"
+	    android:text="预览"
+	    android:visibility="gone"
+	    />
+	
+	
+    <ScrollView
+        android:id="@+id/file_preview_container_sv"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:paddingLeft="@dimen/item_padding_left_narrow"
+        android:paddingRight="@dimen/item_padding_right_narrow"
+        android:scrollbarStyle="outsideOverlay"
+        android:visibility="gone"
+         >
+
+        <TextView
+            android:id="@+id/file_preview_txt_tv"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+    </ScrollView>
+	<com.mportal.client.view.DragImageView
+	    android:id="@+id/file_preview_pic_div"
+	    android:layout_width="match_parent"
+	    android:layout_height="match_parent"
+	    android:visibility="gone"
+	    >
+	</com.mportal.client.view.DragImageView>
+</RelativeLayout>

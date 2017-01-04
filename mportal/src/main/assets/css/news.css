@@ -1,0 +1,63 @@
+﻿
+
+
+/*
+@font-face {
+   font-family: 'headline';
+   src: url('file:///android_asset/fonts/headline.otf'); 
+}
+*/
+
+BODY {
+
+	PADDING-BOTTOM: 0px; MARGIN: 0px; PADDING-LEFT: 0px; PADDING-RIGHT: 0px; PADDING-TOP: 0px;
+	width:auto;text-align: left;	font-family: 'myface';
+	word-wrap: break-word
+	
+}
+p{ margin:0;padding:0;}
+a,a:link,a:visited,a:hover,a:active {text-decoration:none;color:blue;}
+.imgshow{
+ text-align:center;
+}
+/*webkit-box-shadow:1px 1px 2px #cecece; box-shadow:1px 1px 2px #cecece; -moz-box-shadow:1px 1px 2px #cecece; */
+
+.infotitle {
+	background-color: #f0f0f0;color:#000000; FONT-WEIGHT: 900; BORDER-bottom: #e0e0e0 1px solid; PADDING-TOP: 1em;text-align:left;
+	padding-left:20px;padding-right:20px; padding-top:0.5em; padding-bottom:1.0em; margin-bottom:1.2em;
+	
+
+
+}
+.titleshow {
+
+ FONT-SIZE: 22px; line-height:26px;FONT-WEIGHT: bold;vertical-align: baseline; color:rgb(200,​ 51,​ 68);white-space:normal;text-align:left;margin-top:1em;
+}
+.ftitleshow {
+
+ FONT-SIZE: 14px; line-height:18px;FONT-WEIGHT: bold;color:#969696; white-space:normal;text-align:justify;padding-top:0.6em;
+}
+.pubtimeshow{
+ FONT-SIZE: 14px; line-height:18px;color:#969696; white-space:normal;text-align:justify;padding-top:0.6em;
+}
+/*
+.arcinfo {
+	LINE-HEIGHT: 1.5; FONT-SIZE: 18px; font-weight: 500;
+}
+*/
+.contetshow{
+	 margin-left:12px;margin-right:12px; text-align:left;}
+/*.contetshow
+{
+ margin-left:20px;margin-right:20px;text-align:justify;
+	-webkit-columns: 280px 2; 
+    -moz-columns: 280px 2;
+    columns: 280px 2;
+}*/
+
+.pic{
+	color:#666; font-size:14px;padding-top:1em;padding-bottom:1em;text-align:justify;
+}
+.pic_con{width:auto; margin:auto;text-align:center;}
+img {width:100%;} 
+

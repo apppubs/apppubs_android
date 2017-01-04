@@ -1,0 +1,252 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#fff" >
+
+
+    <LinearLayout
+        android:id="@+id/regist_layi"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="16dp"
+        android:background="@drawable/input_bg"
+        android:orientation="vertical"
+        android:paddingLeft="6dp" >
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal" >
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:padding="3dp"
+                android:text="用  户  名 :"
+                android:textSize="14sp" />
+
+            <EditText
+                android:id="@+id/zhuce_username"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@null"
+                android:hint="请输入用户名"
+                android:padding="10dip"
+                android:textSize="12sp" />
+        </LinearLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@color/bottom_bar_bg" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal" >
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:layout_gravity="center"
+                android:padding="3dp"
+                android:text="电子邮箱 :"
+                android:textSize="14sp" />
+
+            <EditText
+                android:id="@+id/zhuce_email"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dip"
+                android:background="@null"
+                android:hint="请输入常用邮箱"
+                android:padding="10dip"
+                android:textSize="12sp"
+                android:windowSoftInputMode="stateHidden" />
+        </LinearLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@color/bottom_bar_bg" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal" >
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:layout_gravity="center"
+                android:padding="3dp"
+                android:text="密       码 :"
+                android:textSize="14sp" />
+
+            <EditText
+                android:id="@+id/zhuce_password"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:background="@null"
+                android:hint="长度小于20的有效密码"
+                android:padding="10dip"
+                android:password="true"
+                android:textSize="12sp"
+                android:windowSoftInputMode="stateHidden" />
+
+            <ImageView
+                android:id="@+id/zhuce_seeword"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:padding="6dip"
+                android:src="@drawable/see_password" />
+        </LinearLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@color/bottom_bar_bg" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal" >
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:layout_gravity="center"
+                android:padding="3dp"
+                android:text="重复密码 :"
+                android:textSize="14sp" />
+
+            <EditText
+                android:id="@+id/zhuce_re_password"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:background="@null"
+                android:hint="重新输入密码"
+                android:padding="10dip"
+                android:password="true"
+                android:textSize="12sp"
+                android:windowSoftInputMode="stateHidden" />
+        </LinearLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@color/bottom_bar_bg" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal" >
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:layout_gravity="center"
+                android:padding="3dp"
+                android:text="昵      称 :"
+                android:textSize="14sp" />
+
+            <EditText
+                android:id="@+id/zhuce_nicname"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:background="@null"
+                android:hint="请输入昵称"
+                android:padding="10dip"
+                android:textSize="12sp"
+                android:windowSoftInputMode="stateHidden" />
+        </LinearLayout>
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/regist_layir"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/regist_layi"
+        android:layout_marginLeft="16dp"
+        android:layout_marginRight="16dp"
+        android:layout_marginTop="16dp"
+        android:background="@drawable/input_bg"
+        android:orientation="horizontal" >
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:layout_gravity="center"
+            android:padding="3dp"
+            android:text=" 手  机  号 :"
+            android:textSize="14sp" />
+
+        <EditText
+            android:id="@+id/zhuce_tel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:background="@null"
+            android:hint="请输入手机号"
+            android:padding="10dip"
+            android:textSize="12sp"
+            android:windowSoftInputMode="stateHidden" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/zhuce_mianze_lay"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/regist_layir"
+        android:layout_marginLeft="16dp"
+        android:layout_marginRight="16dp"
+        android:layout_marginTop="10dip"
+        android:background="@drawable/input_bg"
+        android:orientation="horizontal" >
+
+        <CheckBox
+            android:id="@+id/zhuce_mianzebn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:padding="8dip"
+            android:src="@drawable/check_image_no"
+            
+             />
+
+        <TextView
+            android:id="@+id/zhuce_mianzetv"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:gravity="left"
+            android:padding="10dp"
+            android:text="同意《微门户》的免责声明"
+            android:textSize="14sp" />
+    </LinearLayout>
+
+    <Button
+        android:id="@+id/zhuce_zhuce"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:layout_below="@id/zhuce_mianze_lay"
+        android:layout_marginLeft="@dimen/item_padding_left"
+        android:layout_marginRight="@dimen/item_padding_right"
+        android:layout_marginTop="@dimen/item_padding_top"
+        android:textSize="16dp"
+        android:padding="6dp"
+        android:text="立即注册"
+        android:textColor="#fff" />
+
+</RelativeLayout>

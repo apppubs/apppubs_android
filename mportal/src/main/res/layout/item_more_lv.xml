@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:background="@drawable/sel_common_item"
+    android:paddingLeft="@dimen/item_padding_left"
+    android:paddingTop="@dimen/item_padding_top_narrow"
+    
+    android:layout_width="match_parent"
+    android:layout_height="match_parent" >
+
+    <ImageView
+        android:id="@+id/item_more_iv"
+        android:layout_width="@dimen/bottom_more_item_img_width"
+        android:layout_height="@dimen/bottom_more_item_img_height"
+        android:layout_centerVertical="true"
+        android:background="@drawable/bg_circle"
+        android:gravity="center"
+        android:scaleType="centerInside"
+         />
+
+    <TextView
+        android:id="@+id/item_more_tv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerVertical="true"
+        android:layout_marginLeft="12dp"
+        android:layout_toRightOf="@id/item_more_iv"
+        android:gravity="center"
+        android:textSize="@dimen/item_text_size"
+        android:textColor="#333"
+        android:text="菜单"
+         />
+
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_centerVertical="true"
+        android:src="@drawable/left_arrow" 
+        android:layout_marginRight="@dimen/item_padding_right"
+        />
+    
+    
+    <View
+        android:id="@+id/blank"
+        android:layout_below="@id/item_more_iv"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/item_padding_bottom_narrow"
+        />
+	<View
+	    android:id="@+id/line"
+	    android:layout_below="@id/blank" 
+	    android:layout_width="match_parent"
+	    android:layout_height="1px"
+	    android:background="@color/common_divider_light"
+	    />
+</RelativeLayout>

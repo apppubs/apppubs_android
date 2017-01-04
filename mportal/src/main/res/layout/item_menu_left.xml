@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/left_gv_item"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal"
+    android:paddingLeft="50dp"
+    android:paddingRight="10dp" >
+
+    <ImageView
+        android:id="@+id/left_gv_iv"
+        android:layout_width="21dip" 
+        android:layout_height="21dip"
+        android:layout_alignParentLeft="true"
+        android:layout_centerVertical="true"
+        android:gravity="center"
+        android:scaleType="centerInside" />
+
+    <TextView
+        android:id="@+id/left_gv_tv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerVertical="true"
+        android:layout_gravity="center"
+        android:layout_marginLeft="13dip"
+        android:layout_toRightOf="@id/left_gv_iv"
+        android:gravity="center"
+        android:textColor="#fff"
+        android:textSize="15dp" />
+
+    <com.mportal.client.view.ImageButton
+        xmlns:mportal="http://schemas.android.com/apk/res/com.mportal.client"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_centerVertical="true"
+        android:src="@drawable/left_arrow" 
+        
+        />
+
+</RelativeLayout>

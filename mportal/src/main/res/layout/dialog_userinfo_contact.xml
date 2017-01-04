@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="@drawable/dialog_bg"
+     >
+
+    <LinearLayout
+        android:id="@+id/popu_userinfo_call"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/sel_common_item"
+        android:clickable="true"
+        android:orientation="horizontal"
+        android:padding="10dp" >
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="5dp"
+            android:src="@drawable/phone_list" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:layout_marginLeft="6dp"
+            android:gravity="center_vertical"
+            android:paddingRight="6dp"
+            android:text="打电话"
+            android:textColor="#333" />
+    </LinearLayout>
+
+    <View
+        android:id="@+id/view"
+        android:layout_below="@id/popu_userinfo_call"
+        android:layout_width="match_parent"
+        android:layout_height="1px"
+        android:background="#CDC9C9" />
+
+    <LinearLayout
+        android:layout_below="@id/view"
+        android:id="@+id/popu_userinfo_message"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/sel_common_item"
+        android:clickable="true"
+        android:orientation="horizontal"
+        android:padding="10dp" >
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="5dp"
+            android:src="@drawable/message_list" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:layout_marginLeft="6dp"
+            android:gravity="center_vertical"
+            android:paddingRight="6dp"
+            android:text="发短信"
+            android:textColor="#333" />
+    </LinearLayout>
+
+</RelativeLayout>

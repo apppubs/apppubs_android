@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent" >
+
+    <TextView
+        android:id="@+id/frg_paperissuelist_flag"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/bottom_info_bar_bg"
+        android:paddingBottom="@dimen/text_padding"
+        android:paddingLeft="@dimen/text_padding"
+        android:paddingTop="@dimen/text_padding"
+        android:textSize="15sp"
+        android:textStyle="bold" />
+
+    <ListView
+        android:id="@+id/frg_paperissurelist_lv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:divider="#00000000"
+        android:dividerHeight="0dp"
+        android:layout_below="@id/frg_paperissuelist_flag" >
+    </ListView>
+
+   
+</RelativeLayout>

@@ -1,0 +1,272 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:mportal="http://schemas.android.com/apk/res/com.mportal.client"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/slidemenu_bg_blue" >
+
+    <com.mportal.client.view.TitleBar
+        android:id="@+id/weather_wb"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/title_height"
+        android:background="@android:color/transparent"
+        mportal:leftImgSrc="@drawable/top_back_btn"
+        mportal:mTitle="天气"
+        mportal:rightImgSrc="@drawable/mark_place"
+        mportal:titleSize="@dimen/title_text_size" />
+
+    <LinearLayout
+        android:id="@+id/weather_today_show"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/weather_wb"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:layout_marginTop="40dp"
+        android:background="@drawable/weather_today_show_bg"
+        android:gravity="center"
+        android:orientation="horizontal"
+        android:padding="2dp" >
+
+        <!-- <GifView -->
+
+
+        <!-- <com.ant.liao.GifView -->
+        <!-- android:id="@+id/weather_today_image" -->
+        <!-- android:layout_width="wrap_content" -->
+        <!-- android:layout_height="wrap_content" -->
+        <!-- android:layout_alignParentLeft="true" -->
+        <!-- android:layout_centerVertical="true" -->
+        <!-- android:layout_marginLeft="4dp" -->
+        <!-- android:layout_marginTop="60dp" -->
+        <!-- /> -->
+
+        <ImageView
+            android:id="@+id/weather_today_image"
+            android:layout_width="@dimen/weather_pic"
+            android:layout_height="@dimen/weather_pic"
+            android:layout_gravity="center_vertical"
+            android:layout_margin="8dp"
+            android:layout_weight="1"
+            android:scaleType="fitCenter" />
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:layout_marginLeft="1dp"
+            android:layout_weight="2"
+            android:gravity="center_vertical"
+            android:orientation="vertical" >
+
+            <TextView
+                android:id="@+id/weather_today_time"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:padding="@dimen/text_weather_padding"
+                android:text="今天"
+                android:textColor="@android:color/white"
+                android:textSize="@dimen/item_text_size" />
+
+            <TextView
+                android:id="@+id/weather_today_temp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:padding="@dimen/text_weather_padding"
+                android:textColor="@android:color/white"
+                android:textSize="@dimen/item_text_size_big" />
+
+            <TextView
+                android:id="@+id/weather_today_info"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="5dp"
+                android:padding="@dimen/text_weather_padding"
+                android:textColor="@android:color/white"
+                android:textSize="@dimen/item_text_size" />
+        </LinearLayout>
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/weather_today_show"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:layout_marginTop="50dp"
+        android:layout_weight="3"
+        android:orientation="vertical" >
+
+        <!-- 明天 -->
+
+        <RelativeLayout
+            android:layout_width="wrap_content"
+            android:layout_height="fill_parent"
+            android:layout_marginTop="10dp"
+            android:layout_weight="1"
+            android:gravity="center" >
+
+            <TextView
+                android:id="@+id/weather_tomorrow_time"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:padding="@dimen/text_weather_padding"
+                android:text="星期四"
+                android:textColor="@android:color/white"
+                android:textSize="@dimen/item_text_size_small" />
+
+            <ImageView
+                android:id="@+id/weather_tomorrow_image"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:layout_marginLeft="8dp"
+                android:layout_toRightOf="@id/weather_tomorrow_time"
+                android:scaleType="centerInside"
+                android:src="@drawable/biz_pc_plugin_weather_baoxue" />
+
+            <TextView
+                android:id="@+id/weather_tomorrow_weather"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="8dp"
+                android:layout_toRightOf="@id/weather_tomorrow_image"
+                android:gravity="center"
+                android:padding="@dimen/text_weather_padding"
+                android:paddingTop="3dp"
+                android:text="晴   微风"
+                android:textColor="@android:color/white"
+                android:textSize="@dimen/item_text_size_small" />
+
+            <TextView
+                android:id="@+id/weather_tomorrow_temp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:padding="@dimen/text_weather_padding"
+                android:paddingTop="3dp"
+                android:text="27°/17°"
+                android:textColor="@android:color/white"
+                android:textSize="@dimen/item_text_size_small" />
+        </RelativeLayout>
+        <!-- 后天 -->
+
+        <RelativeLayout
+            android:layout_width="wrap_content"
+            android:layout_height="fill_parent"
+            android:layout_marginTop="10dp"
+            android:layout_weight="1"
+            android:gravity="center" >
+
+            <TextView
+                android:id="@+id/weather_houtian_time"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:padding="@dimen/text_weather_padding"
+                android:paddingTop="3dp"
+                android:text="星期四"
+                android:textColor="@android:color/white"
+                android:textSize="@dimen/item_text_size_small" />
+
+            <ImageView
+                android:id="@+id/weather_houtian_image"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:layout_marginLeft="8dp"
+                android:layout_toRightOf="@id/weather_houtian_time"
+                android:scaleType="centerInside"
+                android:src="@drawable/biz_pc_plugin_weather_baoxue" />
+
+            <TextView
+                android:id="@+id/weather_houtian_weather"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="8dp"
+                android:layout_toRightOf="@id/weather_houtian_image"
+                android:padding="@dimen/text_weather_padding"
+                android:paddingTop="3dp"
+                android:text="晴   微风"
+                android:textColor="@android:color/white"
+                android:textSize="@dimen/item_text_size_small" />
+
+            <TextView
+                android:id="@+id/weather_houtian_temp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:gravity="center"
+                android:padding="@dimen/text_weather_padding"
+                android:text="27°/17°"
+                android:textColor="@android:color/white"
+                android:textSize="@dimen/item_text_size_small" />
+        </RelativeLayout>
+        <!-- 大后天 -->
+
+        <RelativeLayout
+            android:layout_width="wrap_content"
+            android:layout_height="fill_parent"
+            android:layout_marginTop="10dp"
+            android:layout_weight="1"
+            android:gravity="center" >
+
+            <TextView
+                android:id="@+id/weather_dahoutian_time"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:padding="@dimen/text_weather_padding"
+                android:paddingTop="3dp"
+                android:text="星期四"
+                android:textColor="@android:color/white"
+                android:textSize="@dimen/item_text_size_small" />
+
+            <ImageView
+                android:id="@+id/weather_dahoutian_image"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:layout_marginLeft="8dp"
+                android:layout_toRightOf="@id/weather_dahoutian_time"
+                android:scaleType="centerInside"
+                android:src="@drawable/biz_pc_plugin_weather_baoxue" />
+
+            <TextView
+                android:id="@+id/weather_dahoutian_weather"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="8dp"
+                android:layout_toRightOf="@id/weather_dahoutian_image"
+                android:padding="@dimen/text_weather_padding"
+                android:paddingTop="3dp"
+                android:text="晴   微风"
+                android:textColor="@android:color/white"
+                android:textSize="@dimen/item_text_size_small" />
+
+            <TextView
+                android:id="@+id/weather_dahoutian_temp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:padding="@dimen/text_weather_padding"
+                android:paddingTop="3dp"
+                android:text="27°/17°"
+                android:textColor="@android:color/white"
+                android:textSize="@dimen/item_text_size_small" />
+        </RelativeLayout>
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/weather_progress_ll"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/btn_bg_h"
+        android:gravity="center"
+        android:orientation="vertical"
+        android:visibility="gone" >
+
+        <ProgressBar
+            android:layout_width="50dip"
+            android:layout_height="50dip"
+            android:layout_gravity="center" />
+    </LinearLayout>
+
+</RelativeLayout>

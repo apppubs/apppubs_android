@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:mportal="http://schemas.android.com/apk/res/com.mportal.client"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="?attr/appDefaultColor"
+    android:orientation="vertical" >
+
+    <LinearLayout
+        android:id="@+id/pop_news_info_collect"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/sel_common_trans_item"
+        android:orientation="horizontal"
+        android:paddingBottom="8dp"
+        android:paddingLeft="10dp"
+        android:paddingRight="10dp"
+        android:paddingTop="8dp"
+        android:onClick="onClick"
+         >
+
+        <com.mportal.client.view.ImageButton
+            android:layout_width="35dp"
+            android:layout_height="35dp"
+            android:padding="5dp"
+            android:src="@drawable/menubar_favorite"
+            mportal:defaultColor="@android:color/white" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_marginLeft="10dp"
+            android:gravity="center"
+            android:text="收藏    "
+            android:textColor="#fff"
+            android:textSize="@dimen/item_text_size_small" />
+    </LinearLayout>
+
+    <!-- <View
+        android:layout_width="120dp"
+        android:layout_height="1px"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:background="@color/common_divider_light" /> -->
+
+    <LinearLayout
+        android:id="@+id/pop_news_info_share"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/sel_common_trans_item"
+        android:orientation="horizontal"
+        android:paddingBottom="8dp"
+        android:paddingLeft="10dp"
+        android:paddingRight="10dp"
+        android:paddingTop="8dp"
+        android:onClick="onClick"
+         >
+
+        <com.mportal.client.view.ImageButton
+            android:layout_width="35dp"
+            android:layout_height="35dp"
+            android:layout_gravity="center_vertical"
+            android:padding="5dp"
+            android:src="@drawable/menubar_share"
+            mportal:defaultColor="@android:color/white" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_marginLeft="10dp"
+            android:gravity="center"
+            android:text="分享"
+            android:textColor="#fff"
+            android:textSize="@dimen/item_text_size_small" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/pop_news_info_textsize"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/sel_common_trans_item"
+        android:orientation="horizontal"
+        android:paddingBottom="8dp"
+        android:paddingLeft="10dp"
+        android:paddingRight="10dp"
+        android:paddingTop="8dp" 
+        android:onClick="onClick"
+        >
+
+        <com.mportal.client.view.ImageButton
+            android:layout_width="35dp"
+            android:layout_height="35dp"
+            android:layout_gravity="center_vertical"
+            android:padding="5dp"
+            android:src="@drawable/font_size"
+            mportal:defaultColor="@android:color/white" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_marginLeft="10dp"
+            android:gravity="center"
+            android:text="正文字号"
+            android:textColor="#fff"
+            android:textSize="@dimen/item_text_size_small" />
+    </LinearLayout>
+
+</LinearLayout>

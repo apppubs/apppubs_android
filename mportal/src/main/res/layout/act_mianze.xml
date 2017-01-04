@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#fff" >
+
+
+    <WebView
+        android:id="@+id/mianze_webview"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+         />
+   <LinearLayout
+        android:id="@+id/mianze_progressBar"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="#00000000"
+        android:gravity="center"
+        android:orientation="vertical" >
+
+        <ProgressBar
+            android:layout_width="50dip"
+            android:layout_height="50dip"
+            android:layout_gravity="center" />
+    </LinearLayout>
+</RelativeLayout>

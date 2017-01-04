@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    style="@style/item_menu_lv_withpic"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent" >
+
+    <ImageView
+        android:id="@+id/menu_iv"
+        android:layout_width="34dp"
+        android:layout_height="34dp"
+        android:layout_centerVertical="true"
+        android:gravity="center"
+        android:scaleType="fitXY" />
+
+    <TextView
+        android:id="@+id/menu_tv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerVertical="true"
+        android:layout_marginLeft="12dp"
+        android:layout_toRightOf="@id/menu_iv"
+        android:gravity="center"
+        android:text="菜单"
+        android:textColor="#333"
+        android:textSize="15dp" />
+
+    <ImageView
+        android:id="@+id/arrow"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_centerVertical="true"
+        android:src="@drawable/left_arrow" />
+
+    <TextView
+        android:id="@+id/menu_reddot"
+        android:layout_width="20dp"
+        android:layout_height="20dp"
+        android:layout_centerVertical="true"
+        android:layout_toLeftOf="@id/arrow"
+        android:background="@drawable/dot_red"
+        android:gravity="center"
+        android:text="13"
+        android:singleLine="true"
+        android:textColor="#ffffff"
+        android:textSize="12dp"
+        android:textStyle="bold" />
+
+</RelativeLayout>
