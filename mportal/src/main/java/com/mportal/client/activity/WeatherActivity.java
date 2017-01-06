@@ -27,9 +27,9 @@ import com.mportal.client.util.StringUtils;
 import com.mportal.client.util.SystemUtils;
 import com.mportal.client.util.Tools;
 import com.mportal.client.util.WeatherUtils;
-import com.mportal.client.view.AlertDialog;
-import com.mportal.client.view.AlertDialog.OnOkClickListener;
-import com.mportal.client.view.TitleBar;
+import com.mportal.client.widget.AlertDialog;
+import com.mportal.client.widget.AlertDialog.OnOkClickListener;
+import com.mportal.client.widget.TitleBar;
 
 /**
  * 天气

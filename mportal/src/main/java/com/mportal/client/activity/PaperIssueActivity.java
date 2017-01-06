@@ -18,7 +18,7 @@ import com.mportal.client.bean.PaperIssue;
 import com.mportal.client.business.BussinessCallbackCommon;
 import com.mportal.client.fragment.PaperInfoListFragment;
 import com.mportal.client.fragment.PaperIssuePreviewFragment;
-import com.mportal.client.view.TitleBar;
+import com.mportal.client.widget.TitleBar;
 
 /**
  * 某一期的activity

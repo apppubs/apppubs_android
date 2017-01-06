@@ -4,13 +4,13 @@
     android:layout_height="match_parent"
     android:background="@android:color/white" >
 
-    <com.mportal.client.view.commonlist.CommonListView
+    <com.mportal.client.widget.commonlist.CommonListView
         xmlns:mportal="http://schemas.android.com/apk/res/com.mportal.client"
         android:id="@+id/commment_xlv"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         mportal:list_sel="@android:color/transparent" >
-    </com.mportal.client.view.commonlist.CommonListView>
+    </com.mportal.client.widget.commonlist.CommonListView>
 
     <LinearLayout
         android:id="@+id/comment_progress_ll"

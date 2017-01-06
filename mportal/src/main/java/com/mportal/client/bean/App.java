@@ -93,7 +93,6 @@ public class App implements Serializable{
 	private String baiduPushUserId;
 	
 	
-	
 	/**
 	 * 是否允许注册
 	 */

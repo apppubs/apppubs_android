@@ -41,10 +41,10 @@ import com.mportal.client.util.GsonUtils;
 import com.mportal.client.util.JSONResult;
 import com.mportal.client.util.LogM;
 import com.mportal.client.util.WebUtils;
-import com.mportal.client.view.SlidePicView;
-import com.mportal.client.view.SlidePicView.SlidePicItem;
-import com.mportal.client.view.commonlist.CommonListView;
-import com.mportal.client.view.commonlist.CommonListViewListener;
+import com.mportal.client.widget.SlidePicView;
+import com.mportal.client.widget.SlidePicView.SlidePicItem;
+import com.mportal.client.widget.commonlist.CommonListView;
+import com.mportal.client.widget.commonlist.CommonListViewListener;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.orm.SugarRecord;
 /**

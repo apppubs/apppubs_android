@@ -6,7 +6,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
 
-import com.mportal.client.view.PdfViewWithHotArea;
+import com.mportal.client.widget.PdfViewWithHotArea;
 
 public class PaperPageFragment extends BaseFragment{
 

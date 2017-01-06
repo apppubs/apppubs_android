@@ -25,10 +25,10 @@ import com.mportal.client.activity.PaperInfoActivity;
 import com.mportal.client.adapter.CommonAdapter;
 import com.mportal.client.adapter.ViewHolder;
 import com.mportal.client.bean.Collection;
-import com.mportal.client.view.ConfirmDialog;
-import com.mportal.client.view.ConfirmDialog.ConfirmListener;
-import com.mportal.client.view.TitleBar;
-import com.mportal.client.view.commonlist.CommonListView;
+import com.mportal.client.widget.ConfirmDialog;
+import com.mportal.client.widget.ConfirmDialog.ConfirmListener;
+import com.mportal.client.widget.TitleBar;
+import com.mportal.client.widget.commonlist.CommonListView;
 import com.orm.SugarRecord;
 
 public class CollectionFragment extends BaseFragment implements OnItemClickListener {

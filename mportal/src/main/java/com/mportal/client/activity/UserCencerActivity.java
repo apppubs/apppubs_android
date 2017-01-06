@@ -13,13 +13,12 @@ import android.widget.EditText;
 
 import com.mportal.client.MportalApplication;
 import com.mportal.client.R;
-import com.mportal.client.bean.App;
 import com.mportal.client.bean.User;
 import com.mportal.client.constant.Constants;
 import com.mportal.client.util.FileUtils;
 import com.mportal.client.util.Utils;
-import com.mportal.client.view.ConfirmDialog;
-import com.mportal.client.view.LoadingDialog;
+import com.mportal.client.widget.ConfirmDialog;
+import com.mportal.client.widget.LoadingDialog;
 
 public class UserCencerActivity extends BaseActivity {
 	/**

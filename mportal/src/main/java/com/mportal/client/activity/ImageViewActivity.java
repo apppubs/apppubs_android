@@ -7,7 +7,7 @@ import android.view.View.OnClickListener;
 import android.widget.Toast;
 
 import com.mportal.client.R;
-import com.mportal.client.view.ZoomImageView;
+import com.mportal.client.widget.ZoomImageView;
 
 public class ImageViewActivity extends BaseActivity {
 

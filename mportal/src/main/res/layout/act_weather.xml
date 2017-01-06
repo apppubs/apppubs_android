@@ -5,7 +5,7 @@
     android:layout_height="match_parent"
     android:background="@drawable/slidemenu_bg_blue" >
 
-    <com.mportal.client.view.TitleBar
+    <com.mportal.client.widget.TitleBar
         android:id="@+id/weather_wb"
         android:layout_width="match_parent"
         android:layout_height="@dimen/title_height"

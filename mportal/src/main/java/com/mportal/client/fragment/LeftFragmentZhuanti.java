@@ -7,7 +7,7 @@ import android.view.ViewGroup;
 
 import com.mportal.client.R;
 import com.mportal.client.adapter.LefZhutiAdapter;
-import com.mportal.client.view.commonlist.CommonListView;
+import com.mportal.client.widget.commonlist.CommonListView;
 
 public class LeftFragmentZhuanti extends HomeFragment {
 	private CommonListView xlv;

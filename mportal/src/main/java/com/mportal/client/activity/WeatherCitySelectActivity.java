@@ -32,8 +32,8 @@ import com.amap.api.location.LocationManagerProxy;
 import com.amap.api.location.LocationProviderProxy;
 import com.mportal.client.R;
 import com.mportal.client.bean.City;
-import com.mportal.client.view.LetterListView;
-import com.mportal.client.view.LetterListView.OnTouchingLetterChangedListener;
+import com.mportal.client.widget.LetterListView;
+import com.mportal.client.widget.LetterListView.OnTouchingLetterChangedListener;
 import com.orm.SugarRecord;
 
 /**

@@ -21,7 +21,7 @@ import com.mportal.client.R;
 import com.mportal.client.activity.ContainerActivity;
 import com.mportal.client.bean.ServiceNo;
 import com.mportal.client.business.BussinessCallbackCommon;
-import com.mportal.client.view.CircularImage;
+import com.mportal.client.widget.CircularImage;
 
 /**
  * 添加服务号 Copyright (c) heaven Inc. Original Author: zhangwen ChangeLog:

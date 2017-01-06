@@ -27,9 +27,9 @@ import com.mportal.client.business.BussinessCallbackCommon;
 import com.mportal.client.business.SystemBussiness;
 import com.mportal.client.util.LogM;
 import com.mportal.client.util.SystemUtils;
-import com.mportal.client.view.ProgressWebView;
-import com.mportal.client.view.Tabs;
-import com.mportal.client.view.Tabs.OnItemClickListener;
+import com.mportal.client.widget.ProgressWebView;
+import com.mportal.client.widget.Tabs;
+import com.mportal.client.widget.Tabs.OnItemClickListener;
 
 public class WeiBoFragment extends BaseFragment implements OnPageChangeListener ,OnClickListener{
 

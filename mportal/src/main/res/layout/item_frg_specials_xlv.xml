@@ -7,7 +7,7 @@
     android:layout_marginTop="@dimen/app_pic_gv_padding"
      >
 
-    <com.mportal.client.view.RatioLayout
+    <com.mportal.client.widget.RatioLayout
         
         android:id="@+id/item_frg_specials_lay"
         android:layout_width="match_parent"
@@ -21,7 +21,7 @@
             android:layout_centerInParent="true"
             android:scaleType="centerCrop" />
 
-    </com.mportal.client.view.RatioLayout>
+    </com.mportal.client.widget.RatioLayout>
 
     <TextView
         android:id="@+id/item_frg_specials_title"

@@ -23,8 +23,8 @@ import com.mportal.client.R;
 import com.mportal.client.activity.ContainerActivity;
 import com.mportal.client.bean.ServiceNo;
 import com.mportal.client.business.BussinessCallbackCommon;
-import com.mportal.client.view.CircularImage;
-import com.mportal.client.view.TitleBar;
+import com.mportal.client.widget.CircularImage;
+import com.mportal.client.widget.TitleBar;
 
 /**
  * 我的服务号列表

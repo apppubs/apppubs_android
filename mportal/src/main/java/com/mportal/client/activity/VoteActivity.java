@@ -5,7 +5,7 @@ import android.view.View;
 
 import com.mportal.client.R;
 import com.mportal.client.adapter.LefZhutiAdapter;
-import com.mportal.client.view.commonlist.CommonListView;
+import com.mportal.client.widget.commonlist.CommonListView;
 /**
  * 投票界面
  *

@@ -43,7 +43,7 @@ import com.mportal.client.bean.User;
 import com.mportal.client.constant.URLs;
 import com.mportal.client.util.JSONResult;
 import com.mportal.client.util.Utils;
-import com.mportal.client.view.ProgressHUD;
+import com.mportal.client.widget.ProgressHUD;
 
 public class ChatNewGroupChatOrAddUserActivity extends BaseActivity {
 
@@ -347,7 +347,7 @@ public class ChatNewGroupChatOrAddUserActivity extends BaseActivity {
 				JSONResult jr = JSONResult.compile(response);
 				if(jr.resultCode==JSONResult.RESULT_CODE_SUCCESS){
 					try {
-						String groupId = jr.getResultMap().get("groupid");
+						String groupId = (String)jr.getResultMap().get("groupid");
 						ChatActivity.startActivity(ChatNewGroupChatOrAddUserActivity.this, "",groupId,ChatActivity.CHAT_TYPE_GROUP);
 						finish();
 					} catch (JSONException e) {

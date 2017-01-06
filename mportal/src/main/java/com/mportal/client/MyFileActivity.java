@@ -20,8 +20,8 @@ import com.mportal.client.adapter.CommonAdapter;
 import com.mportal.client.adapter.ViewHolder;
 import com.mportal.client.bean.LocalFile;
 import com.mportal.client.util.FileUtils;
-import com.mportal.client.view.ConfirmDialog;
-import com.mportal.client.view.ConfirmDialog.ConfirmListener;
+import com.mportal.client.widget.ConfirmDialog;
+import com.mportal.client.widget.ConfirmDialog.ConfirmListener;
 import com.orm.SugarRecord;
 
 public class MyFileActivity extends BaseActivity implements OnClickListener {

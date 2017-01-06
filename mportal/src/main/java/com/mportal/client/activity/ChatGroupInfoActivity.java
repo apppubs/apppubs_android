@@ -2,6 +2,7 @@ package com.mportal.client.activity;
 
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
+import java.util.Map;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -31,9 +32,9 @@ import com.mportal.client.R;
 import com.mportal.client.constant.URLs;
 import com.mportal.client.util.JSONResult;
 import com.mportal.client.util.Utils;
-import com.mportal.client.view.ConfirmDialog;
-import com.mportal.client.view.ConfirmDialog.ConfirmListener;
-import com.mportal.client.view.FlowLayout;
+import com.mportal.client.widget.ConfirmDialog;
+import com.mportal.client.widget.ConfirmDialog.ConfirmListener;
+import com.mportal.client.widget.FlowLayout;
 
 public class ChatGroupInfoActivity extends BaseActivity{
 
@@ -83,9 +84,10 @@ public class ChatGroupInfoActivity extends BaseActivity{
 			public void onResponse(String response) {
 					JSONResult jr = JSONResult.compile(response);
 					try {
-						mChatGroupName = jr.getResultMap().get("group_name");
+						Map<String,String> map = jr.getResultMap();
+						mChatGroupName = map.get("group_name");
 						fillTextView(R.id.chat_group_info_group_name_tv, TextUtils.isEmpty(mChatGroupName)?"未设置":mChatGroupName);
-						String groupUsersInfoStr = jr.getResultMap().get("group_userinfo");
+						String groupUsersInfoStr = map.get("group_userinfo");
 						JSONArray ja = new JSONArray(groupUsersInfoStr);
 						fillTextView(R.id.chat_group_info_total_num_tv, "共"+ja.length()+"人");
 						usersFl.removeAllViews();

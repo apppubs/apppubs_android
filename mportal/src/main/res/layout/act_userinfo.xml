@@ -4,7 +4,7 @@
     android:background="@color/window_color"
     android:orientation="vertical" >
 
-    <com.mportal.client.view.MyScrollView
+    <com.mportal.client.widget.MyScrollView
         android:id="@+id/userinfosc"
         android:layout_width="match_parent"
         android:layout_height="0dp"
@@ -302,7 +302,7 @@
                 android:layout_height="1px"
                 android:background="@color/common_divider" />
         </LinearLayout>
-    </com.mportal.client.view.MyScrollView>
+    </com.mportal.client.widget.MyScrollView>
 
     <View
         android:id="@+id/line"

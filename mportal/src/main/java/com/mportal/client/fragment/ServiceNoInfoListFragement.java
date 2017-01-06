@@ -35,8 +35,8 @@ import com.mportal.client.business.MsgController;
 import com.mportal.client.constant.URLs;
 import com.mportal.client.util.StringUtils;
 import com.mportal.client.util.SystemUtils;
-import com.mportal.client.view.commonlist.CommonListView;
-import com.mportal.client.view.commonlist.CommonListViewListener;
+import com.mportal.client.widget.commonlist.CommonListView;
+import com.mportal.client.widget.commonlist.CommonListViewListener;
 
 public class ServiceNoInfoListFragement extends BaseFragment {
 	

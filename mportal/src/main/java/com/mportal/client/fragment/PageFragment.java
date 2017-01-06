@@ -40,8 +40,6 @@ import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import cn.jpush.a.a.m;
-
 import com.android.volley.Response.ErrorListener;
 import com.android.volley.Response.Listener;
 import com.android.volley.VolleyError;
@@ -60,19 +58,19 @@ import com.mportal.client.util.LogM;
 import com.mportal.client.util.StringUtils;
 import com.mportal.client.util.Utils;
 import com.mportal.client.util.WebUtils;
-import com.mportal.client.view.CheckableFlowLayout;
-import com.mportal.client.view.DraggableGridView;
-import com.mportal.client.view.DraggableGridView.OnRearrangeListener;
-import com.mportal.client.view.HotArea;
-import com.mportal.client.view.HotAreaImageView;
-import com.mportal.client.view.HotAreaImageView.HotAreaClickListener;
-import com.mportal.client.view.RatioLayout;
-import com.mportal.client.view.ScrollTabs;
-import com.mportal.client.view.ScrollTabs.OnColunmBtnClickListener;
-import com.mportal.client.view.SlidePicView;
-import com.mportal.client.view.SlidePicView.OnItemClickListener;
-import com.mportal.client.view.SlidePicView.SlidePicItem;
-import com.mportal.client.view.TitleBar;
+import com.mportal.client.widget.CheckableFlowLayout;
+import com.mportal.client.widget.DraggableGridView;
+import com.mportal.client.widget.DraggableGridView.OnRearrangeListener;
+import com.mportal.client.widget.HotArea;
+import com.mportal.client.widget.HotAreaImageView;
+import com.mportal.client.widget.HotAreaImageView.HotAreaClickListener;
+import com.mportal.client.widget.RatioLayout;
+import com.mportal.client.widget.ScrollTabs;
+import com.mportal.client.widget.ScrollTabs.OnColunmBtnClickListener;
+import com.mportal.client.widget.SlidePicView;
+import com.mportal.client.widget.SlidePicView.OnItemClickListener;
+import com.mportal.client.widget.SlidePicView.SlidePicItem;
+import com.mportal.client.widget.TitleBar;
 
 public class PageFragment extends TitleMenuFragment implements OnClickListener{
 
@@ -675,7 +673,7 @@ public class PageFragment extends TitleMenuFragment implements OnClickListener{
 				for(int j=-1;++j<items.length();){
 					cfl.addTag(items.getJSONObject(j).getString("title"));
 				}
-				cfl.setOnItemClickListener(new  com.mportal.client.view.CheckableFlowLayout.OnItemClickListener() {
+				cfl.setOnItemClickListener(new  com.mportal.client.widget.CheckableFlowLayout.OnItemClickListener() {
 					
 					@Override
 					public void onItemClick(int pos, String tag, boolean isSelect) {

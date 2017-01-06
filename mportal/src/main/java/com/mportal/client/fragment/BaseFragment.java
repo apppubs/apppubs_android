@@ -17,9 +17,8 @@ import com.android.volley.RequestQueue;
 import com.mportal.client.activity.BaseActivity;
 import com.mportal.client.business.MsgBussiness;
 import com.mportal.client.business.SystemBussiness;
-import com.mportal.client.business.UserBussiness;
-import com.mportal.client.view.ConfirmDialog;
-import com.mportal.client.view.TitleBar;
+import com.mportal.client.message.model.UserBussiness;
+import com.mportal.client.widget.TitleBar;
 import com.nostra13.universalimageloader.core.ImageLoader;
 
 public class BaseFragment extends Fragment implements  KeyEvent.Callback{

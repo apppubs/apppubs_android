@@ -31,9 +31,9 @@ import com.mportal.client.bean.HeadPic;
 import com.mportal.client.bean.NewsChannel;
 import com.mportal.client.business.NewsBussiness;
 import com.mportal.client.util.LogM;
-import com.mportal.client.view.HeaderGridView;
-import com.mportal.client.view.SlidePicView;
-import com.mportal.client.view.SlidePicView.SlidePicItem;
+import com.mportal.client.widget.HeaderGridView;
+import com.mportal.client.widget.SlidePicView;
+import com.mportal.client.widget.SlidePicView.SlidePicItem;
 import com.orm.SugarRecord;
 /**
  * 方格类型的频道列表

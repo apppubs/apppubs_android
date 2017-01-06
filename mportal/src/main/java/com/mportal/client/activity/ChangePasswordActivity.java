@@ -16,7 +16,7 @@ import com.mportal.client.MportalApplication;
 import com.mportal.client.R;
 import com.mportal.client.constant.URLs;
 import com.mportal.client.util.JSONResult;
-import com.mportal.client.view.ProgressHUD;
+import com.mportal.client.widget.ProgressHUD;
 
 public class ChangePasswordActivity extends BaseActivity implements OnClickListener {
 

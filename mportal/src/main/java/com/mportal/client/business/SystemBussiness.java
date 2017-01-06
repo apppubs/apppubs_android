@@ -49,9 +49,11 @@ import android.telephony.TelephonyManager;
 import android.util.DisplayMetrics;
 import android.view.WindowManager;
 
+import com.google.gson.JsonObject;
 import com.mportal.client.MportalApplication;
 import com.mportal.client.R;
 import com.mportal.client.bean.App;
+import com.mportal.client.bean.AppConfig;
 import com.mportal.client.bean.City;
 import com.mportal.client.bean.Client;
 import com.mportal.client.bean.Collection;
@@ -73,7 +75,9 @@ import com.mportal.client.bean.WeiboInfo;
 import com.mportal.client.constant.Constants;
 import com.mportal.client.constant.SystemConfig;
 import com.mportal.client.constant.URLs;
+import com.mportal.client.message.model.UserBussiness;
 import com.mportal.client.util.FileUtils;
+import com.mportal.client.util.GsonUtils;
 import com.mportal.client.util.JSONResult;
 import com.mportal.client.util.LogM;
 import com.mportal.client.util.MathUtils;
@@ -497,6 +501,11 @@ public class SystemBussiness extends BaseBussiness {
 		if(jr!=null&&jr.resultCode==1){
 			FileUtils.writeObj(mContext, jr.result, Constants.FILE_NAME_APP_CONFIG);
 		}
+	}
+
+	public AppConfig getAppConfig(){
+		String str = (String) FileUtils.readObj(mContext,Constants.FILE_NAME_APP_CONFIG);
+		return GsonUtils.parse2Json(str,AppConfig.class);
 	}
 
 	/**

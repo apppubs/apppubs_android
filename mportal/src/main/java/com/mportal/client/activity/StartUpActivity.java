@@ -42,10 +42,10 @@ import com.mportal.client.util.JSONResult;
 import com.mportal.client.util.LogM;
 import com.mportal.client.util.Utils;
 import com.mportal.client.util.WebUtils;
-import com.mportal.client.view.AlertDialog;
-import com.mportal.client.view.AlertDialog.OnOkClickListener;
-import com.mportal.client.view.ConfirmDialog;
-import com.mportal.client.view.ConfirmDialog.ConfirmListener;
+import com.mportal.client.widget.AlertDialog;
+import com.mportal.client.widget.AlertDialog.OnOkClickListener;
+import com.mportal.client.widget.ConfirmDialog;
+import com.mportal.client.widget.ConfirmDialog.ConfirmListener;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.assist.FailReason;
 import com.nostra13.universalimageloader.core.listener.ImageLoadingListener;
@@ -418,7 +418,7 @@ public class StartUpActivity extends BaseActivity implements AsyTaskCallback{
 				
 				String configStr = WebUtils.requestWithGet(sysConfigUrl);
 				JSONResult jr = JSONResult.compile(configStr);
-				String minSupportCodeVerision = jr.getResultMap().get(SERVER_MIN_SUPPORT_APP_CODE_VERSION);
+				String minSupportCodeVerision = (String)jr.getResultMap().get(SERVER_MIN_SUPPORT_APP_CODE_VERSION);
 				result[3] = minSupportCodeVerision;
 			} catch (IOException e) {
 				e.printStackTrace();

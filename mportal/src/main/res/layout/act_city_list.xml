@@ -15,7 +15,7 @@
         android:gravity="center_vertical"
         android:orientation="horizontal" >
 
-        <com.mportal.client.view.EditTextWithDel
+        <com.mportal.client.widget.EditTextWithDel
             android:id="@+id/et"
             android:layout_width="0dp"
             android:layout_height="40dp"
@@ -69,7 +69,7 @@
                 android:divider="@null"
                 android:scrollbars="none" />
 
-            <com.mportal.client.view.LetterListView
+            <com.mportal.client.widget.LetterListView
                 android:id="@+id/cityLetterListView"
                 android:layout_width="30dip"
                 android:layout_height="fill_parent"

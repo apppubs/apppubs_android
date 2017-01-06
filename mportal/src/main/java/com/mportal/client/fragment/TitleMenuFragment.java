@@ -12,7 +12,7 @@ import com.mportal.client.activity.ViewCourier;
 import com.mportal.client.bean.MenuItem;
 import com.mportal.client.bean.TitleMenu;
 import com.mportal.client.util.LogM;
-import com.mportal.client.view.TitleBar;
+import com.mportal.client.widget.TitleBar;
 import com.orm.SugarRecord;
 
 /**

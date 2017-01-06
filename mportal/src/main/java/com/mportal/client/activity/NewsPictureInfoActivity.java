@@ -36,9 +36,9 @@ import com.mportal.client.business.BussinessCallbackCommon;
 import com.mportal.client.util.LogM;
 import com.mportal.client.util.ShareTools;
 import com.mportal.client.util.Utils;
-import com.mportal.client.view.ImageButton;
-import com.mportal.client.view.PictureInfoViewPager;
-import com.mportal.client.view.ZoomImageView;
+import com.mportal.client.widget.ImageButton;
+import com.mportal.client.widget.PictureInfoViewPager;
+import com.mportal.client.widget.ZoomImageView;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.orm.SugarRecord;
 

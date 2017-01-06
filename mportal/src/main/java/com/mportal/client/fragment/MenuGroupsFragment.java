@@ -54,9 +54,9 @@ import com.mportal.client.util.GsonUtils;
 import com.mportal.client.util.LogM;
 import com.mportal.client.util.Utils;
 import com.mportal.client.util.WebUtils;
-import com.mportal.client.view.ConfirmDialog;
-import com.mportal.client.view.SlidePicView;
-import com.mportal.client.view.SlidePicView.SlidePicItem;
+import com.mportal.client.widget.ConfirmDialog;
+import com.mportal.client.widget.SlidePicView;
+import com.mportal.client.widget.SlidePicView.SlidePicItem;
 import com.orm.SugarRecord;
 
 /**

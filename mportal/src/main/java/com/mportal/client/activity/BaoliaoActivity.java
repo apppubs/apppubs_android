@@ -42,9 +42,9 @@ import com.mportal.client.util.StringUtils;
 import com.mportal.client.util.SystemUtils;
 import com.mportal.client.util.Tools;
 import com.mportal.client.util.Utils;
-import com.mportal.client.view.ConfirmDialog;
-import com.mportal.client.view.ConfirmDialog.ConfirmListener;
-import com.mportal.client.view.FlowLayout;
+import com.mportal.client.widget.ConfirmDialog;
+import com.mportal.client.widget.ConfirmDialog.ConfirmListener;
+import com.mportal.client.widget.FlowLayout;
 
 public class BaoliaoActivity extends BaseActivity {
 

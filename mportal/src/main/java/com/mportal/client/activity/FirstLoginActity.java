@@ -49,7 +49,7 @@ import com.mportal.client.util.LogM;
 import com.mportal.client.util.SystemUtils;
 import com.mportal.client.util.Utils;
 import com.mportal.client.util.WebUtils;
-import com.mportal.client.view.ProgressHUD;
+import com.mportal.client.widget.ProgressHUD;
 
 public class FirstLoginActity extends BaseActivity implements ErrorListener, AsyTaskCallback {
 
@@ -406,8 +406,8 @@ public class FirstLoginActity extends BaseActivity implements ErrorListener, Asy
 
 			if (jr.resultCode == 1) {
 				User user = new User();
-				user.setUsername(jr.getResultMap().get("username"));
-				user.setUserId(jr.getResultMap().get("userid"));
+				user.setUsername((String)jr.getResultMap().get("username"));
+				user.setUserId((String)jr.getResultMap().get("userid"));
 				user.setOrgCode(orgCode);
 				MportalApplication.saveAndRefreshUser(FirstLoginActity.this, user);
 

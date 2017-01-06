@@ -9,7 +9,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent" >
 
-        <com.mportal.client.view.commonlist.CommonListView
+        <com.mportal.client.widget.commonlist.CommonListView
             android:id="@+id/left_vedio_xlv"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"

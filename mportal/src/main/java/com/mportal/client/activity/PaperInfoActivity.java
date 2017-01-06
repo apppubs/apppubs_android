@@ -17,7 +17,7 @@ import com.mportal.client.bean.PaperInfo;
 import com.mportal.client.business.CollectionBussiness;
 import com.mportal.client.constant.URLs;
 import com.mportal.client.util.ShareTools;
-import com.mportal.client.view.ImageButton;
+import com.mportal.client.widget.ImageButton;
 import com.orm.SugarRecord;
 
 public class PaperInfoActivity extends BaseActivity implements OnClickListener {

@@ -27,8 +27,8 @@ import com.mportal.client.constant.URLs;
 import com.mportal.client.util.SystemUtils;
 import com.mportal.client.util.Tools;
 import com.mportal.client.util.Utils;
-import com.mportal.client.view.commonlist.CommonListView;
-import com.mportal.client.view.commonlist.CommonListViewListener;
+import com.mportal.client.widget.commonlist.CommonListView;
+import com.mportal.client.widget.commonlist.CommonListViewListener;
 
 /**
  * 搜索界面

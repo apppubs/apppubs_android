@@ -5,7 +5,7 @@
     android:layout_height="match_parent"
     android:background="@color/app_common_bg" >
 
-    <com.mportal.client.view.TitleBar
+    <com.mportal.client.widget.TitleBar
         android:id="@+id/pepter_tb"
         android:layout_width="match_parent"
         android:layout_height="@dimen/title_height"
@@ -14,5 +14,5 @@
         mportal:mTitle="报纸"
         mportal:titleSize="@dimen/title_text_size" >
         <!--         mportal:rightBackground="@drawable/sel_slide_bg" -->
-    </com.mportal.client.view.TitleBar>
+    </com.mportal.client.widget.TitleBar>
 </RelativeLayout>

@@ -15,7 +15,7 @@ import android.webkit.WebViewClient;
 import android.widget.LinearLayout;
 
 import com.mportal.client.R;
-import com.mportal.client.view.MyWebChromeClient;
+import com.mportal.client.widget.MyWebChromeClient;
 /**
  * 
  */

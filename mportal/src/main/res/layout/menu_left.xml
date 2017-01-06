@@ -47,7 +47,7 @@
             android:textSize="14dp" />
     </RelativeLayout>
 
-    <com.mportal.client.view.ImageButton
+    <com.mportal.client.widget.ImageButton
         android:id="@+id/left_back_splash"
         android:layout_width="30dip"
         android:layout_height="30dip"

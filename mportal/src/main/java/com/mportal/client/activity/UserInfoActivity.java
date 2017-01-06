@@ -31,8 +31,8 @@ import com.mportal.client.constant.URLs;
 import com.mportal.client.net.RequestListener;
 import com.mportal.client.util.FileUtils;
 import com.mportal.client.util.JSONResult;
-import com.mportal.client.view.ContactDailog;
-import com.mportal.client.view.ProgressHUD;
+import com.mportal.client.widget.ContactDailog;
+import com.mportal.client.widget.ProgressHUD;
 
 public class UserInfoActivity extends BaseActivity implements OnClickListener,RequestListener{
 
@@ -148,7 +148,7 @@ public class UserInfoActivity extends BaseActivity implements OnClickListener,Re
 	private void resolveIconResponse(String responseStr){
 		try {
 			JSONResult jr = JSONResult.compile(responseStr);
-			mImageLoader.displayImage(jr.getResultMap().get("icon"), mIv);
+			mImageLoader.displayImage((String)jr.getResultMap().get("icon"), mIv);
 		} catch (Exception e1) {
 			e1.printStackTrace();
 		}
@@ -264,7 +264,7 @@ public class UserInfoActivity extends BaseActivity implements OnClickListener,Re
 				Intent ivIntent = new Intent(this, ImageViewActivity.class);
 				JSONResult jr = JSONResult.compile(mIconCacheStr);
 				try {
-					ivIntent.putExtra(ImageViewActivity.EXTRA_STRING_IMG_URL, jr.getResultMap().get("icon"));
+					ivIntent.putExtra(ImageViewActivity.EXTRA_STRING_IMG_URL, (String)jr.getResultMap().get("icon"));
 				} catch (JSONException e) {
 					e.printStackTrace();
 				}
@@ -287,7 +287,7 @@ public class UserInfoActivity extends BaseActivity implements OnClickListener,Re
 				if(jr.resultCode==JSONResult.RESULT_CODE_SUCCESS){
 					String groupId = null;
 					try {
-						groupId = jr.getResultMap().get("groupid");
+						groupId = (String)jr.getResultMap().get("groupid");
 					} catch (JSONException e) {
 						e.printStackTrace();
 					}
@@ -320,7 +320,7 @@ public class UserInfoActivity extends BaseActivity implements OnClickListener,Re
 				JSONResult jr = JSONResult.compile(response);
 				if(jr.resultCode==JSONResult.RESULT_CODE_SUCCESS){
 					try {
-						String groupId = jr.getResultMap().get("groupid");
+						String groupId = (String)jr.getResultMap().get("groupid");
 						ChatActivity.startActivity(UserInfoActivity.this, "",groupId,ChatActivity.CHAT_TYPE_SINGLE,mUser.getTrueName());
 						finish();
 					} catch (JSONException e) {
@@ -378,7 +378,7 @@ public class UserInfoActivity extends BaseActivity implements OnClickListener,Re
 		if(jsonresult.resultCode==JSONResult.RESULT_CODE_SUCCESS){
 			List<String> deptNameStringList;
 			try {
-				deptNameStringList = mUserBussiness.getDepartmentStringListByUserId(mUser.getUserId(), jsonresult.getResultMap().get(Constants.APP_CONFIG_PARAM_ADBOOK_ROOT_ID));
+				deptNameStringList = mUserBussiness.getDepartmentStringListByUserId(mUser.getUserId(), (String)jsonresult.getResultMap().get(Constants.APP_CONFIG_PARAM_ADBOOK_ROOT_ID));
 				StringBuilder sb = new StringBuilder();
 				int size = deptNameStringList.size();
 				for (int i = -1; ++i < size;) {

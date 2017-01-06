@@ -12,7 +12,6 @@ import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager.NameNotFoundException;
 import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
-import android.text.TextUtils;
 import android.util.DisplayMetrics;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -28,10 +27,6 @@ import android.widget.Toast;
 import android.widget.ToggleButton;
 
 import com.android.volley.RequestQueue;
-import com.android.volley.Response.ErrorListener;
-import com.android.volley.Response.Listener;
-import com.android.volley.VolleyError;
-import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.mportal.client.MportalApplication;
 import com.mportal.client.R;
@@ -45,16 +40,14 @@ import com.mportal.client.activity.ThemeSwitchActivity;
 import com.mportal.client.activity.WebAppActivity;
 import com.mportal.client.bean.MenuItem;
 import com.mportal.client.bean.Settings;
-import com.mportal.client.bean.User;
 import com.mportal.client.business.BussinessCallbackCommon;
 import com.mportal.client.constant.URLs;
 import com.mportal.client.service.DownloadAppService;
 import com.mportal.client.util.FileUtils;
-import com.mportal.client.util.LogM;
 import com.mportal.client.util.ServiceUtils;
 import com.mportal.client.util.Utils;
-import com.mportal.client.view.ConfirmDialog;
-import com.mportal.client.view.ConfirmDialog.ConfirmListener;
+import com.mportal.client.widget.ConfirmDialog;
+import com.mportal.client.widget.ConfirmDialog.ConfirmListener;
 import com.orm.SugarRecord;
 
 public class SettingFragment extends TitleMenuFragment implements OnClickListener{

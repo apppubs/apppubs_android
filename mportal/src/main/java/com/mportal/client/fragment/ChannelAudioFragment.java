@@ -32,8 +32,8 @@ import com.mportal.client.bean.NewsAudioInfo;
 import com.mportal.client.constant.URLs;
 import com.mportal.client.util.LogM;
 import com.mportal.client.util.WebUtils;
-import com.mportal.client.view.commonlist.CommonListView;
-import com.mportal.client.view.commonlist.CommonListViewListener;
+import com.mportal.client.widget.commonlist.CommonListView;
+import com.mportal.client.widget.commonlist.CommonListViewListener;
 
 public class ChannelAudioFragment extends ChannelFragment implements AsyTaskCallback,OnClickListener {
 	

@@ -4,7 +4,7 @@
     android:layout_height="match_parent" >
 
 
-    <com.mportal.client.view.Indicator
+    <com.mportal.client.widget.Indicator
         android:id="@+id/page"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

@@ -5,7 +5,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.mportal.client.view.DateTime;
+import com.mportal.client.widget.DateTime;
 
 public class SlidShowFragement extends HomeFragment{
 	@Override

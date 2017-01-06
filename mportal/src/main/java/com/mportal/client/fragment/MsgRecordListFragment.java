@@ -53,10 +53,11 @@ import com.mportal.client.business.MsgController;
 import com.mportal.client.constant.Actions;
 import com.mportal.client.constant.Constants;
 import com.mportal.client.constant.URLs;
+import com.mportal.client.message.fragment.AddressBookFragement;
 import com.mportal.client.util.JSONResult;
 import com.mportal.client.util.SharedPreferenceUtils;
 import com.mportal.client.util.StringUtils;
-import com.mportal.client.view.TitleBar;
+import com.mportal.client.widget.TitleBar;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.orm.SugarRecord;
 
@@ -127,9 +128,6 @@ public class MsgRecordListFragment extends BaseFragment implements OnClickListen
 		rootView.addView(mEmptyTv,emptyTvLp);
 		
 		mRootView = rootView;
-		
-		
-		
 	}
 
 	@Override
@@ -306,7 +304,7 @@ public class MsgRecordListFragment extends BaseFragment implements OnClickListen
 								JSONResult jr = JSONResult.compile(response);
 								if(jr.resultCode==JSONResult.RESULT_CODE_SUCCESS){
 									try {
-										String groupType = jr.getResultMap().get("group_type");
+										String groupType = (String)jr.getResultMap().get("group_type");
 										if(groupType.equals("1")){
 											ChatActivity.startActivity(mHostActivity, "",mr.getSourceUsernameOrId(),ChatActivity.CHAT_TYPE_SINGLE,mr.getTitle());
 										}else{

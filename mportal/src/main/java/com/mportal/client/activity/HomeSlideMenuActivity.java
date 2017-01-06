@@ -58,8 +58,8 @@ import com.mportal.client.util.SystemUtils;
 import com.mportal.client.util.Tools;
 import com.mportal.client.util.Utils;
 import com.mportal.client.util.WeatherUtils;
-import com.mportal.client.view.ConfirmDialog;
-import com.mportal.client.view.TitleBar;
+import com.mportal.client.widget.ConfirmDialog;
+import com.mportal.client.widget.TitleBar;
 import com.nostra13.universalimageloader.core.ImageLoader;
 
 /**

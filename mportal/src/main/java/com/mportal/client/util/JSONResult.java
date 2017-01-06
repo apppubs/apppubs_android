@@ -1,5 +1,10 @@
 package com.mportal.client.util;
 
+import android.text.TextUtils;
+
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -7,15 +12,11 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import android.text.TextUtils;
 /**
  * 用于从服务器返回的数据中提取信息
  *
  */
-public class JSONResult {
+public class JSONResult<T> {
 	
 	public static final int RESULT_CODE_SUCCESS = 1;
 	public static final int RESULT_CODE_FAIL = -1;
@@ -53,15 +54,19 @@ public class JSONResult {
 		return jsonResult;
 	}
 	
-	public Map<String,String> getResultMap() throws JSONException{
+	public HashMap<String,String> getResultMap() throws JSONException{
 		JSONObject jsonObject = new JSONObject(result);
 		Iterator<String> iterator = jsonObject.keys();
-		Map<String,String> map = new HashMap<String, String>();
+		HashMap<String,String> map = new HashMap<String, String>();
 		while(iterator.hasNext()){
 			String key = iterator.next();
 			map.put(key, jsonObject.getString(key));
 		}
 		return map;
 	}
-	
+
+	public T getResultObject(Class<T> clazz){
+		return GsonUtils.getGson().fromJson(result,clazz);
+	}
+
 }

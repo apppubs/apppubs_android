@@ -1,4 +1,4 @@
-<com.mportal.client.view.commonlist.CommonListView
+<com.mportal.client.widget.commonlist.CommonListView
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:mportal="http://schemas.android.com/apk/res-auto"
     android:background="@android:color/white"

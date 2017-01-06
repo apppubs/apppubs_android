@@ -66,11 +66,11 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />
     </ScrollView>
-	<com.mportal.client.view.DragImageView
+	<com.mportal.client.widget.DragImageView
 	    android:id="@+id/file_preview_pic_div"
 	    android:layout_width="match_parent"
 	    android:layout_height="match_parent"
 	    android:visibility="gone"
 	    >
-	</com.mportal.client.view.DragImageView>
+	</com.mportal.client.widget.DragImageView>
 </RelativeLayout>

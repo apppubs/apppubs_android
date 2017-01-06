@@ -24,14 +24,14 @@ import com.mportal.client.adapter.NewsFragmentPagerAdapter;
 import com.mportal.client.bean.NewsChannel;
 import com.mportal.client.business.NewsBussiness;
 import com.mportal.client.util.LogM;
-import com.mportal.client.view.AlternativeChannelLayout;
-import com.mportal.client.view.AlternativeChannelLayout.OnRemoveListener;
-import com.mportal.client.view.DraggableGridView;
-import com.mportal.client.view.DraggableGridView.OnRearrangeListener;
-import com.mportal.client.view.NewsViewPager;
-import com.mportal.client.view.ScrollTabs;
-import com.mportal.client.view.ScrollTabs.OnColunmBtnClickListener;
-import com.mportal.client.view.ScrollTabs.OnItemClickListener;
+import com.mportal.client.widget.AlternativeChannelLayout;
+import com.mportal.client.widget.AlternativeChannelLayout.OnRemoveListener;
+import com.mportal.client.widget.DraggableGridView;
+import com.mportal.client.widget.DraggableGridView.OnRearrangeListener;
+import com.mportal.client.widget.NewsViewPager;
+import com.mportal.client.widget.ScrollTabs;
+import com.mportal.client.widget.ScrollTabs.OnColunmBtnClickListener;
+import com.mportal.client.widget.ScrollTabs.OnItemClickListener;
 /**
  * 资讯列表容器,需要传入频道所属的类别
  * @author Administrator

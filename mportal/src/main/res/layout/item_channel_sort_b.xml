@@ -6,7 +6,7 @@
     android:paddingRight="14dp"
     >
 
-    <com.mportal.client.view.CircularImage
+    <com.mportal.client.widget.CircularImage
         android:id="@+id/channel_sort_iv"
         android:layout_width="50dp"
         android:layout_height="50dp"

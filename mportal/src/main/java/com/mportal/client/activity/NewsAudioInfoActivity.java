@@ -42,7 +42,7 @@ import com.mportal.client.business.NewsBussiness;
 import com.mportal.client.util.LogM;
 import com.mportal.client.util.ShareTools;
 import com.mportal.client.util.Utils;
-import com.mportal.client.view.MyWebChromeClient;
+import com.mportal.client.widget.MyWebChromeClient;
 import com.orm.SugarRecord;
 
 /**

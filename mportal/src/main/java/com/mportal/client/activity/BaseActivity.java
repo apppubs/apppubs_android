@@ -41,14 +41,14 @@ import com.mportal.client.business.MsgBussiness;
 import com.mportal.client.business.NewsBussiness;
 import com.mportal.client.business.PaperBussiness;
 import com.mportal.client.business.SystemBussiness;
-import com.mportal.client.business.UserBussiness;
+import com.mportal.client.message.model.UserBussiness;
 import com.mportal.client.constant.Actions;
 import com.mportal.client.constant.URLs;
 import com.mportal.client.net.RequestListener;
 import com.mportal.client.util.JSONResult;
 import com.mportal.client.util.LogM;
 import com.mportal.client.util.Utils;
-import com.mportal.client.view.TitleBar;
+import com.mportal.client.widget.TitleBar;
 import com.nostra13.universalimageloader.core.ImageLoader;
 
 public abstract class BaseActivity extends FragmentActivity implements OnClickListener {

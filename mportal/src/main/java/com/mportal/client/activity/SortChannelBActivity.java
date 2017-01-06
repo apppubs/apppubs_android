@@ -18,7 +18,7 @@ import com.mportal.client.bean.NewsChannel;
 import com.mportal.client.fragment.ChannelFragment;
 import com.mportal.client.fragment.ChannelFragmentFactory;
 import com.mportal.client.util.LogM;
-import com.mportal.client.view.DragSortListView;
+import com.mportal.client.widget.DragSortListView;
 import com.orm.SugarRecord;
 
 public class SortChannelBActivity extends BaseActivity {

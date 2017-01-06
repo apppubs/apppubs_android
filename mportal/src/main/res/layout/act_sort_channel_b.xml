@@ -5,7 +5,7 @@
     android:background="@android:color/white"
     android:orientation="vertical" >
 
-    <com.mportal.client.view.DragSortListView
+    <com.mportal.client.widget.DragSortListView
         xmlns:dslv="http://schemas.android.com/apk/res/com.mportal.client"
         android:id="@+id/sort_channel_dsll"
         android:layout_width="match_parent"

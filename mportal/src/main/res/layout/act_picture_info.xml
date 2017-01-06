@@ -6,12 +6,12 @@
     android:background="#000"
     android:orientation="vertical" >
 
-    <com.mportal.client.view.PictureInfoViewPager
+    <com.mportal.client.widget.PictureInfoViewPager
         android:id="@+id/picinfo_vp"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:onClick="onClick" >
-    </com.mportal.client.view.PictureInfoViewPager>
+    </com.mportal.client.widget.PictureInfoViewPager>
 
     <ImageView
         android:id="@+id/picinfo_back"
@@ -74,7 +74,7 @@
             android:gravity="center_vertical"
             android:orientation="horizontal" >
 
-            <com.mportal.client.view.ImageButton
+            <com.mportal.client.widget.ImageButton
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="2"
@@ -82,7 +82,7 @@
                 android:padding="7dp"
                 mportal:highlightColor="@color/button_white_hight_color" />
 
-            <com.mportal.client.view.ImageButton
+            <com.mportal.client.widget.ImageButton
                 android:id="@+id/bottom_info_bar_save"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
@@ -94,7 +94,7 @@
                 mportal:defaultColor="@android:color/white"
                  />
 
-            <com.mportal.client.view.ImageButton
+            <com.mportal.client.widget.ImageButton
                 android:id="@+id/bottom_info_bar_share"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
@@ -105,7 +105,7 @@
                 mportal:highlightColor="@color/button_white_hight_color"
                  mportal:defaultColor="@android:color/white"
                  />
-            <com.mportal.client.view.ImageButton
+            <com.mportal.client.widget.ImageButton
                 android:id="@+id/picture_info_download_ib"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
@@ -138,7 +138,7 @@
                     android:textColor="@android:color/white"
                     android:textSize="10dp" />
 
-                <com.mportal.client.view.ImageButton
+                <com.mportal.client.widget.ImageButton
                     android:id="@+id/bottom_info_bar_comment_i"
                     android:layout_width="30dp"
                     android:layout_height="25dp"

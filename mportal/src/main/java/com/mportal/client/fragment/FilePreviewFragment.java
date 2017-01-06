@@ -35,10 +35,10 @@ import com.mportal.client.R;
 import com.mportal.client.activity.ContainerActivity;
 import com.mportal.client.business.BussinessCallbackCommon;
 import com.mportal.client.util.LogM;
-import com.mportal.client.view.AlertDialog;
-import com.mportal.client.view.AlertDialog.OnOkClickListener;
-import com.mportal.client.view.ConfirmDialog;
-import com.mportal.client.view.ConfirmDialog.ConfirmListener;
+import com.mportal.client.widget.AlertDialog;
+import com.mportal.client.widget.AlertDialog.OnOkClickListener;
+import com.mportal.client.widget.ConfirmDialog;
+import com.mportal.client.widget.ConfirmDialog.ConfirmListener;
 
 /**
  * 文件预览界面，用于办公应用的附件预览，聊天的附件预览，我的文件的文件预览等。

@@ -19,7 +19,7 @@
             android:background="@color/menu_bar_bg"
             android:orientation="horizontal" >
 
-            <com.mportal.client.view.ImageButton
+            <com.mportal.client.widget.ImageButton
                 android:id="@+id/menubar_back"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
@@ -30,7 +30,7 @@
                 mportal:defaultColor="@color/imagebtn_default"
                 mportal:highlightColor="@color/button_white_hight_color" />
 
-            <com.mportal.client.view.ImageButton
+            <com.mportal.client.widget.ImageButton
                 android:id="@+id/menubar_forword"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
@@ -41,7 +41,7 @@
                 mportal:defaultColor="@color/imagebtn_default"
                 mportal:highlightColor="@color/button_white_hight_color" />
 
-            <com.mportal.client.view.ImageButton
+            <com.mportal.client.widget.ImageButton
                 android:id="@+id/menubar_refresh"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
@@ -53,7 +53,7 @@
                 mportal:defaultColor="@color/imagebtn_default"
                 mportal:highlightColor="@color/button_white_hight_color" />
 
-            <com.mportal.client.view.ImageButton
+            <com.mportal.client.widget.ImageButton
                 android:id="@+id/menubar_browser"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"

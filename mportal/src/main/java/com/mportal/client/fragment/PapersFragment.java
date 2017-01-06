@@ -23,8 +23,8 @@ import com.mportal.client.activity.BaseActivity;
 import com.mportal.client.bean.Paper;
 import com.mportal.client.business.PaperBussiness;
 import com.mportal.client.util.LogM;
-import com.mportal.client.view.SegmentedGroup;
-import com.mportal.client.view.TitleBar;
+import com.mportal.client.widget.SegmentedGroup;
+import com.mportal.client.widget.TitleBar;
 
 public class PapersFragment extends TitleMenuFragment implements OnPageChangeListener {
 	// 报纸列表

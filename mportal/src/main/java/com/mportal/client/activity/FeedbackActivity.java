@@ -20,9 +20,9 @@ import com.mportal.client.R;
 import com.mportal.client.constant.URLs;
 import com.mportal.client.util.LogM;
 import com.mportal.client.util.SystemUtils;
-import com.mportal.client.view.ConfirmDialog;
-import com.mportal.client.view.ConfirmDialog.ConfirmListener;
-import com.mportal.client.view.ProgressHUD;
+import com.mportal.client.widget.ConfirmDialog;
+import com.mportal.client.widget.ConfirmDialog.ConfirmListener;
+import com.mportal.client.widget.ProgressHUD;
 
 /**
  * 意见反馈

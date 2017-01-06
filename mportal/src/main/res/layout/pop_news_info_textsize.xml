@@ -19,7 +19,7 @@
         android:onClick="onClick"
          >
 
-        <com.mportal.client.view.ImageButton
+        <com.mportal.client.widget.ImageButton
             android:layout_width="35dp"
             android:layout_height="35dp"
             android:padding="5dp"
@@ -56,7 +56,7 @@
         android:onClick="onClick"
          >
 
-        <com.mportal.client.view.ImageButton
+        <com.mportal.client.widget.ImageButton
             android:layout_width="35dp"
             android:layout_height="35dp"
             android:layout_gravity="center_vertical"
@@ -87,7 +87,7 @@
         android:onClick="onClick"
         >
 
-        <com.mportal.client.view.ImageButton
+        <com.mportal.client.widget.ImageButton
             android:layout_width="35dp"
             android:layout_height="35dp"
             android:layout_gravity="center_vertical"

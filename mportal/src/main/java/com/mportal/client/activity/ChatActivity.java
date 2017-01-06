@@ -64,9 +64,9 @@ import com.mportal.client.exception.ESUnavailableException;
 import com.mportal.client.util.FileUtils;
 import com.mportal.client.util.SharedPreferenceUtils;
 import com.mportal.client.util.StringUtils;
-import com.mportal.client.view.FlowLayout;
-import com.mportal.client.view.MyEditText;
-import com.mportal.client.view.ProgressHUD;
+import com.mportal.client.widget.FlowLayout;
+import com.mportal.client.widget.MyEditText;
+import com.mportal.client.widget.ProgressHUD;
 import com.mportal.lame.MP3Recorder;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 

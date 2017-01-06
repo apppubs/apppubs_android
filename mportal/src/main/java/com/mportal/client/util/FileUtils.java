@@ -60,7 +60,7 @@ public class FileUtils {
 	 * 向应用文件夹写入图片信息
 	 * 
 	 * @param context
-	 * @param path
+	 * @param srcPath
 	 * @throws IOException 
 	 */
 	public static String  putImage(Context context, String srcPath, String fileName) throws IOException {
@@ -604,14 +604,13 @@ public class FileUtils {
 	 * 
 	 * @param url
 	 * @param desPath
-	 * @param needProgress是否需呀有进度
+	 * @param needProgress 是否需呀有进度
 	 *            ,如果需要的话需要有onprogressListener
 	 * @param onProgress
 	 * @param needDelete
 	 *            下载中断是否需要删除文件
 	 * @return 下载大小
 	 * @throws InterruptedException
-	 * @throws DownloadException
 	 */
 	public static int downloadWithProgress(String url, String desPath, boolean needProgress, boolean needDelete,
 			OnProgressListener onProgress) throws InterruptedException {

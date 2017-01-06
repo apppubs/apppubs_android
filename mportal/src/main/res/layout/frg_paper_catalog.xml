@@ -4,11 +4,11 @@
     android:layout_height="match_parent"
     android:background="#FFFFFF" >
 
-    <com.mportal.client.view.PdfViewWithHotArea
+    <com.mportal.client.widget.PdfViewWithHotArea
         android:id="@+id/paper_issue_preview_pvwha"
         android:layout_width="match_parent"
         android:layout_height="match_parent" >
-    </com.mportal.client.view.PdfViewWithHotArea>
+    </com.mportal.client.widget.PdfViewWithHotArea>
 
     <ImageView
         android:id="@+id/catalog_iv"

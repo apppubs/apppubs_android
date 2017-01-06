@@ -17,12 +17,12 @@
         android:paddingLeft="20.0dip"
         android:paddingRight="20.0dip" >
 
-        <com.mportal.client.view.DragScheduleBar
+        <com.mportal.client.widget.DragScheduleBar
             android:id="@+id/paper_issue_dsb"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1" >
-        </com.mportal.client.view.DragScheduleBar>
+        </com.mportal.client.widget.DragScheduleBar>
 
         <LinearLayout
             android:layout_width="60dp"

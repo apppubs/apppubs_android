@@ -6,7 +6,7 @@
     android:background="@drawable/sel_common_item"
     android:orientation="vertical" >
 
-    <com.mportal.client.view.RatioLayout
+    <com.mportal.client.widget.RatioLayout
         android:id="@+id/right_gv_item"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -18,7 +18,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:scaleType="centerCrop" />
-    </com.mportal.client.view.RatioLayout>
+    </com.mportal.client.widget.RatioLayout>
 
     <RelativeLayout
         android:layout_width="match_parent"

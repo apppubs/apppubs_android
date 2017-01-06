@@ -31,8 +31,8 @@ import com.mportal.client.adapter.ViewHolder;
 import com.mportal.client.bean.User;
 import com.mportal.client.constant.URLs;
 import com.mportal.client.util.JSONResult;
-import com.mportal.client.view.ConfirmDialog;
-import com.mportal.client.view.ConfirmDialog.ConfirmListener;
+import com.mportal.client.widget.ConfirmDialog;
+import com.mportal.client.widget.ConfirmDialog.ConfirmListener;
 import com.orm.SugarRecord;
 
 public class ChatGroupDeleteUserActivity extends BaseActivity {

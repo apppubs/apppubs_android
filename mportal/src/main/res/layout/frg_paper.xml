@@ -5,13 +5,13 @@
     android:layout_height="match_parent"
     android:background="@android:color/white" >
 
-    <com.mportal.client.view.commonlist.CommonListView
+    <com.mportal.client.widget.commonlist.CommonListView
         android:id="@+id/frg_peter__xlv"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="#ffffff"
         mportal:list_sel="@drawable/sel_common_item" >
-    </com.mportal.client.view.commonlist.CommonListView>
+    </com.mportal.client.widget.commonlist.CommonListView>
 
     <include
         layout="@layout/nullshow_collection"

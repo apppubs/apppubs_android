@@ -18,7 +18,7 @@ import com.mportal.client.business.BussinessCallbackCommon;
 import com.mportal.client.constant.URLs;
 import com.mportal.client.util.SystemUtils;
 import com.mportal.client.util.Utils;
-import com.mportal.client.view.LoadingDialog;
+import com.mportal.client.widget.LoadingDialog;
 
 /**
  * 注册界面

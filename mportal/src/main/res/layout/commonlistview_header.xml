@@ -32,7 +32,7 @@
             android:layout_height="wrap_content"
             android:textSize="12sp" />
     </LinearLayout>
-	<com.mportal.client.view.ProgressPie
+	<com.mportal.client.widget.ProgressPie
 	    android:id="@+id/clv_header_pp"
 	    android:layout_width="30dp"
 	    android:layout_height="30dp"
@@ -40,7 +40,7 @@
 	    android:layout_centerVertical="true"
 	    android:layout_marginRight="10dp"
 	     />
-    <com.mportal.client.view.CircularImage
+    <com.mportal.client.widget.CircularImage
         android:id="@+id/clv_header_icon"
         android:layout_width="30dp"
         android:layout_height="30dp"

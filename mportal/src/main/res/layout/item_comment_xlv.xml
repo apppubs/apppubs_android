@@ -9,13 +9,13 @@
     android:background="#ffffff"
      >
 
-    <com.mportal.client.view.CircularImage
+    <com.mportal.client.widget.CircularImage
         android:id="@+id/comment_item_pic"
         android:layout_width="35dp"
         android:src="@drawable/default_user_image"
         android:layout_height="35dp"
         android:scaleType="centerInside" >
-    </com.mportal.client.view.CircularImage>
+    </com.mportal.client.widget.CircularImage>
 
     <LinearLayout
         android:layout_marginLeft="@dimen/item_padding_right_narrow"

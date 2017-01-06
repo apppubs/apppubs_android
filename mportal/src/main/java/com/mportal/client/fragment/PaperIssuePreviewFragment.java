@@ -22,8 +22,8 @@ import com.mportal.client.R;
 import com.mportal.client.activity.PaperIssueActivity;
 import com.mportal.client.bean.PaperCatalog;
 import com.mportal.client.util.LogM;
-import com.mportal.client.view.DragScheduleBar;
-import com.mportal.client.view.DragScheduleBar.OnGragedListener;
+import com.mportal.client.widget.DragScheduleBar;
+import com.mportal.client.widget.DragScheduleBar.OnGragedListener;
 
 /**
  *  报纸的版面预览视图

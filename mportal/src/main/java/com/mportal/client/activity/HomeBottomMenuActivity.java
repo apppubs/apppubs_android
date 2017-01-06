@@ -21,8 +21,8 @@ import com.mportal.client.bean.MenuItem;
 import com.mportal.client.constant.Actions;
 import com.mportal.client.fragment.BaseFragment;
 import com.mportal.client.util.LogM;
-import com.mportal.client.view.MenuBar;
-import com.mportal.client.view.MenuBar.OnItemClickListener;
+import com.mportal.client.widget.MenuBar;
+import com.mportal.client.widget.MenuBar.OnItemClickListener;
 
 /**
  * 区别于左右菜单的主界面此主界面为底部菜单类似zaker

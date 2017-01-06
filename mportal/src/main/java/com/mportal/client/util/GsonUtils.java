@@ -59,4 +59,8 @@ public class GsonUtils {
 	public static Gson getGson(){
 		return gson;
 	}
+
+	public static <T> T parse2Json(String jsonStr,Class<T> clazz){
+		return gson.fromJson(jsonStr,clazz);
+	}
 }

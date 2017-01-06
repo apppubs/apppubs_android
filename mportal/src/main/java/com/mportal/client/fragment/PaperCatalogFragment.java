@@ -29,8 +29,8 @@ import com.mportal.client.bean.PaperInfo;
 import com.mportal.client.business.BussinessCallbackCommon;
 import com.mportal.client.business.PaperBussiness;
 import com.mportal.client.util.LogM;
-import com.mportal.client.view.PdfViewWithHotArea;
-import com.mportal.client.view.PdfViewWithHotArea.PdfViewWithHotAreaListener;
+import com.mportal.client.widget.PdfViewWithHotArea;
+import com.mportal.client.widget.PdfViewWithHotArea.PdfViewWithHotAreaListener;
 import com.orm.SugarRecord;
 
 /**

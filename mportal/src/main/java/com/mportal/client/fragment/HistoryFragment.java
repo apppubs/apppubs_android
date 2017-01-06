@@ -23,9 +23,9 @@ import com.mportal.client.bean.ServiceNOInfo;
 import com.mportal.client.business.BussinessCallbackCommon;
 import com.mportal.client.util.StringUtils;
 import com.mportal.client.util.SystemUtils;
-import com.mportal.client.view.ProgressHUD;
-import com.mportal.client.view.commonlist.CommonListView;
-import com.mportal.client.view.commonlist.CommonListViewListener;
+import com.mportal.client.widget.ProgressHUD;
+import com.mportal.client.widget.commonlist.CommonListView;
+import com.mportal.client.widget.commonlist.CommonListViewListener;
 
 public class HistoryFragment extends BaseFragment {
 	/**

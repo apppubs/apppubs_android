@@ -21,8 +21,8 @@ import com.mportal.client.bean.Paper;
 import com.mportal.client.bean.PaperIssue;
 import com.mportal.client.business.BussinessCallbackCommon;
 import com.mportal.client.business.PaperBussiness;
-import com.mportal.client.view.commonlist.CommonListView;
-import com.mportal.client.view.commonlist.CommonListViewListener;
+import com.mportal.client.widget.commonlist.CommonListView;
+import com.mportal.client.widget.commonlist.CommonListViewListener;
 import com.orm.SugarRecord;
 
 public class PaperIssueListFragment extends BaseFragment {

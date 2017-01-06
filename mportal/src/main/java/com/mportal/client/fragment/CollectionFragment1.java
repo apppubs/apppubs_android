@@ -30,9 +30,9 @@ import com.mportal.client.bean.Collection;
 import com.mportal.client.bean.NewsInfo;
 import com.mportal.client.fragment.CollectionFragment1.CollectionAdapter.ViewHoder;
 import com.mportal.client.util.LogM;
-import com.mportal.client.view.ConfirmDialog;
-import com.mportal.client.view.ConfirmDialog.ConfirmListener;
-import com.mportal.client.view.commonlist.CommonListView;
+import com.mportal.client.widget.ConfirmDialog;
+import com.mportal.client.widget.ConfirmDialog.ConfirmListener;
+import com.mportal.client.widget.commonlist.CommonListView;
 import com.orm.SugarRecord;
 
 public class CollectionFragment1 extends BaseFragment {

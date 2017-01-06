@@ -1,8 +1,5 @@
 package com.mportal.client.activity;
 
-import java.io.IOException;
-
-import org.json.JSONException;
 import org.json.JSONObject;
 
 import android.content.Context;
@@ -21,15 +18,12 @@ import com.mportal.client.asytask.AsyTaskCallback;
 import com.mportal.client.asytask.AsyTaskExecutor;
 import com.mportal.client.bean.App;
 import com.mportal.client.constant.Constants;
-import com.mportal.client.constant.URLs;
 import com.mportal.client.fragment.WebAppFragment;
 import com.mportal.client.util.FileUtils;
-import com.mportal.client.util.JSONResult;
 import com.mportal.client.util.SystemUtils;
 import com.mportal.client.util.Utils;
-import com.mportal.client.util.WebUtils;
-import com.mportal.client.view.AlertDialog;
-import com.mportal.client.view.LoadingDialog;
+import com.mportal.client.widget.AlertDialog;
+import com.mportal.client.widget.LoadingDialog;
 
 /**
  * 登录界面

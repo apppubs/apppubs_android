@@ -20,7 +20,7 @@ import com.mportal.client.bean.NewsChannel;
 import com.mportal.client.fragment.ChannelFragment;
 import com.mportal.client.fragment.ChannelFragmentFactory;
 import com.mportal.client.util.LogM;
-import com.mportal.client.view.commonlist.CommonListView;
+import com.mportal.client.widget.commonlist.CommonListView;
 import com.orm.SugarRecord;
 /**
  * 增加 频道

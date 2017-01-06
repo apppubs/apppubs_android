@@ -6,8 +6,8 @@ import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import com.mportal.client.R;
-import com.mportal.client.view.LockPatternView;
-import com.mportal.client.view.LockPatternView.OnFinishListener;
+import com.mportal.client.widget.LockPatternView;
+import com.mportal.client.widget.LockPatternView.OnFinishListener;
 
 public class LockActivity extends BaseActivity {
 	

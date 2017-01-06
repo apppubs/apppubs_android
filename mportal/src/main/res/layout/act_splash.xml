@@ -9,7 +9,7 @@
         android:layout_height="match_parent"
         android:scaleType="fitXY"
         />
-    <com.mportal.client.view.ImageButton 
+    <com.mportal.client.widget.ImageButton
         android:id="@+id/splash_back"
         android:layout_width="30dp"
         android:layout_height="30dp"

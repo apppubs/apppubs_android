@@ -17,7 +17,7 @@
         android:layout_height="1px"
         android:background="#E0E0E0" />
 
-    <com.mportal.client.view.MenuBar
+    <com.mportal.client.widget.MenuBar
         android:id="@+id/home_bottom_menubar"
         android:layout_width="match_parent"
         android:layout_height="@dimen/menubar_home_bottom_height"

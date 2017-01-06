@@ -27,7 +27,7 @@ import android.widget.Toast;
 import com.mportal.client.R;
 import com.mportal.client.business.BussinessCallbackCommon;
 import com.mportal.client.util.LogM;
-import com.mportal.client.view.ZoomImageView;
+import com.mportal.client.widget.ZoomImageView;
 
 public class ChatPicInfoActivity extends BaseActivity implements OnClickListener {
 	private ViewPager mViewPager;

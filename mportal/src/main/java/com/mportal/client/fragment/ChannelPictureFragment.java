@@ -23,8 +23,8 @@ import com.mportal.client.bean.NewsInfo;
 import com.mportal.client.business.BussinessCallbackCommon;
 import com.mportal.client.constant.URLs;
 import com.mportal.client.util.LogM;
-import com.mportal.client.view.commonlist.CommonListView;
-import com.mportal.client.view.commonlist.CommonListViewListener;
+import com.mportal.client.widget.commonlist.CommonListView;
+import com.mportal.client.widget.commonlist.CommonListViewListener;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 
 public class ChannelPictureFragment extends ChannelFragment {

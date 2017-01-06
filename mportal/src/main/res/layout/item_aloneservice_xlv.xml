@@ -54,7 +54,7 @@
             android:textColor="@color/item_bg"
             android:textSize="12sp" />
 
-        <com.mportal.client.view.RatioLayout
+        <com.mportal.client.widget.RatioLayout
             android:id="@+id/aloneservice_history_img_rl"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
@@ -65,7 +65,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:scaleType="fitXY" />
-        </com.mportal.client.view.RatioLayout>
+        </com.mportal.client.widget.RatioLayout>
 
         <TextView
             android:id="@+id/aloneservice_history_desp"
@@ -78,7 +78,8 @@
             android:textColor="@color/common_text_gray"
             android:textSize="14dp" />
 
-<!--         是否可以查看详细信息 -->
+<!--         是否可以查看详细信息
+ -->
 
         <LinearLayout
             android:id="@+id/service_no_info_item_detail_ll"

@@ -24,8 +24,8 @@ import com.mportal.client.asytask.AsyTaskExecutor;
 import com.mportal.client.bean.NewsVideoInfo;
 import com.mportal.client.constant.URLs;
 import com.mportal.client.util.WebUtils;
-import com.mportal.client.view.commonlist.CommonListView;
-import com.mportal.client.view.commonlist.CommonListViewListener;
+import com.mportal.client.widget.commonlist.CommonListView;
+import com.mportal.client.widget.commonlist.CommonListViewListener;
 
 public class ChannelVideoFragment extends ChannelFragment implements AsyTaskCallback {
 	

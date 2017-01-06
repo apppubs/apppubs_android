@@ -6,7 +6,7 @@
     android:background="@color/app_common_bg"
     android:orientation="vertical" >
 
-    <com.mportal.client.view.TitleBar
+    <com.mportal.client.widget.TitleBar
         android:id="@+id/survey_tb"
         android:layout_width="match_parent"
         android:layout_height="@dimen/title_height"
@@ -15,7 +15,7 @@
         mportal:mTitle="调查"
         mportal:titleSize="@dimen/title_text_size" />
 
-    <com.mportal.client.view.commonlist.CommonListView
+    <com.mportal.client.widget.commonlist.CommonListView
         android:id="@+id/survey_xlv"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

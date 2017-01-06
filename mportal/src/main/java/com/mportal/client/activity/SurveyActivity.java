@@ -5,8 +5,8 @@ import android.view.View.OnClickListener;
 
 import com.mportal.client.R;
 import com.mportal.client.adapter.SurveyAdapter;
-import com.mportal.client.view.TitleBar;
-import com.mportal.client.view.commonlist.CommonListView;
+import com.mportal.client.widget.TitleBar;
+import com.mportal.client.widget.commonlist.CommonListView;
 
 /**
  * 调查

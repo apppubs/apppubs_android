@@ -45,7 +45,7 @@
                     android:textColor="@color/common_text_gray"
                     android:textSize="@dimen/item_text_size_small" />
 
-                <com.mportal.client.view.CircularImage
+                <com.mportal.client.widget.CircularImage
                     android:id="@+id/service_no_icon_iv"
                     android:layout_width="60dp"
                     android:layout_height="60dp"
