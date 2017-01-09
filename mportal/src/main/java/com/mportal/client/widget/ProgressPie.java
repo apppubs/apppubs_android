@@ -41,9 +41,7 @@ public class ProgressPie extends View{
 		canvas.drawArc(mArcRec,-90,360*mProgress,true,mArcPaint);
 		
 	}
-	
-	
-	
+
 	@Override
 	protected void onFinishInflate() {
 		Log.v("ProgressPie", "onFinishInflate");

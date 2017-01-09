@@ -5,6 +5,8 @@ import android.content.res.ColorStateList;
 import android.content.res.TypedArray;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
+import android.graphics.drawable.ShapeDrawable;
+import android.graphics.drawable.StateListDrawable;
 import android.util.AttributeSet;
 import android.util.TypedValue;
 import android.view.Gravity;
@@ -32,6 +34,7 @@ public class TitleBar extends RelativeLayout {
 
 	private Context mContext;
 	private String mLeftText;
+	private float mLeftTextSize;
 	private Drawable mLeftBackground;
 	private Drawable mLeftImage;
 	private int mLeftTextColor;
@@ -85,6 +88,7 @@ public class TitleBar extends RelativeLayout {
 		
 		TypedArray ta = context.obtainStyledAttributes(attrs, R.styleable.TitleBar);
 		mLeftTextColor = ta.getColor(R.styleable.TitleBar_leftTextColor, -1);
+		mLeftTextSize = ta.getDimension(R.styleable.TitleBar_leftTextSize,Utils.dip2px(context,15));
 		mLeftBackground = ta.getDrawable(R.styleable.TitleBar_leftBackground);
 		mLeftImage = ta.getDrawable(R.styleable.TitleBar_leftImgSrc);
 		mLeftText = ta.getString(R.styleable.TitleBar_leftText);
@@ -109,6 +113,7 @@ public class TitleBar extends RelativeLayout {
 		mLeftBtn.setBackgroundDrawable(mLeftBackground);
 		mLeftBtn.setTextColor(mLeftTextColor);
 		mLeftBtn.setId(R.id.titlebar_left_btn);
+		mLeftBtn.setTextSize(TypedValue.COMPLEX_UNIT_PX,mLeftTextSize);
 		mLeftBtn.setText(mLeftText);
 		mLeftBtn.setGravity(Gravity.CENTER);
 
@@ -185,6 +190,14 @@ public class TitleBar extends RelativeLayout {
 				.getResources().getDimensionPixelSize(R.dimen.title_padding_right), 0);
 		addView(mCurLeftView, mLeftLp);
 		mCurLeftView.setOnClickListener(mLeftClickListener);
+	}
+
+	public void setLeftBtnWithText(String text) {
+		removeView(mCurLeftView);
+		mLeftBtn.setText(text);
+		mCurLeftView = mLeftBtn;
+		mLeftLp.width =  LayoutParams.WRAP_CONTENT;
+		addView(mCurLeftView, mLeftLp);
 	}
 
 	public void setLeftImageResource(int resId) {
@@ -498,7 +511,7 @@ public class TitleBar extends RelativeLayout {
 	 * 
 	 * @param resId
 	 *            图片的资源id
-	 * @param listener此按钮的点击事件
+	 * @param listener 此按钮的点击事件
 	 */
 	public void addLeftBtnWithImageResourceIdAndClickListener(int resId, OnClickListener listener) {
 		// 如果第一个子view是当前的第一个btn的话说明已经有一个左边btn在titlebar了则需要将新的加到第二个上，否则加到第一个

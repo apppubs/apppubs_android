@@ -18,6 +18,7 @@
     </declare-styleable>
     <declare-styleable name="TitleBar">
         <attr name="leftText" format="string" />
+        <attr name="leftTextSize" format="dimension"/>
         <attr name="leftBackground" format="reference" />
         <attr name="leftImgSrc" format="reference"></attr>
         <attr name="leftTextColor" format="reference|color" />

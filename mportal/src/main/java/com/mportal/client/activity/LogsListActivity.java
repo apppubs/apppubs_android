@@ -48,7 +48,7 @@ public class LogsListActivity extends BaseActivity{
 		File[] files = getExternalFilesDir("logs").listFiles();
 		mFileList = new ArrayList<File>();
 		Collections.addAll(mFileList, files);
-		mAdapter.sestData(mFileList);
+		mAdapter.setData(mFileList);
 		mListView.setAdapter(mAdapter);
 		
 		setContentView(mListView);

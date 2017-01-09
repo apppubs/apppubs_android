@@ -40,7 +40,7 @@ public abstract class CommonAdapter<T> extends BaseAdapter {
 		return mDatas.get(position);
 	}
 
-	public void sestData(List<T> datas) {
+	public void setData(List<T> datas) {
 		mDatas = datas;
 	}
 

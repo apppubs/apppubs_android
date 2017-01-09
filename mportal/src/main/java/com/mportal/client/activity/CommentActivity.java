@@ -292,7 +292,7 @@ public class CommentActivity extends BaseActivity {
 		
 		if (mCurPage == 1) {
 			mInfos = obj;
-			mCommentAdapter.sestData(mInfos);
+			mCommentAdapter.setData(mInfos);
 			if (mInfos.size() == 0) {
 				mEmptyLl.setVisibility(View.VISIBLE);
 				

@@ -110,7 +110,7 @@ public class ChatNewGroupChatOrAddUserActivity extends BaseActivity {
 				}else{
 					mFilteredUserList = searchUser(queryString);
 				}
-				mListAdapter.sestData(mFilteredUserList);
+				mListAdapter.setData(mFilteredUserList);
 				mListAdapter.notifyDataSetChanged();
 				return false;
 			}
