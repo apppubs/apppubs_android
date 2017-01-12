@@ -10,6 +10,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -20,8 +21,7 @@ public class JSONResult<T> {
 	
 	public static final int RESULT_CODE_SUCCESS = 1;
 	public static final int RESULT_CODE_FAIL = -1;
-	
-	
+
 	public int resultCode;
 	public String reason;
 	public String result;
@@ -54,19 +54,16 @@ public class JSONResult<T> {
 		return jsonResult;
 	}
 	
-	public HashMap<String,String> getResultMap() throws JSONException{
-		JSONObject jsonObject = new JSONObject(result);
-		Iterator<String> iterator = jsonObject.keys();
-		HashMap<String,String> map = new HashMap<String, String>();
-		while(iterator.hasNext()){
-			String key = iterator.next();
-			map.put(key, jsonObject.getString(key));
-		}
-		return map;
+	public Map<String,String> getResultMap(){
+		return JSONUtils.parseJSON2StringMap(result);
 	}
 
 	public T getResultObject(Class<T> clazz){
-		return GsonUtils.getGson().fromJson(result,clazz);
+		return JSONUtils.getGson().fromJson(result,clazz);
+	}
+
+	public List<T> getResultList(Class<T> clazz){
+		return JSONUtils.parseListFromJson(result,clazz);
 	}
 
 }

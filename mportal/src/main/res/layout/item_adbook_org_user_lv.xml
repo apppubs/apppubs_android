@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@drawable/sel_common_item"
+    android:paddingLeft="@dimen/item_padding_left"
+    android:paddingTop="@dimen/item_padding_top_narrow">
+
+    <com.mportal.client.widget.CircleTextImageView
+        android:id="@+id/item_user_picker_user_iv"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        app:citv_text_size="12dp"
+        android:layout_alignParentLeft="true"
+        android:layout_centerVertical="true"
+        />
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/item_padding_bottom_narrow"
+        android:layout_below="@id/item_user_picker_user_iv" />
+
+    <RelativeLayout
+        android:id="@+id/item_user_picker_user_title_rl"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="10dp"
+        android:layout_toRightOf="@id/item_user_picker_user_iv">
+
+        <TextView
+            android:id="@+id/item_user_picker_user_title_tv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/common_text"
+            android:text="名称"
+            android:textSize="15dp" />
+
+        <TextView
+            android:id="@+id/item_user_picker_user_title1_tv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:paddingRight="@dimen/item_padding_right_narrow"
+            android:singleLine="true"
+            android:text="未激活"
+            android:textColor="@color/common_text_gray_light"
+            android:textSize="12dp" />
+    </RelativeLayout>
+
+
+    <TextView
+        android:id="@+id/item_user_picker_user_des_tv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/item_user_picker_user_title_rl"
+        android:layout_below="@id/item_user_picker_user_title_rl"
+        android:layout_marginTop="3dp"
+        android:layout_toRightOf="@id/item_user_picker_user_iv"
+        android:paddingRight="10dp"
+        android:singleLine="true"
+        android:maxLines="1"
+        android:text=""
+        android:textColor="@color/common_text_gray"
+        android:textSize="13dp" />
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1px"
+        android:layout_alignParentBottom="true"
+        android:background="@color/common_divider" />
+</RelativeLayout>

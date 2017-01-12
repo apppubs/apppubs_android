@@ -20,12 +20,15 @@ import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.webkit.ValueCallback;
 import android.widget.TextView;
 
+import com.android.volley.Cache;
+import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response.ErrorListener;
 import com.android.volley.Response.Listener;
@@ -161,6 +164,19 @@ public abstract class BaseActivity extends FragmentActivity implements OnClickLi
 		return mRequestQueue;
 	}
 
+	public Request<String> addStringRequest(String url,Listener<String> listener,ErrorListener errorListener){
+		StringRequest request = new StringRequest(url, listener,errorListener);
+		return mRequestQueue.add(request);
+	}
+
+	public String getUrlCache(String url){
+		Cache.Entry entry = mRequestQueue.getCache().get(url);
+		if (entry!=null){
+			return new String(entry.data);
+		}
+		return null;
+	}
+
 	@Override
 	public void setContentView(int layoutResID) {
 
@@ -247,12 +263,13 @@ public abstract class BaseActivity extends FragmentActivity implements OnClickLi
 
 		String osVersion = Utils.getAndroidSDKVersion();// 操作系统号
 		String currentVersionName = Utils.getVersionName(this);// app版本号
+		int appCode = Utils.getVersionCode(this);
 		String url = null;
 		try {
 			// /wmh360/json/login/usersmslogin.jsp?username=%s&deviceid=%s&token=%s&os=%s&dev=%s&app=%s&fr=4&appcode="+appCode;
 			url = String.format(URLs.URL_LOGIN_WITH_USERNAME, MportalApplication.user.getUsername(),
 					mSystemBussiness.getMachineId(), MportalApplication.app.getPushToken(), osVersion,
-					URLEncoder.encode(Build.MODEL, "utf-8"), currentVersionName);
+					URLEncoder.encode(Build.MODEL, "utf-8"), currentVersionName,appCode);
 		} catch (UnsupportedEncodingException e) {
 			e.printStackTrace();
 		}
@@ -403,8 +420,6 @@ public abstract class BaseActivity extends FragmentActivity implements OnClickLi
 	/**
 	 * 填充某View下的某TextView
 	 * 
-	 * @param rootView
-	 *            TextView的父view
 	 * @param resId
 	 *            TextView 的id
 	 * @param content

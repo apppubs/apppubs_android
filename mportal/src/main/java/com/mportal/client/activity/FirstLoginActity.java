@@ -294,12 +294,13 @@ public class FirstLoginActity extends BaseActivity implements ErrorListener, Asy
 
 		String osVersion = Utils.getAndroidSDKVersion();// 操作系统号
 		String currentVersionName = Utils.getVersionName(FirstLoginActity.this);// app版本号
+		int versionCode = Utils.getVersionCode(FirstLoginActity.this);
 		String url = null;
 		try {
 			// /wmh360/json/login/usersmslogin.jsp?username=%s&deviceid=%s&token=%s&os=%s&dev=%s&app=%s&fr=4&appcode="+appCode;
 			url = String.format(URLs.URL_LOGIN_WITH_USERNAME, username, mSystemBussiness.getMachineId(),
 					MportalApplication.app.getPushToken(), osVersion, URLEncoder.encode(Build.MODEL, "utf-8"),
-					currentVersionName);
+					currentVersionName,versionCode);
 		} catch (UnsupportedEncodingException e) {
 			e.printStackTrace();
 		}
@@ -401,26 +402,22 @@ public class FirstLoginActity extends BaseActivity implements ErrorListener, Asy
 	}
 
 	private void onLoginWithUsernamePasswordAndOrgIdDone(String response, String orgCode) {
-		try {
-			JSONResult jr = JSONResult.compile(response);
+		JSONResult jr = JSONResult.compile(response);
 
-			if (jr.resultCode == 1) {
-				User user = new User();
-				user.setUsername((String)jr.getResultMap().get("username"));
-				user.setUserId((String)jr.getResultMap().get("userid"));
-				user.setOrgCode(orgCode);
-				MportalApplication.saveAndRefreshUser(FirstLoginActity.this, user);
+		if (jr.resultCode == 1) {
+            User user = new User();
+            user.setUsername((String)jr.getResultMap().get("username"));
+            user.setUserId((String)jr.getResultMap().get("userid"));
+            user.setOrgCode(orgCode);
+            MportalApplication.saveAndRefreshUser(FirstLoginActity.this, user);
 
-				MportalApplication.systemSettings.setIsAllowAutoLogin(mCheckBox.isChecked());
-				MportalApplication.commitAndRefreshSystemSettings(MportalApplication.systemSettings,
-						FirstLoginActity.this);
-				enterHome();
-			} else {
-				Toast.makeText(this, "登录失败", Toast.LENGTH_SHORT).show();
-			}
-		} catch (JSONException e) {
-			e.printStackTrace();
-		}
+            MportalApplication.systemSettings.setIsAllowAutoLogin(mCheckBox.isChecked());
+            MportalApplication.commitAndRefreshSystemSettings(MportalApplication.systemSettings,
+                    FirstLoginActity.this);
+            enterHome();
+        } else {
+            Toast.makeText(this, "登录失败", Toast.LENGTH_SHORT).show();
+        }
 	}
 
 	@Override

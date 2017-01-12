@@ -15,6 +15,9 @@ android {
     }
 
     buildTypes {
+        debug{
+            minifyEnabled false
+        }
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.txt'
@@ -25,6 +28,8 @@ android {
 dependencies {
     compile project(':sugar_orm')
     compile project(':oneKeyShare')
+    compile project(':IMKit')
+    compile 'com.android.support:support-annotations:22.2.0'
     compile 'com.google.code.gson:gson:2.2.4'
     compile 'com.android.support:support-v4:21.0.0'
     compile 'com.android.support:appcompat-v7:21.0.0'
@@ -43,9 +48,8 @@ dependencies {
     compile files('libs/barcode_core.jar')
     compile files('libs/jpush-android-2.1.0.jar')
     compile files('libs/nineoldandroids-2.4.0.jar')
-    compile files('libs/picasso-2.4.0.jar')
     compile files('libs/pinyin4j-2.5.0.jar')
     compile files('libs/pushservice-4.5.3.48.jar')
-    compile files('libs/volley-libary.jar')
-
+    compile 'eu.the4thfloor.volley:com.android.volley:2015.05.28'
+    compile 'com.squareup.picasso:picasso:2.5.2'
 }

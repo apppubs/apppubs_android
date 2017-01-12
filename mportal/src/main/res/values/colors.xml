@@ -7,6 +7,7 @@
     <color name="app_default">#1874CD</color>
     <color name="common_btn_h">#1844AD</color>
     <color name="common_btn_disable">#C0C0C0</color>
+    <color name="common_btn_bg_gray">#b9b9c7</color>
     <color name="app_common_bg">#F5F5F5</color>
     <color name="common_hint">#A7A7A7</color>
     <color name="dialog_bg">#D0FFFFFF</color>
@@ -16,7 +17,8 @@
     <color name="common_item_bg">#FFFFFF</color>
     <color name="common_item_bg_h">#E5E5E5</color>
     <color name="common_item_trans_bg">#30000000</color><!-- 点击时高亮透明颜色 -->
-    
+    <!--红色的提醒色-->
+    <color name="common_notify_red">#ff4000</color>
     <color name="menu_bar_bg">#F7F7F7</color>
     <color name="login_bg">#F5F5DB</color>
     <color name="title_bg">#3A5FCD</color>

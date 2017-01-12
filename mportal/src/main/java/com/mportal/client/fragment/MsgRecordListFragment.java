@@ -303,17 +303,13 @@ public class MsgRecordListFragment extends BaseFragment implements OnClickListen
 							public void onResponse(String response) {
 								JSONResult jr = JSONResult.compile(response);
 								if(jr.resultCode==JSONResult.RESULT_CODE_SUCCESS){
-									try {
-										String groupType = (String)jr.getResultMap().get("group_type");
-										if(groupType.equals("1")){
-											ChatActivity.startActivity(mHostActivity, "",mr.getSourceUsernameOrId(),ChatActivity.CHAT_TYPE_SINGLE,mr.getTitle());
-										}else{
-											ChatActivity.startActivity(mHostActivity, "",mr.getSourceUsernameOrId(),ChatActivity.CHAT_TYPE_GROUP,mr.getTitle());
-										}
-									} catch (JSONException e) {
-										e.printStackTrace();
-									}
-									
+									String groupType = (String)jr.getResultMap().get("group_type");
+									if(groupType.equals("1")){
+                                        ChatActivity.startActivity(mHostActivity, "",mr.getSourceUsernameOrId(),ChatActivity.CHAT_TYPE_SINGLE,mr.getTitle());
+                                    }else{
+                                        ChatActivity.startActivity(mHostActivity, "",mr.getSourceUsernameOrId(),ChatActivity.CHAT_TYPE_GROUP,mr.getTitle());
+                                    }
+
 								}
 							}
 						}, new ErrorListener() {

@@ -147,7 +147,6 @@ public class WebUtils {
 	 * get请求
 	 * 
 	 * @param url
-	 * @param requestId 请求id
 	 * @param needProgressBroadcast 是否需要
 	 * @return action 广播action
 	 * @throws IOException

@@ -2,9 +2,11 @@ package com.mportal.client.message.model;
 
 import android.content.Context;
 import android.content.Intent;
+import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Build;
 import android.text.TextUtils;
+import android.util.Log;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -25,12 +27,16 @@ import com.mportal.client.business.BussinessCallbackCommon;
 import com.mportal.client.business.SystemBussiness;
 import com.mportal.client.constant.Actions;
 import com.mportal.client.constant.URLs;
+import com.mportal.client.util.ACache;
 import com.mportal.client.util.Des3;
 import com.mportal.client.util.JSONResult;
 import com.mportal.client.util.LogM;
+import com.mportal.client.util.StringUtils;
 import com.mportal.client.util.Utils;
 import com.mportal.client.util.WebUtils;
+import com.orm.SugarDb;
 import com.orm.SugarRecord;
+import com.orm.util.NamingHelper;
 
 import org.json.JSONObject;
 
@@ -46,6 +52,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.Future;
 
+import static com.orm.SugarContext.getSugarContext;
+
 /**
  * 用户相关业务
  * 
@@ -59,6 +67,7 @@ import java.util.concurrent.Future;
 public class UserBussiness extends BaseBussiness {
 
 	private static UserBussiness sUserBussiness;
+	private static final String CACHE_NAME = "com.client.message.model.UserBussiness";
 	private Context mContext;
 
 	private UserBussiness(Context context) {
@@ -66,7 +75,7 @@ public class UserBussiness extends BaseBussiness {
 		mContext = context;
 	}
 
-	public static UserBussiness getInstance(Context context) {
+	public static synchronized UserBussiness getInstance(Context context) {
 
 		if (sUserBussiness == null) {
 			sUserBussiness = new UserBussiness(context);
@@ -122,6 +131,30 @@ public class UserBussiness extends BaseBussiness {
 	public long countAllUser() {
 		SugarRecord.count(User.class);
 		return SugarRecord.count(User.class);
+	}
+
+	public long countUserOfCertainDeptment(String deptId){
+		String sql = String.format("WITH RECURSIVE down(mydeptid) AS"+
+		" ("+
+		"SELECT detp_id FROM DEPARTMENT WHERE dept_id='%s' "+
+		"UNION "+
+		"SELECT dept_id FROM DEPARTMENT a,down b "+
+		"WHERE b.mydeptid = a.parent_id "+
+		")"+
+		"SELECT count(*) as count_num from  USER_DEPT_LINK where dept_id in down ",deptId);
+		Log.i("UserBussiness","查询部门下人员数量 sql:"+sql);
+		SQLiteDatabase sqLiteDatabase = SugarRecord.getDatabase();
+		Cursor c = sqLiteDatabase.rawQuery(sql,null);
+		int count = 0;
+		try {
+			c.moveToFirst();
+			count = c.getInt(0);
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			c.close();
+		}
+		return count;
 	}
 
 	/**
@@ -192,6 +225,10 @@ public class UserBussiness extends BaseBussiness {
 
 	}
 
+	public String getRootSuperId(){
+		AppConfig appConfig = SystemBussiness.getInstance(mContext).getAppConfig();
+		return appConfig.getAdbookRootId();
+	}
 	/*
 	 * 列出第一层组织
 	 * 
@@ -215,9 +252,67 @@ public class UserBussiness extends BaseBussiness {
 		return SugarRecord.findByProperty(User.class, "username", username);
 	}
 
+	public List<User> getUsersByUserIds(List<String> userIds){
+		StringBuilder sb = new StringBuilder();
+		for (String userId : userIds){
+			if (sb.length()>0){
+				sb.append(",");
+			}
+			sb.append("'"+userId+"'");
+		}
+		String sql = "select * from USER where USER_ID in ("+sb.toString()+")";
+		return SugarRecord.findWithQuery(User.class,sql);
+	}
+
+	public Future cacheUserBasicInfoList(final List<String> userIds, final BussinessCallbackCommon<List<UserBasicInfo>> callback){
+		Future future = post(new Runnable() {
+			@Override
+			public void run() {
+				String userIdsStr = StringUtils.join(userIds);
+				String url = String.format(URLs.URL_USER_BASIC_INFO,userIdsStr);
+				try {
+					String response = WebUtils.requestWithGet(url);
+					JSONResult jo = JSONResult.compile(response);
+					if (jo.resultCode==1){
+						List<UserBasicInfo> list = jo.getResultList(UserBasicInfo.class);
+						Log.i("userbussiness","解析结果："+list+"list长度："+list.size());
+						ACache cache =  ACache.get(mContext,CACHE_NAME);
+						for (UserBasicInfo userBasicInfo: list){
+							cache.put(userBasicInfo.getUserId(),userBasicInfo);
+						}
+						callback.onDone(list);
+					}
+				} catch (Exception e) {
+					callback.onException(0);
+				}
+			}
+		});
+		return future;
+	}
+
+	public UserBasicInfo getCachedUserBasicInfo(String userId){
+		ACache cache =  ACache.get(mContext,CACHE_NAME);
+		UserBasicInfo userInfo = (UserBasicInfo) cache.getAsObject(userId);
+		return userInfo;
+	}
+
+	public void addOrUpdateUserBasicInfo(UserBasicInfo userBasicInfo){
+		ACache cache =  ACache.get(mContext,CACHE_NAME);
+		cache.put(userBasicInfo.getUserId(),userBasicInfo);
+	}
+
 	public List<Department> getDepartmentByUserId(String userId) {
 		String sql = "select * from DEPARTMENT t1 join USER_DEPT_LINK t2 on t1.DEPT_ID = t2.DEPT_ID where t2.USER_ID = ?";
 		return SugarRecord.findWithQuery(Department.class, sql, userId);
+	}
+
+	public Department getDepartmentById(String deptId){
+		List<Department> deptList = SugarRecord.find(Department.class,"dept_id=?",deptId);
+		if (deptList==null||deptList.size()<1){
+			return null;
+		}else{
+			return deptList.get(0);
+		}
 	}
 	
 	public List<String> getDepartmentStringListByUserId(String userId,String deptRootId){

@@ -48,6 +48,8 @@ import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
 import com.orm.SugarContext;
 
+import io.rong.imkit.RongIM;
+
 public class MportalApplication extends Application {
 
 	public static final String MSG_DELETED_CHAT_GROUP_MAP = "deleted_chat_group_map";
@@ -96,6 +98,9 @@ public class MportalApplication extends Application {
 		// if(appL.size()>0){
 		// app = appL.get(0);
 		// }
+
+		//初始化融云
+		RongIM.init(this);
 
 		WindowManager manager = (WindowManager) getApplicationContext().getSystemService(Context.WINDOW_SERVICE);
 		DisplayMetrics dm = new DisplayMetrics();
@@ -370,8 +375,8 @@ public class MportalApplication extends Application {
 
 	public void initDefaultExceptionHandler() {
 		// 设置该CrashHandler为程序的默认处理器
-		UnCeHandler catchExcep = new UnCeHandler(this);
-		Thread.setDefaultUncaughtExceptionHandler(catchExcep);
+//		UnCeHandler catchExcep = new UnCeHandler(this);
+//		Thread.setDefaultUncaughtExceptionHandler(catchExcep);
 	}
 
 	/**

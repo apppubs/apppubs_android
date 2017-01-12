@@ -4,6 +4,7 @@ import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.Executor;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
 import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.ThreadFactory;
 import java.util.concurrent.ThreadPoolExecutor;
@@ -112,5 +113,17 @@ public abstract class BaseBussiness {
 		}
 		
 	}
+
+    public Future<?> post(Runnable runnable){
+        return sDefaultExecutor.submit(runnable);
+    }
+
+    protected <T> void onDone(BussinessCallbackCommon<T> callback,T obj){
+        sHandler.post(new OnDoneRun<T>(callback,obj));
+    }
+
+    protected <T> void onException(BussinessCallbackCommon<T> callback){
+        sHandler.post(new OnExceptionRun<T>(callback));
+    }
    
 }

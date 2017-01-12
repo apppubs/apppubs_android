@@ -28,8 +28,10 @@ import org.apache.http.protocol.HTTP;
 import org.apache.http.util.EntityUtils;
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.w3c.dom.Text;
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.res.Resources;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
@@ -45,11 +47,14 @@ import android.graphics.Paint;
 import android.graphics.Rect;
 import android.os.AsyncTask;
 import android.os.Build;
+import android.support.annotation.NonNull;
+import android.support.v4.text.TextUtilsCompat;
 import android.telephony.TelephonyManager;
+import android.text.TextUtils;
 import android.util.DisplayMetrics;
+import android.util.Log;
 import android.view.WindowManager;
 
-import com.google.gson.JsonObject;
 import com.mportal.client.MportalApplication;
 import com.mportal.client.R;
 import com.mportal.client.bean.App;
@@ -76,8 +81,9 @@ import com.mportal.client.constant.Constants;
 import com.mportal.client.constant.SystemConfig;
 import com.mportal.client.constant.URLs;
 import com.mportal.client.message.model.UserBussiness;
+import com.mportal.client.util.ACache;
 import com.mportal.client.util.FileUtils;
-import com.mportal.client.util.GsonUtils;
+import com.mportal.client.util.JSONUtils;
 import com.mportal.client.util.JSONResult;
 import com.mportal.client.util.LogM;
 import com.mportal.client.util.MathUtils;
@@ -85,6 +91,9 @@ import com.mportal.client.util.Utils;
 import com.mportal.client.util.WebUtils;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.orm.SugarRecord;
+
+import io.rong.imkit.RongIM;
+import io.rong.imlib.RongIMClient;
 
 /**
  * 
@@ -99,7 +108,7 @@ import com.orm.SugarRecord;
 public class SystemBussiness extends BaseBussiness {
 
 	private float PIC_RATIO = 0.56f;
-	
+
 	public interface UpdateListenser {
 		void onHaveNewVersion(String updateurl, int newVersionCode, int curVersionCode);
 
@@ -505,7 +514,7 @@ public class SystemBussiness extends BaseBussiness {
 
 	public AppConfig getAppConfig(){
 		String str = (String) FileUtils.readObj(mContext,Constants.FILE_NAME_APP_CONFIG);
-		return GsonUtils.parse2Json(str,AppConfig.class);
+		return JSONUtils.parseObjectFromJson(str,AppConfig.class);
 	}
 
 	/**
@@ -1119,6 +1128,101 @@ public class SystemBussiness extends BaseBussiness {
 		}
 		return true;
 
+	}
+
+	/**
+	 * 登录融云
+	 */
+	public void loginRC(){
+		post(new Runnable() {
+			@Override
+			public void run() {
+				String token = getRCToken();
+				if (token!=null){
+					loginRCWithToken(token);
+				}
+			}
+		});
+
+	}
+
+	private String getRCToken(){
+
+		String token = null;
+		String userId = MportalApplication.user.getUserId();
+		String username = MportalApplication.user.getUsername();
+		String url = String.format(URLs.URL_RC_TOKEN,userId,username);
+		try {
+			String response = WebUtils.requestWithGet(url);
+			JSONResult jr = JSONResult.compile(response);
+			Map<String,String> map = jr.getResultMap();
+			token = map.get("token");
+		} catch (IOException e) {
+			e.printStackTrace();
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
+		return token;
+	}
+
+	private void loginRCWithToken(String token){
+		RongIM.connect(token, new RongIMClient.ConnectCallback() {
+
+			/**
+			 * Token 错误。可以从下面两点检查 1.  Token 是否过期，如果过期您需要向 App Server 重新请求一个新的 Token
+			 *                  2.  token 对应的 appKey 和工程里设置的 appKey 是否一致
+			 */
+			@Override
+			public void onTokenIncorrect() {
+
+			}
+
+			/**
+			 * 连接融云成功
+			 * @param userid 当前 token 对应的用户 id
+			 */
+			@Override
+			public void onSuccess(String userid) {
+				Log.d("LoginActivity", "--onSuccess" + userid);
+			}
+
+			/**
+			 * 连接融云失败
+			 * @param errorCode 错误码，可到官网 查看错误码对应的注释
+			 */
+			@Override
+			public void onError(RongIMClient.ErrorCode errorCode) {
+
+			}
+		});
+	}
+
+	public void inviteUsers(@NonNull final List<String> userIds, @NonNull final BussinessCallbackCommon callback){
+		post(new Runnable() {
+			@Override
+			public void run() {
+				StringBuilder sb = new StringBuilder();
+				for (String userId:userIds){
+					if (sb.length()>0){
+						sb.append(",");
+					}
+					sb.append(userId);
+				}
+				String url = String.format(URLs.URL_SEND_INVITE_SMS,sb.toString());
+				try {
+					String response = WebUtils.requestWithGet(url);
+					JSONResult jr = JSONResult.compile(response);
+					if (jr.resultCode==1){
+						onDone(callback,null);
+					}else{
+						onException(callback);
+					}
+				} catch (Exception e) {
+					e.printStackTrace();
+					onException(callback);
+				}
+			}
+		});
 	}
 
 }

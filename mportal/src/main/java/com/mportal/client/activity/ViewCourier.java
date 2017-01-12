@@ -53,6 +53,7 @@ import com.mportal.client.fragment.SettingFragment;
 import com.mportal.client.fragment.TitleMenuFragment;
 import com.mportal.client.fragment.WebAppFragment;
 import com.mportal.client.fragment.WeiBoFragment;
+import com.mportal.client.message.fragment.ConversationListFragment;
 import com.mportal.client.util.FileUtils;
 import com.mportal.client.util.LogM;
 import com.mportal.client.util.StringUtils;
@@ -60,6 +61,9 @@ import com.mportal.client.widget.ConfirmDialog;
 import com.mportal.client.widget.ConfirmDialog.ConfirmListener;
 import com.mportal.client.widget.TitleBar;
 import com.orm.SugarRecord;
+
+import io.rong.imkit.RongIM;
+import io.rong.imlib.model.Conversation;
 
 /**
  * 界面控制器，用户跳转页面
@@ -210,7 +214,12 @@ public class ViewCourier {
         } else if (url.equals("apppubs://qrcode")) {
             Intent intent = new Intent(context, CaptureActivity.class);
             context.startActivity(intent);
-        } else if (url.startsWith("tel:")) {
+        } else if(url.startsWith("apppubs://service_no")){
+            Map<String,Boolean> conversations = new HashMap<String,Boolean>();
+            conversations.put(Conversation.ConversationType.PRIVATE.getName(),false);
+            conversations.put(Conversation.ConversationType.DISCUSSION.getName(),false);
+            RongIM.getInstance().startConversationList(context,conversations);
+        }else if (url.startsWith("tel:")) {
             String str[] = url.split(":");
             final String uri = url;
             final Context con = context;
@@ -401,7 +410,8 @@ public class ViewCourier {
         } else if (uri.equals(MenuItem.MENU_URL_HISTORY_MESSAGE)) {
             ContainerActivity.startActivity(mHomeActivity, HistoryFragment.class, null, "历史消息");
         } else if ((uri.equals(MenuItem.MENU_URL_MESSAGE)|| uri.startsWith("apppubs://message")) && type == MenuItem.MENU_LOCATION_PRIMARY) {
-            frg = new ConversationFragment();
+//            frg = new ConversationFragment();
+            frg = new ConversationListFragment();
             mFragmentsMap.put(item, frg);
             mHomeActivity.changeContent(frg);
 

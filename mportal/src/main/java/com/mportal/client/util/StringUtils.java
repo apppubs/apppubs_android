@@ -365,7 +365,16 @@ public class StringUtils {
 		return result ;
 	}
 	
-	
+	public static String join(List<String> list){
+		StringBuilder sb = new StringBuilder();
+		for (String str : list){
+			if (sb.length()>0){
+				sb.append(",");
+			}
+			sb.append(str);
+		}
+		return sb.toString();
+	}
 	
 	
 }

@@ -346,13 +346,9 @@ public class ChatNewGroupChatOrAddUserActivity extends BaseActivity {
 				ProgressHUD.dismissProgressHUDInThisContext(ChatNewGroupChatOrAddUserActivity.this);
 				JSONResult jr = JSONResult.compile(response);
 				if(jr.resultCode==JSONResult.RESULT_CODE_SUCCESS){
-					try {
-						String groupId = (String)jr.getResultMap().get("groupid");
-						ChatActivity.startActivity(ChatNewGroupChatOrAddUserActivity.this, "",groupId,ChatActivity.CHAT_TYPE_GROUP);
-						finish();
-					} catch (JSONException e) {
-						e.printStackTrace();
-					}
+					String groupId = (String)jr.getResultMap().get("groupid");
+					ChatActivity.startActivity(ChatNewGroupChatOrAddUserActivity.this, "",groupId,ChatActivity.CHAT_TYPE_GROUP);
+					finish();
 				}
 			}
 		}, new ErrorListener() {

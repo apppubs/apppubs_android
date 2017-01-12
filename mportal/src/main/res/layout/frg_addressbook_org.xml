@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent">
+    <com.mportal.client.message.widget.Breadcrumb
+        android:id="@+id/user_picker_bc"
+        android:layout_width="match_parent"
+        android:layout_height="45dp"
+        android:background="@android:color/white"
+        ></com.mportal.client.message.widget.Breadcrumb>
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1px"
+        android:background="@color/common_divider"
+        />
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        >
+        <ListView
+            android:id="@+id/user_picker_lv"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:listSelector="@drawable/sel_com_list"
+            android:divider="@null"
+            ></ListView>
+
+        <TextView
+            android:id="@+id/user_picker_empty_tv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/common_text"
+            android:layout_gravity="center"
+            android:text="没有人员!"
+            android:visibility="gone"
+            />
+    </FrameLayout>
+</LinearLayout>

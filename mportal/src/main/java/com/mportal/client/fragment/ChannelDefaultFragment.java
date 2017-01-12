@@ -37,7 +37,7 @@ import com.mportal.client.bean.NewsChannel;
 import com.mportal.client.bean.NewsInfo;
 import com.mportal.client.business.NewsBussiness;
 import com.mportal.client.constant.URLs;
-import com.mportal.client.util.GsonUtils;
+import com.mportal.client.util.JSONUtils;
 import com.mportal.client.util.JSONResult;
 import com.mportal.client.util.LogM;
 import com.mportal.client.util.WebUtils;
@@ -320,7 +320,7 @@ public class ChannelDefaultFragment extends ChannelFragment  implements OnClickL
 			String url = String.format(URLs.URL_CHANNEL, params[0]);
 			String result = WebUtils.requestWithGet(url);
 			JSONResult jr = JSONResult.compile(result);
-			obj = GsonUtils.getGson().fromJson(jr.result, NewsChannel.class);
+			obj = JSONUtils.getGson().fromJson(jr.result, NewsChannel.class);
 		}else if(tag==TAST_CODE_REFRESH_NEWS){
 			// 如果page==0，刷新数据库信息
 			String url = URLs.URL_NEWS_LIST_OF_CHANNEL + "&channelcode=" + mChannelCode

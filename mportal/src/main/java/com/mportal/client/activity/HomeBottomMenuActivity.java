@@ -157,8 +157,7 @@ public class HomeBottomMenuActivity extends HomeBaseActivity {
 	private Fragment mCurFrg;
 	@Override
 	protected void changeContent(BaseFragment fragment) {
-		
-		
+
 		FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
 		List<Fragment> fragments = getSupportFragmentManager().getFragments();
 		if (fragments==null||!fragments.contains(fragment)) {

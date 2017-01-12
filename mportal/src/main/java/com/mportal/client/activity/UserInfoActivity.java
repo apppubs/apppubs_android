@@ -1,15 +1,20 @@
 package com.mportal.client.activity;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.ImageView;
@@ -17,6 +22,7 @@ import android.widget.ImageView.ScaleType;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.android.volley.Cache;
 import com.android.volley.DefaultRetryPolicy;
 import com.android.volley.Response.ErrorListener;
 import com.android.volley.Response.Listener;
@@ -26,26 +32,32 @@ import com.mportal.client.MportalApplication;
 import com.mportal.client.R;
 import com.mportal.client.bean.App;
 import com.mportal.client.bean.User;
+import com.mportal.client.business.BussinessCallbackCommon;
 import com.mportal.client.constant.Constants;
 import com.mportal.client.constant.URLs;
 import com.mportal.client.net.RequestListener;
 import com.mportal.client.util.FileUtils;
 import com.mportal.client.util.JSONResult;
+import com.mportal.client.widget.AlertDialog;
+import com.mportal.client.widget.CircleTextImageView;
+import com.mportal.client.widget.ConfirmDialog;
 import com.mportal.client.widget.ContactDailog;
 import com.mportal.client.widget.ProgressHUD;
+
+import io.rong.imkit.RongIM;
+import io.rong.imlib.RongIMClient;
+import io.rong.imlib.model.Conversation;
 
 public class UserInfoActivity extends BaseActivity implements OnClickListener,RequestListener{
 
 	public static String EXTRA_STRING_USER_ID = "user_id";
 	
 	private User mUser;
-	private ImageView mIv;
+	private CircleTextImageView mIv;
 	private TextView mNameTv, mDeptTv;
-	private TextView mEmailTV, mTelTV, mMobileTV, mWorkAddressTV;
+	private TextView mEmailTV, mTelTV, mMobileTV, mWorkAddressTV,mInviteTV;
 	
-	private String mIconUrl;
-	private String mIconCacheStr;
-
+	private String mUserInfoUrl;
 	private JSONObject mAppConfigJO;
 	private String[] mIconConfigParams;
 	@Override
@@ -55,17 +67,47 @@ public class UserInfoActivity extends BaseActivity implements OnClickListener,Re
 		setTitle("详细信息");
 		init();
 		optionView();
-		loadIcon();
+		loadUserInfoFromNet();
 	}
 
-	private void loadIcon() {
+	private void loadUserInfoFromNet() {
+		handleUserInfoResponse(getUrlCache(mUserInfoUrl));
+		addStringRequest(mUserInfoUrl, new Listener<String>() {
+			@Override
+			public void onResponse(String response) {
+				handleUserInfoResponse(response);
+			}
+		}, new ErrorListener() {
+			@Override
+			public void onErrorResponse(VolleyError error) {
+			}
+		});
+	}
+
+	private void handleUserInfoResponse(String response){
+		if (TextUtils.isEmpty(response)){
+			return ;
+		}
+		JSONResult jr = JSONResult.compile(response);
+		//底部按钮
+		if (MportalApplication.app.getAllowChat() == App.ALLOW_CHAT_TRUE&&!mUser.getUserId().equals(MportalApplication.user.getUserId())) {
+			//如果未激活显示未激活按钮，如果已激活显示开始聊天按钮,
+			Map<String,String> resultMap = jr.getResultMap();
+			if (!TextUtils.isEmpty(resultMap.get("appcodeversion"))){
+				setVisibilityOfViewByResId(R.id.userinfo_begin_talk, View.VISIBLE);
+			}else{
+				setVisibilityOfViewByResId(R.id.userinfo_welcome_tv,View.VISIBLE);
+			}
+
+		}
+		//头像
 		if(mIconConfigParams!=null&&mIconConfigParams.length>0&&mIconConfigParams[0].equals("1")){
 			if(mIconConfigParams.length>2&&mIconConfigParams[2].equals("1")){
 				mIv.setScaleType(ScaleType.CENTER_CROP);
 			}
-			loadIconCache();
-			loadIconData();
+			mImageLoader.displayImage((String)jr.getResultMap().get("photourl"), mIv);
 		}
+
 	}
 
 	private void optionView() {
@@ -117,34 +159,6 @@ public class UserInfoActivity extends BaseActivity implements OnClickListener,Re
 		}
 	}
 
-	private void loadIconCache() {
-		if(mRequestQueue.getCache().get(mIconUrl)!=null){
-			String cachedResponse = new String(mRequestQueue.getCache().get(mIconUrl).data);
-			mIconCacheStr = cachedResponse;
-			System.out.println("缓存中的："+cachedResponse);
-			resolveIconResponse(cachedResponse);
-		}
-	}
-	
-	private void loadIconData(){
-		StringRequest request = new StringRequest(mIconUrl, new Listener<String>() {
-
-			@Override
-			public void onResponse(String response) {
-				resolveIconResponse(response);
-				mIconCacheStr = response;
-			}
-		}, new ErrorListener() {
-
-			@Override
-			public void onErrorResponse(VolleyError arg0) {
-				
-			}
-		});
-		request.setShouldCache(true);
-		mRequestQueue.add(request);
-	}
-	
 	private void resolveIconResponse(String responseStr){
 		try {
 			JSONResult jr = JSONResult.compile(responseStr);
@@ -173,27 +187,20 @@ public class UserInfoActivity extends BaseActivity implements OnClickListener,Re
 			e.printStackTrace();
 		}
 		mIconConfigParams = TextUtils.isEmpty(flags)?null:flags.split(",");
-		
-		
-		mIconUrl = String.format(URLs.URL_ADDRESS_USER_ICON, mUser.getUsername());
-		
-		mIv = (ImageView) findViewById(R.id.userinfo_icon_iv);
+
+
+		mUserInfoUrl =  String.format(URLs.URL_USER_INFO, mUser.getUserId());
+
+		mIv = (CircleTextImageView) findViewById(R.id.userinfo_icon_iv);
+		mIv.setText(mUser.getTrueName());
 		mNameTv = (TextView) findViewById(R.id.userinfo_name_tv);
 		mDeptTv = (TextView) findViewById(R.id.userinfo_dept_tv);
 		mEmailTV = (TextView) findViewById(R.id.userinfo_email);
 		mTelTV = (TextView) findViewById(R.id.userinfo_tel);
 		mMobileTV = (TextView) findViewById(R.id.userinfo_mobile);
 		mWorkAddressTV = (TextView) findViewById(R.id.userinfo_address);
-		mMobileTV.setOnClickListener(this);
-		if (!mSystemBussiness.containsMenuWithAppURL("app:{$message}")) {
-
-		}
-
-		if (MportalApplication.app.getAllowChat() == App.ALLOW_CHAT_FALSE) {
-			// 当没有聊天功能时隐藏『开始沟通』
-			setVisibilityOfViewByResId(R.id.userinfo_begin_talk, View.GONE);
-		}
-
+		mInviteTV = (TextView) findViewById(R.id.userinfo_welcome_tv);
+		mInviteTV.setOnClickListener(this);
 	}
 
 	@Override
@@ -204,14 +211,18 @@ public class UserInfoActivity extends BaseActivity implements OnClickListener,Re
 			onBeginTalkClicked();
 			break;
 		case R.id.userinfo_email_lay:
-			// 系统邮件系统的动作为android.content.Intent.ACTION_SEND
-			Intent email = new Intent(android.content.Intent.ACTION_SEND);
-			email.setType("plain/text");
-			// 设置邮件默认地址
-			email.putExtra(android.content.Intent.EXTRA_EMAIL, mUser.getEmail());
-			// // 设置邮件默认标题
-			startActivity(Intent.createChooser(email, " 请选择邮件发送软件"));
-			mUserBussiness.recordUser(mUser.getUserId());
+			if (TextUtils.isEmpty(mUser.getEmail())) {
+				Toast.makeText(this, "邮箱不存在!", Toast.LENGTH_SHORT).show();
+			}else{
+				// 系统邮件系统的动作为android.content.Intent.ACTION_SEND
+				Intent email = new Intent(android.content.Intent.ACTION_SEND);
+				email.setType("plain/text");
+				// 设置邮件默认地址
+				email.putExtra(android.content.Intent.EXTRA_EMAIL, mUser.getEmail());
+				// // 设置邮件默认标题
+				startActivity(Intent.createChooser(email, " 请选择邮件发送软件"));
+				mUserBussiness.recordUser(mUser.getUserId());
+			}
 			break;
 		case R.id.userinfo_mobile_lay:
 			String mpbile = mUser.getMobile();
@@ -260,53 +271,85 @@ public class UserInfoActivity extends BaseActivity implements OnClickListener,Re
 		case R.id.userinfo_icon_iv:
 			//当头像地址不为空且允许显示头像时打开头像
 			boolean isAllowOpen = mIconConfigParams!=null&&mIconConfigParams.length>3&&"1".equals(mIconConfigParams[3]);
-			if(!TextUtils.isEmpty(mIconCacheStr)&&isAllowOpen){
+			String avatarUrl = (String) JSONResult.compile( getUrlCache(mUserInfoUrl)).getResultMap().get("photourl");
+			if(!TextUtils.isEmpty(avatarUrl)&&isAllowOpen){
 				Intent ivIntent = new Intent(this, ImageViewActivity.class);
-				JSONResult jr = JSONResult.compile(mIconCacheStr);
-				try {
-					ivIntent.putExtra(ImageViewActivity.EXTRA_STRING_IMG_URL, (String)jr.getResultMap().get("icon"));
-				} catch (JSONException e) {
-					e.printStackTrace();
-				}
+				JSONResult jr = JSONResult.compile(getUrlCache(mUserInfoUrl));
+				ivIntent.putExtra(ImageViewActivity.EXTRA_STRING_IMG_URL, (String)jr.getResultMap().get("photourl"));
 				startActivity(ivIntent);
 			}
 			break;
+			case R.id.userinfo_welcome_tv:
+				ConfirmDialog dialog = new ConfirmDialog(this, new ConfirmDialog.ConfirmListener() {
+					@Override
+					public void onOkClick() {
+						sendInviteSms();
+					}
+
+					@Override
+					public void onCancelClick() {
+
+					}
+				}, "送邀请短信？", "取消", "确定");
+				dialog.show();
+				break;
 		default:
 			break;
 		}
 	}
 
-	private void onBeginTalkClicked() {
+	private void sendInviteSms() {
 		ProgressHUD.show(this);
-		String url = String.format(URLs.URL_CHAT_GET_CHAT_GROUP_ID, MportalApplication.user.getUsername(),mUser.getUsername());
-		mRequestQueue.add(new StringRequest(url, new Listener<String>() {
-
+		String[] userIdArr = new String[]{mUser.getUserId()};
+		mSystemBussiness.inviteUsers(Arrays.asList(userIdArr), new BussinessCallbackCommon() {
 			@Override
-			public void onResponse(String response) {
-				JSONResult jr = JSONResult.compile(response);
-				if(jr.resultCode==JSONResult.RESULT_CODE_SUCCESS){
-					String groupId = null;
-					try {
-						groupId = (String)jr.getResultMap().get("groupid");
-					} catch (JSONException e) {
-						e.printStackTrace();
-					}
-					ChatActivity.startActivity(UserInfoActivity.this, "",groupId,ChatActivity.CHAT_TYPE_SINGLE,mUser.getTrueName());
-					ProgressHUD.dismissProgressHUDInThisContext(UserInfoActivity.this);
-				}else{
-					newChat();
-				}
-			}
-		}, new ErrorListener() {
-
-			@Override
-			public void onErrorResponse(VolleyError error) {
-				Toast.makeText(UserInfoActivity.this, "网络异常！", Toast.LENGTH_SHORT).show();
+			public void onDone(Object obj) {
 				ProgressHUD.dismissProgressHUDInThisContext(UserInfoActivity.this);
+				Toast.makeText(getApplicationContext(),"发送成功",Toast.LENGTH_SHORT).show();
+				makeInviteGray();
 			}
-		}));
-		
-		
+
+			@Override
+			public void onException(int excepCode) {
+				ProgressHUD.dismissProgressHUDInThisContext(UserInfoActivity.this);
+				Toast.makeText(getApplicationContext(),"发送邀请短信失败!",Toast.LENGTH_SHORT).show();
+			}
+		});
+	}
+
+	private void makeInviteGray() {
+		mInviteTV.setText("未激活，已邀请");
+		mInviteTV.setBackgroundColor(Color.parseColor("#CCCCCC"));
+		mInviteTV.setOnClickListener(null);
+	}
+
+	private void onBeginTalkClicked() {
+//		ProgressHUD.show(this);
+//		String url = String.format(URLs.URL_CHAT_GET_CHAT_GROUP_ID, MportalApplication.user.getUsername(),mUser.getUsername());
+//		mRequestQueue.add(new StringRequest(url, new Listener<String>() {
+//
+//			@Override
+//			public void onResponse(String response) {
+//				JSONResult jr = JSONResult.compile(response);
+//				if(jr.resultCode==JSONResult.RESULT_CODE_SUCCESS){
+//					String groupId = null;
+//					groupId = (String)jr.getResultMap().get("groupid");
+//					ChatActivity.startActivity(UserInfoActivity.this, "",groupId,ChatActivity.CHAT_TYPE_SINGLE,mUser.getTrueName());
+//					ProgressHUD.dismissProgressHUDInThisContext(UserInfoActivity.this);
+//				}else{
+//					newChat();
+//				}
+//			}
+//		}, new ErrorListener() {
+//
+//			@Override
+//			public void onErrorResponse(VolleyError error) {
+//				Toast.makeText(UserInfoActivity.this, "网络异常！", Toast.LENGTH_SHORT).show();
+//				ProgressHUD.dismissProgressHUDInThisContext(UserInfoActivity.this);
+//			}
+//		}));
+
+		RongIM.getInstance().startConversation(this, Conversation.ConversationType.PRIVATE,mUser.getUserId(),mUser.getTrueName());
 	}
 	
 	private void newChat() {
@@ -319,13 +362,9 @@ public class UserInfoActivity extends BaseActivity implements OnClickListener,Re
 				ProgressHUD.dismissProgressHUDInThisContext(UserInfoActivity.this);
 				JSONResult jr = JSONResult.compile(response);
 				if(jr.resultCode==JSONResult.RESULT_CODE_SUCCESS){
-					try {
-						String groupId = (String)jr.getResultMap().get("groupid");
-						ChatActivity.startActivity(UserInfoActivity.this, "",groupId,ChatActivity.CHAT_TYPE_SINGLE,mUser.getTrueName());
-						finish();
-					} catch (JSONException e) {
-						e.printStackTrace();
-					}
+					String groupId = (String)jr.getResultMap().get("groupid");
+					ChatActivity.startActivity(UserInfoActivity.this, "",groupId,ChatActivity.CHAT_TYPE_SINGLE,mUser.getTrueName());
+					finish();
 				}
 			}
 		}, new ErrorListener() {
@@ -377,23 +416,18 @@ public class UserInfoActivity extends BaseActivity implements OnClickListener,Re
 	public void onResponse(JSONResult jsonresult, int requestCode) {
 		if(jsonresult.resultCode==JSONResult.RESULT_CODE_SUCCESS){
 			List<String> deptNameStringList;
-			try {
-				deptNameStringList = mUserBussiness.getDepartmentStringListByUserId(mUser.getUserId(), (String)jsonresult.getResultMap().get(Constants.APP_CONFIG_PARAM_ADBOOK_ROOT_ID));
-				StringBuilder sb = new StringBuilder();
-				int size = deptNameStringList.size();
-				for (int i = -1; ++i < size;) {
-					if (i > 0) {
-						sb.append("\n" + deptNameStringList.get(i));
-					} else {
-						sb.append(deptNameStringList.get(i));
-					}
-					
-				}
-				mDeptTv.setText(sb.toString());
-			} catch (JSONException e) {
-				e.printStackTrace();
-				Toast.makeText(UserInfoActivity.this, "解析json对象失败", Toast.LENGTH_SHORT).show();
-			}
+			deptNameStringList = mUserBussiness.getDepartmentStringListByUserId(mUser.getUserId(), (String)jsonresult.getResultMap().get(Constants.APP_CONFIG_PARAM_ADBOOK_ROOT_ID));
+			StringBuilder sb = new StringBuilder();
+			int size = deptNameStringList.size();
+			for (int i = -1; ++i < size;) {
+                if (i > 0) {
+                    sb.append("\n" + deptNameStringList.get(i));
+                } else {
+                    sb.append(deptNameStringList.get(i));
+                }
+
+            }
+			mDeptTv.setText(sb.toString());
 		}else{
 			Toast.makeText(UserInfoActivity.this, "获取APP_CONFIG_PARAM_ADBOOK_ROOT_ID失败", Toast.LENGTH_SHORT).show();
 		}

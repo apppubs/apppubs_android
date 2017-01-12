@@ -57,15 +57,6 @@ public class Breadcrumb extends ViewGroup {
         init();
     }
 
-    @Override
-    protected void onLayout(boolean changed, int l, int t, int r, int b) {
-        int childCount = getChildCount();
-        for (int i=-1;++i<childCount;){
-            View child = getChildAt(i);
-            child.layout(l,t,r,b);
-        }
-    }
-
     public void init(){
         mPathList = new ArrayList<View>();
         mArrowList = new ArrayList<View>();
@@ -91,6 +82,15 @@ public class Breadcrumb extends ViewGroup {
         for (int i=-1;++i<childCount;){
             View child = getChildAt(i);
             child.measure(widthMeasureSpec,heightMeasureSpec);
+        }
+    }
+
+    @Override
+    protected void onLayout(boolean changed, int l, int t, int r, int b) {
+        int childCount = getChildCount();
+        for (int i=-1;++i<childCount;){
+            View child = getChildAt(i);
+            child.layout(0,0,r,b);
         }
     }
 

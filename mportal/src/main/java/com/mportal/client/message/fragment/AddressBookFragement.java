@@ -71,18 +71,10 @@ public class AddressBookFragement extends BaseFragment {
 	private Fragment[] mFrgArr;
 	private Fragment mCurFrg;
 	private int mCurCheckedRadioBtnResId;// 当前选中的radio btn 的id用于下次恢复状态
-	// 首层组织的父id
-	private String mRootDepartmentSuperId;
 
-	
 	@Override
 	public void onAttach(Activity activity) {
 		super.onAttach(activity);
-
-		mRootDepartmentSuperId = getArguments().getString(ARGS_ROOT_DEPARTMENT_SUPER_ID);
-		if (TextUtils.isEmpty(mRootDepartmentSuperId)) {
-			mRootDepartmentSuperId = "0";
-		}
 	}
 
 	@Override
@@ -156,14 +148,11 @@ public class AddressBookFragement extends BaseFragment {
 
 	/**
 	 * 获得根组织
-	 * 
+	 *
 	 * @return
 	 */
 	private Fragment getRootFragment() {
 		Fragment fg = new AddressBookOrganizationFragement();
-		Bundle args = new Bundle();
-		args.putString(AddressBookOrganizationFragement.ARG_STRING_SUPER_ID, mRootDepartmentSuperId);
-		fg.setArguments(args);
 		return fg;
 	}
 
@@ -318,7 +307,7 @@ public class AddressBookFragement extends BaseFragment {
 			mSg.check(mCurCheckedRadioBtnResId);
 		}
 		titleBar.setTitleView(titleView);
-		titleBar.addRightBtnWithTextAndClickListener("同步", new OnClickListener() {
+		titleBar.addRightBtnWithImageResourceIdAndClickListener(R.drawable.adbook_async, new OnClickListener() {
 
 			@Override
 			public void onClick(View v) {
@@ -415,7 +404,7 @@ public class AddressBookFragement extends BaseFragment {
 
 	private void refreshDepartAndUserFragmentIfExist() {
 		if (mFrgArr[0] != null) {
-			((AddressBookOrganizationFragement) mFrgArr[0]).refreshList();
+//			((AddressBookOrganizationFragement) mFrgArr[0]).refreshList();
 		}
 		if (mFrgArr[1] != null) {
 			((AddressBookAllUserFragment) mFrgArr[1]).refreshList();

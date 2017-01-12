@@ -42,6 +42,7 @@ import com.mportal.client.business.MsgController;
 import com.mportal.client.constant.Actions;
 import com.mportal.client.constant.Constants;
 import com.mportal.client.constant.URLs;
+import com.mportal.client.message.model.UserPickerHelper;
 import com.mportal.client.util.JSONResult;
 import com.mportal.client.util.SharedPreferenceUtils;
 import com.mportal.client.util.StringUtils;
@@ -53,8 +54,11 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.lang.reflect.Array;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -301,16 +305,12 @@ public class ConversationFragment extends BaseFragment implements OnClickListene
 							public void onResponse(String response) {
 								JSONResult jr = JSONResult.compile(response);
 								if(jr.resultCode==JSONResult.RESULT_CODE_SUCCESS){
-									try {
-										String groupType = (String)jr.getResultMap().get("group_type");
-										if(groupType.equals("1")){
-											ChatActivity.startActivity(mHostActivity, "",mr.getSourceUsernameOrId(),ChatActivity.CHAT_TYPE_SINGLE,mr.getTitle());
-										}else{
-											ChatActivity.startActivity(mHostActivity, "",mr.getSourceUsernameOrId(),ChatActivity.CHAT_TYPE_GROUP,mr.getTitle());
-										}
-									} catch (JSONException e) {
-										e.printStackTrace();
-									}
+									String groupType = (String)jr.getResultMap().get("group_type");
+									if(groupType.equals("1")){
+                                        ChatActivity.startActivity(mHostActivity, "",mr.getSourceUsernameOrId(),ChatActivity.CHAT_TYPE_SINGLE,mr.getTitle());
+                                    }else{
+                                        ChatActivity.startActivity(mHostActivity, "",mr.getSourceUsernameOrId(),ChatActivity.CHAT_TYPE_GROUP,mr.getTitle());
+                                    }
 
 								}
 							}
@@ -489,8 +489,8 @@ public class ConversationFragment extends BaseFragment implements OnClickListene
 		case R.id.pop_msg_record_add_chat_ll:
 			
 			Log.e(this.getClass().getName(), "此处需要，增加AddressBookFragement的参数");
-			Bundle args = new Bundle();
-			UserPickerActivity.startActivity(mContext);
+			String [] userIds = new String[]{MportalApplication.user.getUserId()};
+//			UserPickerHelper.startActivity(mContext,"选择人员",new ArrayList<String>(Arrays.asList(userIds)));
 			mMenuPW.dismiss();
 			break;
 		case R.id.pop_msg_record_add_group_chat_ll:

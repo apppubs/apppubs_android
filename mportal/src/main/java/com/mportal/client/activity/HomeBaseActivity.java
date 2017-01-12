@@ -75,6 +75,7 @@ public abstract class HomeBaseActivity extends BaseActivity {
 		mViewCourier = ViewCourier.getInstance(this);
 		
 		mSystemBussiness.makeStartUpRequest();
+		mSystemBussiness.loginRC();
 		initWeather();
 		requestWeather();
 

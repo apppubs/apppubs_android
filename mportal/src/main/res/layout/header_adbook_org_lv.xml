@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="70dp"
+    android:orientation="vertical"
+    android:background="@android:color/white"
+    >
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:orientation="horizontal"
+        android:paddingLeft="@dimen/item_padding_left"
+        >
+        <TextView xmlns:android="http://schemas.android.com/apk/res/android"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:gravity="center_vertical"
+            android:text="当前部门创建讨论组"
+            android:textColor="@color/common_text"
+            android:textSize="15dp"
+            >
+        </TextView>
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:src="@drawable/array_right_thin"
+            android:layout_marginRight="@dimen/item_padding_right_narrow"
+            />
+    </LinearLayout>
+    <TextView
+        android:id="@+id/header_adbook_org_lv_text_tv"
+        android:layout_width="match_parent"
+        android:layout_height="25dp"
+        android:textColor="@color/common_text_gray"
+        android:textSize="12dp"
+        android:text="人员（10）"
+        android:gravity="center_vertical"
+        android:background="#DFDFDF"
+        android:paddingLeft="10dp"
+        />
+</LinearLayout>

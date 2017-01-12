@@ -5,7 +5,10 @@ import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -13,8 +16,12 @@ import com.google.gson.JsonDeserializationContext;
 import com.google.gson.JsonDeserializer;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonParseException;
+import com.google.gson.reflect.TypeToken;
+import com.mportal.client.bean.User;
+import com.mportal.client.message.model.UserBasicInfo;
+import com.mportal.ikidou.reflect.TypeBuilder;
 
-public class GsonUtils {
+public class JSONUtils {
 	
 	private static Gson gson;
 	static {
@@ -60,7 +67,44 @@ public class GsonUtils {
 		return gson;
 	}
 
-	public static <T> T parse2Json(String jsonStr,Class<T> clazz){
+	public static <T> T parseObjectFromJson(String jsonStr, Class<T> clazz){
 		return gson.fromJson(jsonStr,clazz);
 	}
+
+	public static <T>List<T> parseListFromJson(String jsonStr,Class<T> clazz){
+		Type type = TypeBuilder
+				.newInstance(List.class)
+				.beginSubType(clazz)
+				.endSubType()
+				.build();
+
+		return gson.fromJson(jsonStr,type);
+	}
+
+	/**
+	 * json转换成map
+	 *
+	 * @param json
+	 * @return
+	 */
+	public static Map<String, Object> parseJSON2ObjectMap(String json) {
+		Map<String, Object> map = new HashMap<String, Object>();
+		if (gson != null) {
+			Type type = new TypeToken<Map<String, Object>>() {
+			}.getType();
+			map = gson.fromJson(json, type);
+		}
+		return map;
+	}
+
+	public static Map<String, String> parseJSON2StringMap(String json) {
+		Map<String, String> map = null;
+		if (gson != null) {
+			Type type = new TypeToken<Map<String, String>>() {
+			}.getType();
+			map = gson.fromJson(json, type);
+		}
+		return map;
+	}
+
 }

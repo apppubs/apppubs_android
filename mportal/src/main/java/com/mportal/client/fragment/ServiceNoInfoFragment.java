@@ -96,8 +96,6 @@ public class ServiceNoInfoFragment extends BaseFragment {
 					} else {
 						attentionBt.setText("关注");
 					}
-				} catch (JSONException e) {
-					e.printStackTrace();
 				} catch (ParseException e) {
 					e.printStackTrace();
 				}

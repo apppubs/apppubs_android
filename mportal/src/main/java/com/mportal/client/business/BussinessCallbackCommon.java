@@ -22,7 +22,7 @@ public interface BussinessCallbackCommon<T>{
 	void onDone(T obj);
 	/**
 	 * 异常时
-	 * @param errCode 错误代码
+	 * @param excepCode 错误代码
 	 */
 	void onException(int excepCode);
 	

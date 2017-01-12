@@ -50,7 +50,7 @@ import com.mportal.client.constant.Actions;
 import com.mportal.client.constant.Constants;
 import com.mportal.client.constant.SystemConfig;
 import com.mportal.client.constant.URLs;
-import com.mportal.client.util.GsonUtils;
+import com.mportal.client.util.JSONUtils;
 import com.mportal.client.util.LogM;
 import com.mportal.client.util.Utils;
 import com.mportal.client.util.WebUtils;
@@ -652,7 +652,7 @@ public class MenuGroupsFragment extends HomeFragment implements OnClickListener{
 			jo = new JSONObject(response);
 			JSONArray ja = jo.getJSONArray("appsubmenus");
 			for(int i=-1;++i<ja.length();){
-				MenuGroup mg = GsonUtils.getGson().fromJson(ja.getString(i),MenuGroup.class);
+				MenuGroup mg = JSONUtils.getGson().fromJson(ja.getString(i),MenuGroup.class);
 				mgList.add(mg);
 			}
 		} catch (JSONException e) {
@@ -667,7 +667,7 @@ public class MenuGroupsFragment extends HomeFragment implements OnClickListener{
 			JSONObject jo = new JSONObject(response);
 			JSONArray ja = jo.getJSONArray("apps");
 			for(int i=-1;++i<ja.length();){
-				MenuItem mi = GsonUtils.getGson().fromJson( ja.getString(i), MenuItem.class) ;
+				MenuItem mi = JSONUtils.getGson().fromJson( ja.getString(i), MenuItem.class) ;
 				menuList.add(mi);
 			}
 		} catch (JSONException e) {
