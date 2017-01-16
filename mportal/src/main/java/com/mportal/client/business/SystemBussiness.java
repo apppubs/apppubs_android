@@ -45,9 +45,11 @@ import android.graphics.ColorMatrix;
 import android.graphics.ColorMatrixColorFilter;
 import android.graphics.Paint;
 import android.graphics.Rect;
+import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.support.annotation.NonNull;
+import android.support.v4.app.Fragment;
 import android.support.v4.text.TextUtilsCompat;
 import android.telephony.TelephonyManager;
 import android.text.TextUtils;
@@ -92,8 +94,16 @@ import com.mportal.client.util.WebUtils;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.orm.SugarRecord;
 
+import io.rong.imkit.DefaultExtensionModule;
+import io.rong.imkit.IExtensionModule;
+import io.rong.imkit.RongExtension;
+import io.rong.imkit.RongExtensionManager;
 import io.rong.imkit.RongIM;
+import io.rong.imkit.plugin.IPluginModule;
+import io.rong.imkit.plugin.ImagePlugin;
+import io.rong.imkit.widget.provider.FilePlugin;
 import io.rong.imlib.RongIMClient;
+import io.rong.imlib.model.Conversation;
 
 /**
  * 
@@ -1184,6 +1194,8 @@ public class SystemBussiness extends BaseBussiness {
 			@Override
 			public void onSuccess(String userid) {
 				Log.d("LoginActivity", "--onSuccess" + userid);
+				setMyExtensionModule();
+
 			}
 
 			/**
@@ -1197,6 +1209,42 @@ public class SystemBussiness extends BaseBussiness {
 		});
 	}
 
+	public void setMyExtensionModule() {
+		List<IExtensionModule> moduleList = RongExtensionManager.getInstance().getExtensionModules();
+		IExtensionModule defaultModule = null;
+		if (moduleList != null) {
+			for (IExtensionModule module : moduleList) {
+				if (module instanceof DefaultExtensionModule) {
+					defaultModule = module;
+					break;
+				}
+			}
+			if (defaultModule != null) {
+				RongExtensionManager.getInstance().unregisterExtensionModule(defaultModule);
+				RongExtensionManager.getInstance().registerExtensionModule(new MyExtensionModule());
+			}
+		}
+	}
+
+
+	public class MyExtensionModule extends DefaultExtensionModule {
+		private FilePlugin filePlugin;
+		private ImagePlugin imagePlugin;
+		List<IPluginModule> pluginModules ;
+		public MyExtensionModule(){
+			pluginModules = new ArrayList<IPluginModule>();
+			filePlugin = new FilePlugin();
+			imagePlugin = new ImagePlugin();
+			pluginModules.add(filePlugin);
+			pluginModules.add(imagePlugin);
+		}
+		@Override
+		public List<IPluginModule> getPluginModules(Conversation.ConversationType conversationType) {
+
+			return pluginModules;
+		}
+
+	}
 	public void inviteUsers(@NonNull final List<String> userIds, @NonNull final BussinessCallbackCommon callback){
 		post(new Runnable() {
 			@Override

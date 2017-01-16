@@ -12,6 +12,7 @@
         android:background="@drawable/sel_common_trans_item"
         android:orientation="horizontal"
         android:padding="8dp"
+        android:visibility="gone"
         >
 
         <ImageView
@@ -35,6 +36,7 @@
         android:background="@color/common_divider_light"
         android:layout_marginLeft="10dp"
         android:layout_marginRight="10dp"
+        android:visibility="gone"
          />
 
     <LinearLayout
@@ -77,6 +79,7 @@
         android:background="@drawable/sel_common_trans_item"
         android:orientation="horizontal"
         android:padding="8dp"
+        android:visibility="gone"
          >
 
         <ImageView

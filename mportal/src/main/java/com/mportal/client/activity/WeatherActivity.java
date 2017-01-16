@@ -190,6 +190,11 @@ public class WeatherActivity extends BaseActivity {
 				// TODO Auto-generated method stub
 				
 			}
+
+			@Override
+			protected void selectTab(int index) {
+
+			}
 		};
 		getShare = getSharedPreferences(WEATHRECITYNAMESF, Context.MODE_PRIVATE);
 		progress = (LinearLayout) findViewById(R.id.weather_progress_ll);

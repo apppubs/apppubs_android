@@ -130,7 +130,7 @@ public class Breadcrumb extends ViewGroup {
 
     }
 
-    public void pop2index(int index){
+    private void pop2index(int index){
         if (mPathList.size()>(index+1)){
             List<View> paddingRemovePathList = new ArrayList<View>();
             List<View> paddingRemoveArrowList = new ArrayList<View>();

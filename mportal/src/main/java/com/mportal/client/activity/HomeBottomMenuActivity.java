@@ -125,9 +125,7 @@ public class HomeBottomMenuActivity extends HomeBaseActivity {
 		}
 	
 	}
-	
-	
-	
+
 	/**
 	 * 选择某个菜单
 	 * @param position
@@ -188,7 +186,12 @@ public class HomeBottomMenuActivity extends HomeBaseActivity {
 		}
 		LogM.log(this.getClass(), "销毁HomeBottomMenuActivity");
 	}
-	
+
+	@Override
+	protected void selectTab(int index) {
+		selectMenu(index);
+	}
+
 	@Override
 	protected void onActivityResult(int requestCode, int resultCode, Intent intent) {
 		super.onActivityResult(requestCode, resultCode, intent);

@@ -26,8 +26,6 @@ import android.widget.ProgressBar;
 import android.widget.Toast;
 import cn.jpush.android.api.JPushInterface;
 
-import com.baidu.android.pushservice.PushConstants;
-import com.baidu.android.pushservice.PushManager;
 import com.mportal.client.MportalApplication;
 import com.mportal.client.R;
 import com.mportal.client.asytask.AsyTaskCallback;
@@ -140,10 +138,9 @@ public class StartUpActivity extends BaseActivity implements AsyTaskCallback{
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
-
 		super.onCreate(savedInstanceState);
+		overridePendingTransition(R.anim.abc_fade_in, R.anim.abc_fade_out);
 		setNeedTitleBar(false);
-		overridePendingTransition(android.R.anim.fade_in, R.anim.zoom_fade_out);
 		setContentView(R.layout.act_start);
 		initComponents();
 		startMainLoop();
@@ -377,13 +374,10 @@ public class StartUpActivity extends BaseActivity implements AsyTaskCallback{
 		case App.PUSH_VENDOR_TYPE_BAIDU:
 			List<String> tagList = new ArrayList<String>();
 			tagList.add(MportalApplication.app.getCode());
-			PushManager.setTags(this, tagList);
-			PushManager.startWork(StartUpActivity.this, PushConstants.LOGIN_TYPE_API_KEY,
-					MportalApplication.app.getBaiduPushApiKey());
-			LogM.log(this.getClass(), "启动推送服务：当前推送服务apikey：" + MportalApplication.app.getBaiduPushApiKey());
+			LogM.log(this.getClass(), "启动百度推送，百度推送已经弃用在20000的版本中已经被移除：" + MportalApplication.app.getBaiduPushApiKey());
 			break;
 		case App.PUSH_VENDOR_TYPE_JPUSH:
-
+			LogM.log(this.getClass(), "启动极光推送，百度推送已经弃用在20000的版本中已经被移除：" );
 			JPushInterface.setDebugMode(true);
 			JPushInterface.init(this);
 			String resigtrationId = JPushInterface.getRegistrationID(this);

@@ -229,7 +229,7 @@ public class UserPickerActivity extends BaseActivity implements UserSelectionBar
                 @Override
                 public void onDone(List<UserBasicInfo> obj) {
 
-                    mUserAdapter.notifyDataSetChanged();
+//                    mUserAdapter.notifyDataSetChanged();
 
                 }
 

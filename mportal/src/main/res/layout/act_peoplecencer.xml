@@ -2,20 +2,58 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#fff" >
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:background="#fff">
 
     <LinearLayout
         android:id="@+id/people_layi"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="@dimen/item_padding_right"
-        android:background="@drawable/input_bg"
         android:orientation="vertical"
         android:paddingLeft="6dp" >
 
+
+        <RelativeLayout
+            android:id="@+id/usercenter_avatar_rl"
+            android:layout_width="match_parent"
+            android:layout_height="80dp"
+            android:onClick="onClick"
+            android:background="@drawable/sel_com_list"
+             >
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:padding="3dp"
+                android:text="头像 "
+                android:layout_centerVertical="true"
+                android:textColor="@color/common_text"
+                android:textSize="@dimen/item_text_size" />
+
+            <com.mportal.client.widget.CircleTextImageView
+                android:id="@+id/usercenter_ctiv"
+                android:layout_width="65dp"
+                android:layout_height="65dp"
+                app:citv_fill_color="@color/common_btn_bg_gray"
+                android:layout_alignParentRight="true"
+                android:layout_centerVertical="true"
+                app:citv_text_text="张三丰"
+                app:citv_text_color="@android:color/white"
+                app:citv_text_size="18dp"
+                />
+        </RelativeLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1px"
+            android:background="@color/common_divider" />
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:paddingTop="@dimen/item_padding_top_narrow"
+            android:paddingBottom="@dimen/item_padding_bottom_narrow"
             android:orientation="horizontal" >
 
             <TextView
@@ -31,21 +69,23 @@
                 android:id="@+id/people_username"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
                 android:background="@null"
                 android:editable="false"
                 android:hint="无"
-                android:padding="10dp"
                 android:textSize="12dp" />
         </LinearLayout>
 
         <View
             android:layout_width="match_parent"
             android:layout_height="1px"
-            android:background="@color/bottom_bar_bg" />
+            android:background="@color/common_divider" />
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:paddingTop="@dimen/item_padding_top_narrow"
+            android:paddingBottom="@dimen/item_padding_bottom_narrow"
             android:orientation="horizontal" >
 
             <TextView
@@ -61,10 +101,10 @@
                 android:id="@+id/people_email"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
                 android:background="@null"
                 android:editable="false"
                 android:hint="无"
-                android:padding="10dp"
                 android:textSize="12dp"
                 android:windowSoftInputMode="stateHidden" />
         </LinearLayout>
@@ -73,11 +113,13 @@
             android:id="@+id/usercenter_pwd_line1"
             android:layout_width="match_parent"
             android:layout_height="1px"
-            android:background="@color/bottom_bar_bg" />
+            android:background="@color/common_divider" />
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:paddingTop="@dimen/item_padding_top_narrow"
+            android:paddingBottom="@dimen/item_padding_bottom_narrow"
             android:orientation="horizontal" >
 
             <TextView
@@ -94,10 +136,10 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
+                android:layout_gravity="center_vertical"
                 android:background="@null"
                 android:editable="false"
                 android:hint="无"
-                android:padding="10dip"
                 android:textSize="@dimen/item_text_size_small"
                 android:windowSoftInputMode="stateHidden" />
         </LinearLayout>
@@ -105,12 +147,14 @@
         <View
             android:layout_width="match_parent"
             android:layout_height="1px"
-            android:background="@color/bottom_bar_bg" />
+            android:background="@color/common_divider" />
 
         <LinearLayout
             android:id="@+id/people_layir"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:paddingTop="@dimen/item_padding_top_narrow"
+            android:paddingBottom="@dimen/item_padding_bottom_narrow"
             android:orientation="horizontal" >
 
             <TextView
@@ -128,12 +172,16 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:background="@null"
+                android:layout_gravity="center_vertical"
                 android:editable="false"
                 android:hint="无"
-                android:padding="10dip"
                 android:textSize="@dimen/item_text_size_small"
                 android:windowSoftInputMode="stateHidden" />
         </LinearLayout>
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1px"
+            android:background="@color/common_divider" />
     </LinearLayout>
 
     <Button

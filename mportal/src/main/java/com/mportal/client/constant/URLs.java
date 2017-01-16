@@ -676,7 +676,15 @@ public class URLs {
 	 */
 	public static final String URL_USER_INFO =  baseURL+"wmh360/json/user/getuser.jsp?userid=%s&appcode="+appCode+"&clientkey=bb7c1386d85044ba7a7ae53f3362d634";
 
+	/**
+	 * 发送邀请短信
+	 */
 	public static final String URL_SEND_INVITE_SMS = baseURL+"wmh360/json/msg/sendinvitesms.jsp?userids=%s&appcode="+appCode+"&clientkey=bb7c1386d85044ba7a7ae53f3362d634";
 
+	/**
+	 * 上传头像
+	 * "%@wmh360/json/user/uploadavatar.jsp?userid=%@&appcode=%@&clientkey=bb7c1386d85044ba7a7ae53f3362d634
+	 */
+	public static final String URL_UPLOAD_AVATAR = baseURL+"wmh360/json/user/uploadavatar.jsp?userid=%s&appcode="+appCode+"&clientkey=bb7c1386d85044ba7a7ae53f3362d634";
 	
 }

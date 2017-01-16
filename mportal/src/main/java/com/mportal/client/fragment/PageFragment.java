@@ -1,16 +1,5 @@
 package com.mportal.client.fragment;
 
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.UUID;
-
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
-
 import android.graphics.Color;
 import android.graphics.Rect;
 import android.os.Bundle;
@@ -44,6 +33,7 @@ import com.android.volley.Response.ErrorListener;
 import com.android.volley.Response.Listener;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
+import com.mportal.client.MportalApplication;
 import com.mportal.client.R;
 import com.mportal.client.activity.HomeBottomMenuActivity;
 import com.mportal.client.activity.ViewCourier;
@@ -71,6 +61,17 @@ import com.mportal.client.widget.SlidePicView;
 import com.mportal.client.widget.SlidePicView.OnItemClickListener;
 import com.mportal.client.widget.SlidePicView.SlidePicItem;
 import com.mportal.client.widget.TitleBar;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.UUID;
 
 public class PageFragment extends TitleMenuFragment implements OnClickListener{
 
@@ -857,10 +858,15 @@ public class PageFragment extends TitleMenuFragment implements OnClickListener{
 					e.printStackTrace();
 				}
 			}
-			if(item.has("textsize")){
+			if(item.has("textsize")&& !TextUtils.isEmpty(item.getString("textsize"))){
 				ha.setTextSize(item.getInt("textsize"));
 			}
-			if(item.has("bgcolor")){
+
+			if(item.has("textalign")){
+				ha.setTextAlign(item.getString("textalign"));
+			}
+
+			if(item.has("bgcolor")&&!TextUtils.isEmpty(item.getString("bgcolor"))){
 				try{
 					ha.setBgColor(Color.parseColor(item.getString("bgcolor")));
 				}catch(Exception e){
@@ -868,23 +874,29 @@ public class PageFragment extends TitleMenuFragment implements OnClickListener{
 				}
 			}
 		
-			
-			if(item.has("texturl")){
-				try {
-					ha.setText(WebUtils.requestWithGet(item.getString("texturl")));
-				} catch (IOException e) {
-					e.printStackTrace();
-				} catch (InterruptedException e) {
-					e.printStackTrace();
+			if(item.has("texturl")&&!TextUtils.isEmpty(item.getString("texturl"))){
+				if (item.getString("texturl").equals("apppubs://macro/text/truename")){
+					ha.setText(MportalApplication.user.getTrueName());
+				}else {
+					try {
+						ha.setText(WebUtils.requestWithGet(item.getString("texturl")));
+					} catch (IOException e) {
+						e.printStackTrace();
+					} catch (InterruptedException e) {
+						e.printStackTrace();
+					}
 				}
 			}
 			if(item.has("imageurl")){
-				ha.setImage(mImageLoader.loadImageSync(item.getString("imageurl")));
+				if ("apppubs://macro/text/useravatarurl".equals(item.getString("imageurl"))){
+					ha.setImage(mImageLoader.loadImageSync(MportalApplication.user.getAvatarUrl()));
+				}else{
+					ha.setImage(mImageLoader.loadImageSync(item.getString("imageurl")));
+				}
 			}
 			hotAreas.add(ha);
 		}
 		return hotAreas;
-		
 	}
 	
 	private TitleBar buildTitleBar(JSONObject info) throws JSONException {
@@ -892,7 +904,11 @@ public class PageFragment extends TitleMenuFragment implements OnClickListener{
 		TitleBar titlebar = null;
 		if(titleJson.getString("titletype").equals("0")){
 			titlebar = new TitleBar(mContext);
-			titlebar.setTitle(titleJson.getString("title"));
+			String title = titleJson.getString("title");
+			if (title.contains("$truename")){
+				title = title.replaceAll("\\$truename",MportalApplication.user.getTrueName());
+			}
+			titlebar.setTitle(title);
 			titlebar.setTitleTextSize(TypedValue.COMPLEX_UNIT_PX, getResources().getDimension(R.dimen.title_text_size));
 			String colorStr = titleJson.getString("bgcolor");
 			if(!TextUtils.isEmpty(colorStr)){

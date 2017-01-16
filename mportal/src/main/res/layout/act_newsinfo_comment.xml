@@ -5,7 +5,7 @@
     android:background="@android:color/white" >
 
     <com.mportal.client.widget.commonlist.CommonListView
-        xmlns:mportal="http://schemas.android.com/apk/res/com.mportal.client"
+        xmlns:mportal="http://schemas.android.com/apk/res-auto"
         android:id="@+id/commment_xlv"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

@@ -612,6 +612,11 @@ public class HomeSlideMenuActivity extends HomeBaseActivity implements OnItemCli
 	}
 
 	@Override
+	protected void selectTab(int index) {
+		LogM.log(this.getClass(),"selectTab 此方法暂未实现！！！！");
+	}
+
+	@Override
 	protected void onDestroy() {
 		super.onDestroy();
 		Log.v("HomeActivity", "主界面onDestory");

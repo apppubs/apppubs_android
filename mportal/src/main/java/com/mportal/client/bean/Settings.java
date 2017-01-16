@@ -20,7 +20,7 @@ public class Settings implements Serializable{
 	
 	private int TextSize = 1;
 	private boolean isNeedPushNotification = true;//是显示推送通知
-	private boolean isAllowDowPicUse2G = false;
+	private boolean isAllowDowPicUse2G = true;
 	private float cacheSize = 0f;
 	
 	private boolean isFristSplash=true;//是否时启动时打开的启动界面

@@ -189,7 +189,8 @@ public class ViewCourier {
             args.putString(AddressBookFragement.ARGS_ROOT_DEPARTMENT_SUPER_ID, rootSuperId);
             ContainerActivity.startActivity(context, AddressBookFragement.class, args);
         } else if (url.matches("apppubs:\\/\\/setting[\\S]*")) {
-            ContainerActivity.startActivity(context, SettingFragment.class);
+            String title = StringUtils.getQueryParameter(url,"title");
+            ContainerActivity.startActivity(context, SettingFragment.class,null,title);
         } else if (url.matches("apppubs:\\/\\/favorite[\\S]*")) {
             CollectionFragment frg = new CollectionFragment();
             ContainerActivity.startActivity(context, frg.getClass());
@@ -211,14 +212,13 @@ public class ViewCourier {
             context.startActivity(intent);
         } else if (url.equals("apppubs://closewindow")) {
             context.finish();
-        } else if (url.equals("apppubs://qrcode")) {
+        } else if (url.startsWith("apppubs://qrcode")) {
             Intent intent = new Intent(context, CaptureActivity.class);
             context.startActivity(intent);
         } else if(url.startsWith("apppubs://service_no")){
-            Map<String,Boolean> conversations = new HashMap<String,Boolean>();
-            conversations.put(Conversation.ConversationType.PRIVATE.getName(),false);
-            conversations.put(Conversation.ConversationType.DISCUSSION.getName(),false);
-            RongIM.getInstance().startConversationList(context,conversations);
+            String title = StringUtils.getQueryParameter(url,"title");
+            ContainerActivity.startActivity(context,ConversationFragment.class,null,title);
+
         }else if (url.startsWith("tel:")) {
             String str[] = url.split(":");
             final String uri = url;
@@ -237,7 +237,12 @@ public class ViewCourier {
 
                 }
             }, "确定拨号?", "电话：" + str[1], "放弃", "拨号").show();
-        } else {
+        }else if(url.startsWith("apppubs://hint")){
+            String []params = StringUtils.getPathParams(url);
+            if (params.length>1){
+                Toast.makeText(context,params[1],Toast.LENGTH_LONG).show();
+            }
+        }else {
             Toast.makeText(context, "请求地址(" + url + ")错误", Toast.LENGTH_SHORT).show();
         }
 
@@ -360,7 +365,7 @@ public class ViewCourier {
             mHomeActivity.changeContent(frg);
         } else if (uri.equals(MenuItem.MENU_URL_WEIBO)) {
             ContainerActivity.startActivity(mHomeActivity, WeiBoFragment.class, null, item.getName());
-        } else if (uri.contains("$qrcode")) {// 二维码
+        } else if (uri.contains("$qrcode")||uri.startsWith("apppubs://qrcode")) {// 二维码
             intent = new Intent(mHomeActivity, CaptureActivity.class);
             mHomeActivity.startActivity(intent);
         } else if (uri.equals(MenuItem.MENU_URL_NEWS)) {// 新闻

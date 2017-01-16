@@ -1,16 +1,5 @@
 package com.mportal.client.activity;
 
-import java.io.UnsupportedEncodingException;
-import java.net.URLDecoder;
-import java.net.URLEncoder;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-
-import org.json.JSONException;
-import org.json.JSONObject;
-
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Intent;
@@ -50,6 +39,17 @@ import com.mportal.client.util.SystemUtils;
 import com.mportal.client.util.Utils;
 import com.mportal.client.util.WebUtils;
 import com.mportal.client.widget.ProgressHUD;
+
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.UnsupportedEncodingException;
+import java.net.URLDecoder;
+import java.net.URLEncoder;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class FirstLoginActity extends BaseActivity implements ErrorListener, AsyTaskCallback {
 
@@ -358,6 +358,9 @@ public class FirstLoginActity extends BaseActivity implements ErrorListener, Asy
 			int result = jo.getInt("result");
 			User user = new User(jo.getString("userid"), jo.getString("username"), jo.getString("cnname"), "",
 					jo.getString("email"), jo.getString("mobile"),jo.getString("menupower"));
+			if (jo.has("photourl")){
+				user.setAvatarUrl(jo.getString("photourl"));
+			}
 			MportalApplication.user = user;
 			if (result == 2) {
 				MportalApplication.saveAndRefreshUser(FirstLoginActity.this, user);

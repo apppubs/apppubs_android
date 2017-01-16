@@ -404,7 +404,7 @@ public class AddressBookFragement extends BaseFragment {
 
 	private void refreshDepartAndUserFragmentIfExist() {
 		if (mFrgArr[0] != null) {
-//			((AddressBookOrganizationFragement) mFrgArr[0]).refreshList();
+			((AddressBookOrganizationFragement) mFrgArr[0]).refreshList();
 		}
 		if (mFrgArr[1] != null) {
 			((AddressBookAllUserFragment) mFrgArr[1]).refreshList();

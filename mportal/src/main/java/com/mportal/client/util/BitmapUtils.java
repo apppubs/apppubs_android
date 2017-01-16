@@ -93,7 +93,7 @@ public class BitmapUtils {
 	 *            指定输出图像的高度
 	 * @return 生成的缩略图
 	 */
-	private Bitmap getImageThumbnail(String imagePath, int width, int height) {
+	public static Bitmap getImageThumbnail(String imagePath, int width, int height) {
 		Bitmap bitmap = null;
 		BitmapFactory.Options options = new BitmapFactory.Options();
 		options.inJustDecodeBounds = true;

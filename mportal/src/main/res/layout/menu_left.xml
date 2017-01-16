@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:mportal="http://schemas.android.com/apk/res/com.mportal.client"
+    xmlns:mportal="http://schemas.android.com/apk/res-auto"
     android:id="@+id/menu_left_rl"
     android:layout_width="160dip"
     android:layout_height="match_parent"

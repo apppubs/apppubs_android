@@ -26,6 +26,7 @@ import android.widget.Toast;
 import com.mportal.client.MportalApplication;
 import com.mportal.client.R;
 import com.mportal.client.activity.ContainerActivity;
+import com.mportal.client.activity.HomeBaseActivity;
 import com.mportal.client.activity.UserInfoActivity;
 import com.mportal.client.adapter.CommonAdapter;
 import com.mportal.client.adapter.ViewHolder;
@@ -43,6 +44,7 @@ import com.mportal.client.message.widget.Breadcrumb;
 import com.mportal.client.message.widget.UserSelectionBar;
 import com.mportal.client.util.FileUtils;
 import com.mportal.client.util.LogM;
+import com.mportal.client.widget.AlertDialog;
 import com.mportal.client.widget.CircleTextImageView;
 import com.mportal.client.widget.ConfirmDialog;
 
@@ -151,19 +153,35 @@ public class AddressBookOrganizationFragement extends BaseFragment {
 	private void prepareForCreateDiscuss() {
 		Department department = mUserBussiness.getDepartmentById(mSuperId);
 		String deptName = department!=null?department.getName():"组织";
-		long countOfDept = mUserBussiness.countUserOfCertainDeptment(mSuperId);
-		String message = String.format("讨论组包含\"%s\"下所有人员和自己共（%ld）人",deptName,countOfDept);
+		final List<String> userIdList = mUserBussiness.getUserIdsOfCertainDepartment(mSuperId);
+		if (userIdList==null||userIdList.size()<1){
+			String message = "此部门无人员";
+			AlertDialog dialog = new AlertDialog(mContext,null,"无法创建讨论组！",message,"确定");
+			dialog.show();
+			return;
+		}
+
+		int countOfUser = userIdList.contains(MportalApplication.user.getUserId())?userIdList.size():userIdList.size()+1;
+		if (countOfUser>UserPickerHelper.MAX_SELECTED_USER_NUM){
+			String message = String.format("讨论组最大人数为%d,当前部门人数%d",UserPickerHelper.MAX_SELECTED_USER_NUM,countOfUser);
+			AlertDialog dialog = new AlertDialog(mContext,null,"无法创建讨论组！",message,"确定");
+			dialog.show();
+			return;
+		}
+		String message = String.format("讨论组包含\"%s\"下所有人员和自己共（%d）人",deptName,countOfUser);
 		ConfirmDialog  dialog = new ConfirmDialog(mHostActivity, new ConfirmDialog.ConfirmListener() {
             @Override
             public void onOkClick() {
-				RongIM.getInstance().createDiscussion("默认标题",null,null);
+				((HomeBaseActivity)mHostActivity).selectMessageFragment();
+				String title = MportalApplication.user.getTrueName()+"+"+mUserBussiness.getDepartmentById(mSuperId).getName()
+;				RongIM.getInstance().createDiscussion(title,userIdList,null);
             }
 
             @Override
             public void onCancelClick() {
 
             }
-        },"创建讨论组？",message,"确定","取消");
+        },"创建讨论组？",message,"取消","创建");
 		dialog.show();
 	}
 
@@ -242,4 +260,7 @@ public class AddressBookOrganizationFragement extends BaseFragment {
 		return mUserBussiness.isLeaf(mSuperId);
 	}
 
+	public void refreshList(){
+		displayBySuperId(mSuperId,false);
+	}
 }

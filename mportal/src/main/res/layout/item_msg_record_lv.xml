@@ -5,7 +5,7 @@
     <com.daimajia.swipe.SwipeLayout
         xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:swipe="http://schemas.android.com/apk/res-auto"
-        xmlns:app="http://schemas.android.com/apk/res/com.mportal.client"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
         android:id="@+id/swipe"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -117,7 +117,7 @@
     <com.daimajia.swipe.SwipeLayout
         xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:swipe="http://schemas.android.com/apk/res-auto"
-        xmlns:app="http://schemas.android.com/apk/res/com.mportal.client"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
         android:id="@+id/swipe1"
         android:layout_width="match_parent"
         android:layout_height="match_parent"

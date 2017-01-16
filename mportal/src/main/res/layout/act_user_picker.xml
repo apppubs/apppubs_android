@@ -10,32 +10,34 @@
     <com.mportal.client.message.widget.Breadcrumb
         android:id="@+id/user_picker_bc"
         android:layout_width="match_parent"
-        android:layout_height="50dp"
-        ></com.mportal.client.message.widget.Breadcrumb>
+        android:layout_height="50dp"></com.mportal.client.message.widget.Breadcrumb>
 
     <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="1"
-        >
+        android:layout_weight="1">
+
         <ListView
             android:id="@+id/user_picker_lv"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:listSelector="@drawable/sel_com_list"
             android:divider="@null"
-            ></ListView>
+            android:listSelector="@drawable/sel_com_list"></ListView>
 
         <TextView
             android:id="@+id/user_picker_empty_tv"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textColor="@color/common_text"
             android:layout_gravity="center"
             android:text="没有人员!"
-            android:visibility="gone"
-            />
+            android:textColor="@color/common_text"
+            android:visibility="gone" />
     </FrameLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1px"
+        android:background="@color/common_divider" />
 
     <com.mportal.client.message.widget.UserSelectionBar
         android:id="@+id/user_picker_user_selection_bar"

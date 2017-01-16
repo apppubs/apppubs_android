@@ -175,7 +175,15 @@ public class HotAreaImageView extends ImageView {
 				//如果设置绘制方式为居中，则指定的x坐标为文字中间位置，y坐标为文字baseline位置 y=(行高-字体高度)/2+字体高度
 				FontMetricsInt fontMetrics = mPaint.getFontMetricsInt();  
 			    int baseline = (targetRect.bottom + targetRect.top - fontMetrics.bottom - fontMetrics.top) / 2;
-				canvas.drawText(ha.getText(),sx+(ex-sx)/2, baseline, mPaint);
+				if (HotArea.TEXT_ALIGN_LEFT.equals(ha.getTextAlign())){
+					float width = mPaint.measureText(ha.getText());
+					canvas.drawText(ha.getText(),sx+width/2,baseline,mPaint);
+				}else if(HotArea.TEXT_ALIGN_RIGHT.equals(ha.getTextAlign())){
+					float width = mPaint.measureText(ha.getText());
+					canvas.drawText(ha.getText(),ex-width/2,baseline,mPaint);
+				}else{
+					canvas.drawText(ha.getText(),sx+(ex-sx)/2, baseline, mPaint);
+				}
 			}
 		}
 	}

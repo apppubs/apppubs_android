@@ -52,6 +52,7 @@ import org.apache.http.util.EntityUtils;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.w3c.dom.Text;
 
 import android.content.Context;
 import android.content.Intent;
@@ -210,7 +211,9 @@ public class WebUtils {
 			if (br != null){
 				br.close();
 			}
-			conn.disconnect();
+            if (conn!=null){
+                conn.disconnect();
+            }
 		}
 		return sb.toString();
 	}
@@ -544,7 +547,6 @@ public class WebUtils {
 	 * 请求一个数据返回单个结果
 	 * 
 	 * @param url
-	 * @param entityClass
 	 * @return
 	 * @throws IOException
 	 * @throws InterruptedException
@@ -613,6 +615,102 @@ public class WebUtils {
 					dos.write(bytes, 0, len);
 				}
 				is.close();
+				dos.write(LINE_END.getBytes());
+				byte[] end_data = (PREFIX + BOUNDARY + PREFIX + LINE_END).getBytes();
+				dos.write(end_data);
+				dos.flush();
+				/**
+				 * 获取响应码 200=成功 当响应成功，获取响应的流
+				 */
+				res = conn.getResponseCode();
+				LogM.log(WebUtils.class, "response code:" + res);
+				if (res == 200) {
+					LogM.log(WebUtils.class, "request success");
+					InputStreamReader isr = new InputStreamReader(conn.getInputStream());
+					StringBuffer sb1 = new StringBuffer();
+					char[] buffer = new char[1024];
+					int size = 0;
+					while ((size = isr.read(buffer)) != -1) {
+						sb1.append(buffer, 0, size);
+					}
+					result = sb1.toString();
+					LogM.log(WebUtils.class, "result : " + result);
+				} else {
+					LogM.log(WebUtils.class, "request error");
+				}
+			}
+		} catch (MalformedURLException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		return result;
+	}
+
+	public static String uploadFile(byte[] bytes, String uploadName, String requestURL,Map<String,String> params) {
+		int res = 0;
+		String result = null;
+		String BOUNDARY = UUID.randomUUID().toString(); // 边界标识 随机生成
+		String PREFIX = "--", LINE_END = "\r\n";
+		String CONTENT_TYPE = "multipart/form-data"; // 内容类型
+
+		try {
+			URL url = new URL(requestURL);
+			HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+			conn.setReadTimeout(TIME_OUT_READ_MILLISECOND);
+			conn.setConnectTimeout(TIME_OUT_CONNECT_MILLISECOND);
+			conn.setDoInput(true); // 允许输入流
+			conn.setDoOutput(true); // 允许输出流
+			conn.setUseCaches(false); // 不允许使用缓存
+			conn.setRequestMethod("POST"); // 请求方式
+			conn.setRequestProperty("Charset", CHARSET); // 设置编码
+			conn.setRequestProperty("connection", "keep-alive");
+			conn.setRequestProperty("Content-Type", CONTENT_TYPE + ";boundary=" + BOUNDARY);
+
+			if (bytes != null) {
+				/**
+				 * 当文件不为空时执行上传
+				 */
+				DataOutputStream dos = new DataOutputStream(conn.getOutputStream());
+				StringBuffer sb = new StringBuffer();
+				sb.append(PREFIX);
+				sb.append(BOUNDARY);
+				sb.append(LINE_END);
+				sb.append(PREFIX + BOUNDARY).append(LINE_END);
+
+				for (String key:params.keySet()){
+					String value = params.get(key);
+					sb.append("Content-Disposition: form-data; name=\""+key+"\"")
+							.append(LINE_END);
+					sb.append("Content-Type: text/plain; charset=" + CHARSET).append(
+							LINE_END);
+					sb.append(LINE_END);
+					sb.append(value);
+					sb.append(LINE_END);
+
+					sb.append(PREFIX + BOUNDARY).append(LINE_END);
+				}
+
+//				sb.append("Content-Disposition: form-data; name=\"appcode\"")
+//						.append(LINE_END);
+//				sb.append("Content-Type: text/plain; charset=" + CHARSET).append(
+//						LINE_END);
+//				sb.append(LINE_END);
+//				sb.append("U1477213539026").append(LINE_END);
+//
+//				sb.append(PREFIX + BOUNDARY).append(LINE_END);
+
+				/**
+				 * 这里重点注意： name里面的值为服务器端需要key 只有这个key 才可以得到对应的文件
+				 * filename是文件的名字，包含后缀名
+				 */
+
+				sb.append("Content-Disposition: form-data; name=\"" + uploadName + "\"; filename=\"" + uploadName + "\""
+						+ LINE_END);
+				sb.append("Content-Type: application/octet-stream; charset=" + CHARSET + LINE_END);
+				sb.append(LINE_END);
+				dos.write(sb.toString().getBytes());
+				dos.write(bytes);
 				dos.write(LINE_END.getBytes());
 				byte[] end_data = (PREFIX + BOUNDARY + PREFIX + LINE_END).getBytes();
 				dos.write(end_data);

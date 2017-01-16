@@ -59,6 +59,8 @@ public abstract class BaseActivity extends FragmentActivity implements OnClickLi
 	public static final int FILECHOOSER_RESULTCODE = 1;
 	public static final String EXTRA_STRING_TITLE = "extra_title";
 	public static final String EXTRA_BOOLEAN_NEED_TITLEBAR = "need_titlebar";
+
+	protected Context mContext;
 	/**
 	 * 是否需要titlebar
 	 */
@@ -92,9 +94,14 @@ public abstract class BaseActivity extends FragmentActivity implements OnClickLi
 
 	@Override
 	protected void onCreate(Bundle arg0) {
+
 		LogM.log(this.getClass(), " BaseActivity onCreate");
 		super.onCreate(arg0);
+
+		mContext = this;
+
 		isNeedTitleBar = getIntent().getBooleanExtra(EXTRA_BOOLEAN_NEED_TITLEBAR, isNeedTitleBar);
+
 		int theme = MportalApplication.systemSettings.getTheme();
 		switch (theme) {
 		case Settings.THEME_BLUE:
@@ -284,7 +291,9 @@ public abstract class BaseActivity extends FragmentActivity implements OnClickLi
 					int result = jo.getInt("result");
 					User user = new User(jo.getString("userid"), jo.getString("username"), jo.getString("cnname"), "",
 							jo.getString("email"), jo.getString("mobile"), jo.getString("menupower"));
-
+					if (jo.has("photourl")){
+						user.setAvatarUrl(jo.getString("photourl"));
+					}
 					if (result != 2) {
 						Intent closeI = new Intent(Actions.CLOSE_ALL_ACTIVITY);
 						sendBroadcast(closeI);

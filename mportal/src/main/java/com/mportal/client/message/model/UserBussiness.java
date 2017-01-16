@@ -133,28 +133,73 @@ public class UserBussiness extends BaseBussiness {
 		return SugarRecord.count(User.class);
 	}
 
-	public long countUserOfCertainDeptment(String deptId){
-		String sql = String.format("WITH RECURSIVE down(mydeptid) AS"+
-		" ("+
-		"SELECT detp_id FROM DEPARTMENT WHERE dept_id='%s' "+
-		"UNION "+
-		"SELECT dept_id FROM DEPARTMENT a,down b "+
-		"WHERE b.mydeptid = a.parent_id "+
-		")"+
-		"SELECT count(*) as count_num from  USER_DEPT_LINK where dept_id in down ",deptId);
-		Log.i("UserBussiness","查询部门下人员数量 sql:"+sql);
-		SQLiteDatabase sqLiteDatabase = SugarRecord.getDatabase();
-		Cursor c = sqLiteDatabase.rawQuery(sql,null);
+	public long countUserOfCertainDepartment(String deptId){
 		int count = 0;
-		try {
-			c.moveToFirst();
-			count = c.getInt(0);
-		} catch (Exception e) {
-			e.printStackTrace();
-		} finally {
-			c.close();
+
+		List<User> user = new ArrayList<User>();
+		List<String> deptIds = new ArrayList<String>();
+		deptIds.add(deptId);
+		recurseGet(deptId,deptIds);
+
+		StringBuilder sb = new StringBuilder();
+		for (String id:deptIds){
+			if (sb.length()>0){
+				sb.append(",");
+			}
+			sb.append("'");
+			sb.append(id);
+			sb.append("'");
 		}
-		return count;
+		String sql = String.format("select count(user_id) as usercount from user_dept_link where dept_id in(%s)",sb.toString());
+
+		Cursor cursor = SugarRecord.getDatabase().rawQuery(sql,null);
+		cursor.moveToFirst();
+		int result = cursor.getInt(0);
+		cursor.close();
+		return result;
+	}
+
+	/**
+	 * 某部门下的所有用户，包含子部门的用户
+	 * @param deptId
+	 * @return
+     */
+	public List<String> getUserIdsOfCertainDepartment(String deptId){
+		List<String> userIdList = new ArrayList<String>();
+		List<String> deptIds = new ArrayList<String>();
+		deptIds.add(deptId);
+		recurseGet(deptId,deptIds);
+
+		StringBuilder sb = new StringBuilder();
+		for (String id:deptIds){
+			if (sb.length()>0){
+				sb.append(",");
+			}
+			sb.append("'");
+			sb.append(id);
+			sb.append("'");
+		}
+
+		String sql = String.format("select distinct user_id from user_dept_link where dept_id in(%s)",sb.toString());
+
+		Cursor cursor = SugarRecord.getDatabase().rawQuery(sql,null);
+		while (cursor.moveToNext()){
+			String userid = cursor.getString(0);
+			userIdList.add(userid);
+		}
+		cursor.close();
+		return userIdList;
+	}
+
+	private void recurseGet(String deptId, List<String> deptIds) {
+		List<Department> depts = SugarRecord.find(Department.class,"super_id=?",deptId);
+		if (depts==null||depts.size()<1){
+			return;
+		}
+		for (Department dept:depts){
+			deptIds.add(dept.getDeptId());
+			recurseGet(dept.getDeptId(),deptIds);
+		}
 	}
 
 	/**

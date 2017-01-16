@@ -9,18 +9,21 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.util.ArrayList;
 
-import android.annotation.SuppressLint;
+import android.*;
+import android.Manifest;
 import android.app.Activity;
 import android.app.AlarmManager;
 import android.app.Application;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.drawable.Drawable;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Build;
+import android.support.v4.content.ContextCompat;
 import android.text.TextUtils;
 import android.util.DisplayMetrics;
 import android.util.Log;
@@ -86,18 +89,15 @@ public class MportalApplication extends Application {
 
 		super.onCreate();
 		initDefaultExceptionHandler();
-		// FrontiaApplication.initFrontiaApplication(this);
 		// 初始化设置
 		initSystemState();
 		deserializeObjects();
+
 		initImageLoader();
+
 		// 初始化SugarORM
 		SugarContext.init(this);
 
-		// List<App> appL = SugarRecord.listAll(App.class);
-		// if(appL.size()>0){
-		// app = appL.get(0);
-		// }
 
 		//初始化融云
 		RongIM.init(this);
@@ -414,15 +414,11 @@ public class MportalApplication extends Application {
 		restart();
 	}
 
-	@SuppressLint("InlinedApi") 
 	public void restart() {
-//		Intent closeI = new Intent(Actions.CLOSE_ALL_ACTIVITY);
-//		sendBroadcast(closeI);
-		
+
 		Intent mStartActivity = new Intent(this, StartUpActivity.class);
 		mStartActivity.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
 		int mPendingIntentId = 123456;
-//
 		PendingIntent mPendingIntent = PendingIntent.getActivity(this, mPendingIntentId, mStartActivity,
 				PendingIntent.FLAG_CANCEL_CURRENT);
 		AlarmManager mgr = (AlarmManager) this.getSystemService(Context.ALARM_SERVICE);

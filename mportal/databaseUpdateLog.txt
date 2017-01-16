@@ -1,0 +1,8 @@
+数据库更新
+20150923 paper 增加 hot_area_base_width,hot_area_base_height
+20150927 +table:title_menu ; menu_item+isAllowCustomIp
+20151104 menu_item + is_allow_custom_ip
+20160104 menu_item + titlebarshowflag
+20160613 news_info + tag
+20160620 news_info + contentUrl
+20170112 user + avatarUrl

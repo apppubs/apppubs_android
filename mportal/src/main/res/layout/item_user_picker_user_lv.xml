@@ -16,9 +16,9 @@
         />
     <com.mportal.client.widget.CircleTextImageView
         android:id="@+id/item_user_picker_user_iv"
-        android:layout_width="48dp"
-        android:layout_height="48dp"
-        app:citv_text_size="12dp"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        app:citv_text_size="10dp"
         android:layout_toRightOf="@id/item_user_picker_check_btn"
         android:layout_centerVertical="true"
         android:layout_marginLeft="10dp"
@@ -34,7 +34,6 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginLeft="10dp"
-        android:layout_marginTop="4dp"
         android:layout_toRightOf="@id/item_user_picker_user_iv">
 
         <TextView
@@ -64,12 +63,12 @@
         android:layout_height="wrap_content"
         android:layout_alignLeft="@+id/item_user_picker_user_title_rl"
         android:layout_below="@id/item_user_picker_user_title_rl"
-        android:layout_marginTop="4dp"
+        android:layout_marginTop="3dp"
         android:layout_toRightOf="@id/item_user_picker_user_iv"
         android:paddingRight="10dp"
         android:singleLine="true"
         android:maxLines="1"
-        android:text="手机:电话:"
+        android:text=""
         android:textColor="@color/common_text_gray"
         android:textSize="13dp" />
 

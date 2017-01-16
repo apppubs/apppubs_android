@@ -28,6 +28,8 @@ import com.mportal.client.util.Tools;
 import com.mportal.client.util.Utils;
 import com.orm.SugarRecord;
 
+import io.rong.imkit.RongIM;
+
 public abstract class HomeBaseActivity extends BaseActivity {
 
 	public static String MPORTAL_PREFERENCE_NAME = "mportal_preference";
@@ -112,7 +114,6 @@ public abstract class HomeBaseActivity extends BaseActivity {
 	/**
 	 * 天气信息(系统静态变量)
 	 * 
-	 * @param user
 	 */
 	public static void refreshWether(Context context, ArrayList<Weather> weathers) {
 		mWeathers = weathers;
@@ -237,6 +238,7 @@ public abstract class HomeBaseActivity extends BaseActivity {
 				overridePendingTransition(R.anim.abc_fade_in, R.anim.abc_fade_out);
 				Intent closeI = new Intent(Actions.CLOSE_ALL_ACTIVITY);
 				sendBroadcast(closeI);
+				RongIM.getInstance().disconnect();
 			} else {
 				lastClickTime = curClickTime;
 				Toast.makeText(HomeBaseActivity.this, "再按一次退出", Toast.LENGTH_SHORT).show();
@@ -276,6 +278,15 @@ public abstract class HomeBaseActivity extends BaseActivity {
 
 	}
 	
-	
+	public void selectMessageFragment(){
+		for (int i=-1;++i<mPrimaryMenuList.size();){
+			MenuItem mi = mPrimaryMenuList.get(i);
+			if (mi.getUrl().contains("apppubs://message")){
+				selectTab(i);
+			}
+		}
+	}
+
+	protected abstract  void selectTab(int index);
 
 }

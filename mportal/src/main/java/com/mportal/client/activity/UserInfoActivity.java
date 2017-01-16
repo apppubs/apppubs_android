@@ -95,8 +95,10 @@ public class UserInfoActivity extends BaseActivity implements OnClickListener,Re
 			Map<String,String> resultMap = jr.getResultMap();
 			if (!TextUtils.isEmpty(resultMap.get("appcodeversion"))){
 				setVisibilityOfViewByResId(R.id.userinfo_begin_talk, View.VISIBLE);
+				setVisibilityOfViewByResId(R.id.userinfo_welcome_tv,View.GONE);
 			}else{
 				setVisibilityOfViewByResId(R.id.userinfo_welcome_tv,View.VISIBLE);
+				setVisibilityOfViewByResId(R.id.userinfo_begin_talk,View.GONE);
 			}
 
 		}

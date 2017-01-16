@@ -57,6 +57,8 @@ public class User extends SugarRecord implements Serializable{
 	private int sortId;
 	
 	private transient String addressbookPermissionString;
+
+	private transient String avatarUrl;//20170113
 	private String orgCode;
 	
 	public User() {
@@ -256,8 +258,11 @@ public class User extends SugarRecord implements Serializable{
 		this.orgCode = orgCode;
 	}
 
+	public String getAvatarUrl() {
+		return avatarUrl;
+	}
 
-
-	
-
+	public void setAvatarUrl(String avatarUrl) {
+		this.avatarUrl = avatarUrl;
+	}
 }
