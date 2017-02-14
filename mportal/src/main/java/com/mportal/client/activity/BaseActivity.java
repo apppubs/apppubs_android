@@ -40,6 +40,7 @@ import com.mportal.client.R;
 import com.mportal.client.bean.App;
 import com.mportal.client.bean.Settings;
 import com.mportal.client.bean.User;
+import com.mportal.client.business.BussinessCallbackCommon;
 import com.mportal.client.business.MsgBussiness;
 import com.mportal.client.business.NewsBussiness;
 import com.mportal.client.business.PaperBussiness;
@@ -245,21 +246,18 @@ public abstract class BaseActivity extends FragmentActivity implements OnClickLi
 		if (MportalApplication.app.getLoginFlag() == App.LOGIN_ONSTART_USE_USERNAME) {
 			confirmDeviceBindStateWhenLoginWithUsername();
 		}
-		
-		AsyncTask<String, Integer, String> asyncTask = new AsyncTask<String, Integer, String>(){
+
+		mSystemBussiness.aSyncAppConfig(this, new BussinessCallbackCommon<Object>() {
 			@Override
-			protected String doInBackground(String... params) {
-				try {
-					mSystemBussiness.syncAppConfig();
-				} catch (IOException e) {
-					e.printStackTrace();
-				} catch (InterruptedException e) {
-					e.printStackTrace();
-				}
-				return null;
+			public void onDone(Object obj) {
+				System.out.print("同步appconfig成功");
 			}
-		};
-		asyncTask.execute("");
+
+			@Override
+			public void onException(int excepCode) {
+				System.out.print("同步appconfig失败");
+			}
+		});
 	}
 
 	/*

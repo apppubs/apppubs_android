@@ -17,8 +17,6 @@ import com.google.gson.JsonDeserializer;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonParseException;
 import com.google.gson.reflect.TypeToken;
-import com.mportal.client.bean.User;
-import com.mportal.client.message.model.UserBasicInfo;
 import com.mportal.ikidou.reflect.TypeBuilder;
 
 public class JSONUtils {

@@ -506,7 +506,7 @@ public class FilePreviewFragment extends BaseFragment{
 	//显示提示框之前首先获取服务端参数，如果已经配置好下载地址则允许用户点击下载按钮否则给出提示框即可
 	private void showInstallAppDialog(final String message) {
 		
-		mSystemBussiness.syncAppConfig(mContext, new BussinessCallbackCommon<Object>() {
+		mSystemBussiness.aSyncAppConfig(mContext, new BussinessCallbackCommon<Object>() {
 
 			@Override
 			public void onException(int excepCode) {
@@ -551,7 +551,7 @@ public class FilePreviewFragment extends BaseFragment{
 	}
 	
 	private void skip2DownloadPage(){
-		mSystemBussiness.syncAppConfig(mContext, new BussinessCallbackCommon<Object>() {
+		mSystemBussiness.aSyncAppConfig(mContext, new BussinessCallbackCommon<Object>() {
 			
 			@Override
 			public void onException(int excepCode) {

@@ -49,6 +49,11 @@ public class ConversationActivity extends BaseActivity {
         title = intent.getData().getQueryParameter("title");
         setTitle(title);
         mTitleBar.setRightText("详情");
+        if (mConversationType == Conversation.ConversationType.PRIVATE) {
+            mTitleBar.setRightBtnImageResourceId(R.drawable.chat_private);
+        }else{
+            mTitleBar.setRightBtnImageResourceId(R.drawable.chat_group);
+        }
         mTitleBar.setRightBtnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

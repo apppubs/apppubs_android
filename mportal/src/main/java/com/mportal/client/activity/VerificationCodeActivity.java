@@ -149,13 +149,14 @@ public class VerificationCodeActivity extends BaseActivity implements ErrorListe
 	
 		String osVersion = Utils.getAndroidSDKVersion();// 操作系统号
 		String currentVersionName = Utils.getVersionName(VerificationCodeActivity.this);// app版本号
+		int buildId = Utils.getVersionCode(VerificationCodeActivity.this);
 		String url = null;
 		try {
 			
 			String token = MportalApplication.app.getPushVendorType()==App.PUSH_VENDOR_TYPE_BAIDU?MportalApplication.app.getBaiduPushUserId():MportalApplication.app.getJpushRegistrationID();
 			url = String.format(URLs.URL_CONFIRM_VERIFICATION_CODE, mPhone,
 					mSystemBussiness.getMachineId(),verificationCode,
-					URLEncoder.encode(MportalApplication.user.getUsername(),"utf-8"),token,osVersion,URLEncoder.encode(Build.MODEL,"utf-8"),currentVersionName);
+					URLEncoder.encode(MportalApplication.user.getUsername(),"utf-8"),token,osVersion,URLEncoder.encode(Build.MODEL,"utf-8"),currentVersionName,buildId);
 		} catch (UnsupportedEncodingException e) {
 			e.printStackTrace();
 		}

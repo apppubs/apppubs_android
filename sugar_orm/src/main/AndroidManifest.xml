@@ -6,4 +6,8 @@
     <uses-sdk
         android:minSdkVersion="8"
         android:targetSdkVersion="21" />
+
+    <meta-data
+        android:name="METADATA_DOMAIN_PACKAGE_NAME"
+        android:value="com.mportal.client" />
 </manifest>

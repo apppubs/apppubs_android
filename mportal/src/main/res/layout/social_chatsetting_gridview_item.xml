@@ -10,7 +10,7 @@
         android:layout_height="wrap_content"
         android:layout_centerInParent="true">
 
-        <com.mportal.client.widget.SelectableRoundedImageView
+        <com.mportal.client.widget.CircleTextImageView
             android:id="@+id/iv_avatar"
             android:layout_width="56dp"
             android:layout_height="56dp"
@@ -18,10 +18,7 @@
             android:layout_marginTop="14dp"
             android:scaleType="centerCrop"
             android:src="@drawable/default_useravatar"
-            app:sriv_left_bottom_corner_radius="3dip"
-            app:sriv_left_top_corner_radius="3dip"
-            app:sriv_right_bottom_corner_radius="3dip"
-            app:sriv_right_top_corner_radius="3dip" />
+             />
 
         <ImageView
             android:id="@+id/badge_delete"

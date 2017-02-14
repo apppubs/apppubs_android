@@ -7,6 +7,7 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.text.TextUtils;
 import android.view.KeyEvent;
 import android.view.View;
 import android.widget.Toast;
@@ -84,6 +85,11 @@ public abstract class HomeBaseActivity extends BaseActivity {
 		initBroadcastReceiver();
 		
 		SharedPreferenceUtils.getInstance(this).putBoolean(MPORTAL_PREFERENCE_NAME, MPORTAL_PREFERENCE_APP_RUNNING_KEY, true);
+		String paddingUrl = MportalApplication.app.getPaddingUrlOnHomeActivityStartUp();
+		if (!TextUtils.isEmpty(paddingUrl)){
+			MportalApplication.app.setPaddingUrlOnHomeActivityStartUp(null);
+			ViewCourier.execute(mContext,paddingUrl);
+		}
 	};
 
 	/**

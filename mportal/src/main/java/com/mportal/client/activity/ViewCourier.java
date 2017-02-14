@@ -145,7 +145,7 @@ public class ViewCourier {
      * @param context
      * @param url
      */
-    public static void execute(BaseActivity context, String url) {
+    public static void execute(Context context, String url) {
         if (url.startsWith("http://") || url.startsWith("https://")) {
             WebAppFragment frg = new WebAppFragment();
             Bundle args = new Bundle();
@@ -189,8 +189,8 @@ public class ViewCourier {
             args.putString(AddressBookFragement.ARGS_ROOT_DEPARTMENT_SUPER_ID, rootSuperId);
             ContainerActivity.startActivity(context, AddressBookFragement.class, args);
         } else if (url.matches("apppubs:\\/\\/setting[\\S]*")) {
-            String title = StringUtils.getQueryParameter(url,"title");
-            ContainerActivity.startActivity(context, SettingFragment.class,null,title);
+            String title = StringUtils.getQueryParameter(url, "title");
+            ContainerActivity.startActivity(context, SettingFragment.class, null, title);
         } else if (url.matches("apppubs:\\/\\/favorite[\\S]*")) {
             CollectionFragment frg = new CollectionFragment();
             ContainerActivity.startActivity(context, frg.getClass());
@@ -211,15 +211,15 @@ public class ViewCourier {
             }
             context.startActivity(intent);
         } else if (url.equals("apppubs://closewindow")) {
-            context.finish();
+//            context.finish();
         } else if (url.startsWith("apppubs://qrcode")) {
             Intent intent = new Intent(context, CaptureActivity.class);
             context.startActivity(intent);
-        } else if(url.startsWith("apppubs://service_no")){
-            String title = StringUtils.getQueryParameter(url,"title");
-            ContainerActivity.startActivity(context,ConversationFragment.class,null,title);
+        } else if (url.startsWith("apppubs://service_no")) {
+            String title = StringUtils.getQueryParameter(url, "title");
+            ContainerActivity.startActivity(context, ConversationFragment.class, null, title);
 
-        }else if (url.startsWith("tel:")) {
+        } else if (url.startsWith("tel:")) {
             String str[] = url.split(":");
             final String uri = url;
             final Context con = context;
@@ -237,12 +237,12 @@ public class ViewCourier {
 
                 }
             }, "确定拨号?", "电话：" + str[1], "放弃", "拨号").show();
-        }else if(url.startsWith("apppubs://hint")){
-            String []params = StringUtils.getPathParams(url);
-            if (params.length>1){
-                Toast.makeText(context,params[1],Toast.LENGTH_LONG).show();
+        } else if (url.startsWith("apppubs://hint")) {
+            String[] params = StringUtils.getPathParams(url);
+            if (params.length > 1) {
+                Toast.makeText(context, params[1], Toast.LENGTH_LONG).show();
             }
-        }else {
+        } else {
             Toast.makeText(context, "请求地址(" + url + ")错误", Toast.LENGTH_SHORT).show();
         }
 
@@ -365,7 +365,7 @@ public class ViewCourier {
             mHomeActivity.changeContent(frg);
         } else if (uri.equals(MenuItem.MENU_URL_WEIBO)) {
             ContainerActivity.startActivity(mHomeActivity, WeiBoFragment.class, null, item.getName());
-        } else if (uri.contains("$qrcode")||uri.startsWith("apppubs://qrcode")) {// 二维码
+        } else if (uri.contains("$qrcode") || uri.startsWith("apppubs://qrcode")) {// 二维码
             intent = new Intent(mHomeActivity, CaptureActivity.class);
             mHomeActivity.startActivity(intent);
         } else if (uri.equals(MenuItem.MENU_URL_NEWS)) {// 新闻
@@ -414,13 +414,13 @@ public class ViewCourier {
             mHomeActivity.changeContent(frg);
         } else if (uri.equals(MenuItem.MENU_URL_HISTORY_MESSAGE)) {
             ContainerActivity.startActivity(mHomeActivity, HistoryFragment.class, null, "历史消息");
-        } else if ((uri.equals(MenuItem.MENU_URL_MESSAGE)|| uri.startsWith("apppubs://message")) && type == MenuItem.MENU_LOCATION_PRIMARY) {
+        } else if ((uri.equals(MenuItem.MENU_URL_MESSAGE) || uri.startsWith("apppubs://message")) && type == MenuItem.MENU_LOCATION_PRIMARY) {
 //            frg = new ConversationFragment();
             frg = new ConversationListFragment();
             mFragmentsMap.put(item, frg);
             mHomeActivity.changeContent(frg);
 
-        } else if (uri.equals(MenuItem.MENU_URL_MESSAGE)|| uri.startsWith("apppubs://message")) {
+        } else if (uri.equals(MenuItem.MENU_URL_MESSAGE) || uri.startsWith("apppubs://message")) {
             ContainerActivity.startActivity(mHomeActivity, ConversationFragment.class, null, item.getName());
         } else if (uri.equals(MenuItem.MENU_URL_PIC)) {// 图片
             frg = new ChannelPictureFragment();
@@ -640,7 +640,7 @@ public class ViewCourier {
             if (item.getSortId() == 1) {
                 if (mApp.getLayoutLocalScheme() == App.LAYOUT_BOTTOM_MENU) {
 //					refreshWeather();
-                    mHomeActivity.registerReceiver(mWeatherRcv, new IntentFilter(Actions.REFRESH_WEATHER));
+//                    mHomeActivity.registerReceiver(mWeatherRcv, new IntentFilter(Actions.REFRESH_WEATHER));
                     isWeatherRcvRegistered = true;
                 }
 

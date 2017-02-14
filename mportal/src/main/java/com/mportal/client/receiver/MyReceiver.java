@@ -1,23 +1,28 @@
 package com.mportal.client.receiver;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.Locale;
-
-import org.json.JSONException;
-import org.json.JSONObject;
-
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Log;
-import cn.jpush.android.api.JPushInterface;
 
 import com.mportal.client.MportalApplication;
+import com.mportal.client.activity.StartUpActivity;
+import com.mportal.client.activity.ViewCourier;
+import com.mportal.client.bean.App;
 import com.mportal.client.bean.Msg;
 import com.mportal.client.business.MsgController;
+import com.mportal.client.util.LogM;
+
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Locale;
+
+import cn.jpush.android.api.JPushInterface;
 
 /**
  * 自定义接收器
@@ -50,14 +55,24 @@ public class MyReceiver extends BroadcastReceiver {
         	
         } else if (JPushInterface.ACTION_NOTIFICATION_OPENED.equals(intent.getAction())) {
             Log.d(TAG, "[MyReceiver] 用户点击打开了通知");
-            
-//        	//打开自定义的Activity
-//        	Intent i = new Intent(context, TestActivity.class);
-//        	i.putExtras(bundle);
-//        	//i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-//        	i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP );
-//        	context.startActivity(i);
-        	
+
+			String extras = bundle.getString(JPushInterface.EXTRA_EXTRA);
+			String url = "";
+			try {
+
+				Intent i = new Intent(context, StartUpActivity.class);
+				i.putExtras(bundle);
+				i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
+				context.startActivity(i);
+
+				JSONObject extrasJson = new JSONObject(extras);
+				url = extrasJson.optString("url");
+//				ViewCourier.execute(context,url);
+				MportalApplication.app.setPaddingUrlOnHomeActivityStartUp(url);
+			} catch (Exception e) {
+				LogM.log(this.getClass(), "Unexpected: extras is not a valid json");
+			}
+
         } else if (JPushInterface.ACTION_RICHPUSH_CALLBACK.equals(intent.getAction())) {
             Log.d(TAG, "[MyReceiver] 用户收到到RICH PUSH CALLBACK: " + bundle.getString(JPushInterface.EXTRA_EXTRA));
             //在这里根据 JPushInterface.EXTRA_EXTRA 的内容处理代码，比如打开新的Activity， 打开一个网页等..

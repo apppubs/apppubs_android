@@ -159,7 +159,8 @@ public class App implements Serializable{
 	private String orgCode;
 	@SerializedName("webloginurl")
 	private String webLoginUrl;
-	
+
+	private String paddingUrlOnHomeActivityStartUp;
 	
 	public boolean isDownload() {
 		return isDownloadApp;
@@ -485,6 +486,12 @@ public class App implements Serializable{
 	public void setWebLoginUrl(String webLoginUrl) {
 		this.webLoginUrl = webLoginUrl;
 	}
-	
-	
+
+	public String getPaddingUrlOnHomeActivityStartUp() {
+		return paddingUrlOnHomeActivityStartUp;
+	}
+
+	public void setPaddingUrlOnHomeActivityStartUp(String paddingUrlOnHomeActivityStartUp) {
+		this.paddingUrlOnHomeActivityStartUp = paddingUrlOnHomeActivityStartUp;
+	}
 }

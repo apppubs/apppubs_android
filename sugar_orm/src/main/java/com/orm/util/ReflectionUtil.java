@@ -206,7 +206,10 @@ public class ReflectionUtil {
     public static List<Class> getDomainClasses(Context context) {
         List<Class> domainClasses = new ArrayList<Class>();
         try {
+
             for (String className : getAllClasses(context)) {
+                System.out.println("运行时类名："+className+"getDomainPackageName:"+ManifestHelper.getDomainPackageName(context));
+
                 if (className.startsWith(ManifestHelper.getDomainPackageName(context))) {
                     Class domainClass = getDomainClass(className, context);
                     if (domainClass != null) domainClasses.add(domainClass);

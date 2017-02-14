@@ -514,19 +514,6 @@ public class SystemBussiness extends BaseBussiness {
 		
 	}
 
-	public void syncAppConfig() throws IOException, InterruptedException {
-		String requestAppConfig = String.format(URLs.URL_APP_CONFIG,"");
-		JSONResult jr = JSONResult.compile(WebUtils.requestWithGet(requestAppConfig));
-		if(jr!=null&&jr.resultCode==1){
-			FileUtils.writeObj(mContext, jr.result, Constants.FILE_NAME_APP_CONFIG);
-		}
-	}
-
-	public AppConfig getAppConfig(){
-		String str = (String) FileUtils.readObj(mContext,Constants.FILE_NAME_APP_CONFIG);
-		return JSONUtils.parseObjectFromJson(str,AppConfig.class);
-	}
-
 	/**
 	 * 初始化标题栏左右的菜单
 	 * 
@@ -743,39 +730,57 @@ public class SystemBussiness extends BaseBussiness {
 
 	}
 
+	public void syncAppConfig() throws IOException, InterruptedException {
+
+		String result = WebUtils.requestWithGet(String.format(URLs.URL_APP_CONFIG,""));
+		JSONResult jsonResult = JSONResult.compile(result);
+		if (jsonResult.resultCode != 1) {
+			LogM.log(this.getClass(), "获取appconfig错误");
+		} else {
+			Map<String, String> resultMap = jsonResult.getResultMap();
+			// service_id":"1428155175898","address_apiflag":"0","usersync_url":"","adbookversion":"5","adbookauth":"1","deptsync_url":"","address_depturl":"http://202.99.19.140:8080/wmh360/json/getaddressdata.jsp?appcode=D20&flag=dept","address_encflag":"1","chatflag":"0","address_deptuserurl":"http://202.99.19.140:8080/wmh360/json/getaddressdata.jsp?appcode=D20&flag=deptuser","userauth_url":"","adbookupdateflag":"0","address_userurl":"http://202.99.19.140:8080/wmh360/json/getaddressdata.jsp?appcode=D20&flag=user","autologout":"1","mduserinfoflag":"0","userauth_flag":"0","userdeptsync_url":""
+			App app = MportalApplication.app;
+			app.setAddressbookUserUrl(resultMap.get("address_userurl"));
+			app.setAddressbookDetpUrl(resultMap.get("address_depturl"));
+			app.setAddressbookDeptUserUrl(resultMap.get("address_deptuserurl"));
+			app.setAddressbookNeedDecryption(Integer.parseInt(resultMap.get("address_encflag")));
+			app.setAddressbookNeedPermission(Integer.parseInt(resultMap.get("adbookauth")));
+			app.setDocumentReaderPageUrl(resultMap.get("document_reader_url"));
+			app.setAddressbookVersion(Integer.parseInt(resultMap.get("adbookversion")));
+
+			if (app.getAddressbookNeedPermission()==App.NEED){
+				String url = String.format(URLs.URL_ADDRESS_PERMISSION, MportalApplication.user.getUserId());
+				String permissionResult = WebUtils.requestWithGet(url);
+				JSONResult jr = JSONResult.compile(permissionResult);
+				if (jr.resultCode==1){
+					MportalApplication.user.setAddressbookPermissionString(jr.result);
+					MportalApplication.saveAndRefreshUser(mContext, MportalApplication.user);
+				}
+			}
+
+			MportalApplication.commitApp(mContext);
+		}
+
+	}
+
+	public AppConfig getAppConfig(){
+		String str = (String) FileUtils.readObj(mContext,Constants.FILE_NAME_APP_CONFIG);
+		return JSONUtils.parseObjectFromJson(str,AppConfig.class);
+	}
+
 	/**
 	 * 更新appconfig，将getappconfig中的数据同步到本地的APP对象中。
 	 */
-	public void syncAppConfig(final Context context,final BussinessCallbackCommon<Object> callback) {
+	public void aSyncAppConfig(final Context context, final BussinessCallbackCommon<Object> callback) {
 		sDefaultExecutor.submit(new Runnable() {
 
 			@Override
 			public void run() {
-
 				try {
-					String result = WebUtils.requestWithGet(String.format(URLs.URL_APP_CONFIG,""));
-					JSONResult jsonResult = JSONResult.compile(result);
-					if (jsonResult.resultCode != 1) {
-						LogM.log(this.getClass(), "获取appconfig错误");
-						sHandler.post(new OnExceptionRun<Object>(callback));// 与主线程的通信
-					} else {
-						Map<String, String> resultMap = jsonResult.getResultMap();
-						// service_id":"1428155175898","address_apiflag":"0","usersync_url":"","adbookversion":"5","adbookauth":"1","deptsync_url":"","address_depturl":"http://202.99.19.140:8080/wmh360/json/getaddressdata.jsp?appcode=D20&flag=dept","address_encflag":"1","chatflag":"0","address_deptuserurl":"http://202.99.19.140:8080/wmh360/json/getaddressdata.jsp?appcode=D20&flag=deptuser","userauth_url":"","adbookupdateflag":"0","address_userurl":"http://202.99.19.140:8080/wmh360/json/getaddressdata.jsp?appcode=D20&flag=user","autologout":"1","mduserinfoflag":"0","userauth_flag":"0","userdeptsync_url":""
-						App app = MportalApplication.app;
-						app.setAddressbookUserUrl(resultMap.get("address_userurl"));
-						app.setAddressbookDetpUrl(resultMap.get("address_depturl"));
-						app.setAddressbookDeptUserUrl(resultMap.get("address_deptuserurl"));
-						app.setAddressbookNeedDecryption(Integer.parseInt(resultMap.get("address_encflag")));
-						app.setAddressbookNeedPermission(Integer.parseInt(resultMap.get("adbookauth")));
-						app.setDocumentReaderPageUrl(resultMap.get("document_reader_url"));
-						app.setAddressbookVersion(Integer.parseInt(resultMap.get("adbookversion")));
-						MportalApplication.commitApp(context);
-						
-						sHandler.post(new OnDoneRun<Object>(callback, null));// 与主线程的通信
-					}
+					syncAppConfig();
+					sHandler.post(new OnDoneRun<Object>(callback, null));// 与主线程的通信
 				} catch (Exception e) {
 					e.printStackTrace();
-					callback.onException(0);
 					sHandler.post(new OnExceptionRun<Object>(callback));// 与主线程的通信
 				}
 

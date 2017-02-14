@@ -209,7 +209,7 @@ public class UserBussiness extends BaseBussiness {
 	 * @return
 	 */
 	public List<User> listUser(String departmentId) {
-		String sql = "select * from USER t1 join USER_DEPT_LINK t2 on t1.USER_ID = t2.USER_ID where t2.DEPT_ID = ? order by sort_id";
+		String sql = "select * from USER t1 join USER_DEPT_LINK t2 on t1.USER_ID = t2.USER_ID where t2.DEPT_ID = ? order by t2.sort_id";
 		return SugarRecord.findWithQuery(User.class, sql, departmentId);
 	}
 
@@ -325,10 +325,11 @@ public class UserBussiness extends BaseBussiness {
 						for (UserBasicInfo userBasicInfo: list){
 							cache.put(userBasicInfo.getUserId(),userBasicInfo);
 						}
-						callback.onDone(list);
+						onDone(callback,list);
 					}
 				} catch (Exception e) {
-					callback.onException(0);
+					e.printStackTrace();
+					onException(callback);
 				}
 			}
 		});

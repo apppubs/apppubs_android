@@ -1,13 +1,5 @@
 package com.mportal.client.activity;
 
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.concurrent.Future;
-
-import org.json.JSONException;
-import org.json.JSONObject;
-
 import android.app.Dialog;
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -24,7 +16,6 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.Toast;
-import cn.jpush.android.api.JPushInterface;
 
 import com.mportal.client.MportalApplication;
 import com.mportal.client.R;
@@ -47,6 +38,16 @@ import com.mportal.client.widget.ConfirmDialog.ConfirmListener;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.assist.FailReason;
 import com.nostra13.universalimageloader.core.listener.ImageLoadingListener;
+
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.concurrent.Future;
+
+import cn.jpush.android.api.JPushInterface;
 
 /**
  * app入口

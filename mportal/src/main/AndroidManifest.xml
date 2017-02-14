@@ -1,9 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
     package="com.mportal.client"
     android:versionCode="200000"
-    android:versionName="2.0.0Alpah">
+    android:versionName="2.0.0">
 
     <uses-sdk
         android:minSdkVersion="8"
@@ -271,9 +270,11 @@
 
             ></activity>
         <activity android:name=".message.activity.DiscussionDetailActivity"
-
+            android:screenOrientation="portrait"
             ></activity>
-        <activity android:name=".message.activity.ConversationActivity">
+        <activity android:name=".message.activity.ConversationActivity"
+            android:screenOrientation="portrait"
+            >
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
 
@@ -459,6 +460,17 @@
 
         <!-- Required SDK核心功能 -->
         <receiver android:name="cn.jpush.android.service.AlarmReceiver" />
+        <!--融云自定义通知-->
+        <receiver
+            android:exported="true"
+            android:name=".receiver.RongPushReceiver">
+            <intent-filter>
+                <action android:name="io.rong.push.intent.MESSAGE_ARRIVED" />
+                <action android:name="io.rong.push.intent.MI_MESSAGE_ARRIVED" />
+                <action android:name="io.rong.push.intent.MESSAGE_CLICKED" />
+                <action android:name="io.rong.push.intent.MI_MESSAGE_CLICKED" />
+            </intent-filter>
+        </receiver>
 
         <!-- User defined.  For test only  用户自定义的广播接收器 -->
         <receiver
@@ -483,7 +495,7 @@
             android:value="developer-default" />
         <meta-data
             android:name="JPUSH_APPKEY"
-            android:value="567f2e17732f8c17ccc9c601" /> <!-- </>值来自开发者平台取得的AppKey -->
+            android:value="25f70836ca8f5f938f77eb32" /> <!-- </>值来自开发者平台取得的AppKey -->
 
 
         <!-- 极光推送结束 -->
@@ -507,12 +519,13 @@
         <meta-data
             android:name="DOMAIN_PACKAGE_NAME"
             android:value="com.mportal.client" />
+
         <meta-data
             android:name="APPCODE"
-            android:value="U1477213539026" />
+            android:value="D20" />
         <meta-data
             android:name="BASE_URL"
-            android:value="http://123.57.13.138:8088/" />
+            android:value="http://60.205.140.176:8088/" />
         <!-- 默认是1 手机、pad都为竖屏，2.手机pad分别为竖屏、横屏 3.手机pad均为横屏 4.手机pad分别为横屏、竖屏 -->
         <meta-data
             android:name="DISPLAY_ORIENTATION"

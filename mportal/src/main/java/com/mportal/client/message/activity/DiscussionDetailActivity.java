@@ -2,6 +2,7 @@ package com.mportal.client.message.activity;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
 import android.text.TextUtils;
@@ -15,14 +16,22 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.mportal.client.MportalApplication;
 import com.mportal.client.R;
 import com.mportal.client.activity.BaseActivity;
+import com.mportal.client.business.BussinessCallbackCommon;
+import com.mportal.client.constant.Constants;
+import com.mportal.client.constant.URLs;
+import com.mportal.client.message.SealConst;
 import com.mportal.client.message.model.OperationRong;
+import com.mportal.client.message.model.UserBasicInfo;
+import com.mportal.client.message.model.UserPickerHelper;
+import com.mportal.client.util.Utils;
+import com.mportal.client.widget.CircleTextImageView;
 import com.mportal.client.widget.DemoGridView;
 import com.mportal.client.widget.DialogWithYesOrNoUtils;
 import com.mportal.client.widget.LoadDialog;
 import com.mportal.client.widget.NToast;
-import com.mportal.client.widget.SelectableRoundedImageView;
 import com.mportal.client.widget.SwitchButton;
 
 import java.io.Serializable;
@@ -141,6 +150,34 @@ public class DiscussionDetailActivity extends BaseActivity implements CompoundBu
         ids = mDiscussion.getMemberIdList();
         if (ids != null) {
 //            request(FIND_USER_INFO);
+            mUserBussiness.cacheUserBasicInfoList(ids, new BussinessCallbackCommon<List<UserBasicInfo>>() {
+                @Override
+                public void onDone(List<UserBasicInfo> infos) {
+
+                    memberList.clear();
+                    for (UserBasicInfo userBasicInfo : infos) {
+                        memberList.add(new UserInfo(userBasicInfo.getUserId(), userBasicInfo.getTrueName(), Uri.parse(userBasicInfo.getAtatarUrl())));
+                    }
+                    String currentUserId = MportalApplication.user.getUserId();
+                    if (currentUserId.equals(createId)) {
+                        isCreated = true;
+                    }
+                    if (memberList != null && memberList.size() > 1) {
+                        if (adapter == null) {
+                            adapter = new GridAdapter(mContext, memberList);
+                            mGridView.setAdapter(adapter);
+                        } else {
+                            adapter.updateListView(memberList);
+                        }
+                    }
+                    LoadDialog.dismiss(mContext);
+                }
+
+                @Override
+                public void onException(int excepCode) {
+
+                }
+            });
         }
     }
 
@@ -246,15 +283,15 @@ public class DiscussionDetailActivity extends BaseActivity implements CompoundBu
             if (convertView == null) {
                 convertView = LayoutInflater.from(context).inflate(R.layout.social_chatsetting_gridview_item, parent, false);
             }
-            SelectableRoundedImageView iv_avatar = (SelectableRoundedImageView) convertView.findViewById(R.id.iv_avatar);
+            CircleTextImageView iv_avatar = (CircleTextImageView) convertView.findViewById(R.id.iv_avatar);
             TextView tv_username = (TextView) convertView.findViewById(R.id.tv_username);
             ImageView badge_delete = (ImageView) convertView.findViewById(R.id.badge_delete);
-
+            iv_avatar.setFillColor(Color.TRANSPARENT);
             // 最后一个item，减人按钮
             if (position == getCount() - 1 && isCreated) {
                 tv_username.setText("");
                 badge_delete.setVisibility(View.GONE);
-                iv_avatar.setImageResource(R.drawable.icon_btn_deleteperson);
+                iv_avatar.setImageResource(R.drawable.delete_members);
 
                 iv_avatar.setOnClickListener(new View.OnClickListener() {
 
@@ -270,16 +307,22 @@ public class DiscussionDetailActivity extends BaseActivity implements CompoundBu
             } else if ((isCreated && position == getCount() - 2) || (!isCreated && position == getCount() - 1)) {
                 tv_username.setText("");
                 badge_delete.setVisibility(View.GONE);
-                iv_avatar.setImageResource(R.drawable.jy_drltsz_btn_addperson);
+                iv_avatar.setImageResource(R.drawable.add_members);
 
                 iv_avatar.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-//                        Intent intent = new Intent(DiscussionDetailActivity.this, SelectFriendsActivity.class);
-//                        intent.putExtra("AddDiscuMember", (Serializable) memberList);
-//                        intent.putExtra("AddDiscuId", targetId);
-//                        startActivityForResult(intent, SealConst.DISCUSSION_ADD_MEMBER_REQUEST_CODE);
 
+                        List<String> preSelectedUserIds = new ArrayList<String>();
+                        for (UserInfo userinfo:memberList){
+                            preSelectedUserIds.add(userinfo.getUserId());
+                        }
+                        UserPickerHelper.startActivity(mContext, "添加成员", preSelectedUserIds, new UserPickerHelper.UserPickerListener() {
+                            @Override
+                            public void onPickDone(final List<String> userIds) {
+                                onAddMemberPickerDone(userIds);
+                            }
+                        });
                     }
                 });
             } else { // 普通成员
@@ -287,7 +330,10 @@ public class DiscussionDetailActivity extends BaseActivity implements CompoundBu
                 if (!TextUtils.isEmpty(bean.getName())) {
                     tv_username.setText(bean.getName());
                 }
-
+                iv_avatar.setText(bean.getName());
+                iv_avatar.setFillColor(getResources().getColor(R.color.common_btn_bg_gray));
+                iv_avatar.setTextColor(Color.WHITE);
+                iv_avatar.setTextSize(Utils.dip2px(mContext,12));
                 mImageLoader.displayImage(bean.getPortraitUri().toString(),iv_avatar);
                 iv_avatar.setOnClickListener(new View.OnClickListener() {
                     @Override
@@ -300,6 +346,45 @@ public class DiscussionDetailActivity extends BaseActivity implements CompoundBu
             }
 
             return convertView;
+        }
+
+        private void onAddMemberPickerDone(final List<String> userIds) {
+
+            LoadDialog.show(mContext);
+            final List<String> tempUserIds = new ArrayList<String>();
+            tempUserIds.addAll(userIds);
+            RongIMClient.getInstance().addMemberToDiscussion(targetId, userIds, new RongIMClient.OperationCallback() {
+                @Override
+                public void onSuccess() {
+                    onAddMemberFinish(tempUserIds);
+                }
+
+                @Override
+                public void onError(RongIMClient.ErrorCode errorCode) {
+                    LoadDialog.dismiss(mContext);
+                }
+            });
+        }
+
+        private void onAddMemberFinish(List<String> userIds) {
+            mUserBussiness.cacheUserBasicInfoList(userIds, new BussinessCallbackCommon<List<UserBasicInfo>>() {
+                @Override
+                public void onDone(List<UserBasicInfo> basicInfos) {
+                    if (basicInfos != null && basicInfos.size() > 0) {
+                        for (UserBasicInfo basicInfo : basicInfos) {
+                            memberList.add(new UserInfo(basicInfo.getUserId(), basicInfo.getTrueName(), Uri.parse(basicInfo.getAtatarUrl())));
+                        }
+                        adapter.updateListView(memberList);
+                        memberSize.setText("讨论组成员(" + memberList.size() + ")");
+                        LoadDialog.dismiss(mContext);
+                    }
+                }
+
+                @Override
+                public void onException(int excepCode) {
+                    LoadDialog.dismiss(mContext);
+                }
+            });
         }
 
         @Override

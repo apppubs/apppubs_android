@@ -204,32 +204,32 @@ public class AddressBookFragement extends BaseFragment {
 
 		} else{
 			
-			if (MportalApplication.app.getAddressbookNeedPermission() == App.NEED) {
-				updatePermissionStrAndRefreshDerartAndUserFragment();
-			}
+//			if (MportalApplication.app.getAddressbookNeedPermission() == App.NEED) {
+//				updatePermissionStrAndRefreshDerartAndUserFragment();
+//			}
 
 		} 
 	}
 
-	private void updatePermissionStrAndRefreshDerartAndUserFragment() {
-		String url = String.format(URLs.URL_ADDRESS_PERMISSION, MportalApplication.user.getUserId());
-		mRequestQueue.add(new StringRequest(url, new Listener<String>() {
-
-			@Override
-			public void onResponse(String response) {
-				JSONResult jr = JSONResult.compile(response);
-				MportalApplication.user.setAddressbookPermissionString(jr.result);
-				MportalApplication.saveAndRefreshUser(mHostActivity, MportalApplication.user);
-				refreshDepartAndUserFragmentIfExist();
-			}
-		}, new ErrorListener() {
-
-			@Override
-			public void onErrorResponse(VolleyError error) {
-
-			}
-		}));
-	}
+//	private void updatePermissionStrAndRefreshDerartAndUserFragment() {
+//		String url = String.format(URLs.URL_ADDRESS_PERMISSION, MportalApplication.user.getUserId());
+//		mRequestQueue.add(new StringRequest(url, new Listener<String>() {
+//
+//			@Override
+//			public void onResponse(String response) {
+//				JSONResult jr = JSONResult.compile(response);
+//				MportalApplication.user.setAddressbookPermissionString(jr.result);
+//				MportalApplication.saveAndRefreshUser(mHostActivity, MportalApplication.user);
+//				refreshDepartAndUserFragmentIfExist();
+//			}
+//		}, new ErrorListener() {
+//
+//			@Override
+//			public void onErrorResponse(VolleyError error) {
+//
+//			}
+//		}));
+//	}
 
 	private void onNewVerisonFound() {
 		if (MportalApplication.app.getNeedForceUploadAddressbook() == App.NEED_FORCE_UPDATE_ADDRESSBOOK_YES) {
@@ -334,7 +334,7 @@ public class AddressBookFragement extends BaseFragment {
 	 */
 	private void sync() {
 		mProgressHUD = ProgressHUD.show(mHostActivity, "同步中", true, false, null);
-		mSystemBussiness.syncAppConfig(mHostActivity, new BussinessCallbackCommon<Object>() {
+		mSystemBussiness.aSyncAppConfig(mHostActivity, new BussinessCallbackCommon<Object>() {
 
 			@Override
 			public void onDone(Object obj) {

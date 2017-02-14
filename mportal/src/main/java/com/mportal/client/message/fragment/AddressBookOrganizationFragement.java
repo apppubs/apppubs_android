@@ -1,52 +1,39 @@
 package com.mportal.client.message.fragment;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
-import org.json.JSONException;
-import org.json.JSONObject;
-
 import android.content.Intent;
 import android.graphics.Color;
-import android.graphics.PorterDuff;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
-import android.widget.AdapterView.OnItemClickListener;
-import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.mportal.client.MportalApplication;
 import com.mportal.client.R;
-import com.mportal.client.activity.ContainerActivity;
 import com.mportal.client.activity.HomeBaseActivity;
 import com.mportal.client.activity.UserInfoActivity;
 import com.mportal.client.adapter.CommonAdapter;
 import com.mportal.client.adapter.ViewHolder;
-import com.mportal.client.bean.App;
 import com.mportal.client.bean.Department;
 import com.mportal.client.bean.User;
 import com.mportal.client.business.BussinessCallbackCommon;
 import com.mportal.client.business.SystemBussiness;
-import com.mportal.client.constant.Constants;
 import com.mportal.client.fragment.BaseFragment;
 import com.mportal.client.message.model.UserBasicInfo;
 import com.mportal.client.message.model.UserBussiness;
 import com.mportal.client.message.model.UserPickerHelper;
 import com.mportal.client.message.widget.Breadcrumb;
-import com.mportal.client.message.widget.UserSelectionBar;
-import com.mportal.client.util.FileUtils;
-import com.mportal.client.util.LogM;
 import com.mportal.client.widget.AlertDialog;
 import com.mportal.client.widget.CircleTextImageView;
 import com.mportal.client.widget.ConfirmDialog;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 import io.rong.imkit.RongIM;
 

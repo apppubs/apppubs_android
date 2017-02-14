@@ -618,7 +618,7 @@ public class URLs {
 	 * dev=devtest&app=apptest&fr=1&clientkey=bb7c1386d85044ba7a7ae53f3362d634
 	 */
 	public static final String URL_CONFIRM_VERIFICATION_CODE = baseURL
-			+ "wmh360/json/login/smsconfirm.jsp?mobile=%s&deviceid=%s&smscode=%s&username=%s&token=%s&os=%s&dev=%s&app=%s&fr=4&clientkey=bb7c1386d85044ba7a7ae53f3362d634&appcode="
+			+ "wmh360/json/login/smsconfirm.jsp?mobile=%s&deviceid=%s&smscode=%s&username=%s&token=%s&os=%s&dev=%s&app=%s&appcodeversion=%d&fr=4&clientkey=bb7c1386d85044ba7a7ae53f3362d634&appcode="
 			+ appCode;
 	public static final int RESULT_CODE_CONFIRM_VERIFICATION_CODE_ERROR = -1;
 
@@ -662,11 +662,6 @@ public class URLs {
 	public static final String URL_PAGE = baseURL+"wmh360/json/getpagejson.jsp?pageid=%s&appid="+appCode;
 
 	/**
-	 * 获取用户基本信息，userid，username，truename，photourl，appclientcode
-	 */
-	public static final String URL_USER_BASIC_INFO = baseURL+"wmh360/json/user/getbasicinfolist.jsp?userids=%s&appcode="+appCode+"&clientkey=bb7c1386d85044ba7a7ae53f3362d634";
-
-	/**
 	 * 获取融云token
 	 */
 	public static final String URL_RC_TOKEN = baseURL+"wmh360/json/getrongToken.jsp?userid=%s&username=%s&appid="+appCode+"&clientkey=bb7c1386d85044ba7a7ae53f3362d634";
@@ -675,6 +670,11 @@ public class URLs {
 	 * 获取用户详情
 	 */
 	public static final String URL_USER_INFO =  baseURL+"wmh360/json/user/getuser.jsp?userid=%s&appcode="+appCode+"&clientkey=bb7c1386d85044ba7a7ae53f3362d634";
+
+	/**
+	 * 获取用户基本信息，userid，username，truename，photourl，appclientcode
+	 */
+	public static final String URL_USER_BASIC_INFO = baseURL+"wmh360/json/user/getbasicinfolist.jsp?userids=%s&appcode="+appCode+"&clientkey=bb7c1386d85044ba7a7ae53f3362d634";
 
 	/**
 	 * 发送邀请短信
