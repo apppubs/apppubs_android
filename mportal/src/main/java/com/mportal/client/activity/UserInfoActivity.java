@@ -1,12 +1,8 @@
 package com.mportal.client.activity;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
-
-import org.json.JSONException;
-import org.json.JSONObject;
 
 import android.content.Context;
 import android.content.Intent;
@@ -14,15 +10,12 @@ import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
-import android.widget.ImageView;
 import android.widget.ImageView.ScaleType;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.android.volley.Cache;
 import com.android.volley.DefaultRetryPolicy;
 import com.android.volley.Response.ErrorListener;
 import com.android.volley.Response.Listener;
@@ -32,20 +25,18 @@ import com.mportal.client.MportalApplication;
 import com.mportal.client.R;
 import com.mportal.client.bean.App;
 import com.mportal.client.bean.User;
+import com.mportal.client.AppContext;
 import com.mportal.client.business.BussinessCallbackCommon;
 import com.mportal.client.constant.Constants;
 import com.mportal.client.constant.URLs;
 import com.mportal.client.net.RequestListener;
-import com.mportal.client.util.FileUtils;
 import com.mportal.client.util.JSONResult;
-import com.mportal.client.widget.AlertDialog;
 import com.mportal.client.widget.CircleTextImageView;
 import com.mportal.client.widget.ConfirmDialog;
 import com.mportal.client.widget.ContactDailog;
 import com.mportal.client.widget.ProgressHUD;
 
 import io.rong.imkit.RongIM;
-import io.rong.imlib.RongIMClient;
 import io.rong.imlib.model.Conversation;
 
 public class UserInfoActivity extends BaseActivity implements OnClickListener,RequestListener{
@@ -58,7 +49,6 @@ public class UserInfoActivity extends BaseActivity implements OnClickListener,Re
 	private TextView mEmailTV, mTelTV, mMobileTV, mWorkAddressTV,mInviteTV;
 	
 	private String mUserInfoUrl;
-	private JSONObject mAppConfigJO;
 	private String[] mIconConfigParams;
 	@Override
 	protected void onCreate(Bundle arg0) {
@@ -90,7 +80,7 @@ public class UserInfoActivity extends BaseActivity implements OnClickListener,Re
 		}
 		JSONResult jr = JSONResult.compile(response);
 		//底部按钮
-		if (MportalApplication.app.getAllowChat() == App.ALLOW_CHAT_TRUE&&!mUser.getUserId().equals(MportalApplication.user.getUserId())) {
+		if (mAppContext.getApp().getAllowChat() == App.ALLOW_CHAT_TRUE&&!mUser.getUserId().equals(AppContext.getInstance(mContext).getCurrentUser().getUserId())) {
 			//如果未激活显示未激活按钮，如果已激活显示开始聊天按钮,
 			Map<String,String> resultMap = jr.getResultMap();
 			if (!TextUtils.isEmpty(resultMap.get("appcodeversion"))){
@@ -139,7 +129,7 @@ public class UserInfoActivity extends BaseActivity implements OnClickListener,Re
 
 	private void fillDepartment() {
 		try {
-			String id = mAppConfigJO.getString(Constants.APP_CONFIG_PARAM_ADBOOK_ROOT_ID);
+			String id = AppContext.getInstance(mContext).getAppConfig().getAdbookRootId();
 			if (!TextUtils.isEmpty(id)) {
 				List<String> deptNameStringList;
 				deptNameStringList = mUserBussiness.getDepartmentStringListByUserId(mUser.getUserId(), id);
@@ -175,19 +165,8 @@ public class UserInfoActivity extends BaseActivity implements OnClickListener,Re
 	private void init() {
 		String userId = getIntent().getStringExtra(EXTRA_STRING_USER_ID);
 		mUser = mUserBussiness.getUserByUserId(userId);
-		String appConfigStr = (String) FileUtils.readObj(this, Constants.FILE_NAME_APP_CONFIG);
-		try {
-			mAppConfigJO = new JSONObject(appConfigStr);
-		} catch (JSONException e) {
-			e.printStackTrace();
-		}
-		
-		String flags = null;
-		try {
-			flags = mAppConfigJO.getString(Constants.APP_CONFIG_PARAM_USER_ICON_FLAGS);
-		} catch (JSONException e) {
-			e.printStackTrace();
-		}
+
+		String flags = AppContext.getInstance(this).getAppConfig().getAdbookUserIconFlags();
 		mIconConfigParams = TextUtils.isEmpty(flags)?null:flags.split(",");
 
 
@@ -356,7 +335,7 @@ public class UserInfoActivity extends BaseActivity implements OnClickListener,Re
 	
 	private void newChat() {
 		
-		String url = String.format(URLs.URL_CHAT_CREATE_CHAT, MportalApplication.user.getUsername(),MportalApplication.user.getUsername()+","+mUser.getUsername(),"1");
+		String url = String.format(URLs.URL_CHAT_CREATE_CHAT, AppContext.getInstance(mContext).getCurrentUser().getUsername(), AppContext.getInstance(mContext).getCurrentUser().getUsername()+","+mUser.getUsername(),"1");
 		StringRequest request = new StringRequest(url, new Listener<String>() {
 
 			@Override

@@ -10,7 +10,6 @@ import android.content.BroadcastReceiver;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
-import android.content.IntentFilter;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
@@ -28,7 +27,7 @@ import com.mportal.client.R;
 import com.mportal.client.bean.App;
 import com.mportal.client.bean.MenuItem;
 import com.mportal.client.bean.NewsChannel;
-import com.mportal.client.bean.User;
+import com.mportal.client.AppContext;
 import com.mportal.client.constant.Actions;
 import com.mportal.client.message.fragment.AddressBookFragement;
 import com.mportal.client.fragment.BaseFragment;
@@ -61,9 +60,6 @@ import com.mportal.client.widget.ConfirmDialog;
 import com.mportal.client.widget.ConfirmDialog.ConfirmListener;
 import com.mportal.client.widget.TitleBar;
 import com.orm.SugarRecord;
-
-import io.rong.imkit.RongIM;
-import io.rong.imlib.model.Conversation;
 
 /**
  * 界面控制器，用户跳转页面
@@ -101,7 +97,7 @@ public class ViewCourier {
 
     private ViewCourier(Context context) {
         mContext = context;
-        mApp = MportalApplication.app;
+        mApp = AppContext.getInstance(context).getApp();
         mFragmentsMap = new HashMap<MenuItem, Fragment>();
 
     }
@@ -123,7 +119,7 @@ public class ViewCourier {
     public void execute(int action) {
         switch (action) {
             case ACTION_USER_CENTER:
-                String userId = MportalApplication.user.getUserId();
+                String userId = AppContext.getInstance(mContext).getCurrentUser().getUserId();
                 Intent intent = null;
                 if (userId != null && !userId.equals("")) {// 已登录
                     intent = new Intent(mContext, UserCencerActivity.class);
@@ -202,7 +198,7 @@ public class ViewCourier {
             Intent intent = new Intent(context, BaoliaoActivity.class);
             context.startActivity(intent);
         } else if (url.matches("apppubs:\\/\\/user_account[\\S]*")) {
-            String userId = MportalApplication.user.getUserId();
+            String userId = AppContext.getInstance(context).getCurrentUser().getUserId();
             Intent intent = null;
             if (userId != null && !userId.equals("")) {// 已登录
                 intent = new Intent(context, UserCencerActivity.class);
@@ -260,7 +256,7 @@ public class ViewCourier {
             Intent intent = new Intent(context, BaoliaoActivity.class);
             context.startActivity(intent);
         } else if (uri.equals(MenuItem.MENU_URL_USER_ACCOUNT)) {
-            String userId = MportalApplication.user.getUserId();
+            String userId = AppContext.getInstance(context).getCurrentUser().getUserId();
             Intent intent = null;
             if (userId != null && !userId.equals("")) {// 已登录
                 intent = new Intent(context, UserCencerActivity.class);
@@ -274,11 +270,9 @@ public class ViewCourier {
 
                         @Override
                         public void onOkClick() {
-
-                            if (MportalApplication.app.getLoginFlag() == App.LOGIN_INAPP) {
-
-                                User user = new User();
-                                MportalApplication.saveAndRefreshUser(context, user);
+                            App app = AppContext.getInstance(context).getApp();
+                            if (app.getLoginFlag() == App.LOGIN_INAPP) {
+                                AppContext.getInstance(context).clearCurrentUser();
                                 context.finish();
                             } else {
                                 context.sendBroadcast(new Intent(Actions.ACTION_LOGOUT));
@@ -295,7 +289,7 @@ public class ViewCourier {
 
     public static boolean openLoginViewIfNeeded(String url, BaseActivity context) {
         String apppubsloginFlag = StringUtils.getQueryParameter(url, "apppubslogin");
-        String userId = MportalApplication.user.getUserId();
+        String userId = AppContext.getInstance(context).getCurrentUser().getUserId();
         if (!TextUtils.isEmpty(apppubsloginFlag) && apppubsloginFlag.equals("1") && TextUtils.isEmpty(userId)) {
             Intent intent = new Intent(context, LoginActivity.class);
             context.startActivityForResult(intent, LoginActivity.REQUEST_CODE);
@@ -425,7 +419,7 @@ public class ViewCourier {
         } else if (uri.equals(MenuItem.MENU_URL_PIC)) {// 图片
             frg = new ChannelPictureFragment();
             Bundle b = new Bundle();
-            b.putString(ChannelPictureFragment.ARG_KEY, MportalApplication.app.getWebAppCode());
+            b.putString(ChannelPictureFragment.ARG_KEY, mApp.getWebAppCode());
             frg.setArguments(b);
             mFragmentsMap.put(item, frg);
             mHomeActivity.changeContent(frg);
@@ -644,7 +638,7 @@ public class ViewCourier {
                     isWeatherRcvRegistered = true;
                 }
 
-                mHomeTitleBar.setTitle(MportalApplication.app.getName());
+                mHomeTitleBar.setTitle(mApp.getName());
             }
         }
 

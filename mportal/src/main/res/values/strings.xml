@@ -16,7 +16,7 @@
     <string name="memo">提示</string>
     <string name="barcode_msg_fail">扫描失败！  </string>
     <string name="barcode_tow_dimen_success">"已检测到地址:%1$s是否打开?"</string>
-    <string name="barcode_one_dimen_success">"已检测到文本内容:%1$s是否复制?"</string>
+    <string name="barcode_one_dimen_success">"已检测到文本内容: \"%1$s\"  是否复制?"</string>
     <string name="border_top">Border Top</string>
     <string name="border_bottom">Border Bottom</string>
     <string name="image_url">Image Url</string>

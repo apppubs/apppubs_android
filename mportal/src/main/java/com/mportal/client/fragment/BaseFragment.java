@@ -14,6 +14,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.android.volley.RequestQueue;
+import com.mportal.client.AppContext;
 import com.mportal.client.activity.BaseActivity;
 import com.mportal.client.business.MsgBussiness;
 import com.mportal.client.business.SystemBussiness;
@@ -41,17 +42,19 @@ public class BaseFragment extends Fragment implements  KeyEvent.Callback{
 	protected MsgBussiness mMsgBussiness;
 	protected SystemBussiness mSystemBussiness;
 	protected RequestQueue mRequestQueue;
+	protected AppContext mAppContext;
 
 	
 	@Override
 	public void onAttach(Activity activity) {
 		super.onAttach(activity);
+		mContext = activity;
 		mHostActivity = (BaseActivity) activity;
 		mSystemBussiness = SystemBussiness.getInstance(activity);
-		mMsgBussiness = MsgBussiness.getInstance();
+		mMsgBussiness = MsgBussiness.getInstance(activity);
 		mUserBussiness = UserBussiness.getInstance(activity);
-		mContext = activity;
 		mRequestQueue = mHostActivity.getRequestQueue();
+		mAppContext = AppContext.getInstance(mContext);
 	}
 	
 	@Override

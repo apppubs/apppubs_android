@@ -3,9 +3,6 @@ package com.mportal.client.message.fragment;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.json.JSONException;
-import org.json.JSONObject;
-
 import android.app.Activity;
 import android.app.Dialog;
 import android.content.Intent;
@@ -39,13 +36,13 @@ import com.mportal.client.activity.UserInfoActivity;
 import com.mportal.client.adapter.CommonAdapter;
 import com.mportal.client.adapter.ViewHolder;
 import com.mportal.client.bean.App;
+import com.mportal.client.bean.AppConfig;
 import com.mportal.client.bean.User;
 import com.mportal.client.business.AbstractBussinessCallback;
+import com.mportal.client.AppContext;
 import com.mportal.client.business.BussinessCallbackCommon;
-import com.mportal.client.constant.Constants;
 import com.mportal.client.constant.URLs;
 import com.mportal.client.fragment.BaseFragment;
-import com.mportal.client.util.FileUtils;
 import com.mportal.client.util.JSONResult;
 import com.mportal.client.util.LogM;
 import com.mportal.client.widget.ConfirmDialog;
@@ -172,16 +169,17 @@ public class AddressBookFragement extends BaseFragment {
 
 	private void init() {
 		// 本地的版本小于服务器版本则需要更新
-		String appConfig = (String) FileUtils.readObj(mContext,Constants.FILE_NAME_APP_CONFIG);
-		int addressBookVersion = -1;
-		try {
-			JSONObject jo = new JSONObject(appConfig);
-			addressBookVersion = jo.getInt(Constants.APP_CONFIG_PARAM_ADBOOK_VERSION);
-			
-		} catch (JSONException e1) {
-			e1.printStackTrace();
-		}
-		if(addressBookVersion>MportalApplication.app.getAddressbookLocalVersion()){
+//		String appConfig = (String) FileUtils.readObj(mContext,Constants.FILE_NAME_APP_CONFIG);
+		AppConfig appconfig = AppContext.getInstance(mContext).getAppConfig();
+//		int addressBookVersion = -1;
+//		try {
+//			JSONObject jo = new JSONObject(appConfig);
+//			addressBookVersion = jo.getInt(Constants.APP_CONFIG_PARAM_ADBOOK_VERSION);
+//
+//		} catch (JSONException e1) {
+//			e1.printStackTrace();
+//		}
+		if(appconfig.getAdbookVersion()>mAppContext.getApp().getAddressbookLocalVersion()){
 			onNewVerisonFound();
 		}else if (mUserBussiness.countAllUser() == 0) {
 
@@ -204,7 +202,7 @@ public class AddressBookFragement extends BaseFragment {
 
 		} else{
 			
-//			if (MportalApplication.app.getAddressbookNeedPermission() == App.NEED) {
+//			if (mAppContext.getApp().getAddressbookNeedPermission() == App.NEED) {
 //				updatePermissionStrAndRefreshDerartAndUserFragment();
 //			}
 
@@ -232,7 +230,7 @@ public class AddressBookFragement extends BaseFragment {
 //	}
 
 	private void onNewVerisonFound() {
-		if (MportalApplication.app.getNeedForceUploadAddressbook() == App.NEED_FORCE_UPDATE_ADDRESSBOOK_YES) {
+		if (mAppContext.getApp().getNeedForceUploadAddressbook() == App.NEED_FORCE_UPDATE_ADDRESSBOOK_YES) {
 			LogM.log(getClass(), "直接更新。。。。。。");
 			sync();
 		} else {
@@ -362,18 +360,20 @@ public class AddressBookFragement extends BaseFragment {
 			@Override
 			public void onDone(Object obj) {
 				// 完成更新后更改版本
-				MportalApplication.app.setAddressbookLocalVersion(MportalApplication.app.getAddressbookVersion());
-				MportalApplication.commitApp(mHostActivity, MportalApplication.app);
+				App app = AppContext.getInstance(mContext).getApp();
+				app.setAddressbookLocalVersion(mAppContext.getApp().getAddressbookVersion());
+				AppContext.getInstance(mContext).setApp(app);
 
-				if (MportalApplication.app.getAddressbookNeedPermission() == App.NEED) {
-					String url = String.format(URLs.URL_ADDRESS_PERMISSION, MportalApplication.user.getUserId());
+				if (mAppContext.getApp().getAddressbookNeedPermission() == App.NEED) {
+					final User currentUser = AppContext.getInstance(mContext).getCurrentUser();
+					String url = String.format(URLs.URL_ADDRESS_PERMISSION,currentUser.getUserId());
 					mRequestQueue.add(new StringRequest(url, new Listener<String>() {
 
 						@Override
 						public void onResponse(String response) {
 							JSONResult jr = JSONResult.compile(response);
-							MportalApplication.user.setAddressbookPermissionString(jr.result);
-							MportalApplication.saveAndRefreshUser(mHostActivity, MportalApplication.user);
+							currentUser.setAddressbookPermissionString(jr.result);
+							AppContext.getInstance(mContext).setCurrentUser(currentUser);
 							refreshDepartAndUserFragmentIfExist();
 
 							Toast.makeText(mHostActivity, "同步完成", Toast.LENGTH_SHORT).show();

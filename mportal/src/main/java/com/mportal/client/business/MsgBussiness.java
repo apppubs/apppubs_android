@@ -1,5 +1,7 @@
 package com.mportal.client.business;
 
+import android.content.Context;
+
 import java.io.File;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
@@ -14,7 +16,7 @@ import java.util.concurrent.Future;
 import org.json.JSONException;
 
 import com.google.gson.reflect.TypeToken;
-import com.mportal.client.MportalApplication;
+import com.mportal.client.AppContext;
 import com.mportal.client.bean.Msg;
 import com.mportal.client.bean.MsgRecord;
 import com.mportal.client.bean.ServiceNOInfo;
@@ -42,17 +44,17 @@ import com.orm.SugarRecord;
 public class MsgBussiness extends BaseBussiness {
 
 	private static MsgBussiness sMessageBussiness;
-
-	private MsgBussiness() {
-
+	private Context mContext;
+	private MsgBussiness(Context context) {
+		mContext = context;
 	}
 
-	public static MsgBussiness getInstance() {
+	public static MsgBussiness getInstance(Context context) {
 
 		if (sMessageBussiness == null) {
 			synchronized (MsgBussiness.class) {
 				if(sMessageBussiness==null){
-					sMessageBussiness = new MsgBussiness();
+					sMessageBussiness = new MsgBussiness(context);
 				}
 			}
 			
@@ -64,8 +66,6 @@ public class MsgBussiness extends BaseBussiness {
 	/**
 	 * 获取聊天消息列表
 	 * 
-	 * @param receiverUsername收取人用户名
-	 * @param senderUsername发送者
 	 * @param callback
 	 * @return
 	 */
@@ -560,7 +560,7 @@ public class MsgBussiness extends BaseBussiness {
 			public void run() {
 				try {
 					// http://www.wmh360.com/wmh360/json/msg/getserviceinfolist.jsp?appcode=U1433417616429&service_id=1433580152045&username=ceshi6&userid=&curp=1&perp=10&clientkey=bb7c1386d85044ba7a7ae53f3362d634
-					String url = URLs.URL_SERVICE_MESSAGE_INFO_LIST + "&service_id="+serviceid+"&username="+MportalApplication.user.getUsername()+"&userid="+MportalApplication.user.getUserId()
+					String url = URLs.URL_SERVICE_MESSAGE_INFO_LIST + "&service_id="+serviceid+"&username="+ AppContext.getInstance(mContext).getCurrentUser().getUsername()+"&userid="+ AppContext.getInstance(mContext).getCurrentUser().getUserId()
 					+"&curp=1&perp=10";
 					List<ServiceNOInfo> snl = WebUtils.requestList(url, ServiceNOInfo.class);
 					sHandler.post(new OnDoneRun<List<ServiceNOInfo>>(callback, snl));

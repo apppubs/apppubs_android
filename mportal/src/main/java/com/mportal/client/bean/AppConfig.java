@@ -1,21 +1,20 @@
 package com.mportal.client.bean;
 
+import android.content.Context;
+
 import com.google.gson.annotations.SerializedName;
+import com.mportal.client.MportalApplication;
+import com.mportal.client.util.LogM;
+
+import java.io.Serializable;
 
 /**
  * Created by zhangwen on 2017/1/5.
  */
 
-public class AppConfig {
+public class AppConfig implements Serializable{
 
-    public static final String APP_CONFIG_PARAM_ADBOOK_ROOT_ID = "adbook_rootid";
-    public static final String APP_CONFIG_PARAM_ADBOOK_VERSION = "adbookversion";
-    public static final String APP_CONFIG_PARAM_ORG_SHOW_COUNT_FLAG = "adbook_org_count_flag";
-    public static final String APP_CONFIG_PARAM_USER_ICON_FLAGS = "adbook_user_icon_flags";
-    public static final String APP_CONFIG_PARAM_USER_CENTER_PWD_FLAGS = "user_account_pwd_flags";
-    public static final String APP_CONFIG_PARAM_PDF_EDITABLE = "pdf_editable";
-    public static final String APP_CONFIG_PARAM_REG_URL = "reg_url";
-    public static final String APP_CONFIG_PARAM_FORGET_PWD_URL = "forget_password_url";
+
 
     @SerializedName("adbook_rootid")
     private String adbookRootId;
@@ -33,6 +32,14 @@ public class AppConfig {
     private String regURL;
     @SerializedName("forget_password_url")
     private String forgetPasswordUrl;
+    @SerializedName("android_version")
+    private String latestVersion;
+    @SerializedName("android_version_describe")
+    private String latestVersionDescribe;
+    @SerializedName("android_min_app_code_version")
+    private int minSupportedVersionCode;
+    @SerializedName("android_updateurl")
+    private String updateUrl;
 
     public AppConfig(){
         adbookRootId = "0";
@@ -44,6 +51,7 @@ public class AppConfig {
         regURL = "";
         forgetPasswordUrl = "";
     }
+
     public String getAdbookRootId() {
         return adbookRootId;
     }
@@ -106,5 +114,37 @@ public class AppConfig {
 
     public void setForgetPasswordUrl(String forgetPasswordUrl) {
         this.forgetPasswordUrl = forgetPasswordUrl;
+    }
+
+    public String getLatestVersion() {
+        return latestVersion;
+    }
+
+    public void setLatestVersion(String latestVersion) {
+        this.latestVersion = latestVersion;
+    }
+
+    public String getLatestVersionDescribe() {
+        return latestVersionDescribe;
+    }
+
+    public void setLatestVersionDescribe(String latestVersionDescribe) {
+        this.latestVersionDescribe = latestVersionDescribe;
+    }
+
+    public int getMinSupportedVersionCode() {
+        return minSupportedVersionCode;
+    }
+
+    public void setMinSupportedVersionCode(int minSupportedVersionCode) {
+        this.minSupportedVersionCode = minSupportedVersionCode;
+    }
+
+    public String getUpdateUrl() {
+        return updateUrl;
+    }
+
+    public void setUpdateUrl(String updateUrl) {
+        this.updateUrl = updateUrl;
     }
 }

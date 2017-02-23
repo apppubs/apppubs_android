@@ -4,9 +4,7 @@ import android.content.Intent;
 import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
 import android.os.Bundle;
-import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -19,19 +17,17 @@ import com.mportal.client.R;
 import com.mportal.client.activity.ChatNewGroupChatOrAddUserActivity;
 import com.mportal.client.activity.ContainerActivity;
 import com.mportal.client.bean.App;
+import com.mportal.client.AppContext;
 import com.mportal.client.fragment.BaseFragment;
 import com.mportal.client.fragment.ServiceNoSubscribeFragment;
-import com.mportal.client.message.activity.UserPickerActivity;
 import com.mportal.client.message.model.UserPickerHelper;
 import com.mportal.client.widget.TitleBar;
 
-import java.net.URI;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
 import io.rong.imkit.RongIM;
-import io.rong.imlib.RongIMClient;
 import io.rong.imlib.model.Conversation;
 
 /**
@@ -84,7 +80,7 @@ public class ConversationListFragment extends BaseFragment implements View.OnCli
                 mMenuPW.setOutsideTouchable(true);
                 mMenuPW.setBackgroundDrawable(new BitmapDrawable());
                 mMenuPW.showAsDropDown(mTitleBar.getRightView());
-                if (MportalApplication.app.getAllowChat() == App.ALLOW_CHAT_FALSE) {
+                if (mAppContext.getApp().getAllowChat() == App.ALLOW_CHAT_FALSE) {
                     // 当没有聊天功能时隐藏新建聊天
                     setVisibilityOfViewByResId(menuPop, R.id.pop_msg_record_add_chat_ll, View.GONE);
                     setVisibilityOfViewByResId(menuPop, R.id.pop_msg_record_add_group_chat_ll, View.GONE);
@@ -111,7 +107,7 @@ public class ConversationListFragment extends BaseFragment implements View.OnCli
             case R.id.pop_msg_record_add_chat_ll:
 
                 Log.e(this.getClass().getName(), "此处需要，增加AddressBookFragement的参数");
-                String [] userIds = new String[]{MportalApplication.user.getUserId()};
+                String [] userIds = new String[]{AppContext.getInstance(mContext).getCurrentUser().getUserId()};
                 UserPickerHelper.startActivity(mContext, "选择人员", new ArrayList<String>(Arrays.asList(userIds)), new UserPickerHelper.UserPickerListener() {
                     @Override
                     public void onPickDone(List<String> userIds) {
@@ -128,7 +124,7 @@ public class ConversationListFragment extends BaseFragment implements View.OnCli
                 break;
             case R.id.pop_msg_record_add_group_chat_ll:
                 Intent chatNewGroupIntent = new Intent(mHostActivity,ChatNewGroupChatOrAddUserActivity.class);
-                chatNewGroupIntent.putExtra(ChatNewGroupChatOrAddUserActivity.EXTRA_PRESELECTED_USERNAME_LIST, MportalApplication.user.getUsername());
+                chatNewGroupIntent.putExtra(ChatNewGroupChatOrAddUserActivity.EXTRA_PRESELECTED_USERNAME_LIST, AppContext.getInstance(mContext).getCurrentUser().getUsername());
                 startActivity(chatNewGroupIntent);
                 mMenuPW.dismiss();
                 break;

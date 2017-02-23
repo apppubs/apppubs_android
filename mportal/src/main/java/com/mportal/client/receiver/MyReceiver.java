@@ -9,9 +9,8 @@ import android.util.Log;
 
 import com.mportal.client.MportalApplication;
 import com.mportal.client.activity.StartUpActivity;
-import com.mportal.client.activity.ViewCourier;
-import com.mportal.client.bean.App;
 import com.mportal.client.bean.Msg;
+import com.mportal.client.AppContext;
 import com.mportal.client.business.MsgController;
 import com.mportal.client.util.LogM;
 
@@ -68,7 +67,7 @@ public class MyReceiver extends BroadcastReceiver {
 				JSONObject extrasJson = new JSONObject(extras);
 				url = extrasJson.optString("url");
 //				ViewCourier.execute(context,url);
-				MportalApplication.app.setPaddingUrlOnHomeActivityStartUp(url);
+				AppContext.getInstance(context).getApp().setPaddingUrlOnHomeActivityStartUp(url);
 			} catch (Exception e) {
 				LogM.log(this.getClass(), "Unexpected: extras is not a valid json");
 			}
@@ -115,7 +114,7 @@ public class MyReceiver extends BroadcastReceiver {
 			msg.setId(jsonO.getString("msgid"));
 			msg.setTitle(jsonO.getString("title"));
 			msg.setType(jsonO.getInt("type"));
-			msg.setReceiverUsername(MportalApplication.user.getUsername());
+			msg.setReceiverUsername(AppContext.getInstance(context).getCurrentUser().getUsername());
 			if(TextUtils.isEmpty(jsonO.getString("content"))){
 				msg.setContent(jsonO.getString("title"));
 			}else{

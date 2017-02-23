@@ -23,7 +23,6 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.mportal.client.MportalApplication;
 import com.mportal.client.R;
 import com.mportal.client.activity.ChatPicInfoActivity;
 import com.mportal.client.activity.ChatVideoInfoActivity;
@@ -31,6 +30,7 @@ import com.mportal.client.asytask.AsyTaskCallback;
 import com.mportal.client.asytask.AsyTaskExecutor;
 import com.mportal.client.bean.Msg;
 import com.mportal.client.bean.User;
+import com.mportal.client.AppContext;
 import com.mportal.client.util.LogM;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
@@ -83,7 +83,7 @@ public class ChatAdapter extends BaseAdapter implements OnClickListener ,AsyTask
 		mContext = context;
 		mList = new ArrayList<Msg>();
 		mInflater = LayoutInflater.from(context);
-		mCurUser = MportalApplication.user;//
+		mCurUser = AppContext.getInstance(mContext).getCurrentUser();//
 		mImageLoader = ImageLoader.getInstance();
 		Drawable drawable = Drawable.createFromPath(context.getFilesDir().getAbsolutePath()+File.separator+"stance.png");
 		mImageLoaderOptions = new DisplayImageOptions.Builder()

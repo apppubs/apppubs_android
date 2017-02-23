@@ -64,7 +64,7 @@ public class RegisterActivity extends BaseActivity {
 		mMianzeCb.setOnClickListener(this);
 		seeMianze.setOnClickListener(this);
 		zhuce.setOnClickListener(this);
-		seeMianze.setText("同意《"+mApp.app.getName()+"》的免责声明");
+		seeMianze.setText("同意《"+mAppContext.getApp().getName()+"》的免责声明");
 	}
 
 	@Override

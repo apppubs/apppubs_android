@@ -44,7 +44,7 @@ public abstract class ChannelFragment extends BaseFragment{
 			mChannel = SugarRecord.findByProperty(NewsChannel.class, "CODE", mChannelCode);
 		}
 		super.onCreate(savedInstanceState);
-		mNewsBussiness = NewsBussiness.getInstance();
+		mNewsBussiness = NewsBussiness.getInstance(mContext);
 	}
 	
 	public abstract void refresh();

@@ -49,6 +49,7 @@ import com.mportal.client.activity.ChatNewGroupChatOrAddUserActivity;
 import com.mportal.client.activity.ContainerActivity;
 import com.mportal.client.bean.App;
 import com.mportal.client.bean.MsgRecord;
+import com.mportal.client.AppContext;
 import com.mportal.client.business.MsgController;
 import com.mportal.client.constant.Actions;
 import com.mportal.client.constant.Constants;
@@ -159,7 +160,7 @@ public class MsgRecordListFragment extends BaseFragment implements OnClickListen
 				mMenuPW.setOutsideTouchable(true);
 				mMenuPW.setBackgroundDrawable(new BitmapDrawable());
 				mMenuPW.showAsDropDown(mTitleBar.getRightView());
-				if (MportalApplication.app.getAllowChat() == App.ALLOW_CHAT_FALSE) {
+				if (mAppContext.getApp().getAllowChat() == App.ALLOW_CHAT_FALSE) {
 					// 当没有聊天功能时隐藏新建聊天
 					setVisibilityOfViewByResId(menuPop, R.id.pop_msg_record_add_chat_ll, View.GONE);
 					setVisibilityOfViewByResId(menuPop, R.id.pop_msg_record_add_group_chat_ll, View.GONE);
@@ -203,7 +204,7 @@ public class MsgRecordListFragment extends BaseFragment implements OnClickListen
 		mHostActivity.unregisterReceiver(mRefreshBR);
 	}
 	private void refreshList() {
-		String url = String.format(URLs.URL_SERVICE_NO_FOR_USER, MportalApplication.user.getUsername());
+		String url = String.format(URLs.URL_SERVICE_NO_FOR_USER, AppContext.getInstance(mContext).getCurrentUser().getUsername());
 		mRequestQueue.add(new StringRequest(url,new Listener<String>() {
 
 			@Override
@@ -296,7 +297,7 @@ public class MsgRecordListFragment extends BaseFragment implements OnClickListen
 						
 //					User otherU = mUserBussiness.getUserByUsername(mr.getSourceUsernameOrId());
 //					User otherU = mUserBussiness.getUserByUserId(mr.getSourceUsernameOrId());
-						String url = String.format(URLs.URL_CHAT_GROUD_INFO, mr.getSourceUsernameOrId(),MportalApplication.user.getUsername());
+						String url = String.format(URLs.URL_CHAT_GROUD_INFO, mr.getSourceUsernameOrId(), AppContext.getInstance(mContext).getCurrentUser().getUsername());
 						mRequestQueue.add(new StringRequest(url, new Listener<String>() {
 							
 							@Override
@@ -414,7 +415,7 @@ public class MsgRecordListFragment extends BaseFragment implements OnClickListen
 						MportalApplication.writeObj(mContext, map, MportalApplication.MSG_DELETED_CHAT_GROUP_MAP);
 						
 						String url = String.format(URLs.URL_CLEAR_UNREAD_NUM_FOR_SERVICE_NO_AND_CHAT, mMsgRecordL.get(pos).getSourceUsernameOrId(),
-								MportalApplication.user.getUsername());
+								AppContext.getInstance(mContext).getCurrentUser().getUsername());
 						mRequestQueue.add(new StringRequest(url, new Listener<String>() {
 
 							@Override
@@ -494,7 +495,7 @@ public class MsgRecordListFragment extends BaseFragment implements OnClickListen
 			break;
 		case R.id.pop_msg_record_add_group_chat_ll:
 			Intent chatNewGroupIntent = new Intent(mHostActivity,ChatNewGroupChatOrAddUserActivity.class);
-			chatNewGroupIntent.putExtra(ChatNewGroupChatOrAddUserActivity.EXTRA_PRESELECTED_USERNAME_LIST, MportalApplication.user.getUsername());
+			chatNewGroupIntent.putExtra(ChatNewGroupChatOrAddUserActivity.EXTRA_PRESELECTED_USERNAME_LIST, AppContext.getInstance(mContext).getCurrentUser().getUsername());
 			startActivity(chatNewGroupIntent);
 			mMenuPW.dismiss();
 			break;

@@ -31,6 +31,7 @@ import com.mportal.client.asytask.AsyTaskExecutor;
 import com.mportal.client.bean.App;
 import com.mportal.client.bean.User;
 import com.mportal.client.business.AbstractBussinessCallback;
+import com.mportal.client.AppContext;
 import com.mportal.client.business.BussinessCallbackCommon;
 import com.mportal.client.constant.URLs;
 import com.mportal.client.util.JSONResult;
@@ -71,6 +72,7 @@ public class FirstLoginActity extends BaseActivity implements ErrorListener, Asy
 
 	private int mLoginType;// 登陆类型
 
+	private User mLoginingUser;//正在登录的用户
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -98,13 +100,13 @@ public class FirstLoginActity extends BaseActivity implements ErrorListener, Asy
 	@SuppressLint("SetJavaScriptEnabled") 
 	private void init() {
 
-		mLoginType = MportalApplication.app.getLoginFlag();
+		mLoginType = mAppContext.getApp().getLoginFlag();
 
 		mContainerLl = (LinearLayout) findViewById(R.id.firstlogin_container_ll);
 		mFristZhuce = (TextView) findViewById(R.id.frist_login_reg);
 		mFristZhuce.setOnClickListener(this);
 		mFristZhuce.setTextColor(mThemeColor);
-		if (MportalApplication.app.getAllowRegister() == 1) {// 不允许注册
+		if (mAppContext.getApp().getAllowRegister() == 1) {// 不允许注册
 			mFristZhuce.setVisibility(View.GONE);
 		}
 		mUsernameTv = (EditText) findViewById(R.id.fristregist_name);
@@ -113,11 +115,11 @@ public class FirstLoginActity extends BaseActivity implements ErrorListener, Asy
 		mOrgEt = (EditText) findViewById(R.id.firstlogin_orgcode_et);
 		mUsernameEt = (EditText) findViewById(R.id.firstlogin_username_et);
 		mTitleTv = (TextView) findViewById(R.id.firstlogin_title_tv);
-		String title = MportalApplication.app.getName();
+		String title = mAppContext.getApp().getName();
 		mTitleTv.setText(title);
 		mBgIv = (ImageView) findViewById(R.id.firstlogin_bg_iv);
-		LogM.log(this.getClass(), "MportalApplication.app.getLoginPicUrl()" + MportalApplication.app.getLoginPicUrl());
-		mImageLoader.displayImage(MportalApplication.app.getLoginPicUrl(), mBgIv);
+		LogM.log(this.getClass(), "mAppContext.getApp().getLoginPicUrl()" + mAppContext.getApp().getLoginPicUrl());
+		mImageLoader.displayImage(mAppContext.getApp().getLoginPicUrl(), mBgIv);
 		mCheckBox = (CheckBox) findViewById(R.id.firstlogin_ckb);
 		if (mLoginType == App.LOGIN_ONSTART_USE_USERNAME_PASSWORD) {
 
@@ -169,7 +171,7 @@ public class FirstLoginActity extends BaseActivity implements ErrorListener, Asy
 				}
 			});
 
-			mWebview.loadUrl(MportalApplication.app.getWebLoginUrl());
+			mWebview.loadUrl(mAppContext.getApp().getWebLoginUrl());
 		}
 	}
 
@@ -177,8 +179,8 @@ public class FirstLoginActity extends BaseActivity implements ErrorListener, Asy
 	protected void onResume() {
 
 		super.onResume();
-		if (MportalApplication.user != null) {
-			User user = MportalApplication.user;
+		if (AppContext.getInstance(mContext).getCurrentUser() != null) {
+			User user = AppContext.getInstance(mContext).getCurrentUser();
 			String usernameS = user.getUsername();
 			if (!TextUtils.isEmpty(usernameS)) {
 				if (!TextUtils.isEmpty(user.getOrgCode())) {
@@ -189,7 +191,7 @@ public class FirstLoginActity extends BaseActivity implements ErrorListener, Asy
 				}
 				mOrgEt.setText(user.getOrgCode());
 				mPasswordTv.requestFocus();
-				mCheckBox.setChecked(MportalApplication.systemSettings.isAllowAutoLogin());
+				mCheckBox.setChecked(mAppContext.getSettings().isAllowAutoLogin());
 
 			}
 
@@ -299,7 +301,7 @@ public class FirstLoginActity extends BaseActivity implements ErrorListener, Asy
 		try {
 			// /wmh360/json/login/usersmslogin.jsp?username=%s&deviceid=%s&token=%s&os=%s&dev=%s&app=%s&fr=4&appcode="+appCode;
 			url = String.format(URLs.URL_LOGIN_WITH_USERNAME, username, mSystemBussiness.getMachineId(),
-					MportalApplication.app.getPushToken(), osVersion, URLEncoder.encode(Build.MODEL, "utf-8"),
+					mAppContext.getApp().getPushToken(), osVersion, URLEncoder.encode(Build.MODEL, "utf-8"),
 					currentVersionName,versionCode);
 		} catch (UnsupportedEncodingException e) {
 			e.printStackTrace();
@@ -331,10 +333,8 @@ public class FirstLoginActity extends BaseActivity implements ErrorListener, Asy
 			if (result == 2) {
 				enterHome();
 			} else if (result == 1) {
-				User user = new User(jo.getString("userid"), jo.getString("username"), jo.getString("cnname"), "",
+				mLoginingUser = new User(jo.getString("userid"), jo.getString("username"), jo.getString("cnname"), "",
 						jo.getString("email"), jo.getString("mobile"));
-				MportalApplication.user = user;
-
 				Intent intent = new Intent(this, VerificationCodeActivity.class);
 				Bundle extras = new Bundle();
 				extras.putString(VerificationCodeActivity.EXTRA_STRING_PHONE, phone);
@@ -356,24 +356,23 @@ public class FirstLoginActity extends BaseActivity implements ErrorListener, Asy
 		try {
 			JSONObject jo = new JSONObject(response);
 			int result = jo.getInt("result");
-			User user = new User(jo.getString("userid"), jo.getString("username"), jo.getString("cnname"), "",
+			mLoginingUser = new User(jo.getString("userid"), jo.getString("username"), jo.getString("cnname"), "",
 					jo.getString("email"), jo.getString("mobile"),jo.getString("menupower"));
 			if (jo.has("photourl")){
-				user.setAvatarUrl(jo.getString("photourl"));
+				mLoginingUser.setAvatarUrl(jo.getString("photourl"));
 			}
-			MportalApplication.user = user;
 			if (result == 2) {
-				MportalApplication.saveAndRefreshUser(FirstLoginActity.this, user);
+				AppContext.getInstance(mContext).setCurrentUser(mLoginingUser);
 				enterHome();
 			} else if (result == 1) {
 
 				Intent intent = new Intent(this, VerificationCodeActivity.class);
 				Bundle extras = new Bundle();
-				extras.putString(VerificationCodeActivity.EXTRA_STRING_PHONE, user.getMobile());
+				extras.putString(VerificationCodeActivity.EXTRA_STRING_PHONE, mLoginingUser.getMobile());
 				intent.putExtras(extras);
 				startActivityForResult(intent, REQUEST_CODE_VERIFICATION);
 			} else {
-				MportalApplication.saveAndRefreshUser(FirstLoginActity.this, new User());
+				AppContext.getInstance(mContext).setCurrentUser(new User());
 				Toast.makeText(this, jo.getString("resultreason"), Toast.LENGTH_SHORT).show();
 			}
 
@@ -389,7 +388,7 @@ public class FirstLoginActity extends BaseActivity implements ErrorListener, Asy
 		try {
 			// wmh360/json/login/usercroplogin.jsp?username=%s&password=%s&cropid=%s&deviceid=%s&os=%s&token=%sdev=%s&app=%s&fr=4&appcode="+appCode+"";
 			url = String.format(URLs.URL_LOGIN_WITH_ORG, username, password, orgCode, mSystemBussiness.getMachineId(),
-					osVersion, MportalApplication.app.getPushToken(), URLEncoder.encode(Build.MODEL, "utf-8"),
+					osVersion, mAppContext.getApp().getPushToken(), URLEncoder.encode(Build.MODEL, "utf-8"),
 					currentVersionName);
 		} catch (UnsupportedEncodingException e) {
 			e.printStackTrace();
@@ -412,10 +411,10 @@ public class FirstLoginActity extends BaseActivity implements ErrorListener, Asy
             user.setUsername((String)jr.getResultMap().get("username"));
             user.setUserId((String)jr.getResultMap().get("userid"));
             user.setOrgCode(orgCode);
-            MportalApplication.saveAndRefreshUser(FirstLoginActity.this, user);
+			AppContext.getInstance(mContext).setCurrentUser(user);
 
-            MportalApplication.systemSettings.setIsAllowAutoLogin(mCheckBox.isChecked());
-            MportalApplication.commitAndRefreshSystemSettings(MportalApplication.systemSettings,
+            mAppContext.getSettings().setIsAllowAutoLogin(mCheckBox.isChecked());
+            MportalApplication.commitAndRefreshSystemSettings(mAppContext.getSettings(),
                     FirstLoginActity.this);
             enterHome();
         } else {
@@ -453,7 +452,7 @@ public class FirstLoginActity extends BaseActivity implements ErrorListener, Asy
 		} else if (result == 2) {
 
 			// 如果第一次启动且有message功能，则同步通讯录和订阅号
-			if (MportalApplication.app.getInitTimes() == 1) {
+			if (mAppContext.getApp().getInitTimes() == 1) {
 				sycnUserAndServiceNumber();
 
 			} else {
@@ -525,7 +524,7 @@ public class FirstLoginActity extends BaseActivity implements ErrorListener, Asy
 	protected void onActivityResult(int requestCode, int resultCode, Intent intent) {
 		super.onActivityResult(requestCode, resultCode, intent);
 		if (requestCode == REQUEST_CODE_VERIFICATION && resultCode == Activity.RESULT_OK) {
-			MportalApplication.saveAndRefreshUser(this, MportalApplication.user);
+			AppContext.getInstance(mContext).setCurrentUser(mLoginingUser);
 			HomeBaseActivity.startHomeActivity(this);
 		}
 	}
@@ -534,8 +533,8 @@ public class FirstLoginActity extends BaseActivity implements ErrorListener, Asy
 	public Object onExecute(Integer tag,String[] params) {
 
 		if(tag==LOGIN_WITH_USERNAME_AND_PASSWORD_TASK){
-			String token = MportalApplication.app.getPushVendorType() == App.PUSH_VENDOR_TYPE_BAIDU ? MportalApplication.app
-					.getBaiduPushUserId() : MportalApplication.app.getJpushRegistrationID();// 百度硬件设备号
+			String token = mAppContext.getApp().getPushVendorType() == App.PUSH_VENDOR_TYPE_BAIDU ? mAppContext.getApp()
+					.getBaiduPushUserId() : mAppContext.getApp().getJpushRegistrationID();// 百度硬件设备号
 			String osVersion = Utils.getAndroidSDKVersion();// 操作系统号
 			String currentVersionName = Utils.getVersionName(FirstLoginActity.this);// app版本号
 
@@ -565,10 +564,12 @@ public class FirstLoginActity extends BaseActivity implements ErrorListener, Asy
 				User user = new User(jo.getString("userid"), jo.getString("username"), jo.getString("cnname"),
 						params[1], jo.getString("email"), jo.getString("mobile"));
 				user.setMenuPower(jo.getString("menupower"));
+
+
+				AppContext.getInstance(this).setCurrentUser(user);
 				// 保存user对象，并保存是否自动登录的配置
-				MportalApplication.saveAndRefreshUser(this, user);
-				MportalApplication.systemSettings.setIsAllowAutoLogin(cb.isChecked());
-				MportalApplication.commitAndRefreshSystemSettings(MportalApplication.systemSettings, this);
+				mAppContext.getSettings().setIsAllowAutoLogin(cb.isChecked());
+				MportalApplication.commitAndRefreshSystemSettings(mAppContext.getSettings(), this);
 			}catch(Exception e){
 				e.printStackTrace();
 			}

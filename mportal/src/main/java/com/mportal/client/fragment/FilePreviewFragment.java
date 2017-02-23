@@ -515,7 +515,7 @@ public class FilePreviewFragment extends BaseFragment{
 
 			@Override
 			public void onDone(Object obj) {
-				 if(TextUtils.isEmpty(MportalApplication.app.getDocumentReaderPageUrl())){
+				 if(TextUtils.isEmpty(mAppContext.getApp().getDocumentReaderPageUrl())){
 					 showAlertDialog(message);
 				 }else{
 					 showSelectiveDialog(message);
@@ -561,7 +561,7 @@ public class FilePreviewFragment extends BaseFragment{
 			@Override
 			public void onDone(Object obj) {
 				Bundle extra = new Bundle();
-				extra.putString(WebAppFragment.ARGUMENT_STRING_URL, MportalApplication.app.getDocumentReaderPageUrl());
+				extra.putString(WebAppFragment.ARGUMENT_STRING_URL, mAppContext.getApp().getDocumentReaderPageUrl());
 				ContainerActivity.startActivity(mContext, WebAppFragment.class,extra);
 			}
 		});

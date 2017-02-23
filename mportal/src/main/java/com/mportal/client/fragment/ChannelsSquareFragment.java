@@ -74,7 +74,7 @@ public class ChannelsSquareFragment extends ChannelsFragment implements OnClickL
 		
 		mChannelsGv = (HeaderGridView) mRootView.findViewById(R.id.channels_hgl);
 		mPicList = SugarRecord.find(HeadPic.class, "CHANNEL_TYPE_ID = ?" ,new String[]{mChannelTypeId+""},null,null,null);
-		mNewsBussiness = NewsBussiness.getInstance();
+		mNewsBussiness = NewsBussiness.getInstance(mContext);
 		
 	}
 	@Override

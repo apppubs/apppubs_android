@@ -11,7 +11,6 @@ import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.TextView;
 
-import com.mportal.client.MportalApplication;
 import com.mportal.client.R;
 import com.mportal.client.activity.HomeBaseActivity;
 import com.mportal.client.activity.UserInfoActivity;
@@ -19,8 +18,8 @@ import com.mportal.client.adapter.CommonAdapter;
 import com.mportal.client.adapter.ViewHolder;
 import com.mportal.client.bean.Department;
 import com.mportal.client.bean.User;
+import com.mportal.client.AppContext;
 import com.mportal.client.business.BussinessCallbackCommon;
-import com.mportal.client.business.SystemBussiness;
 import com.mportal.client.fragment.BaseFragment;
 import com.mportal.client.message.model.UserBasicInfo;
 import com.mportal.client.message.model.UserBussiness;
@@ -64,7 +63,7 @@ public class AddressBookOrganizationFragement extends BaseFragment {
 
 	private void initAdapter() {
 		final int totalRow = mDepartmentList.size();
-		final String showCountFlag = SystemBussiness.getInstance(mContext).getAppConfig().getAdbookOrgCountFlag();
+		final String showCountFlag = AppContext.getInstance(mContext).getAppConfig().getAdbookOrgCountFlag();
 		mDeptAdapter = new CommonAdapter<Department>(mContext,mDepartmentList, R.layout.item_organization_lv) {
 
 			@Override
@@ -148,7 +147,8 @@ public class AddressBookOrganizationFragement extends BaseFragment {
 			return;
 		}
 
-		int countOfUser = userIdList.contains(MportalApplication.user.getUserId())?userIdList.size():userIdList.size()+1;
+		final User currentUser = AppContext.getInstance(mContext).getCurrentUser();
+		int countOfUser = userIdList.contains(currentUser.getUserId())?userIdList.size():userIdList.size()+1;
 		if (countOfUser>UserPickerHelper.MAX_SELECTED_USER_NUM){
 			String message = String.format("讨论组最大人数为%d,当前部门人数%d",UserPickerHelper.MAX_SELECTED_USER_NUM,countOfUser);
 			AlertDialog dialog = new AlertDialog(mContext,null,"无法创建讨论组！",message,"确定");
@@ -160,7 +160,7 @@ public class AddressBookOrganizationFragement extends BaseFragment {
             @Override
             public void onOkClick() {
 				((HomeBaseActivity)mHostActivity).selectMessageFragment();
-				String title = MportalApplication.user.getTrueName()+"+"+mUserBussiness.getDepartmentById(mSuperId).getName()
+				String title = currentUser.getTrueName()+"+"+mUserBussiness.getDepartmentById(mSuperId).getName()
 ;				RongIM.getInstance().createDiscussion(title,userIdList,null);
             }
 
@@ -174,7 +174,7 @@ public class AddressBookOrganizationFragement extends BaseFragment {
 
 	private void initData() {
 		mListViewOffsetMap = new HashMap<String,Integer>();
-		String rootId = SystemBussiness.getInstance(mContext).getAppConfig().getAdbookRootId();
+		String rootId = AppContext.getInstance(mContext).getAppConfig().getAdbookRootId();
 		mSuperId =  rootId;
 		mDepartmentList = mUserBussiness.listRootDepartment();
 		mSuperId = UserBussiness.getInstance(mContext).getRootSuperId();

@@ -22,7 +22,7 @@ import com.android.volley.toolbox.StringRequest;
 import com.mportal.client.MportalApplication;
 import com.mportal.client.R;
 import com.mportal.client.bean.App;
-import com.mportal.client.bean.User;
+import com.mportal.client.AppContext;
 import com.mportal.client.constant.URLs;
 import com.mportal.client.util.JSONResult;
 import com.mportal.client.util.Utils;
@@ -81,7 +81,7 @@ public class VerificationCodeActivity extends BaseActivity implements ErrorListe
 		};
 		timer.start();
 		
-		String url = String.format(URLs.URL_SEND_SMS, MportalApplication.user.getUsername(),mPhone,mSystemBussiness.getMachineId());
+		String url = String.format(URLs.URL_SEND_SMS, AppContext.getInstance(mContext).getCurrentUser().getUsername(),mPhone,mSystemBussiness.getMachineId());
 		StringRequest request = new StringRequest(url, new Listener<String>() {
 			@Override
 			public void onResponse(String response) {
@@ -123,7 +123,7 @@ public class VerificationCodeActivity extends BaseActivity implements ErrorListe
 			
 			@Override
 			public void onOkClick() {
-				MportalApplication.user = new User();
+				AppContext.getInstance(mContext).clearCurrentUser();
 				finish();
 			}
 			
@@ -153,10 +153,10 @@ public class VerificationCodeActivity extends BaseActivity implements ErrorListe
 		String url = null;
 		try {
 			
-			String token = MportalApplication.app.getPushVendorType()==App.PUSH_VENDOR_TYPE_BAIDU?MportalApplication.app.getBaiduPushUserId():MportalApplication.app.getJpushRegistrationID();
+			String token = mAppContext.getApp().getPushVendorType()==App.PUSH_VENDOR_TYPE_BAIDU?mAppContext.getApp().getBaiduPushUserId():mAppContext.getApp().getJpushRegistrationID();
 			url = String.format(URLs.URL_CONFIRM_VERIFICATION_CODE, mPhone,
 					mSystemBussiness.getMachineId(),verificationCode,
-					URLEncoder.encode(MportalApplication.user.getUsername(),"utf-8"),token,osVersion,URLEncoder.encode(Build.MODEL,"utf-8"),currentVersionName,buildId);
+					URLEncoder.encode(AppContext.getInstance(mContext).getCurrentUser().getUsername(),"utf-8"),token,osVersion,URLEncoder.encode(Build.MODEL,"utf-8"),currentVersionName,buildId);
 		} catch (UnsupportedEncodingException e) {
 			e.printStackTrace();
 		}

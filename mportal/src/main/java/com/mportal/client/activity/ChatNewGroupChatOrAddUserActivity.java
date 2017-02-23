@@ -5,8 +5,6 @@ import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.json.JSONException;
-
 import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.graphics.Color;
@@ -35,11 +33,11 @@ import com.android.volley.Response.ErrorListener;
 import com.android.volley.Response.Listener;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
-import com.mportal.client.MportalApplication;
 import com.mportal.client.R;
 import com.mportal.client.adapter.CommonAdapter;
 import com.mportal.client.adapter.ViewHolder;
 import com.mportal.client.bean.User;
+import com.mportal.client.AppContext;
 import com.mportal.client.constant.URLs;
 import com.mportal.client.util.JSONResult;
 import com.mportal.client.util.Utils;
@@ -293,7 +291,7 @@ public class ChatNewGroupChatOrAddUserActivity extends BaseActivity {
 	
 	private void addUser2Group() {
 		StringBuilder sb = new StringBuilder();
-		sb.append(MportalApplication.user.getUsername());
+		sb.append(AppContext.getInstance(mContext).getCurrentUser().getUsername());
 		for(int i=-1;++i<mCheckedUserList.size();){
 			sb.append(",");
 			sb.append(mCheckedUserList.get(i).getUsername());
@@ -328,14 +326,14 @@ public class ChatNewGroupChatOrAddUserActivity extends BaseActivity {
 	private void newChat() {
 		ProgressHUD.show(this);
 		StringBuilder sb = new StringBuilder();
-		sb.append(MportalApplication.user.getUsername());
+		sb.append(AppContext.getInstance(mContext).getCurrentUser().getUsername());
 		for(int i=-1;++i<mCheckedUserList.size();){
 			sb.append(",");
 			sb.append(mCheckedUserList.get(i).getUsername());
 		}
 		String url = null;
 		try {
-			url = String.format(URLs.URL_CHAT_CREATE_CHAT, MportalApplication.user.getUsername(),URLEncoder.encode(sb.toString(),"utf-8"),"2");
+			url = String.format(URLs.URL_CHAT_CREATE_CHAT, AppContext.getInstance(mContext).getCurrentUser().getUsername(),URLEncoder.encode(sb.toString(),"utf-8"),"2");
 		} catch (UnsupportedEncodingException e) {
 			e.printStackTrace();
 		}

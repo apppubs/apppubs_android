@@ -1,13 +1,5 @@
 package com.mportal.client.fragment;
 
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
-import java.io.UnsupportedEncodingException;
-import java.net.URLDecoder;
-import java.util.List;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Intent;
@@ -24,17 +16,13 @@ import android.view.ViewGroup;
 import android.webkit.DownloadListener;
 import android.webkit.WebSettings;
 import android.widget.PopupWindow;
-import cn.sharesdk.framework.Platform;
-import cn.sharesdk.framework.Platform.ShareParams;
-import cn.sharesdk.framework.ShareSDK;
-import cn.sharesdk.wechat.friends.Wechat;
 
 import com.mportal.client.MportalApplication;
 import com.mportal.client.R;
 import com.mportal.client.activity.HomeBaseActivity;
 import com.mportal.client.activity.ViewCourier;
 import com.mportal.client.bean.MenuItem;
-import com.mportal.client.constant.SystemConfig;
+import com.mportal.client.AppContext;
 import com.mportal.client.util.Base64;
 import com.mportal.client.util.BitmapUtils;
 import com.mportal.client.util.LogM;
@@ -47,6 +35,19 @@ import com.mportal.jsbridge.BridgeHandler;
 import com.mportal.jsbridge.CallBackFunction;
 import com.mportal.jsbridge.DefaultHandler;
 import com.mportal.multi_image_selector.MultiImageSelectorActivity;
+
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.io.UnsupportedEncodingException;
+import java.net.URLDecoder;
+import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
+import cn.sharesdk.framework.Platform;
+import cn.sharesdk.framework.Platform.ShareParams;
+import cn.sharesdk.framework.ShareSDK;
+import cn.sharesdk.wechat.friends.Wechat;
 
 public class WebAppFragment extends BaseFragment implements OnClickListener {
 
@@ -83,7 +84,7 @@ public class WebAppFragment extends BaseFragment implements OnClickListener {
 		if (TextUtils.isEmpty(mMoreMenusStr)) {
 			mMoreMenusStr = "0";
 		}
-		mUrl = SystemConfig.convertUrl(mUrl);
+		mUrl = AppContext.getInstance(mContext).convertUrl(mUrl);
 		mHostActivity.setShouldInterceptBackClick(true);
 		
 	}
@@ -194,7 +195,8 @@ public class WebAppFragment extends BaseFragment implements OnClickListener {
 	        @Override
 	        public void handler(String data, CallBackFunction function) {
 	        	LogM.log(WebAppFragment.class, "getUserInfo");
-	            function.onCallBack(MportalApplication.user.getUserId());
+
+	            function.onCallBack(AppContext.getInstance(mContext).getCurrentUser().getUserId());
 	        }
 	    });
 		
@@ -547,6 +549,7 @@ public class WebAppFragment extends BaseFragment implements OnClickListener {
 	public void onDestroy() {
 		super.onDestroy();
 		mWebView.destroy();
+		mWebView.cancelNetworkError();
 	}
 
 }

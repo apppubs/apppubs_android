@@ -12,6 +12,7 @@ public class Constants {
 	public static final String APP_CONFIG_PARAM_PDF_EDITABLE = "pdf_editable";
 	public static final String APP_CONFIG_PARAM_REG_URL = "reg_url";
 	public static final String APP_CONFIG_PARAM_FORGET_PWD_URL = "forget_password_url";
+
 	
 	public static final String CUSTOM_SCHEMA_APPPUBS_NEWS = "apppubsnews";
 	public static final String CUSTOM_SCHEMA_APPPUBS = "apppubs";
@@ -42,8 +43,9 @@ public class Constants {
 	
 	public static final String FILE_NAME_APP_CONFIG = "appconfig";
 	public static final String FILE_NAME_SELECTED_NAV_TGABS = "selected_tabs_%s";//已订阅的标签，保存时文件名用page id拼接于末尾
-	
-	
+
+	public static final String APP_FOLDER_NAME = "apppubs";
+	public static String APK_FILE_NAME = "mportal.apk";
 	
 	
 }

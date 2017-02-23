@@ -21,12 +21,12 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.mportal.client.MportalApplication;
 import com.mportal.client.R;
 import com.mportal.client.adapter.CommonAdapter;
 import com.mportal.client.adapter.ViewHolder;
 import com.mportal.client.bean.Comment;
 import com.mportal.client.bean.NewsInfo;
+import com.mportal.client.AppContext;
 import com.mportal.client.business.BussinessCallbackCommon;
 import com.mportal.client.constant.URLs;
 import com.mportal.client.util.LogM;
@@ -217,9 +217,9 @@ public class CommentActivity extends BaseActivity {
 				new Thread() {
 
 					public void run() {
-						String trueName = MportalApplication.user.getTrueName();
+						String trueName = AppContext.getInstance(mContext).getCurrentUser().getTrueName();
 						
-						String i  = json.submmitCommment(mInfoId, mIP, mEditText.getText().toString(), URLs.CLIENTKEY,MportalApplication.user.getUserId(),trueName==null?"":trueName);
+						String i  = json.submmitCommment(mInfoId, mIP, mEditText.getText().toString(), URLs.CLIENTKEY, AppContext.getInstance(mContext).getCurrentUser().getUserId(),trueName==null?"":trueName);
 						Message msg = Message.obtain();
 						msg.what = 0;
 						if (i.equals("")) {
@@ -235,8 +235,8 @@ public class CommentActivity extends BaseActivity {
 				new Thread() {
 
 					public void run() {
-						String trueName = MportalApplication.user.getTrueName();
-						String i = json.submmitCommment(mInfoId, mIP, mEditText.getText().toString(), URLs.CLIENTKEY,MportalApplication.user.getUserId(),trueName);
+						String trueName = AppContext.getInstance(mContext).getCurrentUser().getTrueName();
+						String i = json.submmitCommment(mInfoId, mIP, mEditText.getText().toString(), URLs.CLIENTKEY, AppContext.getInstance(mContext).getCurrentUser().getUserId(),trueName);
 						Message msg = Message.obtain();
 						msg.what = 0;
 						if (i.equals("")) {
@@ -248,7 +248,7 @@ public class CommentActivity extends BaseActivity {
 					};
 				}.start();
 			} else {
-				Toast.makeText(getApplication(), getResources().getString(R.string.network_faile), 2000).show();
+				Toast.makeText(getApplication(), getResources().getString(R.string.network_faile), Toast.LENGTH_LONG).show();
 			}
 
 		}

@@ -164,7 +164,7 @@ public class TitleBar extends RelativeLayout {
 		mTitleLp = new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT);
 
 		mTitleLp.leftMargin = mImageBtnWidth;
-		mTitleLp.rightMargin = 30;
+		mTitleLp.rightMargin = Utils.dip2px(mContext,50);
 		mTitleLp.addRule(RelativeLayout.CENTER_IN_PARENT, TRUE);
 		addView(mTitleTv, mTitleLp);
 		mCurTitleView = mTitleTv;

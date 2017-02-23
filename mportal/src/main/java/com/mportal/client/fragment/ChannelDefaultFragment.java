@@ -107,7 +107,7 @@ public class ChannelDefaultFragment extends ChannelFragment  implements OnClickL
 		.cacheOnDisk(true)
 		.considerExifParams(true)
 		.bitmapConfig(Bitmap.Config.RGB_565)
-		.denyNetworkDownload(MportalApplication.systemState.getNetworkState()!=ConnectivityManager.TYPE_WIFI&&!MportalApplication.systemSettings.isAllowDowPicUse2G())
+		.denyNetworkDownload(MportalApplication.systemState.getNetworkState()!=ConnectivityManager.TYPE_WIFI&&!mAppContext.getSettings().isAllowDowPicUse2G())
 		.build();
 		
 		mCommonLv = (CommonListView) mRootView.findViewById(R.id.channel_lv);
@@ -343,7 +343,7 @@ public class ChannelDefaultFragment extends ChannelFragment  implements OnClickL
 			if (showType == NewsChannel.SHOWTYPE_HEADLINE) {
 
 				String url = URLs.URL_HEAD_PIC + "&channelcode=" + mChannelCode + "&webappcode="
-						+ MportalApplication.app.getWebAppCode();
+						+ mAppContext.getApp().getWebAppCode();
 				List<HeadPic> hList = WebUtils.requestList(url, HeadPic.class, "tgpic");
 
 				for (HeadPic hp : hList) {

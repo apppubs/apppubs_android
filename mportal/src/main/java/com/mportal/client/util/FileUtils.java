@@ -38,7 +38,7 @@ import android.provider.MediaStore;
 import android.util.Log;
 
 import com.mportal.client.business.BussinessCallbackCommon;
-import com.mportal.client.constant.SystemConfig;
+import com.mportal.client.constant.Constants;
 import com.mportal.client.exception.ESUnavailableException;
 
 /**
@@ -349,7 +349,7 @@ public class FileUtils {
 	public static File getAppExternalStorageFile() throws ESUnavailableException {
 
 		if (Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED)) {
-			return new File(Environment.getExternalStorageDirectory(), SystemConfig.APP_FOLDER_NAME);
+			return new File(Environment.getExternalStorageDirectory(), Constants.APP_FOLDER_NAME);
 		} else {
 			throw new ESUnavailableException("Thes sd card is unusable！！");
 		}
@@ -363,7 +363,7 @@ public class FileUtils {
 	public static File getPaperStorageFile() throws ESUnavailableException {
 
 		File file = getAppExternalStorageFile();
-		File newFile = new File(file, SystemConfig.APP_FOLDER_NAME);
+		File newFile = new File(file, Constants.APP_FOLDER_NAME);
 		return newFile;
 
 	}
@@ -702,7 +702,7 @@ public class FileUtils {
 		}
 		throw new IOException();
 	}
-	
+
 	
 
 }

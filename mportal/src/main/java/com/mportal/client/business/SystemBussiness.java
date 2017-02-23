@@ -1,37 +1,6 @@
 package com.mportal.client.business;
 
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.net.MalformedURLException;
-import java.net.URL;
-import java.net.URLConnection;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Locale;
-import java.util.Map;
-import java.util.concurrent.Future;
-
-import org.apache.http.HttpEntity;
-import org.apache.http.HttpResponse;
-import org.apache.http.NameValuePair;
-import org.apache.http.client.HttpClient;
-import org.apache.http.client.entity.UrlEncodedFormEntity;
-import org.apache.http.client.methods.HttpPost;
-import org.apache.http.impl.client.DefaultHttpClient;
-import org.apache.http.message.BasicNameValuePair;
-import org.apache.http.protocol.HTTP;
-import org.apache.http.util.EntityUtils;
-import org.json.JSONException;
-import org.json.JSONObject;
-import org.w3c.dom.Text;
-
 import android.content.Context;
-import android.content.Intent;
 import android.content.res.Resources;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
@@ -45,18 +14,16 @@ import android.graphics.ColorMatrix;
 import android.graphics.ColorMatrixColorFilter;
 import android.graphics.Paint;
 import android.graphics.Rect;
-import android.graphics.drawable.Drawable;
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.support.annotation.NonNull;
-import android.support.v4.app.Fragment;
-import android.support.v4.text.TextUtilsCompat;
 import android.telephony.TelephonyManager;
-import android.text.TextUtils;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.WindowManager;
 
+import com.mportal.client.AppContext;
 import com.mportal.client.MportalApplication;
 import com.mportal.client.R;
 import com.mportal.client.bean.App;
@@ -80,12 +47,9 @@ import com.mportal.client.bean.User;
 import com.mportal.client.bean.UserDeptLink;
 import com.mportal.client.bean.WeiboInfo;
 import com.mportal.client.constant.Constants;
-import com.mportal.client.constant.SystemConfig;
 import com.mportal.client.constant.URLs;
 import com.mportal.client.message.model.UserBussiness;
-import com.mportal.client.util.ACache;
 import com.mportal.client.util.FileUtils;
-import com.mportal.client.util.JSONUtils;
 import com.mportal.client.util.JSONResult;
 import com.mportal.client.util.LogM;
 import com.mportal.client.util.MathUtils;
@@ -94,9 +58,37 @@ import com.mportal.client.util.WebUtils;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.orm.SugarRecord;
 
+import org.apache.http.HttpEntity;
+import org.apache.http.HttpResponse;
+import org.apache.http.NameValuePair;
+import org.apache.http.client.HttpClient;
+import org.apache.http.client.entity.UrlEncodedFormEntity;
+import org.apache.http.client.methods.HttpPost;
+import org.apache.http.impl.client.DefaultHttpClient;
+import org.apache.http.message.BasicNameValuePair;
+import org.apache.http.protocol.HTTP;
+import org.apache.http.util.EntityUtils;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.net.URLConnection;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Locale;
+import java.util.Map;
+import java.util.concurrent.Future;
+
 import io.rong.imkit.DefaultExtensionModule;
 import io.rong.imkit.IExtensionModule;
-import io.rong.imkit.RongExtension;
 import io.rong.imkit.RongExtensionManager;
 import io.rong.imkit.RongIM;
 import io.rong.imkit.plugin.IPluginModule;
@@ -104,6 +96,7 @@ import io.rong.imkit.plugin.ImagePlugin;
 import io.rong.imkit.widget.provider.FilePlugin;
 import io.rong.imlib.RongIMClient;
 import io.rong.imlib.model.Conversation;
+import io.rong.imlib.model.UserInfo;
 
 /**
  * 
@@ -126,11 +119,12 @@ public class SystemBussiness extends BaseBussiness {
 	}
 
 	private Context mContext;
-
+	private AppContext mAppContext;
 	private static SystemBussiness mSystemBussiness;
 
 	private SystemBussiness(Context context) {
 		mContext = context;
+		mAppContext = AppContext.getInstance(context);
 	}
 
 	public static SystemBussiness getInstance(Context context) {
@@ -182,7 +176,7 @@ public class SystemBussiness extends BaseBussiness {
 	public void downloadApk(String url, BussinessCallbackCommon<String> callback) {
 		try {
 			FileUtils.asyDownload(url, FileUtils.getAppExternalStorageFile().getAbsolutePath() + "/"
-					+ SystemConfig.APP_FILE_NAME, callback);
+					+ Constants.APK_FILE_NAME, callback);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -360,7 +354,7 @@ public class SystemBussiness extends BaseBussiness {
 	private synchronized void init() throws IOException, InterruptedException, JSONException {
 
 		// 如果是第一次初始化，无论那个步骤出现问题都清空数据库重新初始化
-		App localApp = MportalApplication.app;
+		App localApp = AppContext.getInstance(mContext).getApp();
 		String orientationFlag = Utils.isScreenHorizontal(mContext)?"1":"0";
 		String deviceFlag = Utils.isPad(mContext)?"4":"3";
 		String screenDimenFlag = null;
@@ -375,18 +369,17 @@ public class SystemBussiness extends BaseBussiness {
 			if(Utils.getVersionCode(mContext)/1000%1000==1){//代码库版本为1时
 				System.out.println("代码库版本为1时");
 				UserBussiness userBussiness = UserBussiness.getInstance(mContext);
-				User user = new User();
-				MportalApplication.saveAndRefreshUser(mContext, user);
+				AppContext.getInstance(mContext).clearCurrentUser();
 			}
 		}
-		String url = String.format(URLs.URL_APPINFO, MportalApplication.user.getOrgCode(),orientationFlag,deviceFlag,screenDimenFlag);
+		String url = String.format(URLs.URL_APPINFO, AppContext.getInstance(mContext).getCurrentUser().getOrgCode(),orientationFlag,deviceFlag,screenDimenFlag);
 		App remoteApp = WebUtils.request(url, App.class, "app");
 
 		if (localApp.getInitTimes() == 0) {
 			localApp = remoteApp;
 			localApp.setLayoutLocalScheme(localApp.getLayoutScheme());
-			MportalApplication.systemSettings.setTheme(remoteApp.getDefaultTheme());
-			MportalApplication.commitAndRefreshSystemSettings(MportalApplication.systemSettings, mContext);
+			mAppContext.getSettings().setTheme(remoteApp.getDefaultTheme());
+			MportalApplication.commitAndRefreshSystemSettings(mAppContext.getSettings(), mContext);
 			LogM.log(this.getClass(), "初始化颜色 appRemote.getDefaultTheme" + remoteApp.getDefaultTheme());
 			generateStanceDrawable(remoteApp.getName());
 			generateMediumStance();
@@ -486,8 +479,8 @@ public class SystemBussiness extends BaseBussiness {
 			initPaper();
 		}
 		localApp.setStartupTimes(localApp.getInitTimes() + 1);
-		MportalApplication.commitApp(mContext, localApp);
-		
+		AppContext.getInstance(mContext).setApp(localApp);
+
 		//初始化appconfig,首次初始化必须使用同步方法
 		
 		Object appConfig = FileUtils.readObj(mContext, Constants.FILE_NAME_APP_CONFIG);
@@ -739,7 +732,7 @@ public class SystemBussiness extends BaseBussiness {
 		} else {
 			Map<String, String> resultMap = jsonResult.getResultMap();
 			// service_id":"1428155175898","address_apiflag":"0","usersync_url":"","adbookversion":"5","adbookauth":"1","deptsync_url":"","address_depturl":"http://202.99.19.140:8080/wmh360/json/getaddressdata.jsp?appcode=D20&flag=dept","address_encflag":"1","chatflag":"0","address_deptuserurl":"http://202.99.19.140:8080/wmh360/json/getaddressdata.jsp?appcode=D20&flag=deptuser","userauth_url":"","adbookupdateflag":"0","address_userurl":"http://202.99.19.140:8080/wmh360/json/getaddressdata.jsp?appcode=D20&flag=user","autologout":"1","mduserinfoflag":"0","userauth_flag":"0","userdeptsync_url":""
-			App app = MportalApplication.app;
+			App app = AppContext.getInstance(mContext).getApp();
 			app.setAddressbookUserUrl(resultMap.get("address_userurl"));
 			app.setAddressbookDetpUrl(resultMap.get("address_depturl"));
 			app.setAddressbookDeptUserUrl(resultMap.get("address_deptuserurl"));
@@ -748,24 +741,24 @@ public class SystemBussiness extends BaseBussiness {
 			app.setDocumentReaderPageUrl(resultMap.get("document_reader_url"));
 			app.setAddressbookVersion(Integer.parseInt(resultMap.get("adbookversion")));
 
+			AppConfig appconfig = (AppConfig) jsonResult.getResultObject(AppConfig.class);
+			AppContext.getInstance(mContext).setAppConfig(appconfig);
 			if (app.getAddressbookNeedPermission()==App.NEED){
-				String url = String.format(URLs.URL_ADDRESS_PERMISSION, MportalApplication.user.getUserId());
+				String url = String.format(URLs.URL_ADDRESS_PERMISSION, AppContext.getInstance(mContext).getCurrentUser().getUserId());
 				String permissionResult = WebUtils.requestWithGet(url);
 				JSONResult jr = JSONResult.compile(permissionResult);
 				if (jr.resultCode==1){
-					MportalApplication.user.setAddressbookPermissionString(jr.result);
-					MportalApplication.saveAndRefreshUser(mContext, MportalApplication.user);
+					AppContext.getInstance(mContext).getCurrentUser().setAddressbookPermissionString(jr.result);
+					AppContext.getInstance(mContext).setCurrentUser(AppContext.getInstance(mContext).getCurrentUser());
 				}
 			}
-
-			MportalApplication.commitApp(mContext);
+			AppContext.getInstance(mContext).setApp(app);
 		}
 
 	}
 
 	public AppConfig getAppConfig(){
-		String str = (String) FileUtils.readObj(mContext,Constants.FILE_NAME_APP_CONFIG);
-		return JSONUtils.parseObjectFromJson(str,AppConfig.class);
+		return AppContext.getInstance(mContext).getAppConfig();
 	}
 
 	/**
@@ -797,8 +790,8 @@ public class SystemBussiness extends BaseBussiness {
 
 				try {
 					String url = URLs.URL_SERVICE_MESSAGE_INFO_LIST + "&service_id="
-							+ MportalApplication.app.getDefaultServiceNoId() + "&username="
-							+ MportalApplication.user.getUsername() + "&userid=" + MportalApplication.user.getUserId()
+							+ AppContext.getInstance(mContext).getApp().getDefaultServiceNoId() + "&username="
+							+ AppContext.getInstance(mContext).getCurrentUser().getUsername() + "&userid=" + AppContext.getInstance(mContext).getCurrentUser().getUserId()
 							+ "&curp=1&perp=10";
 					List<History> list = WebUtils.requestList(url, History.class, "info");
 					sHandler.post(new OnDoneRun<List<History>>(callback, list));// 与主线程的通信
@@ -1164,8 +1157,8 @@ public class SystemBussiness extends BaseBussiness {
 	private String getRCToken(){
 
 		String token = null;
-		String userId = MportalApplication.user.getUserId();
-		String username = MportalApplication.user.getUsername();
+		String userId = AppContext.getInstance(mContext).getCurrentUser().getUserId();
+		String username = AppContext.getInstance(mContext).getCurrentUser().getUsername();
 		String url = String.format(URLs.URL_RC_TOKEN,userId,username);
 		try {
 			String response = WebUtils.requestWithGet(url);
@@ -1200,6 +1193,10 @@ public class SystemBussiness extends BaseBussiness {
 			public void onSuccess(String userid) {
 				Log.d("LoginActivity", "--onSuccess" + userid);
 				setMyExtensionModule();
+				User user = AppContext.getInstance(mContext).getCurrentUser();
+				UserInfo userinfo = new UserInfo(userid,user.getTrueName(), Uri.parse(user.getAvatarUrl()));
+				RongIM.getInstance().setCurrentUserInfo(userinfo);
+				RongIM.getInstance().setMessageAttachedUserInfo(true);
 
 			}
 
@@ -1238,9 +1235,9 @@ public class SystemBussiness extends BaseBussiness {
 		List<IPluginModule> pluginModules ;
 		public MyExtensionModule(){
 			pluginModules = new ArrayList<IPluginModule>();
-			filePlugin = new FilePlugin();
+//			filePlugin = new FilePlugin();
 			imagePlugin = new ImagePlugin();
-			pluginModules.add(filePlugin);
+//			pluginModules.add(filePlugin);
 			pluginModules.add(imagePlugin);
 		}
 		@Override
@@ -1276,6 +1273,59 @@ public class SystemBussiness extends BaseBussiness {
 				}
 			}
 		});
+	}
+
+	public interface CheckUpdateListener{
+		void onDone(boolean needUpdate,boolean needForceUpdate,String version,String updateDescribe,String updateUrl);
+	}
+
+	public void checkUpdate(Context context,CheckUpdateListener listener){
+		AppConfig appConfig = AppContext.getInstance(mContext).getAppConfig();
+		boolean needUpdate = false;
+		boolean needForceupdate = false;
+		String versionDes = null;
+		if (compareVersion(appConfig.getLatestVersion(),Utils.getVersionName(context))>0){
+			needUpdate = true;
+			if (appConfig.getMinSupportedVersionCode()>Utils.getVersionCode(context)){
+				needForceupdate = true;
+			}
+			versionDes = appConfig.getLatestVersionDescribe();
+		}
+		String version = appConfig.getLatestVersion();
+		listener.onDone(needUpdate,needForceupdate,version,versionDes,appConfig.getUpdateUrl());
+	}
+
+	public static int compareVersion(String version1, String version2) {
+		if (version1.equals(version2)) {
+			return 0;
+		}
+		String[] version1Array = version1.split("\\.");
+		String[] version2Array = version2.split("\\.");
+		int index = 0;
+		//获取最小长度值
+		int minLen = Math.min(version1Array.length, version2Array.length);
+		int diff = 0;
+		//循环判断每位的大小
+		while (index < minLen && (diff = Integer.parseInt(version1Array[index]) - Integer.parseInt(version2Array[index])) == 0) {
+			index++;
+		}
+		if (diff == 0) {
+			//如果位数不一致，比较多余位数
+			for (int i = index; i < version1Array.length; i++) {
+				if (Integer.parseInt(version1Array[i]) > 0) {
+					return 1;
+				}
+			}
+
+			for (int i = index; i < version2Array.length; i++) {
+				if (Integer.parseInt(version2Array[i]) > 0) {
+					return -1;
+				}
+			}
+			return 0;
+		} else {
+			return diff > 0 ? 1 : -1;
+		}
 	}
 
 }

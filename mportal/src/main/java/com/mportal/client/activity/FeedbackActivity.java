@@ -15,8 +15,8 @@ import com.android.volley.Response.ErrorListener;
 import com.android.volley.Response.Listener;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
-import com.mportal.client.MportalApplication;
 import com.mportal.client.R;
+import com.mportal.client.AppContext;
 import com.mportal.client.constant.URLs;
 import com.mportal.client.util.LogM;
 import com.mportal.client.util.SystemUtils;
@@ -90,7 +90,7 @@ public class FeedbackActivity extends BaseActivity {
 			e.printStackTrace();
 		}
 		String url = String.format(URLs.URL_FEEDBACK,
-				MportalApplication.user.getUserId(), "android", phone, content);
+				AppContext.getInstance(mContext).getCurrentUser().getUserId(), "android", phone, content);
 		LogM.log(this.getClass(), url);
 		mRequestQueue.add(new StringRequest(url, new Listener<String>() {
 

@@ -38,7 +38,7 @@ public class ChannelsFragment extends TitleMenuFragment{
 		
 		Bundle args = getArguments();
 		mChannelTypeId = args.getString(ARGUMENT_NAME_CHANNELTYPEID);
-		mNb = NewsBussiness.getInstance();
+		mNb = NewsBussiness.getInstance(mContext);
 		mChannelList = SugarRecord.find(NewsChannel.class,  "TYPE_ID=?", new String[]{mChannelTypeId+""}, null, "DISPLAY_ORDER", null);
 		mChannelSelectedList = SugarRecord.find(NewsChannel.class,  "TYPE_ID=? and DISPLAY_ORDER != 0", new String[]{mChannelTypeId+""}, null, "DISPLAY_ORDER", null);
 		mAllowConfig = SugarRecord.findByProperty(MenuItem.class, "CHANNEL_TYPE_ID", mChannelTypeId+"").getAllowConfigFlag()==0?false:true;

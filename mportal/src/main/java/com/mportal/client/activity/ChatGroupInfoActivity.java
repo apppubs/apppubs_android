@@ -27,8 +27,8 @@ import com.android.volley.Response.ErrorListener;
 import com.android.volley.Response.Listener;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
-import com.mportal.client.MportalApplication;
 import com.mportal.client.R;
+import com.mportal.client.AppContext;
 import com.mportal.client.constant.URLs;
 import com.mportal.client.util.JSONResult;
 import com.mportal.client.util.Utils;
@@ -77,7 +77,7 @@ public class ChatGroupInfoActivity extends BaseActivity{
 	@Override
 	protected void onResume() {
 		super.onResume();
-		String url = String.format(URLs.URL_CHAT_GROUD_INFO, mChatGroupId,MportalApplication.user.getUsername());
+		String url = String.format(URLs.URL_CHAT_GROUD_INFO, mChatGroupId, AppContext.getInstance(mContext).getCurrentUser().getUsername());
 		mRequestQueue.add(new StringRequest(url, new Listener<String>() {
 			
 			@Override
@@ -111,7 +111,7 @@ public class ChatGroupInfoActivity extends BaseActivity{
 							usernamesSB.append(userJsonO.getString("username"));
 						}
 						mUsernames = usernamesSB.toString();
-						if(MportalApplication.user.getUsername().equals(jr.getResultMap().get("group_creator"))){
+						if(AppContext.getInstance(mContext).getCurrentUser().getUsername().equals(jr.getResultMap().get("group_creator"))){
 							setVisibilityOfViewByResId(R.id.chat_group_info_delete_user_rl, View.VISIBLE);
 						}
 						loadSuccess = true;
@@ -161,7 +161,7 @@ public class ChatGroupInfoActivity extends BaseActivity{
 	}
 
 	private void onDeleteUserClicked() {
-		String deletableUsernames = mUsernames.replaceAll(MportalApplication.user.getUsername()+",", "").replaceAll(","+MportalApplication.user.getUsername(), "").replaceAll(MportalApplication.user.getUsername(), "");
+		String deletableUsernames = mUsernames.replaceAll(AppContext.getInstance(mContext).getCurrentUser().getUsername()+",", "").replaceAll(","+ AppContext.getInstance(mContext).getCurrentUser().getUsername(), "").replaceAll(AppContext.getInstance(mContext).getCurrentUser().getUsername(), "");
 		ChatGroupDeleteUserActivity.startActivity(this, deletableUsernames,mChatGroupId);
 	}
 
@@ -181,7 +181,7 @@ public class ChatGroupInfoActivity extends BaseActivity{
 	}
 
 	private void exitGroupChat() {
-		String url = String.format(URLs.URL_CHAT_EXIT_CHAT_GROUP, mChatGroupId,MportalApplication.user.getUsername());
+		String url = String.format(URLs.URL_CHAT_EXIT_CHAT_GROUP, mChatGroupId, AppContext.getInstance(mContext).getCurrentUser().getUsername());
 		mRequestQueue.add(new StringRequest(url, new Listener<String>() {
 
 			@Override

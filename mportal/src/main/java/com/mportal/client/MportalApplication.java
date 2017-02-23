@@ -1,29 +1,16 @@
 package com.mportal.client;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
-import java.util.ArrayList;
-
-import android.*;
-import android.Manifest;
 import android.app.Activity;
 import android.app.AlarmManager;
 import android.app.Application;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
-import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.drawable.Drawable;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Build;
-import android.support.v4.content.ContextCompat;
 import android.text.TextUtils;
 import android.util.DisplayMetrics;
 import android.util.Log;
@@ -40,7 +27,6 @@ import com.mportal.client.bean.App;
 import com.mportal.client.bean.Settings;
 import com.mportal.client.bean.User;
 import com.mportal.client.constant.URLs;
-import com.mportal.client.exception.UnCeHandler;
 import com.mportal.client.util.LogM;
 import com.mportal.client.util.MathUtils;
 import com.mportal.client.util.Utils;
@@ -51,15 +37,22 @@ import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
 import com.orm.SugarContext;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+import java.util.ArrayList;
+
 import io.rong.imkit.RongIM;
 
 public class MportalApplication extends Application {
 
 	public static final String MSG_DELETED_CHAT_GROUP_MAP = "deleted_chat_group_map";
 	private static final String CONFIG_DIRECTORY = "static_objs";
-	private static final String SYSTEM_SETTING_FILE_NAME = "settings.cfg";
-	private static final String USER_FILE_NAME = "user.cfg";
-	private static final String APP_FILE_NAME = "app.cfg";
+
 	/**
 	 * 系统设置
 	 */
@@ -68,14 +61,6 @@ public class MportalApplication extends Application {
 	 * 系统状态
 	 */
 	public static SystemState systemState;
-	/**
-	 * app信息
-	 */
-	public static App app;
-	/**
-	 * 用户
-	 */
-	public static User user;
 
 
 	// /** 获取可見区域高度 **/
@@ -91,8 +76,6 @@ public class MportalApplication extends Application {
 		initDefaultExceptionHandler();
 		// 初始化设置
 		initSystemState();
-		deserializeObjects();
-
 		initImageLoader();
 
 		// 初始化SugarORM
@@ -192,41 +175,6 @@ public class MportalApplication extends Application {
 	}
 
 	/**
-	 * 反序列化对象
-	 */
-	private void deserializeObjects() {
-
-		// 恢复设置对象
-		Object setting = readObj(this,SYSTEM_SETTING_FILE_NAME);
-		if (setting == null) {
-			
-			String baseUrl = Utils.getMetaValue(this, "BASE_URL");
-			String appCode = Utils.getMetaValue(this, "APPCODE");
-			MportalApplication.systemSettings = new Settings(baseUrl, appCode);
-			
-		} else {
-			MportalApplication.systemSettings = (Settings) setting;
-		}
-
-		// 恢复本机存储的用户对象
-		Object user = readObj(this,USER_FILE_NAME);
-		if (user == null) {
-			MportalApplication.user = new User();
-		} else {
-			MportalApplication.user = (User) user;
-		}
-
-		// 恢复app对象
-		Object app = readObj(this,APP_FILE_NAME);
-		if (app == null) {
-			MportalApplication.app = new App();
-		} else {
-			MportalApplication.app = (App) app;
-		}
-
-	}
-
-	/**
 	 * 初始化系统状态
 	 */
 	private void initSystemState() {
@@ -242,17 +190,6 @@ public class MportalApplication extends Application {
 	}
 
 	/**
-	 * 提交设置
-	 */
-	public void commitSystemSettings(Settings settings) {
-		Log.v("MportalApplication", "commitSystemSettings appcode:" + settings.getAppCode());
-		MportalApplication.systemSettings = settings;
-
-		writeObj(this, settings, SYSTEM_SETTING_FILE_NAME);
-
-	}
-
-	/**
 	 * 机器唯一标识
 	 */
 	public static String getMachineId() {
@@ -262,7 +199,7 @@ public class MportalApplication extends Application {
 	}
 	/**
 	 * 提交并刷新内存中的设置信息
-	 * 
+	 *
 	 * @param settings
 	 * @param context
 	 */
@@ -271,7 +208,7 @@ public class MportalApplication extends Application {
 		Log.v("MportalApplication", "commitAndRefreshSystemSettings");
 		MportalApplication.systemSettings = settings;
 
-		File file = new File(context.getDir(CONFIG_DIRECTORY, Context.MODE_PRIVATE), SYSTEM_SETTING_FILE_NAME);
+		File file = new File(context.getDir(CONFIG_DIRECTORY, Context.MODE_PRIVATE), "settings.cfg");
 		ObjectOutputStream oos = null;
 		try {
 			oos = new ObjectOutputStream(new FileOutputStream(file));
@@ -291,26 +228,8 @@ public class MportalApplication extends Application {
 	}
 
 	/**
-	 * 属性用户信息(系统静态变量)
-	 * 
-	 * @param user
-	 */
-	public static void saveAndRefreshUser(Context context, User user) {
-		MportalApplication.user = user;
-		writeObj(context, user, USER_FILE_NAME);
-	}
-
-	public static void commitApp(Context context, App app) {
-		MportalApplication.app = app;
-		writeObj(context, app, APP_FILE_NAME);
-	}
-	public static void commitApp(Context context){
-		writeObj(context, app, APP_FILE_NAME);
-	}
-
-	/**
 	 * 持久化对象
-	 * 
+	 *
 	 * @param obj
 	 * @param fileName
 	 */
@@ -339,7 +258,7 @@ public class MportalApplication extends Application {
 
 	/**
 	 * 读取持久化对象
-	 * 
+	 *
 	 * @param fileName
 	 * @return
 	 */
@@ -406,37 +325,17 @@ public class MportalApplication extends Application {
 		android.os.Process.killProcess(android.os.Process.myPid());
 	}
 
-	public void switchLayout() {
-		// 杀死该应用进程
-		app.setLayoutLocalScheme(app.getLayoutLocalScheme() ^ 1);
-		commitApp(this, app);
-
-		restart();
-	}
-
-	public void restart() {
-
-		Intent mStartActivity = new Intent(this, StartUpActivity.class);
-		mStartActivity.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-		int mPendingIntentId = 123456;
-		PendingIntent mPendingIntent = PendingIntent.getActivity(this, mPendingIntentId, mStartActivity,
-				PendingIntent.FLAG_CANCEL_CURRENT);
-		AlarmManager mgr = (AlarmManager) this.getSystemService(Context.ALARM_SERVICE);
-		mgr.set(AlarmManager.RTC, System.currentTimeMillis()+20 , mPendingIntent);
-		android.os.Process.killProcess(android.os.Process.myPid());
-	}
-	
 	public static Context getContext(){
 		return sContext;
 	}
 	
-	public void showChangeDialog(Context context,final String  ip, final String code) {
+	public void showChangeDialog(final Context context, final String  ip, final String code) {
 		new ConfirmDialog(context, new ConfirmListener() {
 
 			@Override
 			public void onOkClick() {
-				final Settings s = MportalApplication.systemSettings;
-				
+				final Settings s = AppContext.getInstance(MportalApplication.this).getSettings();
+
 				LogM.log(this.getClass(), ip + ":" + code);
 				String verifyURL = ip+URLs.URL_APP_BASIC_INFO+"&appcode="+code;
 				StringRequest request = new StringRequest(verifyURL, new Listener<String>() {
@@ -446,29 +345,30 @@ public class MportalApplication extends Application {
 						if(!TextUtils.isEmpty(str)&&!str.equals("null")){
 							s.setBaseURL(ip);
 							s.setAppCode(code);
-							MportalApplication.this.commitSystemSettings(s);
+							MportalApplication.this.commitAndRefreshSystemSettings(s,context);
 							User user = new User();
-							MportalApplication.saveAndRefreshUser(MportalApplication.this, user);
-							MportalApplication.app.setStartupTimes(0);
-							MportalApplication.commitApp(MportalApplication.this, MportalApplication.app);
-							MportalApplication.this.restart();
-							
+							AppContext.getInstance(MportalApplication.this).setCurrentUser(user);
+							App app = AppContext.getInstance(context).getApp();
+							app.setStartupTimes(0);
+							AppContext.getInstance(context).setApp(app);
+							AppManager.getInstant(context).restart();
+
 						}else{
 							Toast.makeText(MportalApplication.this, "ip地址错误或者客户号不存在",Toast.LENGTH_LONG).show();
-							
+
 						}
 					}
-					
+
 				}, new ErrorListener() {
 
 					@Override
 					public void onErrorResponse(VolleyError arg0) {
 						Toast.makeText(MportalApplication.this, "ip地址错误或者客户号不存在",Toast.LENGTH_LONG).show();
 					}
-					
+
 				});
 				Volley.newRequestQueue(MportalApplication.this).add(request);
-				
+
 			}
 
 			@Override

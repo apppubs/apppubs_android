@@ -28,6 +28,7 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.zxing.BarcodeFormat;
 import com.google.zxing.BinaryBitmap;
@@ -122,7 +123,7 @@ public final class CaptureActivity extends BaseActivity implements OnClickListen
 	public void onCreate(Bundle icicle) {
 		super.onCreate(icicle);
 
-		setNeedTitleBar(false);
+//		setNeedTitleBar(true);
 		// Window window = getWindow();
 		// window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
 		setContentView(R.layout.act_capture);
@@ -190,6 +191,7 @@ public final class CaptureActivity extends BaseActivity implements OnClickListen
 						cm.setText(msg);
 						//读取剪贴板数据
 						//cm.getText();
+						Toast.makeText(mContext,"已复制",Toast.LENGTH_SHORT).show();
 							
 					}
 				}).setNegativeButton(getString(R.string.cancel), new DialogInterface.OnClickListener() {

@@ -69,7 +69,6 @@ public class NewsInfoActivity extends BaseActivity implements AsyTaskCallback{
 	private String mInfoId;
 	private String mChannelCode;
 	private Comment mCommment;// 评论数，赞，踩
-	private NewsBussiness mNewsBussiness;
 //	private Future<?> mFuture;
 	private TextView mCommentTv;
 	private PopupWindow mMenuPW;
@@ -107,7 +106,7 @@ public class NewsInfoActivity extends BaseActivity implements AsyTaskCallback{
 		webSettings.setLayoutAlgorithm(LayoutAlgorithm.NORMAL);
 		// 设置WebView属性，能够执行Javascript脚本
 		webSettings.setJavaScriptEnabled(true);
-		int textSize = MportalApplication.systemSettings.getTextSize();
+		int textSize = mAppContext.getSettings().getTextSize();
 		switch (textSize) {
 		case Settings.TEXTSIZE_BIG:
 			webSettings.setTextSize(TextSize.LARGER);
@@ -371,7 +370,6 @@ public class NewsInfoActivity extends BaseActivity implements AsyTaskCallback{
 	public Object onExecute(Integer tag, String[] params) throws Exception {
 		Object obj = null;
 		if(tag==REQUEST_TAG){
-			mNewsBussiness = NewsBussiness.getInstance();
 			obj = mNewsBussiness.getNewInfo(params[0], params[1]);
 		}else if(tag==REQUEST_HTML_TAG){
 			obj = WebUtils.requestWithGet(params[0]);

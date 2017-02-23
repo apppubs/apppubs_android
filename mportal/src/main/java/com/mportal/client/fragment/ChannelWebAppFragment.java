@@ -14,7 +14,7 @@ import android.webkit.WebViewClient;
 
 import com.mportal.client.R;
 import com.mportal.client.activity.HomeBaseActivity;
-import com.mportal.client.constant.SystemConfig;
+import com.mportal.client.AppContext;
 import com.mportal.client.util.LogM;
 import com.mportal.client.util.SystemUtils;
 
@@ -56,7 +56,7 @@ public class ChannelWebAppFragment extends ChannelFragment implements OnClickLis
 		Bundle args = getArguments();
 		mMenuBarType = args.getInt(ChannelWebAppFragment.ARGUMENT_INT_MENUBARTYPE, 0);
 		mUrl = mChannel.getLinkURL();
-		mUrl = SystemConfig.convertUrl(mUrl);
+		mUrl = AppContext.getInstance(mContext).convertUrl(mUrl);
 		mWebView = (WebView) mRootView.findViewById(R.id.webapp_wb);
 //		menuBarAll = (FrameLayout) v.findViewById(R.id.bottom_menubar_four);
 //		menuBarBack = (LinearLayout) v.findViewById(R.id.bottom_menubar_one);

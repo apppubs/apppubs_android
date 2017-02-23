@@ -36,7 +36,7 @@ public class SplashActivity extends BaseActivity{
 		setContentView(R.layout.act_splash);
 		iv=(ImageView) findViewById(R.id.splash_iv);
 		
-		mImageLoader.displayImage(MportalApplication.app.getStartUpPic(), iv);
+		mImageLoader.displayImage(mAppContext.getApp().getStartUpPic(), iv);
 //		viewparge = (ViewPager) findViewById(R.id.spladh_viewparge);
 //		viewparge.setAdapter(new SplashPagerAdapter(getApplication()));
 	}

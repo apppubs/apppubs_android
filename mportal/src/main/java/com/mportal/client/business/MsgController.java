@@ -21,6 +21,7 @@ import android.support.v4.app.NotificationCompat;
 import android.text.TextUtils;
 import android.util.SparseIntArray;
 
+import com.mportal.client.AppContext;
 import com.mportal.client.MportalApplication;
 import com.mportal.client.R;
 import com.mportal.client.activity.BaseActivity;
@@ -95,7 +96,7 @@ public class MsgController {
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
-		} else if (MportalApplication.systemSettings.isNeedPushNotification()) {
+		} else if (AppContext.getInstance(mContext).getSettings().isNeedPushNotification()) {
 			NotificationManager notificationManager = (NotificationManager) mContext
 					.getSystemService(android.content.Context.NOTIFICATION_SERVICE);
 

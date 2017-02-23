@@ -12,8 +12,9 @@ import com.android.volley.Response.ErrorListener;
 import com.android.volley.Response.Listener;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
-import com.mportal.client.MportalApplication;
 import com.mportal.client.R;
+import com.mportal.client.bean.User;
+import com.mportal.client.AppContext;
 import com.mportal.client.constant.URLs;
 import com.mportal.client.util.JSONResult;
 import com.mportal.client.widget.ProgressHUD;
@@ -54,7 +55,8 @@ public class ChangePasswordActivity extends BaseActivity implements OnClickListe
 				Toast.makeText(this, "新旧密码相同", Toast.LENGTH_SHORT).show();
 			} else {
 				ProgressHUD.show(this);
-				String url = String.format(URLs.URL_MODIFY_PASSWORD, MportalApplication.user.getUserId(), mOriginalEt
+				User currentUser = AppContext.getInstance(mContext).getCurrentUser();
+				String url = String.format(URLs.URL_MODIFY_PASSWORD, currentUser.getUserId(), mOriginalEt
 						.getText().toString().trim(), mNewEt.getText().toString().trim());
 				mRequestQueue.add(new StringRequest(url, new Listener<String>() {
 

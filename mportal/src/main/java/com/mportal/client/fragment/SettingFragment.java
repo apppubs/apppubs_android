@@ -28,6 +28,7 @@ import android.widget.ToggleButton;
 
 import com.android.volley.RequestQueue;
 import com.android.volley.toolbox.Volley;
+import com.mportal.client.AppManager;
 import com.mportal.client.MportalApplication;
 import com.mportal.client.R;
 import com.mportal.client.activity.AboutUsActivity;
@@ -68,7 +69,7 @@ public class SettingFragment extends TitleMenuFragment implements OnClickListene
 		 super.onCreateView(inflater, container, savedInstanceState);
 		 mRootView = inflater.inflate(R.layout.frg_setting, null);
 //			//左右滑动的布局下从下打开，其他情况用默认打开方式
-//			if(MportalApplication.app.getLayoutLocalScheme()==App.STYLE_SLIDE_MENU){
+//			if(mAppContext.getApp().getLayoutLocalScheme()==App.STYLE_SLIDE_MENU){
 //				mTitleBar.setLeftImageResource(R.drawable.close);
 //			}
 			init();
@@ -82,7 +83,7 @@ public class SettingFragment extends TitleMenuFragment implements OnClickListene
 		mApp = (MportalApplication) mHostActivity.getApplication();
 	}
 	private void initState1() {
-		isHaveNewVersion = MportalApplication.app.getLatestVersion() > Utils.getVersionCode(mContext);
+		isHaveNewVersion = mAppContext.getApp().getLatestVersion() > Utils.getVersionCode(mContext);
 		if (isHaveNewVersion) {
 			newVresion.setVisibility(View.VISIBLE);
 		} else {
@@ -141,12 +142,12 @@ public class SettingFragment extends TitleMenuFragment implements OnClickListene
 	 * 恢复设置状态
 	 */
 	private void initState() {
-		Settings settings = MportalApplication.systemSettings;
+		Settings settings = mAppContext.getSettings();
 		mPushTb.setChecked(settings.isNeedPushNotification());
 		mNetworkTb.setChecked(settings.isAllowDowPicUse2G());
 
 		refreshCacheSize();
-		if(MportalApplication.systemSettings.isDevMode()){
+		if(mAppContext.getSettings().isDevMode()){
 			showOrHideDevItems(true);
 		}else{
 			showOrHideDevItems(false);
@@ -169,15 +170,15 @@ public class SettingFragment extends TitleMenuFragment implements OnClickListene
 			public void onClick(View v) {
 				mClickNum++;
 				System.out.println("标题点击"+mClickNum+"次");
-				if(mClickNum==10&&!MportalApplication.systemSettings.isDevMode()){
-					MportalApplication.systemSettings.setDevMode(true);
-					MportalApplication.commitAndRefreshSystemSettings(MportalApplication.systemSettings, mHostActivity);
+				if(mClickNum==10&&!mAppContext.getSettings().isDevMode()){
+					mAppContext.getSettings().setDevMode(true);
+					MportalApplication.commitAndRefreshSystemSettings(mAppContext.getSettings(), mHostActivity);
 					Toast.makeText(mHostActivity, "切换应用功能已经打开", Toast.LENGTH_SHORT).show();
 					showOrHideDevItems(true);
 					mClickNum = 0;
-				}else if(mClickNum==10&&MportalApplication.systemSettings.isDevMode()){
-					MportalApplication.systemSettings.setDevMode(false);
-					MportalApplication.commitAndRefreshSystemSettings(MportalApplication.systemSettings, mHostActivity);
+				}else if(mClickNum==10&&mAppContext.getSettings().isDevMode()){
+					mAppContext.getSettings().setDevMode(false);
+					MportalApplication.commitAndRefreshSystemSettings(mAppContext.getSettings(), mHostActivity);
 					Toast.makeText(mHostActivity, "切换应用功能已经关闭", Toast.LENGTH_SHORT).show();
 					showOrHideDevItems(false);
 					mClickNum = 0;
@@ -290,20 +291,20 @@ public class SettingFragment extends TitleMenuFragment implements OnClickListene
 			break;
 		case R.id.setting_push_tb:// 是否接受消息点击
 			if (mPushTb.isChecked()) {
-				MportalApplication.systemSettings.setNeedPush(true);
+				mAppContext.getSettings().setNeedPush(true);
 			} else {
-				MportalApplication.systemSettings.setNeedPush(false);
+				mAppContext.getSettings().setNeedPush(false);
 			}
-//			m.commitSystemSettings(MportalApplication.systemSettings);
+//			m.commitSystemSettings(mAppContext.getSettings());
 			break;
 		case R.id.settings_network_tb:// 网络
+			Settings settings = mAppContext.getSettings();
 			if (mNetworkTb.isChecked()) {
-				MportalApplication.systemSettings.setAllowDowPicUse2G(true);
+				settings.setAllowDowPicUse2G(true);
 			} else {
-				MportalApplication.systemSettings.setAllowDowPicUse2G(false);
+				settings.setAllowDowPicUse2G(false);
 			}
-			mApp.commitSystemSettings(MportalApplication.systemSettings);
-
+			mAppContext.setSettings(settings);
 			break;
 		case R.id.settings_update:
 			checkVersion();
@@ -314,7 +315,7 @@ public class SettingFragment extends TitleMenuFragment implements OnClickListene
 				@Override
 				public void onOkClick() {
 					isSwitchTheme = true;
-					mApp.switchLayout();
+					AppManager.getInstant(mContext).switchLayout();
 				}
 
 				@Override
@@ -334,8 +335,8 @@ public class SettingFragment extends TitleMenuFragment implements OnClickListene
 			Button subBtn = (Button) popV.findViewById(R.id.switch_submit_btn);
 			final EditText ipEt = (EditText) popV.findViewById(R.id.switch_ip_et);
 			final EditText codeEt = (EditText) popV.findViewById(R.id.switch_code_et);
-			ipEt.setText(MportalApplication.systemSettings.getBaseURL());
-			codeEt.setText(MportalApplication.systemSettings.getAppCode());
+			ipEt.setText(mAppContext.getSettings().getBaseURL());
+			codeEt.setText(mAppContext.getSettings().getAppCode());
 			subBtn.setOnClickListener(new OnClickListener() {
 
 				@Override
@@ -397,7 +398,7 @@ public class SettingFragment extends TitleMenuFragment implements OnClickListene
 	}
 
 	private void checkVersion() {
-		boolean bo = MportalApplication.app.getLatestVersion() > Utils.getVersionCode(mHostActivity);
+		boolean bo = mAppContext.getApp().getLatestVersion() > Utils.getVersionCode(mHostActivity);
 		if (bo) {
 			newVresion.setVisibility(View.VISIBLE);
 			mSystemBussiness.update(new BussinessCallbackCommon<String[]>() {

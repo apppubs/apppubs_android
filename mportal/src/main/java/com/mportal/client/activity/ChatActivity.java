@@ -55,6 +55,8 @@ import com.mportal.client.MportalApplication;
 import com.mportal.client.R;
 import com.mportal.client.adapter.ChatAdapter;
 import com.mportal.client.bean.Msg;
+import com.mportal.client.bean.User;
+import com.mportal.client.AppContext;
 import com.mportal.client.business.BussinessCallbackCommon;
 import com.mportal.client.business.MsgController;
 import com.mportal.client.constant.Actions;
@@ -239,7 +241,8 @@ public class ChatActivity extends BaseActivity implements OnClickListener {
 		if(map!=null&&map.get(mChatGroupId)!=null){
 			deleteDateStr = map.get(mChatGroupId);
 		}
-		mMsgBussiness.getChatGroupChatList(MportalApplication.user.getUsername(), mChatGroupId,deleteDateStr,
+		User currentUser = AppContext.getInstance(mContext).getCurrentUser();
+		mMsgBussiness.getChatGroupChatList(currentUser.getUsername(), mChatGroupId,deleteDateStr,
 				new BussinessCallbackCommon<List<Msg>>() {
 
 					@Override
@@ -298,9 +301,9 @@ public class ChatActivity extends BaseActivity implements OnClickListener {
 
 	private void cleanUnreadNum() {
 		if (!TextUtils.isEmpty(mChatGroupId)) {
-
+			User currentUser = AppContext.getInstance(mContext).getCurrentUser();
 			String url = String.format(URLs.URL_CLEAR_UNREAD_NUM_FOR_SERVICE_NO_AND_CHAT, mChatGroupId,
-					MportalApplication.user.getUsername());
+					currentUser.getUsername());
 			mRequestQueue.add(new StringRequest(url, new Listener<String>() {
 
 				@Override
@@ -386,7 +389,8 @@ public class ChatActivity extends BaseActivity implements OnClickListener {
 								 * obj } });
 								 */
 								Msg info = new Msg();
-								info.setSenderId(MportalApplication.user.getUsername());
+								User currentUser = AppContext.getInstance(mContext).getCurrentUser();
+								info.setSenderId(currentUser.getUsername());
 								info.setContentType(Msg.TYPE_CONTENT_SOUND);
 								info.setLength(mVoiceDuration);
 								info.setVoiceLocation(mSoundPath);
@@ -400,7 +404,7 @@ public class ChatActivity extends BaseActivity implements OnClickListener {
 								// mFileName,mVoiceDuration);
 								// }else{
 								// }
-								mMsgBussiness.sendGroupSoundMsg(MportalApplication.user.getUsername(), mChatGroupId,
+								mMsgBussiness.sendGroupSoundMsg(currentUser.getUsername(), mChatGroupId,
 										mSoundPath, mVoiceDuration);
 							}
 
@@ -561,7 +565,7 @@ public class ChatActivity extends BaseActivity implements OnClickListener {
 						info.setContent(count);
 						info.setContentType(Msg.TYPE_CONTENT_TEXT);
 						info.setSendTime(obj);
-						info.setSenderId(MportalApplication.user.getUsername());
+						info.setSenderId(AppContext.getInstance(mContext).getCurrentUser().getUsername());
 						infos.add(info);
 						mChatAdapter.notifyDataSetChanged();
 						mListView.setSelection(infos.size() - 1);
@@ -572,7 +576,7 @@ public class ChatActivity extends BaseActivity implements OnClickListener {
 						// mChatType==CHAT_TYPE_SINGLE?mOtherUser.getUsername():"";
 						// String receiverUsername =
 						// mChatType==CHAT_TYPE_SINGLE?mOtherUser.getUsername():"";
-						mMsgBussiness.sendTextMsg(MportalApplication.user.getUsername(), "", groupId,
+						mMsgBussiness.sendTextMsg(AppContext.getInstance(mContext).getCurrentUser().getUsername(), "", groupId,
 								info.getContent(), new BussinessCallbackCommon<Object>() {
 
 									@Override
@@ -747,14 +751,14 @@ public class ChatActivity extends BaseActivity implements OnClickListener {
 				Msg msg = new Msg();
 				msg.setPicLocation("file://" + smallImagePath);
 				msg.setContentType(Msg.TYPE_CONTENT_IMAGE);
-				msg.setSenderId(MportalApplication.user.getUsername());
+				msg.setSenderId(AppContext.getInstance(mContext).getCurrentUser().getUsername());
 				msg.setSendTime(new Date());
 				// msg.setReceiverUsername(mOtherUser.getUsername());
 				infos.add(msg);
 
 				mChatAdapter.notifyDataSetChanged();
 				mListView.setSelection(infos.size() - 1);
-				mMsgBussiness.sendGroupPicMsg(MportalApplication.user.getUsername(), mChatGroupId, smallImagePath);
+				mMsgBussiness.sendGroupPicMsg(AppContext.getInstance(mContext).getCurrentUser().getUsername(), mChatGroupId, smallImagePath);
 				break;
 			case 2:
 				// 相机拍摄
@@ -788,7 +792,7 @@ public class ChatActivity extends BaseActivity implements OnClickListener {
 					}
 				}
 				Msg info = new Msg();
-				info.setSenderId(MportalApplication.user.getUsername());
+				info.setSenderId(AppContext.getInstance(mContext).getCurrentUser().getUsername());
 				info.setContentType(Msg.TYPE_CONTENT_IMAGE);
 				info.setPicLocation( pic);
 				info.setSendTime(new Date());
@@ -800,7 +804,7 @@ public class ChatActivity extends BaseActivity implements OnClickListener {
 				// }else{
 				// mMsgBussiness.sendGroupPicMsg(MportalApplication.user.getUsername(),mChatGroupId,mPicPath);
 				// }
-				mMsgBussiness.sendGroupPicMsg(MportalApplication.user.getUsername(), mChatGroupId, cameraBitSmallPath);
+				mMsgBussiness.sendGroupPicMsg(AppContext.getInstance(mContext).getCurrentUser().getUsername(), mChatGroupId, cameraBitSmallPath);
 				break;
 			case 3:// 文件
 				System.out.println("打印文件传送返回来的..........." + data.getDataString());
@@ -878,7 +882,7 @@ public class ChatActivity extends BaseActivity implements OnClickListener {
 				// });
 				// }else{
 				// }
-				mMsgBussiness.sendGroupVideoMsg(MportalApplication.user.getUsername(), mChatGroupId, videoPath,
+				mMsgBussiness.sendGroupVideoMsg(AppContext.getInstance(mContext).getCurrentUser().getUsername(), mChatGroupId, videoPath,
 						new BussinessCallbackCommon<Object>() {
 
 							@Override
@@ -893,7 +897,7 @@ public class ChatActivity extends BaseActivity implements OnClickListener {
 								if(map!=null){
 									deleteDateStr = map.get(mChatGroupId);
 								}
-								mMsgBussiness.getChatGroupChatList(MportalApplication.user.getUsername(), mChatGroupId,deleteDateStr,
+								mMsgBussiness.getChatGroupChatList(AppContext.getInstance(mContext).getCurrentUser().getUsername(), mChatGroupId,deleteDateStr,
 										new BussinessCallbackCommon<List<Msg>>() {
 
 											@Override
@@ -967,7 +971,7 @@ public class ChatActivity extends BaseActivity implements OnClickListener {
 			public void onDone(Date obj) {
 				// obj
 				Msg info = new Msg();
-				info.setSenderId(MportalApplication.user.getUsername());
+				info.setSenderId(AppContext.getInstance(mContext).getCurrentUser().getUsername());
 				info.setContentType(2);// 图片
 				info.setSendTime(obj);
 				info.setPicLocation(mPicPath);

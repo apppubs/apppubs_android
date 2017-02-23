@@ -5,7 +5,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.graphics.Bitmap;
-import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
 import android.util.Log;
 import android.util.TypedValue;
@@ -35,14 +34,12 @@ import com.mportal.client.R;
 import com.mportal.client.activity.ChatActivity;
 import com.mportal.client.activity.ChatNewGroupChatOrAddUserActivity;
 import com.mportal.client.activity.ContainerActivity;
-import com.mportal.client.message.activity.UserPickerActivity;
-import com.mportal.client.bean.App;
+import com.mportal.client.AppContext;
 import com.mportal.client.bean.MsgRecord;
 import com.mportal.client.business.MsgController;
 import com.mportal.client.constant.Actions;
 import com.mportal.client.constant.Constants;
 import com.mportal.client.constant.URLs;
-import com.mportal.client.message.model.UserPickerHelper;
 import com.mportal.client.util.JSONResult;
 import com.mportal.client.util.SharedPreferenceUtils;
 import com.mportal.client.util.StringUtils;
@@ -54,11 +51,8 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.lang.reflect.Array;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -205,7 +199,7 @@ public class ConversationFragment extends BaseFragment implements OnClickListene
 		mHostActivity.unregisterReceiver(mRefreshBR);
 	}
 	private void refreshList() {
-		String url = String.format(URLs.URL_SERVICE_NO_FOR_USER, MportalApplication.user.getUsername());
+		String url = String.format(URLs.URL_SERVICE_NO_FOR_USER, AppContext.getInstance(mContext).getCurrentUser().getUsername());
 		mRequestQueue.add(new StringRequest(url,new Listener<String>() {
 
 			@Override
@@ -298,7 +292,7 @@ public class ConversationFragment extends BaseFragment implements OnClickListene
 
 //					User otherU = mUserBussiness.getUserByUsername(mr.getSourceUsernameOrId());
 //					User otherU = mUserBussiness.getUserByUserId(mr.getSourceUsernameOrId());
-						String url = String.format(URLs.URL_CHAT_GROUD_INFO, mr.getSourceUsernameOrId(),MportalApplication.user.getUsername());
+						String url = String.format(URLs.URL_CHAT_GROUD_INFO, mr.getSourceUsernameOrId(), AppContext.getInstance(mContext).getCurrentUser().getUsername());
 						mRequestQueue.add(new StringRequest(url, new Listener<String>() {
 
 							@Override
@@ -416,7 +410,7 @@ public class ConversationFragment extends BaseFragment implements OnClickListene
 						MportalApplication.writeObj(mContext, map, MportalApplication.MSG_DELETED_CHAT_GROUP_MAP);
 						
 						String url = String.format(URLs.URL_CLEAR_UNREAD_NUM_FOR_SERVICE_NO_AND_CHAT, mMsgRecordL.get(pos).getSourceUsernameOrId(),
-								MportalApplication.user.getUsername());
+								AppContext.getInstance(mContext).getCurrentUser().getUsername());
 						mRequestQueue.add(new StringRequest(url, new Listener<String>() {
 
 							@Override
@@ -489,13 +483,13 @@ public class ConversationFragment extends BaseFragment implements OnClickListene
 		case R.id.pop_msg_record_add_chat_ll:
 			
 			Log.e(this.getClass().getName(), "此处需要，增加AddressBookFragement的参数");
-			String [] userIds = new String[]{MportalApplication.user.getUserId()};
+			String [] userIds = new String[]{AppContext.getInstance(mContext).getCurrentUser().getUserId()};
 //			UserPickerHelper.startActivity(mContext,"选择人员",new ArrayList<String>(Arrays.asList(userIds)));
 			mMenuPW.dismiss();
 			break;
 		case R.id.pop_msg_record_add_group_chat_ll:
 			Intent chatNewGroupIntent = new Intent(mHostActivity,ChatNewGroupChatOrAddUserActivity.class);
-			chatNewGroupIntent.putExtra(ChatNewGroupChatOrAddUserActivity.EXTRA_PRESELECTED_USERNAME_LIST, MportalApplication.user.getUsername());
+			chatNewGroupIntent.putExtra(ChatNewGroupChatOrAddUserActivity.EXTRA_PRESELECTED_USERNAME_LIST, AppContext.getInstance(mContext).getCurrentUser().getUsername());
 			startActivity(chatNewGroupIntent);
 			mMenuPW.dismiss();
 			break;

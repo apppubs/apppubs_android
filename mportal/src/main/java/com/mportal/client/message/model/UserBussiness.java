@@ -22,6 +22,7 @@ import com.mportal.client.bean.Department;
 import com.mportal.client.bean.User;
 import com.mportal.client.bean.UserDeptLink;
 import com.mportal.client.business.AbstractBussinessCallback;
+import com.mportal.client.AppContext;
 import com.mportal.client.business.BaseBussiness;
 import com.mportal.client.business.BussinessCallbackCommon;
 import com.mportal.client.business.SystemBussiness;
@@ -34,9 +35,7 @@ import com.mportal.client.util.LogM;
 import com.mportal.client.util.StringUtils;
 import com.mportal.client.util.Utils;
 import com.mportal.client.util.WebUtils;
-import com.orm.SugarDb;
 import com.orm.SugarRecord;
-import com.orm.util.NamingHelper;
 
 import org.json.JSONObject;
 
@@ -51,8 +50,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.Future;
-
-import static com.orm.SugarContext.getSugarContext;
 
 /**
  * 用户相关业务
@@ -69,10 +66,11 @@ public class UserBussiness extends BaseBussiness {
 	private static UserBussiness sUserBussiness;
 	private static final String CACHE_NAME = "com.client.message.model.UserBussiness";
 	private Context mContext;
+	private AppContext mAppContext;
 
 	private UserBussiness(Context context) {
-
 		mContext = context;
+		mAppContext = AppContext.getInstance(context);
 	}
 
 	public static synchronized UserBussiness getInstance(Context context) {
@@ -89,12 +87,11 @@ public class UserBussiness extends BaseBussiness {
 	 * @return
 	 */
 	public List<User> listAllUser() {
-//		Collections.sort(list, new SortByInitialsAndTruename());
-		return listAllUser(null);
+		return listAllUser(AppContext.getInstance(mContext).getCurrentUser().getAddressbookPermissionString());
 	}
 	public List<User> listAllUser(String permissionString){
 		List<User> result = null;
-		if(permissionString!=null){
+		if(!TextUtils.isEmpty(permissionString)){
 			String permissionStr = resovePermissionString(permissionString);
 			String sql =  "select * from USER t1 join USER_DEPT_LINK t2 on t1.USER_ID  = t2.USER_ID where t2.DEPT_ID in("+permissionStr+")  order by t1.INITIALS ";
 			result = SugarRecord.findWithQuery(User.class, sql, new String[]{});
@@ -103,6 +100,7 @@ public class UserBussiness extends BaseBussiness {
 		}
 		return result;
 	}
+
 
 	// 根据首字母和真实名称排序
 	private class SortByInitialsAndTruename implements Comparator<User> {
@@ -222,9 +220,9 @@ public class UserBussiness extends BaseBussiness {
 	 */
 	public List<Department> listSubDepartment(String superDepId) {
 		List<Department> result = null;
-		int needPermsion = MportalApplication.app.getAddressbookNeedPermission();
+		int needPermsion = AppContext.getInstance(mContext).getApp().getAddressbookNeedPermission();
 		if (needPermsion==App.NEED){
-			String departnentStr = MportalApplication.user.getAddressbookPermissionString();
+			String departnentStr = AppContext.getInstance(mContext).getCurrentUser().getAddressbookPermissionString();
 			result = listSubDepartment(superDepId,departnentStr);
 		}else{
 			result = listSubDepartment(superDepId,null);
@@ -452,11 +450,12 @@ public class UserBussiness extends BaseBussiness {
 						}
 					});
 					Gson gson = gb.create();
-					String urlUser = MportalApplication.app.getAddressbookUserUrl();
+					App app = AppContext.getInstance(mContext).getApp();
+					String urlUser = app.getAddressbookUserUrl();
 					// String urlUser = URLs.URL_ADDRESS_BOOK +
 					// "&dowhat=getuser";
 					String userString = WebUtils.requestWithGet(urlUser);
-					if (MportalApplication.app.getAddressbookNeedDecryption() == App.NEED) {
+					if (app.getAddressbookNeedDecryption() == App.NEED) {
 						userString = Des3.decode(userString);
 					}
 					JSONObject userJson = new JSONObject(userString);
@@ -471,9 +470,9 @@ public class UserBussiness extends BaseBussiness {
 					userL = null;
 
 					// 部门
-					String urlDep = MportalApplication.app.getAddressbookDetpUrl();
+					String urlDep = app.getAddressbookDetpUrl();
 					String deptString = WebUtils.requestWithGet(urlDep);
-					if (MportalApplication.app.getAddressbookNeedDecryption() == App.NEED) {
+					if (app.getAddressbookNeedDecryption() == App.NEED) {
 						deptString = Des3.decode(deptString);
 					}
 					JSONObject deptJson = new JSONObject(deptString);
@@ -489,11 +488,11 @@ public class UserBussiness extends BaseBussiness {
 					deptL = null;
 
 					// 关联
-					String urlLink = MportalApplication.app.getAddressbookDeptUserUrl();
+					String urlLink = mAppContext.getApp().getAddressbookDeptUserUrl();
 					// String urlLink = URLs.URL_ADDRESS_BOOK +
 					// "&dowhat=getdeptuser";
 					String linkString = WebUtils.requestWithGet(urlLink);
-					if (MportalApplication.app.getAddressbookNeedDecryption() == App.NEED) {
+					if (mAppContext.getApp().getAddressbookNeedDecryption() == App.NEED) {
 						linkString = Des3.decode(linkString);
 					}
 					JSONObject linkJson = new JSONObject(linkString);
@@ -558,9 +557,9 @@ public class UserBussiness extends BaseBussiness {
 					jo.getString("email"), jo.getString("mobile"));
 			user.setMenuPower(jo.getString("menupower"));
 			// 保存user对象，并保存是否自动登录的配置
-			MportalApplication.saveAndRefreshUser(mContext, user);
-			MportalApplication.systemSettings.setIsAllowAutoLogin(allowAutoLogin);
-			MportalApplication.commitAndRefreshSystemSettings(MportalApplication.systemSettings, mContext);
+			AppContext.getInstance(mContext).setCurrentUser(user);
+			mAppContext.getSettings().setIsAllowAutoLogin(allowAutoLogin);
+			MportalApplication.commitAndRefreshSystemSettings(mAppContext.getSettings(), mContext);
 
 			// sHandler.post(new OnDoneRun<Integer>(callback, result));//
 			// 与主线程的通信
@@ -622,15 +621,15 @@ public class UserBussiness extends BaseBussiness {
 			@Override
 			public void run() {
 
-				String token = MportalApplication.app.getPushVendorType() == App.PUSH_VENDOR_TYPE_BAIDU ? MportalApplication.app
-						.getBaiduPushUserId() : MportalApplication.app.getJpushRegistrationID();// 百度硬件设备号
+				String token = mAppContext.getApp().getPushVendorType() == App.PUSH_VENDOR_TYPE_BAIDU ? mAppContext.getApp()
+						.getBaiduPushUserId() : mAppContext.getApp().getJpushRegistrationID();// 百度硬件设备号
 				String deviceId = SystemBussiness.getInstance(mContext).getMachineId();
 				String systemVresion = Utils.getAndroidSDKVersion();// 操作系统号
 				String currentVersionCode = Utils.getVersionName(mContext);// app版本号
 				try {
 					String url = String.format(URLs.URL_REGISTER_DEVICE, token, deviceId, systemVresion,
 							URLEncoder.encode(Build.MODEL, "utf-8"), currentVersionCode,
-							MportalApplication.app.getCode());
+							mAppContext.getApp().getCode());
 					String result = WebUtils.requestWithGet(url);
 					JSONResult jr = JSONResult.compile(result);
 					if (jr.resultCode == 1) {
@@ -652,10 +651,9 @@ public class UserBussiness extends BaseBussiness {
 	}
 	
 	public void logout(Context context) {
-		if(MportalApplication.app.getLoginFlag()==App.LOGIN_INAPP){
+		if(mAppContext.getApp().getLoginFlag()==App.LOGIN_INAPP){
 			
-			User user = new User();
-			MportalApplication.saveAndRefreshUser(context, user);
+			AppContext.getInstance(mContext).clearCurrentUser();
 			
 		}
 		context.sendBroadcast(new Intent(Actions.ACTION_LOGOUT));

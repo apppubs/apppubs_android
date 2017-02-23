@@ -63,20 +63,20 @@ public class ThemeSwitchActivity extends BaseActivity {
 			break;
 		case R.id.switch_btn:
 			if(mCurSelectedTheme==Settings.THEME_BLUE){
-				MportalApplication.systemSettings.setTheme(Settings.THEME_BLUE);
+				mAppContext.getSettings().setTheme(Settings.THEME_BLUE);
 				mApp.setTheme(R.style.AppThemeBlue);
 				
 			}else if(mCurSelectedTheme==Settings.THEME_INDIGO){
-				MportalApplication.systemSettings.setTheme(Settings.THEME_INDIGO);
+				mAppContext.getSettings().setTheme(Settings.THEME_INDIGO);
 				mApp.setTheme(R.style.AppThemeIndigo);
 			}else if(mCurSelectedTheme==Settings.THEME_RED){
-				MportalApplication.systemSettings.setTheme(Settings.THEME_RED);
+				mAppContext.getSettings().setTheme(Settings.THEME_RED);
 				mApp.setTheme(R.style.AppThemeRed);
 			}else{
-				MportalApplication.systemSettings.setTheme(Settings.THEME_BROWN);
+				mAppContext.getSettings().setTheme(Settings.THEME_BROWN);
 				mApp.setTheme(R.style.AppThemeBrown);
 			}
-			MportalApplication.commitAndRefreshSystemSettings(MportalApplication.systemSettings, this);
+			MportalApplication.commitAndRefreshSystemSettings(mAppContext.getSettings(), this);
 			Intent i = new Intent(Actions.CLOSE_ALL_ACTIVITY);
 			sendBroadcast(i);
 			HomeBaseActivity.startHomeActivity(this);

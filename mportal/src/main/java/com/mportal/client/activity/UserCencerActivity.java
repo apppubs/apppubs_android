@@ -23,6 +23,7 @@ import com.mportal.client.R;
 import com.mportal.client.asytask.AsyTaskCallback;
 import com.mportal.client.asytask.AsyTaskExecutor;
 import com.mportal.client.bean.User;
+import com.mportal.client.AppContext;
 import com.mportal.client.constant.Constants;
 import com.mportal.client.constant.URLs;
 import com.mportal.client.util.BitmapUtils;
@@ -142,7 +143,7 @@ public class UserCencerActivity extends BaseActivity {
 	@Override
 	protected void onResume() {
 		super.onResume();
-		User user = MportalApplication.user;
+		User user = AppContext.getInstance(mContext).getCurrentUser();
 		mName.setText(user.getUsername());
 		mEmail.setText(user.getEmail());
 		mNicname.setText(user.getTrueName());
@@ -169,7 +170,7 @@ public class UserCencerActivity extends BaseActivity {
 			AsyTaskExecutor.getInstance().startTask(1, new AsyTaskCallback() {
 				@Override
 				public Object onExecute(Integer tag, String[] params) throws Exception {
-					String url = String.format(URLs.URL_UPLOAD_AVATAR,MportalApplication.user.getUserId());
+					String url = String.format(URLs.URL_UPLOAD_AVATAR, AppContext.getInstance(mContext).getCurrentUser().getUserId());
 					Bitmap bitmap = BitmapFactory.decodeFile(params[0]);
 					Bitmap b = BitmapUtils.zoomImg(bitmap,400,400);
 					ByteArrayOutputStream baos = new ByteArrayOutputStream();
@@ -180,7 +181,7 @@ public class UserCencerActivity extends BaseActivity {
 					String response = WebUtils.uploadFile(baos.toByteArray(),"file.jpg",url,paramsMap);
 					JSONResult jr = JSONResult.compile(response);
 					String avatarUrl = (String) jr.getResultMap().get("photourl");
-					MportalApplication.user.setAvatarUrl(avatarUrl);
+					AppContext.getInstance(mContext).getCurrentUser().setAvatarUrl(avatarUrl);
 
 					return null;
 				}
@@ -189,7 +190,7 @@ public class UserCencerActivity extends BaseActivity {
 				public void onTaskSuccess(Integer tag, Object obj) {
 					ProgressHUD.dismissProgressHUDInThisContext(UserCencerActivity.this);
 					Toast.makeText(UserCencerActivity.this,"头像修改成功",Toast.LENGTH_SHORT).show();
-					mImageLoader.displayImage(MportalApplication.user.getAvatarUrl(),mAvatarIV);
+					mImageLoader.displayImage(AppContext.getInstance(mContext).getCurrentUser().getAvatarUrl(),mAvatarIV);
 				}
 
 				@Override
@@ -197,7 +198,7 @@ public class UserCencerActivity extends BaseActivity {
 					ProgressHUD.dismissProgressHUDInThisContext(UserCencerActivity.this);
 					Toast.makeText(UserCencerActivity.this,"头像修改失败",Toast.LENGTH_SHORT).show();
 				}
-			},new String[]{selectPath.get(0),MportalApplication.user.getUserId(),MportalApplication.systemSettings.getAppCode()});
+			},new String[]{selectPath.get(0), AppContext.getInstance(mContext).getCurrentUser().getUserId(),mAppContext.getSettings().getAppCode()});
 
 		}
 

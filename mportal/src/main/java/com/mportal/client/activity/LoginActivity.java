@@ -63,7 +63,7 @@ public class LoginActivity extends BaseActivity implements AsyTaskCallback {
 		mBgIV = (ImageView) findViewById(R.id.login_bg_iv);
 		// wangjimiam = (Button) findViewById(R.id.login_wangjipassword);
 //		zhuce = (Button) findViewById(R.id.login_register);
-//		if (MportalApplication.app.getAllowRegister() == 1) {// 不允许注册
+//		if (mAppContext.getApp().getAllowRegister() == 1) {// 不允许注册
 //			zhuce.setVisibility(View.GONE);
 //		}
 		username.setText(usernameT);
@@ -71,7 +71,7 @@ public class LoginActivity extends BaseActivity implements AsyTaskCallback {
 		
 		AsyTaskExecutor.getInstance().startTask(SYSTEM_CONFIG_TAG, this, null);
 		
-		String picUrl = MportalApplication.app.getLoginPicUrl();
+		String picUrl = mAppContext.getApp().getLoginPicUrl();
 		if(!TextUtils.isEmpty(picUrl)){
 			mImageLoader.displayImage(picUrl, mBgIV);
 		}
@@ -99,7 +99,7 @@ public class LoginActivity extends BaseActivity implements AsyTaskCallback {
 				if (SystemUtils.canConnectNet(getApplication())) {
 					dialog = new LoadingDialog(LoginActivity.this, "正在登陆，请稍候...");
 					dialog.show();
-					String deviceid = MportalApplication.app.getPushVendorType()==App.PUSH_VENDOR_TYPE_BAIDU?MportalApplication.app.getBaiduPushUserId():MportalApplication.app.getJpushRegistrationID();// 百度硬件设备号
+					String deviceid = mAppContext.getApp().getPushVendorType()==App.PUSH_VENDOR_TYPE_BAIDU?mAppContext.getApp().getBaiduPushUserId():mAppContext.getApp().getJpushRegistrationID();// 百度硬件设备号
 					String systemVresion = Utils.getAndroidSDKVersion();
 					String currentVersionCode = Utils.getVersionName(LoginActivity.this);// app版本号
 					String[] params = new String[]{usernameT,passwordT,deviceid,Build.MODEL,systemVresion,currentVersionCode};

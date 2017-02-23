@@ -47,6 +47,7 @@ import com.mportal.client.bean.App;
 import com.mportal.client.bean.MenuItem;
 import com.mportal.client.bean.User;
 import com.mportal.client.bean.Weather;
+import com.mportal.client.AppContext;
 import com.mportal.client.business.BussinessCallbackCommon;
 import com.mportal.client.fragment.BaseFragment;
 import com.mportal.client.service.DownloadAppService;
@@ -164,10 +165,10 @@ public class HomeSlideMenuActivity extends HomeBaseActivity implements OnItemCli
 		mTitleBar.setLeftBtnClickListener(this);
 //		mTitleBar.setRightBtnClickListener(this);
 
-		if (MportalApplication.app.getLayoutLocalScheme() == App.STYLE_SLIDE_MENU) {
+		if (mAppContext.getApp().getLayoutLocalScheme() == App.STYLE_SLIDE_MENU) {
 			versionTV.setText("当前版本:" + "V" + Utils.getVersionName(HomeSlideMenuActivity.this));
 		}
-		if(MportalApplication.app.getWeatherDisplayFlag()==1){
+		if(mAppContext.getApp().getWeatherDisplayFlag()==1){
 			// 天气信息
 			String temp = getShare.getString(WeatherActivity.WEATHERTEMP, "");
 			mcityname = getShare.getString(WeatherActivity.WEATHERCITYNAME, "");
@@ -203,8 +204,8 @@ public class HomeSlideMenuActivity extends HomeBaseActivity implements OnItemCli
 	}
 
 	private void checkVersion() {
-		boolean bo = MportalApplication.app.getLatestVersion() > Utils.getVersionCode(HomeSlideMenuActivity.this);
-		System.out.println("打印保存的版本号。。。。" + MportalApplication.app.getWebAppCode());
+		boolean bo = mAppContext.getApp().getLatestVersion() > Utils.getVersionCode(HomeSlideMenuActivity.this);
+		System.out.println("打印保存的版本号。。。。" + mAppContext.getApp().getWebAppCode());
 		if (bo) {
 			newVersion.setVisibility(View.VISIBLE);
 			updateApp.setOnClickListener(new OnClickListener() {
@@ -277,7 +278,7 @@ public class HomeSlideMenuActivity extends HomeBaseActivity implements OnItemCli
 
 		super.onResume();
 		// 刷新右边菜单的用户名
-		User user = MportalApplication.user;
+		User user = AppContext.getInstance(mContext).getCurrentUser();
 		final String username = user.getUsername();
 		if (username != null && !username.equals("")) {
 			mUsername.setText(username);

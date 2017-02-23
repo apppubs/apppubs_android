@@ -39,16 +39,15 @@ import android.widget.TextView;
 
 import com.android.volley.Response.Listener;
 import com.android.volley.toolbox.StringRequest;
-import com.mportal.client.MportalApplication;
 import com.mportal.client.R;
 import com.mportal.client.activity.ContainerActivity;
 import com.mportal.client.activity.NewsInfoActivity;
 import com.mportal.client.bean.HeadPic;
 import com.mportal.client.bean.MenuGroup;
 import com.mportal.client.bean.MenuItem;
+import com.mportal.client.AppContext;
 import com.mportal.client.constant.Actions;
 import com.mportal.client.constant.Constants;
-import com.mportal.client.constant.SystemConfig;
 import com.mportal.client.constant.URLs;
 import com.mportal.client.util.JSONUtils;
 import com.mportal.client.util.LogM;
@@ -556,7 +555,7 @@ public class MenuGroupsFragment extends HomeFragment implements OnClickListener{
 		mSettings.setBuiltInZoomControls(false);
 		mSettings.setUseWideViewPort(true);
 		String url = mi.getUrl().split(",")[1];
-		url = SystemConfig.convertUrl(url);
+		url = AppContext.getInstance(mContext).convertUrl(url);
 		wb.loadUrl(url);
 		System.out.println("插件：url："+url);
 	}
@@ -591,7 +590,7 @@ public class MenuGroupsFragment extends HomeFragment implements OnClickListener{
 	private void refreshBadge(){
 		for(String s:mBadgeMap.keySet()){
 			MenuItem mi = mMenuMap.get(s);
-			String url = SystemConfig.convertUrl(mi.getBadgeURL());
+			String url = AppContext.getInstance(mContext).convertUrl(mi.getBadgeURL());
 			setViewVisibilityByRemoteBadgeURL(mBadgeMap.get(s), url);
 		}
 		
@@ -675,7 +674,7 @@ public class MenuGroupsFragment extends HomeFragment implements OnClickListener{
 		}
 		mMenuMap = new HashMap<String, MenuItem>();
 		for(MenuItem mi:menuList){
-			String menuPower = MportalApplication.user.getMenuPower();
+			String menuPower = AppContext.getInstance(mContext).getCurrentUser().getMenuPower();
 			if(mi.getProtectedFlag()==0||(!TextUtils.isEmpty(menuPower)&&menuPower.indexOf(mi.getId())!=-1)){
 				mMenuMap.put(mi.getId(), mi);
 			}

@@ -76,7 +76,7 @@ public class PaperInfoListFragment extends BaseFragment implements OnScrollListe
 				.bitmapConfig(Bitmap.Config.RGB_565)
 				.denyNetworkDownload(
 						MportalApplication.systemState.getNetworkState() != ConnectivityManager.TYPE_WIFI
-								&& !MportalApplication.systemSettings.isAllowDowPicUse2G()).build();
+								&& !mAppContext.getSettings().isAllowDowPicUse2G()).build();
 		mCatalogList = mHostActivity.getCatalogList();
 
 		lv.setAdapter(new PaperIssueListAdapter());

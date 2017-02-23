@@ -18,6 +18,7 @@ import com.mportal.client.bean.App;
 import com.mportal.client.bean.MenuItem;
 import com.mportal.client.bean.User;
 import com.mportal.client.bean.Weather;
+import com.mportal.client.AppContext;
 import com.mportal.client.constant.Actions;
 import com.mportal.client.fragment.BaseFragment;
 import com.mportal.client.service.DownloadAppService;
@@ -54,8 +55,8 @@ public abstract class HomeBaseActivity extends BaseActivity {
 		super.onCreate(arg0);
 		overridePendingTransition(R.anim.abc_fade_in, R.anim.abc_fade_out);
 		LogM.log(this.getClass(), " HomeActivity onCreate");
-		if (MportalApplication.user.getMenuPower() != null) {
-			String menuPower = MportalApplication.user.getMenuPower();
+		if (AppContext.getInstance(mContext).getCurrentUser().getMenuPower() != null) {
+			String menuPower = AppContext.getInstance(mContext).getCurrentUser().getMenuPower();
 			String[] menus = menuPower.split(",");
 			String sqlParam = "";
 			for(int i=-1;++i<menus.length;){
@@ -85,9 +86,9 @@ public abstract class HomeBaseActivity extends BaseActivity {
 		initBroadcastReceiver();
 		
 		SharedPreferenceUtils.getInstance(this).putBoolean(MPORTAL_PREFERENCE_NAME, MPORTAL_PREFERENCE_APP_RUNNING_KEY, true);
-		String paddingUrl = MportalApplication.app.getPaddingUrlOnHomeActivityStartUp();
+		String paddingUrl = mAppContext.getApp().getPaddingUrlOnHomeActivityStartUp();
 		if (!TextUtils.isEmpty(paddingUrl)){
-			MportalApplication.app.setPaddingUrlOnHomeActivityStartUp(null);
+			mAppContext.getApp().setPaddingUrlOnHomeActivityStartUp(null);
 			ViewCourier.execute(mContext,paddingUrl);
 		}
 	};
@@ -187,8 +188,10 @@ public abstract class HomeBaseActivity extends BaseActivity {
 		unregisterReceiver(mLogoutBR);
 
 		// 记录此次运行的版本
-		MportalApplication.app.setPreWorkingVersion(Utils.getVersionCode(HomeBaseActivity.this));
-		MportalApplication.commitApp(this);
+
+		App app = mAppContext.getApp();
+		app.setPreWorkingVersion(Utils.getVersionCode(mContext));
+		mAppContext.setApp(app);
 	}
 
 	// protected void exit() {
@@ -214,7 +217,7 @@ public abstract class HomeBaseActivity extends BaseActivity {
 	public static void startHomeActivity(Context fromActivy) {
 
 		LogM.log(Class.class, "startHomeActivity-->启动主界面");
-		int layout = MportalApplication.app.getLayoutLocalScheme();
+		int layout = AppContext.getInstance(fromActivy).getApp().getLayoutLocalScheme();
 		Intent stopAllActivity = new Intent(Actions.CLOSE_ALL_ACTIVITY);
 		fromActivy.sendBroadcast(stopAllActivity);
 		Intent intent = null;
@@ -260,21 +263,20 @@ public abstract class HomeBaseActivity extends BaseActivity {
 	}
 
 	public void logout() {
-		User user = new User();
-		MportalApplication.saveAndRefreshUser(mApp, user);
-		if (MportalApplication.app.getLoginFlag() == App.LOGIN_ONSTART_USE_USERNAME_PASSWORD||MportalApplication.app.getLoginFlag()==App.LOGIN_ONSTART_USE_USERNAME_PASSWORD_ORGCODE) {
+		AppContext.getInstance(mContext).setCurrentUser(new User());
+		if (mAppContext.getApp().getLoginFlag() == App.LOGIN_ONSTART_USE_USERNAME_PASSWORD||mAppContext.getApp().getLoginFlag()==App.LOGIN_ONSTART_USE_USERNAME_PASSWORD_ORGCODE) {
 			Intent closeI = new Intent(Actions.CLOSE_ALL_ACTIVITY);
 			sendBroadcast(closeI);
 			Intent intent = new Intent(this, FirstLoginActity.class);
 			startActivity(intent);
 
-		} else if(MportalApplication.app.getLoginFlag() == App.LOGIN_ONSTART_USE_USERNAME){
+		} else if(mAppContext.getApp().getLoginFlag() == App.LOGIN_ONSTART_USE_USERNAME){
 			Intent closeI = new Intent(Actions.CLOSE_ALL_ACTIVITY);
 			sendBroadcast(closeI);
 			Intent intent = new Intent(this, FirstLoginActity.class);
 			startActivity(intent);
 
-		}else if(MportalApplication.app.getLoginFlag() == App.LOGIN_ONSTART_USE_PHONE_NUMBER){
+		}else if(mAppContext.getApp().getLoginFlag() == App.LOGIN_ONSTART_USE_PHONE_NUMBER){
 			Intent closeI = new Intent(Actions.CLOSE_ALL_ACTIVITY);
 			sendBroadcast(closeI);
 			Intent intent = new Intent(this, FirstLoginActity.class);

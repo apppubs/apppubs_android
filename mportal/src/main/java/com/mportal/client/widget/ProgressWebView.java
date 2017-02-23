@@ -20,6 +20,7 @@ import android.net.Uri;
 import android.net.http.SslError;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.CountDownTimer;
 import android.util.AttributeSet;
 import android.webkit.JsResult;
 import android.webkit.SslErrorHandler;
@@ -28,6 +29,7 @@ import android.webkit.WebResourceResponse;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.ProgressBar;
+import android.widget.Toast;
 
 import com.mportal.client.R;
 import com.mportal.client.SkipActivity;
@@ -58,6 +60,7 @@ public class ProgressWebView extends BridgeWebView {
 	private ProgressWebViewListener mListener;
 	private ProgressDialog mProgressDialog;
 	private AsyncTask mCurrentTask;
+	private CountDownTimer mCounterDownTimer;
 	
 
 	public ProgressWebView(Context context, AttributeSet attrs) {
@@ -66,7 +69,7 @@ public class ProgressWebView extends BridgeWebView {
 		progressbar = new ProgressBar(context, null, android.R.attr.progressBarStyleHorizontal);
 		Drawable drawable = null;
 		/*
-		 * int theme = MportalApplication.systemSettings.getTheme(); switch
+		 * int theme = mAppContext.getSettings().getTheme(); switch
 		 * (theme) { case Settings.THEME_BLUE:
 		 * 
 		 * drawable = context.getResources().getDrawable(
@@ -100,6 +103,23 @@ public class ProgressWebView extends BridgeWebView {
 		});
 		// mProgressDialog.show();
 
+		if (mCounterDownTimer==null){
+			mCounterDownTimer = new CountDownTimer(5*1000,1000) {
+				@Override
+				public void onTick(long millisUntilFinished) {
+				}
+
+				@Override
+				public void onFinish() {
+					Toast.makeText(mContext,"请检查网络状态(或者VPN是否连接)",Toast.LENGTH_LONG).show();
+				}
+			};
+		}
+		mCounterDownTimer.start();
+	}
+
+	public void cancelNetworkError(){
+		mCounterDownTimer.cancel();
 	}
 
 	public void setHostActivity(BaseActivity activity){
@@ -251,12 +271,16 @@ public class ProgressWebView extends BridgeWebView {
 		@Override
 		public void onPageFinished(WebView view, String url) {
 			super.onPageFinished(view, url);
+
+			if (mCounterDownTimer!=null){
+				mCounterDownTimer.cancel();
+			}
+
 			isLoaded = true;
 			if (mListener != null) {
 				mListener.onFinished();
 			}
 			
-
 	        if (ProgressWebView.this.getStartupMessage() != null) {
 	            for (Message m : ProgressWebView.this.getStartupMessage()) {
 	            	ProgressWebView.this.dispatchMessage(m);
@@ -271,7 +295,7 @@ public class ProgressWebView extends BridgeWebView {
 		public boolean shouldOverrideUrlLoading(WebView view, String url) {
 
 			LogM.log(this.getClass(), "shouldOverrideUrlLoading-->url" + url);
-
+			mCounterDownTimer.start();
 	        try {
 	            url = URLDecoder.decode(url, "UTF-8");
 	        } catch (UnsupportedEncodingException e) {

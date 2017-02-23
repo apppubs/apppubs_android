@@ -26,10 +26,10 @@ import com.android.volley.Response.ErrorListener;
 import com.android.volley.Response.Listener;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
-import com.mportal.client.MportalApplication;
 import com.mportal.client.R;
 import com.mportal.client.activity.ContainerActivity;
 import com.mportal.client.bean.ServiceNOInfo;
+import com.mportal.client.AppContext;
 import com.mportal.client.business.BussinessCallbackCommon;
 import com.mportal.client.business.MsgController;
 import com.mportal.client.constant.URLs;
@@ -72,7 +72,7 @@ public class ServiceNoInfoListFragement extends BaseFragment {
 	}
 
 	private void clearUnreadNum() {
-		String url = String.format(URLs.URL_CLEAR_UNREAD_NUM_FOR_SERVICE_NO_AND_CHAT, mServiceNoId,MportalApplication.user.getUsername());
+		String url = String.format(URLs.URL_CLEAR_UNREAD_NUM_FOR_SERVICE_NO_AND_CHAT, mServiceNoId, AppContext.getInstance(mContext).getCurrentUser().getUsername());
 		mRequestQueue.add(new StringRequest(url, new Listener<String>() {
 
 			@Override

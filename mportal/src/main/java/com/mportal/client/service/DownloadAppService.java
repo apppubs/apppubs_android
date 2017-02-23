@@ -18,13 +18,14 @@ import android.os.IBinder;
 import android.os.Message;
 import android.widget.RemoteViews;
 
+import com.mportal.client.AppContext;
 import com.mportal.client.MportalApplication;
 import com.mportal.client.R;
 import com.mportal.client.activity.HomeSlideMenuActivity;
 import com.mportal.client.activity.StartUpActivity;
 import com.mportal.client.business.CallbackResult;
 import com.mportal.client.business.SystemBussiness;
-import com.mportal.client.constant.SystemConfig;
+import com.mportal.client.constant.Constants;
 import com.mportal.client.exception.ESUnavailableException;
 import com.mportal.client.util.FileUtils;
 import com.mportal.client.util.LogM;
@@ -49,6 +50,7 @@ public class DownloadAppService extends Service {
 	private Class<?> cls[] = { StartUpActivity.class, HomeSlideMenuActivity.class };// 具体返回的
 	//
 	private Notification mNotification;
+	private AppContext mAppContext;
 	/**
 	 * 下载apk
 	 * 
@@ -64,7 +66,7 @@ public class DownloadAppService extends Service {
 			switch (msg.what) {
 			case 0:
 				stopSelf();
-				MportalApplication.app.setDownload(false);
+				mAppContext.getApp().setDownload(false);
 				// 下载完毕
 				// 取消通知
 				mNotificationManager.cancel(NOTIFY_ID);
@@ -72,14 +74,14 @@ public class DownloadAppService extends Service {
 				break;
 			case 2:
 				stopSelf();
-				MportalApplication.app.setDownload(false);
+				mAppContext.getApp().setDownload(false);
 				// 这里是用户界面手动取消，所以会经过activity的onDestroy();方法
 				// 取消通知
 				mNotificationManager.cancel(NOTIFY_ID);
 				break;
 			case 1:
 				int rate = msg.arg1;
-				MportalApplication.app.setDownload(true);
+				mAppContext.getApp().setDownload(true);
 				if (rate < 100) {
 					RemoteViews contentview = mNotification.contentView;
 					contentview.setTextViewText(R.id.downloadapk_progress_tv, rate + "%");
@@ -121,7 +123,7 @@ public class DownloadAppService extends Service {
 	public void onDestroy() {
 		super.onDestroy();
 		LogM.log(this.getClass(), "downloadappservice onDestroy");
-		MportalApplication.app.setDownload(false);
+		mAppContext.getApp().setDownload(false);
 		// 这里是用户界面手动取消，所以会经过activity的onDestroy();方法
 		// 取消通知
 		mNotificationManager.cancel(NOTIFY_ID);
@@ -144,9 +146,9 @@ public class DownloadAppService extends Service {
 	@Override
 	public void onCreate() {
 		super.onCreate();
-
+		mAppContext = AppContext.getInstance(this);
 		mNotificationManager = (NotificationManager) getSystemService(android.content.Context.NOTIFICATION_SERVICE);
-		
+
 	}
 
 	/**
@@ -164,7 +166,7 @@ public class DownloadAppService extends Service {
 		mNotification.flags = Notification.FLAG_ONGOING_EVENT;
 
 		RemoteViews contentView = new RemoteViews(getPackageName(), R.layout.notification_downloadapk);
-		contentView.setTextViewText(R.id.downloadapk_name, MportalApplication.app.getName() + "正在下载...");
+		contentView.setTextViewText(R.id.downloadapk_name, mAppContext.getApp().getName() + "正在下载...");
 		// 指定个性化视图
 		mNotification.contentView = contentView;
 
@@ -180,13 +182,13 @@ public class DownloadAppService extends Service {
 	public int onStartCommand(Intent intent, int flags, int startId) {
 
 		try {
-			saveFileName = FileUtils.getAppExternalStorageFile() + SystemConfig.APP_FILE_NAME;
+			saveFileName = FileUtils.getAppExternalStorageFile() + Constants.APK_FILE_NAME;
 		} catch (ESUnavailableException e) {
 			e.printStackTrace();
 		}
 		mSystemBussiness = SystemBussiness.getInstance(this);
 		try {
-			savePath = FileUtils.getAppExternalStorageFile().getAbsolutePath() + "/" + SystemConfig.APP_FILE_NAME;
+			savePath = FileUtils.getAppExternalStorageFile().getAbsolutePath() + "/" + Constants.APK_FILE_NAME;
 
 		} catch (ESUnavailableException e) {
 			e.printStackTrace();
@@ -267,7 +269,6 @@ public class DownloadAppService extends Service {
 	/**
 	 * 安装apk
 	 * 
-	 * @param url
 	 */
 	private void installApk() {
 		File apkfile = new File(saveFileName);

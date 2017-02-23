@@ -165,7 +165,6 @@ public class SlidePicView extends RelativeLayout implements OnPageChangeListener
 		.cacheOnDisk(true)
 		.considerExifParams(true)
 		.bitmapConfig(Bitmap.Config.RGB_565)
-		.denyNetworkDownload(MportalApplication.systemState.getNetworkState()!=ConnectivityManager.TYPE_WIFI&&!MportalApplication.systemSettings.isAllowDowPicUse2G())
 		.build();
 		
 	}

@@ -16,13 +16,10 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.mportal.client.MportalApplication;
 import com.mportal.client.R;
 import com.mportal.client.activity.BaseActivity;
+import com.mportal.client.AppContext;
 import com.mportal.client.business.BussinessCallbackCommon;
-import com.mportal.client.constant.Constants;
-import com.mportal.client.constant.URLs;
-import com.mportal.client.message.SealConst;
 import com.mportal.client.message.model.OperationRong;
 import com.mportal.client.message.model.UserBasicInfo;
 import com.mportal.client.message.model.UserPickerHelper;
@@ -34,11 +31,9 @@ import com.mportal.client.widget.LoadDialog;
 import com.mportal.client.widget.NToast;
 import com.mportal.client.widget.SwitchButton;
 
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-import io.rong.imageloader.core.ImageLoader;
 import io.rong.imkit.RongIM;
 import io.rong.imkit.utilities.PromptPopupDialog;
 import io.rong.imlib.RongIMClient;
@@ -158,7 +153,7 @@ public class DiscussionDetailActivity extends BaseActivity implements CompoundBu
                     for (UserBasicInfo userBasicInfo : infos) {
                         memberList.add(new UserInfo(userBasicInfo.getUserId(), userBasicInfo.getTrueName(), Uri.parse(userBasicInfo.getAtatarUrl())));
                     }
-                    String currentUserId = MportalApplication.user.getUserId();
+                    String currentUserId = AppContext.getInstance(mContext).getCurrentUser().getUserId();
                     if (currentUserId.equals(createId)) {
                         isCreated = true;
                     }

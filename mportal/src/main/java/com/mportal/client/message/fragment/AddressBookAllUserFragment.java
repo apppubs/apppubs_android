@@ -17,11 +17,10 @@ import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.TextView;
 
-import com.mportal.client.MportalApplication;
 import com.mportal.client.R;
 import com.mportal.client.activity.UserInfoActivity;
-import com.mportal.client.bean.App;
 import com.mportal.client.bean.User;
+import com.mportal.client.AppContext;
 import com.mportal.client.fragment.BaseFragment;
 import com.mportal.client.widget.LetterListView;
 import com.mportal.client.widget.LetterListView.OnTouchingLetterChangedListener;
@@ -69,7 +68,8 @@ public class AddressBookAllUserFragment extends BaseFragment {
 			String temp = mEditText.getText().toString();
 			if (temp.equals("")) {
 				// 填充所有的
-				mUsers = mUserBussiness.listAllUser(MportalApplication.app.getAddressbookNeedPermission()==App.NEED?MportalApplication.user.getAddressbookPermissionString():null);
+				User currentUser = AppContext.getInstance(mContext).getCurrentUser();
+				mUsers = mUserBussiness.listAllUser(currentUser.getAddressbookPermissionString());
 				adapter = new MyAdapter(mUsers);
 				mCityLv.setAdapter(adapter);
 			}
@@ -77,7 +77,7 @@ public class AddressBookAllUserFragment extends BaseFragment {
 	};
 
 	public void refreshList(){
-		mUsers = mUserBussiness.listAllUser(MportalApplication.app.getAddressbookNeedPermission()==App.NEED?MportalApplication.user.getAddressbookPermissionString():null);
+		mUsers = mUserBussiness.listAllUser();
 		adapter.setData(mUsers);
 		adapter.notifyDataSetChanged();
 	}
@@ -86,7 +86,7 @@ public class AddressBookAllUserFragment extends BaseFragment {
 
 		super.onActivityCreated(savedInstanceState);
 
-		mUsers = mUserBussiness.listAllUser(MportalApplication.app.getAddressbookNeedPermission()==App.NEED?MportalApplication.user.getAddressbookPermissionString():null);
+		mUsers = mUserBussiness.listAllUser();
 		adapter = new MyAdapter(mUsers);
 		mCityLv.setAdapter(adapter);
 	}

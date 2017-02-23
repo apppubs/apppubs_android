@@ -97,7 +97,7 @@ public class NewsPictureInfoActivity extends BaseActivity implements OnPageChang
 		.cacheOnDisk(true)
 		.considerExifParams(true)
 		.bitmapConfig(Bitmap.Config.RGB_565)
-		.denyNetworkDownload(MportalApplication.systemState.getNetworkState()!=ConnectivityManager.TYPE_WIFI&&!MportalApplication.systemSettings.isAllowDowPicUse2G())
+		.denyNetworkDownload(MportalApplication.systemState.getNetworkState()!=ConnectivityManager.TYPE_WIFI&&!mAppContext.getSettings().isAllowDowPicUse2G())
 		.build();
 		
 		mFuture = mNewsBussiness.getPicInfoPage(mInfoId,

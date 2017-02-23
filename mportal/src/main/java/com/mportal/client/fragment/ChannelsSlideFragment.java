@@ -97,7 +97,7 @@ public class ChannelsSlideFragment extends ChannelsFragment implements OnPageCha
 		
 		mChannelSelDg = (DraggableGridView) mRootView.findViewById(R.id.channels_dgv);
 		mAlterChannelL = (AlternativeChannelLayout) mRootView.findViewById(R.id.channels_alter_acl);
-		mNb = NewsBussiness.getInstance();
+		mNb = NewsBussiness.getInstance(mContext);
 	}
 	
 	@Override

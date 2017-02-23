@@ -32,7 +32,7 @@ public class ChangTextSizeActivity extends BaseActivity {
 	 * 恢复状态
 	 */
 	private void initState(){
-		Settings settings = MportalApplication.systemSettings;
+		Settings settings = mAppContext.getSettings();
 		if(settings.getTextSize()==Settings.TEXTSIZE_SMALL){
 			small.setVisibility(View.VISIBLE);
 			middle.setVisibility(View.GONE);
@@ -53,22 +53,22 @@ public class ChangTextSizeActivity extends BaseActivity {
 		super.onClick(v);
 		switch (v.getId()) {
 		case R.id.changeword_small:
-			MportalApplication.systemSettings.setTextSize(Settings.TEXTSIZE_SMALL);
-			mApp.commitSystemSettings(MportalApplication.systemSettings);
+			mAppContext.getSettings().setTextSize(Settings.TEXTSIZE_SMALL);
+			mAppContext.setSettings(mAppContext.getSettings());
 			small.setVisibility(View.VISIBLE);
 			middle.setVisibility(View.GONE);
 			big.setVisibility(View.GONE);
 			break;
 		case R.id.changeword_middlel:
-			MportalApplication.systemSettings.setTextSize(Settings.TEXTSIZE_MEDIUM);
-			mApp.commitSystemSettings(MportalApplication.systemSettings);
+			mAppContext.getSettings().setTextSize(Settings.TEXTSIZE_MEDIUM);
+			mAppContext.setSettings(mAppContext.getSettings());
 			middle.setVisibility(View.VISIBLE);
 			small.setVisibility(View.GONE);
 			big.setVisibility(View.GONE);
 			break;
 		case R.id.changeword_big:
-			MportalApplication.systemSettings.setTextSize(Settings.TEXTSIZE_BIG);
-			mApp.commitSystemSettings(MportalApplication.systemSettings);
+			mAppContext.getSettings().setTextSize(Settings.TEXTSIZE_BIG);
+			mAppContext.setSettings(mAppContext.getSettings());
 			big.setVisibility(View.VISIBLE);
 			middle.setVisibility(View.GONE);
 			small.setVisibility(View.GONE);

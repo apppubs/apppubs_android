@@ -33,13 +33,13 @@ import com.android.volley.Response.ErrorListener;
 import com.android.volley.Response.Listener;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
-import com.mportal.client.MportalApplication;
 import com.mportal.client.R;
 import com.mportal.client.activity.HomeBottomMenuActivity;
 import com.mportal.client.activity.ViewCourier;
 import com.mportal.client.adapter.PageFragmentPagerAdapter;
 import com.mportal.client.asytask.AsyTaskCallback;
 import com.mportal.client.asytask.AsyTaskExecutor;
+import com.mportal.client.AppContext;
 import com.mportal.client.constant.Constants;
 import com.mportal.client.constant.URLs;
 import com.mportal.client.util.FileUtils;
@@ -876,7 +876,7 @@ public class PageFragment extends TitleMenuFragment implements OnClickListener{
 		
 			if(item.has("texturl")&&!TextUtils.isEmpty(item.getString("texturl"))){
 				if (item.getString("texturl").equals("apppubs://macro/text/truename")){
-					ha.setText(MportalApplication.user.getTrueName());
+					ha.setText(AppContext.getInstance(mContext).getCurrentUser().getTrueName());
 				}else {
 					try {
 						ha.setText(WebUtils.requestWithGet(item.getString("texturl")));
@@ -889,7 +889,7 @@ public class PageFragment extends TitleMenuFragment implements OnClickListener{
 			}
 			if(item.has("imageurl")){
 				if ("apppubs://macro/text/useravatarurl".equals(item.getString("imageurl"))){
-					ha.setImage(mImageLoader.loadImageSync(MportalApplication.user.getAvatarUrl()));
+					ha.setImage(mImageLoader.loadImageSync(AppContext.getInstance(mContext).getCurrentUser().getAvatarUrl()));
 				}else{
 					ha.setImage(mImageLoader.loadImageSync(item.getString("imageurl")));
 				}
@@ -906,7 +906,7 @@ public class PageFragment extends TitleMenuFragment implements OnClickListener{
 			titlebar = new TitleBar(mContext);
 			String title = titleJson.getString("title");
 			if (title.contains("$truename")){
-				title = title.replaceAll("\\$truename",MportalApplication.user.getTrueName());
+				title = title.replaceAll("\\$truename", AppContext.getInstance(mContext).getCurrentUser().getTrueName());
 			}
 			titlebar.setTitle(title);
 			titlebar.setTitleTextSize(TypedValue.COMPLEX_UNIT_PX, getResources().getDimension(R.dimen.title_text_size));

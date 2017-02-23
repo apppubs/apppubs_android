@@ -13,6 +13,7 @@ import java.util.Locale;
 import android.content.Context;
 import android.util.Log;
 
+import com.mportal.client.AppContext;
 import com.mportal.client.MportalApplication;
 
 /**
@@ -31,7 +32,7 @@ public class LogM {
 	public static void log(Class<?> clazz, String msg) {
 		Log.v(clazz.getSimpleName(), msg);
 		// 写入本地文件
-		if (MportalApplication.systemSettings.isDevMode()) {
+		if (AppContext.getInstance(MportalApplication.getContext()).getSettings().isDevMode()) {
 			formatMsg(clazz, msg);
 		}
 	}
@@ -72,7 +73,7 @@ public class LogM {
 		}
 
 		// 写入本地文件
-		if (MportalApplication.systemSettings.isDevMode()) {
+		if (AppContext.getInstance(MportalApplication.getContext()).getSettings().isDevMode()) {
 			formatMsg(clazz, msg);
 
 		}

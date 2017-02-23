@@ -1,6 +1,5 @@
 package com.mportal.client.activity;
 
-import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 
@@ -15,17 +14,16 @@ import android.content.pm.ActivityInfo;
 import android.content.res.TypedArray;
 import android.graphics.Color;
 import android.net.Uri;
-import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.webkit.ValueCallback;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.android.volley.Cache;
 import com.android.volley.Request;
@@ -40,6 +38,7 @@ import com.mportal.client.R;
 import com.mportal.client.bean.App;
 import com.mportal.client.bean.Settings;
 import com.mportal.client.bean.User;
+import com.mportal.client.AppContext;
 import com.mportal.client.business.BussinessCallbackCommon;
 import com.mportal.client.business.MsgBussiness;
 import com.mportal.client.business.NewsBussiness;
@@ -49,9 +48,12 @@ import com.mportal.client.message.model.UserBussiness;
 import com.mportal.client.constant.Actions;
 import com.mportal.client.constant.URLs;
 import com.mportal.client.net.RequestListener;
+import com.mportal.client.service.DownloadAppService;
 import com.mportal.client.util.JSONResult;
 import com.mportal.client.util.LogM;
 import com.mportal.client.util.Utils;
+import com.mportal.client.widget.AlertDialog;
+import com.mportal.client.widget.ConfirmDialog;
 import com.mportal.client.widget.TitleBar;
 import com.nostra13.universalimageloader.core.ImageLoader;
 
@@ -70,6 +72,7 @@ public abstract class BaseActivity extends FragmentActivity implements OnClickLi
 	protected TitleBar mTitleBar;
 	protected ImageLoader mImageLoader;
 	protected MportalApplication mApp;
+	protected AppContext mAppContext;
 
 	protected NewsBussiness mNewsBussiness;
 	protected SystemBussiness mSystemBussiness;
@@ -103,7 +106,7 @@ public abstract class BaseActivity extends FragmentActivity implements OnClickLi
 
 		isNeedTitleBar = getIntent().getBooleanExtra(EXTRA_BOOLEAN_NEED_TITLEBAR, isNeedTitleBar);
 
-		int theme = MportalApplication.systemSettings.getTheme();
+		int theme = mAppContext.getSettings().getTheme();
 		switch (theme) {
 		case Settings.THEME_BLUE:
 			setTheme(R.style.AppThemeBlue);
@@ -129,7 +132,7 @@ public abstract class BaseActivity extends FragmentActivity implements OnClickLi
 			array.recycle();
 
 		} else {
-			mThemeColor = Color.parseColor(MportalApplication.app.getCustomThemeColor());
+			mThemeColor = Color.parseColor(mAppContext.getApp().getCustomThemeColor());
 		}
 
 		// // 横竖屏 当方向标记为2,3时，平板为横屏，为3,4时手机为横屏
@@ -148,11 +151,12 @@ public abstract class BaseActivity extends FragmentActivity implements OnClickLi
 		overridePendingTransition(R.anim.slide_in_from_right, R.anim.slide_out_to_left);
 		mImageLoader = ImageLoader.getInstance();
 		mApp = (MportalApplication) getApplication();
-		mNewsBussiness = NewsBussiness.getInstance();
+		mAppContext = AppContext.getInstance(mContext);
+		mNewsBussiness = NewsBussiness.getInstance(mContext);
 		mSystemBussiness = SystemBussiness.getInstance(this);
 		mPaperBussiness = PaperBussiness.getInstance();
 		mUserBussiness = UserBussiness.getInstance(this);
-		mMsgBussiness = MsgBussiness.getInstance();
+		mMsgBussiness = MsgBussiness.getInstance(this);
 
 		mBr = new BroadcastReceiver() {
 
@@ -243,7 +247,7 @@ public abstract class BaseActivity extends FragmentActivity implements OnClickLi
 
 	protected void onAppActive() {
 		// 如果是用户名登陆则启动是验证
-		if (MportalApplication.app.getLoginFlag() == App.LOGIN_ONSTART_USE_USERNAME) {
+		if (mAppContext.getApp().getLoginFlag() == App.LOGIN_ONSTART_USE_USERNAME) {
 			confirmDeviceBindStateWhenLoginWithUsername();
 		}
 
@@ -251,6 +255,51 @@ public abstract class BaseActivity extends FragmentActivity implements OnClickLi
 			@Override
 			public void onDone(Object obj) {
 				System.out.print("同步appconfig成功");
+				mSystemBussiness.checkUpdate(BaseActivity.this,new SystemBussiness.CheckUpdateListener(){
+
+					@Override
+					public void onDone(boolean needUpdate, boolean needForceUpdate, String version ,String updateDescribe, final String updateUrl) {
+						if (needUpdate){
+							String title = String.format("检查到有新版 %s",TextUtils.isEmpty(version)?"":"V"+version);
+							if(needForceUpdate){
+								AlertDialog ad = new AlertDialog(BaseActivity.this, new AlertDialog.OnOkClickListener() {
+
+									@Override
+									public void onclick() {
+										Intent it = new Intent(BaseActivity.this, DownloadAppService.class);
+										it.putExtra(DownloadAppService.SERVICRINTENTURL, updateUrl);
+										it.putExtra(DownloadAppService.SERVACESHARENAME, 0);
+										startService(it);
+										Toast.makeText(BaseActivity.this, "正在下载中，请稍候", Toast.LENGTH_SHORT).show();
+									}
+								}, title, updateDescribe,"更新");
+								ad.show();
+								ad.setCancelable(false);
+								ad.setCanceledOnTouchOutside(false);
+							}else{
+								ConfirmDialog dialog = new ConfirmDialog(BaseActivity.this, new ConfirmDialog.ConfirmListener() {
+
+									@Override
+									public void onCancelClick() {
+									}
+
+									@Override
+									public void onOkClick() {
+										Intent it = new Intent(BaseActivity.this, DownloadAppService.class);
+										it.putExtra(DownloadAppService.SERVICRINTENTURL, updateUrl);
+										it.putExtra(DownloadAppService.SERVACESHARENAME, 0);
+										startService(it);
+										mUserBussiness.logout(BaseActivity.this);
+									}
+								}, title , updateDescribe, "下次", "更新");
+								dialog.show();
+								dialog.setCanceledOnTouchOutside(false);
+							}
+						}else{
+						}
+					}
+				});
+
 			}
 
 			@Override
@@ -272,8 +321,9 @@ public abstract class BaseActivity extends FragmentActivity implements OnClickLi
 		String url = null;
 		try {
 			// /wmh360/json/login/usersmslogin.jsp?username=%s&deviceid=%s&token=%s&os=%s&dev=%s&app=%s&fr=4&appcode="+appCode;
-			url = String.format(URLs.URL_LOGIN_WITH_USERNAME, MportalApplication.user.getUsername(),
-					mSystemBussiness.getMachineId(), MportalApplication.app.getPushToken(), osVersion,
+			User currentUser = AppContext.getInstance(mContext).getCurrentUser();
+			url = String.format(URLs.URL_LOGIN_WITH_USERNAME, currentUser.getUsername(),
+					mSystemBussiness.getMachineId(), mAppContext.getApp().getPushToken(), osVersion,
 					URLEncoder.encode(Build.MODEL, "utf-8"), currentVersionName,appCode);
 		} catch (UnsupportedEncodingException e) {
 			e.printStackTrace();
@@ -297,7 +347,7 @@ public abstract class BaseActivity extends FragmentActivity implements OnClickLi
 						sendBroadcast(closeI);
 						startActivity(FirstLoginActity.class);
 					} else {
-						MportalApplication.saveAndRefreshUser(BaseActivity.this, user);
+						AppContext.getInstance(BaseActivity.this).setCurrentUser(user);
 					}
 
 				} catch (JSONException e) {

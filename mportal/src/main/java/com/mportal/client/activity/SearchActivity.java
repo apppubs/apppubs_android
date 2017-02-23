@@ -117,7 +117,7 @@ public class SearchActivity extends BaseActivity implements OnItemClickListener 
 			new Thread() {
 				public void run() {
 					String word = keywordEt.getText().toString().trim();
-					adapter.getLodemore(MportalApplication.app.getWebAppCode(), word, lodemun, 6, URLs.CLIENTKEY);
+					adapter.getLodemore(mAppContext.getApp().getWebAppCode(), word, lodemun, 6, URLs.CLIENTKEY);
 					System.out.println("打印webappcode..."+URLs.appCode);
 					boolean bo = adapter.backmore();
 					if (bo) {
@@ -203,8 +203,8 @@ public class SearchActivity extends BaseActivity implements OnItemClickListener 
 		private Tools json;
 		public SearchAdapter() {
 			json = new Tools(SearchActivity.this);
-			System.out.println("搜索用到的webappcode........."+MportalApplication.app.getWebAppCode());
-			infos = json.getSearchInfos(MportalApplication.app.getWebAppCode(),word, 1, 10, URLs.CLIENTKEY);
+			System.out.println("搜索用到的webappcode........."+mAppContext.getApp().getWebAppCode());
+			infos = json.getSearchInfos(mAppContext.getApp().getWebAppCode(),word, 1, 10, URLs.CLIENTKEY);
 		}
 
 		// 加载更多

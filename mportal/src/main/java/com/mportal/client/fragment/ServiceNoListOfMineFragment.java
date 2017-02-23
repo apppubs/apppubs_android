@@ -18,10 +18,10 @@ import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 
-import com.mportal.client.MportalApplication;
 import com.mportal.client.R;
 import com.mportal.client.activity.ContainerActivity;
 import com.mportal.client.bean.ServiceNo;
+import com.mportal.client.AppContext;
 import com.mportal.client.business.BussinessCallbackCommon;
 import com.mportal.client.widget.CircularImage;
 import com.mportal.client.widget.TitleBar;
@@ -59,7 +59,7 @@ public class ServiceNoListOfMineFragment extends BaseFragment {
 	public void onResume() {
 		super.onResume();
 		attentionServiceMsg = getActivity().getSharedPreferences(USERATTECTIONSP, Context.MODE_PRIVATE);
-		mMsgBussiness.getUserServiceNoList(MportalApplication.user.getUsername(),
+		mMsgBussiness.getUserServiceNoList(AppContext.getInstance(mContext).getCurrentUser().getUsername(),
 				new BussinessCallbackCommon<List<ServiceNo>>() {
 
 					public void onException(int excepCode) {

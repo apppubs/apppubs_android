@@ -1,6 +1,8 @@
 package com.mportal.client.constant;
 
+import com.mportal.client.AppContext;
 import com.mportal.client.MportalApplication;
+import com.mportal.client.bean.Settings;
 import com.mportal.client.util.SystemUtils;
 
 public class URLs {
@@ -12,8 +14,9 @@ public class URLs {
 	public static String appCode;
 
 	static{
-		baseURL = MportalApplication.systemSettings.getBaseURL();
-		appCode = MportalApplication.systemSettings.getAppCode();
+		Settings settings = AppContext.getInstance(MportalApplication.getContext()).getSettings();
+		baseURL = settings.getBaseURL();
+		appCode = settings.getAppCode();
 	}
 	
 	/**

@@ -14,9 +14,11 @@ import java.util.regex.Pattern;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import android.content.Context;
 import android.util.Log;
 
 import com.google.gson.JsonParseException;
+import com.mportal.client.AppContext;
 import com.mportal.client.MportalApplication;
 import com.mportal.client.bean.Collection;
 import com.mportal.client.bean.HeadPic;
@@ -32,15 +34,18 @@ public class NewsBussiness extends BaseBussiness {
 
 	private SimpleDateFormat mSdf;
 
-	private NewsBussiness() {
+
+	private static NewsBussiness mNewsBussinessImpl;
+	private Context mContext;
+
+	private NewsBussiness(Context context){
+		mContext = context;
 		mSdf = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss",Locale.CHINA);
 	}
 
-	private static NewsBussiness mNewsBussinessImpl;
-
-	public static NewsBussiness getInstance() {
+	public static synchronized  NewsBussiness getInstance(Context context) {
 		if (mNewsBussinessImpl == null)
-			mNewsBussinessImpl = new NewsBussiness();
+			mNewsBussinessImpl = new NewsBussiness(context);
 		return mNewsBussinessImpl;
 
 	}
@@ -125,7 +130,7 @@ public class NewsBussiness extends BaseBussiness {
 			/**
 			 * 将图片列表转换为newinfo列表，并保存
 			 * 
-			 * @param infoList
+			 * @param picList
 			 * @return
 			 */
 			private List<NewsInfo> savePicInfoList(List<NewsPictureInfo> picList) {
@@ -230,7 +235,7 @@ public class NewsBussiness extends BaseBussiness {
 					if (showType == NewsChannel.SHOWTYPE_HEADLINE) {
 
 						String url = URLs.URL_HEAD_PIC + "&channelcode=" + channelCode + "&webappcode="
-								+ MportalApplication.app.getWebAppCode();
+								+ AppContext.getInstance(mContext).getApp().getWebAppCode();
 						List<HeadPic> hList = WebUtils.requestList(url, HeadPic.class, "tgpic");
 
 						for (HeadPic hp : hList) {

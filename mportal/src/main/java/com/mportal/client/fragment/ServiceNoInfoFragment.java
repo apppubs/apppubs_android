@@ -5,8 +5,6 @@ import java.text.SimpleDateFormat;
 import java.util.Locale;
 import java.util.Map;
 
-import org.json.JSONException;
-
 import android.app.Activity;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -22,10 +20,10 @@ import com.android.volley.Response.ErrorListener;
 import com.android.volley.Response.Listener;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
-import com.mportal.client.MportalApplication;
 import com.mportal.client.R;
 import com.mportal.client.activity.ContainerActivity;
 import com.mportal.client.bean.ServiceNo;
+import com.mportal.client.AppContext;
 import com.mportal.client.business.BussinessCallbackCommon;
 import com.mportal.client.constant.URLs;
 import com.mportal.client.util.DateUtils;
@@ -68,7 +66,7 @@ public class ServiceNoInfoFragment extends BaseFragment {
 	@Override
 	public void onResume() {
 		super.onResume();
-		String url = String.format(URLs.URL_SERVICE_NO, mServiceNoId,MportalApplication.user.getUsername());
+		String url = String.format(URLs.URL_SERVICE_NO, mServiceNoId, AppContext.getInstance(mContext).getCurrentUser().getUsername());
 		mRequestQueue.add(new StringRequest(url, new Listener<String>() {
 
 			@Override
@@ -128,7 +126,7 @@ public class ServiceNoInfoFragment extends BaseFragment {
 			public void onClick(View arg0) {
 				progressBar.setVisibility(View.VISIBLE);
 				if (attentionBt.getText().equals("关注")) {
-					mMsgBussiness.getServiceAttention(mServiceNoId, MportalApplication.user.getUsername(),
+					mMsgBussiness.getServiceAttention(mServiceNoId, AppContext.getInstance(mContext).getCurrentUser().getUsername(),
 							new BussinessCallbackCommon<String>() {
 
 								@Override
@@ -153,7 +151,7 @@ public class ServiceNoInfoFragment extends BaseFragment {
 								}
 							});
 				} else {// 取消关注
-					mMsgBussiness.getServiceUnAttention(mServiceNoId, MportalApplication.user.getUsername(),
+					mMsgBussiness.getServiceUnAttention(mServiceNoId, AppContext.getInstance(mContext).getCurrentUser().getUsername(),
 							new BussinessCallbackCommon<String>() {
 
 								@Override

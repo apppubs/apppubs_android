@@ -1,18 +1,5 @@
 package com.mportal.client.fragment;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.UnsupportedEncodingException;
-import java.net.URLEncoder;
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.List;
-import java.util.Locale;
-
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
@@ -41,6 +28,8 @@ import android.widget.Toast;
 import com.mportal.client.MportalApplication;
 import com.mportal.client.R;
 import com.mportal.client.activity.BaseActivity;
+import com.mportal.client.bean.User;
+import com.mportal.client.AppContext;
 import com.mportal.client.util.FileUtils;
 import com.mportal.client.util.StringUtils;
 import com.mportal.client.util.SystemUtils;
@@ -49,6 +38,19 @@ import com.mportal.client.util.Utils;
 import com.mportal.client.widget.ConfirmDialog;
 import com.mportal.client.widget.ConfirmDialog.ConfirmListener;
 import com.mportal.client.widget.FlowLayout;
+
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.List;
+import java.util.Locale;
 
 public class BaoliaoFragment extends BaseActivity {
 	private LinearLayout pop_layout;// 图片来源显示
@@ -172,23 +174,24 @@ public class BaoliaoFragment extends BaseActivity {
 							// 联网请求数据
 							String userid = "";
 							String username = baoliaoname.getText().toString();
-							if (MportalApplication.user.getId() == null
-									|| MportalApplication.user.getId().equals("")) {
+							User currentUser = AppContext.getInstance(mContext).getCurrentUser();
+							if (currentUser.getId() == null
+									|| currentUser.getId().equals("")) {
 								userid = "";
 							} else {
-								userid = MportalApplication.user.getId();
+								userid = currentUser.getId();
 							}
 							if (username.equals("")) {
-								if ((MportalApplication.user.getUsername() == null || MportalApplication.user
+								if ((currentUser.getUsername() == null || currentUser
 										.getUsername().equals(""))) {
 									username = "";
 								} else {
-									username = MportalApplication.user.getUsername();
+									username = currentUser.getUsername();
 								}
 							}
 							String picPath=getImageStr(mPicPath);
 							baoliaoCanNetwork(userid, title, username, content, contract, picPath,
-									MportalApplication.app.getCode());
+									mAppContext.getApp().getCode());
 							System.out.println("输入的名字，联系信息...." + username + "............" + contract);
 						}
 

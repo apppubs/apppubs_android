@@ -83,7 +83,7 @@ public class NewsAudioInfoActivity extends BaseActivity {
 		}else{
 			mChannelCode = mNewsInfo.getChannelCode();
 		}
-		mNewsBussiness = NewsBussiness.getInstance();
+		mNewsBussiness = NewsBussiness.getInstance(mContext);
 		mFuture = mNewsBussiness.getNewsInfo(mNewsInfo.getId(), mNewsInfo.getChannelCode(),
 				new BussinessCallbackCommon<NewsInfo>() {
 
@@ -126,7 +126,7 @@ public class NewsAudioInfoActivity extends BaseActivity {
 		webSettings.setLayoutAlgorithm(LayoutAlgorithm.NORMAL);
 		// 设置WebView属性，能够执行Javascript脚本
 		webSettings.setJavaScriptEnabled(false);
-		int textSize = MportalApplication.systemSettings.getTextSize();
+		int textSize = mAppContext.getSettings().getTextSize();
 		switch (textSize) {
 		case Settings.TEXTSIZE_BIG:
 			webSettings.setTextSize(TextSize.LARGER);

@@ -1,13 +1,19 @@
 package com.mportal.client.bean;
 
-import java.io.Serializable;
-import java.util.Date;
+import android.content.Context;
 
 import com.google.gson.annotations.SerializedName;
+import com.mportal.client.MportalApplication;
+
+import java.io.Serializable;
+import java.util.Date;
+import java.util.Map;
 
 public class App implements Serializable{
 	
 	private static final long serialVersionUID = 1L;
+
+
 	public static final int STYLE_SLIDE_MENU = 0;
 	public static final int LAYOUT_BOTTOM_MENU = 1;
 	
@@ -161,7 +167,7 @@ public class App implements Serializable{
 	private String webLoginUrl;
 
 	private String paddingUrlOnHomeActivityStartUp;
-	
+
 	public boolean isDownload() {
 		return isDownloadApp;
 	}
@@ -494,4 +500,5 @@ public class App implements Serializable{
 	public void setPaddingUrlOnHomeActivityStartUp(String paddingUrlOnHomeActivityStartUp) {
 		this.paddingUrlOnHomeActivityStartUp = paddingUrlOnHomeActivityStartUp;
 	}
+
 }

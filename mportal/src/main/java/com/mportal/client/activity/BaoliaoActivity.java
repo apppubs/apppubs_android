@@ -37,6 +37,8 @@ import android.widget.Toast;
 
 import com.mportal.client.MportalApplication;
 import com.mportal.client.R;
+import com.mportal.client.bean.User;
+import com.mportal.client.AppContext;
 import com.mportal.client.util.FileUtils;
 import com.mportal.client.util.StringUtils;
 import com.mportal.client.util.SystemUtils;
@@ -253,20 +255,21 @@ public class BaoliaoActivity extends BaseActivity {
 		// 联网请求数据
 		String userid = "";
 		String username = baoliaoname.getText().toString();
-		if (MportalApplication.user.getId() == null || MportalApplication.user.getId().equals("")) {
+		User currentUser = AppContext.getInstance(mContext).getCurrentUser();
+		if (currentUser.getId() == null || currentUser.getId().equals("")) {
 			userid = "";
 		} else {
-			userid = MportalApplication.user.getId();
+			userid = currentUser.getId();
 		}
 		if (username.equals("")) {
-			if ((MportalApplication.user.getUsername() == null || MportalApplication.user.getUsername().equals(""))) {
+			if ((currentUser.getUsername() == null || currentUser.getUsername().equals(""))) {
 				username = "";
 			} else {
-				username = MportalApplication.user.getUsername();
+				username = currentUser.getUsername();
 			}
 		}
 		String picPath = getImageStr(mPicPath);
-		baoliaoCanNetwork(userid, title, username, content, contract, picPath, MportalApplication.app.getCode());
+		baoliaoCanNetwork(userid, title, username, content, contract, picPath, mAppContext.getApp().getCode());
 	}
 
 	// 判断联网提交

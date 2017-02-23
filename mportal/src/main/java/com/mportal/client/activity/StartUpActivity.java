@@ -23,14 +23,13 @@ import com.mportal.client.asytask.AsyTaskCallback;
 import com.mportal.client.asytask.AsyTaskExecutor;
 import com.mportal.client.bean.App;
 import com.mportal.client.bean.User;
+import com.mportal.client.AppContext;
 import com.mportal.client.business.BussinessCallbackCommon;
-import com.mportal.client.constant.URLs;
+import com.mportal.client.business.SystemBussiness;
 import com.mportal.client.fragment.WelcomeFragment;
 import com.mportal.client.service.DownloadAppService;
-import com.mportal.client.util.JSONResult;
 import com.mportal.client.util.LogM;
 import com.mportal.client.util.Utils;
-import com.mportal.client.util.WebUtils;
 import com.mportal.client.widget.AlertDialog;
 import com.mportal.client.widget.AlertDialog.OnOkClickListener;
 import com.mportal.client.widget.ConfirmDialog;
@@ -38,9 +37,6 @@ import com.mportal.client.widget.ConfirmDialog.ConfirmListener;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.assist.FailReason;
 import com.nostra13.universalimageloader.core.listener.ImageLoadingListener;
-
-import org.json.JSONException;
-import org.json.JSONObject;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -64,7 +60,6 @@ import cn.jpush.android.api.JPushInterface;
  */
 public class StartUpActivity extends BaseActivity implements AsyTaskCallback{
 
-	private final int REQUEST_LATEST_VERSION_TASK_TAG = 1;
 	private final int VERIFY_USER_TASK_TAG = 2;
 	
 	private final String SERVER_MIN_SUPPORT_APP_CODE_VERSION = "min_android_code_version";
@@ -122,7 +117,7 @@ public class StartUpActivity extends BaseActivity implements AsyTaskCallback{
 				}
 
 				// 有欢迎图而且系统初始化次数为0
-				if (welcomePicNum > 0 && MportalApplication.app.getInitTimes() < 2) {
+				if (welcomePicNum > 0 && mAppContext.getApp().getInitTimes() < 2) {
 
 					isGuidePlayed = true;
 					startWelcome();
@@ -167,44 +162,44 @@ public class StartUpActivity extends BaseActivity implements AsyTaskCallback{
 
 	public void startLoginOrMainActivity() {
 
-		System.out.println("当前登陆方式：" + MportalApplication.app.getLoginFlag());
+		System.out.println("当前登陆方式：" + mAppContext.getApp().getLoginFlag());
 		// 需要登录而且本地保存的用户信息不为空或者不允许自动登录或者自动登录的情况下密码验证不成功则进入登录界面
-		if ((MportalApplication.app.getLoginFlag() == App.LOGIN_ONSTART_USE_USERNAME_PASSWORD||MportalApplication.app.getLoginFlag() == App.LOGIN_ONSTART_USE_USERNAME_PASSWORD_ORGCODE)
-				&& (MportalApplication.user == null || TextUtils.isEmpty(MportalApplication.user.getUserId())
-						|| !MportalApplication.systemSettings.isAllowAutoLogin() || !isVerfyUserSuccess)) {
+		if ((mAppContext.getApp().getLoginFlag() == App.LOGIN_ONSTART_USE_USERNAME_PASSWORD||mAppContext.getApp().getLoginFlag() == App.LOGIN_ONSTART_USE_USERNAME_PASSWORD_ORGCODE)
+				&& (AppContext.getInstance(mContext).getCurrentUser() == null || TextUtils.isEmpty(AppContext.getInstance(mContext).getCurrentUser().getUserId())
+						|| !mAppContext.getSettings().isAllowAutoLogin() || !isVerfyUserSuccess)) {
 			// 如果已经登录则直接跳过
 			startActivity(FirstLoginActity.class);
-		} else if (MportalApplication.app.getLoginFlag() == App.LOGIN_ONSTART_USE_PHONE_NUMBER
-				&& (MportalApplication.user != null && !TextUtils.isEmpty(MportalApplication.user.getUserId()))) {
+		} else if (mAppContext.getApp().getLoginFlag() == App.LOGIN_ONSTART_USE_PHONE_NUMBER
+				&& (AppContext.getInstance(mContext).getCurrentUser() != null && !TextUtils.isEmpty(AppContext.getInstance(mContext).getCurrentUser().getUserId()))) {
 
 			HomeBaseActivity.startHomeActivity(StartUpActivity.this);
 			
-		} else if (MportalApplication.app.getLoginFlag() == App.LOGIN_ONSTART_USE_USERNAME
-				&& (MportalApplication.user != null && !TextUtils.isEmpty(MportalApplication.user.getUserId()))) {
+		} else if (mAppContext.getApp().getLoginFlag() == App.LOGIN_ONSTART_USE_USERNAME
+				&& (AppContext.getInstance(mContext).getCurrentUser() != null && !TextUtils.isEmpty(AppContext.getInstance(mContext).getCurrentUser().getUserId()))) {
 //			confirmDeviceBindStateWhenLoginWithUsername();
 			HomeBaseActivity.startHomeActivity(StartUpActivity.this);
 			
 			
-		} else if (MportalApplication.app.getLoginFlag() == App.LOGIN_ONSTART_USE_PHONE_NUMBER
-				&& (MportalApplication.user == null || TextUtils.isEmpty(MportalApplication.user.getUserId())
-						|| !MportalApplication.systemSettings.isAllowAutoLogin() || !isVerfyUserSuccess)) {
+		} else if (mAppContext.getApp().getLoginFlag() == App.LOGIN_ONSTART_USE_PHONE_NUMBER
+				&& (AppContext.getInstance(mContext).getCurrentUser() == null || TextUtils.isEmpty(AppContext.getInstance(mContext).getCurrentUser().getUserId())
+						|| !mAppContext.getSettings().isAllowAutoLogin() || !isVerfyUserSuccess)) {
 			// 需要登录而且本地保存的用户信息不为空或者不允许自动登录或者自动登录的情况下密码验证不成功则进入登录界面
 			// 如果已经登录则直接跳过
 			startActivity(FirstLoginActity.class);
-		} else if (MportalApplication.app.getLoginFlag() == App.LOGIN_ONSTART_WEB
-				&& (MportalApplication.user == null || TextUtils.isEmpty(MportalApplication.user.getUserId())
-						|| !MportalApplication.systemSettings.isAllowAutoLogin() || !isVerfyUserSuccess)) {
+		} else if (mAppContext.getApp().getLoginFlag() == App.LOGIN_ONSTART_WEB
+				&& (AppContext.getInstance(mContext).getCurrentUser() == null || TextUtils.isEmpty(AppContext.getInstance(mContext).getCurrentUser().getUserId())
+						|| !mAppContext.getSettings().isAllowAutoLogin() || !isVerfyUserSuccess)) {
 			// 需要登录而且本地保存的用户信息不为空或者不允许自动登录或者自动登录的情况下密码验证不成功则进入登录界面
 			// 如果已经登录则直接跳过
 			startActivity(FirstLoginActity.class);
-		} else if (MportalApplication.app.getLoginFlag() == App.LOGIN_ONSTART_USE_USERNAME) {
+		} else if (mAppContext.getApp().getLoginFlag() == App.LOGIN_ONSTART_USE_USERNAME) {
 			// 需要登录而且本地保存的用户信息不为空或者不允许自动登录或者自动登录的情况下密码验证不成功则进入登录界面
 			// 如果已经登录则直接跳过
 			startActivity(FirstLoginActity.class);
 		} else {
 
 			// 此时如果客户端是不需要登陆的则需要注册设备账号
-			if (MportalApplication.app.getLoginFlag() == App.LOGIN_INAPP) {
+			if (mAppContext.getApp().getLoginFlag() == App.LOGIN_INAPP) {
 				mUserBussiness.registerDevice(null);
 			}
 			HomeBaseActivity.startHomeActivity(StartUpActivity.this);
@@ -236,7 +231,7 @@ public class StartUpActivity extends BaseActivity implements AsyTaskCallback{
 				.build();
 
 		mStartupIv = (ImageView) findViewById(R.id.startup_iv);
-		curStartUpPicURL = MportalApplication.app.getStartUpPic();
+		curStartUpPicURL = mAppContext.getApp().getStartUpPic();
 		mImageLoader.displayImage(curStartUpPicURL, mStartupIv, mImageLoaderOptions);
 	}
 
@@ -276,9 +271,9 @@ public class StartUpActivity extends BaseActivity implements AsyTaskCallback{
 				startUpPush();
 				isSystemInitCompleted = true;
 
-				if (curStartUpPicURL == null || !curStartUpPicURL.equals(MportalApplication.app.getStartUpPic())) {
+				if (curStartUpPicURL == null || !curStartUpPicURL.equals(mAppContext.getApp().getStartUpPic())) {
 					LogM.log(this.getClass(), "init 初始化：当前启动图：" + curStartUpPicURL);
-					mImageLoader.displayImage(MportalApplication.app.getStartUpPic(), mStartupIv, mImageLoaderOptions,
+					mImageLoader.displayImage(mAppContext.getApp().getStartUpPic(), mStartupIv, mImageLoaderOptions,
 							new ImageLoadingListener() {
 
 								@Override
@@ -307,12 +302,12 @@ public class StartUpActivity extends BaseActivity implements AsyTaskCallback{
 				}
 
 				// 用户名密码或者用户名密码和组织嘛登录方式下需要登录而且已经登录过而且是自动登录的情况下验证密码,
-				User curUser = MportalApplication.user;
-				if ((MportalApplication.app.getLoginFlag() == App.LOGIN_ONSTART_USE_USERNAME_PASSWORD) && curUser != null
+				User curUser = AppContext.getInstance(mContext).getCurrentUser();
+				if ((mAppContext.getApp().getLoginFlag() == App.LOGIN_ONSTART_USE_USERNAME_PASSWORD) && curUser != null
 						&& !TextUtils.isEmpty(curUser.getUserId())
-						&& MportalApplication.systemSettings.isAllowAutoLogin()) {
+						&& mAppContext.getSettings().isAllowAutoLogin()) {
 
-					String deviceid = MportalApplication.app.getPushVendorType()==App.PUSH_VENDOR_TYPE_BAIDU?MportalApplication.app.getBaiduPushUserId():MportalApplication.app.getJpushRegistrationID();// 百度硬件设备号
+					String deviceid = mAppContext.getApp().getPushVendorType()==App.PUSH_VENDOR_TYPE_BAIDU?mAppContext.getApp().getBaiduPushUserId():mAppContext.getApp().getJpushRegistrationID();// 百度硬件设备号
 					String systemVresion = Utils.getAndroidSDKVersion();// 操作系统号
 					String currentVersionCode = Utils.getVersionName(StartUpActivity.this);// app版本号
 				
@@ -325,21 +320,63 @@ public class StartUpActivity extends BaseActivity implements AsyTaskCallback{
 					isVerfyUserCompleted = true;
 					isVerfyUserSuccess = true;
 				}
-				// 检查版本更新
-				// 如果本地的版本小于服务器的版本号则请求版本的信息并提示更新
-				if (Utils.getVersionCode(StartUpActivity.this) < MportalApplication.app.getLatestVersion()) {
-					AsyTaskExecutor.getInstance().startTask(REQUEST_LATEST_VERSION_TASK_TAG, StartUpActivity.this, null);
-				} else {
-//					mHandler.postDelayed(enterHomeRun, 1000);
-					isVersionChecked = true;
-				}
-				
+
+				mSystemBussiness.checkUpdate(StartUpActivity.this,new SystemBussiness.CheckUpdateListener(){
+
+					@Override
+					public void onDone(boolean needUpdate, boolean needForceUpdate, String version ,String updateDescribe, final String updateUrl) {
+						if (needUpdate){
+							String title = String.format("检查到有新版 %s",TextUtils.isEmpty(version)?"":"V"+version);
+							if(needForceUpdate){
+								AlertDialog ad = new AlertDialog(StartUpActivity.this, new OnOkClickListener() {
+
+									@Override
+									public void onclick() {
+										Intent it = new Intent(StartUpActivity.this, DownloadAppService.class);
+										it.putExtra(DownloadAppService.SERVICRINTENTURL, updateUrl);
+										it.putExtra(DownloadAppService.SERVACESHARENAME, 0);
+										startService(it);
+										Toast.makeText(StartUpActivity.this, "正在下载中，请稍候", Toast.LENGTH_SHORT).show();
+									}
+								}, title, updateDescribe,"更新");
+								ad.show();
+								ad.setCancelable(false);
+								ad.setCanceledOnTouchOutside(false);
+							}else{
+								ConfirmDialog dialog = new ConfirmDialog(StartUpActivity.this, new ConfirmDialog.ConfirmListener() {
+
+									@Override
+									public void onCancelClick() {
+										isVersionChecked = true;
+									}
+
+									@Override
+									public void onOkClick() {
+										isVersionChecked = true;
+										Intent it = new Intent(StartUpActivity.this, DownloadAppService.class);
+										it.putExtra(DownloadAppService.SERVICRINTENTURL, updateUrl);
+										it.putExtra(DownloadAppService.SERVACESHARENAME, 0);
+										startService(it);
+										// bindService(it, conn, Context.BIND_AUTO_CREATE);
+										mUserBussiness.logout(StartUpActivity.this);
+									}
+								}, title , updateDescribe, "下次", "更新");
+								dialog.show();
+								dialog.setCanceledOnTouchOutside(false);
+							}
+						}else{
+							isVersionChecked = true;
+						}
+					}
+				});
 				mHandler.postDelayed(enterHomeRun, 1000);
 
 			}
 
 		});
 	}
+
+
 
 	private void showErrorDialog() {
 		Dialog confirmDialog = new ConfirmDialog(this, new ConfirmListener() {
@@ -371,11 +408,11 @@ public class StartUpActivity extends BaseActivity implements AsyTaskCallback{
 	 */
 	private void startUpPush() {
 		
-		switch (MportalApplication.app.getPushVendorType()) {
+		switch (mAppContext.getApp().getPushVendorType()) {
 		case App.PUSH_VENDOR_TYPE_BAIDU:
 			List<String> tagList = new ArrayList<String>();
-			tagList.add(MportalApplication.app.getCode());
-			LogM.log(this.getClass(), "启动百度推送，百度推送已经弃用在20000的版本中已经被移除：" + MportalApplication.app.getBaiduPushApiKey());
+			tagList.add(mAppContext.getApp().getCode());
+			LogM.log(this.getClass(), "启动百度推送，百度推送已经弃用在20000的版本中已经被移除：" + mAppContext.getApp().getBaiduPushApiKey());
 			break;
 		case App.PUSH_VENDOR_TYPE_JPUSH:
 			LogM.log(this.getClass(), "启动极光推送，百度推送已经弃用在20000的版本中已经被移除：" );
@@ -383,8 +420,9 @@ public class StartUpActivity extends BaseActivity implements AsyTaskCallback{
 			JPushInterface.init(this);
 			String resigtrationId = JPushInterface.getRegistrationID(this);
 			if(!TextUtils.isEmpty(resigtrationId)){
-				MportalApplication.app.setJpushRegistrationID(resigtrationId);
-				MportalApplication.commitApp(this);
+				App app = mAppContext.getApp();
+				app.setJpushRegistrationID(resigtrationId);
+				mAppContext.setApp(app);
 			}
 			LogM.log(this.getClass(), "jpush注册id" + resigtrationId);
 			break;
@@ -396,36 +434,7 @@ public class StartUpActivity extends BaseActivity implements AsyTaskCallback{
 
 	@Override
 	public Object onExecute(Integer tag, String[] params) {
-		
-		if(tag==REQUEST_LATEST_VERSION_TASK_TAG){
-			String[] result = null;
-			String updateverurl = URLs.URL_UPDATE + "appcode=" + URLs.appCode + "&type=android&clientkey="
-					+ URLs.CLIENTKEY;
-			String sysConfigUrl = String.format(URLs.URL_SYSTEM_CONFIG,SERVER_MIN_SUPPORT_APP_CODE_VERSION); 
-			System.out.println("更新链接 ，，，" + updateverurl);
-			try {
-				String verJson = WebUtils.requestWithGet(updateverurl);
-				JSONObject jsonO = new JSONObject(verJson);
-				result = new String[4];
-				result[0] = jsonO.getString("appdesc");
-				result[1] = jsonO.getString("updateurl");
-				result[2] = jsonO.getString("version");
-				
-				String configStr = WebUtils.requestWithGet(sysConfigUrl);
-				JSONResult jr = JSONResult.compile(configStr);
-				String minSupportCodeVerision = (String)jr.getResultMap().get(SERVER_MIN_SUPPORT_APP_CODE_VERSION);
-				result[3] = minSupportCodeVerision;
-			} catch (IOException e) {
-				e.printStackTrace();
-			} catch (InterruptedException e) {
-				e.printStackTrace();
-			} catch (JSONException e) {
-
-				e.printStackTrace();
-			}
-			
-			return result;
-		}else if(tag==VERIFY_USER_TASK_TAG){
+	 if(tag==VERIFY_USER_TASK_TAG){
 			
 //			String[] params = new String[]{curUser.getUsername(), curUser.getPassword(), deviceid, Build.MODEL,
 //					systemVresion, currentVersionCode,"true"};
@@ -440,57 +449,7 @@ public class StartUpActivity extends BaseActivity implements AsyTaskCallback{
 	@Override
 	public void onTaskSuccess(Integer tag, Object obj) {
 		
-		if (tag==REQUEST_LATEST_VERSION_TASK_TAG) {
-			final String[] arr = (String[]) obj;
-			boolean needForceUpdate = false;
-			int currentCodeVersion = Utils.getVersionCode(StartUpActivity.this)/1000%1000;
-			//服务端支持的最小代码版本大于本客户端的客户端代码版本则强制升级
-			if(arr[3]!=null&&Integer.parseInt(arr[3])>currentCodeVersion){
-				needForceUpdate = true;
-			}
-			
-			if(needForceUpdate){
-				AlertDialog ad = new AlertDialog(StartUpActivity.this, new OnOkClickListener() {
-					
-					@Override
-					public void onclick() {
-						Intent it = new Intent(StartUpActivity.this, DownloadAppService.class);
-						it.putExtra(DownloadAppService.SERVICRINTENTURL, arr[1]);
-						it.putExtra(DownloadAppService.SERVACESHARENAME, 0);
-						startService(it);
-						Toast.makeText(StartUpActivity.this, "正在下载中，请稍候", Toast.LENGTH_SHORT).show();
-					}
-				}, "检查到有新版本是否更新?", "确定");
-				ad.show();
-				ad.setCancelable(false);
-				ad.setCanceledOnTouchOutside(false);
-			}else{
-				ConfirmDialog dialog = new ConfirmDialog(StartUpActivity.this, new ConfirmDialog.ConfirmListener() {
-
-					@Override
-					public void onCancelClick() {
-//						mHandler.postDelayed(enterHomeRun, 1500);
-						isVersionChecked = true;
-					}
-
-					@Override
-					public void onOkClick() {
-//						mHandler.postDelayed(enterHomeRun, 1500);
-						isVersionChecked = true;
-						Intent it = new Intent(StartUpActivity.this, DownloadAppService.class);
-						it.putExtra(DownloadAppService.SERVICRINTENTURL, arr[1]);
-						it.putExtra(DownloadAppService.SERVACESHARENAME, 0);
-						startService(it);
-						// bindService(it, conn, Context.BIND_AUTO_CREATE);
-						mUserBussiness.logout(StartUpActivity.this);
-					}
-				}, "检查到有新版本是否更新？", arr[0], "下次", "更新");
-				dialog.show();
-				dialog.setCanceledOnTouchOutside(false);
-			}
-			
-		
-		}else if(tag==VERIFY_USER_TASK_TAG){
+	 if(tag==VERIFY_USER_TASK_TAG){
 			if (Integer.parseInt(obj.toString()) == 2) {
 				isVerfyUserSuccess = true;
 			} else {
@@ -502,11 +461,6 @@ public class StartUpActivity extends BaseActivity implements AsyTaskCallback{
 
 	@Override
 	public void onTaskFail(Integer tag,Exception e) {
-		if(tag==REQUEST_LATEST_VERSION_TASK_TAG){
-			isVerfyUserCompleted = true;
-			isVerfyUserSuccess = false;
-		}
-		
 
 	}
 
