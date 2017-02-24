@@ -29,6 +29,7 @@ import com.mportal.client.R;
 import com.mportal.client.asytask.AsyTaskCallback;
 import com.mportal.client.asytask.AsyTaskExecutor;
 import com.mportal.client.bean.App;
+import com.mportal.client.bean.Settings;
 import com.mportal.client.bean.User;
 import com.mportal.client.business.AbstractBussinessCallback;
 import com.mportal.client.AppContext;
@@ -412,10 +413,9 @@ public class FirstLoginActity extends BaseActivity implements ErrorListener, Asy
             user.setUserId((String)jr.getResultMap().get("userid"));
             user.setOrgCode(orgCode);
 			AppContext.getInstance(mContext).setCurrentUser(user);
-
-            mAppContext.getSettings().setIsAllowAutoLogin(mCheckBox.isChecked());
-            MportalApplication.commitAndRefreshSystemSettings(mAppContext.getSettings(),
-                    FirstLoginActity.this);
+			Settings settings = mAppContext.getSettings();
+			settings.setIsAllowAutoLogin(mCheckBox.isChecked());
+			mAppContext.setSettings(settings);
             enterHome();
         } else {
             Toast.makeText(this, "登录失败", Toast.LENGTH_SHORT).show();
@@ -568,8 +568,9 @@ public class FirstLoginActity extends BaseActivity implements ErrorListener, Asy
 
 				AppContext.getInstance(this).setCurrentUser(user);
 				// 保存user对象，并保存是否自动登录的配置
-				mAppContext.getSettings().setIsAllowAutoLogin(cb.isChecked());
-				MportalApplication.commitAndRefreshSystemSettings(mAppContext.getSettings(), this);
+				Settings settings = mAppContext.getSettings();
+				settings.setIsAllowAutoLogin(cb.isChecked());
+				mAppContext.setSettings(settings);
 			}catch(Exception e){
 				e.printStackTrace();
 			}

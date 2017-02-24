@@ -39,7 +39,7 @@ import com.mportal.client.widget.ProgressHUD;
 import io.rong.imkit.RongIM;
 import io.rong.imlib.model.Conversation;
 
-public class UserInfoActivity extends BaseActivity implements OnClickListener,RequestListener{
+public class UserInfoActivity extends BaseActivity implements OnClickListener{
 
 	public static String EXTRA_STRING_USER_ID = "user_id";
 	
@@ -129,7 +129,7 @@ public class UserInfoActivity extends BaseActivity implements OnClickListener,Re
 
 	private void fillDepartment() {
 		try {
-			String id = AppContext.getInstance(mContext).getAppConfig().getAdbookRootId();
+			String id = mAppContext.getAppConfig().getAdbookRootId();
 			if (!TextUtils.isEmpty(id)) {
 				List<String> deptNameStringList;
 				deptNameStringList = mUserBussiness.getDepartmentStringListByUserId(mUser.getUserId(), id);
@@ -151,17 +151,6 @@ public class UserInfoActivity extends BaseActivity implements OnClickListener,Re
 		}
 	}
 
-	private void resolveIconResponse(String responseStr){
-		try {
-			JSONResult jr = JSONResult.compile(responseStr);
-			mImageLoader.displayImage((String)jr.getResultMap().get("icon"), mIv);
-		} catch (Exception e1) {
-			e1.printStackTrace();
-		}
-
-	}
-	
-	
 	private void init() {
 		String userId = getIntent().getStringExtra(EXTRA_STRING_USER_ID);
 		mUser = mUserBussiness.getUserByUserId(userId);
@@ -392,31 +381,6 @@ public class UserInfoActivity extends BaseActivity implements OnClickListener,Re
         		// 备注信息
         		startActivity(it);
         
-	}
-	@Override
-	public void onResponse(JSONResult jsonresult, int requestCode) {
-		if(jsonresult.resultCode==JSONResult.RESULT_CODE_SUCCESS){
-			List<String> deptNameStringList;
-			deptNameStringList = mUserBussiness.getDepartmentStringListByUserId(mUser.getUserId(), (String)jsonresult.getResultMap().get(Constants.APP_CONFIG_PARAM_ADBOOK_ROOT_ID));
-			StringBuilder sb = new StringBuilder();
-			int size = deptNameStringList.size();
-			for (int i = -1; ++i < size;) {
-                if (i > 0) {
-                    sb.append("\n" + deptNameStringList.get(i));
-                } else {
-                    sb.append(deptNameStringList.get(i));
-                }
-
-            }
-			mDeptTv.setText(sb.toString());
-		}else{
-			Toast.makeText(UserInfoActivity.this, "获取APP_CONFIG_PARAM_ADBOOK_ROOT_ID失败", Toast.LENGTH_SHORT).show();
-		}
-	}
-
-	@Override
-	public void onException(int resultCode, int requestCode) {
-		Toast.makeText(UserInfoActivity.this, "网络异常", Toast.LENGTH_SHORT).show();
 	}
 
 }

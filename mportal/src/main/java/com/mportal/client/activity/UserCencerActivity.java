@@ -68,14 +68,7 @@ public class UserCencerActivity extends BaseActivity {
 		mNicname = (EditText) findViewById(R.id.people_nicname);
 		mPhone = (EditText) findViewById(R.id.people_tel);
 		
-		String appConfigStr = (String) FileUtils.readObj(this,Constants.FILE_NAME_APP_CONFIG);
-		String flags = null;
-		try {
-			JSONObject jo = new JSONObject(appConfigStr);
-			flags = jo.getString(Constants.APP_CONFIG_PARAM_USER_CENTER_PWD_FLAGS);
-		} catch (JSONException e) {
-			e.printStackTrace();
-		}
+		String flags = mAppContext.getAppConfig().getAdbookAccountPWDFlags();
 		String[] params = TextUtils.isEmpty(flags)?null:flags.split(",");
 		
 		if(params!=null&&params.length>0){

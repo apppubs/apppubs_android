@@ -2,14 +2,8 @@ package com.mportal.client.constant;
 
 public class Constants {
 	public static final String MENU_URI_SLIDING_PIC = "app:{$sliding_pic}";
-	public static final String ADDRESSBOOK_SECRET_GUOTOU = "bb7c1386d85044ba7a7ae53f3362d656";
-	
+
 	public static final String APP_CONFIG_PARAM_ADBOOK_ROOT_ID = "adbook_rootid";
-	public static final String APP_CONFIG_PARAM_ADBOOK_VERSION = "adbookversion";
-	public static final String APP_CONFIG_PARAM_ORG_SHOW_COUNT_FLAG = "adbook_org_count_flag";
-	public static final String APP_CONFIG_PARAM_USER_ICON_FLAGS = "adbook_user_icon_flags";
-	public static final String APP_CONFIG_PARAM_USER_CENTER_PWD_FLAGS = "user_account_pwd_flags";
-	public static final String APP_CONFIG_PARAM_PDF_EDITABLE = "pdf_editable";
 	public static final String APP_CONFIG_PARAM_REG_URL = "reg_url";
 	public static final String APP_CONFIG_PARAM_FORGET_PWD_URL = "forget_password_url";
 

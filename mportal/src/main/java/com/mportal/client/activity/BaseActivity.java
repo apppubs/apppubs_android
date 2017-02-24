@@ -98,12 +98,11 @@ public abstract class BaseActivity extends FragmentActivity implements OnClickLi
 
 	@Override
 	protected void onCreate(Bundle arg0) {
-
-		LogM.log(this.getClass(), " BaseActivity onCreate");
 		super.onCreate(arg0);
+		LogM.log(this.getClass(), " BaseActivity onCreate");
 
 		mContext = this;
-
+		mAppContext = AppContext.getInstance(mContext);
 		isNeedTitleBar = getIntent().getBooleanExtra(EXTRA_BOOLEAN_NEED_TITLEBAR, isNeedTitleBar);
 
 		int theme = mAppContext.getSettings().getTheme();
@@ -151,7 +150,7 @@ public abstract class BaseActivity extends FragmentActivity implements OnClickLi
 		overridePendingTransition(R.anim.slide_in_from_right, R.anim.slide_out_to_left);
 		mImageLoader = ImageLoader.getInstance();
 		mApp = (MportalApplication) getApplication();
-		mAppContext = AppContext.getInstance(mContext);
+
 		mNewsBussiness = NewsBussiness.getInstance(mContext);
 		mSystemBussiness = SystemBussiness.getInstance(this);
 		mPaperBussiness = PaperBussiness.getInstance();

@@ -95,7 +95,7 @@
 	<color name="seek_progress">#FFFFFF</color>
 
 
-    <color name="group_list_black_textview">#353535</color>
+    <color name="group_list_black_textview">#333</color>
     <color name="group_list_gray">#999999</color>
     <color name="group_list_liner">#e4e4e4</color>
 </resources>

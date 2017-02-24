@@ -3,6 +3,7 @@ package com.mportal.client.message.activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.MenuItem;
@@ -15,6 +16,8 @@ import android.widget.Toast;
 import com.mportal.client.R;
 import com.mportal.client.activity.BaseActivity;
 import com.mportal.client.message.model.OperationRong;
+import com.mportal.client.util.Utils;
+import com.mportal.client.widget.CircleTextImageView;
 import com.mportal.client.widget.SelectableRoundedImageView;
 import com.mportal.client.widget.SwitchButton;
 
@@ -40,7 +43,7 @@ public class PrivateChatDetailActivity extends BaseActivity implements View.OnCl
 
     private UserInfo mUserInfo;
     private SwitchButton messageTop, messageNotification;
-    private SelectableRoundedImageView mImageView;
+    private CircleTextImageView mImageView;
     private TextView friendName;
 //    private LinearLayout mSearchChattingRecordsLinearLayout;
 
@@ -74,6 +77,10 @@ public class PrivateChatDetailActivity extends BaseActivity implements View.OnCl
 
     private void initData() {
         if (mUserInfo != null) {
+            mImageView.setText(mUserInfo.getName());
+            mImageView.setTextColor(Color.WHITE);
+            mImageView.setFillColor(getResources().getColor(R.color.common_btn_bg_gray));
+            mImageView.setTextSize(Utils.dip2px(mContext,12));
             mImageLoader.displayImage(mUserInfo.getPortraitUri().toString(),mImageView);
             friendName.setText(mUserInfo.getName());
         }
@@ -82,7 +89,7 @@ public class PrivateChatDetailActivity extends BaseActivity implements View.OnCl
 
     private void initView() {
         LinearLayout cleanMessage = (LinearLayout) findViewById(R.id.clean_friend);
-        mImageView = (SelectableRoundedImageView) findViewById(R.id.friend_header);
+        mImageView = (CircleTextImageView) findViewById(R.id.friend_header);
         mImageView.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v) {

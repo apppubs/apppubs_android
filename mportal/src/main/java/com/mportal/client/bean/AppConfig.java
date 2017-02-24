@@ -1,10 +1,6 @@
 package com.mportal.client.bean;
 
-import android.content.Context;
-
 import com.google.gson.annotations.SerializedName;
-import com.mportal.client.MportalApplication;
-import com.mportal.client.util.LogM;
 
 import java.io.Serializable;
 

@@ -17,6 +17,7 @@ import android.webkit.DownloadListener;
 import android.webkit.WebSettings;
 import android.widget.PopupWindow;
 
+import com.mportal.client.AppManager;
 import com.mportal.client.MportalApplication;
 import com.mportal.client.R;
 import com.mportal.client.activity.HomeBaseActivity;
@@ -271,8 +272,7 @@ public class WebAppFragment extends BaseFragment implements OnClickListener {
 					
 					@Override
 					public void run() {
-						MportalApplication app = (MportalApplication) mHostActivity.getApplication();
-						app.showChangeDialog(mContext, strArr[0], strArr[1]);
+						AppManager.getInstant(mContext).showChangeDialog(mContext, strArr[0], strArr[1]);
 						changeActivityTitleView(mTitleBar);
 					}
 				});

@@ -13,7 +13,7 @@
         android:background="#ffffff"
         android:orientation="horizontal">
 
-        <com.mportal.client.widget.SelectableRoundedImageView
+        <com.mportal.client.widget.CircleTextImageView
             android:id="@+id/friend_header"
             android:layout_width="64dp"
             android:layout_height="64dp"

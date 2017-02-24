@@ -1,37 +1,17 @@
 package com.mportal.client;
 
 import android.app.Activity;
-import android.app.AlarmManager;
 import android.app.Application;
-import android.app.PendingIntent;
 import android.content.Context;
-import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.drawable.Drawable;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Build;
-import android.text.TextUtils;
 import android.util.DisplayMetrics;
-import android.util.Log;
 import android.view.WindowManager;
-import android.widget.Toast;
 
-import com.android.volley.Response.ErrorListener;
-import com.android.volley.Response.Listener;
-import com.android.volley.VolleyError;
-import com.android.volley.toolbox.StringRequest;
-import com.android.volley.toolbox.Volley;
-import com.mportal.client.activity.StartUpActivity;
-import com.mportal.client.bean.App;
-import com.mportal.client.bean.Settings;
-import com.mportal.client.bean.User;
-import com.mportal.client.constant.URLs;
-import com.mportal.client.util.LogM;
 import com.mportal.client.util.MathUtils;
-import com.mportal.client.util.Utils;
-import com.mportal.client.widget.ConfirmDialog;
-import com.mportal.client.widget.ConfirmDialog.ConfirmListener;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
@@ -56,7 +36,7 @@ public class MportalApplication extends Application {
 	/**
 	 * 系统设置
 	 */
-	public static Settings systemSettings;
+//	public static Settings systemSettings;
 	/**
 	 * 系统状态
 	 */
@@ -80,7 +60,6 @@ public class MportalApplication extends Application {
 
 		// 初始化SugarORM
 		SugarContext.init(this);
-
 
 		//初始化融云
 		RongIM.init(this);
@@ -197,35 +176,35 @@ public class MportalApplication extends Application {
 				+ Build.DEVICE);
 
 	}
-	/**
-	 * 提交并刷新内存中的设置信息
-	 *
-	 * @param settings
-	 * @param context
-	 */
-	public static void commitAndRefreshSystemSettings(Settings settings, Context context) {
-
-		Log.v("MportalApplication", "commitAndRefreshSystemSettings");
-		MportalApplication.systemSettings = settings;
-
-		File file = new File(context.getDir(CONFIG_DIRECTORY, Context.MODE_PRIVATE), "settings.cfg");
-		ObjectOutputStream oos = null;
-		try {
-			oos = new ObjectOutputStream(new FileOutputStream(file));
-			oos.writeObject(settings);
-		} catch (FileNotFoundException e) {
-			e.printStackTrace();
-		} catch (IOException e) {
-			e.printStackTrace();
-		} finally {
-			try {
-				if (oos != null)
-					oos.close();
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
-		}
-	}
+//	/**
+//	 * 提交并刷新内存中的设置信息
+//	 *
+//	 * @param settings
+//	 * @param context
+//	 */
+//	public static void commitAndRefreshSystemSettings(Settings settings, Context context) {
+//
+//		Log.v("MportalApplication", "commitAndRefreshSystemSettings");
+//		MportalApplication.systemSettings = settings;
+//
+//		File file = new File(context.getDir(CONFIG_DIRECTORY, Context.MODE_PRIVATE), "settings.cfg");
+//		ObjectOutputStream oos = null;
+//		try {
+//			oos = new ObjectOutputStream(new FileOutputStream(file));
+//			oos.writeObject(settings);
+//		} catch (FileNotFoundException e) {
+//			e.printStackTrace();
+//		} catch (IOException e) {
+//			e.printStackTrace();
+//		} finally {
+//			try {
+//				if (oos != null)
+//					oos.close();
+//			} catch (IOException e) {
+//				e.printStackTrace();
+//			}
+//		}
+//	}
 
 	/**
 	 * 持久化对象
@@ -294,8 +273,8 @@ public class MportalApplication extends Application {
 
 	public void initDefaultExceptionHandler() {
 		// 设置该CrashHandler为程序的默认处理器
-//		UnCeHandler catchExcep = new UnCeHandler(this);
-//		Thread.setDefaultUncaughtExceptionHandler(catchExcep);
+//		UnCeHandler catchExcep = new UnsetDefaultUncaughtExceptionHandlerCeHandler(this);
+//		Thread.(catchExcep);
 	}
 
 	/**
@@ -329,52 +308,4 @@ public class MportalApplication extends Application {
 		return sContext;
 	}
 	
-	public void showChangeDialog(final Context context, final String  ip, final String code) {
-		new ConfirmDialog(context, new ConfirmListener() {
-
-			@Override
-			public void onOkClick() {
-				final Settings s = AppContext.getInstance(MportalApplication.this).getSettings();
-
-				LogM.log(this.getClass(), ip + ":" + code);
-				String verifyURL = ip+URLs.URL_APP_BASIC_INFO+"&appcode="+code;
-				StringRequest request = new StringRequest(verifyURL, new Listener<String>() {
-
-					@Override
-					public void onResponse(String str) {
-						if(!TextUtils.isEmpty(str)&&!str.equals("null")){
-							s.setBaseURL(ip);
-							s.setAppCode(code);
-							MportalApplication.this.commitAndRefreshSystemSettings(s,context);
-							User user = new User();
-							AppContext.getInstance(MportalApplication.this).setCurrentUser(user);
-							App app = AppContext.getInstance(context).getApp();
-							app.setStartupTimes(0);
-							AppContext.getInstance(context).setApp(app);
-							AppManager.getInstant(context).restart();
-
-						}else{
-							Toast.makeText(MportalApplication.this, "ip地址错误或者客户号不存在",Toast.LENGTH_LONG).show();
-
-						}
-					}
-
-				}, new ErrorListener() {
-
-					@Override
-					public void onErrorResponse(VolleyError arg0) {
-						Toast.makeText(MportalApplication.this, "ip地址错误或者客户号不存在",Toast.LENGTH_LONG).show();
-					}
-
-				});
-				Volley.newRequestQueue(MportalApplication.this).add(request);
-
-			}
-
-			@Override
-			public void onCancelClick() {
-			}
-		}, "确定修改？修改会抹除当前数据然后自动启动", "取消", "确定").show();
-	}
-
 }

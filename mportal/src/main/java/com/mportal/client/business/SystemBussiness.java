@@ -94,6 +94,7 @@ import io.rong.imkit.RongIM;
 import io.rong.imkit.plugin.IPluginModule;
 import io.rong.imkit.plugin.ImagePlugin;
 import io.rong.imkit.widget.provider.FilePlugin;
+import io.rong.imkit.widget.provider.LocationPlugin;
 import io.rong.imlib.RongIMClient;
 import io.rong.imlib.model.Conversation;
 import io.rong.imlib.model.UserInfo;
@@ -379,7 +380,7 @@ public class SystemBussiness extends BaseBussiness {
 			localApp = remoteApp;
 			localApp.setLayoutLocalScheme(localApp.getLayoutScheme());
 			mAppContext.getSettings().setTheme(remoteApp.getDefaultTheme());
-			MportalApplication.commitAndRefreshSystemSettings(mAppContext.getSettings(), mContext);
+			mAppContext.setSettings(mAppContext.getSettings());
 			LogM.log(this.getClass(), "初始化颜色 appRemote.getDefaultTheme" + remoteApp.getDefaultTheme());
 			generateStanceDrawable(remoteApp.getName());
 			generateMediumStance();
@@ -1232,6 +1233,7 @@ public class SystemBussiness extends BaseBussiness {
 	public class MyExtensionModule extends DefaultExtensionModule {
 		private FilePlugin filePlugin;
 		private ImagePlugin imagePlugin;
+//		LocationPlugin locationPlugin;
 		List<IPluginModule> pluginModules ;
 		public MyExtensionModule(){
 			pluginModules = new ArrayList<IPluginModule>();
@@ -1239,6 +1241,8 @@ public class SystemBussiness extends BaseBussiness {
 			imagePlugin = new ImagePlugin();
 //			pluginModules.add(filePlugin);
 			pluginModules.add(imagePlugin);
+//			locationPlugin = new LocationPlugin();
+//			pluginModules.add(locationPlugin);
 		}
 		@Override
 		public List<IPluginModule> getPluginModules(Conversation.ConversationType conversationType) {

@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/app_common_bg"
+    android:paddingTop="20dp"
+    android:paddingLeft="@dimen/item_padding_left"
+    android:paddingRight="@dimen/item_padding_right"
+    >
+
+    <EditText
+        android:id="@+id/text_editor_et"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:layout_marginBottom="20dp"
+        android:maxLines="1"
+        />
+
+</LinearLayout>

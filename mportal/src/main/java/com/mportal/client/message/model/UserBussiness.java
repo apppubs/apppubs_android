@@ -19,6 +19,7 @@ import com.mportal.client.MportalApplication;
 import com.mportal.client.bean.App;
 import com.mportal.client.bean.AppConfig;
 import com.mportal.client.bean.Department;
+import com.mportal.client.bean.Settings;
 import com.mportal.client.bean.User;
 import com.mportal.client.bean.UserDeptLink;
 import com.mportal.client.business.AbstractBussinessCallback;
@@ -558,11 +559,9 @@ public class UserBussiness extends BaseBussiness {
 			user.setMenuPower(jo.getString("menupower"));
 			// 保存user对象，并保存是否自动登录的配置
 			AppContext.getInstance(mContext).setCurrentUser(user);
-			mAppContext.getSettings().setIsAllowAutoLogin(allowAutoLogin);
-			MportalApplication.commitAndRefreshSystemSettings(mAppContext.getSettings(), mContext);
-
-			// sHandler.post(new OnDoneRun<Integer>(callback, result));//
-			// 与主线程的通信
+			Settings settings = mAppContext.getSettings();
+			settings.setIsAllowAutoLogin(allowAutoLogin);
+			mAppContext.setSettings(settings);
 
 		} catch (Exception e) {
 			e.printStackTrace();

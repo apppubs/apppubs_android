@@ -170,15 +170,16 @@ public class SettingFragment extends TitleMenuFragment implements OnClickListene
 			public void onClick(View v) {
 				mClickNum++;
 				System.out.println("标题点击"+mClickNum+"次");
+				Settings settings = mAppContext.getSettings();
 				if(mClickNum==10&&!mAppContext.getSettings().isDevMode()){
-					mAppContext.getSettings().setDevMode(true);
-					MportalApplication.commitAndRefreshSystemSettings(mAppContext.getSettings(), mHostActivity);
+					settings.setDevMode(true);
+					mAppContext.setSettings(settings);
 					Toast.makeText(mHostActivity, "切换应用功能已经打开", Toast.LENGTH_SHORT).show();
 					showOrHideDevItems(true);
 					mClickNum = 0;
 				}else if(mClickNum==10&&mAppContext.getSettings().isDevMode()){
 					mAppContext.getSettings().setDevMode(false);
-					MportalApplication.commitAndRefreshSystemSettings(mAppContext.getSettings(), mHostActivity);
+					mAppContext.setSettings(settings);
 					Toast.makeText(mHostActivity, "切换应用功能已经关闭", Toast.LENGTH_SHORT).show();
 					showOrHideDevItems(false);
 					mClickNum = 0;
@@ -342,10 +343,10 @@ public class SettingFragment extends TitleMenuFragment implements OnClickListene
 				@Override
 				public void onClick(View v) {
 
-					mApp.showChangeDialog(mContext,ipEt.getText().toString(), codeEt.getText().toString());
+					AppManager.getInstant(mContext).showChangeDialog(mContext, ipEt.getText().toString(), codeEt.getText().toString());
 				}
 			});
-			
+
 			TextView resetTV = (TextView) popV.findViewById(R.id.switch_reset_btn);
 			resetTV.setOnClickListener(new OnClickListener() {
 				

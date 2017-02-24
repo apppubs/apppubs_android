@@ -76,7 +76,7 @@ public class ThemeSwitchActivity extends BaseActivity {
 				mAppContext.getSettings().setTheme(Settings.THEME_BROWN);
 				mApp.setTheme(R.style.AppThemeBrown);
 			}
-			MportalApplication.commitAndRefreshSystemSettings(mAppContext.getSettings(), this);
+			mAppContext.setSettings(mAppContext.getSettings());
 			Intent i = new Intent(Actions.CLOSE_ALL_ACTIVITY);
 			sendBroadcast(i);
 			HomeBaseActivity.startHomeActivity(this);

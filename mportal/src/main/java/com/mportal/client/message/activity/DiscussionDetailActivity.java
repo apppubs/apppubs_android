@@ -15,22 +15,28 @@ import android.widget.CompoundButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.hp.hpl.sparta.Text;
 import com.mportal.client.R;
 import com.mportal.client.activity.BaseActivity;
 import com.mportal.client.AppContext;
+import com.mportal.client.bean.User;
 import com.mportal.client.business.BussinessCallbackCommon;
 import com.mportal.client.message.model.OperationRong;
 import com.mportal.client.message.model.UserBasicInfo;
 import com.mportal.client.message.model.UserPickerHelper;
 import com.mportal.client.util.Utils;
 import com.mportal.client.widget.CircleTextImageView;
+import com.mportal.client.widget.ConfirmDialog;
 import com.mportal.client.widget.DemoGridView;
 import com.mportal.client.widget.DialogWithYesOrNoUtils;
 import com.mportal.client.widget.LoadDialog;
 import com.mportal.client.widget.NToast;
 import com.mportal.client.widget.SwitchButton;
+import com.mportal.client.widget.UserIconImageView;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -59,6 +65,7 @@ public class DiscussionDetailActivity extends BaseActivity implements CompoundBu
     private boolean isCreated;
     private SwitchButton discussionTop, discussionNof;
     private List<String> ids;
+    private boolean isDeleteMode;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -139,9 +146,13 @@ public class DiscussionDetailActivity extends BaseActivity implements CompoundBu
     }
 
 
-    private void initData(Discussion mDiscussion) {
+    private void initData(final Discussion mDiscussion) {
         memberSize.setText("讨论组成员(" + mDiscussion.getMemberIdList().size() + ")");
         createId = mDiscussion.getCreatorId();
+        String currentUserId = RongIM.getInstance().getCurrentUserId();
+        if (currentUserId.equals(DiscussionDetailActivity.this.createId)) {
+            isCreated = true;
+        }
         ids = mDiscussion.getMemberIdList();
         if (ids != null) {
 //            request(FIND_USER_INFO);
@@ -151,11 +162,15 @@ public class DiscussionDetailActivity extends BaseActivity implements CompoundBu
 
                     memberList.clear();
                     for (UserBasicInfo userBasicInfo : infos) {
-                        memberList.add(new UserInfo(userBasicInfo.getUserId(), userBasicInfo.getTrueName(), Uri.parse(userBasicInfo.getAtatarUrl())));
+                        if (userBasicInfo.getUserId().equals(createId)){
+                            memberList.add(new UserInfo(userBasicInfo.getUserId(), userBasicInfo.getTrueName(), Uri.parse(userBasicInfo.getAtatarUrl())));
+                        }
                     }
-                    String currentUserId = AppContext.getInstance(mContext).getCurrentUser().getUserId();
-                    if (currentUserId.equals(createId)) {
-                        isCreated = true;
+                    for (UserBasicInfo userBasicInfo : infos) {
+                        if (userBasicInfo.getUserId().equals(createId)){
+                        }else{
+                            memberList.add(new UserInfo(userBasicInfo.getUserId(), userBasicInfo.getTrueName(), Uri.parse(userBasicInfo.getAtatarUrl())));
+                        }
                     }
                     if (memberList != null && memberList.size() > 1) {
                         if (adapter == null) {
@@ -174,6 +189,13 @@ public class DiscussionDetailActivity extends BaseActivity implements CompoundBu
                 }
             });
         }
+
+        fillView();
+    }
+
+    private void fillView() {
+        TextView tv = (TextView) findViewById(R.id.discussion_name_tv);
+        tv.setText(mDiscussion.getName());
     }
 
 
@@ -278,13 +300,15 @@ public class DiscussionDetailActivity extends BaseActivity implements CompoundBu
             if (convertView == null) {
                 convertView = LayoutInflater.from(context).inflate(R.layout.social_chatsetting_gridview_item, parent, false);
             }
-            CircleTextImageView iv_avatar = (CircleTextImageView) convertView.findViewById(R.id.iv_avatar);
+            UserIconImageView iv_avatar = (UserIconImageView) convertView.findViewById(R.id.iv_avatar);
             TextView tv_username = (TextView) convertView.findViewById(R.id.tv_username);
             ImageView badge_delete = (ImageView) convertView.findViewById(R.id.badge_delete);
             iv_avatar.setFillColor(Color.TRANSPARENT);
+            View deleteBtn = convertView.findViewById(R.id.badge_delete);
             // 最后一个item，减人按钮
             if (position == getCount() - 1 && isCreated) {
                 tv_username.setText("");
+                iv_avatar.setNeedNonactivated(false);
                 badge_delete.setVisibility(View.GONE);
                 iv_avatar.setImageResource(R.drawable.delete_members);
 
@@ -296,12 +320,15 @@ public class DiscussionDetailActivity extends BaseActivity implements CompoundBu
 //                        intent.putExtra("DeleteDiscuMember", (Serializable) memberList);
 //                        intent.putExtra("DeleteDiscuId", targetId);
 //                        startActivityForResult(intent, SealConst.DISCUSSION_REMOVE_MEMBER_REQUEST_CODE);
+                        isDeleteMode = !isDeleteMode;
+                        adapter.notifyDataSetChanged();
                     }
 
                 });
             } else if ((isCreated && position == getCount() - 2) || (!isCreated && position == getCount() - 1)) {
                 tv_username.setText("");
                 badge_delete.setVisibility(View.GONE);
+                iv_avatar.setNeedNonactivated(false);
                 iv_avatar.setImageResource(R.drawable.add_members);
 
                 iv_avatar.setOnClickListener(new View.OnClickListener() {
@@ -321,7 +348,8 @@ public class DiscussionDetailActivity extends BaseActivity implements CompoundBu
                     }
                 });
             } else { // 普通成员
-                UserInfo bean = list.get(position);
+                final UserInfo bean = list.get(position);
+                UserBasicInfo userBasicInfo = mUserBussiness.getCachedUserBasicInfo(bean.getUserId());
                 if (!TextUtils.isEmpty(bean.getName())) {
                     tv_username.setText(bean.getName());
                 }
@@ -329,6 +357,11 @@ public class DiscussionDetailActivity extends BaseActivity implements CompoundBu
                 iv_avatar.setFillColor(getResources().getColor(R.color.common_btn_bg_gray));
                 iv_avatar.setTextColor(Color.WHITE);
                 iv_avatar.setTextSize(Utils.dip2px(mContext,12));
+                if (TextUtils.isEmpty(userBasicInfo.getAppCodeVersion())){
+                    iv_avatar.setNeedNonactivated(true);
+                }else{
+                    iv_avatar.setNeedNonactivated(false);
+                }
                 mImageLoader.displayImage(bean.getPortraitUri().toString(),iv_avatar);
                 iv_avatar.setOnClickListener(new View.OnClickListener() {
                     @Override
@@ -337,7 +370,35 @@ public class DiscussionDetailActivity extends BaseActivity implements CompoundBu
                     }
 
                 });
+                deleteBtn.setVisibility(isDeleteMode?View.VISIBLE:View.GONE);
+                deleteBtn.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        ConfirmDialog dialog = new ConfirmDialog(mContext, new ConfirmDialog.ConfirmListener() {
+                            @Override
+                            public void onOkClick() {
+                                RongIM.getInstance().removeMemberFromDiscussion(mDiscussion.getId(), bean.getUserId(), new RongIMClient.OperationCallback() {
+                                    @Override
+                                    public void onSuccess() {
+                                        removeMember(bean.getUserId());
+                                        adapter.notifyDataSetChanged();
+                                    }
 
+                                    @Override
+                                    public void onError(RongIMClient.ErrorCode errorCode) {
+                                        Toast.makeText(mContext,"移除用户失败",Toast.LENGTH_SHORT).show();
+                                    }
+                                });
+                            }
+
+                            @Override
+                            public void onCancelClick() {
+
+                            }
+                        },"确定移除\""+bean.getName()+"\"？","取消","确定");
+                        dialog.show();
+                    }
+                });
             }
 
             return convertView;
@@ -411,7 +472,19 @@ public class DiscussionDetailActivity extends BaseActivity implements CompoundBu
 
     }
 
+    private void removeMember(String id){
+        UserInfo paddingDeleteUser  = null;
+        for (UserInfo user:memberList){
+            if (user.getUserId().equals(id)){
+                paddingDeleteUser = user;
+                break;
+            }
+        }
+        if (paddingDeleteUser!=null){
+            memberList.remove(paddingDeleteUser);
+        }
 
+    }
     // 拿到新增的成员刷新adapter
     @Override
     @SuppressWarnings("unchecked")

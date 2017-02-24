@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.util.Log;
@@ -12,12 +13,12 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.PopupWindow;
 
-import com.mportal.client.MportalApplication;
+import com.mportal.client.AppContext;
 import com.mportal.client.R;
 import com.mportal.client.activity.ChatNewGroupChatOrAddUserActivity;
 import com.mportal.client.activity.ContainerActivity;
 import com.mportal.client.bean.App;
-import com.mportal.client.AppContext;
+import com.mportal.client.bean.User;
 import com.mportal.client.fragment.BaseFragment;
 import com.mportal.client.fragment.ServiceNoSubscribeFragment;
 import com.mportal.client.message.model.UserPickerHelper;
@@ -112,12 +113,33 @@ public class ConversationListFragment extends BaseFragment implements View.OnCli
                     @Override
                     public void onPickDone(List<String> userIds) {
                         if (userIds!=null&&userIds.size()>0){
+
                             if (userIds.size()>1){
-                                RongIM.getInstance().createDiscussion("默认标题",userIds,null);
+                                String title = getTitleName(userIds);
+                                RongIM.getInstance().createDiscussionChat(mContext,userIds,title);
                             }else {
-                                RongIM.getInstance().startConversation(mContext,Conversation.ConversationType.PRIVATE,userIds.get(0),"人名");
+                                User user = mUserBussiness.getUserByUserId(userIds.get(0));
+                                RongIM.getInstance().startConversation(mContext,Conversation.ConversationType.PRIVATE,userIds.get(0),user.getTrueName());
                             }
                         }
+                    }
+
+                    @NonNull
+                    private String getTitleName(List<String> userIds) {
+                        StringBuilder titleSb = new StringBuilder();
+                        for (int i=-1;++i<userIds.size();){
+                            if (i>2){
+                                titleSb.append("...");
+                                break;
+                            }
+                            User user = mUserBussiness.getUserByUserId(userIds.get(i));
+                            String trueName = user.getTrueName();
+                            if (titleSb.length()>0){
+                                titleSb.append("、");
+                            }
+                            titleSb.append(trueName);
+                        }
+                        return titleSb.toString();
                     }
                 });
                 mMenuPW.dismiss();
