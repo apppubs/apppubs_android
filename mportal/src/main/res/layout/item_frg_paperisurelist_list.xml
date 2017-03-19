@@ -17,7 +17,7 @@
         android:textSize="15sp"
         android:textStyle="bold" />
 
-    <com.mportal.client.widget.MyListView
+    <com.apppubs.d20.widget.MyListView
         android:id="@+id/frg_papreissurelist_list_lv"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -25,7 +25,7 @@
         android:divider="@null"
         android:clickable="false"
         android:focusable="false" >
-    </com.mportal.client.widget.MyListView>
+    </com.apppubs.d20.widget.MyListView>
      
 
 </RelativeLayout>

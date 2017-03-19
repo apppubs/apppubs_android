@@ -3,11 +3,11 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical" >
-        <com.mportal.client.widget.CheckableFlowLayout
+        <com.apppubs.d20.widget.CheckableFlowLayout
             android:id="@+id/tag_fl"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:paddingBottom="15dp"
              >
-        </com.mportal.client.widget.CheckableFlowLayout>
+        </com.apppubs.d20.widget.CheckableFlowLayout>
 </LinearLayout>

@@ -9,5 +9,5 @@
 
     <meta-data
         android:name="METADATA_DOMAIN_PACKAGE_NAME"
-        android:value="com.mportal.client" />
+        android:value="com.apppubs.d20" />
 </manifest>

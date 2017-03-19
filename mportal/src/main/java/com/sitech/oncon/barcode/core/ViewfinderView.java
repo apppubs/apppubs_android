@@ -31,7 +31,7 @@ import android.util.Log;
 import android.view.View;
 
 import com.google.zxing.ResultPoint;
-import com.mportal.client.R;
+import com.apppubs.d20.R;
 import com.sitech.oncon.barcode.camera.CameraManager;
 
 /**

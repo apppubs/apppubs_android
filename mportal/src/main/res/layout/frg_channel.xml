@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<com.mportal.client.widget.commonlist.CommonListView xmlns:android="http://schemas.android.com/apk/res/android"
+<com.apppubs.d20.widget.commonlist.CommonListView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:mportal="http://schemas.android.com/apk/res-auto"
     android:id="@+id/channel_lv"
     android:layout_width="match_parent"

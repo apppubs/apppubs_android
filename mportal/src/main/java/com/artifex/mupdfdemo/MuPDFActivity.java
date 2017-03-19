@@ -42,7 +42,7 @@ import android.widget.SeekBar;
 import android.widget.TextView;
 import android.widget.ViewAnimator;
 
-import com.mportal.client.R;
+import com.apppubs.d20.R;
 
 class ThreadPerTaskExecutor implements Executor {
 	public void execute(Runnable r) {

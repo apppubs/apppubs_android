@@ -5,7 +5,7 @@
     android:background="@color/window_color"
     android:orientation="vertical">
 
-    <com.mportal.client.widget.MyScrollView
+    <com.apppubs.d20.widget.MyScrollView
         android:id="@+id/userinfosc"
         android:layout_width="match_parent"
         android:layout_height="0dp"
@@ -39,7 +39,7 @@
                     android:textSize="@dimen/item_text_size_big"
                     android:textStyle="bold" />
 
-                <com.mportal.client.widget.CircleTextImageView
+                <com.apppubs.d20.widget.CircleTextImageView
                     android:id="@+id/userinfo_icon_iv"
                     android:layout_width="65dp"
                     android:layout_height="65dp"
@@ -305,7 +305,7 @@
                 android:layout_height="1px"
                 android:background="@color/common_divider" />
         </LinearLayout>
-    </com.mportal.client.widget.MyScrollView>
+    </com.apppubs.d20.widget.MyScrollView>
 
     <View
         android:id="@+id/line"

@@ -14,7 +14,7 @@
         android:src="@drawable/sel_checkable_btn"
         android:layout_centerVertical="true"
         />
-    <com.mportal.client.widget.CircleTextImageView
+    <com.apppubs.d20.widget.CircleTextImageView
         android:id="@+id/item_user_picker_user_iv"
         android:layout_width="40dp"
         android:layout_height="40dp"

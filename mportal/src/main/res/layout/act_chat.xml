@@ -23,7 +23,7 @@
             android:layout_height="1px"
             android:background="@color/common_divider" />
 
-        <com.mportal.client.widget.FlowLayout
+        <com.apppubs.d20.widget.FlowLayout
             android:id="@+id/chat_more_flow"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
@@ -31,7 +31,7 @@
             android:visibility="gone"
             android:padding="10dp"
              >
-        </com.mportal.client.widget.FlowLayout>
+        </com.apppubs.d20.widget.FlowLayout>
 
         <!-- <RelativeLayout -->
         <!-- android:id="@+id/faceLayout" -->
@@ -114,7 +114,7 @@
                 android:text="按住 说话"
                 android:visibility="gone" />
 
-            <com.mportal.client.widget.MyEditText
+            <com.apppubs.d20.widget.MyEditText
                 android:id="@+id/chat_content_et"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"

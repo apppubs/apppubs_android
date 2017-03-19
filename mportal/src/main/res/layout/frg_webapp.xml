@@ -4,7 +4,7 @@
     android:layout_height="match_parent"
     android:background="@android:color/white" >
 
-    <com.mportal.client.widget.ProgressWebView
+    <com.apppubs.d20.widget.ProgressWebView
         android:id="@+id/webapp_wb"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />

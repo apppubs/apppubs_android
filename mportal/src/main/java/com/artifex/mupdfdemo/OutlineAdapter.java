@@ -6,7 +6,7 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.TextView;
 
-import com.mportal.client.R;
+import com.apppubs.d20.R;
 
 public class OutlineAdapter extends BaseAdapter {
 	private final OutlineItem    mItems[];

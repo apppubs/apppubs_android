@@ -43,7 +43,7 @@
                 </TextView>
             </RelativeLayout>
 
-            <com.mportal.client.widget.FlowLayout
+            <com.apppubs.d20.widget.FlowLayout
                 android:id="@+id/chat_group_info_users_fl"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -51,7 +51,7 @@
                 android:paddingRight="@dimen/item_padding_right"
                 app:hspace="10dp"
                 app:vspace="8dp" >
-            </com.mportal.client.widget.FlowLayout>
+            </com.apppubs.d20.widget.FlowLayout>
         </LinearLayout>
 
         <RelativeLayout

@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     android:background="@android:color/white"
     android:orientation="vertical">
-    <com.mportal.client.widget.RatioLayout
+    <com.apppubs.d20.widget.RatioLayout
        
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -19,7 +19,7 @@
             android:scaleType="centerCrop"
             
             />
-    </com.mportal.client.widget.RatioLayout>
+    </com.apppubs.d20.widget.RatioLayout>
 	<TextView
 	    android:id="@+id/single_pic_title_tv"
 	    android:layout_width="match_parent"

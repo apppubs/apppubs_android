@@ -19,7 +19,7 @@
            	android:background="#FFFFFF"
             ></android.support.v7.widget.SearchView>
         
-        <com.mportal.client.widget.LetterListView
+        <com.apppubs.d20.widget.LetterListView
             android:id="@+id/frg_usernames_cityLetterListView"
             android:layout_width="30dip"
             android:layout_height="fill_parent"

@@ -5,12 +5,12 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context="com.mportal.client.message.activity.UserPickerActivity">
+    tools:context="com.apppubs.d20.com.apppubs.client.message.activity.UserPickerActivity">
 
-    <com.mportal.client.message.widget.Breadcrumb
+    <com.apppubs.d20.message.widget.Breadcrumb
         android:id="@+id/user_picker_bc"
         android:layout_width="match_parent"
-        android:layout_height="50dp"></com.mportal.client.message.widget.Breadcrumb>
+        android:layout_height="50dp"></com.apppubs.d20.message.widget.Breadcrumb>
 
     <FrameLayout
         android:layout_width="match_parent"
@@ -39,8 +39,8 @@
         android:layout_height="1px"
         android:background="@color/common_divider" />
 
-    <com.mportal.client.message.widget.UserSelectionBar
+    <com.apppubs.d20.message.widget.UserSelectionBar
         android:id="@+id/user_picker_user_selection_bar"
         android:layout_width="match_parent"
-        android:layout_height="50dp"></com.mportal.client.message.widget.UserSelectionBar>
+        android:layout_height="50dp"></com.apppubs.d20.message.widget.UserSelectionBar>
 </LinearLayout>

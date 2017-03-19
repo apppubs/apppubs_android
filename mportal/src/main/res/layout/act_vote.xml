@@ -27,7 +27,7 @@
             android:textSize="16sp" />
     </RelativeLayout>
 
-    <com.mportal.client.widget.commonlist.CommonListView
+    <com.apppubs.d20.widget.commonlist.CommonListView
         android:id="@+id/vote_xlv"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

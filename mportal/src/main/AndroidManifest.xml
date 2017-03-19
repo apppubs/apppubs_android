@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.mportal.client"
+    package="com.apppubs.d20"
     android:versionCode="200000"
     android:versionName="2.0.0">
 
@@ -10,7 +10,7 @@
 
     <!-- Required 自定义用来收发消息的相关权限 -->
     <permission
-        android:name="com.mportal.client.permission.JPUSH_MESSAGE"
+        android:name="com.apppubs.d20.permission.JPUSH_MESSAGE"
         android:protectionLevel="signature" />
 
     <uses-permission android:name="android.permission.VIBRATE" />
@@ -35,7 +35,7 @@
 
     <!-- 极光推送 -->
     <uses-permission
-        android:name="com.mportal.client.permission.JPUSH_MESSAGE"
+        android:name="com.apppubs.d20.permission.JPUSH_MESSAGE"
         android:protectionLevel="signature" />
     <!-- 支持网络视频 -->
     <data
@@ -261,10 +261,10 @@
             android:screenOrientation="sensor"
             android:theme="@android:style/Theme.NoTitleBar.Fullscreen" />
         <activity
-            android:name="com.mportal.multi_image_selector.MultiImageSelectorActivity"
+            android:name="com.apppubs.multi_image_selector.MultiImageSelectorActivity"
             android:screenOrientation="portrait" />
         <activity
-            android:name="com.mportal.multi_image_selector.PreviewPicturesActivity"
+            android:name="com.apppubs.multi_image_selector.PreviewPicturesActivity"
             android:screenOrientation="portrait" />
         <activity android:name=".message.activity.PrivateChatDetailActivity"
 
@@ -281,7 +281,7 @@
                 <category android:name="android.intent.category.DEFAULT" />
 
                 <data
-                    android:host="com.mportal.client"
+                    android:host="com.apppubs.d20"
                     android:pathPrefix="/conversation/"
                     android:scheme="rong" />
             </intent-filter>
@@ -413,7 +413,7 @@
                 <action android:name="cn.jpush.android.ui.PushActivity" />
 
                 <category android:name="android.intent.category.DEFAULT" />
-                <category android:name="com.mportal.client" />
+                <category android:name="com.apppubs.d20" />
             </intent-filter>
         </activity>
 
@@ -432,7 +432,7 @@
             <intent-filter>
                 <action android:name="cn.jpush.android.intent.DaemonService" />
 
-                <category android:name="com.mportal.client" />
+                <category android:name="com.apppubs.d20" />
             </intent-filter>
         </service>
 
@@ -443,7 +443,7 @@
             android:exported="false">
             <intent-filter android:priority="1000">
                 <action android:name="cn.jpush.android.intent.NOTIFICATION_RECEIVED_PROXY" /> <!-- Required  显示通知栏 -->
-                <category android:name="com.mportal.client" />
+                <category android:name="com.apppubs.d20" />
             </intent-filter>
             <intent-filter>
                 <action android:name="android.intent.action.USER_PRESENT" />
@@ -485,7 +485,7 @@
                 <action android:name="cn.jpush.android.intent.NOTIFICATION_OPENED" /> <!-- Required  用户打开自定义通知栏的intent -->
                 <action android:name="cn.jpush.android.intent.ACTION_RICHPUSH_CALLBACK" /> <!-- Optional 用户接受Rich Push Javascript 回调函数的intent -->
                 <action android:name="cn.jpush.android.intent.CONNECTION" /> <!-- 接收网络变化 连接/断开 since 1.6.3 -->
-                <category android:name="com.mportal.client" />
+                <category android:name="com.apppubs.d20" />
             </intent-filter>
         </receiver>
 
@@ -495,7 +495,7 @@
             android:value="developer-default" />
         <meta-data
             android:name="JPUSH_APPKEY"
-            android:value="25f70836ca8f5f938f77eb32" /> <!-- </>值来自开发者平台取得的AppKey -->
+            android:value="85358a757b2da7055f45f83c" /> <!-- </>值来自开发者平台取得的AppKey -->
 
 
         <!-- 极光推送结束 -->
@@ -518,7 +518,7 @@
             android:value="true" />
         <meta-data
             android:name="DOMAIN_PACKAGE_NAME"
-            android:value="com.mportal.client" />
+            android:value="com.apppubs.d20" />
 
         <meta-data
             android:name="APPCODE"

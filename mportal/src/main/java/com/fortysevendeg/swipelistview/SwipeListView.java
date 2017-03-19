@@ -33,7 +33,7 @@ import android.view.ViewGroup;
 import android.widget.ListAdapter;
 import android.widget.ListView;
 
-import com.mportal.client.R;
+import com.apppubs.d20.R;
 
 /**
  * ListView subclass that provides the swipe functionality

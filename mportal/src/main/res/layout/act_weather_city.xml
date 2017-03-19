@@ -6,7 +6,7 @@
     android:background="#fff"
     android:orientation="vertical" >
 
-    <com.mportal.client.widget.TitleBar
+    <com.apppubs.d20.widget.TitleBar
         android:id="@+id/wethwe_tb"
         android:layout_width="match_parent"
         android:layout_height="@dimen/title_height"
@@ -14,7 +14,7 @@
         mportal:leftImgSrc="@drawable/top_back_btn"
         mportal:mTitle="主要城市"
         mportal:titleSize="@dimen/title_text_size" >
-    </com.mportal.client.widget.TitleBar>
+    </com.apppubs.d20.widget.TitleBar>
 
     <ListView
         android:id="@+id/w_city_list"

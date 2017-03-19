@@ -5,7 +5,7 @@
     android:layout_height="match_parent"
     android:background="@color/app_common_bg" >
 
-    <com.mportal.client.widget.Tabs
+    <com.apppubs.d20.widget.Tabs
         android:id="@+id/weibo_st"
         android:layout_width="match_parent"
         android:layout_height="40dp"
@@ -14,7 +14,7 @@
         mportal:selectedTextColor="?attr/appDefaultTextColor"
         >
         
-    </com.mportal.client.widget.Tabs>
+    </com.apppubs.d20.widget.Tabs>
 <!--     <HorizontalScrollView
         android:id="@+id/weibo_hsv"
         android:layout_width="match_parent"
@@ -37,12 +37,12 @@
         android:layout_below="@id/weibo_hsv"
         android:background="@color/title_bg" />
 -->
-    <com.mportal.client.widget.NewsViewPager
+    <com.apppubs.d20.widget.NewsViewPager
         android:id="@+id/weibo_viewparger"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@id/weibo_st" >
-    </com.mportal.client.widget.NewsViewPager>
+    </com.apppubs.d20.widget.NewsViewPager>
 
     <include
         android:layout_alignParentBottom="true"

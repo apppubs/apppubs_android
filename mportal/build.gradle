@@ -4,7 +4,7 @@ android {
     compileSdkVersion 21
     buildToolsVersion "25.0.2"
     defaultConfig {
-        applicationId "com.mportal.client"
+        applicationId "com.apppubs.d20"
         minSdkVersion 9
         targetSdkVersion 19
         compileOptions {
@@ -18,7 +18,7 @@ android {
         }
         manifestPlaceholders = [
                 JPUSH_PKGNAME : applicationId,
-                JPUSH_APPKEY : "25f70836ca8f5f938f77eb32", //JPush上注册的包名对应的appkey.
+                JPUSH_APPKEY : "85358a757b2da7055f45f83c", //JPush上注册的包名对应的appkey.
                 JPUSH_CHANNEL : "developer-default", //暂时填写默认值即可.
         ]
 
@@ -52,7 +52,7 @@ dependencies {
     compile project(':sugar_orm')
     compile project(':oneKeyShare')
     compile project(':IMKit')
-    compile 'com.android.support:support-annotations:22.2.0'
+    compile 'com.android.support:support-annotations:21.0.0'
     compile 'com.google.code.gson:gson:2.2.4'
     compile 'com.android.support:support-v4:21.0.0'
     compile 'com.android.support:appcompat-v7:21.0.0'

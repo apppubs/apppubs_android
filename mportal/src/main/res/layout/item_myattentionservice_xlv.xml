@@ -6,7 +6,7 @@
     android:paddingLeft="@dimen/item_padding_left"
     android:paddingTop="@dimen/item_padding_top_narrow" >
 
-    <com.mportal.client.widget.CircularImage
+    <com.apppubs.d20.widget.CircularImage
         android:id="@+id/item_myservice_pic"
         android:layout_width="50dp"
         android:layout_height="50dp"

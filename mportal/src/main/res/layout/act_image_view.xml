@@ -3,7 +3,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context="${relativePackage}.${activityClass}" >
-	<com.mportal.client.widget.ZoomImageView
+	<com.apppubs.d20.widget.ZoomImageView
 	    android:id="@+id/img_view_zv"
 	    android:layout_width="match_parent"
 	    android:layout_height="match_parent"

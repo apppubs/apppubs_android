@@ -18,7 +18,7 @@ import android.widget.Adapter;
 import android.widget.AdapterView;
 import android.widget.Scroller;
 
-import com.mportal.client.R;
+import com.apppubs.d20.R;
 
 public class ReaderView
 		extends AdapterView<Adapter>

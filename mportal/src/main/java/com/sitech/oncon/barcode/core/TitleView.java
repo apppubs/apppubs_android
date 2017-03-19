@@ -8,7 +8,7 @@ import android.view.View;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import com.mportal.client.R;
+import com.apppubs.d20.R;
 
 public class TitleView extends RelativeLayout {
 	protected TextView tvLeft;

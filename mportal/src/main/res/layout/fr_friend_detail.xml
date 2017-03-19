@@ -13,7 +13,7 @@
         android:background="#ffffff"
         android:orientation="horizontal">
 
-        <com.mportal.client.widget.CircleTextImageView
+        <com.apppubs.d20.widget.CircleTextImageView
             android:id="@+id/friend_header"
             android:layout_width="64dp"
             android:layout_height="64dp"
@@ -72,7 +72,7 @@
             android:textColor="@color/common_text"
             android:textSize="16sp" />
 
-        <com.mportal.client.widget.SwitchButton
+        <com.apppubs.d20.widget.SwitchButton
             android:id="@+id/sw_friend_notfaction"
             style="@style/SwitchButtonStyle"
             android:layout_width="wrap_content"
@@ -120,7 +120,7 @@
             android:textColor="@color/common_text"
             android:textSize="16sp" />
 
-        <com.mportal.client.widget.SwitchButton
+        <com.apppubs.d20.widget.SwitchButton
             android:id="@+id/sw_freind_top"
             style="@style/SwitchButtonStyle"
             android:layout_width="wrap_content"

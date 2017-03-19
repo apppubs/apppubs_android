@@ -6,7 +6,7 @@
     android:background="#F6F6F6"
      >
 
-    <com.mportal.client.widget.NewsViewPager
+    <com.apppubs.d20.widget.NewsViewPager
         android:id="@+id/channels_vp"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -21,7 +21,7 @@
         android:orientation="vertical"
         android:visibility="gone" >
 
-        <com.mportal.client.widget.DraggableGridView
+        <com.apppubs.d20.widget.DraggableGridView
             android:id="@+id/channels_dgv"
             android:layout_width="match_parent"
             android:layout_height="200dp"
@@ -47,7 +47,7 @@
             android:layout_height="0dp"
             android:layout_weight="1" >
 
-            <com.mportal.client.widget.AlternativeChannelLayout
+            <com.apppubs.d20.widget.AlternativeChannelLayout
                 android:id="@+id/channels_alter_acl"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -59,7 +59,7 @@
         </ScrollView>
     </LinearLayout>
 
-    <com.mportal.client.widget.ScrollTabs
+    <com.apppubs.d20.widget.ScrollTabs
         android:id="@+id/channels_ct"
         android:layout_width="match_parent"
         android:layout_height="40dp"

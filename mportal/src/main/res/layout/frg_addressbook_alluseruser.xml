@@ -9,7 +9,7 @@
         android:layout_height="fill_parent"
         android:orientation="vertical" >
 
-        <com.mportal.client.widget.LetterListView
+        <com.apppubs.d20.widget.LetterListView
             android:id="@+id/frg_usernames_cityLetterListView"
             android:layout_width="30dip"
             android:layout_height="fill_parent"

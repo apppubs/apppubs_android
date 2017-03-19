@@ -4,7 +4,7 @@
     android:layout_height="match_parent"
     xmlns:mportal="http://schemas.android.com/apk/res-auto"
     android:background="@android:color/white" >
-    <com.mportal.client.widget.commonlist.CommonListView
+    <com.apppubs.d20.widget.commonlist.CommonListView
         android:id="@+id/left_zhuti_xlv"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

@@ -21,7 +21,7 @@ import android.os.Handler;
 import android.view.View;
 import android.widget.ListView;
 
-import com.mportal.client.R;
+import com.apppubs.d20.R;
 
 enum Purpose {
 	PickPDF,

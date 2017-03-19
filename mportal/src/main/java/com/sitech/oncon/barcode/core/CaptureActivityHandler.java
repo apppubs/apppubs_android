@@ -28,8 +28,8 @@ import android.util.Log;
 
 import com.google.zxing.BarcodeFormat;
 import com.google.zxing.Result;
-import com.mportal.client.R;
-import com.mportal.client.activity.CaptureActivity;
+import com.apppubs.d20.R;
+import com.apppubs.d20.activity.CaptureActivity;
 import com.sitech.oncon.barcode.camera.CameraManager;
 
 /**

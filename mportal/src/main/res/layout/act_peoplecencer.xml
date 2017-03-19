@@ -32,7 +32,7 @@
                 android:textColor="@color/common_text"
                 android:textSize="@dimen/item_text_size" />
 
-            <com.mportal.client.widget.CircleTextImageView
+            <com.apppubs.d20.widget.CircleTextImageView
                 android:id="@+id/usercenter_ctiv"
                 android:layout_width="65dp"
                 android:layout_height="65dp"

@@ -6,7 +6,7 @@ import android.graphics.Bitmap;
 import android.graphics.PointF;
 import android.graphics.RectF;
 
-import com.mportal.client.R;
+import com.apppubs.d20.R;
 
 public class MuPDFCore
 {
