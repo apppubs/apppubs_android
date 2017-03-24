@@ -589,7 +589,17 @@ public class ViewCourier {
 
         } else if (uri.startsWith("apppubs://page")) {
             execute(mHomeActivity, uri);
-        } else {
+        }else if(uri.startsWith("apppubs://service_no")){
+			String title = StringUtils.getQueryParameter(uri, "title");
+
+			frg = new ConversationFragment();
+			Bundle args = new Bundle();
+			String[] params = StringUtils.getPathParams(uri);
+			frg.setArguments(args);
+			mFragmentsMap.put(item, frg);
+			mHomeActivity.changeContent(frg);
+
+		} else {
             if (type == MenuItem.MENU_LOCATION_PRIMARY) {
                 frg = new ExceptionFragment();
                 mHomeActivity.changeContent(frg);

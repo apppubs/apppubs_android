@@ -309,8 +309,9 @@ public class StartUpActivity extends BaseActivity implements AsyTaskCallback{
 					String deviceid = mAppContext.getApp().getPushVendorType()==App.PUSH_VENDOR_TYPE_BAIDU?mAppContext.getApp().getBaiduPushUserId():mAppContext.getApp().getJpushRegistrationID();// 百度硬件设备号
 					String systemVresion = Utils.getAndroidSDKVersion();// 操作系统号
 					String currentVersionCode = Utils.getVersionName(StartUpActivity.this);// app版本号
-				
-					String[] params = new String[]{curUser.getUsername(), curUser.getPassword(), deviceid, Build.MODEL,
+					String token = mAppContext.getApp().getPushVendorType() == App.PUSH_VENDOR_TYPE_BAIDU ? mAppContext.getApp()
+							.getBaiduPushUserId() : mAppContext.getApp().getJpushRegistrationID();// 百度硬件设备号
+					String[] params = new String[]{curUser.getUsername(), curUser.getPassword(), deviceid,token, Build.MODEL,
 							systemVresion, currentVersionCode,"true"};
 					
 					AsyTaskExecutor.getInstance().startTask(VERIFY_USER_TASK_TAG, StartUpActivity.this, params);
@@ -437,7 +438,7 @@ public class StartUpActivity extends BaseActivity implements AsyTaskCallback{
 			
 //			String[] params = new String[]{curUser.getUsername(), curUser.getPassword(), deviceid, Build.MODEL,
 //					systemVresion, currentVersionCode,"true"};
-			Integer result = mUserBussiness.login(params[0], params[1], params[2], params[3], params[4], params[5], true);
+			Integer result = mUserBussiness.login(params[0], params[1], params[2], params[3], params[4], params[5], params[6],true);
 			
 			return result;
 		}

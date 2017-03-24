@@ -24,8 +24,7 @@ public class AlertDialog extends Dialog implements android.view.View.OnClickList
 	private Button mOkBtn;
 	private TextView mMsgTv;
 	private OnOkClickListener mOnOkClickListener;
-	private int mRes;
-	
+
 	public interface OnOkClickListener{
 		void onclick();
 	}
@@ -38,6 +37,7 @@ public class AlertDialog extends Dialog implements android.view.View.OnClickList
 	
 	public AlertDialog(Context context, OnOkClickListener onOkClickListener,String title,String msg,String btnText){
 		super(context, R.style.dialog);
+		setContentView(R.layout.dialog_alert);
 		this.mOnOkClickListener = onOkClickListener;
 
 		mTitleTv = (TextView) findViewById(R.id.alert_title);
@@ -52,15 +52,6 @@ public class AlertDialog extends Dialog implements android.view.View.OnClickList
 		mOkBtn.setOnClickListener(this);
 	}
 
-	@Override
-	protected void onCreate(Bundle savedInstanceState) {
-		super.onCreate(savedInstanceState);
-		setContentView(mRes);
-	}
-
-	public void setRes(int resId){
-        this.mRes = resId;
-    }
 
 	@Override
 	public void onClick(View v) {

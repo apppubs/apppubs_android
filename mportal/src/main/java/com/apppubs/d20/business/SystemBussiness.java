@@ -18,7 +18,9 @@ import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.support.annotation.NonNull;
+import android.support.v4.text.TextUtilsCompat;
 import android.telephony.TelephonyManager;
+import android.text.TextUtils;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.WindowManager;
@@ -1294,6 +1296,9 @@ public class SystemBussiness extends BaseBussiness {
 	}
 
 	public static int compareVersion(String version1, String version2) {
+		if(TextUtils.isEmpty(version1)||TextUtils.isEmpty(version2)){
+			return 0;
+		}
 		if (version1.equals(version2)) {
 			return 0;
 		}

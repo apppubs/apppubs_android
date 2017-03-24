@@ -436,6 +436,7 @@ public class ProgressWebView extends BridgeWebView {
 
 			} else if (FilePreviewFragment.isAbleToRead(url)) {
 				openFileWithUrl(url);
+				mCounterDownTimer.cancel();
 				return true;
 			} else if (url.contains("target=_blank")) {
 				
@@ -445,6 +446,7 @@ public class ProgressWebView extends BridgeWebView {
 					args.putBoolean(BaseActivity.EXTRA_BOOLEAN_NEED_TITLEBAR, false);
 				}
 				ContainerActivity.startActivity(mContext, WebAppFragment.class, args);
+				mCounterDownTimer.cancel();
 				return true;
 			}else if(url.startsWith(Constants.CUSTOM_SCHEMA_APPPUBS_NEWS+"://")){
 				Intent skipIntent = new Intent(mContext,SkipActivity.class);

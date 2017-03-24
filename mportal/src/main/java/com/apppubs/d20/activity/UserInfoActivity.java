@@ -91,6 +91,7 @@ public class UserInfoActivity extends BaseActivity implements OnClickListener{
 		}
 		//头像
 		if(mIconConfigParams!=null&&mIconConfigParams.length>0&&mIconConfigParams[0].equals("1")){
+			mIv.setVisibility(View.VISIBLE);
 			if(mIconConfigParams.length>2&&mIconConfigParams[2].equals("1")){
 				mIv.setScaleType(ScaleType.CENTER_CROP);
 			}

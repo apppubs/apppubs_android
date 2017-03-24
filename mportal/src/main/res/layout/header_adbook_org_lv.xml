@@ -2,19 +2,20 @@
 <LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="70dp"
+    android:layout_height="wrap_content"
     android:orientation="vertical"
     android:background="@android:color/white"
     >
 
     <LinearLayout
+        android:id="@+id/adbook_org_header_create_discuss_ll"
         android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1"
+        android:layout_height="45dp"
         android:orientation="horizontal"
         android:paddingLeft="@dimen/item_padding_left"
+        android:visibility="gone"
         >
-        <TextView xmlns:android="http://schemas.android.com/apk/res/android"
+        <TextView
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"

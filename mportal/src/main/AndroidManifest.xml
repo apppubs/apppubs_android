@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.apppubs.d20"
-    android:versionCode="200000"
-    android:versionName="2.0.0">
+    android:versionCode="200002"
+    android:versionName="3.0.0">
 
     <uses-sdk
         android:minSdkVersion="8"
@@ -495,7 +495,7 @@
             android:value="developer-default" />
         <meta-data
             android:name="JPUSH_APPKEY"
-            android:value="85358a757b2da7055f45f83c" /> <!-- </>值来自开发者平台取得的AppKey -->
+            android:value="${JPUSH_APPKEY}" /> <!-- </>值来自开发者平台取得的AppKey -->
 
 
         <!-- 极光推送结束 -->
@@ -522,10 +522,10 @@
 
         <meta-data
             android:name="APPCODE"
-            android:value="D20" />
+            android:value="U1436955029538" />
         <meta-data
             android:name="BASE_URL"
-            android:value="http://60.205.140.176:8088/" />
+            android:value="http://oapp.rilm.com.cn/" />
         <!-- 默认是1 手机、pad都为竖屏，2.手机pad分别为竖屏、横屏 3.手机pad均为横屏 4.手机pad分别为横屏、竖屏 -->
         <meta-data
             android:name="DISPLAY_ORIENTATION"

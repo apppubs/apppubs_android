@@ -101,7 +101,9 @@ public class LoginActivity extends BaseActivity implements AsyTaskCallback {
 					String deviceid = mAppContext.getApp().getPushVendorType()==App.PUSH_VENDOR_TYPE_BAIDU?mAppContext.getApp().getBaiduPushUserId():mAppContext.getApp().getJpushRegistrationID();// 百度硬件设备号
 					String systemVresion = Utils.getAndroidSDKVersion();
 					String currentVersionCode = Utils.getVersionName(LoginActivity.this);// app版本号
-					String[] params = new String[]{usernameT,passwordT,deviceid,Build.MODEL,systemVresion,currentVersionCode};
+					String token = mAppContext.getApp().getPushVendorType() == App.PUSH_VENDOR_TYPE_BAIDU ? mAppContext.getApp()
+							.getBaiduPushUserId() : mAppContext.getApp().getJpushRegistrationID();// 百度硬件设备号
+					String[] params = new String[]{usernameT,passwordT,deviceid,token,Build.MODEL,systemVresion,currentVersionCode};
 					AsyTaskExecutor.getInstance().startTask(LOGIN_TAG, LoginActivity.this, params);
 				} else {
 					Toast.makeText(getApplication(), getResources().getString(R.string.network_faile), Toast.LENGTH_LONG).show();
@@ -134,7 +136,7 @@ public class LoginActivity extends BaseActivity implements AsyTaskCallback {
 	public Object onExecute(Integer tag, String[] params) throws Exception {
 		Object obj = null;
 		if(tag==LOGIN_TAG){
-			obj = mUserBussiness.login(params[0], params[1], params[2], params[3], params[4], params[5], true);
+			obj = mUserBussiness.login(params[0], params[1], params[2], params[3], params[4], params[5],params[6], true);
 		}else if(tag==SYSTEM_CONFIG_TAG){
 			String appConfigStr = (String) FileUtils.readObj(this, Constants.FILE_NAME_APP_CONFIG);
 			JSONObject jo = new JSONObject(appConfigStr);

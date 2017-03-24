@@ -113,8 +113,10 @@ public class AddressBookOrganizationFragement extends BaseFragment {
 					if(!TextUtils.isEmpty(userBasicInfo.getAtatarUrl())){
 						mImageLoader.displayImage(userBasicInfo.getAtatarUrl(),imageView);
 					}
-					TextView registerTv = holder.getView(R.id.item_user_picker_user_title1_tv);
-					registerTv.setVisibility(!TextUtils.isEmpty(userBasicInfo.getAppCodeVersion())?View.GONE:View.VISIBLE);
+					if(mAppContext.getAppConfig().getChatFlag().equals("1")){
+						TextView registerTv = holder.getView(R.id.item_user_picker_user_title1_tv);
+						registerTv.setVisibility(!TextUtils.isEmpty(userBasicInfo.getAppCodeVersion())?View.GONE:View.VISIBLE);
+					}
 				}
 			}
 		};
@@ -122,7 +124,7 @@ public class AddressBookOrganizationFragement extends BaseFragment {
 		mListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 			@Override
 			public void onItemClick(AdapterView<?> adapterView, View view, int position, long arg3) {
-				if (position==0){
+				if (mAppContext.getAppConfig().getChatFlag().equals("1")&&position==0){
 					prepareForCreateDiscuss();
 				}else if (currentSuperIdIsLeaf()){
 					User user = (User) adapterView.getAdapter().getItem(position);
@@ -189,7 +191,13 @@ public class AddressBookOrganizationFragement extends BaseFragment {
 		mListView.setEmptyView(mRootView.findViewById(R.id.user_picker_empty_tv));
 		View header = inflater.inflate(R.layout.header_adbook_org_lv,mListView,false);
 		mHeaderNumberTV = (TextView) header.findViewById(R.id.header_adbook_org_lv_text_tv);
+		if(mAppContext.getAppConfig().getChatFlag().equals("1")){
+			View createDiscussLl = header.findViewById(R.id.adbook_org_header_create_discuss_ll);
+			createDiscussLl.setVisibility(View.VISIBLE);
+		}
 		mListView.addHeaderView(header);
+
+
 
 		mBreadcrumb = (Breadcrumb) mRootView.findViewById(R.id.user_picker_bc);
 		mBreadcrumb.setTextColor(Color.BLACK);
@@ -211,15 +219,21 @@ public class AddressBookOrganizationFragement extends BaseFragment {
 		//存储上一个列表的偏移量
 		mListViewOffsetMap.put(mSuperId,mListView.getFirstVisiblePosition());
 		if (!mUserBussiness.isLeaf(superId)) {
+
 			mDepartmentList = mUserBussiness.listSubDepartment(superId);
+
+			mHeaderNumberTV.setText("部门("+mDepartmentList.size()+")");
+
 			mDeptAdapter.setData(mDepartmentList);
 			mListView.setAdapter(mDeptAdapter);
-			mHeaderNumberTV.setText("部门("+mDepartmentList.size()+")");
+
 		} else {
 			mUserList = mUserBussiness.listUser(superId);
+
+			mHeaderNumberTV.setText("人员("+mUserList.size()+")");
+
 			mUserAdapter.setData(mUserList);
 			mListView.setAdapter(mUserAdapter);
-			mHeaderNumberTV.setText("人员("+mUserList.size()+")");
 			List<String> userIds = new ArrayList<String>();
 			for (User user : mUserList){
 				userIds.add(user.getUserId());

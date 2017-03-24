@@ -430,7 +430,8 @@ public class FilePreviewFragment extends BaseFragment{
 		InputStreamReader isr = null;
 		BufferedReader br = null;
 		try {
-			File source = new File(mContext.getExternalFilesDir(""), filename);
+			File source = new File(mContext.getExternalFilesDir(null), filename);
+//			File source = new File(mContext.getExternalFilesDir(""), filename);
 			isr = new InputStreamReader(new FileInputStream(source), mTextCharSet == 1 ? "GBK" : "UTF-8");
 			br = new BufferedReader(isr);
 
@@ -458,12 +459,12 @@ public class FilePreviewFragment extends BaseFragment{
 	}
 	
 	// 将下载的文本显示
-	private void displayTXTByPath(String filePath) {
+	private void displayTXTByPath(String filename) {
 		StringBuilder sb = new StringBuilder();
 		InputStreamReader isr = null;
 		BufferedReader br = null;
 		try {
-			File source = new File(filePath);
+			File source = new File(mContext.getExternalFilesDir(null), filename);
 			isr = new InputStreamReader(new FileInputStream(source), mTextCharSet == 1 ? "GBK" : "UTF-8");
 			br = new BufferedReader(isr);
 
@@ -478,8 +479,12 @@ public class FilePreviewFragment extends BaseFragment{
 			e.printStackTrace();
 		} finally {
 			try {
-				isr.close();
-				br.close();
+				if(isr!=null){
+					isr.close();
+				}
+				if(br!=null){
+					br.close();
+				}
 			} catch (IOException e) {
 				e.printStackTrace();
 			}

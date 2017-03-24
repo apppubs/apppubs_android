@@ -12,6 +12,7 @@ import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager.NameNotFoundException;
 import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.util.DisplayMetrics;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -31,6 +32,7 @@ import com.android.volley.toolbox.Volley;
 import com.apppubs.d20.AppManager;
 import com.apppubs.d20.activity.FeedbackActivity;
 import com.apppubs.d20.activity.StartUpActivity;
+import com.apppubs.d20.business.SystemBussiness;
 import com.apppubs.d20.widget.ConfirmDialog;
 import com.apppubs.d20.MportalApplication;
 import com.apppubs.d20.R;
@@ -82,12 +84,18 @@ public class SettingFragment extends TitleMenuFragment implements OnClickListene
 		mApp = (MportalApplication) mHostActivity.getApplication();
 	}
 	private void initState1() {
-		isHaveNewVersion = mAppContext.getApp().getLatestVersion() > Utils.getVersionCode(mContext);
-		if (isHaveNewVersion) {
-			newVresion.setVisibility(View.VISIBLE);
-		} else {
-			newVresion.setVisibility(View.GONE);
-		}
+		mSystemBussiness.checkUpdate(mHostActivity, new SystemBussiness.CheckUpdateListener() {
+			@Override
+			public void onDone(boolean needUpdate, boolean needForceUpdate, String version, String updateDescribe, String updateUrl) {
+				isHaveNewVersion = needUpdate;
+				if (isHaveNewVersion) {
+					newVresion.setVisibility(View.VISIBLE);
+				} else {
+					newVresion.setVisibility(View.GONE);
+				}
+			}
+		});
+
         currentVersionTv=(TextView) mRootView.findViewById(R.id.settting_update_version);
         
         PackageInfo pInfo = null;
@@ -398,49 +406,40 @@ public class SettingFragment extends TitleMenuFragment implements OnClickListene
 	}
 
 	private void checkVersion() {
-		boolean bo = mAppContext.getApp().getLatestVersion() > Utils.getVersionCode(mHostActivity);
-		if (bo) {
-			newVresion.setVisibility(View.VISIBLE);
-			mSystemBussiness.update(new BussinessCallbackCommon<String[]>() {
 
-				@Override
-				public void onException(int excepCode) {
-					// TODO Auto-generated method stub
+		mSystemBussiness.checkUpdate(mHostActivity, new SystemBussiness.CheckUpdateListener() {
+			@Override
+			public void onDone(boolean needUpdate, boolean needForceUpdate, String version, String updateDescribe, final String updateUrl) {
 
-				}
+				if (needUpdate) {
+					String title = String.format("检查到有新版 %s", TextUtils.isEmpty(version)?"":"V"+version);
+					newVresion.setVisibility(View.VISIBLE);
+					ConfirmDialog dialog = new ConfirmDialog(mHostActivity, new ConfirmDialog.ConfirmListener() {
 
-				@Override
-				public void onDone(final String[] obj) {
-					ConfirmDialog dialog = new ConfirmDialog(mHostActivity,
-							new ConfirmDialog.ConfirmListener() {
+						@Override
+						public void onCancelClick() {
+						}
 
-								@Override
-								public void onOkClick() {
-									if (ServiceUtils.isServiceRunning(mHostActivity,
-											DownloadAppService.serviceName)) {
-										Toast.makeText(mHostActivity, "升级服务已经启动,无需再次启动", Toast.LENGTH_SHORT).show();
-									} else {
-										Intent it = new Intent(mHostActivity, DownloadAppService.class);
-										it.putExtra(DownloadAppService.SERVICRINTENTURL, obj[1]);
-										it.putExtra(DownloadAppService.SERVACESHARENAME, 0);
-										mHostActivity.startService(it);
-										System.out.println("启动服务。。。。。。。。。。。。。。");
-									}
-								}
-
-								@Override
-								public void onCancelClick() {
-									// TODO Auto-generated method stub
-
-								}
-							}, "检查到有新版本更新", obj[0],"下次", "升级");
+						@Override
+						public void onOkClick() {
+							Intent it = new Intent(mHostActivity, DownloadAppService.class);
+							it.putExtra(DownloadAppService.SERVICRINTENTURL, updateUrl);
+							it.putExtra(DownloadAppService.SERVACESHARENAME, 0);
+							mHostActivity.startService(it);
+							// bindService(it, conn, Context.BIND_AUTO_CREATE);
+							mUserBussiness.logout(mHostActivity);
+						}
+					}, title , updateDescribe, "下次", "更新");
 					dialog.show();
+					dialog.setCanceledOnTouchOutside(false);
+				} else {
+					newVresion.setVisibility(View.GONE);
+					Toast.makeText(mHostActivity, "当前已是最新版本", Toast.LENGTH_SHORT).show();
 				}
-			});
-		} else {
-			newVresion.setVisibility(View.GONE);
-			Toast.makeText(mHostActivity, "当前已是最新版本", Toast.LENGTH_SHORT).show();
-		}
+			}
+		});
+
+
 	}
 
 

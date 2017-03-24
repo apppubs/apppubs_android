@@ -545,7 +545,8 @@ public class FirstLoginActity extends BaseActivity implements ErrorListener, Asy
 				Map<String, Object> requestParamsMap = new HashMap<String, Object>();
 				requestParamsMap.put("username", params[0]);
 				requestParamsMap.put("password", params[1]);
-				requestParamsMap.put("deviceid", token);
+				requestParamsMap.put("deviceid",  mSystemBussiness.getMachineId());
+				requestParamsMap.put("token",  token);
 				requestParamsMap.put("dev", URLEncoder.encode(Build.MODEL, "utf-8"));
 				requestParamsMap.put("os", osVersion);
 				requestParamsMap.put("app", currentVersionName);

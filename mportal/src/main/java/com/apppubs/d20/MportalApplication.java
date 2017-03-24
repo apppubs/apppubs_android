@@ -11,6 +11,7 @@ import android.os.Build;
 import android.util.DisplayMetrics;
 import android.view.WindowManager;
 
+import com.apppubs.d20.exception.UnCeHandler;
 import com.apppubs.d20.util.MathUtils;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;

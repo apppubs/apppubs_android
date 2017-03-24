@@ -36,6 +36,8 @@ public class AppConfig implements Serializable{
     private int minSupportedVersionCode;
     @SerializedName("android_updateurl")
     private String updateUrl;
+	@SerializedName("chat_flag")
+	private String chatFlag;
 
     public AppConfig(){
         adbookRootId = "0";
@@ -46,6 +48,7 @@ public class AppConfig implements Serializable{
         pdfEditableFlag = "0";
         regURL = "";
         forgetPasswordUrl = "";
+		chatFlag = "0";
     }
 
     public String getAdbookRootId() {
@@ -143,4 +146,12 @@ public class AppConfig implements Serializable{
     public void setUpdateUrl(String updateUrl) {
         this.updateUrl = updateUrl;
     }
+
+	public String getChatFlag() {
+		return chatFlag;
+	}
+
+	public void setChatFlag(String chatFlag) {
+		this.chatFlag = chatFlag;
+	}
 }

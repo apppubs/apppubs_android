@@ -36,7 +36,7 @@ public abstract class HomeBaseActivity extends BaseActivity {
 
 	public static String MPORTAL_PREFERENCE_NAME = "mportal_preference";
 	public static String MPORTAL_PREFERENCE_APP_RUNNING_KEY = "is_app_running";
-	
+
 	/**
 	 * 应用主目录
 	 */
@@ -59,39 +59,43 @@ public abstract class HomeBaseActivity extends BaseActivity {
 			String menuPower = AppContext.getInstance(mContext).getCurrentUser().getMenuPower();
 			String[] menus = menuPower.split(",");
 			String sqlParam = "";
-			for(int i=-1;++i<menus.length;){
-				if(i!=0){
-					sqlParam+=",";
+			for (int i = -1; ++i < menus.length; ) {
+				if (i != 0) {
+					sqlParam += ",";
 				}
-				sqlParam += "'"+menus[i]+"'";
+				sqlParam += "'" + menus[i] + "'";
 			}
-			mPrimaryMenuList = SugarRecord.find(MenuItem.class, "LOCATION=? and (PROTECTED_FLAG = 0 or ID in ("+sqlParam+"))",
-					new String[] { MenuItem.MENU_LOCATION_PRIMARY + "" }, null,
+			mPrimaryMenuList = SugarRecord.find(MenuItem.class, "LOCATION=? and (PROTECTED_FLAG = 0 or ID in (" + sqlParam + "))",
+					new String[]{MenuItem.MENU_LOCATION_PRIMARY + ""}, null,
 					"SORT_ID", null);
 		} else {
 
 			mPrimaryMenuList = SugarRecord.find(MenuItem.class, "LOCATION=? and PROTECTED_FLAG = 0",
-					new String[] { MenuItem.MENU_LOCATION_PRIMARY + "" }, null, "SORT_ID", null);
+					new String[]{MenuItem.MENU_LOCATION_PRIMARY + ""}, null, "SORT_ID", null);
 		}
 		mSecondaryMenuList = SugarRecord.find(MenuItem.class, "LOCATION=?",
-				new String[] { MenuItem.MENU_LOCATION_SECONDARY + "" }, null, "SORT_ID", null);
+				new String[]{MenuItem.MENU_LOCATION_SECONDARY + ""}, null, "SORT_ID", null);
 		mApp = (MportalApplication) this.getApplication();
 		mViewCourier = ViewCourier.getInstance(this);
-		
+
 		mSystemBussiness.makeStartUpRequest();
-		mSystemBussiness.loginRC();
+		if (mAppContext.getAppConfig().getChatFlag().equals("1")) {
+			mSystemBussiness.loginRC();
+		}
 		initWeather();
 		requestWeather();
 
 		initBroadcastReceiver();
-		
+
 		SharedPreferenceUtils.getInstance(this).putBoolean(MPORTAL_PREFERENCE_NAME, MPORTAL_PREFERENCE_APP_RUNNING_KEY, true);
 		String paddingUrl = mAppContext.getApp().getPaddingUrlOnHomeActivityStartUp();
-		if (!TextUtils.isEmpty(paddingUrl)){
+		if (!TextUtils.isEmpty(paddingUrl)) {
 			mAppContext.getApp().setPaddingUrlOnHomeActivityStartUp(null);
-			ViewCourier.execute(mContext,paddingUrl);
+			ViewCourier.execute(mContext, paddingUrl);
 		}
-	};
+	}
+
+	;
 
 	/**
 	 * 初始化天气信息
@@ -120,7 +124,6 @@ public abstract class HomeBaseActivity extends BaseActivity {
 
 	/**
 	 * 天气信息(系统静态变量)
-	 * 
 	 */
 	public static void refreshWether(Context context, ArrayList<Weather> weathers) {
 		mWeathers = weathers;
@@ -151,8 +154,8 @@ public abstract class HomeBaseActivity extends BaseActivity {
 
 	protected abstract void changeContent(BaseFragment fragment);
 
-	protected abstract void setUnreadNumForMenu(String menuId,int num);
-	
+	protected abstract void setUnreadNumForMenu(String menuId, int num);
+
 	@Override
 	protected void onResume() {
 		super.onResume();
@@ -264,37 +267,37 @@ public abstract class HomeBaseActivity extends BaseActivity {
 
 	public void logout() {
 		AppContext.getInstance(mContext).setCurrentUser(new User());
-		if (mAppContext.getApp().getLoginFlag() == App.LOGIN_ONSTART_USE_USERNAME_PASSWORD||mAppContext.getApp().getLoginFlag()==App.LOGIN_ONSTART_USE_USERNAME_PASSWORD_ORGCODE) {
+		if (mAppContext.getApp().getLoginFlag() == App.LOGIN_ONSTART_USE_USERNAME_PASSWORD || mAppContext.getApp().getLoginFlag() == App.LOGIN_ONSTART_USE_USERNAME_PASSWORD_ORGCODE) {
 			Intent closeI = new Intent(Actions.CLOSE_ALL_ACTIVITY);
 			sendBroadcast(closeI);
 			Intent intent = new Intent(this, FirstLoginActity.class);
 			startActivity(intent);
 
-		} else if(mAppContext.getApp().getLoginFlag() == App.LOGIN_ONSTART_USE_USERNAME){
+		} else if (mAppContext.getApp().getLoginFlag() == App.LOGIN_ONSTART_USE_USERNAME) {
 			Intent closeI = new Intent(Actions.CLOSE_ALL_ACTIVITY);
 			sendBroadcast(closeI);
 			Intent intent = new Intent(this, FirstLoginActity.class);
 			startActivity(intent);
 
-		}else if(mAppContext.getApp().getLoginFlag() == App.LOGIN_ONSTART_USE_PHONE_NUMBER){
+		} else if (mAppContext.getApp().getLoginFlag() == App.LOGIN_ONSTART_USE_PHONE_NUMBER) {
 			Intent closeI = new Intent(Actions.CLOSE_ALL_ACTIVITY);
 			sendBroadcast(closeI);
 			Intent intent = new Intent(this, FirstLoginActity.class);
 			startActivity(intent);
-		}else {
+		} else {
 		}
 
 	}
-	
-	public void selectMessageFragment(){
-		for (int i=-1;++i<mPrimaryMenuList.size();){
+
+	public void selectMessageFragment() {
+		for (int i = -1; ++i < mPrimaryMenuList.size(); ) {
 			MenuItem mi = mPrimaryMenuList.get(i);
-			if (mi.getUrl().contains("apppubs://message")){
+			if (mi.getUrl().contains("apppubs://message")) {
 				selectTab(i);
 			}
 		}
 	}
 
-	protected abstract  void selectTab(int index);
+	protected abstract void selectTab(int index);
 
 }

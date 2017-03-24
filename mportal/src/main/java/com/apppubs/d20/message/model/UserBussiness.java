@@ -529,7 +529,7 @@ public class UserBussiness extends BaseBussiness {
 	 * 1.IPHONE客户端 3.IPad客户端 4.Android客户端 孙姐 13:11:28 //username 用户名 //password
 	 * 密码 //deviceid 硬件设备号 //dev 硬件版本 //os 操作系统版本 //app 当前应用版本 //fr 1.IPHONE客户
 	 */
-	public int login(final String username, final String password, final String deviceid, final String dev,
+	public int login(final String username, final String password, String deviceid,String token, final String dev,
 			final String systemVresion, final String currentVersionName, final boolean allowAutoLogin) {
 
 		int result = 0;
@@ -538,6 +538,7 @@ public class UserBussiness extends BaseBussiness {
 			requestParamsMap.put("username", username);
 			requestParamsMap.put("password", password);
 			requestParamsMap.put("deviceid", deviceid);
+			requestParamsMap.put("token",token);
 			requestParamsMap.put("dev", URLEncoder.encode(dev, "utf-8"));
 			requestParamsMap.put("os", systemVresion);
 			requestParamsMap.put("app", currentVersionName);
@@ -572,7 +573,7 @@ public class UserBussiness extends BaseBussiness {
 		// return f;
 		return result;
 	}
-	public User login(final String username, final String password, final String deviceid, final String dev,
+	public User login1(final String username, final String password, final String deviceid, final String dev,
 			final String systemVresion, final String currentVersionName) {
 		
 		User result = null;

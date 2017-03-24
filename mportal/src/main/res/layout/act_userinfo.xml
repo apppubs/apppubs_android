@@ -47,7 +47,9 @@
                     android:onClick="onClick"
                     app:citv_fill_color="@color/common_btn_bg_gray"
                     app:citv_text_color="@android:color/white"
-                    app:citv_text_size="18dp" />
+                    app:citv_text_size="18dp"
+                    android:visibility="gone"
+                    />
 
                 <TextView
                     android:id="@+id/userinfo_dept_tv"

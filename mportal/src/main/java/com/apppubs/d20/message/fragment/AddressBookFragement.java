@@ -318,7 +318,7 @@ public class AddressBookFragement extends BaseFragment {
 					public void onCancelClick() {
 						
 					}
-				}, "确定同步？","同步可能需要几秒到几分钟的时间！", "取消", "取消").show();
+				}, "确定同步？","同步可能需要几秒到几分钟的时间！", "取消", "确定").show();
 				
 			}
 
