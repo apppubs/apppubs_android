@@ -21,7 +21,7 @@ import com.apppubs.d20.bean.ServiceNo;
 import com.apppubs.d20.widget.CircularImage;
 import com.apppubs.d20.R;
 import com.apppubs.d20.activity.ContainerActivity;
-import com.apppubs.d20.business.BussinessCallbackCommon;
+import com.apppubs.d20.model.BussinessCallbackCommon;
 
 /**
  * 添加服务号 Copyright (c) heaven Inc. Original Author: zhangwen ChangeLog:

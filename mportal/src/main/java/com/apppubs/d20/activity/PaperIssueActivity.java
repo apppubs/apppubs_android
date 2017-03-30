@@ -16,7 +16,7 @@ import com.apppubs.d20.bean.PaperCatalog;
 import com.apppubs.d20.bean.PaperIssue;
 import com.apppubs.d20.widget.TitleBar;
 import com.apppubs.d20.R;
-import com.apppubs.d20.business.BussinessCallbackCommon;
+import com.apppubs.d20.model.BussinessCallbackCommon;
 import com.apppubs.d20.fragment.PaperInfoListFragment;
 import com.apppubs.d20.fragment.PaperIssuePreviewFragment;
 

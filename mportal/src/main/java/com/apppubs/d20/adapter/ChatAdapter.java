@@ -27,6 +27,7 @@ import com.apppubs.d20.AppContext;
 import com.apppubs.d20.activity.ChatVideoInfoActivity;
 import com.apppubs.d20.bean.Msg;
 import com.apppubs.d20.bean.User;
+import com.apppubs.d20.bean.UserInfo;
 import com.apppubs.d20.util.LogM;
 import com.apppubs.d20.R;
 import com.apppubs.d20.activity.ChatPicInfoActivity;
@@ -72,7 +73,7 @@ public class ChatAdapter extends BaseAdapter implements OnClickListener ,AsyTask
 	private Context mContext;
 	private List<Msg> mList;
 	private LayoutInflater mInflater;
-	private User mCurUser;//当前登录的用户
+	private UserInfo mCurUser;//当前登录的用户
 	private ImageLoader mImageLoader;
 	private DisplayImageOptions mImageLoaderOptions;
 	private boolean isVoicePlaying;

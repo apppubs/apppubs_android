@@ -2,9 +2,13 @@ package com.orm;
 
 import static com.orm.util.ManifestHelper.getDatabaseVersion;
 import static com.orm.util.ManifestHelper.getDebugEnabled;
+
+import android.annotation.TargetApi;
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
+import android.database.sqlite.SQLiteDatabaseLockedException;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.os.Build;
 
 import com.orm.util.ManifestHelper;
 import com.orm.util.SugarCursorFactory;
@@ -30,9 +34,14 @@ public class SugarDb extends SQLiteOpenHelper {
 		schemaGenerator.doUpgrade(sqLiteDatabase, oldVersion, newVersion);
 	}
 
+	@TargetApi(Build.VERSION_CODES.HONEYCOMB)
 	public synchronized SQLiteDatabase getDB() {
 		if (this.sqLiteDatabase == null) {
-			this.sqLiteDatabase = getWritableDatabase();
+			try{
+				this.sqLiteDatabase = getWritableDatabase();
+			}catch (SQLiteDatabaseLockedException e){
+				e.printStackTrace();
+			}
 		}
 
 		return this.sqLiteDatabase;

@@ -24,8 +24,8 @@ import com.apppubs.d20.activity.StartUpActivity;
 import com.apppubs.d20.exception.ESUnavailableException;
 import com.apppubs.d20.util.LogM;
 import com.apppubs.d20.R;
-import com.apppubs.d20.business.CallbackResult;
-import com.apppubs.d20.business.SystemBussiness;
+import com.apppubs.d20.model.CallbackResult;
+import com.apppubs.d20.model.SystemBussiness;
 import com.apppubs.d20.constant.Constants;
 import com.apppubs.d20.util.FileUtils;
 

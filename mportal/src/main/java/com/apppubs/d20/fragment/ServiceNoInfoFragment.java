@@ -25,7 +25,7 @@ import com.apppubs.d20.util.DateUtils;
 import com.apppubs.d20.R;
 import com.apppubs.d20.activity.ContainerActivity;
 import com.apppubs.d20.bean.ServiceNo;
-import com.apppubs.d20.business.BussinessCallbackCommon;
+import com.apppubs.d20.model.BussinessCallbackCommon;
 import com.apppubs.d20.constant.URLs;
 import com.apppubs.d20.util.JSONResult;
 

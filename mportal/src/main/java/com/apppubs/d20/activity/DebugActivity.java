@@ -5,7 +5,7 @@ import java.util.List;
 import android.os.Bundle;
 
 import com.apppubs.d20.bean.Msg;
-import com.apppubs.d20.business.BussinessCallbackCommon;
+import com.apppubs.d20.model.BussinessCallbackCommon;
 
 /**
  * 测试的activity

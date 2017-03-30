@@ -28,10 +28,10 @@ import com.apppubs.d20.asytask.AsyTaskCallback;
 import com.apppubs.d20.asytask.AsyTaskExecutor;
 import com.apppubs.d20.bean.App;
 import com.apppubs.d20.bean.Settings;
-import com.apppubs.d20.bean.User;
-import com.apppubs.d20.business.AbstractBussinessCallback;
+import com.apppubs.d20.bean.UserInfo;
+import com.apppubs.d20.model.AbstractBussinessCallback;
 import com.apppubs.d20.AppContext;
-import com.apppubs.d20.business.BussinessCallbackCommon;
+import com.apppubs.d20.model.BussinessCallbackCommon;
 import com.apppubs.d20.constant.URLs;
 import com.apppubs.d20.util.JSONResult;
 import com.apppubs.d20.util.LogM;
@@ -71,7 +71,7 @@ public class FirstLoginActity extends BaseActivity implements ErrorListener, Asy
 
 	private int mLoginType;// 登陆类型
 
-	private User mLoginingUser;//正在登录的用户
+	private UserInfo mLoginingUser;//正在登录的用户
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -179,7 +179,7 @@ public class FirstLoginActity extends BaseActivity implements ErrorListener, Asy
 
 		super.onResume();
 		if (AppContext.getInstance(mContext).getCurrentUser() != null) {
-			User user = AppContext.getInstance(mContext).getCurrentUser();
+			UserInfo user = AppContext.getInstance(mContext).getCurrentUser();
 			String usernameS = user.getUsername();
 			if (!TextUtils.isEmpty(usernameS)) {
 				if (!TextUtils.isEmpty(user.getOrgCode())) {
@@ -332,7 +332,7 @@ public class FirstLoginActity extends BaseActivity implements ErrorListener, Asy
 			if (result == 2) {
 				enterHome();
 			} else if (result == 1) {
-				mLoginingUser = new User(jo.getString("userid"), jo.getString("username"), jo.getString("cnname"), "",
+				mLoginingUser = new UserInfo(jo.getString("userid"), jo.getString("username"), jo.getString("cnname"), "",
 						jo.getString("email"), jo.getString("mobile"));
 				Intent intent = new Intent(this, VerificationCodeActivity.class);
 				Bundle extras = new Bundle();
@@ -356,7 +356,7 @@ public class FirstLoginActity extends BaseActivity implements ErrorListener, Asy
 		try {
 			JSONObject jo = new JSONObject(response);
 			int result = jo.getInt("result");
-			mLoginingUser = new User(jo.getString("userid"), jo.getString("username"), jo.getString("cnname"), "",
+			mLoginingUser = new UserInfo(jo.getString("userid"), jo.getString("username"), jo.getString("cnname"), "",
 					jo.getString("email"), jo.getString("mobile"),jo.getString("menupower"));
 			if (jo.has("photourl")){
 				mLoginingUser.setAvatarUrl(jo.getString("photourl"));
@@ -373,7 +373,7 @@ public class FirstLoginActity extends BaseActivity implements ErrorListener, Asy
 				intent.putExtras(extras);
 				startActivityForResult(intent, REQUEST_CODE_VERIFICATION);
 			} else {
-				AppContext.getInstance(mContext).setCurrentUser(new User());
+				AppContext.getInstance(mContext).setCurrentUser(new UserInfo());
 				Toast.makeText(this, jo.getString("resultreason"), Toast.LENGTH_SHORT).show();
 			}
 
@@ -408,7 +408,7 @@ public class FirstLoginActity extends BaseActivity implements ErrorListener, Asy
 		JSONResult jr = JSONResult.compile(response);
 
 		if (jr.resultCode == 1) {
-            User user = new User();
+			UserInfo user = new UserInfo();
             user.setUsername((String)jr.getResultMap().get("username"));
             user.setUserId((String)jr.getResultMap().get("userid"));
             user.setOrgCode(orgCode);
@@ -469,30 +469,6 @@ public class FirstLoginActity extends BaseActivity implements ErrorListener, Asy
 	 */
 	private void sycnUserAndServiceNumber() {
 		mProgressHUD = ProgressHUD.show(FirstLoginActity.this, "信息同步中", true, false, null);
-		mUserBussiness.sycnAddressBook(new AbstractBussinessCallback<Object>() {
-
-			@Override
-			public void onException(int excepCode) {
-				isUserSycnDone = true;
-				if (isUserSycnDone && isServiceNoSycnDone) {
-					Toast.makeText(FirstLoginActity.this, "同步失败", Toast.LENGTH_LONG).show();
-					enterHome();
-				}
-			}
-
-			@Override
-			public void onDone(Object obj) {
-				isUserSycnDone = true;
-				if (isUserSycnDone && isServiceNoSycnDone) {
-					enterHome();
-				}
-			}
-
-			@Override
-			public void onProgressUpdate(float progress) {
-
-			}
-		});
 		mSystemBussiness.sycnServiceNo(new BussinessCallbackCommon<Object>() {
 
 			@Override
@@ -562,7 +538,7 @@ public class FirstLoginActity extends BaseActivity implements ErrorListener, Asy
 
 				// 登录成功才会修改本地的用户信息
 
-				User user = new User(jo.getString("userid"), jo.getString("username"), jo.getString("cnname"),
+				UserInfo user = new UserInfo(jo.getString("userid"), jo.getString("username"), jo.getString("cnname"),
 						params[1], jo.getString("email"), jo.getString("mobile"));
 				user.setMenuPower(jo.getString("menupower"));
 

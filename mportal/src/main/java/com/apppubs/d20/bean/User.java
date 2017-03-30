@@ -78,6 +78,7 @@ public class User extends SugarRecord implements Serializable{
 		this(userid,  username,  cnname,  password,  user_email,
 				 user_phone);
 		this.menuPower = menuPower;
+		addressbookPermissionString = "";
 	}
 
 	public String getId() {

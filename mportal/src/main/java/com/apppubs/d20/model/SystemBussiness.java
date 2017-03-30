@@ -1,4 +1,4 @@
-package com.apppubs.d20.business;
+package com.apppubs.d20.model;
 
 import android.content.Context;
 import android.content.res.Resources;
@@ -18,7 +18,6 @@ import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.support.annotation.NonNull;
-import android.support.v4.text.TextUtilsCompat;
 import android.telephony.TelephonyManager;
 import android.text.TextUtils;
 import android.util.DisplayMetrics;
@@ -26,21 +25,29 @@ import android.util.Log;
 import android.view.WindowManager;
 
 import com.apppubs.d20.AppContext;
+import com.apppubs.d20.R;
 import com.apppubs.d20.bean.App;
 import com.apppubs.d20.bean.AppConfig;
+import com.apppubs.d20.bean.City;
 import com.apppubs.d20.bean.Client;
 import com.apppubs.d20.bean.Collection;
 import com.apppubs.d20.bean.Comment;
 import com.apppubs.d20.bean.Department;
 import com.apppubs.d20.bean.HeadPic;
+import com.apppubs.d20.bean.History;
+import com.apppubs.d20.bean.MenuGroup;
 import com.apppubs.d20.bean.MenuItem;
 import com.apppubs.d20.bean.MsgRecord;
+import com.apppubs.d20.bean.NewsChannel;
 import com.apppubs.d20.bean.NewsInfo;
+import com.apppubs.d20.bean.Paper;
 import com.apppubs.d20.bean.ServiceNo;
 import com.apppubs.d20.bean.TitleMenu;
 import com.apppubs.d20.bean.User;
 import com.apppubs.d20.bean.UserDeptLink;
 import com.apppubs.d20.bean.WeiboInfo;
+import com.apppubs.d20.constant.Constants;
+import com.apppubs.d20.constant.URLs;
 import com.apppubs.d20.message.model.UserBussiness;
 import com.apppubs.d20.util.FileUtils;
 import com.apppubs.d20.util.JSONResult;
@@ -48,14 +55,6 @@ import com.apppubs.d20.util.LogM;
 import com.apppubs.d20.util.MathUtils;
 import com.apppubs.d20.util.Utils;
 import com.apppubs.d20.util.WebUtils;
-import com.apppubs.d20.R;
-import com.apppubs.d20.bean.City;
-import com.apppubs.d20.bean.History;
-import com.apppubs.d20.bean.MenuGroup;
-import com.apppubs.d20.bean.NewsChannel;
-import com.apppubs.d20.bean.Paper;
-import com.apppubs.d20.constant.Constants;
-import com.apppubs.d20.constant.URLs;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.orm.SugarRecord;
 
@@ -113,11 +112,7 @@ public class SystemBussiness extends BaseBussiness {
 
 	private final float PIC_RATIO = 0.56f;
 
-	public interface UpdateListenser {
-		void onHaveNewVersion(String updateurl, int newVersionCode, int curVersionCode);
-
-		void onHaveNoNewVersion(int vurVersionCode);
-	}
+	private boolean isInitialized;
 
 	private Context mContext;
 	private AppContext mAppContext;
@@ -190,6 +185,7 @@ public class SystemBussiness extends BaseBussiness {
 					db.beginTransaction();
 					init();
 					db.setTransactionSuccessful();
+					isInitialized = true;
 					sHandler.post(new OnDoneRun<Object>(callback, null));
 				} catch (JSONException e) {
 					clearDataBase(isFirst);
@@ -361,15 +357,23 @@ public class SystemBussiness extends BaseBussiness {
 		System.out.println("当前版本，"+Utils.getVersionCode(mContext)+"上一次启动的版本："+localApp.getPreWorkingVersion());
 		if(Utils.getVersionCode(mContext)>localApp.getPreWorkingVersion()){
 			System.out.println("新版本第一次启动");
-			if(Utils.getVersionCode(mContext)/1000%1000==1){//代码库版本为1时
-				System.out.println("代码库版本为1时");
-				UserBussiness userBussiness = UserBussiness.getInstance(mContext);
-				AppContext.getInstance(mContext).clearCurrentUser();
+			switch (localApp.getPreWorkingVersion()){
+				case 200001:
+					UserBussiness userBussiness = UserBussiness.getInstance(mContext);
+					AppContext.getInstance(mContext).clearCurrentUser();
+				case 200002:
+					AppContext.getInstance(mContext).clearCurrentUser();
+				case 200003:
+					//下一个需要做升级处理的版
+					break;
 			}
+			localApp.setPreWorkingVersion(Utils.getVersionCode(mContext));
+			localApp.setWelcomePlayed(false);
 		}
 		String url = String.format(URLs.URL_APPINFO, AppContext.getInstance(mContext).getCurrentUser().getOrgCode(),orientationFlag,deviceFlag,screenDimenFlag);
 		App remoteApp = WebUtils.request(url, App.class, "app");
 
+		LogM.log(this.getClass(),"当前启动次数"+localApp.getInitTimes());
 		if (localApp.getInitTimes() == 0) {
 			localApp = remoteApp;
 			localApp.setLayoutLocalScheme(localApp.getLayoutScheme());
@@ -383,7 +387,7 @@ public class SystemBussiness extends BaseBussiness {
 			SugarRecord.deleteAll(UserDeptLink.class);
 			SugarRecord.deleteAll(Department.class);
 			SugarRecord.deleteAll(MsgRecord.class);
-			initDatabase();
+//			initDatabase();
 
 		} else {
 			localApp.setAllModifyUserInfo(remoteApp.getAllModifyUserInfo());
@@ -473,14 +477,13 @@ public class SystemBussiness extends BaseBussiness {
 		if (haveNewspaperMenu) {
 			initPaper();
 		}
-		localApp.setStartupTimes(localApp.getInitTimes() + 1);
-		AppContext.getInstance(mContext).setApp(localApp);
 
 		//初始化appconfig,首次初始化必须使用同步方法
 		
-		Object appConfig = FileUtils.readObj(mContext, Constants.FILE_NAME_APP_CONFIG);
+		Object appConfig = localApp.getAppConfig();
 		if(appConfig==null){
-			syncAppConfig();
+			AppConfig cfg = syncAppConfig();
+			localApp.setAppConfig(cfg);
 		}else{
 			AsyncTask<String, Integer, String> asyncTask = new AsyncTask<String, Integer, String>(){
 				@Override
@@ -498,8 +501,9 @@ public class SystemBussiness extends BaseBussiness {
 			asyncTask.execute("");
 			
 		}
-	
-		
+
+		localApp.setStartupTimes(localApp.getInitTimes() + 1);
+		AppContext.getInstance(mContext).setApp(localApp);
 	}
 
 	/**
@@ -718,7 +722,7 @@ public class SystemBussiness extends BaseBussiness {
 
 	}
 
-	public void syncAppConfig() throws IOException, InterruptedException {
+	public AppConfig syncAppConfig() throws IOException, InterruptedException {
 
 		String result = WebUtils.requestWithGet(String.format(URLs.URL_APP_CONFIG,""));
 		JSONResult jsonResult = JSONResult.compile(result);
@@ -737,23 +741,34 @@ public class SystemBussiness extends BaseBussiness {
 			app.setAddressbookVersion(Integer.parseInt(resultMap.get("adbookversion")));
 
 			AppConfig appconfig = (AppConfig) jsonResult.getResultObject(AppConfig.class);
-			AppContext.getInstance(mContext).setAppConfig(appconfig);
-			if (app.getAddressbookNeedPermission()==App.NEED){
+
+
+			if (appconfig.getAdbookAuthFlag()==1){
 				String url = String.format(URLs.URL_ADDRESS_PERMISSION, AppContext.getInstance(mContext).getCurrentUser().getUserId());
 				String permissionResult = WebUtils.requestWithGet(url);
 				JSONResult jr = JSONResult.compile(permissionResult);
 				if (jr.resultCode==1){
-					AppContext.getInstance(mContext).getCurrentUser().setAddressbookPermissionString(jr.result);
-					AppContext.getInstance(mContext).setCurrentUser(AppContext.getInstance(mContext).getCurrentUser());
+					com.apppubs.d20.bean.UserInfo userInfo = AppContext.getInstance(mContext).getCurrentUser();
+					userInfo.setAddressbookPermissionString(jr.result);
+					AppContext.getInstance(mContext).setCurrentUser(userInfo);
 				}
 			}
-			AppContext.getInstance(mContext).setApp(app);
+
+			if(appconfig.getChatAuthFlag()==1){
+				String url = String.format(URLs.URL_USER_PERMISSION, AppContext.getInstance(mContext).getCurrentUser().getUserId());
+				String permissionResult = WebUtils.requestWithGet(url);
+				JSONResult jr = JSONResult.compile(permissionResult);
+				if (jr.resultCode==1){
+					com.apppubs.d20.bean.UserInfo userInfo = AppContext.getInstance(mContext).getCurrentUser();
+					userInfo.setChatPermissionString(jr.result);
+					AppContext.getInstance(mContext).setCurrentUser(userInfo);
+				}
+			}
+
+			AppContext.getInstance(mContext).setAppConfig(appconfig);
+			return appconfig;
 		}
-
-	}
-
-	public AppConfig getAppConfig(){
-		return AppContext.getInstance(mContext).getAppConfig();
+		return null;
 	}
 
 	/**
@@ -1188,7 +1203,7 @@ public class SystemBussiness extends BaseBussiness {
 			public void onSuccess(String userid) {
 				Log.d("LoginActivity", "--onSuccess" + userid);
 				setMyExtensionModule();
-				User user = AppContext.getInstance(mContext).getCurrentUser();
+				com.apppubs.d20.bean.UserInfo user = AppContext.getInstance(mContext).getCurrentUser();
 				if(user!=null){
 					UserInfo userinfo = new UserInfo(userid,user.getTrueName(), Uri.parse(user.getAvatarUrl()));
 					RongIM.getInstance().setCurrentUserInfo(userinfo);
@@ -1284,15 +1299,26 @@ public class SystemBussiness extends BaseBussiness {
 		boolean needUpdate = false;
 		boolean needForceupdate = false;
 		String versionDes = null;
-		if (compareVersion(appConfig.getLatestVersion(),Utils.getVersionName(context))>0){
+		if (appConfig!=null&&compareVersion(appConfig.getLatestVersion(),Utils.getVersionName(context))>0){
 			needUpdate = true;
 			if (appConfig.getMinSupportedVersionCode()>Utils.getVersionCode(context)){
 				needForceupdate = true;
 			}
 			versionDes = appConfig.getLatestVersionDescribe();
+			String version = appConfig.getLatestVersion();
+			listener.onDone(needUpdate,needForceupdate,version,versionDes,appConfig.getUpdateUrl());
+		}else{
+			listener.onDone(needUpdate,needForceupdate,null,null,null);
+
 		}
-		String version = appConfig.getLatestVersion();
-		listener.onDone(needUpdate,needForceupdate,version,versionDes,appConfig.getUpdateUrl());
+	}
+
+	public boolean isInitialized() {
+		return isInitialized;
+	}
+
+	public void setInitialized(boolean initialized) {
+		isInitialized = initialized;
 	}
 
 	public static int compareVersion(String version1, String version2) {
@@ -1329,6 +1355,8 @@ public class SystemBussiness extends BaseBussiness {
 		} else {
 			return diff > 0 ? 1 : -1;
 		}
+
+
 	}
 
 }

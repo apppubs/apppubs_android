@@ -1,4 +1,4 @@
-package com.apppubs.d20.business;
+package com.apppubs.d20.model;
 
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.Executor;

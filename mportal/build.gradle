@@ -7,6 +7,8 @@ android {
         applicationId "com.apppubs.d20"
         minSdkVersion 9
         targetSdkVersion 19
+        versionCode 200004
+        versionName "2.0.0"
         compileOptions {
             sourceCompatibility JavaVersion.VERSION_1_7
             targetCompatibility JavaVersion.VERSION_1_7
@@ -18,8 +20,11 @@ android {
         }
         manifestPlaceholders = [
                 JPUSH_PKGNAME : applicationId,
-                JPUSH_APPKEY : "23b11de6ee89d51a03689973", //JPush上注册的包名对应的appkey.
+                JPUSH_APPKEY : "85358a757b2da7055f45f83c", //JPush上注册的包名对应的appkey.
                 JPUSH_CHANNEL : "developer-default", //暂时填写默认值即可.
+                APPCODE:"D20",
+                BASE_URL:"http://60.205.140.176:8088/",
+                DISPLAY_ORIENTATION:"1"
         ]
 
 
@@ -44,7 +49,7 @@ android {
         }
     }
 
-
+    lintOptions { checkReleaseBuilds false }
 }
 
 dependencies {
@@ -62,5 +67,6 @@ dependencies {
     compile 'com.android.support:multidex:1.0.1'
     compile 'cn.jiguang.sdk:jpush:3.0.1'
     compile 'cn.jiguang.sdk:jcore:1.1.0'
+    compile 'org.greenrobot:eventbus:3.0.0'
 
 }

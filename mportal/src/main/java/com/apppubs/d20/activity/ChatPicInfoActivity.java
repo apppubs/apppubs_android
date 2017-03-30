@@ -27,7 +27,7 @@ import android.widget.Toast;
 import com.apppubs.d20.util.LogM;
 import com.apppubs.d20.widget.ZoomImageView;
 import com.apppubs.d20.R;
-import com.apppubs.d20.business.BussinessCallbackCommon;
+import com.apppubs.d20.model.BussinessCallbackCommon;
 
 public class ChatPicInfoActivity extends BaseActivity implements OnClickListener {
 	private ViewPager mViewPager;

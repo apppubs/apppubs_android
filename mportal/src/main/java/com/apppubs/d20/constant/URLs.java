@@ -646,7 +646,11 @@ public class URLs {
 	 */
 	public static final String URL_ADDRESS_PERMISSION = baseURL + "wmh360/json/msg/getdept_authsetl.jsp?appcode="
 			+ appCode + "&userid=%s&clientkey=bb7c1386d85044ba7a7ae53f3362d634";
-	
+	/**
+	 * http://60.205.140.176:8088/wmh360/json/msg/getdept_imauthset.jsp?appcode=D20&userid=8a80c6533629df2f01362e0db94e01c8&clientkey=bb7c1386d85044ba7a7ae53f3362d634
+	 */
+	public static final String URL_USER_PERMISSION = baseURL+"wmh360/json/msg/getdept_imauthset.jsp?appcode="+appCode+"&userid=%s&clientkey=bb7c1386d85044ba7a7ae53f3362d634";
+
 	/**
 	 * http://123.57.13.138:8088/wmh360/json/getaddressicon.jsp?username=xiwang&appcode=D20&clientkey=bb7c1386d85044ba7a7ae53f3362d634
 	 */
@@ -689,5 +693,7 @@ public class URLs {
 	 * "%@wmh360/json/user/uploadavatar.jsp?userid=%@&appcode=%@&clientkey=bb7c1386d85044ba7a7ae53f3362d634
 	 */
 	public static final String URL_UPLOAD_AVATAR = baseURL+"wmh360/json/user/uploadavatar.jsp?userid=%s&appcode="+appCode+"&clientkey=bb7c1386d85044ba7a7ae53f3362d634";
-	
+
+
+
 }

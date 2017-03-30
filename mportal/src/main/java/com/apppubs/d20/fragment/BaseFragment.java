@@ -16,8 +16,8 @@ import android.widget.TextView;
 import com.android.volley.RequestQueue;
 import com.apppubs.d20.AppContext;
 import com.apppubs.d20.activity.BaseActivity;
-import com.apppubs.d20.business.MsgBussiness;
-import com.apppubs.d20.business.SystemBussiness;
+import com.apppubs.d20.model.MsgBussiness;
+import com.apppubs.d20.model.SystemBussiness;
 import com.apppubs.d20.message.model.UserBussiness;
 import com.apppubs.d20.widget.TitleBar;
 import com.nostra13.universalimageloader.core.ImageLoader;
@@ -44,7 +44,6 @@ public class BaseFragment extends Fragment implements  KeyEvent.Callback{
 	protected RequestQueue mRequestQueue;
 	protected AppContext mAppContext;
 
-	
 	@Override
 	public void onAttach(Activity activity) {
 		super.onAttach(activity);
@@ -155,5 +154,6 @@ public class BaseFragment extends Fragment implements  KeyEvent.Callback{
 		Intent intent = new Intent(mHostActivity,clazz);
 		startActivity(intent);
 	}
-	
+
+
 }

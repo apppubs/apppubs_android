@@ -20,7 +20,7 @@ import android.widget.RadioGroup.OnCheckedChangeListener;
 
 import com.apppubs.d20.activity.BaseActivity;
 import com.apppubs.d20.bean.Paper;
-import com.apppubs.d20.business.PaperBussiness;
+import com.apppubs.d20.model.PaperBussiness;
 import com.apppubs.d20.util.LogM;
 import com.apppubs.d20.widget.SegmentedGroup;
 import com.apppubs.d20.widget.TitleBar;

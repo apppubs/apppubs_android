@@ -41,5 +41,5 @@ public class Constants {
 	public static final String APP_FOLDER_NAME = "apppubs";
 	public static String APK_FILE_NAME = "mportal.apk";
 	
-	
+	public static final int MESSAGE_EVENT_INIT_APP = 0;
 }

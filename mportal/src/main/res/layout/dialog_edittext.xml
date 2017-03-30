@@ -20,11 +20,17 @@
     <EditText
         android:id="@+id/dialog_content_et"
         android:layout_width="match_parent"
-        android:layout_height="50dp"
+        android:layout_height="35dp"
         android:gravity="left"
-        android:paddingLeft="@dimen/item_padding_left"
-        android:paddingRight="@dimen/item_padding_left"
-        android:paddingBottom="@dimen/item_padding_left"
+        android:background="@drawable/edittext_bg"
+        android:paddingTop="8dp"
+        android:paddingLeft="10dp"
+        android:paddingRight="10dp"
+        android:maxLines="1"
+        android:inputType="text"
+        android:layout_marginLeft="@dimen/item_padding_left"
+        android:layout_marginRight="@dimen/item_padding_left"
+        android:layout_marginBottom="@dimen/item_padding_left"
         android:textColor="#333"
         android:textSize="14dp" />
 

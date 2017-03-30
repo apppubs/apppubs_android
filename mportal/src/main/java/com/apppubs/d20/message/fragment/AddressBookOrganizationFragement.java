@@ -14,6 +14,7 @@ import android.widget.TextView;
 import com.apppubs.d20.AppContext;
 import com.apppubs.d20.activity.HomeBaseActivity;
 import com.apppubs.d20.adapter.ViewHolder;
+import com.apppubs.d20.bean.UserInfo;
 import com.apppubs.d20.fragment.BaseFragment;
 import com.apppubs.d20.message.widget.Breadcrumb;
 import com.apppubs.d20.widget.ConfirmDialog;
@@ -22,13 +23,12 @@ import com.apppubs.d20.activity.UserInfoActivity;
 import com.apppubs.d20.adapter.CommonAdapter;
 import com.apppubs.d20.bean.Department;
 import com.apppubs.d20.bean.User;
-import com.apppubs.d20.business.BussinessCallbackCommon;
+import com.apppubs.d20.model.BussinessCallbackCommon;
 import com.apppubs.d20.message.model.UserBasicInfo;
 import com.apppubs.d20.message.model.UserBussiness;
 import com.apppubs.d20.message.model.UserPickerHelper;
 import com.apppubs.d20.widget.AlertDialog;
 import com.apppubs.d20.widget.CircleTextImageView;
-import com.hp.hpl.sparta.Text;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -144,23 +144,23 @@ public class AddressBookOrganizationFragement extends BaseFragment {
 	private void prepareForCreateDiscuss() {
 		Department department = mUserBussiness.getDepartmentById(mSuperId);
 		String deptName = department!=null?department.getName():"组织";
-		final List<String> userIdList = mUserBussiness.getUserIdsOfCertainDepartment(mSuperId);
+		final List<String> userIdList = mUserBussiness.getUserIdsOfCertainDepartment(mSuperId,mAppContext.getAppConfig().getChatAuthFlag()==1?true:false);
 		if (userIdList==null||userIdList.size()<1){
-			String message = "此部门无人员";
+			String message = "此部门无可会话人员";
 			AlertDialog dialog = new AlertDialog(mContext,null,"无法创建讨论组！",message,"确定");
 			dialog.show();
 			return;
 		}
 
-		final User currentUser = AppContext.getInstance(mContext).getCurrentUser();
+		final UserInfo currentUser = AppContext.getInstance(mContext).getCurrentUser();
 		int countOfUser = userIdList.contains(currentUser.getUserId())?userIdList.size():userIdList.size()+1;
 		if (countOfUser>UserPickerHelper.MAX_SELECTED_USER_NUM){
-			String message = String.format("讨论组最大人数为%d,当前部门人数%d",UserPickerHelper.MAX_SELECTED_USER_NUM,countOfUser);
+			String message = String.format("讨论组最大人数为%d,当前部门可会话人数%d",UserPickerHelper.MAX_SELECTED_USER_NUM,countOfUser);
 			AlertDialog dialog = new AlertDialog(mContext,null,"无法创建讨论组！",message,"确定");
 			dialog.show();
 			return;
 		}
-		String message = String.format("讨论组包含\"%s\"下所有人员和自己共（%d）人",deptName,countOfUser);
+		String message = String.format("讨论组包含\"%s\"下所有可会话人员和自己共（%d）人",deptName,countOfUser);
 		ConfirmDialog dialog = new ConfirmDialog(mHostActivity, new ConfirmDialog.ConfirmListener() {
             @Override
             public void onOkClick() {
@@ -196,7 +196,6 @@ public class AddressBookOrganizationFragement extends BaseFragment {
 			createDiscussLl.setVisibility(View.VISIBLE);
 		}
 		mListView.addHeaderView(header);
-
 
 
 		mBreadcrumb = (Breadcrumb) mRootView.findViewById(R.id.user_picker_bc);
@@ -242,7 +241,7 @@ public class AddressBookOrganizationFragement extends BaseFragment {
 				@Override
 				public void onDone(List<UserBasicInfo> obj) {
 
-//                    mUserAdapter.notifyDataSetChanged();
+                    mUserAdapter.notifyDataSetChanged();
 
 				}
 

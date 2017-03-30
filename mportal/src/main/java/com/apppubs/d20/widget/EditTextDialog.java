@@ -3,6 +3,7 @@ package com.apppubs.d20.widget;
 import android.app.Dialog;
 import android.content.Context;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.view.Gravity;
 import android.view.View;
 import android.widget.Button;
@@ -17,7 +18,7 @@ public class EditTextDialog extends Dialog implements View.OnClickListener {
 	private TextView title;
 	private EditText mEditText;
 	private Button cancle, ok;
-	private String mTitle, mCancelStr, mOkStr;
+	private String mTitle, mCancelStr, mOkStr,mDefaultText;
 
 	public interface ConfirmListener {
 		void onOkClick(String result);
@@ -50,10 +51,13 @@ public class EditTextDialog extends Dialog implements View.OnClickListener {
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.dialog_confirm);
+		setContentView(R.layout.dialog_edittext);
 		initViews();
 	}
 
+	public void setDefaultText(String text){
+		mDefaultText = text;
+	}
 	private void initViews() {
 		title = (TextView) findViewById(R.id.dialog_title);
 		mEditText = (EditText) findViewById(R.id.dialog_content_et);
@@ -64,6 +68,9 @@ public class EditTextDialog extends Dialog implements View.OnClickListener {
 		ok.setOnClickListener(this);
 		cancle.setText(mCancelStr);
 		cancle.setOnClickListener(this);
+
+		mEditText.setText(mDefaultText);
+		mEditText.setSelection(!TextUtils.isEmpty(mDefaultText)?mDefaultText.length():0);
 	}
 
 	@Override

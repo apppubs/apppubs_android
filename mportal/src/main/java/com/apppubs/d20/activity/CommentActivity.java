@@ -29,7 +29,7 @@ import com.apppubs.d20.util.Tools;
 import com.apppubs.d20.widget.commonlist.CommonListView;
 import com.apppubs.d20.R;
 import com.apppubs.d20.adapter.CommonAdapter;
-import com.apppubs.d20.business.BussinessCallbackCommon;
+import com.apppubs.d20.model.BussinessCallbackCommon;
 import com.apppubs.d20.constant.URLs;
 import com.apppubs.d20.util.SystemUtils;
 import com.apppubs.d20.widget.commonlist.CommonListViewListener;

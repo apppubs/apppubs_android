@@ -14,7 +14,7 @@ import android.widget.Toast;
 import com.apppubs.d20.bean.PaperInfo;
 import com.apppubs.d20.R;
 import com.apppubs.d20.bean.Collection;
-import com.apppubs.d20.business.CollectionBussiness;
+import com.apppubs.d20.model.CollectionBussiness;
 import com.apppubs.d20.constant.URLs;
 import com.apppubs.d20.util.ShareTools;
 import com.apppubs.d20.widget.ImageButton;

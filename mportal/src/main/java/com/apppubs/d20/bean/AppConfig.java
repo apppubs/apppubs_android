@@ -10,8 +10,6 @@ import java.io.Serializable;
 
 public class AppConfig implements Serializable{
 
-
-
     @SerializedName("adbook_rootid")
     private String adbookRootId;
     @SerializedName("adbookversion")
@@ -38,6 +36,10 @@ public class AppConfig implements Serializable{
     private String updateUrl;
 	@SerializedName("chat_flag")
 	private String chatFlag;
+	@SerializedName("adbookauth")
+	private Integer adbookAuthFlag;
+	@SerializedName("chat_auth")
+	private Integer chatAuthFlag;
 
     public AppConfig(){
         adbookRootId = "0";
@@ -49,6 +51,8 @@ public class AppConfig implements Serializable{
         regURL = "";
         forgetPasswordUrl = "";
 		chatFlag = "0";
+		adbookAuthFlag = 0;
+		chatAuthFlag = 0;
     }
 
     public String getAdbookRootId() {
@@ -153,5 +157,21 @@ public class AppConfig implements Serializable{
 
 	public void setChatFlag(String chatFlag) {
 		this.chatFlag = chatFlag;
+	}
+
+	public Integer getAdbookAuthFlag() {
+		return adbookAuthFlag;
+	}
+
+	public void setAdbookAuthFlag(Integer adbookAuthFlag) {
+		this.adbookAuthFlag = adbookAuthFlag;
+	}
+
+	public Integer getChatAuthFlag() {
+		return chatAuthFlag;
+	}
+
+	public void setChatAuthFlag(Integer chatAuthFlag) {
+		this.chatAuthFlag = chatAuthFlag;
 	}
 }

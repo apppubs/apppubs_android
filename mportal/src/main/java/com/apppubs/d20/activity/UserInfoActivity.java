@@ -28,7 +28,7 @@ import com.apppubs.d20.util.JSONResult;
 import com.apppubs.d20.widget.ConfirmDialog;
 import com.apppubs.d20.widget.ContactDailog;
 import com.apppubs.d20.R;
-import com.apppubs.d20.business.BussinessCallbackCommon;
+import com.apppubs.d20.model.BussinessCallbackCommon;
 import com.apppubs.d20.constant.URLs;
 import com.apppubs.d20.widget.CircleTextImageView;
 import com.apppubs.d20.widget.ProgressHUD;
@@ -47,6 +47,8 @@ public class UserInfoActivity extends BaseActivity implements OnClickListener{
 	
 	private String mUserInfoUrl;
 	private String[] mIconConfigParams;
+	private boolean mShouldShowDetail;
+
 	@Override
 	protected void onCreate(Bundle arg0) {
 		super.onCreate(arg0);
@@ -77,17 +79,20 @@ public class UserInfoActivity extends BaseActivity implements OnClickListener{
 		}
 		JSONResult jr = JSONResult.compile(response);
 		//底部按钮
-		if (mAppContext.getApp().getAllowChat() == App.ALLOW_CHAT_TRUE&&!mUser.getUserId().equals(AppContext.getInstance(mContext).getCurrentUser().getUserId())) {
-			//如果未激活显示未激活按钮，如果已激活显示开始聊天按钮,
-			Map<String,String> resultMap = jr.getResultMap();
-			if (!TextUtils.isEmpty(resultMap.get("appcodeversion"))){
-				setVisibilityOfViewByResId(R.id.userinfo_begin_talk, View.VISIBLE);
-				setVisibilityOfViewByResId(R.id.userinfo_welcome_tv,View.GONE);
-			}else{
-				setVisibilityOfViewByResId(R.id.userinfo_welcome_tv,View.VISIBLE);
-				setVisibilityOfViewByResId(R.id.userinfo_begin_talk,View.GONE);
-			}
+		//不需要权限限制或需要限制而且有权限的情况下进行按钮的下一步逻辑判断
+		if (mAppContext.getAppConfig().getChatAuthFlag()==0||(mAppContext.getAppConfig().getChatAuthFlag()==1&&mUserBussiness.hasChatPermissionOfUser(mUser.getUserId()))){
+			if (mAppContext.getApp().getAllowChat() == App.ALLOW_CHAT_TRUE&&!mUser.getUserId().equals(AppContext.getInstance(mContext).getCurrentUser().getUserId())) {
+				//如果未激活显示未激活按钮，如果已激活显示开始聊天按钮,
+				Map<String,String> resultMap = jr.getResultMap();
+				if (!TextUtils.isEmpty(resultMap.get("appcodeversion"))){
+					setVisibilityOfViewByResId(R.id.userinfo_begin_talk, View.VISIBLE);
+					setVisibilityOfViewByResId(R.id.userinfo_welcome_tv,View.GONE);
+				}else{
+					setVisibilityOfViewByResId(R.id.userinfo_welcome_tv,View.VISIBLE);
+					setVisibilityOfViewByResId(R.id.userinfo_begin_talk,View.GONE);
+				}
 
+			}
 		}
 		//头像
 		if(mIconConfigParams!=null&&mIconConfigParams.length>0&&mIconConfigParams[0].equals("1")){
@@ -107,22 +112,28 @@ public class UserInfoActivity extends BaseActivity implements OnClickListener{
 		if (mUser.getIcon() != null && !mUser.getIcon().equals("")) {
 			mImageLoader.displayImage(mUser.getIcon(), mIv);
 		}
-		String emailS = mUser.getEmail();
-		String workTELS = mUser.getWorkTEL();
-		String mobS = mUser.getMobile();
-		String offerS = mUser.getOfficeNO();
-		if (emailS != null && !emailS.equals("")) {
-			mEmailTV.setText(emailS);
+
+		if (mShouldShowDetail){
+			String emailS = mUser.getEmail();
+			String workTELS = mUser.getWorkTEL();
+			String mobS = mUser.getMobile();
+			String offerS = mUser.getOfficeNO();
+			if (emailS != null && !emailS.equals("")) {
+				mEmailTV.setText(emailS);
+			}
+			if (workTELS != null && !workTELS.equals("")) {
+				mTelTV.setText(workTELS);
+			}
+			if (mobS != null && !mobS.equals("")) {
+				mMobileTV.setText(mobS);
+			}
+			if (offerS != null && !offerS.equals("")) {
+				mWorkAddressTV.setText(offerS);
+			}
+		}else{
+			setVisibilityOfViewByResId(R.id.act_userinfo_add2contact_ll,View.GONE);
 		}
-		if (workTELS != null && !workTELS.equals("")) {
-			mTelTV.setText(workTELS);
-		}
-		if (mobS != null && !mobS.equals("")) {
-			mMobileTV.setText(mobS);
-		}
-		if (offerS != null && !offerS.equals("")) {
-			mWorkAddressTV.setText(offerS);
-		}
+
 
 		mNameTv.setText(mUser.getTrueName());
 		fillDepartment();
@@ -172,6 +183,13 @@ public class UserInfoActivity extends BaseActivity implements OnClickListener{
 		mWorkAddressTV = (TextView) findViewById(R.id.userinfo_address);
 		mInviteTV = (TextView) findViewById(R.id.userinfo_welcome_tv);
 		mInviteTV.setOnClickListener(this);
+
+		//限制权限并且没有权限时不显示，其他情况均显示
+		if (mAppContext.getAppConfig().getAdbookAuthFlag()==1&&!mUserBussiness.hasReadPermissionOfUser(userId)){
+			mShouldShowDetail = false;
+		}else {
+			mShouldShowDetail = true;
+		}
 	}
 
 	@Override
@@ -182,62 +200,70 @@ public class UserInfoActivity extends BaseActivity implements OnClickListener{
 			onBeginTalkClicked();
 			break;
 		case R.id.userinfo_email_lay:
-			if (TextUtils.isEmpty(mUser.getEmail())) {
-				Toast.makeText(this, "邮箱不存在!", Toast.LENGTH_SHORT).show();
-			}else{
-				// 系统邮件系统的动作为android.content.Intent.ACTION_SEND
-				Intent email = new Intent(android.content.Intent.ACTION_SEND);
-				email.setType("plain/text");
-				// 设置邮件默认地址
-				email.putExtra(android.content.Intent.EXTRA_EMAIL, mUser.getEmail());
-				// // 设置邮件默认标题
-				startActivity(Intent.createChooser(email, " 请选择邮件发送软件"));
-				mUserBussiness.recordUser(mUser.getUserId());
+			if (mShouldShowDetail){
+				if (TextUtils.isEmpty(mUser.getEmail())) {
+					Toast.makeText(this, "邮箱不存在!", Toast.LENGTH_SHORT).show();
+				}else{
+					// 系统邮件系统的动作为android.content.Intent.ACTION_SEND
+					Intent email = new Intent(android.content.Intent.ACTION_SEND);
+					email.setType("plain/text");
+					// 设置邮件默认地址
+					email.putExtra(android.content.Intent.EXTRA_EMAIL, mUser.getEmail());
+					// // 设置邮件默认标题
+					startActivity(Intent.createChooser(email, " 请选择邮件发送软件"));
+					mUserBussiness.recordUser(mUser.getUserId());
+				}
 			}
 			break;
 		case R.id.userinfo_mobile_lay:
-			String mpbile = mUser.getMobile();
-			if (TextUtils.isEmpty(mpbile)) {
-				Toast.makeText(this, "手机号不存在!", Toast.LENGTH_SHORT).show();
-			} else {
+			if(mShouldShowDetail){
+				String mpbile = mUser.getMobile();
+				if (TextUtils.isEmpty(mpbile)) {
+					Toast.makeText(this, "手机号不存在!", Toast.LENGTH_SHORT).show();
+				} else {
 
-				ContactDailog dialog = new ContactDailog(UserInfoActivity.this, R.style.dialog,
-						new ContactDailog.ContactDailogListener() {
-							String mpbile = mUser.getMobile();
+					ContactDailog dialog = new ContactDailog(UserInfoActivity.this, R.style.dialog,
+							new ContactDailog.ContactDailogListener() {
+								String mpbile = mUser.getMobile();
 
-							@Override
-							public void onSmsClick() {
-								Uri smsToUri = Uri.parse("smsto:" + mpbile);
-								Intent mIntent = new Intent(android.content.Intent.ACTION_SENDTO);
-								mIntent.setData(smsToUri);
-								startActivity(mIntent);
-								mUserBussiness.recordUser(mUser.getUserId());
-							}
+								@Override
+								public void onSmsClick() {
+									Uri smsToUri = Uri.parse("smsto:" + mpbile);
+									Intent mIntent = new Intent(android.content.Intent.ACTION_SENDTO);
+									mIntent.setData(smsToUri);
+									startActivity(mIntent);
+									mUserBussiness.recordUser(mUser.getUserId());
+								}
 
-							@Override
-							public void onCallClick() {
-								Intent intentCall = new Intent(android.content.Intent.ACTION_CALL);
-								intentCall.setData(Uri.parse("tel:" + mpbile));
-								startActivity(intentCall);
-								mUserBussiness.recordUser(mUser.getUserId());
-							}
-						});
-				dialog.show();
+								@Override
+								public void onCallClick() {
+									Intent intentCall = new Intent(android.content.Intent.ACTION_CALL);
+									intentCall.setData(Uri.parse("tel:" + mpbile));
+									startActivity(intentCall);
+									mUserBussiness.recordUser(mUser.getUserId());
+								}
+							});
+					dialog.show();
+				}
 			}
 			break;
 		case R.id.userinfo_tel_lay:
-			final String tel = mUser.getWorkTEL();
-			if (tel == null || tel.equals("")) {
-				Toast.makeText(this, "电话号码不存在!", Toast.LENGTH_SHORT).show();
-			} else {
-				Intent intentCall = new Intent(android.content.Intent.ACTION_CALL);
-				intentCall.setData(Uri.parse("tel:" + tel));
-				startActivity(intentCall);
-				mUserBussiness.recordUser(mUser.getUserId());
+			if (mShouldShowDetail){
+				final String tel = mUser.getWorkTEL();
+				if (tel == null || tel.equals("")) {
+					Toast.makeText(this, "电话号码不存在!", Toast.LENGTH_SHORT).show();
+				} else {
+					Intent intentCall = new Intent(android.content.Intent.ACTION_CALL);
+					intentCall.setData(Uri.parse("tel:" + tel));
+					startActivity(intentCall);
+					mUserBussiness.recordUser(mUser.getUserId());
+				}
 			}
 			break;
 		case R.id.userinfo_add2contact:
-			addContact();
+			if (mShouldShowDetail){
+				addContact();
+			}
 			break;
 		case R.id.userinfo_icon_iv:
 			//当头像地址不为空且允许显示头像时打开头像

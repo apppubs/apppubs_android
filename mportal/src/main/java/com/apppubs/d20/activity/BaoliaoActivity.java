@@ -36,6 +36,7 @@ import android.widget.Toast;
 
 import com.apppubs.d20.AppContext;
 import com.apppubs.d20.bean.User;
+import com.apppubs.d20.bean.UserInfo;
 import com.apppubs.d20.util.FileUtils;
 import com.apppubs.d20.util.StringUtils;
 import com.apppubs.d20.util.SystemUtils;
@@ -252,7 +253,7 @@ public class BaoliaoActivity extends BaseActivity {
 		// 联网请求数据
 		String userid = "";
 		String username = baoliaoname.getText().toString();
-		User currentUser = AppContext.getInstance(mContext).getCurrentUser();
+		UserInfo currentUser = AppContext.getInstance(mContext).getCurrentUser();
 		if (currentUser.getId() == null || currentUser.getId().equals("")) {
 			userid = "";
 		} else {

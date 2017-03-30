@@ -35,7 +35,7 @@ import com.apppubs.d20.widget.AlertDialog;
 import com.apppubs.d20.widget.ConfirmDialog;
 import com.apppubs.d20.R;
 import com.apppubs.d20.activity.ContainerActivity;
-import com.apppubs.d20.business.BussinessCallbackCommon;
+import com.apppubs.d20.model.BussinessCallbackCommon;
 
 /**
  * 文件预览界面，用于办公应用的附件预览，聊天的附件预览，我的文件的文件预览等。

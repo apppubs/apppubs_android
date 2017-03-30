@@ -19,6 +19,7 @@ import com.apppubs.d20.R;
 import com.apppubs.d20.asytask.AsyTaskCallback;
 import com.apppubs.d20.asytask.AsyTaskExecutor;
 import com.apppubs.d20.bean.User;
+import com.apppubs.d20.bean.UserInfo;
 import com.apppubs.d20.constant.URLs;
 import com.apppubs.d20.util.BitmapUtils;
 import com.apppubs.d20.util.JSONResult;
@@ -129,7 +130,7 @@ public class UserCencerActivity extends BaseActivity {
 	@Override
 	protected void onResume() {
 		super.onResume();
-		User user = AppContext.getInstance(mContext).getCurrentUser();
+		UserInfo user = AppContext.getInstance(mContext).getCurrentUser();
 		mName.setText(user.getUsername());
 		mEmail.setText(user.getEmail());
 		mNicname.setText(user.getTrueName());

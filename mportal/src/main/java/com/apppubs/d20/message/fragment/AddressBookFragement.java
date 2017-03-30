@@ -36,6 +36,7 @@ import com.apppubs.d20.adapter.ViewHolder;
 import com.apppubs.d20.bean.App;
 import com.apppubs.d20.bean.AppConfig;
 import com.apppubs.d20.bean.User;
+import com.apppubs.d20.bean.UserInfo;
 import com.apppubs.d20.fragment.BaseFragment;
 import com.apppubs.d20.util.JSONResult;
 import com.apppubs.d20.util.LogM;
@@ -45,8 +46,8 @@ import com.apppubs.d20.widget.SegmentedGroup;
 import com.apppubs.d20.widget.TitleBar;
 import com.apppubs.d20.R;
 import com.apppubs.d20.adapter.CommonAdapter;
-import com.apppubs.d20.business.AbstractBussinessCallback;
-import com.apppubs.d20.business.BussinessCallbackCommon;
+import com.apppubs.d20.model.AbstractBussinessCallback;
+import com.apppubs.d20.model.BussinessCallbackCommon;
 import com.apppubs.d20.constant.URLs;
 
 public class AddressBookFragement extends BaseFragment {
@@ -167,16 +168,7 @@ public class AddressBookFragement extends BaseFragment {
 
 	private void init() {
 		// 本地的版本小于服务器版本则需要更新
-//		String appConfig = (String) FileUtils.readObj(mContext,Constants.FILE_NAME_APP_CONFIG);
 		AppConfig appconfig = AppContext.getInstance(mContext).getAppConfig();
-//		int addressBookVersion = -1;
-//		try {
-//			JSONObject jo = new JSONObject(appConfig);
-//			addressBookVersion = jo.getInt(Constants.APP_CONFIG_PARAM_ADBOOK_VERSION);
-//
-//		} catch (JSONException e1) {
-//			e1.printStackTrace();
-//		}
 		if(appconfig.getAdbookVersion()>mAppContext.getApp().getAddressbookLocalVersion()){
 			onNewVerisonFound();
 		}else if (mUserBussiness.countAllUser() == 0) {
@@ -193,39 +185,13 @@ public class AddressBookFragement extends BaseFragment {
 
 				}
 
-			}, "是否同步？", "取消", "同步");
+			}, "是否同步？","同步可能需要几秒到几分钟时间！", "取消", "同步");
 			dialog.show();
 			dialog.setCancelable(false);
 			dialog.setCanceledOnTouchOutside(false);
 
-		} else{
-			
-//			if (mAppContext.getApp().getAddressbookNeedPermission() == App.NEED) {
-//				updatePermissionStrAndRefreshDerartAndUserFragment();
-//			}
-
-		} 
+		}
 	}
-
-//	private void updatePermissionStrAndRefreshDerartAndUserFragment() {
-//		String url = String.format(URLs.URL_ADDRESS_PERMISSION, MportalApplication.user.getUserId());
-//		mRequestQueue.add(new StringRequest(url, new Listener<String>() {
-//
-//			@Override
-//			public void onResponse(String response) {
-//				JSONResult jr = JSONResult.compile(response);
-//				MportalApplication.user.setAddressbookPermissionString(jr.result);
-//				MportalApplication.saveAndRefreshUser(mHostActivity, MportalApplication.user);
-//				refreshDepartAndUserFragmentIfExist();
-//			}
-//		}, new ErrorListener() {
-//
-//			@Override
-//			public void onErrorResponse(VolleyError error) {
-//
-//			}
-//		}));
-//	}
 
 	private void onNewVerisonFound() {
 		if (mAppContext.getApp().getNeedForceUploadAddressbook() == App.NEED_FORCE_UPDATE_ADDRESSBOOK_YES) {
@@ -303,25 +269,22 @@ public class AddressBookFragement extends BaseFragment {
 			mSg.check(mCurCheckedRadioBtnResId);
 		}
 		titleBar.setTitleView(titleView);
-		titleBar.addRightBtnWithImageResourceIdAndClickListener(R.drawable.adbook_async, new OnClickListener() {
-
+		titleBar.addRightBtnWithTextAndClickListener("同步", new OnClickListener() {
 			@Override
 			public void onClick(View v) {
 				new ConfirmDialog(mContext, new ConfirmDialog.ConfirmListener() {
-					
+
 					@Override
 					public void onOkClick() {
 						sync();
 					}
-					
+
 					@Override
 					public void onCancelClick() {
-						
+
 					}
 				}, "确定同步？","同步可能需要几秒到几分钟的时间！", "取消", "确定").show();
-				
 			}
-
 		});
 	}
 
@@ -363,7 +326,7 @@ public class AddressBookFragement extends BaseFragment {
 				AppContext.getInstance(mContext).setApp(app);
 
 				if (mAppContext.getApp().getAddressbookNeedPermission() == App.NEED) {
-					final User currentUser = AppContext.getInstance(mContext).getCurrentUser();
+					final UserInfo currentUser = AppContext.getInstance(mContext).getCurrentUser();
 					String url = String.format(URLs.URL_ADDRESS_PERMISSION,currentUser.getUserId());
 					mRequestQueue.add(new StringRequest(url, new Listener<String>() {
 

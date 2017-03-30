@@ -10,12 +10,13 @@ import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import com.apppubs.d20.AppContext;
 import com.apppubs.d20.activity.BaseActivity;
 import com.apppubs.d20.adapter.ViewHolder;
 import com.apppubs.d20.bean.Department;
 import com.apppubs.d20.bean.User;
-import com.apppubs.d20.business.BussinessCallbackCommon;
-import com.apppubs.d20.business.SystemBussiness;
+import com.apppubs.d20.model.BussinessCallbackCommon;
+import com.apppubs.d20.model.SystemBussiness;
 import com.apppubs.d20.message.model.UserBasicInfo;
 import com.apppubs.d20.message.model.UserPickerHelper;
 import com.apppubs.d20.message.widget.Breadcrumb;
@@ -55,7 +56,7 @@ public class UserPickerActivity extends BaseActivity implements UserSelectionBar
 
     private void initAdapter() {
         final int totalRow = mDepartmentList.size();
-        final String showCountFlag = SystemBussiness.getInstance(this).getAppConfig().getAdbookOrgCountFlag();
+        final String showCountFlag = AppContext.getInstance(this).getAppConfig().getAdbookOrgCountFlag();
         mDeptAdapter = new CommonAdapter<Department>(this,mDepartmentList, R.layout.item_organization_lv) {
 
             @Override
@@ -163,7 +164,7 @@ public class UserPickerActivity extends BaseActivity implements UserSelectionBar
 
     private void initData() {
         mListViewOffsetMap = new HashMap<String,Integer>();
-        String rootId = SystemBussiness.getInstance(this).getAppConfig().getAdbookRootId();
+        String rootId = AppContext.getInstance(this).getAppConfig().getAdbookRootId();
         mSuperId =  rootId;
         mDepartmentList = mUserBussiness.listRootDepartment();
         mUserPickerHelper = UserPickerHelper.getInstance(this);
@@ -212,7 +213,11 @@ public class UserPickerActivity extends BaseActivity implements UserSelectionBar
         //存储上一个列表的偏移量
         mListViewOffsetMap.put(mSuperId,mListView.getFirstVisiblePosition());
         if (!mUserBussiness.isLeaf(superId)) {
-            mDepartmentList = mUserBussiness.listSubDepartment(superId);
+			if(mAppContext.getAppConfig().getChatAuthFlag()==1){
+				mDepartmentList = mUserBussiness.listSubDepartment(superId,mAppContext.getCurrentUser().getChatPermissionString());
+			}else{
+				mDepartmentList = mUserBussiness.listSubDepartment(superId);
+			}
             mDeptAdapter.setData(mDepartmentList);
             mListView.setAdapter(mDeptAdapter);
         } else {

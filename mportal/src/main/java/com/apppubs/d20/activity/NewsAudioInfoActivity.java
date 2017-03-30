@@ -33,15 +33,15 @@ import android.widget.Toast;
 import com.apppubs.d20.bean.Collection;
 import com.apppubs.d20.bean.Comment;
 import com.apppubs.d20.bean.NewsInfo;
-import com.apppubs.d20.business.CollectionBussiness;
-import com.apppubs.d20.business.NewsBussiness;
+import com.apppubs.d20.model.CollectionBussiness;
+import com.apppubs.d20.model.NewsBussiness;
 import com.apppubs.d20.util.LogM;
 import com.apppubs.d20.util.ShareTools;
 import com.apppubs.d20.util.Utils;
 import com.apppubs.d20.widget.MyWebChromeClient;
 import com.apppubs.d20.R;
 import com.apppubs.d20.bean.Settings;
-import com.apppubs.d20.business.BussinessCallbackCommon;
+import com.apppubs.d20.model.BussinessCallbackCommon;
 import com.orm.SugarRecord;
 
 /**

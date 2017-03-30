@@ -19,7 +19,7 @@ import android.widget.TextView;
 
 import com.apppubs.d20.activity.NewsPictureInfoActivity;
 import com.apppubs.d20.bean.NewsInfo;
-import com.apppubs.d20.business.BussinessCallbackCommon;
+import com.apppubs.d20.model.BussinessCallbackCommon;
 import com.apppubs.d20.constant.URLs;
 import com.apppubs.d20.util.LogM;
 import com.apppubs.d20.widget.commonlist.CommonListView;

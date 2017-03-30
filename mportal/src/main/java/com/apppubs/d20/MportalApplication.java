@@ -8,15 +8,23 @@ import android.graphics.drawable.Drawable;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Build;
+import android.os.Bundle;
 import android.util.DisplayMetrics;
+import android.view.View;
 import android.view.WindowManager;
 
-import com.apppubs.d20.exception.UnCeHandler;
+import com.apppubs.d20.activity.MessageEvent;
+import com.apppubs.d20.activity.UserInfoActivity;
+import com.apppubs.d20.model.BussinessCallbackCommon;
+import com.apppubs.d20.model.SystemBussiness;
+import com.apppubs.d20.constant.Constants;
 import com.apppubs.d20.util.MathUtils;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
 import com.orm.SugarContext;
+
+import org.greenrobot.eventbus.EventBus;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -28,6 +36,11 @@ import java.io.ObjectOutputStream;
 import java.util.ArrayList;
 
 import io.rong.imkit.RongIM;
+import io.rong.imkit.manager.IUnReadMessageObserver;
+import io.rong.imlib.RongIMClient;
+import io.rong.imlib.model.Conversation;
+import io.rong.imlib.model.Message;
+import io.rong.imlib.model.UserInfo;
 
 public class MportalApplication extends Application {
 
@@ -64,6 +77,13 @@ public class MportalApplication extends Application {
 
 		//初始化融云
 		RongIM.init(this);
+		RongIM.setConversationBehaviorListener(new MyConversationBehaviorListener());
+		RongIM.getInstance().addUnReadMessageCountChangedObserver(new IUnReadMessageObserver() {
+			@Override
+			public void onCountChanged(int i) {
+				AppContext.getInstance(getContext()).getApp().setmMessageUnreadNum(i);
+			}
+		}, Conversation.ConversationType.DISCUSSION, Conversation.ConversationType.PRIVATE);
 
 		WindowManager manager = (WindowManager) getApplicationContext().getSystemService(Context.WINDOW_SERVICE);
 		DisplayMetrics dm = new DisplayMetrics();
@@ -71,6 +91,52 @@ public class MportalApplication extends Application {
 		windowWidth = dm.widthPixels;
 		windowHeight = dm.heightPixels;
 		sContext = getApplicationContext();
+
+
+		SystemBussiness.getInstance(this).initSystem(new BussinessCallbackCommon<Object>() {
+			@Override
+			public void onDone(Object obj) {
+				MessageEvent me = new MessageEvent();
+				me.tag = Constants.MESSAGE_EVENT_INIT_APP;
+				EventBus.getDefault().post(me);
+			}
+
+			@Override
+			public void onException(int excepCode) {
+				MessageEvent me = new MessageEvent();
+				me.tag = Constants.MESSAGE_EVENT_INIT_APP;
+				EventBus.getDefault().post(me);
+			}
+		});
+	}
+
+
+	private class MyConversationBehaviorListener implements RongIM.ConversationBehaviorListener{
+		@Override
+		public boolean onUserPortraitClick(Context context, Conversation.ConversationType conversationType, UserInfo userInfo) {
+			UserInfoActivity.startActivity(context,userInfo.getUserId());
+			return true;
+		}
+
+		@Override
+		public boolean onUserPortraitLongClick(Context context, Conversation.ConversationType conversationType, UserInfo userInfo) {
+			return false;
+		}
+
+		@Override
+		public boolean onMessageClick(Context context, View view, Message message) {
+			return false;
+		}
+
+		@Override
+		public boolean onMessageLinkClick(Context context, String s) {
+			return false;
+		}
+
+		@Override
+		public boolean onMessageLongClick(Context context, View view, Message message) {
+			return false;
+		}
 	}
 
 	@Override
@@ -216,7 +282,11 @@ public class MportalApplication extends Application {
 
 	public static void writeObj(Context context, Object obj, String fileName) {
 
-		File file = new File(context.getDir(CONFIG_DIRECTORY, Context.MODE_PRIVATE), fileName);
+		File dir = context.getDir(CONFIG_DIRECTORY, Context.MODE_PRIVATE);
+		if (!dir.exists()){
+			dir.mkdirs();
+		}
+		File file = new File(dir, fileName);
 
 		ObjectOutputStream oos = null;
 		try {
@@ -228,8 +298,10 @@ public class MportalApplication extends Application {
 			e.printStackTrace();
 		} finally {
 			try {
-				if (oos != null)
+				if (oos != null){
+					oos.flush();
 					oos.close();
+				}
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
@@ -244,13 +316,13 @@ public class MportalApplication extends Application {
 	 */
 	public static  Object readObj(Context context,String fileName) {
 		ObjectInputStream ois = null;
-
+		Object result = null;
 		try {
 			File file = new File(context.getDir(CONFIG_DIRECTORY, Context.MODE_PRIVATE), fileName);
 			if (!file.exists())
 				return null;
 			ois = new ObjectInputStream(new FileInputStream(file));
-			return ois.readObject();
+			result = ois.readObject();
 		} catch (FileNotFoundException e) {
 			e.printStackTrace();
 		} catch (IOException e) {
@@ -266,7 +338,7 @@ public class MportalApplication extends Application {
 			}
 		}
 
-		return null;
+		return result;
 
 	}
 

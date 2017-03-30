@@ -18,6 +18,7 @@ import android.widget.ImageView;
 import android.widget.ImageView.ScaleType;
 import android.widget.RelativeLayout;
 
+import com.apppubs.d20.activity.HomeBaseActivity;
 import com.apppubs.d20.activity.StartUpActivity;
 import com.apppubs.d20.util.Utils;
 import com.apppubs.d20.R;
@@ -101,7 +102,8 @@ public class WelcomeFragment extends BaseFragment implements OnPageChangeListene
 
 						@Override
 						public void onClick(View v) {
-							((StartUpActivity) mHostActivity).startLoginOrMainActivity();
+							HomeBaseActivity.startHomeActivity(mHostActivity);
+							mHostActivity.finish();
 						}
 					});
 				} else {

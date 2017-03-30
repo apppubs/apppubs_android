@@ -16,6 +16,8 @@ import io.rong.imlib.model.Conversation;
 
 public class ConversationActivity extends BaseActivity {
 
+	private final int REQUEST_CODE_DISCUSSION = 166;
+
     private String TAG = ConversationActivity.class.getSimpleName();
     /**
      * 对方id
@@ -90,7 +92,7 @@ public class ConversationActivity extends BaseActivity {
             } else if (mConversationType == Conversation.ConversationType.DISCUSSION) {
                 intent = new Intent(this, DiscussionDetailActivity.class);
                 intent.putExtra("TargetId", mTargetId);
-                startActivityForResult(intent, 166);
+                startActivityForResult(intent, REQUEST_CODE_DISCUSSION);
                 return;
             }
             intent.putExtra("TargetId", mTargetId);
@@ -101,4 +103,12 @@ public class ConversationActivity extends BaseActivity {
         }
     }
 
+	@Override
+	protected void onActivityResult(int requestCode, int resultCode, Intent intent) {
+		super.onActivityResult(requestCode, resultCode, intent);
+		if(requestCode==REQUEST_CODE_DISCUSSION&&resultCode==RESULT_OK){
+			String title = intent.getStringExtra("title");
+			setTitle(title);
+		}
+	}
 }

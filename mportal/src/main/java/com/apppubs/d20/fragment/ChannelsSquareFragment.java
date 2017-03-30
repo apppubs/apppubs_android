@@ -26,7 +26,7 @@ import com.apppubs.d20.activity.AddChannelActivity;
 import com.apppubs.d20.activity.ContainerActivity;
 import com.apppubs.d20.activity.SortChannelBActivity;
 import com.apppubs.d20.bean.HeadPic;
-import com.apppubs.d20.business.NewsBussiness;
+import com.apppubs.d20.model.NewsBussiness;
 import com.apppubs.d20.util.LogM;
 import com.apppubs.d20.widget.SlidePicView;
 import com.apppubs.d20.R;

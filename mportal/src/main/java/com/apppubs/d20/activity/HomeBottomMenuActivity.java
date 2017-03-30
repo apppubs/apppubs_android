@@ -1,7 +1,5 @@
 package com.apppubs.d20.activity;
 
-import java.util.List;
-
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -16,12 +14,19 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.apppubs.d20.R;
 import com.apppubs.d20.bean.MenuItem;
 import com.apppubs.d20.constant.Actions;
 import com.apppubs.d20.fragment.BaseFragment;
 import com.apppubs.d20.util.LogM;
 import com.apppubs.d20.widget.MenuBar;
-import com.apppubs.d20.R;
+
+import java.util.List;
+
+import io.rong.imkit.RongIM;
+import io.rong.imkit.manager.IUnReadMessageObserver;
+import io.rong.imlib.RongIMClient;
+import io.rong.imlib.model.Conversation;
 
 /**
  * 区别于左右菜单的主界面此主界面为底部菜单类似zaker
@@ -46,7 +51,15 @@ public class HomeBottomMenuActivity extends HomeBaseActivity {
 	private int mIntentCurPos;
 	private int mMenuBarBtnDefaultColor;
 	private BroadcastReceiver mLogoutBr;
-	
+	private IUnReadMessageObserver mMessageUnReadCountObserver = new IUnReadMessageObserver(){
+
+		@Override
+		public void onCountChanged(int i) {
+
+			mAppContext.getApp().setmMessageUnreadNum(i);
+			setMessageUnreadNum();
+		}
+	};
 	
 	@Override
 	protected void onCreate(Bundle arg0) {
@@ -69,6 +82,8 @@ public class HomeBottomMenuActivity extends HomeBaseActivity {
 			}
 		};
 		registerReceiver(mLogoutBr, new IntentFilter(Actions.ACTION_LOGOUT));
+
+		RongIM.getInstance().addUnReadMessageCountChangedObserver(mMessageUnReadCountObserver, Conversation.ConversationType.DISCUSSION, Conversation.ConversationType.PRIVATE);
 	}
 	@Override
 	protected void onResume() {
@@ -76,14 +91,31 @@ public class HomeBottomMenuActivity extends HomeBaseActivity {
 		super.onResume();
 		
 	}
+
+	@Override
+	protected void onNewIntent(Intent intent) {
+		super.onNewIntent(intent);
+	}
+
 	@Override
 	protected void onSaveInstanceState(Bundle outState) {
-		
-		
+
 		LogM.log(this.getClass(), "onSaveInstanceState-->调用");
 	}
-	
-	
+
+	private void setMessageUnreadNum(){
+		String messageMenuId = null;
+		for (MenuItem mi:mPrimaryMenuList){
+			if(mi.getUrl()!=null&&mi.getUrl().startsWith("apppubs://message")){
+				messageMenuId = mi.getId();
+				break;
+			}
+		}
+		if (messageMenuId!=null){
+			mMenuBar.setUnreadNumForMenu(messageMenuId,mAppContext.getApp().getmMessageUnreadNum());
+		}
+	}
+
 	private void initComponent(){
 		mMenuBarBtnDefaultColor = getResources().getColor(R.color.menubar_default);
 		mMenuBar = (MenuBar) findViewById(R.id.home_bottom_menubar);
@@ -184,6 +216,8 @@ public class HomeBottomMenuActivity extends HomeBaseActivity {
 			unregisterReceiver(mLogoutBr);
 		}
 		LogM.log(this.getClass(), "销毁HomeBottomMenuActivity");
+
+		RongIM.getInstance().removeUnReadMessageCountChangedObserver(mMessageUnReadCountObserver);
 	}
 
 	@Override

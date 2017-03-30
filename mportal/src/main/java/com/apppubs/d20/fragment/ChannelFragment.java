@@ -13,7 +13,7 @@ import com.apppubs.d20.activity.NewsInfoActivity;
 import com.apppubs.d20.activity.NewsInfoBaseActivity;
 import com.apppubs.d20.bean.NewsChannel;
 import com.apppubs.d20.bean.NewsInfo;
-import com.apppubs.d20.business.NewsBussiness;
+import com.apppubs.d20.model.NewsBussiness;
 import com.orm.SugarRecord;
 /**
  * 频道fragment，展示频道信息列表

@@ -18,6 +18,7 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import com.apppubs.d20.AppContext;
+import com.apppubs.d20.bean.UserInfo;
 import com.apppubs.d20.widget.LetterListView;
 import com.apppubs.d20.R;
 import com.apppubs.d20.activity.UserInfoActivity;
@@ -67,7 +68,7 @@ public class AddressBookAllUserFragment extends BaseFragment {
 			String temp = mEditText.getText().toString();
 			if (temp.equals("")) {
 				// 填充所有的
-				User currentUser = AppContext.getInstance(mContext).getCurrentUser();
+				UserInfo currentUser = AppContext.getInstance(mContext).getCurrentUser();
 				mUsers = mUserBussiness.listAllUser(currentUser.getAddressbookPermissionString());
 				adapter = new MyAdapter(mUsers);
 				mCityLv.setAdapter(adapter);

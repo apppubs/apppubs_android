@@ -13,6 +13,7 @@ import android.view.View;
 import android.widget.Toast;
 
 import com.apppubs.d20.AppContext;
+import com.apppubs.d20.bean.UserInfo;
 import com.apppubs.d20.util.LogM;
 import com.apppubs.d20.MportalApplication;
 import com.apppubs.d20.R;
@@ -54,6 +55,18 @@ public abstract class HomeBaseActivity extends BaseActivity {
 	protected void onCreate(android.os.Bundle arg0) {
 		super.onCreate(arg0);
 		overridePendingTransition(R.anim.abc_fade_in, R.anim.abc_fade_out);
+		//检测是否需要登录而且是否登录
+		if(mAppContext.getApp().getLoginFlag()!=App.LOGIN_INAPP&&TextUtils.isEmpty(mAppContext.getCurrentUser().getUserId())){
+			//跳转到登录界面
+			startActivity(FirstLoginActity.class);
+			finish();
+		}
+
+		// 此时如果客户端是不需要登陆的则需要注册设备账号
+		if (mAppContext.getApp().getLoginFlag() == App.LOGIN_INAPP) {
+			mUserBussiness.registerDevice(null);
+		}
+
 		LogM.log(this.getClass(), " HomeActivity onCreate");
 		if (AppContext.getInstance(mContext).getCurrentUser().getMenuPower() != null) {
 			String menuPower = AppContext.getInstance(mContext).getCurrentUser().getMenuPower();
@@ -88,11 +101,7 @@ public abstract class HomeBaseActivity extends BaseActivity {
 		initBroadcastReceiver();
 
 		SharedPreferenceUtils.getInstance(this).putBoolean(MPORTAL_PREFERENCE_NAME, MPORTAL_PREFERENCE_APP_RUNNING_KEY, true);
-		String paddingUrl = mAppContext.getApp().getPaddingUrlOnHomeActivityStartUp();
-		if (!TextUtils.isEmpty(paddingUrl)) {
-			mAppContext.getApp().setPaddingUrlOnHomeActivityStartUp(null);
-			ViewCourier.execute(mContext, paddingUrl);
-		}
+
 	}
 
 	;
@@ -159,8 +168,26 @@ public abstract class HomeBaseActivity extends BaseActivity {
 	@Override
 	protected void onResume() {
 		super.onResume();
+		String paddingUrl = mAppContext.getApp().getPaddingUrlOnHomeActivityStartUp();
+		if (!TextUtils.isEmpty(paddingUrl)) {
+			mAppContext.getApp().setPaddingUrlOnHomeActivityStartUp(null);
+			if (paddingUrl.startsWith("apppubs://message")){
+				for (MenuItem mi:mPrimaryMenuList){
+					if (mi.getUrl().startsWith("apppubs://message")){
+						mViewCourier.executeInHomeActivity(mi,HomeBaseActivity.this);
+						break;
+					}
+				}
+			}else{
+				ViewCourier.execute(mContext, paddingUrl);
+			}
+		}
 	}
 
+	@Override
+	protected void onNewIntent(Intent intent) {
+		super.onNewIntent(intent);
+	}
 
 	public ViewCourier getViewController() {
 		return mViewCourier;
@@ -188,13 +215,11 @@ public abstract class HomeBaseActivity extends BaseActivity {
 		sendBroadcast(closeService);
 		stopService(new Intent(HomeBaseActivity.this, DownloadAppService.class));
 
-		unregisterReceiver(mLogoutBR);
-
 		// 记录此次运行的版本
-
-		App app = mAppContext.getApp();
-		app.setPreWorkingVersion(Utils.getVersionCode(mContext));
-		mAppContext.setApp(app);
+//
+//		App app = mAppContext.getApp();
+//		app.setPreWorkingVersion(Utils.getVersionCode(mContext));
+//		mAppContext.setApp(app);
 	}
 
 	// protected void exit() {
@@ -220,15 +245,15 @@ public abstract class HomeBaseActivity extends BaseActivity {
 	public static void startHomeActivity(Context fromActivy) {
 
 		LogM.log(Class.class, "startHomeActivity-->启动主界面");
+
 		int layout = AppContext.getInstance(fromActivy).getApp().getLayoutLocalScheme();
-		Intent stopAllActivity = new Intent(Actions.CLOSE_ALL_ACTIVITY);
-		fromActivy.sendBroadcast(stopAllActivity);
 		Intent intent = null;
 		if (layout == App.STYLE_SLIDE_MENU) {
 			intent = new Intent(fromActivy, HomeSlideMenuActivity.class);
 		} else {
 			intent = new Intent(fromActivy, HomeBottomMenuActivity.class);
 		}
+		intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK|Intent.FLAG_ACTIVITY_CLEAR_TOP);
 		fromActivy.startActivity(intent);
 	}
 
@@ -237,6 +262,8 @@ public abstract class HomeBaseActivity extends BaseActivity {
 		super.onDestroy();
 		mViewCourier.destory();
 		SharedPreferenceUtils.getInstance(this).putBoolean(MPORTAL_PREFERENCE_NAME, MPORTAL_PREFERENCE_APP_RUNNING_KEY, false);
+		unregisterReceiver(mLogoutBR);
+
 	}
 
 	private long lastClickTime = 0;
@@ -266,7 +293,7 @@ public abstract class HomeBaseActivity extends BaseActivity {
 	}
 
 	public void logout() {
-		AppContext.getInstance(mContext).setCurrentUser(new User());
+		AppContext.getInstance(mContext).setCurrentUser(new UserInfo());
 		if (mAppContext.getApp().getLoginFlag() == App.LOGIN_ONSTART_USE_USERNAME_PASSWORD || mAppContext.getApp().getLoginFlag() == App.LOGIN_ONSTART_USE_USERNAME_PASSWORD_ORGCODE) {
 			Intent closeI = new Intent(Actions.CLOSE_ALL_ACTIVITY);
 			sendBroadcast(closeI);

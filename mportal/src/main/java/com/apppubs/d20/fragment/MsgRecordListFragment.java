@@ -42,7 +42,7 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.apppubs.d20.AppContext;
 import com.apppubs.d20.bean.MsgRecord;
-import com.apppubs.d20.business.MsgController;
+import com.apppubs.d20.model.MsgController;
 import com.apppubs.d20.util.SharedPreferenceUtils;
 import com.daimajia.swipe.SwipeLayout;
 import com.daimajia.swipe.adapters.BaseSwipeAdapter;

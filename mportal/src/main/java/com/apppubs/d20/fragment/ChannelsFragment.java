@@ -6,7 +6,7 @@ import android.os.Bundle;
 
 import com.apppubs.d20.bean.MenuItem;
 import com.apppubs.d20.bean.NewsChannel;
-import com.apppubs.d20.business.NewsBussiness;
+import com.apppubs.d20.model.NewsBussiness;
 import com.orm.SugarRecord;
 /**
  * 资讯列表容器,需要传入频道所属的类别

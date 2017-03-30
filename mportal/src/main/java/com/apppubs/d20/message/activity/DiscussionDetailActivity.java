@@ -17,9 +17,11 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.amap.api.maps2d.model.Text;
 import com.apppubs.d20.R;
 import com.apppubs.d20.activity.BaseActivity;
-import com.apppubs.d20.business.BussinessCallbackCommon;
+import com.apppubs.d20.activity.UserInfoActivity;
+import com.apppubs.d20.model.BussinessCallbackCommon;
 import com.apppubs.d20.message.model.OperationRong;
 import com.apppubs.d20.message.model.UserBasicInfo;
 import com.apppubs.d20.message.model.UserPickerHelper;
@@ -30,10 +32,12 @@ import com.apppubs.d20.widget.DialogWithYesOrNoUtils;
 import com.apppubs.d20.widget.EditTextDialog;
 import com.apppubs.d20.widget.LoadDialog;
 import com.apppubs.d20.widget.NToast;
+import com.apppubs.d20.widget.ProgressHUD;
 import com.apppubs.d20.widget.SwitchButton;
 import com.apppubs.d20.widget.UserIconImageView;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import io.rong.imkit.RongIM;
@@ -63,6 +67,7 @@ public class DiscussionDetailActivity extends BaseActivity implements CompoundBu
     private SwitchButton discussionTop, discussionNof;
     private List<String> ids;
     private boolean isDeleteMode;
+	private  List<UserBasicInfo> mCachedUserInfoList;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -100,27 +105,13 @@ public class DiscussionDetailActivity extends BaseActivity implements CompoundBu
         discussionNof = (SwitchButton) findViewById(R.id.sw_discu_notfaction);
         LinearLayout discussionClean = (LinearLayout) findViewById(R.id.discu_clean);
         Button deleteDiscussion = (Button) findViewById(R.id.discu_quit);
+
         mDiscussName = (TextView) findViewById(R.id.discussion_name_tv);
+
+		View inviteLL = findViewById(R.id.discussion_invite_ll);
+		inviteLL.setOnClickListener(this);
         View changeNameLL = findViewById(R.id.discussion_name_ll);
-        changeNameLL.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-
-                EditTextDialog dialog = new EditTextDialog(mContext, new EditTextDialog.ConfirmListener() {
-                    @Override
-                    public void onOkClick(String result) {
-
-                    }
-
-                    @Override
-                    public void onCancelClick() {
-
-                    }
-                },"修改","确定","取消");
-                dialog.show();
-            }
-        });
+		changeNameLL.setOnClickListener(this);
         discussionTop.setOnCheckedChangeListener(this);
         discussionNof.setOnCheckedChangeListener(this);
         discussionClean.setOnClickListener(this);
@@ -177,7 +168,7 @@ public class DiscussionDetailActivity extends BaseActivity implements CompoundBu
             mUserBussiness.cacheUserBasicInfoList(ids, new BussinessCallbackCommon<List<UserBasicInfo>>() {
                 @Override
                 public void onDone(List<UserBasicInfo> infos) {
-
+					mCachedUserInfoList = infos;
                     memberList.clear();
                     for (UserBasicInfo userBasicInfo : infos) {
                         if (userBasicInfo.getUserId().equals(createId)){
@@ -214,6 +205,10 @@ public class DiscussionDetailActivity extends BaseActivity implements CompoundBu
     private void fillView() {
         TextView tv = (TextView) findViewById(R.id.discussion_name_tv);
         tv.setText(mDiscussion.getName());
+
+		if (isCreated){
+			setVisibilityOfViewByResId(R.id.discussion_invite_ll,View.VISIBLE);
+		}
     }
 
 
@@ -297,11 +292,88 @@ public class DiscussionDetailActivity extends BaseActivity implements CompoundBu
                 });
 
                 break;
+			case R.id.discussion_name_ll:{
+
+				EditTextDialog dialog = new EditTextDialog(mContext, new EditTextDialog.ConfirmListener() {
+					@Override
+					public void onOkClick(final String result) {
+						LoadDialog.show(DiscussionDetailActivity.this);
+						RongIM.getInstance().setDiscussionName(mDiscussion.getId(),result, new RongIMClient.OperationCallback(){
+
+							@Override
+							public void onSuccess() {
+								LoadDialog.dismiss(DiscussionDetailActivity.this);
+								mDiscussName.setText(result);
+								Intent i = new Intent();
+								i.putExtra("title",result);
+								setResult(RESULT_OK,i);
+							}
+
+							@Override
+							public void onError(RongIMClient.ErrorCode errorCode) {
+								LoadDialog.dismiss(DiscussionDetailActivity.this);
+								Toast.makeText(mContext,"修改失败",Toast.LENGTH_SHORT).show();
+							}
+						});
+					}
+
+					@Override
+					public void onCancelClick() {
+
+					}
+				},"修改讨论组名称","取消","确定");
+				dialog.setDefaultText(mDiscussName.getText().toString());
+				dialog.show();
+				break;
+			}
+			case R.id.discussion_invite_ll:{
+
+				ConfirmDialog inviteDialog = new ConfirmDialog(mContext, new ConfirmDialog.ConfirmListener() {
+					@Override
+					public void onOkClick() {
+						sendInviteSms();
+					}
+
+					@Override
+					public void onCancelClick() {
+
+					}
+				},"确定发送邀请？","取消","确定");
+				inviteDialog.show();
+
+				break;
+			}
+
         }
     }
 
+	private void sendInviteSms() {
+		ProgressHUD.show(this);
+		List<String> idList = new ArrayList<String>();
+		for (UserBasicInfo ubi:mCachedUserInfoList){
+			String appCodeVersion = ubi.getAppCodeVersion();
+			if (TextUtils.isEmpty(appCodeVersion)){
+				idList.add(ubi.getUserId());
+			}
+		}
+		mSystemBussiness.inviteUsers(idList, new BussinessCallbackCommon() {
+			@Override
+			public void onDone(Object obj) {
+				ProgressHUD.dismissProgressHUDInThisContext(mContext);
+				Toast.makeText(getApplicationContext(),"发送成功",Toast.LENGTH_SHORT).show();
+			}
 
-    private class GridAdapter extends BaseAdapter {
+			@Override
+			public void onException(int excepCode) {
+				ProgressHUD.dismissProgressHUDInThisContext(mContext);
+				Toast.makeText(getApplicationContext(),"发送邀请短信失败!",Toast.LENGTH_SHORT).show();
+			}
+		});
+	}
+
+
+
+	private class GridAdapter extends BaseAdapter {
 
         private List<UserInfo> list;
         Context context;
@@ -605,5 +677,6 @@ public class DiscussionDetailActivity extends BaseActivity implements CompoundBu
 //    public void onFailure(int requestCode, int state, Object result) {
 //        LoadDialog.dismiss(mContext);
 //    }
+
 
 }

@@ -38,7 +38,7 @@ import android.provider.MediaStore;
 import android.util.Log;
 
 import com.apppubs.d20.exception.ESUnavailableException;
-import com.apppubs.d20.business.BussinessCallbackCommon;
+import com.apppubs.d20.model.BussinessCallbackCommon;
 import com.apppubs.d20.constant.Constants;
 
 /**

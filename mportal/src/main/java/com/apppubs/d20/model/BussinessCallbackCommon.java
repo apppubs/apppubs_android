@@ -1,4 +1,4 @@
-package com.apppubs.d20.business;
+package com.apppubs.d20.model;
 
 
 

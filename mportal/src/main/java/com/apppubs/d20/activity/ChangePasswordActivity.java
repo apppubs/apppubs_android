@@ -13,6 +13,7 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.apppubs.d20.AppContext;
 import com.apppubs.d20.bean.User;
+import com.apppubs.d20.bean.UserInfo;
 import com.apppubs.d20.constant.URLs;
 import com.apppubs.d20.util.JSONResult;
 import com.apppubs.d20.widget.ProgressHUD;
@@ -54,7 +55,7 @@ public class ChangePasswordActivity extends BaseActivity implements OnClickListe
 				Toast.makeText(this, "新旧密码相同", Toast.LENGTH_SHORT).show();
 			} else {
 				ProgressHUD.show(this);
-				User currentUser = AppContext.getInstance(mContext).getCurrentUser();
+				UserInfo currentUser = AppContext.getInstance(mContext).getCurrentUser();
 				String url = String.format(URLs.URL_MODIFY_PASSWORD, currentUser.getUserId(), mOriginalEt
 						.getText().toString().trim(), mNewEt.getText().toString().trim());
 				mRequestQueue.add(new StringRequest(url, new Listener<String>() {

@@ -96,7 +96,7 @@
         <item name="android:layout_marginRight">7dp</item>
     </style>
 
-    <style name="dialog" parent="@android:style/Theme.Dialog">
+    <style name="dialog" parent="@style/Theme.AppCompat.Light.Dialog">
         <item name="android:windowIsFloating">true</item>
         <!-- 是否浮现在activity之上 -->
         <item name="android:windowIsTranslucent">true</item>

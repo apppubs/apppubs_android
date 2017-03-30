@@ -32,7 +32,7 @@ import com.apppubs.d20.asytask.AsyTaskCallback;
 import com.apppubs.d20.asytask.AsyTaskExecutor;
 import com.apppubs.d20.bean.HeadPic;
 import com.apppubs.d20.bean.NewsInfo;
-import com.apppubs.d20.business.NewsBussiness;
+import com.apppubs.d20.model.NewsBussiness;
 import com.apppubs.d20.constant.URLs;
 import com.apppubs.d20.util.JSONResult;
 import com.apppubs.d20.util.JSONUtils;

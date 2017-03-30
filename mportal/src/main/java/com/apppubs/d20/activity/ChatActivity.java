@@ -52,8 +52,8 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.apppubs.d20.AppContext;
 import com.apppubs.d20.bean.Msg;
-import com.apppubs.d20.bean.User;
-import com.apppubs.d20.business.MsgController;
+import com.apppubs.d20.bean.UserInfo;
+import com.apppubs.d20.model.MsgController;
 import com.apppubs.d20.constant.Actions;
 import com.apppubs.d20.exception.ESUnavailableException;
 import com.apppubs.d20.util.SharedPreferenceUtils;
@@ -62,7 +62,7 @@ import com.apppubs.d20.widget.MyEditText;
 import com.apppubs.d20.MportalApplication;
 import com.apppubs.d20.R;
 import com.apppubs.d20.adapter.ChatAdapter;
-import com.apppubs.d20.business.BussinessCallbackCommon;
+import com.apppubs.d20.model.BussinessCallbackCommon;
 import com.apppubs.d20.constant.Constants;
 import com.apppubs.d20.constant.URLs;
 import com.apppubs.d20.util.FileUtils;
@@ -240,7 +240,7 @@ public class ChatActivity extends BaseActivity implements OnClickListener {
 		if(map!=null&&map.get(mChatGroupId)!=null){
 			deleteDateStr = map.get(mChatGroupId);
 		}
-		User currentUser = AppContext.getInstance(mContext).getCurrentUser();
+		UserInfo currentUser = AppContext.getInstance(mContext).getCurrentUser();
 		mMsgBussiness.getChatGroupChatList(currentUser.getUsername(), mChatGroupId,deleteDateStr,
 				new BussinessCallbackCommon<List<Msg>>() {
 
@@ -300,7 +300,7 @@ public class ChatActivity extends BaseActivity implements OnClickListener {
 
 	private void cleanUnreadNum() {
 		if (!TextUtils.isEmpty(mChatGroupId)) {
-			User currentUser = AppContext.getInstance(mContext).getCurrentUser();
+			UserInfo currentUser = AppContext.getInstance(mContext).getCurrentUser();
 			String url = String.format(URLs.URL_CLEAR_UNREAD_NUM_FOR_SERVICE_NO_AND_CHAT, mChatGroupId,
 					currentUser.getUsername());
 			mRequestQueue.add(new StringRequest(url, new Listener<String>() {
@@ -388,7 +388,7 @@ public class ChatActivity extends BaseActivity implements OnClickListener {
 								 * obj } });
 								 */
 								Msg info = new Msg();
-								User currentUser = AppContext.getInstance(mContext).getCurrentUser();
+								UserInfo currentUser = AppContext.getInstance(mContext).getCurrentUser();
 								info.setSenderId(currentUser.getUsername());
 								info.setContentType(Msg.TYPE_CONTENT_SOUND);
 								info.setLength(mVoiceDuration);

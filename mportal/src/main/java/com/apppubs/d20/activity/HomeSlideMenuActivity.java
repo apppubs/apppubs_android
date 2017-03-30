@@ -39,15 +39,15 @@ import com.amap.api.location.AMapLocation;
 import com.amap.api.location.AMapLocationListener;
 import com.amap.api.location.LocationManagerProxy;
 import com.amap.api.location.LocationProviderProxy;
+import com.apppubs.d20.bean.UserInfo;
 import com.jeremyfeinstein.slidingmenu.lib.SlidingMenu;
 import com.jeremyfeinstein.slidingmenu.lib.app.SlidingActivityHelper;
 import com.apppubs.d20.R;
 import com.apppubs.d20.bean.App;
 import com.apppubs.d20.bean.MenuItem;
-import com.apppubs.d20.bean.User;
 import com.apppubs.d20.bean.Weather;
 import com.apppubs.d20.AppContext;
-import com.apppubs.d20.business.BussinessCallbackCommon;
+import com.apppubs.d20.model.BussinessCallbackCommon;
 import com.apppubs.d20.fragment.BaseFragment;
 import com.apppubs.d20.service.DownloadAppService;
 import com.apppubs.d20.util.LocationUtils;
@@ -277,7 +277,7 @@ public class HomeSlideMenuActivity extends HomeBaseActivity implements OnItemCli
 
 		super.onResume();
 		// 刷新右边菜单的用户名
-		User user = AppContext.getInstance(mContext).getCurrentUser();
+		UserInfo user = AppContext.getInstance(mContext).getCurrentUser();
 		final String username = user.getUsername();
 		if (username != null && !username.equals("")) {
 			mUsername.setText(username);

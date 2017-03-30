@@ -32,7 +32,7 @@ import com.android.volley.toolbox.Volley;
 import com.apppubs.d20.AppManager;
 import com.apppubs.d20.activity.FeedbackActivity;
 import com.apppubs.d20.activity.StartUpActivity;
-import com.apppubs.d20.business.SystemBussiness;
+import com.apppubs.d20.model.SystemBussiness;
 import com.apppubs.d20.widget.ConfirmDialog;
 import com.apppubs.d20.MportalApplication;
 import com.apppubs.d20.R;
@@ -44,11 +44,10 @@ import com.apppubs.d20.activity.ThemeSwitchActivity;
 import com.apppubs.d20.activity.WebAppActivity;
 import com.apppubs.d20.bean.MenuItem;
 import com.apppubs.d20.bean.Settings;
-import com.apppubs.d20.business.BussinessCallbackCommon;
+import com.apppubs.d20.model.BussinessCallbackCommon;
 import com.apppubs.d20.constant.URLs;
 import com.apppubs.d20.service.DownloadAppService;
 import com.apppubs.d20.util.FileUtils;
-import com.apppubs.d20.util.ServiceUtils;
 import com.apppubs.d20.util.Utils;
 import com.orm.SugarRecord;
 
@@ -104,7 +103,7 @@ public class SettingFragment extends TitleMenuFragment implements OnClickListene
 		} catch (NameNotFoundException e) {
 			e.printStackTrace();
 		}
-		currentVersionTv.setText("V" + pInfo.versionName);
+		currentVersionTv.setText("V" + pInfo.versionName+" ("+Utils.getVersionCode(mContext)+")");
 		
 	}
 

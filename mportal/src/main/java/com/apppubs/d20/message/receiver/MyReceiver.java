@@ -1,4 +1,4 @@
-package com.apppubs.d20.receiver;
+package com.apppubs.d20.message.receiver;
 
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -8,9 +8,10 @@ import android.text.TextUtils;
 import android.util.Log;
 
 import com.apppubs.d20.AppContext;
+import com.apppubs.d20.activity.HomeBaseActivity;
 import com.apppubs.d20.activity.StartUpActivity;
 import com.apppubs.d20.bean.Msg;
-import com.apppubs.d20.business.MsgController;
+import com.apppubs.d20.model.MsgController;
 import com.apppubs.d20.util.LogM;
 
 import org.json.JSONException;
@@ -57,19 +58,15 @@ public class MyReceiver extends BroadcastReceiver {
 			String extras = bundle.getString(JPushInterface.EXTRA_EXTRA);
 			String url = "";
 			try {
-
-				Intent i = new Intent(context, StartUpActivity.class);
-				i.putExtras(bundle);
-				i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
-				context.startActivity(i);
-
 				JSONObject extrasJson = new JSONObject(extras);
 				url = extrasJson.optString("url");
-//				ViewCourier.execute(context,url);
 				AppContext.getInstance(context).getApp().setPaddingUrlOnHomeActivityStartUp(url);
+
 			} catch (Exception e) {
 				LogM.log(this.getClass(), "Unexpected: extras is not a valid json");
 			}
+
+			HomeBaseActivity.startHomeActivity(context);
 
         } else if (JPushInterface.ACTION_RICHPUSH_CALLBACK.equals(intent.getAction())) {
             Log.d(TAG, "[MyReceiver] 用户收到到RICH PUSH CALLBACK: " + bundle.getString(JPushInterface.EXTRA_EXTRA));
@@ -144,28 +141,5 @@ public class MyReceiver extends BroadcastReceiver {
 			e1.printStackTrace();
 		}
 		
-//		Intent msgIntent = new Intent(MainActivity.MESSAGE_RECEIVED_ACTION);
-//		msgIntent.putExtra(MainActivity.KEY_MESSAGE, message);
-//		
-//		LogM.log(this.getClass(), msg)
-		
-//		if (MainActivity.isForeground) {
-//			String message = bundle.getString(JPushInterface.EXTRA_MESSAGE);
-//			String extras = bundle.getString(JPushInterface.EXTRA_EXTRA);
-//			Intent msgIntent = new Intent(MainActivity.MESSAGE_RECEIVED_ACTION);
-//			msgIntent.putExtra(MainActivity.KEY_MESSAGE, message);
-//			if (!ExampleUtil.isEmpty(extras)) {
-//				try {
-//					JSONObject extraJson = new JSONObject(extras);
-//					if (null != extraJson && extraJson.length() > 0) {
-//						msgIntent.putExtra(MainActivity.KEY_EXTRAS, extras);
-//					}
-//				} catch (JSONException e) {
-//
-//				}
-//
-//			}
-//			context.sendBroadcast(msgIntent);
-//		}
 	}
 }

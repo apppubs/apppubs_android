@@ -25,7 +25,7 @@ import com.jeremyfeinstein.slidingmenu.lib.SlidingMenu;
 import com.apppubs.d20.R;
 import com.apppubs.d20.adapter.NewsFragmentPagerAdapter;
 import com.apppubs.d20.bean.NewsChannel;
-import com.apppubs.d20.business.NewsBussiness;
+import com.apppubs.d20.model.NewsBussiness;
 import com.apppubs.d20.widget.DraggableGridView;
 import com.apppubs.d20.widget.DraggableGridView.OnRearrangeListener;
 import com.apppubs.d20.widget.ScrollTabs;

@@ -37,7 +37,7 @@ import com.apppubs.d20.widget.PictureInfoViewPager;
 import com.apppubs.d20.widget.ZoomImageView;
 import com.apppubs.d20.MportalApplication;
 import com.apppubs.d20.R;
-import com.apppubs.d20.business.BussinessCallbackCommon;
+import com.apppubs.d20.model.BussinessCallbackCommon;
 import com.apppubs.d20.widget.ImageButton;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.orm.SugarRecord;

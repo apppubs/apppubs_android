@@ -205,21 +205,34 @@ public class ReflectionUtil {
 
     public static List<Class> getDomainClasses(Context context) {
         List<Class> domainClasses = new ArrayList<Class>();
-        try {
 
-            for (String className : getAllClasses(context)) {
-                System.out.println("运行时类名："+className+"getDomainPackageName:"+ManifestHelper.getDomainPackageName(context));
+		String[] classNameArr = new String[]{"com.apppubs.d20.bean.City","com.apppubs.d20.bean.Collection",
+				"com.apppubs.d20.bean.Department","com.apppubs.d20.bean.HeadPic","com.apppubs.d20.bean.LocalFile",
+				"com.apppubs.d20.bean.MenuGroup","com.apppubs.d20.bean.MenuItem","com.apppubs.d20.bean.Msg",
+				"com.apppubs.d20.bean.MsgRecord","com.apppubs.d20.bean.NewsChannel","com.apppubs.d20.bean.NewsInfo",
+				"com.apppubs.d20.bean.Paper","com.apppubs.d20.bean.PaperCatalog",
+				"com.apppubs.d20.bean.PaperDownloadInfo","com.apppubs.d20.bean.PaperInfo","com.apppubs.d20.bean.PaperInfoPic",
+				"com.apppubs.d20.bean.PaperIssue",
+				"com.apppubs.d20.bean.PaperOrder","com.apppubs.d20.bean.ServiceNo","com.apppubs.d20.bean.ServiceNOInfo",
+				"com.apppubs.d20.bean.StartUpPic","com.apppubs.d20.bean.TitleMenu","com.apppubs.d20.bean.User",
+				"com.apppubs.d20.bean.UserDeptLink"
+		};
+//            for (String className : getAllClasses(context)) {
+		for (String className : classNameArr) {
+			System.out.println("运行时类名："+className+"getDomainPackageName:"+ManifestHelper.getDomainPackageName(context));
 
-                if (className.startsWith(ManifestHelper.getDomainPackageName(context))) {
-                    Class domainClass = getDomainClass(className, context);
-                    if (domainClass != null) domainClasses.add(domainClass);
-                }
-            }
-        } catch (IOException e) {
-            Log.e("Sugar", e.getMessage());
-        } catch (PackageManager.NameNotFoundException e) {
-            Log.e("Sugar", e.getMessage());
-        }
+			if (className.startsWith(ManifestHelper.getDomainPackageName(context))) {
+				Class domainClass = getDomainClass(className, context);
+				if (domainClass != null) domainClasses.add(domainClass);
+			}
+		}
+//        try {
+//
+//        } catch (IOException e) {
+//            Log.e("Sugar", e.getMessage());
+//        } catch (PackageManager.NameNotFoundException e) {
+//            Log.e("Sugar", e.getMessage());
+//        }
 
         return domainClasses;
     }

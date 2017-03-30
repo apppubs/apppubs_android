@@ -30,7 +30,7 @@ import com.android.volley.toolbox.StringRequest;
 import com.apppubs.d20.AppContext;
 import com.apppubs.d20.activity.ChatActivity;
 import com.apppubs.d20.bean.MsgRecord;
-import com.apppubs.d20.business.MsgController;
+import com.apppubs.d20.model.MsgController;
 import com.apppubs.d20.constant.Actions;
 import com.apppubs.d20.util.JSONResult;
 import com.apppubs.d20.util.SharedPreferenceUtils;

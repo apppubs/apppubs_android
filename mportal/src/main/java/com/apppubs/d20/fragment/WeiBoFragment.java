@@ -27,8 +27,8 @@ import com.apppubs.d20.util.SystemUtils;
 import com.apppubs.d20.widget.ProgressWebView;
 import com.apppubs.d20.widget.Tabs;
 import com.apppubs.d20.R;
-import com.apppubs.d20.business.BussinessCallbackCommon;
-import com.apppubs.d20.business.SystemBussiness;
+import com.apppubs.d20.model.BussinessCallbackCommon;
+import com.apppubs.d20.model.SystemBussiness;
 
 public class WeiBoFragment extends BaseFragment implements OnPageChangeListener ,OnClickListener{
 

@@ -164,6 +164,13 @@ public class App implements Serializable{
 
 	private String paddingUrlOnHomeActivityStartUp;
 
+	private int mMessageUnreadNum;
+
+	private AppConfig appConfig;
+
+	private boolean mWelcomePlayed;
+
+
 	public boolean isDownload() {
 		return isDownloadApp;
 	}
@@ -409,6 +416,7 @@ public class App implements Serializable{
 	}
 
 	public int getAddressbookNeedPermission() {
+
 		return addressbookNeedPermission;
 	}
 
@@ -497,4 +505,27 @@ public class App implements Serializable{
 		this.paddingUrlOnHomeActivityStartUp = paddingUrlOnHomeActivityStartUp;
 	}
 
+	public AppConfig getAppConfig() {
+		return appConfig;
+	}
+
+	public void setAppConfig(AppConfig appConfig) {
+		this.appConfig = appConfig;
+	}
+
+	public int getmMessageUnreadNum() {
+		return mMessageUnreadNum;
+	}
+
+	public void setmMessageUnreadNum(int mMessageUnreadNum) {
+		this.mMessageUnreadNum = mMessageUnreadNum;
+	}
+
+	public boolean isWelcomePlayed() {
+		return mWelcomePlayed;
+	}
+
+	public void setWelcomePlayed(boolean mWelcomePlayed) {
+		this.mWelcomePlayed = mWelcomePlayed;
+	}
 }

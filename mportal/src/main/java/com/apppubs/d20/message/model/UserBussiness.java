@@ -10,14 +10,25 @@ import android.util.Log;
 
 import com.apppubs.d20.AppContext;
 import com.apppubs.d20.bean.App;
+import com.apppubs.d20.bean.AppConfig;
 import com.apppubs.d20.bean.Department;
+import com.apppubs.d20.bean.Settings;
+import com.apppubs.d20.bean.User;
 import com.apppubs.d20.bean.UserDeptLink;
-import com.apppubs.d20.business.BaseBussiness;
+import com.apppubs.d20.bean.UserInfo;
+import com.apppubs.d20.model.AbstractBussinessCallback;
+import com.apppubs.d20.model.BaseBussiness;
+import com.apppubs.d20.model.BussinessCallbackCommon;
+import com.apppubs.d20.model.SystemBussiness;
 import com.apppubs.d20.constant.Actions;
+import com.apppubs.d20.constant.URLs;
+import com.apppubs.d20.util.ACache;
+import com.apppubs.d20.util.Des3;
 import com.apppubs.d20.util.JSONResult;
 import com.apppubs.d20.util.LogM;
 import com.apppubs.d20.util.StringUtils;
 import com.apppubs.d20.util.Utils;
+import com.apppubs.d20.util.WebUtils;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonDeserializationContext;
@@ -25,16 +36,6 @@ import com.google.gson.JsonDeserializer;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonParseException;
 import com.google.gson.reflect.TypeToken;
-import com.apppubs.d20.bean.AppConfig;
-import com.apppubs.d20.bean.Settings;
-import com.apppubs.d20.bean.User;
-import com.apppubs.d20.business.AbstractBussinessCallback;
-import com.apppubs.d20.business.BussinessCallbackCommon;
-import com.apppubs.d20.business.SystemBussiness;
-import com.apppubs.d20.constant.URLs;
-import com.apppubs.d20.util.ACache;
-import com.apppubs.d20.util.Des3;
-import com.apppubs.d20.util.WebUtils;
 import com.orm.SugarRecord;
 
 import org.json.JSONObject;
@@ -87,7 +88,7 @@ public class UserBussiness extends BaseBussiness {
 	 * @return
 	 */
 	public List<User> listAllUser() {
-		return listAllUser(AppContext.getInstance(mContext).getCurrentUser().getAddressbookPermissionString());
+		return listAllUser(null);
 	}
 	public List<User> listAllUser(String permissionString){
 		List<User> result = null;
@@ -127,7 +128,6 @@ public class UserBussiness extends BaseBussiness {
 	 * @return
 	 */
 	public long countAllUser() {
-		SugarRecord.count(User.class);
 		return SugarRecord.count(User.class);
 	}
 
@@ -163,20 +163,41 @@ public class UserBussiness extends BaseBussiness {
 	 * @return
      */
 	public List<String> getUserIdsOfCertainDepartment(String deptId){
+		return getUserIdsOfCertainDepartment(deptId,false);
+	}
+
+	public List<String> getUserIdsOfCertainDepartment(String deptId,boolean needChatPermission){
+
 		List<String> userIdList = new ArrayList<String>();
 		List<String> deptIds = new ArrayList<String>();
 		deptIds.add(deptId);
 		recurseGet(deptId,deptIds);
 
 		StringBuilder sb = new StringBuilder();
-		for (String id:deptIds){
-			if (sb.length()>0){
-				sb.append(",");
+		if (needChatPermission){
+			String permissionStr = AppContext.getInstance(mContext).getCurrentUser().getChatPermissionString();
+			for (String id:deptIds){
+				if (!TextUtils.isEmpty(permissionStr)&&permissionStr.contains(id)){
+					if (sb.length()>0){
+						sb.append(",");
+					}
+					sb.append("'");
+					sb.append(id);
+					sb.append("'");
+				}
 			}
-			sb.append("'");
-			sb.append(id);
-			sb.append("'");
+		}else{
+			for (String id:deptIds){
+				if (sb.length()>0){
+					sb.append(",");
+				}
+				sb.append("'");
+				sb.append(id);
+				sb.append("'");
+			}
 		}
+
+
 
 		String sql = String.format("select distinct user_id from user_dept_link where dept_id in(%s)",sb.toString());
 
@@ -202,12 +223,19 @@ public class UserBussiness extends BaseBussiness {
 
 	/**
 	 * 列出某个department下的用户
-	 * 
+	 * 当前系统需要限制通讯录权限且有部门权限则显示全部信息，否则只查询出userid和truename
 	 * @param departmentId
 	 * @return
 	 */
 	public List<User> listUser(String departmentId) {
-		String sql = "select * from USER t1 join USER_DEPT_LINK t2 on t1.USER_ID = t2.USER_ID where t2.DEPT_ID = ? order by t2.sort_id";
+		String sql = "";
+		if (this.mAppContext.getAppConfig().getAdbookAuthFlag() < 0 || (this.mAppContext.getAppConfig().getAdbookAuthFlag() > 0 && mAppContext.getCurrentUser().getAddressbookPermissionString().contains(departmentId))
+				) {
+			sql = "select * from USER t1 join USER_DEPT_LINK t2 on t1.USER_ID = t2.USER_ID where t2.DEPT_ID = ? order by t2.sort_id";
+		} else {
+			sql = "select t1.USER_ID,t1.TRUE_NAME from USER t1 join USER_DEPT_LINK t2 on t1.USER_ID = t2.USER_ID where t2.DEPT_ID = ? order by t2.sort_id";
+		}
+
 		return SugarRecord.findWithQuery(User.class, sql, departmentId);
 	}
 
@@ -219,15 +247,7 @@ public class UserBussiness extends BaseBussiness {
 	 * @return0 superDepId 0
 	 */
 	public List<Department> listSubDepartment(String superDepId) {
-		List<Department> result = null;
-		int needPermsion = AppContext.getInstance(mContext).getApp().getAddressbookNeedPermission();
-		if (needPermsion== App.NEED){
-			String departnentStr = AppContext.getInstance(mContext).getCurrentUser().getAddressbookPermissionString();
-			result = listSubDepartment(superDepId,departnentStr);
-		}else{
-			result = listSubDepartment(superDepId,null);
-		}
-		return result;
+		return listSubDepartment(superDepId,null);
 	}
 
 	public List<Department> listSubDepartment(String superDepId, String permissionString) {
@@ -269,7 +289,7 @@ public class UserBussiness extends BaseBussiness {
 	}
 
 	public String getRootSuperId(){
-		AppConfig appConfig = SystemBussiness.getInstance(mContext).getAppConfig();
+		AppConfig appConfig = AppContext.getInstance(mContext).getAppConfig();
 		return appConfig.getAdbookRootId();
 	}
 	/*
@@ -277,7 +297,7 @@ public class UserBussiness extends BaseBussiness {
 	 * 
 	 */
 	public List<Department> listRootDepartment() {
-		AppConfig appConfig = SystemBussiness.getInstance(mContext).getAppConfig();
+		AppConfig appConfig = AppContext.getInstance(mContext).getAppConfig();
 		return listSubDepartment(appConfig.getAdbookRootId());
 	}
 
@@ -554,7 +574,7 @@ public class UserBussiness extends BaseBussiness {
 
 			// 登录成功才会修改本地的用户信息
 
-			User user = new User(jo.getString("userid"), jo.getString("username"), jo.getString("cnname"), password,
+			UserInfo user = new UserInfo(jo.getString("userid"), jo.getString("username"), jo.getString("cnname"), password,
 					jo.getString("email"), jo.getString("mobile"));
 			user.setMenuPower(jo.getString("menupower"));
 			// 保存user对象，并保存是否自动登录的配置
@@ -656,6 +676,33 @@ public class UserBussiness extends BaseBussiness {
 			
 		}
 		context.sendBroadcast(new Intent(Actions.ACTION_LOGOUT));
+	}
+
+	/**
+	 * 判断在是否有某用户的读取权限
+	 * @param userid
+	 * @return
+	 */
+	public boolean hasReadPermissionOfUser(String userid){
+		List<Department> dl = getDepartmentByUserId(userid);
+		for (Department d: dl){
+			String permissionStr = AppContext.getInstance(mContext).getCurrentUser().getAddressbookPermissionString();
+			if (!TextUtils.isEmpty(permissionStr)&&permissionStr.contains(d.getDeptId())){
+				return true;
+			}
+		}
+		return false;
+	}
+
+	public boolean hasChatPermissionOfUser(String userId){
+		List<Department> dl = getDepartmentByUserId(userId);
+		for (Department d: dl){
+			String permissionStr = AppContext.getInstance(mContext).getCurrentUser().getChatPermissionString();
+			if (!TextUtils.isEmpty(permissionStr)&&permissionStr.contains(d.getDeptId())){
+				return true;
+			}
+		}
+		return false;
 	}
 
 }
