@@ -54,7 +54,6 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import android.content.Context;
-import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Environment;
@@ -82,7 +81,6 @@ import com.google.gson.JsonParseException;
 public class WebUtils {
 
 	
-	public static final String EXTRA_NAME_FLOAT_PROGRESS = "progress_num";
 	// Json Get请求
 	private static final String TAG = WebUtils.class.getSimpleName();
 	private static final int TIME_OUT_CONNECT_MILLISECOND = 5 * 1000;
@@ -140,21 +138,69 @@ public class WebUtils {
 	 * @throws InterruptedException
 	 */
 	public static String requestWithGet(String url) throws IOException, InterruptedException {
-		return requestWithGet(url, null, false, null);
+		if(TextUtils.isEmpty(url)){
+			return null;
+		}
+		Log.v(TAG, "请求：" + url);
+		StringBuilder sb = new StringBuilder(521);
+		HttpURLConnection conn = null;
+		BufferedReader br = null;
+		try {
+			URL urlO = new URL(url);
+			conn = (HttpURLConnection) urlO.openConnection();
+			conn.setRequestMethod("GET");
+			// 告知服务器端解码
+			conn.addRequestProperty("Content-Type", "application/x-www-form-urlencoded; charset=utf-8");
+			conn.setReadTimeout(TIME_OUT_READ_MILLISECOND);
+			conn.setConnectTimeout(TIME_OUT_CONNECT_MILLISECOND);
+			localAndServiceTimeInterval = conn.getDate()!=0?conn.getDate():localAndServiceTimeInterval;
+			long pre = System.currentTimeMillis();
+
+			if (conn.getResponseCode() / 100 != 2){
+				throw new IOException("Network failure , please check network!");
+			}
+
+
+			int lenghtOfFile = conn.getContentLength();
+
+			br = new BufferedReader(new InputStreamReader(conn.getInputStream()), 10 * 1024);
+			char[] buffer = new char[512];
+			long total = 0;
+			float preProgress = 0;
+			int len = 0;
+			while ((len = br.read(buffer)) != -1) {
+				if (Thread.currentThread().isInterrupted()) {
+					throw new InterruptedException();
+				}
+				sb.append(buffer, 0, len);
+			}
+
+			Log.v(TAG, "请求完成：" + url + "用时：" + (System.currentTimeMillis() - pre) + "ms  "+sb.toString());
+		} catch (IOException e) {
+			throw e;
+		}  finally {
+			if (br != null){
+				br.close();
+			}
+			if (conn!=null){
+				conn.disconnect();
+			}
+		}
+		return sb.toString();
 	}
 	
 	/**
 	 * get请求
 	 * 
 	 * @param url
-	 * @param needProgressBroadcast 是否需要
+	 * @param listener 下载进度
 	 * @return action 广播action
 	 * @throws IOException
 	 * @throws InterruptedException
 	 */
-	public static String requestWithGet(String url,Context context,boolean needProgressBroadcast,String action) throws IOException, InterruptedException {
+	public static void requestWithGet(String url,DownloadLisener listener) throws IOException, InterruptedException {
 		if(TextUtils.isEmpty(url)){
-			return null;
+			return ;
 		}
 		Log.v(TAG, "请求：" + url);
 		StringBuilder sb = new StringBuilder(521);
@@ -177,7 +223,6 @@ public class WebUtils {
 			int lenghtOfFile = conn.getContentLength();
 			
 			
-			Intent broadcastIntent = new Intent(action);
 			br = new BufferedReader(new InputStreamReader(conn.getInputStream()), 10 * 1024);
 			char[] buffer = new char[512];
 			long total = 0;
@@ -189,23 +234,28 @@ public class WebUtils {
 				}
 				sb.append(buffer, 0, len);
 				
-				if(needProgressBroadcast){
+				if(listener!=null){
 					total += len;
 					float curProgress = total / (float)lenghtOfFile;
 					if (curProgress - preProgress >= 0.005) {
 						preProgress = curProgress;
-						broadcastIntent.putExtra(EXTRA_NAME_FLOAT_PROGRESS, preProgress);
-						context.sendBroadcast(broadcastIntent);
-						Log.v(TAG,"当前进度："+curProgress+"当前action:"+action);
+						listener.onUpdate(curProgress);
+					}else if(total==lenghtOfFile){
+						listener.onUpdate(1.0f);
 					}
+
 				}
 	
 			}
+			if (listener!=null){
+				listener.onSuccess(sb.toString());
+			}
 			Log.v(TAG, "请求完成：" + url + "用时：" + (System.currentTimeMillis() - pre) + "ms  "+sb.toString());
-		} catch (IOException e) {
-			throw e;
-		} catch (InterruptedException e) {
-			throw e;
+		} catch (IOException|InterruptedException e) {
+			e.printStackTrace();
+			if (listener!=null){
+				listener.onExceptioin(e);
+			}
 		} finally {
 			if (br != null){
 				br.close();
@@ -214,7 +264,12 @@ public class WebUtils {
                 conn.disconnect();
             }
 		}
-		return sb.toString();
+	}
+
+	public interface DownloadLisener {
+		void onUpdate(double progress);
+		void onSuccess(String response);
+		void onExceptioin(Exception e);
 	}
 
 	// HttpConnection发送post请求
@@ -446,16 +501,16 @@ public class WebUtils {
 	InterruptedException {
 		
 		
-		return requestList(url, entityClass, name, password, null, false, null);
+		return requestList(url, entityClass, name, password, null, null, null);
 		
 	}
-	public static <T> List<T> requestList(String url, Class<T> entityClass, String name,String password,Context context,boolean needProgress,String action) throws JSONException, IOException,
+	public static <T> List<T> requestList(String url, Class<T> entityClass, String name, String password, Context context, DownloadLisener listener, String action) throws JSONException, IOException,
 	InterruptedException {
 		
 		JSONObject jo;
 		
 		try {
-			String data = requestWithGet(url,context,needProgress,action);
+			String data = requestWithGet(url);
 			if(password!=null){
 				
 				byte[] temp = Base64.decode(data,Base64.DEFAULT);

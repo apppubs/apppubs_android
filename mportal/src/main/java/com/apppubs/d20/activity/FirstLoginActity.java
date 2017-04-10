@@ -356,10 +356,12 @@ public class FirstLoginActity extends BaseActivity implements ErrorListener, Asy
 		try {
 			JSONObject jo = new JSONObject(response);
 			int result = jo.getInt("result");
-			mLoginingUser = new UserInfo(jo.getString("userid"), jo.getString("username"), jo.getString("cnname"), "",
-					jo.getString("email"), jo.getString("mobile"),jo.getString("menupower"));
-			if (jo.has("photourl")){
-				mLoginingUser.setAvatarUrl(jo.getString("photourl"));
+			if (result==1||result==2){
+				mLoginingUser = new UserInfo(jo.getString("userid"), jo.getString("username"), jo.getString("cnname"), "",
+						jo.getString("email"), jo.getString("mobile"),jo.getString("menupower"));
+				if (jo.has("photourl")){
+					mLoginingUser.setAvatarUrl(jo.getString("photourl"));
+				}
 			}
 			if (result == 2) {
 				AppContext.getInstance(mContext).setCurrentUser(mLoginingUser);

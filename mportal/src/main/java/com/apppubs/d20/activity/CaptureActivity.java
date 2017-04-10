@@ -29,6 +29,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.apppubs.d20.widget.ConfirmDialog;
 import com.google.zxing.BarcodeFormat;
 import com.google.zxing.BinaryBitmap;
 import com.google.zxing.ChecksumException;
@@ -151,59 +152,45 @@ public final class CaptureActivity extends BaseActivity implements OnClickListen
 			mProgress.dismiss();
 		}
 		if(msg.startsWith("http")){
-			new AlertDialog.Builder(CaptureActivity.this).setTitle(getString(R.string.memo)).
-			setMessage(String.format(getString(R.string.barcode_tow_dimen_success), msg)).
-			setPositiveButton(getString(R.string.confirm), new DialogInterface.OnClickListener() {
-
+			 new ConfirmDialog(this, new ConfirmDialog.ConfirmListener() {
 				@Override
-				public void onClick(DialogInterface dialog, int which) {
-					dialog.dismiss();
-					//	String testUrl = "http://www.on-con.com/oncon/pages/download.jsp";
-						Intent intent = new Intent();        
-						intent.setAction("android.intent.action.VIEW");    
-						Uri content_url = Uri.parse(msg);   
-						intent.setData(content_url);  
-						startActivity(intent);
-						//finish();
+				public void onOkClick() {
+					Intent intent = new Intent();
+					intent.setAction("android.intent.action.VIEW");
+					Uri content_url = Uri.parse(msg);
+					intent.setData(content_url);
+					startActivity(intent);
 				}
-			}).setNegativeButton(getString(R.string.cancel), new DialogInterface.OnClickListener() {
 
 				@Override
-				public void onClick(DialogInterface dialog, int which) {
-					dialog.dismiss();
+				public void onCancelClick() {
 					if ((source == IntentSource.NONE || source == IntentSource.ZXING_LINK) && lastResult != null) {
 						restartPreviewAfterDelay(0L);
 					}
 				}
-			}).show();
-			}else{
-				new AlertDialog.Builder(CaptureActivity.this).setTitle(getString(R.string.memo)).
-				setMessage(String.format(getString(R.string.barcode_one_dimen_success), msg)).
-				setPositiveButton(getString(R.string.confirm), new DialogInterface.OnClickListener() {
+			},getString(R.string.memo),String.format(getString(R.string.barcode_tow_dimen_success), msg),getString(R.string.cancel),getString(R.string.confirm)).show();
+		}else{
+			new ConfirmDialog(this, new ConfirmDialog.ConfirmListener() {
+				@Override
+				public void onOkClick() {
+					//获取剪贴板管理服务
+					ClipboardManager cm =(ClipboardManager) getSystemService(CLIPBOARD_SERVICE);
+					//将文本数据复制到剪贴板
+					cm.setText(msg);
+					//读取剪贴板数据
+					//cm.getText();
+					Toast.makeText(mContext,"已复制",Toast.LENGTH_SHORT).show();
+				}
 
-					@Override
-					public void onClick(DialogInterface dialog, int which) {
-						dialog.dismiss();
-						//获取剪贴板管理服务
-						ClipboardManager cm =(ClipboardManager) getSystemService(CLIPBOARD_SERVICE);
-						//将文本数据复制到剪贴板
-						cm.setText(msg);
-						//读取剪贴板数据
-						//cm.getText();
-						Toast.makeText(mContext,"已复制",Toast.LENGTH_SHORT).show();
-							
+				@Override
+				public void onCancelClick() {
+					if ((source == IntentSource.NONE || source == IntentSource.ZXING_LINK) && lastResult != null) {
+						restartPreviewAfterDelay(0L);
 					}
-				}).setNegativeButton(getString(R.string.cancel), new DialogInterface.OnClickListener() {
+				}
+			},getString(R.string.memo),String.format(getString(R.string.barcode_one_dimen_success), msg),getString(R.string.cancel),"复制").show();
 
-					@Override
-					public void onClick(DialogInterface dialog, int which) {
-						dialog.dismiss();
-						if ((source == IntentSource.NONE || source == IntentSource.ZXING_LINK) && lastResult != null) {
-							restartPreviewAfterDelay(0L);
-						}
-					}
-				}).show();
-			}
+		}
 
 	}
 

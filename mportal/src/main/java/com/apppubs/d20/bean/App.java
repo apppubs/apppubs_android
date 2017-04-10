@@ -1,5 +1,6 @@
 package com.apppubs.d20.bean;
 
+import com.apppubs.d20.util.LogM;
 import com.google.gson.annotations.SerializedName;
 
 import java.io.Serializable;
@@ -170,6 +171,10 @@ public class App implements Serializable{
 
 	private boolean mWelcomePlayed;
 
+	public App(){
+		LogM.log(App.class,"初始化App");
+		appConfig = new AppConfig();
+	}
 
 	public boolean isDownload() {
 		return isDownloadApp;
@@ -210,10 +215,16 @@ public class App implements Serializable{
 		this.loginFlag = loginFlag;
 	}
 	public int getInitTimes() {
+		LogM.log(App.class,"获取启动次数"+ initTimes);
 		return initTimes;
 	}
 	public void setStartupTimes(int startupTimes) {
+		LogM.log(App.class,"设置启动数字"+ startupTimes);
 		this.initTimes = startupTimes;
+	}
+	public void addStartupTime(){
+		this.initTimes++;
+		LogM.log(App.class,"启动次数增加"+ initTimes);
 	}
 //	@Override
 //	public String getId() {
@@ -527,5 +538,57 @@ public class App implements Serializable{
 
 	public void setWelcomePlayed(boolean mWelcomePlayed) {
 		this.mWelcomePlayed = mWelcomePlayed;
+	}
+
+	@Override
+	public String toString() {
+		return "App{" +
+				"code='" + code + '\'' +
+				", name='" + name + '\'' +
+				", content='" + content + '\'' +
+				", initTimes=" + initTimes +
+				", loginFlag=" + loginFlag +
+				", webAppCode='" + webAppCode + '\'' +
+				", loginPicUrl='" + loginPicUrl + '\'' +
+				", startUpPic='" + startUpPic + '\'' +
+				", layoutScheme=" + layoutScheme +
+				", layoutLocalScheme=" + layoutLocalScheme +
+				", bgPicURL='" + bgPicURL + '\'' +
+				", menuUpdateTime=" + menuUpdateTime +
+				", menuLocalUpdateTime=" + menuLocalUpdateTime +
+				", channelUpdateTime=" + channelUpdateTime +
+				", channelLocalUpdateTime=" + channelLocalUpdateTime +
+				", baiduPushApiKey='" + baiduPushApiKey + '\'' +
+				", baiduPushUserId='" + baiduPushUserId + '\'' +
+				", allowRegister=" + allowRegister +
+				", defaultTheme=" + defaultTheme +
+				", customThemeColor='" + customThemeColor + '\'' +
+				", menuGroupUpdateTime=" + menuGroupUpdateTime +
+				", menuGroupLocalUpdateTime=" + menuGroupLocalUpdateTime +
+				", isDownloadApp=" + isDownloadApp +
+				", allowChat=" + allowChat +
+				", allModifyUserInfo=" + allModifyUserInfo +
+				", needForceUploadAddressbook=" + needForceUploadAddressbook +
+				", addressbookVersion=" + addressbookVersion +
+				", addressbookLocalVersion=" + addressbookLocalVersion +
+				", addressbookUserUrl='" + addressbookUserUrl + '\'' +
+				", addressbookDeptUserUrl='" + addressbookDeptUserUrl + '\'' +
+				", addressbookDetpUrl='" + addressbookDetpUrl + '\'' +
+				", addressbookNeedDecryption=" + addressbookNeedDecryption +
+				", addressbookNeedPermission=" + addressbookNeedPermission +
+				", documentReaderPageUrl='" + documentReaderPageUrl + '\'' +
+				", latestVersion=" + latestVersion +
+				", preWorkingVersion=" + preWorkingVersion +
+				", defaultServiceNoId='" + defaultServiceNoId + '\'' +
+				", weatherDisplayFlag=" + weatherDisplayFlag +
+				", pushVendorType=" + pushVendorType +
+				", jpushRegistrationID='" + jpushRegistrationID + '\'' +
+				", orgCode='" + orgCode + '\'' +
+				", webLoginUrl='" + webLoginUrl + '\'' +
+				", paddingUrlOnHomeActivityStartUp='" + paddingUrlOnHomeActivityStartUp + '\'' +
+				", mMessageUnreadNum=" + mMessageUnreadNum +
+				", appConfig=" + appConfig +
+				", mWelcomePlayed=" + mWelcomePlayed +
+				'}';
 	}
 }

@@ -13,8 +13,8 @@ import java.util.Locale;
 import android.content.Context;
 import android.util.Log;
 
-import com.apppubs.d20.AppContext;
 import com.apppubs.d20.MportalApplication;
+import com.apppubs.d20.constant.Constants;
 
 /**
  * 系统日志
@@ -32,7 +32,7 @@ public class LogM {
 	public static void log(Class<?> clazz, String msg) {
 		Log.v(clazz.getSimpleName(), msg);
 		// 写入本地文件
-		if (AppContext.getInstance(MportalApplication.getContext()).getSettings().isDevMode()) {
+		if (Constants.IS_DEBUG) {
 			formatMsg(clazz, msg);
 		}
 	}
@@ -73,7 +73,7 @@ public class LogM {
 		}
 
 		// 写入本地文件
-		if (AppContext.getInstance(MportalApplication.getContext()).getSettings().isDevMode()) {
+		if (Constants.IS_DEBUG) {
 			formatMsg(clazz, msg);
 
 		}

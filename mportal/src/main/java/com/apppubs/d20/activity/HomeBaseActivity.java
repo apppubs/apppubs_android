@@ -7,6 +7,7 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.net.Uri;
 import android.text.TextUtils;
 import android.view.KeyEvent;
 import android.view.View;
@@ -14,6 +15,7 @@ import android.widget.Toast;
 
 import com.apppubs.d20.AppContext;
 import com.apppubs.d20.bean.UserInfo;
+import com.apppubs.d20.model.BussinessCallbackCommon;
 import com.apppubs.d20.util.LogM;
 import com.apppubs.d20.MportalApplication;
 import com.apppubs.d20.R;
@@ -102,6 +104,35 @@ public abstract class HomeBaseActivity extends BaseActivity {
 
 		SharedPreferenceUtils.getInstance(this).putBoolean(MPORTAL_PREFERENCE_NAME, MPORTAL_PREFERENCE_APP_RUNNING_KEY, true);
 
+
+		mUserBussiness.updateUserInfo(this, new BussinessCallbackCommon<UserInfo>() {
+			@Override
+			public void onDone(final UserInfo obj) {
+
+				RongIM.setUserInfoProvider(new RongIM.UserInfoProvider() {
+
+					@Override
+					public io.rong.imlib.model.UserInfo getUserInfo(String userId) {
+
+						io.rong.imlib.model.UserInfo ui = new io.rong.imlib.model.UserInfo(obj.getUserId(),obj.getTrueName(),Uri.parse(obj.getAvatarUrl()));
+						return ui;//根据 userId 去你的用户系统里查询对应的用户信息返回给融云 SDK。
+					}
+
+				}, true);
+
+				if (obj==null||TextUtils.isEmpty(obj.getUserId())){
+					Intent closeI = new Intent(Actions.CLOSE_ALL_ACTIVITY);
+					sendBroadcast(closeI);
+					startActivity(FirstLoginActity.class);
+				}
+			}
+
+			@Override
+			public void onException(int excepCode) {
+
+			}
+		});
+
 	}
 
 	;
@@ -168,6 +199,7 @@ public abstract class HomeBaseActivity extends BaseActivity {
 	@Override
 	protected void onResume() {
 		super.onResume();
+
 		String paddingUrl = mAppContext.getApp().getPaddingUrlOnHomeActivityStartUp();
 		if (!TextUtils.isEmpty(paddingUrl)) {
 			mAppContext.getApp().setPaddingUrlOnHomeActivityStartUp(null);
@@ -182,6 +214,7 @@ public abstract class HomeBaseActivity extends BaseActivity {
 				ViewCourier.execute(mContext, paddingUrl);
 			}
 		}
+
 	}
 
 	@Override
@@ -246,15 +279,30 @@ public abstract class HomeBaseActivity extends BaseActivity {
 
 		LogM.log(Class.class, "startHomeActivity-->启动主界面");
 
-		int layout = AppContext.getInstance(fromActivy).getApp().getLayoutLocalScheme();
 		Intent intent = null;
-		if (layout == App.STYLE_SLIDE_MENU) {
-			intent = new Intent(fromActivy, HomeSlideMenuActivity.class);
-		} else {
-			intent = new Intent(fromActivy, HomeBottomMenuActivity.class);
+		if (AppContext.getInstance(fromActivy).getApp().getLoginFlag()!=App.LOGIN_INAPP){
+			UserInfo currentUser = AppContext.getInstance(fromActivy).getCurrentUser();
+
+			int layout = AppContext.getInstance(fromActivy).getApp().getLayoutLocalScheme();
+
+			if (currentUser==null||TextUtils.isEmpty(currentUser.getUserId())){
+				intent = new Intent(fromActivy,FirstLoginActity.class);
+			}else if (layout == App.STYLE_SLIDE_MENU) {
+				intent = new Intent(fromActivy, HomeSlideMenuActivity.class);
+			} else {
+				intent = new Intent(fromActivy, HomeBottomMenuActivity.class);
+			}
+		}else{
+			int layout = AppContext.getInstance(fromActivy).getApp().getLayoutLocalScheme();
+			if (layout == App.STYLE_SLIDE_MENU) {
+				intent = new Intent(fromActivy, HomeSlideMenuActivity.class);
+			} else {
+				intent = new Intent(fromActivy, HomeBottomMenuActivity.class);
+			}
 		}
 		intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK|Intent.FLAG_ACTIVITY_CLEAR_TOP);
 		fromActivy.startActivity(intent);
+
 	}
 
 	@Override
@@ -313,7 +361,6 @@ public abstract class HomeBaseActivity extends BaseActivity {
 			startActivity(intent);
 		} else {
 		}
-
 	}
 
 	public void selectMessageFragment() {

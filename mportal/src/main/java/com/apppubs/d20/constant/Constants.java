@@ -1,6 +1,9 @@
 package com.apppubs.d20.constant;
 
 public class Constants {
+
+
+	public static final String REAL_PACKAGE_NAME = "com.apppubs.d20";
 	public static final String MENU_URI_SLIDING_PIC = "app:{$sliding_pic}";
 
 	public static final String APP_CONFIG_PARAM_ADBOOK_ROOT_ID = "adbook_rootid";
@@ -42,4 +45,6 @@ public class Constants {
 	public static String APK_FILE_NAME = "mportal.apk";
 	
 	public static final int MESSAGE_EVENT_INIT_APP = 0;
+
+	public static final boolean IS_DEBUG = true;
 }

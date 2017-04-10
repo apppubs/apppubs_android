@@ -19,4 +19,5 @@ android {
 
 dependencies {
     compile files('libs/ShareSDK-Core-2.5.0.jar')
+//    compile files('libs/ShareSDK-QQ-2.8.2.jar')
 }

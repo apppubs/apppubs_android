@@ -30,6 +30,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.apppubs.d20.bean.AppConfig;
 import com.apppubs.d20.util.LogM;
 import com.apppubs.d20.widget.AlertDialog;
 import com.apppubs.d20.widget.ConfirmDialog;
@@ -508,7 +509,7 @@ public class FilePreviewFragment extends BaseFragment{
 	//显示提示框之前首先获取服务端参数，如果已经配置好下载地址则允许用户点击下载按钮否则给出提示框即可
 	private void showInstallAppDialog(final String message) {
 		
-		mSystemBussiness.aSyncAppConfig(mContext, new BussinessCallbackCommon<Object>() {
+		mSystemBussiness.aSyncAppConfig(mContext, new BussinessCallbackCommon<AppConfig>() {
 
 			@Override
 			public void onException(int excepCode) {
@@ -516,7 +517,7 @@ public class FilePreviewFragment extends BaseFragment{
 			}
 
 			@Override
-			public void onDone(Object obj) {
+			public void onDone(AppConfig obj) {
 				 if(TextUtils.isEmpty(mAppContext.getApp().getDocumentReaderPageUrl())){
 					 showAlertDialog(message);
 				 }else{
@@ -553,7 +554,7 @@ public class FilePreviewFragment extends BaseFragment{
 	}
 	
 	private void skip2DownloadPage(){
-		mSystemBussiness.aSyncAppConfig(mContext, new BussinessCallbackCommon<Object>() {
+		mSystemBussiness.aSyncAppConfig(mContext, new BussinessCallbackCommon<AppConfig>() {
 			
 			@Override
 			public void onException(int excepCode) {
@@ -561,7 +562,7 @@ public class FilePreviewFragment extends BaseFragment{
 			}
 			
 			@Override
-			public void onDone(Object obj) {
+			public void onDone(AppConfig obj) {
 				Bundle extra = new Bundle();
 				extra.putString(WebAppFragment.ARGUMENT_STRING_URL, mAppContext.getApp().getDocumentReaderPageUrl());
 				ContainerActivity.startActivity(mContext, WebAppFragment.class,extra);

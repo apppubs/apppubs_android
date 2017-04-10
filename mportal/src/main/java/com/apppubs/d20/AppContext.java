@@ -33,16 +33,17 @@ public class AppContext {
 	private AppContext(Context context) {
 		mContext = context;
 		mApp = (App) MportalApplication.readObj(mContext, APP_FILE_NAME);
+		LogM.log(AppContext.class,"初始化AppContext App "+mApp.toString());
 		if (mApp == null) {
 			mApp = new App();
 		}
-
-		if (mCurrentUser == null) {
-			mCurrentUser = (UserInfo) MportalApplication.readObj(mContext, USER_FILE_NAME);
-		}
+		LogM.log(AppContext.class,"初始化AppContext App "+mApp.toString());
+		mCurrentUser = (UserInfo) MportalApplication.readObj(mContext, USER_FILE_NAME);
+		LogM.log(AppContext.class,"初始化AppContext currentUser "+mCurrentUser.toString());
 		if (mCurrentUser == null) {
 			mCurrentUser = new UserInfo();
 		}
+		LogM.log(AppContext.class,"初始化AppContext currentUser "+mCurrentUser.toString());
 	}
 
 	public static AppContext getInstance(Context context) {
@@ -57,12 +58,18 @@ public class AppContext {
 	}
 
 	public App getApp() {
+		LogM.log(AppContext.class,"获取app:"+mApp.toString());
 		return mApp;
 	}
 
-	public synchronized void setApp(App mApp) {
-		MportalApplication.writeObj(mContext, mApp, APP_FILE_NAME);
+	public void setApp(App mApp) {
+
 		this.mApp = mApp;
+	}
+
+	public synchronized void serializeApp(){
+		MportalApplication.writeObj(mContext, mApp, APP_FILE_NAME);
+		LogM.log(AppContext.class,"保存app:"+mApp.toString());
 	}
 
 	public AppConfig getAppConfig() {
@@ -72,9 +79,7 @@ public class AppContext {
 
 	public synchronized void setAppConfig(AppConfig appConfig) {
 
-		App app = getApp();
-		app.setAppConfig(appConfig);
-		setApp(app);
+		mApp.setAppConfig(appConfig);
 	}
 
 	public UserInfo getCurrentUser() {

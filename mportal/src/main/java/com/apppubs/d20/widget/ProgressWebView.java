@@ -455,12 +455,15 @@ public class ProgressWebView extends BridgeWebView {
 				return true;
 			} else if(url.startsWith(Constants.CUSTOM_SCHEMA_APPPUBS+"://")){
 				ViewCourier.execute(mHostActivity, url);
+				cancelNetworkError();
 				return true;
 			}else if (url.startsWith(BridgeUtil.YY_RETURN_DATA)) { // 如果是返回数据
 	            handlerReturnData(url);
+				cancelNetworkError();
 	            return true;
 	        } else if (url.startsWith(BridgeUtil.YY_OVERRIDE_SCHEMA)) { //
 	        	flushMessageQueue();
+				handlerReturnData(url);
 	            return true;
 	        } else if (mListener != null) {
 				mListener.onURLClicked(url);

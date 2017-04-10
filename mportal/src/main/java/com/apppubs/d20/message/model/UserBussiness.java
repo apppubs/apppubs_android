@@ -16,12 +16,12 @@ import com.apppubs.d20.bean.Settings;
 import com.apppubs.d20.bean.User;
 import com.apppubs.d20.bean.UserDeptLink;
 import com.apppubs.d20.bean.UserInfo;
+import com.apppubs.d20.constant.Actions;
+import com.apppubs.d20.constant.URLs;
 import com.apppubs.d20.model.AbstractBussinessCallback;
 import com.apppubs.d20.model.BaseBussiness;
 import com.apppubs.d20.model.BussinessCallbackCommon;
 import com.apppubs.d20.model.SystemBussiness;
-import com.apppubs.d20.constant.Actions;
-import com.apppubs.d20.constant.URLs;
 import com.apppubs.d20.util.ACache;
 import com.apppubs.d20.util.Des3;
 import com.apppubs.d20.util.JSONResult;
@@ -38,9 +38,11 @@ import com.google.gson.JsonParseException;
 import com.google.gson.reflect.TypeToken;
 import com.orm.SugarRecord;
 
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
 import java.lang.reflect.Type;
 import java.net.URLEncoder;
 import java.text.Collator;
@@ -68,6 +70,7 @@ public class UserBussiness extends BaseBussiness {
 	private static final String CACHE_NAME = "com.client.message.model.UserBussiness";
 	private Context mContext;
 	private AppContext mAppContext;
+	private boolean isSynchronizingAdbook;
 
 	private UserBussiness(Context context) {
 		mContext = context;
@@ -438,109 +441,245 @@ public class UserBussiness extends BaseBussiness {
 	 * 
 	 * @param callback
 	 */
+
+	private double mUserDownloadProgress;//用户信息下载进度
+	private double mDeptDownloadProgress;//部门信息下载进度
+	private double mUserDeptDownloadProgress;//用户，部门信息关联表下载进度
+
+	private String mUserResponse;
+	private String mDeptResponse;
+	private String mUserDeptResponse;
+
 	public Future<?> sycnAddressBook(final AbstractBussinessCallback<Object> callback) {
+		if (isSynchronizingAdbook){
+			sHandler.post(new OnExceptionRun<Object>(callback));
+			return null;
+		}
+		isSynchronizingAdbook = true;
 		Future<?> f = sDefaultExecutor.submit(new Runnable() {
 
 			@Override
 			public void run() {
 
-				SQLiteDatabase db = SugarRecord.getDatabase();
 				try {
-					db.beginTransaction();
-					SugarRecord.deleteAll(User.class);
-					SugarRecord.deleteAll(Department.class);
-					SugarRecord.deleteAll(UserDeptLink.class);
-
 					// 用户
-
-					GsonBuilder gb = new GsonBuilder();
-					gb.registerTypeAdapter(Integer.class, new JsonDeserializer<Integer>() {
+					App app = mAppContext.getApp();
+					String urlUser = app.getAddressbookUserUrl();
+					WebUtils.requestWithGet(urlUser, new WebUtils.DownloadLisener() {
+						@Override
+						public void onUpdate(double progress) {
+							mUserDownloadProgress = progress;
+							sHandler.post(new OnUpdateRun(callback, (mUserDownloadProgress+mDeptDownloadProgress+mUserDeptDownloadProgress)/3.0f));
+						}
 
 						@Override
-						public Integer deserialize(JsonElement json, Type arg1, JsonDeserializationContext arg2)
-								throws JsonParseException {
-							Integer result = 0;
-							String jsonStr = json.getAsString();
+						public void onSuccess(String response) {
+							mUserResponse = response;
 							try {
-								result = Integer.parseInt(jsonStr);
+								if(writeDbIfPossible()){
+									sHandler.post(new OnDoneRun<Object>(callback, new Object()));
+								}
 							} catch (Exception e) {
-								result = 0;
+								e.printStackTrace();
+								sHandler.post(new OnExceptionRun<Object>(callback));
 							}
-							return result;
+						}
+
+						@Override
+						public void onExceptioin(Exception e) {
+							e.printStackTrace();
+							sHandler.post(new OnExceptionRun<Object>(callback));
+							isSynchronizingAdbook = false;
 						}
 					});
-					Gson gson = gb.create();
-					App app = AppContext.getInstance(mContext).getApp();
-					String urlUser = app.getAddressbookUserUrl();
-					// String urlUser = URLs.URL_ADDRESS_BOOK +
-					// "&dowhat=getuser";
-					String userString = WebUtils.requestWithGet(urlUser);
-					if (app.getAddressbookNeedDecryption() == App.NEED) {
-						userString = Des3.decode(userString);
-					}
-					JSONObject userJson = new JSONObject(userString);
-					List<User> userL = gson.fromJson(userJson.getString("users"), new TypeToken<List<User>>() {
-					}.getType());
-					userJson = null;
-					userString = null;
-					for (User u : userL) {
-						u.save();
-					}
-					userL.clear();
-					userL = null;
 
 					// 部门
 					String urlDep = app.getAddressbookDetpUrl();
-					String deptString = WebUtils.requestWithGet(urlDep);
-					if (app.getAddressbookNeedDecryption() == App.NEED) {
-						deptString = Des3.decode(deptString);
-					}
-					JSONObject deptJson = new JSONObject(deptString);
-					List<Department> deptL = gson.fromJson(deptJson.getString("depts"),
-							new TypeToken<List<Department>>() {
-							}.getType());
-					deptJson = null;
-					deptString = null;
-					for (Department d : deptL) {
-						d.save();
-					}
-					deptL.clear();
-					deptL = null;
+					WebUtils.requestWithGet(urlDep, new WebUtils.DownloadLisener() {
+						@Override
+						public void onUpdate(double progress) {
+							mDeptDownloadProgress = progress;
+							sHandler.post(new OnUpdateRun(callback, (mUserDownloadProgress+mDeptDownloadProgress+mUserDeptDownloadProgress)/3.0f));
+						}
+
+						@Override
+						public void onSuccess(String response) {
+							mDeptResponse = response;
+							try {
+								if(writeDbIfPossible()){
+									sHandler.post(new OnDoneRun<Object>(callback, new Object()));
+								}
+							} catch (Exception e) {
+								e.printStackTrace();
+								sHandler.post(new OnExceptionRun<Object>(callback));
+							}
+						}
+
+						@Override
+						public void onExceptioin(Exception e) {
+							e.printStackTrace();
+							callback.onException(0);
+							sHandler.post(new OnExceptionRun<Object>(callback));
+							isSynchronizingAdbook = false;
+						}
+					});
+
 
 					// 关联
 					String urlLink = mAppContext.getApp().getAddressbookDeptUserUrl();
-					// String urlLink = URLs.URL_ADDRESS_BOOK +
-					// "&dowhat=getdeptuser";
-					String linkString = WebUtils.requestWithGet(urlLink);
-					if (mAppContext.getApp().getAddressbookNeedDecryption() == App.NEED) {
-						linkString = Des3.decode(linkString);
-					}
-					JSONObject linkJson = new JSONObject(linkString);
-					List<UserDeptLink> linkL = gson.fromJson(linkJson.getString("deptuser"),
-							new TypeToken<List<UserDeptLink>>() {
-							}.getType());
-					linkJson = null;
-					linkString = null;
-					for (UserDeptLink l : linkL) {
-						l.save();
-					}
-					linkL.clear();
-					linkL = null;
-					db.setTransactionSuccessful();
-					sHandler.post(new OnDoneRun<Object>(callback, new Object()));
+					WebUtils.requestWithGet(urlLink, new WebUtils.DownloadLisener() {
+						@Override
+						public void onUpdate(double progress) {
+							mUserDeptDownloadProgress = progress;
+							sHandler.post(new OnUpdateRun(callback, (mUserDownloadProgress+mDeptDownloadProgress+mUserDeptDownloadProgress)/3.0f));
+						}
+
+						@Override
+						public void onSuccess(String response) {
+							mUserDeptResponse = response;
+							try {
+								if(writeDbIfPossible()){
+									sHandler.post(new OnDoneRun<Object>(callback, new Object()));
+								}
+							} catch (Exception e) {
+								e.printStackTrace();
+								sHandler.post(new OnExceptionRun<Object>(callback));
+							}
+						}
+
+						@Override
+						public void onExceptioin(Exception e) {
+							sHandler.post(new OnExceptionRun<Object>(callback));
+							isSynchronizingAdbook = false;
+						}
+					});
+
 
 				} catch (Exception e) {
 					sHandler.post(new OnExceptionRun<Object>(callback));
 					e.printStackTrace();
+					isSynchronizingAdbook = false;
 				} finally {
 
-					db.endTransaction();
 				}
 
 			}
 		});
 
 		return f;
+	}
+
+	protected class OnUpdateRun implements Runnable{
+		private AbstractBussinessCallback mCallback;
+		private double mProgress;
+		public OnUpdateRun(AbstractBussinessCallback callback,double progress){
+			mCallback = callback;
+			mProgress = progress;
+		}
+		@Override
+		public void run() {
+			mCallback.onProgressUpdate((float)mProgress);
+		}
+
+	}
+
+	private boolean writeDbIfPossible() throws Exception {
+		if (shouldWriteDb()){
+
+			SQLiteDatabase db = SugarRecord.getDatabase();
+			db.beginTransaction();
+			SugarRecord.deleteAll(User.class);
+			SugarRecord.deleteAll(Department.class);
+			SugarRecord.deleteAll(UserDeptLink.class);
+
+			GsonBuilder gb = new GsonBuilder();
+			gb.registerTypeAdapter(Integer.class, new JsonDeserializer<Integer>() {
+
+				@Override
+				public Integer deserialize(JsonElement json, Type arg1, JsonDeserializationContext arg2)
+						throws JsonParseException {
+					Integer result = 0;
+					String jsonStr = json.getAsString();
+					try {
+						result = Integer.parseInt(jsonStr);
+					} catch (Exception e) {
+						result = 0;
+					}
+					return result;
+				}
+			});
+			Gson gson = gb.create();
+			App app = AppContext.getInstance(mContext).getApp();
+
+			try {
+
+				if (app.getAddressbookNeedDecryption() == App.NEED) {
+					mUserResponse = Des3.decode(mUserResponse);
+				}
+				JSONObject userJson = new JSONObject(mUserResponse);
+				List<User> userL = gson.fromJson(userJson.getString("users"), new TypeToken<List<User>>() {
+				}.getType());
+				mUserResponse = null;
+				for (User u : userL) {
+					u.save();
+				}
+				userL.clear();
+
+				//部门
+				if (app.getAddressbookNeedDecryption() == App.NEED) {
+					mDeptResponse = Des3.decode(mDeptResponse);
+				}
+				JSONObject deptJson = new JSONObject(mDeptResponse);
+				List<Department> deptL = gson.fromJson(deptJson.getString("depts"),
+						new TypeToken<List<Department>>() {
+						}.getType());
+				mDeptResponse = null;
+				for (Department d : deptL) {
+					d.save();
+				}
+				deptL.clear();
+
+				//关联表
+
+				if (mAppContext.getApp().getAddressbookNeedDecryption() == App.NEED) {
+					mUserDeptResponse = Des3.decode(mUserDeptResponse);
+				}
+				JSONObject linkJson = new JSONObject(mUserDeptResponse);
+				List<UserDeptLink> linkL = gson.fromJson(linkJson.getString("deptuser"),
+						new TypeToken<List<UserDeptLink>>() {
+						}.getType());
+				mUserDeptResponse = null;
+				for (UserDeptLink l : linkL) {
+					l.save();
+				}
+				linkL.clear();
+				db.setTransactionSuccessful();
+				return true;
+			}catch (Exception e){
+				throw e;
+			}finally {
+				db.endTransaction();
+				isSynchronizingAdbook = false;
+				mUserDeptDownloadProgress = 0;
+				mDeptDownloadProgress = 0;
+				mUserDeptDownloadProgress = 0;
+			}
+		}
+
+		return false;
+	}
+
+	/**
+	 * 判断是否通讯录信息是否下载完毕,是否可以写数据库
+	 * @return
+	 */
+	private boolean shouldWriteDb(){
+		if((mUserDownloadProgress==mUserDeptDownloadProgress)&&
+				(mUserDeptDownloadProgress==mDeptDownloadProgress)&&
+				(mDeptDownloadProgress==1.0f)){
+			return true;
+		}
+		return false;
 	}
 
 	/**
@@ -705,4 +844,83 @@ public class UserBussiness extends BaseBussiness {
 		return false;
 	}
 
+
+	public void updateUserInfo(final Context context, final BussinessCallbackCommon<UserInfo> callback){
+
+		sDefaultExecutor.submit(new Runnable() {
+
+			@Override
+			public void run() {
+				if (mAppContext.getApp().getLoginFlag() == App.LOGIN_ONSTART_USE_USERNAME) {
+
+					String osVersion = Utils.getAndroidSDKVersion();// 操作系统号
+					String currentVersionName = Utils.getVersionName(context);// app版本号
+					int appCode = Utils.getVersionCode(context);
+					String machineId = SystemBussiness.getInstance(context).getMachineId();
+					String url = null;
+					try {
+						// /wmh360/json/login/usersmslogin.jsp?username=%s&deviceid=%s&token=%s&os=%s&dev=%s&app=%s&fr=4&appcode="+appCode;
+						UserInfo currentUser = AppContext.getInstance(mContext).getCurrentUser();
+						url = String.format(URLs.URL_LOGIN_WITH_USERNAME, currentUser.getUsername(),
+								machineId, mAppContext.getApp().getPushToken(), osVersion,
+								URLEncoder.encode(Build.MODEL, "utf-8"), currentVersionName,appCode);
+					} catch (UnsupportedEncodingException e) {
+						e.printStackTrace();
+					}
+
+					LogM.log(this.getClass(), "请求url:" + url);
+					try {
+						WebUtils.requestWithGet(url, new WebUtils.DownloadLisener() {
+							@Override
+							public void onUpdate(double progress) {
+
+							}
+
+							@Override
+							public void onSuccess(String response) {
+
+								try {
+									JSONObject jo = new JSONObject(response);
+									int result = jo.getInt("result");
+									UserInfo user = AppContext.getInstance(mContext).getCurrentUser();
+									user.setUserId(jo.getString("userid"));
+									user.setUsername(jo.getString("username"));
+									user.setTrueName(jo.getString("cnname"));
+									user.setEmail(jo.getString("email"));
+									user.setMobile(jo.getString("mobile"));
+									user.setMenuPower(jo.getString("menupower"));
+
+									if (jo.has("photourl")){
+										user.setAvatarUrl(jo.getString("photourl"));
+									}
+									if (result != 2) {
+
+										user = new UserInfo();
+										AppContext.getInstance(context).setCurrentUser(user);
+									} else {
+										AppContext.getInstance(context).setCurrentUser(user);
+									}
+									sHandler.post(new OnDoneRun<UserInfo>(callback,user));
+								} catch (JSONException e) {
+									e.printStackTrace();
+									sHandler.post(new OnExceptionRun<UserInfo>(callback));
+								}
+							}
+
+							@Override
+							public void onExceptioin(Exception e) {
+								sHandler.post(new OnExceptionRun<UserInfo>(callback));
+							}
+						});
+					} catch (IOException|InterruptedException e) {
+						e.printStackTrace();
+						sHandler.post(new OnExceptionRun<UserInfo>(callback));
+					}
+				}else{
+					sHandler.post(new OnExceptionRun<UserInfo>(callback));
+				}
+			}
+		});
+
+	}
 }

@@ -107,7 +107,7 @@ public class StartUpActivity extends BaseActivity implements AsyTaskCallback{
 					App app = mAppContext.getApp();
 					app.setWelcomePlayed(true);
 					mAppContext.setApp(app);
-
+					mAppContext.serializeApp();
 				} else {
 					HomeBaseActivity.startHomeActivity(StartUpActivity.this);
 					finish();
@@ -386,6 +386,7 @@ public class StartUpActivity extends BaseActivity implements AsyTaskCallback{
 				App app = mAppContext.getApp();
 				app.setJpushRegistrationID(resigtrationId);
 				mAppContext.setApp(app);
+				mAppContext.serializeApp();
 			}
 			LogM.log(this.getClass(), "jpush注册id" + resigtrationId);
 			break;

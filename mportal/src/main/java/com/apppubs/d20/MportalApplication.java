@@ -1,6 +1,7 @@
 package com.apppubs.d20;
 
 import android.app.Activity;
+import android.app.ActivityManager;
 import android.app.Application;
 import android.content.Context;
 import android.graphics.Bitmap;
@@ -26,6 +27,7 @@ import com.orm.SugarContext;
 
 import org.greenrobot.eventbus.EventBus;
 
+import java.io.BufferedInputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -34,6 +36,7 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.util.ArrayList;
+import java.util.List;
 
 import io.rong.imkit.RongIM;
 import io.rong.imkit.manager.IUnReadMessageObserver;
@@ -67,6 +70,18 @@ public class MportalApplication extends Application {
 	public void onCreate() {
 
 		super.onCreate();
+
+		String processName = getProcessName(this, android.os.Process.myPid());
+		if (processName != null) {
+			boolean defaultProcess = processName.equals(Constants.REAL_PACKAGE_NAME);
+			if (defaultProcess) {
+				initAppForMainProcess();
+			} else if (processName.contains(":ipc")) {
+			}
+		}
+	}
+
+	private void initAppForMainProcess() {
 		initDefaultExceptionHandler();
 		// 初始化设置
 		initSystemState();
@@ -322,6 +337,7 @@ public class MportalApplication extends Application {
 			if (!file.exists())
 				return null;
 			ois = new ObjectInputStream(new FileInputStream(file));
+
 			result = ois.readObject();
 		} catch (FileNotFoundException e) {
 			e.printStackTrace();
@@ -379,6 +395,23 @@ public class MportalApplication extends Application {
 
 	public static Context getContext(){
 		return sContext;
+	}
+
+	/**
+	 * @return null may be returned if the specified process not found
+	 */
+	public static String getProcessName(Context cxt, int pid) {
+		ActivityManager am = (ActivityManager) cxt.getSystemService(Context.ACTIVITY_SERVICE);
+		List<ActivityManager.RunningAppProcessInfo> runningApps = am.getRunningAppProcesses();
+		if (runningApps == null) {
+			return null;
+		}
+		for (ActivityManager.RunningAppProcessInfo procInfo : runningApps) {
+			if (procInfo.pid == pid) {
+				return procInfo.processName;
+			}
+		}
+		return null;
 	}
 	
 }

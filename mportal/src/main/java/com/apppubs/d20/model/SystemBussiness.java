@@ -344,8 +344,11 @@ public class SystemBussiness extends BaseBussiness {
 
 	private synchronized void init() throws IOException, InterruptedException, JSONException {
 
-		// 如果是第一次初始化，无论那个步骤出现问题都清空数据库重新初始化
+		// 如果是第一次初始化，无论那init个步骤出现问题都清空数据库重新初始化
 		App localApp = AppContext.getInstance(mContext).getApp();
+
+		LogM.log(AppContext.class,"初始化:"+localApp.toString());
+
 		String orientationFlag = Utils.isScreenHorizontal(mContext)?"1":"0";
 		String deviceFlag = Utils.isPad(mContext)?"4":"3";
 		String screenDimenFlag = null;
@@ -387,8 +390,7 @@ public class SystemBussiness extends BaseBussiness {
 			SugarRecord.deleteAll(UserDeptLink.class);
 			SugarRecord.deleteAll(Department.class);
 			SugarRecord.deleteAll(MsgRecord.class);
-//			initDatabase();
-
+			LogM.log(this.getClass(),"删除用户信息"+localApp.getInitTimes());
 		} else {
 			localApp.setAllModifyUserInfo(remoteApp.getAllModifyUserInfo());
 			localApp.setAllowChat(remoteApp.getAllowChat());
@@ -485,25 +487,39 @@ public class SystemBussiness extends BaseBussiness {
 			AppConfig cfg = syncAppConfig();
 			localApp.setAppConfig(cfg);
 		}else{
-			AsyncTask<String, Integer, String> asyncTask = new AsyncTask<String, Integer, String>(){
+
+			aSyncAppConfig(mContext, new BussinessCallbackCommon<AppConfig>() {
 				@Override
-				protected String doInBackground(String... params) {
-					try {
-						syncAppConfig();
-					} catch (IOException e) {
-						e.printStackTrace();
-					} catch (InterruptedException e) {
-						e.printStackTrace();
-					}
-					return null;
+				public void onDone(AppConfig obj) {
+					AppContext.getInstance(mContext).setAppConfig(obj);
+					AppContext.getInstance(mContext).serializeApp();
 				}
-			};
-			asyncTask.execute("");
+
+				@Override
+				public void onException(int excepCode) {
+
+				}
+			});
+//			AsyncTask<String, Integer, String> asyncTask = new AsyncTask<String, Integer, String>(){
+//				@Override
+//				protected String doInBackground(String... params) {
+//					try {
+//						syncAppConfig();
+//					} catch (IOException e) {
+//						e.printStackTrace();
+//					} catch (InterruptedException e) {
+//						e.printStackTrace();
+//					}
+//					return null;
+//				}
+//			};
+//			asyncTask.execute("");
 			
 		}
 
-		localApp.setStartupTimes(localApp.getInitTimes() + 1);
+		localApp.addStartupTime();
 		AppContext.getInstance(mContext).setApp(localApp);
+		AppContext.getInstance(mContext).serializeApp();
 	}
 
 	/**
@@ -612,7 +628,7 @@ public class SystemBussiness extends BaseBussiness {
 		mClientInfo.setmNation(Locale.getDefault().getCountry());
 		mClientInfo.setmImei(tm.getDeviceId());
 
-		mClientInfo.setmAppVersion(Utils.getVersionCode(mContext) + "");
+		mClientInfo.setmAppVersion(Utils.getVersionName(mContext) );
 		// mClientInfo.setmClientKey(Util.md5("CmsClient"));
 		mClientInfo.setmClientKey(URLs.CLIENTKEY);
 		mClientInfo.setmSms("");
@@ -629,6 +645,7 @@ public class SystemBussiness extends BaseBussiness {
 		sb.append("&appversion=").append(mClientInfo.getmAppVersion());
 		sb.append("&clientkey=").append(mClientInfo.getmClientKey());
 		sb.append("&fr=").append(mClientInfo.getmFrom());
+		sb.append("&username=").append(mAppContext.getCurrentUser()!=null?mAppContext.getCurrentUser().getUsername():"");
 		return sb.toString();
 
 	}
@@ -774,17 +791,17 @@ public class SystemBussiness extends BaseBussiness {
 	/**
 	 * 更新appconfig，将getappconfig中的数据同步到本地的APP对象中。
 	 */
-	public void aSyncAppConfig(final Context context, final BussinessCallbackCommon<Object> callback) {
+	public void aSyncAppConfig(final Context context, final BussinessCallbackCommon<AppConfig> callback) {
 		sDefaultExecutor.submit(new Runnable() {
 
 			@Override
 			public void run() {
 				try {
-					syncAppConfig();
-					sHandler.post(new OnDoneRun<Object>(callback, null));// 与主线程的通信
+					AppConfig ac = syncAppConfig();
+					sHandler.post(new OnDoneRun<AppConfig>(callback, ac));// 与主线程的通信
 				} catch (Exception e) {
 					e.printStackTrace();
-					sHandler.post(new OnExceptionRun<Object>(callback));// 与主线程的通信
+					sHandler.post(new OnExceptionRun<AppConfig>(callback));// 与主线程的通信
 				}
 
 			}

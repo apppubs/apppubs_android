@@ -230,7 +230,8 @@
         <activity
             android:name=".activity.FirstLoginActity"
             android:screenOrientation="portrait"
-            android:windowSoftInputMode="stateHidden" />
+            android:windowSoftInputMode="stateHidden|adjustResize"
+            />
         <activity
             android:name=".activity.VoteActivity"
             android:screenOrientation="portrait" />

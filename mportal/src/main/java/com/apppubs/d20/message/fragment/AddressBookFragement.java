@@ -1,5 +1,7 @@
 package com.apppubs.d20.message.fragment;
 
+import java.text.DecimalFormat;
+import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -293,10 +295,10 @@ public class AddressBookFragement extends BaseFragment {
 	 */
 	private void sync() {
 		mProgressHUD = ProgressHUD.show(mHostActivity, "同步中", true, false, null);
-		mSystemBussiness.aSyncAppConfig(mHostActivity, new BussinessCallbackCommon<Object>() {
+		mSystemBussiness.aSyncAppConfig(mHostActivity, new BussinessCallbackCommon<AppConfig>() {
 
 			@Override
-			public void onDone(Object obj) {
+			public void onDone(AppConfig obj) {
 				syncAddressbook();
 			}
 
@@ -324,6 +326,7 @@ public class AddressBookFragement extends BaseFragment {
 				App app = AppContext.getInstance(mContext).getApp();
 				app.setAddressbookLocalVersion(mAppContext.getApp().getAddressbookVersion());
 				AppContext.getInstance(mContext).setApp(app);
+				AppContext.getInstance(mContext).serializeApp();
 
 				if (mAppContext.getApp().getAddressbookNeedPermission() == App.NEED) {
 					final UserInfo currentUser = AppContext.getInstance(mContext).getCurrentUser();
@@ -358,7 +361,9 @@ public class AddressBookFragement extends BaseFragment {
 
 			@Override
 			public void onProgressUpdate(float progress) {
-				System.out.println("进度更新------------" + progress);
+				NumberFormat nf   =   NumberFormat.getPercentInstance();
+				nf.setMinimumFractionDigits(0);
+				mProgressHUD.setMessage(nf.format(progress));
 			}
 		});
 	}

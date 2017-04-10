@@ -33,6 +33,7 @@ import com.apppubs.d20.AppContext;
 import com.apppubs.d20.MportalApplication;
 import com.apppubs.d20.R;
 import com.apppubs.d20.bean.App;
+import com.apppubs.d20.bean.AppConfig;
 import com.apppubs.d20.bean.Settings;
 import com.apppubs.d20.bean.UserInfo;
 import com.apppubs.d20.constant.Actions;
@@ -276,13 +277,25 @@ public abstract class BaseActivity extends FragmentActivity implements OnClickLi
 
 	protected void onAppActive() {
 		// 如果是用户名登陆则启动是验证
-		if (mAppContext.getApp().getLoginFlag() == App.LOGIN_ONSTART_USE_USERNAME) {
-			confirmDeviceBindStateWhenLoginWithUsername();
-		}
-
-		mSystemBussiness.aSyncAppConfig(this, new BussinessCallbackCommon<Object>() {
+		mUserBussiness.updateUserInfo(this, new BussinessCallbackCommon<UserInfo>() {
 			@Override
-			public void onDone(Object obj) {
+			public void onDone(UserInfo obj) {
+				if (obj==null||TextUtils.isEmpty(obj.getUserId())){
+					Intent closeI = new Intent(Actions.CLOSE_ALL_ACTIVITY);
+					sendBroadcast(closeI);
+					startActivity(FirstLoginActity.class);
+				}
+			}
+
+			@Override
+			public void onException(int excepCode) {
+
+			}
+		});
+
+		mSystemBussiness.aSyncAppConfig(this, new BussinessCallbackCommon<AppConfig>() {
+			@Override
+			public void onDone(AppConfig obj) {
 				System.out.print("同步appconfig成功");
 				//避免在startupactivit中进行重复检测
 				if (!(BaseActivity.this instanceof StartUpActivity)){
@@ -345,66 +358,6 @@ public abstract class BaseActivity extends FragmentActivity implements OnClickLi
 		});
 	}
 
-	/*
-	 * 
-	 * 检测当前客户端绑定状态
-	 */
-	private void confirmDeviceBindStateWhenLoginWithUsername() {
-
-		String osVersion = Utils.getAndroidSDKVersion();// 操作系统号
-		String currentVersionName = Utils.getVersionName(this);// app版本号
-		int appCode = Utils.getVersionCode(this);
-		String url = null;
-		try {
-			// /wmh360/json/login/usersmslogin.jsp?username=%s&deviceid=%s&token=%s&os=%s&dev=%s&app=%s&fr=4&appcode="+appCode;
-			UserInfo currentUser = AppContext.getInstance(mContext).getCurrentUser();
-			url = String.format(URLs.URL_LOGIN_WITH_USERNAME, currentUser.getUsername(),
-					mSystemBussiness.getMachineId(), mAppContext.getApp().getPushToken(), osVersion,
-					URLEncoder.encode(Build.MODEL, "utf-8"), currentVersionName,appCode);
-		} catch (UnsupportedEncodingException e) {
-			e.printStackTrace();
-		}
-
-		LogM.log(this.getClass(), "请求url:" + url);
-		mRequestQueue.add(new StringRequest(url, new Listener<String>() {
-
-			@Override
-			public void onResponse(String response) {
-				try {
-					JSONObject jo = new JSONObject(response);
-					int result = jo.getInt("result");
-					UserInfo user = AppContext.getInstance(mContext).getCurrentUser();
-					user.setUserId(jo.getString("userid"));
-					user.setUsername(jo.getString("username"));
-					user.setTrueName(jo.getString("cnname"));
-					user.setEmail(jo.getString("email"));
-					user.setMobile(jo.getString("mobile"));
-					user.setMenuPower(jo.getString("menupower"));
-
-					if (jo.has("photourl")){
-						user.setAvatarUrl(jo.getString("photourl"));
-					}
-					if (result != 2) {
-						Intent closeI = new Intent(Actions.CLOSE_ALL_ACTIVITY);
-						sendBroadcast(closeI);
-						startActivity(FirstLoginActity.class);
-					} else {
-						AppContext.getInstance(BaseActivity.this).setCurrentUser(user);
-					}
-
-				} catch (JSONException e) {
-					e.printStackTrace();
-				}
-
-			}
-
-		}, new ErrorListener() {
-
-			@Override
-			public void onErrorResponse(VolleyError arg0) {
-			}
-		}));
-	}
 
 	@Override
 	protected void onStop() {

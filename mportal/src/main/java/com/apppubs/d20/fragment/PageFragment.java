@@ -848,7 +848,7 @@ public class PageFragment extends TitleMenuFragment implements OnClickListener{
 			if(item.has("coords")){
 				ha.setCoords(item.getString("coords"));
 			}
-			if(item.has("textcolor")){
+			if(item.has("textcolor")&&!TextUtils.isEmpty(item.getString("textcolor"))){
 				try{
 					ha.setTextColor(Color.parseColor(item.getString("textcolor")));
 				}catch(Exception e){

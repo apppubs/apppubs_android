@@ -64,6 +64,7 @@ public class AppManager {
         App app = mAppContext.getApp();
         app.setLayoutLocalScheme(app.getLayoutLocalScheme() ^ 1);
         mAppContext.setApp(app);
+		mAppContext.serializeApp();
         this.restart();
     }
 
@@ -88,6 +89,7 @@ public class AppManager {
                             App app = AppContext.getInstance(context).getApp();
                             app.setStartupTimes(0);
                             AppContext.getInstance(context).setApp(app);
+							AppContext.getInstance(context).serializeApp();
                             AppManager.getInstant(context).restart();
 
                         }else{

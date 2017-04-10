@@ -4,6 +4,7 @@ import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
 import android.os.Bundle;
@@ -37,6 +38,10 @@ import com.apppubs.jsbridge.CallBackFunction;
 import com.apppubs.jsbridge.DefaultHandler;
 import com.apppubs.multi_image_selector.MultiImageSelectorActivity;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
@@ -49,6 +54,7 @@ import cn.sharesdk.framework.Platform;
 import cn.sharesdk.framework.Platform.ShareParams;
 import cn.sharesdk.framework.ShareSDK;
 import cn.sharesdk.wechat.friends.Wechat;
+import cn.sharesdk.wechat.moments.WechatMoments;
 
 public class WebAppFragment extends BaseFragment implements OnClickListener {
 
@@ -283,15 +289,38 @@ public class WebAppFragment extends BaseFragment implements OnClickListener {
 		mWebView.registerHandler("share", new BridgeHandler() {
 	        @Override
 	        public void handler(String data, CallBackFunction function) {
-	        	ShareSDK.initSDK(mContext);
-	        	ShareParams sp = new ShareParams();
-	        	sp.setText("测试分享的文本");
-//	        	sp.setImagePath(“/mnt/sdcard/测试分享的图片.jpg”);
 
-	        	Platform qq = ShareSDK.getPlatform(Wechat.NAME);
-//	        	qq.setPlatformActionListener(null); // 设置分享事件回调
-	        	// 执行图文分享
-	        	qq.share(sp);
+				try {
+					JSONArray arr = new JSONArray(data);
+
+					ShareParams sp = new ShareParams();
+
+					ShareSDK.initSDK(mContext);
+					String type = arr.getString(0);
+
+					if (arr.length()>1){
+						String msg = arr.getString(1);
+						sp.setText(msg);
+					}
+
+					if ("wechat".equals(type)){
+						Platform p = ShareSDK.getPlatform(Wechat.NAME);
+						p.share(sp);
+					}else if("wechat_timeline".equals(type)){
+						Platform p = ShareSDK.getPlatform(WechatMoments.NAME);
+						Bitmap bmp= BitmapFactory.decodeResource(getResources(), R.drawable.icon);
+						sp.setImageData(bmp);
+						p.share(sp);
+					}else if("qq".equals(type)){
+//						Platform p = ShareSDK.getPlatform(QQ.NAME);
+//						p.share(sp);
+					}
+
+
+				} catch (JSONException e) {
+					e.printStackTrace();
+				}
+
 	        }
 	    });
 	}
