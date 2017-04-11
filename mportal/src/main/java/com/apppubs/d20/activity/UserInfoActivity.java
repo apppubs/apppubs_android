@@ -79,12 +79,12 @@ public class UserInfoActivity extends BaseActivity implements OnClickListener{
 		}
 		JSONResult jr = JSONResult.compile(response);
 		//底部按钮
-		//不需要权限限制或需要限制而且有权限的情况下进行按钮的下一步逻辑判断
+		//不需要权限限制或需要限制而且有权限的情况下并且在移动门户下有用户时进行按钮的下一步逻辑判断
 		if (mAppContext.getAppConfig().getChatAuthFlag()==0||(mAppContext.getAppConfig().getChatAuthFlag()==1&&mUserBussiness.hasChatPermissionOfUser(mUser.getUserId()))){
-			if (mAppContext.getApp().getAllowChat() == App.ALLOW_CHAT_TRUE&&!mUser.getUserId().equals(AppContext.getInstance(mContext).getCurrentUser().getUserId())) {
+			if (mAppContext.getApp().getAllowChat() == App.ALLOW_CHAT_TRUE&&!mUser.getUserId().equals(AppContext.getInstance(mContext).getCurrentUser().getUserId())&&jr.resultCode==1) {
 				//如果未激活显示未激活按钮，如果已激活显示开始聊天按钮,
 				Map<String,String> resultMap = jr.getResultMap();
-				if (!TextUtils.isEmpty(resultMap.get("appcodeversion"))){
+				if (jr.resultCode==1&&!TextUtils.isEmpty(resultMap.get("appcodeversion"))){
 					setVisibilityOfViewByResId(R.id.userinfo_begin_talk, View.VISIBLE);
 					setVisibilityOfViewByResId(R.id.userinfo_welcome_tv,View.GONE);
 				}else{
@@ -100,9 +100,11 @@ public class UserInfoActivity extends BaseActivity implements OnClickListener{
 			if(mIconConfigParams.length>2&&mIconConfigParams[2].equals("1")){
 				mIv.setScaleType(ScaleType.CENTER_CROP);
 			}
-			String photoUrl = (String)jr.getResultMap().get("photourl");
-			if(!TextUtils.isEmpty(photoUrl)){
-				mImageLoader.displayImage(photoUrl, mIv);
+			if (jr.resultCode==1){
+				String photoUrl = (String)jr.getResultMap().get("photourl");
+				if(!TextUtils.isEmpty(photoUrl)){
+					mImageLoader.displayImage(photoUrl, mIv);
+				}
 			}
 		}
 

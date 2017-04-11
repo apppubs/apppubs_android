@@ -204,34 +204,13 @@ public class MportalApplication extends MultiDexApplication {
 			draw = getResources().getDrawable(R.drawable.stance_gray);
 		}
 		DisplayImageOptions options = new DisplayImageOptions.Builder().showImageOnLoading(draw)
-				.showImageForEmptyUri(draw).showImageOnFail(draw).cacheInMemory(true).cacheOnDisk(true)
+				.cacheInMemory(true).cacheOnDisk(true)
 				.considerExifParams(true).bitmapConfig(Bitmap.Config.RGB_565).build();
 		ImageLoaderConfiguration config = new ImageLoaderConfiguration.Builder(this)
-		// .memoryCacheExtraOptions(480, 800) // default = device screen
-		// dimensions
-		// .diskCacheExtraOptions(480, 800, null)
-		// .taskExecutor(...)
-		// .taskExecutorForCachedImages(...)
 				.threadPoolSize(3) // default
 				.threadPriority(Thread.NORM_PRIORITY - 2) // default
-				// .tasksProcessingOrder(QueueProcessingType.FIFO) // default
 				.denyCacheImageMultipleSizesInMemory()
-				// .memoryCache(new LruMemoryCache(5 * 1024 * 1024))
-				// .memoryCacheSize(5 * 1024 * 1024)
-				// .memoryCacheSizePercentage(13) // default
-				// .diskCache(new UnlimitedDiskCache(cacheDir)) // default
-				// .diskCacheSize(500 * 1024 * 1024)
-				// .diskCacheFileCount(1000)
-				// .diskCacheFileNameGenerator(new HashCodeFileNameGenerator())
-				// // defaul
-				// .diskCacheFileNameGenerator(new EReaderFileNameGenerator())
-				// // defaul
-				// .imageDownloader(new BaseImageDownloader(context)) // default
-				// .imageDecoder(new BaseImageDecoder()) // default
-				// .defaultDisplayImageOptions(DisplayImageOptions.createSimple())
-				// // default
 				.defaultDisplayImageOptions(options) // default
-				// .writeDebugLogs()
 				.build();
 
 		ImageLoader.getInstance().init(config);

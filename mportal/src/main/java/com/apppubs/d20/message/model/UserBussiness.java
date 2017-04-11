@@ -392,6 +392,13 @@ public class UserBussiness extends BaseBussiness {
 		}
 		return strList;
 	}
+
+	/**
+	 * 获取除顶级部门外两级部门名称
+	 * @param deptId
+	 * @param deptRootId
+	 * @param resultSb
+	 */
 	private void getDepartmentStringByDeptId(String deptId,String deptRootId,StringBuilder resultSb){
 		Department dept = SugarRecord.findByProperty(Department.class, "dept_id", deptId);
 		if(!deptId.equals(deptRootId)){
@@ -400,7 +407,10 @@ public class UserBussiness extends BaseBussiness {
 			}else{
 				resultSb.insert(0, dept.getName()+"-");
 			}
-			getDepartmentStringByDeptId(dept.getSuperId(),deptRootId,resultSb);
+			if (!TextUtils.isEmpty(dept.getSuperId())&&!dept.getSuperId().equals(deptRootId)){
+				Department superDept = SugarRecord.findByProperty(Department.class, "dept_id", dept.getSuperId());
+				resultSb.insert(0,superDept.getName()+"-");
+			}
 		}
 	}
 

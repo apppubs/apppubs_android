@@ -117,6 +117,9 @@ public class AddressBookOrganizationFragement extends BaseFragment {
 						TextView registerTv = holder.getView(R.id.item_user_picker_user_title1_tv);
 						registerTv.setVisibility(!TextUtils.isEmpty(userBasicInfo.getAppCodeVersion())?View.GONE:View.VISIBLE);
 					}
+				}else{
+					TextView registerTv = holder.getView(R.id.item_user_picker_user_title1_tv);
+					registerTv.setVisibility(View.GONE);
 				}
 			}
 		};

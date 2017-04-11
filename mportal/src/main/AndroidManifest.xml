@@ -369,7 +369,9 @@
             android:theme="@android:style/Theme.Translucent.NoTitleBar" />
         <activity
             android:name=".message.activity.UserPickerActivity"
-            android:screenOrientation="portrait" />
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="adjustUnspecified|stateHidden"
+            />
 
         <receiver
             android:name=".receiver.ConnectionChangeReceiver"

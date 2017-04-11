@@ -1,17 +1,21 @@
 package com.apppubs.d20.message.activity;
 
+import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.PorterDuff;
 import android.os.Bundle;
+import android.support.v7.widget.SearchView;
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ImageView;
+import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
 
 import com.apppubs.d20.AppContext;
 import com.apppubs.d20.activity.BaseActivity;
+import com.apppubs.d20.activity.UserInfoActivity;
 import com.apppubs.d20.adapter.ViewHolder;
 import com.apppubs.d20.bean.Department;
 import com.apppubs.d20.bean.User;
@@ -43,6 +47,10 @@ public class UserPickerActivity extends BaseActivity implements UserSelectionBar
     private UserSelectionBar mUserSelectBar;
     private Map<String,Integer> mListViewOffsetMap;
     private UserPickerHelper mUserPickerHelper;
+	private SearchView mSearchView;
+	private ListView mSearchResultLV;
+	private List<User> mSearchResultList;
+	private CommonAdapter mSearchResultAdapter;
 
 
     @Override
@@ -122,18 +130,9 @@ public class UserPickerActivity extends BaseActivity implements UserSelectionBar
                         User user = mUserList.get(position);
                         String userId = user.getUserId();
                         if (checkBtnIv.isSelected()){
-                            mUserPickerHelper.selectUser(userId);
-                            UserBasicInfo ui = mUserBussiness.getCachedUserBasicInfo(userId);
-                            if (ui==null){
-                                ui = new UserBasicInfo();
-                                ui.setUserId(user.getUserId());
-                                ui.setTrueName(user.getTrueName());
-                                ui.setUsername(user.getUsername());
-                            }
-                            mUserSelectBar.addUser(ui);
+							checkUser(user, userId);
                         }else{
-                            mUserPickerHelper.removeUser(userId);
-                            mUserSelectBar.removeUser(userId);
+							uncheckUser(userId);
                         }
                     }
                 }else{
@@ -144,9 +143,27 @@ public class UserPickerActivity extends BaseActivity implements UserSelectionBar
                 }
             }
         });
+
     }
 
-    private void checkCheckBtn(ImageView checkBtnIv, boolean check,boolean lock) {
+	private void uncheckUser(String userId) {
+		mUserPickerHelper.removeUser(userId);
+		mUserSelectBar.removeUser(userId);
+	}
+
+	private void checkUser(User user, String userId) {
+		mUserPickerHelper.selectUser(userId);
+		UserBasicInfo ui = mUserBussiness.getCachedUserBasicInfo(userId);
+		if (ui==null){
+			ui = new UserBasicInfo();
+			ui.setUserId(user.getUserId());
+			ui.setTrueName(user.getTrueName());
+			ui.setUsername(user.getUsername());
+		}
+		mUserSelectBar.addUser(ui);
+	}
+
+	private void checkCheckBtn(ImageView checkBtnIv, boolean check,boolean lock) {
         if (lock){
             checkBtnIv.setSelected(true);
             checkBtnIv.setEnabled(false);
@@ -199,6 +216,82 @@ public class UserPickerActivity extends BaseActivity implements UserSelectionBar
         mUserSelectBar = (UserSelectionBar) findViewById(R.id.user_picker_user_selection_bar);
         mUserSelectBar.setMaxSelectCount(mUserPickerHelper.getRemainSelectionNum());
         mUserSelectBar.setListener(this);
+
+		mSearchView = (SearchView) findViewById(R.id.user_picker_sv);
+		mSearchResultLV = (ListView) findViewById(R.id.user_picker_search_result_lv);
+		mSearchView.setFocusable(false);
+		mSearchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+
+			@Override
+			public boolean onQueryTextSubmit(String searchText) {
+				return false;
+			}
+
+			@Override
+			public boolean onQueryTextChange(String searchText) {
+				if(TextUtils.isEmpty(searchText)){
+					setVisibilityOfViewByResId(R.id.user_picker_search_result_lv, View.GONE);
+				}else{
+					setVisibilityOfViewByResId( R.id.user_picker_search_result_lv, View.VISIBLE);
+					mSearchResultList = mUserBussiness.searchUser(searchText);
+					mSearchResultAdapter.notifyDataSetChanged(mSearchResultList);
+				}
+				return false;
+			}
+		});
+		mSearchResultList = new ArrayList<User>();
+		mSearchResultAdapter = new CommonAdapter<User>(mContext,mSearchResultList,R.layout.item_user_picker_user_lv) {
+
+			@Override
+			protected void fillValues(ViewHolder holder, User user, int position) {
+
+				TextView titleTv = holder.getView(R.id.item_user_picker_user_title_tv);
+				titleTv.setText(user.getTrueName());
+				TextView desTv = holder.getView(R.id.item_user_picker_user_des_tv);
+				if(!TextUtils.isEmpty(user.getWorkTEL())&&!TextUtils.isEmpty(user.getMobile())){
+					desTv.setText("手机:"+user.getMobile()+" 电话:"+user.getWorkTEL());
+				}else if(TextUtils.isEmpty(user.getWorkTEL())&&!TextUtils.isEmpty(user.getMobile())){
+					desTv.setText("手机:"+user.getMobile());
+				}else if(!TextUtils.isEmpty(user.getWorkTEL())&&TextUtils.isEmpty(user.getMobile())){
+					desTv.setText("电话:"+user.getWorkTEL());
+				}
+				ImageView checkBtnIv = holder.getView(R.id.item_user_picker_check_btn);
+				checkCheckBtn(checkBtnIv,mUserPickerHelper.isSelected(user.getUserId()),mUserPickerHelper.isPreselected(user.getUserId()));
+				CircleTextImageView imageView = holder.getView(R.id.item_user_picker_user_iv);
+				imageView.setTextColor(Color.WHITE);
+				imageView.setFillColor(getResources().getColor(R.color.common_btn_bg_gray));
+				imageView.setText(user.getTrueName());
+				UserBasicInfo userBasicInfo = mUserBussiness.getCachedUserBasicInfo(user.getUserId());
+				if (userBasicInfo!=null){
+					mImageLoader.displayImage(userBasicInfo.getAtatarUrl(),imageView);
+					TextView registerTv = holder.getView(R.id.item_user_picker_user_title1_tv);
+					registerTv.setVisibility(!TextUtils.isEmpty(userBasicInfo.getAppCodeVersion())?View.GONE:View.VISIBLE);
+				}
+
+			}
+		};
+		mSearchResultLV.setAdapter(mSearchResultAdapter);
+		mSearchResultLV.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+
+			@Override
+			public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+				ImageView checkBtnIv = (ImageView) view.findViewById(R.id.item_user_picker_check_btn);
+				if (checkBtnIv.isEnabled()){
+					checkCheckBtn(checkBtnIv,!checkBtnIv.isSelected(),false);
+
+					User user = mSearchResultList.get(position);
+					String userId = user.getUserId();
+					if (checkBtnIv.isSelected()){
+						checkUser(user, userId);
+					}else{
+						uncheckUser(userId);
+					}
+					mSearchView.setQuery("", false);
+					mSearchView.clearFocus();
+					mSearchResultLV.setVisibility(View.GONE);
+				}
+			}
+		});
     }
 
     @Override
