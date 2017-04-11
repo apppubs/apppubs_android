@@ -23,7 +23,7 @@ public class ShareTools {
 			oks.disableSSOWhenAuthorize();
 
 			// 分享时Notification的图标和文字
-			oks.setNotification(R.drawable.icon, context.getString(R.string.app_name));
+//			oks.setNotification(R.drawable.icon, context.getString(R.string.app_name));
 			// title标题，印象笔记、邮箱、信息、微信、人人网和QQ空间使用
 			oks.setTitle(context.getString(R.string.share));
 			// titleUrl是标题的网络链接，仅在人人网和QQ空间使用

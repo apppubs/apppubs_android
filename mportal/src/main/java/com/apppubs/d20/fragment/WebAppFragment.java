@@ -53,6 +53,8 @@ import java.util.regex.Pattern;
 import cn.sharesdk.framework.Platform;
 import cn.sharesdk.framework.Platform.ShareParams;
 import cn.sharesdk.framework.ShareSDK;
+import cn.sharesdk.system.text.ShortMessage;
+import cn.sharesdk.tencent.qq.QQ;
 import cn.sharesdk.wechat.friends.Wechat;
 import cn.sharesdk.wechat.moments.WechatMoments;
 
@@ -294,26 +296,47 @@ public class WebAppFragment extends BaseFragment implements OnClickListener {
 					JSONArray arr = new JSONArray(data);
 
 					ShareParams sp = new ShareParams();
+					sp.setCustomFlag(new String[]{getString(R.string.app_name)});
 
 					ShareSDK.initSDK(mContext);
 					String type = arr.getString(0);
 
-					if (arr.length()>1){
-						String msg = arr.getString(1);
-						sp.setText(msg);
-					}
+
 
 					if ("wechat".equals(type)){
+						if (arr.length()>1){
+							String msg = arr.getString(1);
+							sp.setText(msg);
+						}
 						Platform p = ShareSDK.getPlatform(Wechat.NAME);
 						p.share(sp);
 					}else if("wechat_timeline".equals(type)){
+						if (arr.length()>1){
+							String msg = arr.getString(1);
+							sp.setText(msg);
+						}
 						Platform p = ShareSDK.getPlatform(WechatMoments.NAME);
 						Bitmap bmp= BitmapFactory.decodeResource(getResources(), R.drawable.icon);
 						sp.setImageData(bmp);
 						p.share(sp);
 					}else if("qq".equals(type)){
-//						Platform p = ShareSDK.getPlatform(QQ.NAME);
-//						p.share(sp);
+						if (arr.length()>1){
+							String msg = arr.getString(1);
+							sp.setText(msg);
+						}
+						if (arr.length()>2){
+							sp.setTitleUrl(arr.getString(2));
+						}
+						sp.setShareType(Platform.SHARE_TEXT);
+						Platform p = ShareSDK.getPlatform(QQ.NAME);
+						p.share(sp);
+					}else if("sms".equals(type)){
+						if (arr.length()>1){
+							String msg = arr.getString(1);
+							sp.setText(msg);
+						}
+						Platform p = ShareSDK.getPlatform(ShortMessage.NAME);
+						p.share(sp);
 					}
 
 

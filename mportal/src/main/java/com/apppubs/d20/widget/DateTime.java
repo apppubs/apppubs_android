@@ -1,7 +1,6 @@
 package com.apppubs.d20.widget;
 import java.util.Calendar;
 
-import m.framework.utils.Utils;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.graphics.Color;
@@ -20,6 +19,9 @@ import android.widget.TextView;
 
 import com.apppubs.d20.R;
 import com.apppubs.d20.util.SystemUtils;
+import com.apppubs.d20.util.Utils;
+
+import okhttp3.internal.Util;
 
 public class DateTime extends ScrollView {
 	private static final String TAG = null;
@@ -80,8 +82,8 @@ public class DateTime extends ScrollView {
 				LinearLayout.LayoutParams.MATCH_PARENT));
 		// ͷ����ʾ
 		LinearLayout titleLayOut = new LinearLayout(mContext);
-		LayoutParams params = new LayoutParams(LayoutParams.MATCH_PARENT, Utils.dipToPx(context, 50));
-		params.setMargins(0, Utils.dipToPx(context, 15), 0, 0);
+		LayoutParams params = new LayoutParams(LayoutParams.MATCH_PARENT, Utils.dip2px(context, 50.0f));
+		params.setMargins(0, Utils.dip2px(context, 15), 0, 0);
 		titleLayOut.setLayoutParams(params);
 		titleLayOut.setOrientation(LinearLayout.HORIZONTAL);
 		titleLayOut.setGravity(Gravity.CENTER);
@@ -113,12 +115,13 @@ public class DateTime extends ScrollView {
 		showDateTxt.setTextSize(20);
 		showDateTxt.setTypeface(Typeface.DEFAULT_BOLD);
 		showDateTxt.setGravity(Gravity.CENTER);
+		int width = Utils.dip2px(context,50);
 		LinearLayout.LayoutParams la1 = new LinearLayout.LayoutParams(
-				Utils.dipToPx(context, 50),LayoutParams.MATCH_PARENT);
+				width,LayoutParams.MATCH_PARENT);
 		btnpre = new ImageView(mContext);
 		btnpre.setLayoutParams(la1);
 		//btnpre.setImageResource(R.drawable.selector_bpre_bg);
-		int paddingPx = (int)Utils.dipToPx(context, 5);
+		int paddingPx = Utils.dip2px(context,5);
 		btnpre.setPadding(paddingPx, paddingPx, paddingPx, paddingPx);
 		btnnext = new ImageView(mContext);
 		btnnext.setLayoutParams(la1);
@@ -173,19 +176,13 @@ public class DateTime extends ScrollView {
 	/**
 	 * 初始化日期
 	 * 
-	 * @param titleCoclor
-	 *            标题颜色
-	 * @param weekTitleColor
-	 *            星期颜色
-	 * @param dayColor
-	 *            日期颜色
 	 */
 
 	public void init() {
 		if (!init) {
 			showDateTxt.setTextColor(Color.WHITE);
 			LinearLayout.LayoutParams lp = (LinearLayout.LayoutParams) mCalendarTl.getLayoutParams();
-			lp.bottomMargin = Utils.dipToPx(mContext, 20);
+			lp.bottomMargin = Utils.dip2px(mContext, 20);
 			generateDate();
 		}
 
@@ -381,7 +378,7 @@ public class DateTime extends ScrollView {
 	}
 	/**
 	 * 
-	 * @param WeekdayOfFirstDay本月第一天是周几
+	 * @param WeekdayOfFirstDay 本月第一天是周几
 	 * @param daysOfMonth 本月天数
 	 * @return 本月跨越周数 
 	 */

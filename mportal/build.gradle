@@ -55,9 +55,10 @@ android {
 dependencies {
     compile fileTree(include: ['*.jar'], dir: 'libs')
     compile project(':sugar_orm')
-    compile project(':oneKeyShare')
+    compile project(':ShareSDK')
     compile project(':IMKit')
     compile 'com.android.support:support-annotations:21.0.0'
+    compile 'org.greenrobot:eventbus:3.0.0'
     compile 'com.google.code.gson:gson:2.2.4'
     compile 'com.android.support:support-v4:21.0.0'
     compile 'com.android.support:appcompat-v7:21.0.0'
@@ -67,7 +68,7 @@ dependencies {
     compile 'com.android.support:multidex:1.0.1'
     compile 'cn.jiguang.sdk:jpush:3.0.1'
     compile 'cn.jiguang.sdk:jcore:1.1.0'
-    compile 'org.greenrobot:eventbus:3.0.0'
+
     compile 'com.squareup.okhttp3:okhttp:3.6.0'
 
 }

@@ -10,6 +10,8 @@ import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Build;
 import android.os.Bundle;
+import android.support.multidex.MultiDex;
+import android.support.multidex.MultiDexApplication;
 import android.util.DisplayMetrics;
 import android.view.View;
 import android.view.WindowManager;
@@ -45,7 +47,7 @@ import io.rong.imlib.model.Conversation;
 import io.rong.imlib.model.Message;
 import io.rong.imlib.model.UserInfo;
 
-public class MportalApplication extends Application {
+public class MportalApplication extends MultiDexApplication {
 
 	public static final String MSG_DELETED_CHAT_GROUP_MAP = "deleted_chat_group_map";
 	private static final String CONFIG_DIRECTORY = "static_objs";
@@ -413,5 +415,11 @@ public class MportalApplication extends Application {
 		}
 		return null;
 	}
-	
+
+	@Override
+	protected void attachBaseContext(Context base) {
+		super.attachBaseContext(base);
+		MultiDex.install(this);
+	}
+
 }

@@ -33,17 +33,13 @@ public class AppContext {
 	private AppContext(Context context) {
 		mContext = context;
 		mApp = (App) MportalApplication.readObj(mContext, APP_FILE_NAME);
-		LogM.log(AppContext.class,"初始化AppContext App "+mApp.toString());
 		if (mApp == null) {
 			mApp = new App();
 		}
-		LogM.log(AppContext.class,"初始化AppContext App "+mApp.toString());
 		mCurrentUser = (UserInfo) MportalApplication.readObj(mContext, USER_FILE_NAME);
-		LogM.log(AppContext.class,"初始化AppContext currentUser "+mCurrentUser.toString());
 		if (mCurrentUser == null) {
 			mCurrentUser = new UserInfo();
 		}
-		LogM.log(AppContext.class,"初始化AppContext currentUser "+mCurrentUser.toString());
 	}
 
 	public static AppContext getInstance(Context context) {

@@ -1,5 +1,4 @@
-include ':shareSDK', ':IMLib', ':IMKit'
-include ':oneKeyShare'
+include ':IMLib', ':IMKit', ':ShareSDK'
 include ':sugar_orm'
 include ':mportal'
 
