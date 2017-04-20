@@ -1,12 +1,5 @@
 package com.apppubs.d20.service;
 
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.net.HttpURLConnection;
-import java.net.URL;
-
 import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
@@ -19,15 +12,22 @@ import android.os.Message;
 import android.widget.RemoteViews;
 
 import com.apppubs.d20.AppContext;
+import com.apppubs.d20.R;
 import com.apppubs.d20.activity.HomeSlideMenuActivity;
 import com.apppubs.d20.activity.StartUpActivity;
+import com.apppubs.d20.constant.Constants;
 import com.apppubs.d20.exception.ESUnavailableException;
-import com.apppubs.d20.util.LogM;
-import com.apppubs.d20.R;
 import com.apppubs.d20.model.CallbackResult;
 import com.apppubs.d20.model.SystemBussiness;
-import com.apppubs.d20.constant.Constants;
 import com.apppubs.d20.util.FileUtils;
+import com.apppubs.d20.util.LogM;
+
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.net.HttpURLConnection;
+import java.net.URL;
 
 public class DownloadAppService extends Service {
 
@@ -56,7 +56,7 @@ public class DownloadAppService extends Service {
 	 * @param url
 	 */
 	private Thread mDownLoadThread;
-
+	private boolean isDownloading;
 	private Handler mHandler = new Handler() {
 
 		@Override
@@ -179,91 +179,92 @@ public class DownloadAppService extends Service {
 
 	@Override
 	public int onStartCommand(Intent intent, int flags, int startId) {
+		if (!isDownloading){
+			isDownloading = true;
 
-		try {
-			saveFileName = FileUtils.getAppExternalStorageFile() + Constants.APK_FILE_NAME;
-		} catch (ESUnavailableException e) {
-			e.printStackTrace();
-		}
-		mSystemBussiness = SystemBussiness.getInstance(this);
-		try {
-			savePath = FileUtils.getAppExternalStorageFile().getAbsolutePath() + "/" + Constants.APK_FILE_NAME;
-
-		} catch (ESUnavailableException e) {
-			e.printStackTrace();
-		}
-		backActivity = intent.getIntExtra(SERVACESHARENAME, 0);
-		apkurl = intent.getStringExtra(SERVICRINTENTURL);
-		
-		setUpNotification();
-
-		mDownLoadThread = new Thread(new Runnable() {
-			@Override
-			public void run() {
-				
-				
-				LogM.log(this.getClass(), "开始下载");
-				int lastRate = 0;
-				int curProgress = 0;
-				try {
-					URL url = new URL(apkurl);
-
-					HttpURLConnection conn = (HttpURLConnection) url.openConnection();
-					conn.connect();
-					int length = conn.getContentLength();
-					InputStream is = conn.getInputStream();
-
-					File file = new File(savePath);
-					if (!file.exists()) {
-						file.mkdirs();
-					}
-					File ApkFile = new File(saveFileName);
-					FileOutputStream fos = new FileOutputStream(ApkFile);
-
-					int count = 0;
-					byte buf[] = new byte[1024];
-
-					do {
-						int numread = is.read(buf);
-						count += numread;
-						curProgress = (int) (((float) count / length) * 100);
-						// 更新进度
-						Message msg = mHandler.obtainMessage();
-						msg.what = 1;
-						msg.arg1 = curProgress;
-						if (curProgress >= lastRate + 1) {
-							mHandler.sendMessage(msg);
-							lastRate = curProgress;
-							if (callback != null)
-								callback.OnBackResult(curProgress);
-						}
-						if (numread <= 0) {
-							// 下载完成通知安装
-							mHandler.sendEmptyMessage(0);
-							// 下载完了，cancelled也要设置
-							canceled = true;
-							break;
-						}
-
-						fos.write(buf, 0, numread);
-					} while (!canceled);// 点击取消就停止下载.
-
-					fos.close();
-					is.close();
-				} catch (IOException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
-
+			try {
+				saveFileName = FileUtils.getAppExternalStorageFile() + Constants.APK_FILE_NAME;
+			} catch (ESUnavailableException e) {
+				e.printStackTrace();
 			}
-		});
-		mDownLoadThread.start();
-		
-		
-	
-		
+			mSystemBussiness = SystemBussiness.getInstance(this);
+			try {
+				savePath = FileUtils.getAppExternalStorageFile().getAbsolutePath() + "/" + Constants.APK_FILE_NAME;
+
+			} catch (ESUnavailableException e) {
+				e.printStackTrace();
+			}
+			backActivity = intent.getIntExtra(SERVACESHARENAME, 0);
+			apkurl = intent.getStringExtra(SERVICRINTENTURL);
+
+			setUpNotification();
+
+			mDownLoadThread = new Thread(new Runnable() {
+				@Override
+				public void run() {
+
+
+					LogM.log(this.getClass(), "开始下载");
+					int lastRate = 0;
+					int curProgress = 0;
+					try {
+						URL url = new URL(apkurl);
+
+						HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+						conn.connect();
+						int length = conn.getContentLength();
+						InputStream is = conn.getInputStream();
+
+						File file = new File(savePath);
+						if (!file.exists()) {
+							file.mkdirs();
+						}
+						File ApkFile = new File(saveFileName);
+						FileOutputStream fos = new FileOutputStream(ApkFile);
+
+						int count = 0;
+						byte buf[] = new byte[1024];
+
+						do {
+							int numread = is.read(buf);
+							count += numread;
+							curProgress = (int) (((float) count / length) * 100);
+							// 更新进度
+							Message msg = mHandler.obtainMessage();
+							msg.what = 1;
+							msg.arg1 = curProgress;
+							if (curProgress >= lastRate + 1) {
+								mHandler.sendMessage(msg);
+								lastRate = curProgress;
+								if (callback != null)
+									callback.OnBackResult(curProgress);
+							}
+							if (numread <= 0) {
+								// 下载完成通知安装
+								mHandler.sendEmptyMessage(0);
+								// 下载完了，cancelled也要设置
+								canceled = true;
+								break;
+							}
+
+							fos.write(buf, 0, numread);
+						} while (!canceled);// 点击取消就停止下载.
+
+						fos.close();
+						is.close();
+					} catch (IOException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+
+				}
+			});
+			mDownLoadThread.start();
+		}
+
 		return START_NOT_STICKY;
 	}
+
 
 	/**
 	 * 安装apk

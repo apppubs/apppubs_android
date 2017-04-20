@@ -2,14 +2,12 @@ package com.apppubs.d20;
 
 import android.app.Activity;
 import android.app.ActivityManager;
-import android.app.Application;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.drawable.Drawable;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Build;
-import android.os.Bundle;
 import android.support.multidex.MultiDex;
 import android.support.multidex.MultiDexApplication;
 import android.util.DisplayMetrics;
@@ -18,9 +16,9 @@ import android.view.WindowManager;
 
 import com.apppubs.d20.activity.MessageEvent;
 import com.apppubs.d20.activity.UserInfoActivity;
+import com.apppubs.d20.constant.Constants;
 import com.apppubs.d20.model.BussinessCallbackCommon;
 import com.apppubs.d20.model.SystemBussiness;
-import com.apppubs.d20.constant.Constants;
 import com.apppubs.d20.util.MathUtils;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
@@ -29,7 +27,6 @@ import com.orm.SugarContext;
 
 import org.greenrobot.eventbus.EventBus;
 
-import java.io.BufferedInputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -42,7 +39,6 @@ import java.util.List;
 
 import io.rong.imkit.RongIM;
 import io.rong.imkit.manager.IUnReadMessageObserver;
-import io.rong.imlib.RongIMClient;
 import io.rong.imlib.model.Conversation;
 import io.rong.imlib.model.Message;
 import io.rong.imlib.model.UserInfo;
@@ -239,35 +235,6 @@ public class MportalApplication extends MultiDexApplication {
 				+ Build.DEVICE);
 
 	}
-//	/**
-//	 * 提交并刷新内存中的设置信息
-//	 *
-//	 * @param settings
-//	 * @param context
-//	 */
-//	public static void commitAndRefreshSystemSettings(Settings settings, Context context) {
-//
-//		Log.v("MportalApplication", "commitAndRefreshSystemSettings");
-//		MportalApplication.systemSettings = settings;
-//
-//		File file = new File(context.getDir(CONFIG_DIRECTORY, Context.MODE_PRIVATE), "settings.cfg");
-//		ObjectOutputStream oos = null;
-//		try {
-//			oos = new ObjectOutputStream(new FileOutputStream(file));
-//			oos.writeObject(settings);
-//		} catch (FileNotFoundException e) {
-//			e.printStackTrace();
-//		} catch (IOException e) {
-//			e.printStackTrace();
-//		} finally {
-//			try {
-//				if (oos != null)
-//					oos.close();
-//			} catch (IOException e) {
-//				e.printStackTrace();
-//			}
-//		}
-//	}
 
 	/**
 	 * 持久化对象

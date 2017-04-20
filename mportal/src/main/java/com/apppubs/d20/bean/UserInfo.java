@@ -75,6 +75,7 @@ public class UserInfo implements Serializable{
 		this.password = password;
 		this.email = user_email;
 		this.mobile = user_phone;
+		this.orgCode = "";
 	}
 	public UserInfo(String userid, String username, String cnname, String password, String user_email,
 					String user_phone, String menuPower) {

@@ -90,7 +90,7 @@ public class StartUpActivity extends BaseActivity implements AsyTaskCallback{
 	private Runnable enterHomeRun = new Runnable() {
 		@Override
 		public void run() {
-			if (mSystemBussiness.isInitialized()&&isVersionChecked) {
+			if ((mSystemBussiness.isInitialized()&&mAppContext.getApp().getInitTimes() < 2)||(mSystemBussiness.isInitialized()&&isVersionChecked)) {
 
 				int welcomePicNum = 0;
 				try {

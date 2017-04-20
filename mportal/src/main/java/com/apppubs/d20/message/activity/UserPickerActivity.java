@@ -13,6 +13,7 @@ import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import com.amap.api.maps2d.model.Text;
 import com.apppubs.d20.AppContext;
 import com.apppubs.d20.activity.BaseActivity;
 import com.apppubs.d20.activity.UserInfoActivity;
@@ -112,7 +113,9 @@ public class UserPickerActivity extends BaseActivity implements UserSelectionBar
                 imageView.setText(user.getTrueName());
                 UserBasicInfo userBasicInfo = mUserBussiness.getCachedUserBasicInfo(user.getUserId());
                 if (userBasicInfo!=null){
-                    mImageLoader.displayImage(userBasicInfo.getAtatarUrl(),imageView);
+					if (!TextUtils.isEmpty(userBasicInfo.getAtatarUrl())){
+						mImageLoader.displayImage(userBasicInfo.getAtatarUrl(),imageView);
+					}
                     TextView registerTv = holder.getView(R.id.item_user_picker_user_title1_tv);
                     registerTv.setVisibility(!TextUtils.isEmpty(userBasicInfo.getAppCodeVersion())?View.GONE:View.VISIBLE);
                 }

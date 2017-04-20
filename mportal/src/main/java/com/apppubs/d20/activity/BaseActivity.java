@@ -276,38 +276,41 @@ public abstract class BaseActivity extends FragmentActivity implements OnClickLi
 	}
 
 	protected void onAppActive() {
-		// 如果是用户名登陆则启动是验证
-		mUserBussiness.updateUserInfo(this, new BussinessCallbackCommon<UserInfo>() {
-			@Override
-			public void onDone(UserInfo obj) {
-				if (obj==null||TextUtils.isEmpty(obj.getUserId())){
-					Intent closeI = new Intent(Actions.CLOSE_ALL_ACTIVITY);
-					sendBroadcast(closeI);
-					startActivity(FirstLoginActity.class);
+		if (!(this instanceof FirstLoginActity)||(this instanceof StartUpActivity)){
+			// 如果是用户名登陆则启动是验证
+			mUserBussiness.updateUserInfo(this, new BussinessCallbackCommon<UserInfo>() {
+				@Override
+				public void onDone(UserInfo obj) {
+					if (obj==null||TextUtils.isEmpty(obj.getUserId())){
+						Intent closeI = new Intent(Actions.CLOSE_ALL_ACTIVITY);
+						sendBroadcast(closeI);
+						startActivity(FirstLoginActity.class);
+					}
 				}
-			}
 
-			@Override
-			public void onException(int excepCode) {
+				@Override
+				public void onException(int excepCode) {
 
-			}
-		});
-
-		mSystemBussiness.aSyncAppConfig(this, new BussinessCallbackCommon<AppConfig>() {
-			@Override
-			public void onDone(AppConfig obj) {
-				System.out.print("同步appconfig成功");
-				//避免在startupactivit中进行重复检测
-				if (!(BaseActivity.this instanceof StartUpActivity)){
-					checkUpdate();
 				}
-			}
+			});
 
-			@Override
-			public void onException(int excepCode) {
-				System.out.print("同步appconfig失败");
-			}
-		});
+			mSystemBussiness.aSyncAppConfig(this, new BussinessCallbackCommon<AppConfig>() {
+				@Override
+				public void onDone(AppConfig obj) {
+					System.out.print("同步appconfig成功");
+					//避免在startupactivit中进行重复检测
+					if (!(BaseActivity.this instanceof StartUpActivity)){
+						checkUpdate();
+					}
+				}
+
+				@Override
+				public void onException(int excepCode) {
+					System.out.print("同步appconfig失败");
+				}
+			});
+
+		}
 
 	}
 

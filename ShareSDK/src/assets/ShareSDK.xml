@@ -47,7 +47,10 @@
 			KakaoStory     https://developers.kakao.com/
 			Plurk          http://www.plurk.com/API
     -->
-    
+
+    <ShareSDK
+        AppKey = "15f5b0a9bae20"/> <!-- 修改成你在sharesdk后台注册的应用的appkey"-->
+
     <!-- ShareByAppClient标识是否使用微博客户端分享，默认是false -->
     <SinaWeibo
         Id="1"
@@ -88,16 +91,16 @@
     <Wechat
         Id="4"
         SortId="4"
-        AppId="wx4868b35061f87885"
-        AppSecret="64020361b8ec4c99936c0e3999a9f249"
-        BypassApproval="false"
+        AppId="wxf02a27161bbb6809"
+        AppSecret="24c5e763674d780cc4926e6f6c4675c6"
+        BypassApproval="true"
         Enable="true" />
     
     <WechatMoments
         Id="5"
         SortId="5"
-        AppId="wx4868b35061f87885"
-        AppSecret="64020361b8ec4c99936c0e3999a9f249"
+        AppId="wxf02a27161bbb6809"
+        AppSecret="24c5e763674d780cc4926e6f6c4675c6"
         BypassApproval="false"
         Enable="true" />
         
@@ -112,7 +115,7 @@
 	<QQ
         Id="7"
         SortId="7"
-        AppId="100371282"
+        AppId="1003712821"
         AppKey="aed9b0303e3ed1e27bae87c33761161d"
         ShareByAppClient="true"
         Enable="true" />

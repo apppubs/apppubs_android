@@ -173,6 +173,7 @@ public class App implements Serializable{
 
 	public App(){
 		LogM.log(App.class,"初始化App");
+		mWelcomePlayed = false;
 		appConfig = new AppConfig();
 	}
 

@@ -93,8 +93,6 @@ public class UserCencerActivity extends BaseActivity {
 
 						@Override
 						public void onOkClick() {
-							
-//							logout();
 							mUserBussiness.logout(UserCencerActivity.this);
 							UserCencerActivity.this.finish();
 						}

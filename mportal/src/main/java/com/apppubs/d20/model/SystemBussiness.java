@@ -24,6 +24,7 @@ import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.WindowManager;
 
+import com.amap.api.maps2d.model.Text;
 import com.apppubs.d20.AppContext;
 import com.apppubs.d20.R;
 import com.apppubs.d20.bean.App;
@@ -756,11 +757,11 @@ public class SystemBussiness extends BaseBussiness {
 			app.setAddressbookNeedPermission(Integer.parseInt(resultMap.get("adbookauth")));
 			app.setDocumentReaderPageUrl(resultMap.get("document_reader_url"));
 			app.setAddressbookVersion(Integer.parseInt(resultMap.get("adbookversion")));
-
+			app.setAllowChat(Integer.parseInt(resultMap.get("chat_flag")));
 			AppConfig appconfig = (AppConfig) jsonResult.getResultObject(AppConfig.class);
 
-
-			if (appconfig.getAdbookAuthFlag()==1){
+			com.apppubs.d20.bean.UserInfo ui = AppContext.getInstance(mContext).getCurrentUser();
+			if (!TextUtils.isEmpty(ui.getUserId())&&appconfig.getAdbookAuthFlag()==1){
 				String url = String.format(URLs.URL_ADDRESS_PERMISSION, AppContext.getInstance(mContext).getCurrentUser().getUserId());
 				String permissionResult = WebUtils.requestWithGet(url);
 				JSONResult jr = JSONResult.compile(permissionResult);
@@ -771,7 +772,7 @@ public class SystemBussiness extends BaseBussiness {
 				}
 			}
 
-			if(appconfig.getChatAuthFlag()==1){
+			if(!TextUtils.isEmpty(ui.getUserId())&&appconfig.getChatAuthFlag()==1){
 				String url = String.format(URLs.URL_USER_PERMISSION, AppContext.getInstance(mContext).getCurrentUser().getUserId());
 				String permissionResult = WebUtils.requestWithGet(url);
 				JSONResult jr = JSONResult.compile(permissionResult);

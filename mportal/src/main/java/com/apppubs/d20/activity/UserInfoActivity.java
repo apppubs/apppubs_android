@@ -108,6 +108,8 @@ public class UserInfoActivity extends BaseActivity implements OnClickListener{
 			}
 		}
 
+		RongIM.getInstance().refreshUserInfoCache(new io.rong.imlib.model.UserInfo(mUser.getUserId(), mUser.getTrueName(), Uri.parse((String)jr.getResultMap().get("photourl"))));
+
 	}
 
 	private void optionView() {

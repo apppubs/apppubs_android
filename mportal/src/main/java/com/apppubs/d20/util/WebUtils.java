@@ -84,7 +84,7 @@ public class WebUtils {
 	// Json Get请求
 	private static final String TAG = WebUtils.class.getSimpleName();
 	private static final int TIME_OUT_CONNECT_MILLISECOND = 5 * 1000;
-	private static final int TIME_OUT_READ_MILLISECOND = 10 * 1000;
+	private static final int TIME_OUT_READ_MILLISECOND = 15 * 1000;
 	private static final String CHARSET = "utf-8";
 
 	public static Gson gson;

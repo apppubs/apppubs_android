@@ -40,7 +40,6 @@ import com.apppubs.multi_image_selector.MultiImageSelectorActivity;
 
 import org.json.JSONArray;
 import org.json.JSONException;
-import org.json.JSONObject;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -326,6 +325,7 @@ public class WebAppFragment extends BaseFragment implements OnClickListener {
 						}
 						if (arr.length()>2){
 							sp.setTitleUrl(arr.getString(2));
+							sp.setUrl(arr.getString(2));
 						}
 						sp.setShareType(Platform.SHARE_TEXT);
 						Platform p = ShareSDK.getPlatform(QQ.NAME);

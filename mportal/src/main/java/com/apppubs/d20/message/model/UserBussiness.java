@@ -54,6 +54,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.Future;
 
+import io.rong.imkit.RongIM;
+
 /**
  * 用户相关业务
  * 
@@ -819,11 +821,8 @@ public class UserBussiness extends BaseBussiness {
 	}
 	
 	public void logout(Context context) {
-		if(mAppContext.getApp().getLoginFlag()==App.LOGIN_INAPP){
-			
-			AppContext.getInstance(mContext).clearCurrentUser();
-			
-		}
+		AppContext.getInstance(mContext).clearCurrentUser();
+		RongIM.getInstance().logout();
 		context.sendBroadcast(new Intent(Actions.ACTION_LOGOUT));
 	}
 
@@ -898,7 +897,9 @@ public class UserBussiness extends BaseBussiness {
 									user.setTrueName(jo.getString("cnname"));
 									user.setEmail(jo.getString("email"));
 									user.setMobile(jo.getString("mobile"));
-									user.setMenuPower(jo.getString("menupower"));
+									if(jo.has("menupower")){
+										user.setMenuPower(jo.getString("menupower"));
+									}
 
 									if (jo.has("photourl")){
 										user.setAvatarUrl(jo.getString("photourl"));
