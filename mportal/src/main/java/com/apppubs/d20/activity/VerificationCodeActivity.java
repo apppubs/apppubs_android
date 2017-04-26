@@ -27,6 +27,8 @@ import com.apppubs.d20.util.JSONResult;
 import com.apppubs.d20.util.Utils;
 import com.apppubs.d20.widget.ProgressHUD;
 
+import cn.jpush.android.api.JPushInterface;
+
 public class VerificationCodeActivity extends BaseActivity implements ErrorListener{
 	
 	public static final String EXTRA_STRING_PHONE = "phone";
@@ -151,7 +153,7 @@ public class VerificationCodeActivity extends BaseActivity implements ErrorListe
 		String url = null;
 		try {
 			
-			String token = mAppContext.getApp().getPushVendorType()==App.PUSH_VENDOR_TYPE_BAIDU?mAppContext.getApp().getBaiduPushUserId():mAppContext.getApp().getJpushRegistrationID();
+			String token = mAppContext.getApp().getPushVendorType()==App.PUSH_VENDOR_TYPE_BAIDU?mAppContext.getApp().getBaiduPushUserId(): JPushInterface.getRegistrationID(this);
 			url = String.format(URLs.URL_CONFIRM_VERIFICATION_CODE, mPhone,
 					mSystemBussiness.getMachineId(),verificationCode,
 					URLEncoder.encode(mUsername,"utf-8"),token,osVersion,URLEncoder.encode(Build.MODEL,"utf-8"),currentVersionName,buildId);

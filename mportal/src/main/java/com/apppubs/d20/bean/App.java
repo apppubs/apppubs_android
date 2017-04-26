@@ -468,10 +468,12 @@ public class App implements Serializable{
 		this.pushVendorType = pushVendorType;
 	}
 
+	@Deprecated
 	public String getJpushRegistrationID() {
 		return jpushRegistrationID;
 	}
 
+	@Deprecated
 	public void setJpushRegistrationID(String jpushRegistrationID) {
 		this.jpushRegistrationID = jpushRegistrationID;
 	}
@@ -485,6 +487,7 @@ public class App implements Serializable{
 		this.documentReaderPageUrl = documentReaderPageUrl;
 	}
 
+	@Deprecated
 	public String getPushToken(){
 		if(pushVendorType==PUSH_VENDOR_TYPE_BAIDU){
 			return baiduPushUserId;

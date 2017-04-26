@@ -61,6 +61,7 @@ public class AppContext {
 	public void setApp(App mApp) {
 
 		this.mApp = mApp;
+		serializeApp();
 	}
 
 	public synchronized void serializeApp(){
@@ -76,6 +77,7 @@ public class AppContext {
 	public synchronized void setAppConfig(AppConfig appConfig) {
 
 		mApp.setAppConfig(appConfig);
+		serializeApp();
 	}
 
 	public UserInfo getCurrentUser() {

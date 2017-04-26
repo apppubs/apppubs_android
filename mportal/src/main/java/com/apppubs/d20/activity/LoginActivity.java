@@ -24,6 +24,8 @@ import com.apppubs.d20.util.Utils;
 import com.apppubs.d20.widget.AlertDialog;
 import com.apppubs.d20.widget.LoadingDialog;
 
+import cn.jpush.android.api.JPushInterface;
+
 /**
  * 登录界面
  * 
@@ -98,11 +100,11 @@ public class LoginActivity extends BaseActivity implements AsyTaskCallback {
 				if (SystemUtils.canConnectNet(getApplication())) {
 					dialog = new LoadingDialog(LoginActivity.this, "正在登陆，请稍候...");
 					dialog.show();
-					String deviceid = mAppContext.getApp().getPushVendorType()==App.PUSH_VENDOR_TYPE_BAIDU?mAppContext.getApp().getBaiduPushUserId():mAppContext.getApp().getJpushRegistrationID();// 百度硬件设备号
+					String deviceid = mAppContext.getApp().getPushVendorType()==App.PUSH_VENDOR_TYPE_BAIDU?mAppContext.getApp().getBaiduPushUserId():JPushInterface.getRegistrationID(this);// 百度硬件设备号
 					String systemVresion = Utils.getAndroidSDKVersion();
 					String currentVersionCode = Utils.getVersionName(LoginActivity.this);// app版本号
 					String token = mAppContext.getApp().getPushVendorType() == App.PUSH_VENDOR_TYPE_BAIDU ? mAppContext.getApp()
-							.getBaiduPushUserId() : mAppContext.getApp().getJpushRegistrationID();// 百度硬件设备号
+							.getBaiduPushUserId() : JPushInterface.getRegistrationID(this);// 百度硬件设备号
 					String[] params = new String[]{usernameT,passwordT,deviceid,token,Build.MODEL,systemVresion,currentVersionCode};
 					AsyTaskExecutor.getInstance().startTask(LOGIN_TAG, LoginActivity.this, params);
 				} else {

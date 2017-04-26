@@ -54,7 +54,7 @@ import com.orm.SugarRecord;
 public class SettingFragment extends TitleMenuFragment implements OnClickListener{
 
 	private TextView mCacheTv;
-	private ToggleButton mPushTb, mNetworkTb;
+	private ToggleButton mPushTb;
 	private boolean isSwitch, isSwitchTheme;
 	private TextView currentVersionTv;
 	private ImageView newVresion;
@@ -110,12 +110,12 @@ public class SettingFragment extends TitleMenuFragment implements OnClickListene
 	private void init() {
 		newVresion = (ImageView) mRootView.findViewById(R.id.settting_update_newcursion);
 		mPushTb = (ToggleButton) mRootView.findViewById(R.id.setting_push_tb);
-		mNetworkTb = (ToggleButton) mRootView.findViewById(R.id.settings_network_tb);
+//		mNetworkTb = (ToggleButton) mRootView.findViewById(R.id.settings_network_tb);
 		mCacheTv = (TextView) mRootView.findViewById(R.id.settings_cache_tv);
 //		mTextSizeTv = (TextView) findViewById(R.id.settings_textsize_tv);
         
 		registerOnClickListener(R.id.setting_push_tb, this);
-		registerOnClickListener(R.id.settings_network_tb, this);
+//		registerOnClickListener(R.id.settings_network_tb, this);
 		registerOnClickListener(R.id.settings_cache, this);
 		registerOnClickListener(R.id.settings_feed, this);
 		registerOnClickListener(R.id.settings_about, this);
@@ -150,7 +150,7 @@ public class SettingFragment extends TitleMenuFragment implements OnClickListene
 	private void initState() {
 		Settings settings = mAppContext.getSettings();
 		mPushTb.setChecked(settings.isNeedPushNotification());
-		mNetworkTb.setChecked(settings.isAllowDowPicUse2G());
+//		mNetworkTb.setChecked(settings.isAllowDowPicUse2G());
 
 		refreshCacheSize();
 		if(mAppContext.getSettings().isDevMode()){
@@ -304,15 +304,15 @@ public class SettingFragment extends TitleMenuFragment implements OnClickListene
 			}
 //			m.commitSystemSettings(mAppContext.getSettings());
 			break;
-		case R.id.settings_network_tb:// 网络
-			Settings settings = mAppContext.getSettings();
-			if (mNetworkTb.isChecked()) {
-				settings.setAllowDowPicUse2G(true);
-			} else {
-				settings.setAllowDowPicUse2G(false);
-			}
-			mAppContext.setSettings(settings);
-			break;
+//		case R.id.settings_network_tb:// 网络
+//			Settings settings = mAppContext.getSettings();
+//			if (mNetworkTb.isChecked()) {
+//				settings.setAllowDowPicUse2G(true);
+//			} else {
+//				settings.setAllowDowPicUse2G(false);
+//			}
+//			mAppContext.setSettings(settings);
+//			break;
 		case R.id.settings_update:
 			checkVersion();
 			break;

@@ -325,11 +325,11 @@ public class StartUpActivity extends BaseActivity implements AsyTaskCallback{
 				&& !TextUtils.isEmpty(curUser.getUserId())
 				&& mAppContext.getSettings().isAllowAutoLogin()) {
 
-			String deviceid = mAppContext.getApp().getPushVendorType()==App.PUSH_VENDOR_TYPE_BAIDU?mAppContext.getApp().getBaiduPushUserId():mAppContext.getApp().getJpushRegistrationID();// 百度硬件设备号
+			String deviceid = mAppContext.getApp().getPushVendorType()==App.PUSH_VENDOR_TYPE_BAIDU?mAppContext.getApp().getBaiduPushUserId():JPushInterface.getRegistrationID(this);// 百度硬件设备号
 			String systemVresion = Utils.getAndroidSDKVersion();// 操作系统号
 			String currentVersionCode = Utils.getVersionName(StartUpActivity.this);// app版本号
 			String token = mAppContext.getApp().getPushVendorType() == App.PUSH_VENDOR_TYPE_BAIDU ? mAppContext.getApp()
-					.getBaiduPushUserId() : mAppContext.getApp().getJpushRegistrationID();// 百度硬件设备号
+					.getBaiduPushUserId() : JPushInterface.getRegistrationID(this);// 百度硬件设备号
 			String[] params = new String[]{curUser.getUsername(), curUser.getPassword(), deviceid,token, Build.MODEL,
 					systemVresion, currentVersionCode,"true"};
 

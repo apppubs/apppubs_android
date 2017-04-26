@@ -7,8 +7,11 @@ import android.database.sqlite.SQLiteDatabase;
 import android.os.Build;
 import android.text.TextUtils;
 import android.util.Log;
+import android.widget.CheckBox;
 
 import com.apppubs.d20.AppContext;
+import com.apppubs.d20.R;
+import com.apppubs.d20.activity.FirstLoginActity;
 import com.apppubs.d20.bean.App;
 import com.apppubs.d20.bean.AppConfig;
 import com.apppubs.d20.bean.Department;
@@ -54,6 +57,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.Future;
 
+import cn.jpush.android.api.JPushInterface;
 import io.rong.imkit.RongIM;
 
 /**
@@ -234,7 +238,7 @@ public class UserBussiness extends BaseBussiness {
 	 */
 	public List<User> listUser(String departmentId) {
 		String sql = "";
-		if (this.mAppContext.getAppConfig().getAdbookAuthFlag() < 0 || (this.mAppContext.getAppConfig().getAdbookAuthFlag() > 0 && mAppContext.getCurrentUser().getAddressbookPermissionString().contains(departmentId))
+		if (this.mAppContext.getAppConfig().getAdbookAuthFlag() < 1 || (this.mAppContext.getAppConfig().getAdbookAuthFlag() > 0 && mAppContext.getCurrentUser().getAddressbookPermissionString().contains(departmentId))
 				) {
 			sql = "select * from USER t1 join USER_DEPT_LINK t2 on t1.USER_ID = t2.USER_ID where t2.DEPT_ID = ? order by t2.sort_id";
 		} else {
@@ -792,7 +796,7 @@ public class UserBussiness extends BaseBussiness {
 			public void run() {
 
 				String token = mAppContext.getApp().getPushVendorType() == App.PUSH_VENDOR_TYPE_BAIDU ? mAppContext.getApp()
-						.getBaiduPushUserId() : mAppContext.getApp().getJpushRegistrationID();// 百度硬件设备号
+						.getBaiduPushUserId() : JPushInterface.getRegistrationID(mContext);// 百度硬件设备号
 				String deviceId = SystemBussiness.getInstance(mContext).getMachineId();
 				String systemVresion = Utils.getAndroidSDKVersion();// 操作系统号
 				String currentVersionCode = Utils.getVersionName(mContext);// app版本号
@@ -871,7 +875,7 @@ public class UserBussiness extends BaseBussiness {
 						// /wmh360/json/login/usersmslogin.jsp?username=%s&deviceid=%s&token=%s&os=%s&dev=%s&app=%s&fr=4&appcode="+appCode;
 						UserInfo currentUser = AppContext.getInstance(mContext).getCurrentUser();
 						url = String.format(URLs.URL_LOGIN_WITH_USERNAME, currentUser.getUsername(),
-								machineId, mAppContext.getApp().getPushToken(), osVersion,
+								machineId, JPushInterface.getRegistrationID(mContext), osVersion,
 								URLEncoder.encode(Build.MODEL, "utf-8"), currentVersionName,appCode);
 					} catch (UnsupportedEncodingException e) {
 						e.printStackTrace();
@@ -924,6 +928,54 @@ public class UserBussiness extends BaseBussiness {
 							}
 						});
 					} catch (IOException|InterruptedException e) {
+						e.printStackTrace();
+						sHandler.post(new OnExceptionRun<UserInfo>(callback));
+					}
+				}else if(mAppContext.getApp().getLoginFlag() == App.LOGIN_ONSTART_USE_USERNAME_PASSWORD){
+					String token = JPushInterface.getRegistrationID(mContext);;
+					String osVersion = Utils.getAndroidSDKVersion();// 操作系统号
+					String currentVersionName = Utils.getVersionName(mContext);// app版本号
+
+
+					int result =0;
+					try {
+						Map<String, Object> requestParamsMap = new HashMap<String, Object>();
+
+						UserInfo currentUser = mAppContext.getCurrentUser();
+						requestParamsMap.put("username", currentUser.getUsername());
+						requestParamsMap.put("password", currentUser.getPassword());
+						requestParamsMap.put("deviceid",  SystemBussiness.getInstance(mContext).getMachineId());
+						requestParamsMap.put("token",  token);
+						requestParamsMap.put("dev", URLEncoder.encode(Build.MODEL, "utf-8"));
+						requestParamsMap.put("os", osVersion);
+						requestParamsMap.put("app", currentVersionName);
+						requestParamsMap.put("appcodeversion",Utils.getVersionCode(mContext)+"");
+						requestParamsMap.put("fr", "4");
+
+						String data = WebUtils.requestWithPost(URLs.URL_LOGIN, requestParamsMap);
+						JSONObject jo = new JSONObject(data);
+						/**
+						 * //0、用户名或密码错误 //1、还未注册 //2、已经注册并且信息一致
+						 * //3、已经注册但信息不一致，该帐户被其他人注册 //参数4 用户中文名字
+						 */
+						result = jo.getInt("result");
+
+						// 登录成功才会修改本地的用户信息
+						UserInfo user = null;
+						if (result==2){
+							user = new UserInfo(jo.getString("userid"), jo.getString("username"), jo.getString("cnname"),
+									currentUser.getPassword(), jo.getString("email"), jo.getString("mobile"));
+							user.setMenuPower(jo.getString("menupower"));
+
+						}else{
+							user = new UserInfo();
+						}
+						AppContext.getInstance(mContext).setCurrentUser(user);
+						sHandler.post(new OnDoneRun<UserInfo>(callback,user));
+					} catch (JSONException e) {
+						e.printStackTrace();
+						sHandler.post(new OnExceptionRun<UserInfo>(callback));
+					} catch (UnsupportedEncodingException e) {
 						e.printStackTrace();
 						sHandler.post(new OnExceptionRun<UserInfo>(callback));
 					}

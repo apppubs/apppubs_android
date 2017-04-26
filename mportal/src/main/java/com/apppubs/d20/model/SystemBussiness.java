@@ -1186,7 +1186,7 @@ public class SystemBussiness extends BaseBussiness {
 
 		String token = null;
 		String userId = AppContext.getInstance(mContext).getCurrentUser().getUserId();
-		String username = AppContext.getInstance(mContext).getCurrentUser().getUsername();
+		String username = AppContext.getInstance(mContext).getCurrentUser().getTrueName();
 		String url = String.format(URLs.URL_RC_TOKEN,userId,username);
 		try {
 			String response = WebUtils.requestWithGet(url);

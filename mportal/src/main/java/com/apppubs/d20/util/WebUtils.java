@@ -240,14 +240,13 @@ public class WebUtils {
 					if (curProgress - preProgress >= 0.005) {
 						preProgress = curProgress;
 						listener.onUpdate(curProgress);
-					}else if(total==lenghtOfFile){
-						listener.onUpdate(1.0f);
 					}
 
 				}
 	
 			}
 			if (listener!=null){
+				listener.onUpdate(1.0f);
 				listener.onSuccess(sb.toString());
 			}
 			Log.v(TAG, "请求完成：" + url + "用时：" + (System.currentTimeMillis() - pre) + "ms  "+sb.toString());

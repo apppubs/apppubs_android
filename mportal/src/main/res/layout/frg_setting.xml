@@ -50,35 +50,35 @@
             android:visibility="gone"
             />
 
-        <RelativeLayout
-            style="@style/item_menu_lv"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content" >
+        <!--<RelativeLayout-->
+            <!--style="@style/item_menu_lv"-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="wrap_content" >-->
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:gravity="center"
-                android:text="2G/3G/4G网络下载图片"
-                android:textColor="@color/common_text"
-                android:textSize="@dimen/item_text_size" />
+            <!--<TextView-->
+                <!--android:layout_width="wrap_content"-->
+                <!--android:layout_height="match_parent"-->
+                <!--android:gravity="center"-->
+                <!--android:text="2G/3G/4G网络下载图片"-->
+                <!--android:textColor="@color/common_text"-->
+                <!--android:textSize="@dimen/item_text_size" />-->
 
-            <ToggleButton
-                android:id="@+id/settings_network_tb"
-                android:layout_width="66dp"
-                android:layout_height="22dp"
-                android:layout_alignParentRight="true"
-                android:layout_centerVertical="true"
-                android:background="@drawable/sel_toggle"
-                android:onClick="onClick"
-                android:textOff=""
-                android:textOn="" />
-        </RelativeLayout>
+            <!--<ToggleButton-->
+                <!--android:id="@+id/settings_network_tb"-->
+                <!--android:layout_width="66dp"-->
+                <!--android:layout_height="22dp"-->
+                <!--android:layout_alignParentRight="true"-->
+                <!--android:layout_centerVertical="true"-->
+                <!--android:background="@drawable/sel_toggle"-->
+                <!--android:onClick="onClick"-->
+                <!--android:textOff=""-->
+                <!--android:textOn="" />-->
+        <!--</RelativeLayout>
 
         <View
             android:layout_width="@dimen/item_padding_left"
             android:layout_height="1px"
-            android:background="#ffffff" />
+            android:background="#ffffff" />-->
 
         <RelativeLayout
             android:id="@+id/settingliline"

@@ -277,7 +277,6 @@ public abstract class BaseActivity extends FragmentActivity implements OnClickLi
 
 	protected void onAppActive() {
 		if (!(this instanceof FirstLoginActity)||(this instanceof StartUpActivity)){
-			// 如果是用户名登陆则启动是验证
 			mUserBussiness.updateUserInfo(this, new BussinessCallbackCommon<UserInfo>() {
 				@Override
 				public void onDone(UserInfo obj) {

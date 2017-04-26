@@ -51,6 +51,8 @@ import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import cn.jpush.android.api.JPushInterface;
+
 public class FirstLoginActity extends BaseActivity implements ErrorListener, AsyTaskCallback {
 
 	public static final int REQUEST_CODE_VERIFICATION = 100;
@@ -454,44 +456,13 @@ public class FirstLoginActity extends BaseActivity implements ErrorListener, Asy
 		} else if (result == 2) {
 
 			// 如果第一次启动且有message功能，则同步通讯录和订阅号
-			if (mAppContext.getApp().getInitTimes() == 1) {
-				sycnUserAndServiceNumber();
-
-			} else {
-				enterHome();
-			}
+			enterHome();
 
 		} else {
 			Toast.makeText(getApplication(), "登录失败", Toast.LENGTH_LONG).show();
 		}
 	}
 
-	/**
-	 * 同步用户信息和服务号
-	 */
-	private void sycnUserAndServiceNumber() {
-		mProgressHUD = ProgressHUD.show(FirstLoginActity.this, "信息同步中", true, false, null);
-		mSystemBussiness.sycnServiceNo(new BussinessCallbackCommon<Object>() {
-
-			@Override
-			public void onException(int excepCode) {
-				isServiceNoSycnDone = true;
-				// mMsgBussiness.initializeMsgRecordList();
-				if (isUserSycnDone && isServiceNoSycnDone) {
-					enterHome();
-				}
-			}
-
-			@Override
-			public void onDone(Object obj) {
-				isServiceNoSycnDone = true;
-				// mMsgBussiness.initializeMsgRecordList();
-				if (isUserSycnDone && isServiceNoSycnDone) {
-					enterHome();
-				}
-			}
-		});
-	}
 
 	@Override
 	public void onErrorResponse(VolleyError error) {
@@ -512,7 +483,7 @@ public class FirstLoginActity extends BaseActivity implements ErrorListener, Asy
 
 		if(tag==LOGIN_WITH_USERNAME_AND_PASSWORD_TASK){
 			String token = mAppContext.getApp().getPushVendorType() == App.PUSH_VENDOR_TYPE_BAIDU ? mAppContext.getApp()
-					.getBaiduPushUserId() : mAppContext.getApp().getJpushRegistrationID();// 百度硬件设备号
+					.getBaiduPushUserId() : JPushInterface.getRegistrationID(this);// 百度硬件设备号
 			String osVersion = Utils.getAndroidSDKVersion();// 操作系统号
 			String currentVersionName = Utils.getVersionName(FirstLoginActity.this);// app版本号
 
@@ -528,6 +499,7 @@ public class FirstLoginActity extends BaseActivity implements ErrorListener, Asy
 				requestParamsMap.put("dev", URLEncoder.encode(Build.MODEL, "utf-8"));
 				requestParamsMap.put("os", osVersion);
 				requestParamsMap.put("app", currentVersionName);
+				requestParamsMap.put("appcodeversion",Utils.getVersionCode(mContext)+"");
 				requestParamsMap.put("fr", "4");
 
 				String data = WebUtils.requestWithPost(URLs.URL_LOGIN, requestParamsMap);
