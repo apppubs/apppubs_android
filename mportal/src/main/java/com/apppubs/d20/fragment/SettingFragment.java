@@ -30,6 +30,7 @@ import android.widget.ToggleButton;
 import com.android.volley.RequestQueue;
 import com.android.volley.toolbox.Volley;
 import com.apppubs.d20.AppManager;
+import com.apppubs.d20.activity.AboutActivity;
 import com.apppubs.d20.activity.FeedbackActivity;
 import com.apppubs.d20.activity.StartUpActivity;
 import com.apppubs.d20.model.SystemBussiness;
@@ -291,9 +292,7 @@ public class SettingFragment extends TitleMenuFragment implements OnClickListene
 			break;
 	
 		case R.id.settings_about:// 关于我们
-			intent = new Intent(mHostActivity, AboutUsActivity.class);
-			intent.putExtra(WebAppActivity.EXTRA_NAME_TITLE, "关于我们");
-			intent.putExtra(WebAppActivity.EXTRA_NAME_URL, URLs.URL_ABOUT);
+			intent = new Intent(mHostActivity, AboutActivity.class);
 			this.startActivity(intent);
 			break;
 		case R.id.setting_push_tb:// 是否接受消息点击

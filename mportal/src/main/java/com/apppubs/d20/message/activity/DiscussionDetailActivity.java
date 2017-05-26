@@ -456,7 +456,9 @@ public class DiscussionDetailActivity extends BaseActivity implements CompoundBu
                 iv_avatar.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-
+						Intent intent = new Intent(DiscussionDetailActivity.this, UserInfoActivity.class);
+						intent.putExtra(UserInfoActivity.EXTRA_STRING_USER_ID, bean.getUserId());
+						DiscussionDetailActivity.this.startActivity(intent);
                     }
 
                 });

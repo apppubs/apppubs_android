@@ -1,5 +1,6 @@
 package com.apppubs.d20.message.activity;
 
+import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.text.TextUtils;
@@ -12,6 +13,7 @@ import android.widget.Toast;
 
 import com.apppubs.d20.R;
 import com.apppubs.d20.activity.BaseActivity;
+import com.apppubs.d20.activity.UserInfoActivity;
 import com.apppubs.d20.message.model.OperationRong;
 import com.apppubs.d20.util.Utils;
 import com.apppubs.d20.widget.CircleTextImageView;
@@ -86,12 +88,9 @@ public class PrivateChatDetailActivity extends BaseActivity implements View.OnCl
         mImageView.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v) {
-//                Intent intent = new Intent(PrivateChatDetailActivity.this, UserDetailActivity.class);
-//                Friend friend = CharacterParser.getInstance().generateFriendFromUserInfo(mUserInfo);
-//                intent.putExtra("friend", friend);
-//                intent.putExtra("conversationType", Conversation.ConversationType.PRIVATE.getValue());
-//                intent.putExtra("type", 1);
-//                PrivateChatDetailActivity.this.startActivity(intent);
+                Intent intent = new Intent(PrivateChatDetailActivity.this, UserInfoActivity.class);
+				intent.putExtra(UserInfoActivity.EXTRA_STRING_USER_ID, mUserInfo.getUserId());
+                PrivateChatDetailActivity.this.startActivity(intent);
             }
         });
         messageTop = (SwitchButton) findViewById(R.id.sw_freind_top);

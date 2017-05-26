@@ -48,6 +48,15 @@
             android:textSize="12dp"
             android:visibility="gone"
             />
+        <ImageView
+            android:id="@+id/item_user_picker_bubble_iv"
+            android:layout_width="30dp"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:paddingRight="@dimen/item_padding_right_narrow"
+            android:src="@drawable/adbook_list_bubble"
+            android:visibility="gone"
+            />
     </RelativeLayout>
 
 

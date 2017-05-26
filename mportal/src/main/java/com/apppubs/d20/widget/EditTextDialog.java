@@ -10,15 +10,16 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import com.amap.api.maps2d.model.Text;
 import com.apppubs.d20.R;
 
 public class EditTextDialog extends Dialog implements View.OnClickListener {
 
 	private ConfirmListener listener;
-	private TextView title;
+	private TextView title,mMessageTV;
 	private EditText mEditText;
 	private Button cancle, ok;
-	private String mTitle, mCancelStr, mOkStr,mDefaultText;
+	private String mTitle,mMessage, mCancelStr, mOkStr,mDefaultText;
 
 	public interface ConfirmListener {
 		void onOkClick(String result);
@@ -34,17 +35,22 @@ public class EditTextDialog extends Dialog implements View.OnClickListener {
 	 * @param cancleStr 取消按钮显示文字
 	 * @param okStr 确定按钮显示文字
 	 */
-	public EditTextDialog(Context context, int theme, ConfirmListener listener, String title, String cancleStr,
+	public EditTextDialog(Context context, int theme, ConfirmListener listener, String title,String message, String cancleStr,
                           String okStr) {
 		super(context, theme);
 		this.listener = listener;
 		this.mTitle = title;
 		this.mCancelStr = cancleStr;
 		this.mOkStr = okStr;
+		this.mMessage = message;
 	}
 
 	public EditTextDialog(Context context, ConfirmListener listener, String title, String cancel, String ok) {
-		this(context, R.style.dialog, listener, title, cancel, ok);
+		this(context, R.style.dialog, listener, title,null, cancel, ok);
+	}
+
+	public EditTextDialog(Context context, ConfirmListener listener, String title, String message,String cancel, String ok) {
+		this(context, R.style.dialog, listener, title,message, cancel, ok);
 	}
 
 
@@ -53,6 +59,8 @@ public class EditTextDialog extends Dialog implements View.OnClickListener {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.dialog_edittext);
 		initViews();
+		fillValues();
+		addListeners();
 	}
 
 	public void setDefaultText(String text){
@@ -63,14 +71,32 @@ public class EditTextDialog extends Dialog implements View.OnClickListener {
 		mEditText = (EditText) findViewById(R.id.dialog_content_et);
 		ok = (Button) findViewById(R.id.confirm_ok);
 		cancle = (Button) findViewById(R.id.confirm_cancel);
+
+		mMessageTV = (TextView) findViewById(R.id.dialog_content);
+		if (!TextUtils.isEmpty(mMessage)){
+			mMessageTV.setVisibility(View.VISIBLE);
+		}
+	}
+
+	private void fillValues(){
+
 		title.setText(mTitle);
-		ok.setText(mOkStr);
-		ok.setOnClickListener(this);
-		cancle.setText(mCancelStr);
-		cancle.setOnClickListener(this);
+		if (!TextUtils.isEmpty(mMessage)){
+			mMessageTV.setText(mMessage);
+		}
 
 		mEditText.setText(mDefaultText);
 		mEditText.setSelection(!TextUtils.isEmpty(mDefaultText)?mDefaultText.length():0);
+
+		ok.setText(mOkStr);
+		cancle.setText(mCancelStr);
+	}
+
+	private void addListeners() {
+
+		ok.setOnClickListener(this);
+
+		cancle.setOnClickListener(this);
 	}
 
 	@Override

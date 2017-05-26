@@ -11,6 +11,7 @@ import android.util.Log;
 import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.LayoutInflater;
+import android.view.TextureView;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
@@ -19,6 +20,7 @@ import android.view.WindowManager;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.AdapterView;
+import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.ImageView.ScaleType;
@@ -34,9 +36,16 @@ import com.android.volley.Response.Listener;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.apppubs.d20.AppContext;
+import com.apppubs.d20.R;
+import com.apppubs.d20.activity.CustomWebAppUrlProtocolAndIpActivity;
+import com.apppubs.d20.activity.HomeBottomMenuActivity;
+import com.apppubs.d20.activity.ViewCourier;
 import com.apppubs.d20.adapter.PageFragmentPagerAdapter;
 import com.apppubs.d20.asytask.AsyTaskCallback;
 import com.apppubs.d20.asytask.AsyTaskExecutor;
+import com.apppubs.d20.bean.MenuItem;
+import com.apppubs.d20.constant.Constants;
+import com.apppubs.d20.constant.URLs;
 import com.apppubs.d20.util.FileUtils;
 import com.apppubs.d20.util.JSONResult;
 import com.apppubs.d20.util.LogM;
@@ -44,20 +53,16 @@ import com.apppubs.d20.util.StringUtils;
 import com.apppubs.d20.util.Utils;
 import com.apppubs.d20.util.WebUtils;
 import com.apppubs.d20.widget.CheckableFlowLayout;
+import com.apppubs.d20.widget.DraggableGridView;
+import com.apppubs.d20.widget.DraggableGridView.OnRearrangeListener;
+import com.apppubs.d20.widget.EditTextDialog;
 import com.apppubs.d20.widget.HotArea;
+import com.apppubs.d20.widget.HotAreaImageView;
+import com.apppubs.d20.widget.HotAreaImageView.HotAreaClickListener;
 import com.apppubs.d20.widget.RatioLayout;
 import com.apppubs.d20.widget.ScrollTabs;
 import com.apppubs.d20.widget.SlidePicView;
 import com.apppubs.d20.widget.TitleBar;
-import com.apppubs.d20.R;
-import com.apppubs.d20.activity.HomeBottomMenuActivity;
-import com.apppubs.d20.activity.ViewCourier;
-import com.apppubs.d20.constant.Constants;
-import com.apppubs.d20.constant.URLs;
-import com.apppubs.d20.widget.DraggableGridView;
-import com.apppubs.d20.widget.DraggableGridView.OnRearrangeListener;
-import com.apppubs.d20.widget.HotAreaImageView;
-import com.apppubs.d20.widget.HotAreaImageView.HotAreaClickListener;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -69,11 +74,15 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class PageFragment extends TitleMenuFragment implements OnClickListener{
 
 	public static final String EXTRA_STRING_NAME_PAGE_ID = "page_id";
-	
+	public static final String CUSTOM_WEB_APP_URL_SERIALIZED_FILE_NAME = "custom_web_app_url_map";
+
+
 	private final int ASY_TASK_TAG_RESOLVE_HOTAREAS = 100;//异步解析热区信息
 	private String mPageId;
 	
@@ -149,16 +158,13 @@ public class PageFragment extends TitleMenuFragment implements OnClickListener{
 			@Override
 			public void onResponse(String response) {
 				LogM.log(this.getClass(), response);
-				//出现和缓存不同的数据才进行加载
-				if(!response.equals(mCachedResponse)){
-					mCachedResponse = response;
-					JSONResult jr = JSONResult.compile(response);
-					try {
-						parse(new JSONObject(jr.result));
-					} catch (Exception e) {
-						e.printStackTrace();
-						LogM.log(this.getClass(), e);
-					}
+				mCachedResponse = response;
+				JSONResult jr = JSONResult.compile(response);
+				try {
+					parse(new JSONObject(jr.result));
+				} catch (Exception e) {
+					e.printStackTrace();
+					LogM.log(this.getClass(), e);
 				}
 
 			}
@@ -707,7 +713,9 @@ public class PageFragment extends TitleMenuFragment implements OnClickListener{
 						String viewTag = (String) map.get("viewTag");
 						List<HotArea> hotAreas = (List<HotArea>) map.get("hotareas");
 						HotAreaImageView iv = (HotAreaImageView) mContainerLl.findViewWithTag(viewTag);
-						iv.setHotAreas(hotAreas);
+						if (iv!=null){
+							iv.setHotAreas(hotAreas);
+						}
 					}
 					
 					@Override
@@ -718,7 +726,7 @@ public class PageFragment extends TitleMenuFragment implements OnClickListener{
 					@Override
 					public Object onExecute(Integer tag, String[] params) throws Exception {
 						System.out.println(params[0]);
-						List<HotArea> areas = resolveHotareaItems(params[0],params[1]);
+						List<HotArea> areas = resolveHotareaItems(params[0]);
 						Map<String,Object> map = new HashMap<String,Object>();
 						map.put("viewTag", params[1]);
 						map.put("hotareas", areas);
@@ -728,8 +736,76 @@ public class PageFragment extends TitleMenuFragment implements OnClickListener{
 				iv.setListener(new HotAreaClickListener() {
 					
 					@Override
-					public void onItemClickListener(int index, HotArea hotArea) {
-						resolveUrl(hotArea.getUrl());
+					public void onItemClick(int index, HotArea hotArea) {
+
+						if (!TextUtils.isEmpty(getUrlReplacement(hotArea.getUrl()))){
+							resolveUrl(convertUri(hotArea.getUrl()));
+						}else{
+							resolveUrl(hotArea.getUrl());
+						}
+
+					}
+
+					@Override
+					public void onItemLongClick(int index, final HotArea hotArea) {
+						if (configurable(hotArea.getUrl())){
+
+
+							EditTextDialog dialog = new EditTextDialog(mContext, new EditTextDialog.ConfirmListener() {
+								@Override
+								public void onOkClick(String result) {
+									setUrlReplecement(hotArea.getUrl(),result);
+								}
+
+								@Override
+								public void onCancelClick() {
+
+								}
+							},"自定义服务地址","格式示例 \n http://www.example.com/","取消","确定");
+							dialog.setDefaultText(getUrlReplacement(hotArea.getUrl()));
+							dialog.show();
+						}
+					}
+
+					private String convertUri(String originalUrl) {
+						String tempUri = originalUrl;
+						String replacement = getUrlReplacement(originalUrl);
+
+						if (!TextUtils.isEmpty(replacement)) {
+							Pattern pattern = Pattern.compile("(http|https)://[^/]+");
+							Matcher matcher = pattern.matcher(originalUrl);
+							matcher.find();
+							tempUri = matcher.replaceFirst(replacement);
+						}
+						return tempUri;
+					}
+					private String getUrlReplacement(String url) {
+						Map<String,String> customIpMap = (Map<String, String>) FileUtils.readObj(mContext, CUSTOM_WEB_APP_URL_SERIALIZED_FILE_NAME);
+						if(customIpMap==null){
+							customIpMap = new HashMap<String, String>();
+						}
+
+						return customIpMap.get(url);
+					}
+
+					private void setUrlReplecement(String url,String replacement){
+						Map<String,String> customIpMap = (Map<String, String>) FileUtils.readObj(mContext, CUSTOM_WEB_APP_URL_SERIALIZED_FILE_NAME);
+						if (customIpMap==null){
+							customIpMap = new HashMap<String, String>();
+						}
+						customIpMap.put(url, replacement);
+						FileUtils.writeObj(mContext, customIpMap, CUSTOM_WEB_APP_URL_SERIALIZED_FILE_NAME);
+					}
+
+					private boolean configurable(String url){
+						if (TextUtils.isEmpty(url)){
+							return false;
+						}
+						String configurable = StringUtils.getQueryParameter(url,"configurable");
+						if("1".equals(configurable)){
+							return true;
+						}
+						return false;
 					}
 				});
 				WindowManager wm = mHostActivity.getWindowManager();
@@ -768,8 +844,13 @@ public class PageFragment extends TitleMenuFragment implements OnClickListener{
 				iv.setListener(new HotAreaClickListener() {
 					
 					@Override
-					public void onItemClickListener(int index, HotArea hotArea) {
+					public void onItemClick(int index, HotArea hotArea) {
 						resolveUrl(hotArea.getUrl());
+					}
+
+					@Override
+					public void onItemLongClick(int index, HotArea hotArea) {
+
 					}
 				});
 				WindowManager wm = mHostActivity.getWindowManager();
@@ -830,7 +911,7 @@ public class PageFragment extends TitleMenuFragment implements OnClickListener{
 		}
 	}
 	//解析热区，取出热区内动态数据，最后放到热区内
-	private List<HotArea> resolveHotareaItems(String itemsStr,String tag) throws JSONException {
+	private List<HotArea> resolveHotareaItems(String itemsStr) throws JSONException {
 		List<HotArea> hotAreas = new ArrayList<HotArea>();
 		JSONArray items = new JSONArray(itemsStr);
 		for(int j=-1;++j<items.length();){

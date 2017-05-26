@@ -8,6 +8,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -116,10 +117,14 @@ public class AddressBookOrganizationFragement extends BaseFragment {
 					if(mAppContext.getAppConfig().getChatFlag().equals("1")){
 						TextView registerTv = holder.getView(R.id.item_user_picker_user_title1_tv);
 						registerTv.setVisibility(!TextUtils.isEmpty(userBasicInfo.getAppCodeVersion())?View.GONE:View.VISIBLE);
+						ImageView chatBubble = holder.getView(R.id.item_user_picker_bubble_iv);
+						chatBubble.setVisibility(!TextUtils.isEmpty(userBasicInfo.getAppCodeVersion())?View.VISIBLE:View.GONE);
 					}
 				}else{
 					TextView registerTv = holder.getView(R.id.item_user_picker_user_title1_tv);
 					registerTv.setVisibility(View.GONE);
+					ImageView chatBubble = holder.getView(R.id.item_user_picker_bubble_iv);
+					chatBubble.setVisibility(View.GONE);
 				}
 			}
 		};

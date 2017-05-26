@@ -14,7 +14,9 @@ import android.graphics.Rect;
 import android.text.TextUtils;
 import android.util.AttributeSet;
 import android.util.Log;
+import android.view.GestureDetector;
 import android.view.MotionEvent;
+import android.view.TextureView;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -26,24 +28,45 @@ public class HotAreaImageView extends ImageView {
 	private Paint mPaint;
 	private int mPicWidth;
 	private float mPicAndViewRatio;//图片尺寸比view尺寸
+	private GestureDetector mLongGestureDetector;
 
 	public HotAreaImageView(Context context) {
 		super(context);
-		init();
+		init(context);
 	}
 
 	public HotAreaImageView(Context context, AttributeSet attrs) {
 		super(context, attrs);
-		init();
+		init(context);
 	}
 
 	public interface HotAreaClickListener {
-		void onItemClickListener(int index, HotArea hotArea);
+		void onItemClick(int index, HotArea hotArea);
+		void onItemLongClick(int index,HotArea hotArea);
 	}
 
-	private void init() {
+	private void init(Context context) {
 		mTextHotAreas = new ArrayList<TextView>();
 		mPaint = new Paint();
+
+		mLongGestureDetector = new GestureDetector(context,new GestureDetector.SimpleOnGestureListener() {
+			public void onLongPress(MotionEvent event) {
+				Log.e("", "Longpress detected");
+				int result = clickhotAreaCheck((int) event.getX(), (int) event.getY());
+				if (result!=-1&&mListener != null) {
+					mListener.onItemLongClick(result, mHotAreas.get(result));
+				}
+			}
+
+			@Override
+			public boolean onSingleTapUp(MotionEvent event) {
+				int result = clickhotAreaCheck((int) event.getX(), (int) event.getY());
+				if (result!=-1&&mListener != null) {
+					mListener.onItemClick(result, mHotAreas.get(result));
+				}
+				return super.onSingleTapUp(event);
+			}
+		});
 	}
 
 	public List<HotArea> getHotAreas() {
@@ -71,25 +94,12 @@ public class HotAreaImageView extends ImageView {
 		this.mListener = listener;
 	}
 
+
 	@Override
 	public boolean onTouchEvent(MotionEvent event) {
 		Log.v(this.getClass().getName(),
 				"触摸pdfview action:" + event.getAction() + "maskedAction:" + event.getActionMasked());
-		int result = -1;
-		if (event.getAction() == MotionEvent.ACTION_DOWN && mHotAreas != null
-				&& (result = clickhotAreaCheck((int) event.getX(), (int) event.getY())) != -1) {
-			Log.v(this.getClass().getName(), "点击到了第：" + result + "个热区");
-
-		}
-		if (event.getAction() == MotionEvent.ACTION_UP && mHotAreas != null
-				&& (result = clickhotAreaCheck((int) event.getX(), (int) event.getY())) != -1) {
-			Log.v(this.getClass().getName(), "松开时点击到了第：" + result + "个热区");
-
-			if (mListener != null) {
-				mListener.onItemClickListener(result, mHotAreas.get(result));
-			}
-		}
-
+		mLongGestureDetector.onTouchEvent(event);
 		return true;
 	}
 
@@ -132,6 +142,10 @@ public class HotAreaImageView extends ImageView {
 				drawText(canvas, ha);
 			}else if(HotArea.TYPE_IMAGE.equals(type)){
 				drawBitmap(canvas, ha);
+			}else if(HotArea.TYPE_BADGE.equals(ha.getType())){
+				if (!TextUtils.isEmpty(ha.getText())&&!"0".equals(ha.getText())){
+					drawText(canvas, ha);
+				}
 			}
 			
 		}
@@ -189,7 +203,10 @@ public class HotAreaImageView extends ImageView {
 	}
 	
 	private void drawBitmap(Canvas canvas, HotArea ha){
-		if(HotArea.SHAPE_CIRCLE.equals(ha.getShape())&&null!=ha.getImage()){
+		if (ha.getImage()==null){
+			return;
+		}
+		if(HotArea.SHAPE_CIRCLE.equals(ha.getShape())){
 			mPaint.setAntiAlias(true);
 			mPaint.setColor(Color.TRANSPARENT);
 			mPaint.setStyle(Style.STROKE);
@@ -204,6 +221,24 @@ public class HotAreaImageView extends ImageView {
 			Matrix matrix = new Matrix();
 			matrix.postScale(scaleX, scaleY);
 			matrix.postTranslate(cx-radius, cy-radius);
+			canvas.drawBitmap(ha.getImage(), matrix, null);
+			mPaint.reset();
+		}else if(HotArea.SHAPE_RECT.equals(ha.getShape())){
+			mPaint.setAntiAlias(true);
+			mPaint.setColor(Color.TRANSPARENT);
+			mPaint.setStyle(Style.STROKE);
+			mPaint.setFilterBitmap(true);
+			mPaint.setDither(true);
+			String[] coords = ha.getCoords().split(",");
+			float x1 = Integer.parseInt(coords[0])/mPicAndViewRatio;
+			float y1 = Integer.parseInt(coords[1])/mPicAndViewRatio;
+			float x2 = Integer.parseInt(coords[2])/mPicAndViewRatio;
+			float y2 = Integer.parseInt(coords[3])/mPicAndViewRatio;
+			float scaleX = (x2-x1)/ha.getImage().getWidth();
+			float scaleY = (y2-y1)/ha.getImage().getHeight();
+			Matrix matrix = new Matrix();
+			matrix.postScale(scaleX, scaleY);
+			matrix.postTranslate(x1, y1);
 			canvas.drawBitmap(ha.getImage(), matrix, null);
 			mPaint.reset();
 		}

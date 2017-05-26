@@ -13,6 +13,7 @@ import android.text.TextUtils;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.ImageView.ScaleType;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -44,7 +45,7 @@ public class UserInfoActivity extends BaseActivity implements OnClickListener{
 	private CircleTextImageView mIv;
 	private TextView mNameTv, mDeptTv;
 	private TextView mEmailTV, mTelTV, mMobileTV, mWorkAddressTV,mInviteTV;
-	
+	private LinearLayout mBeginChatBtn;
 	private String mUserInfoUrl;
 	private String[] mIconConfigParams;
 	private boolean mShouldShowDetail;
@@ -108,7 +109,7 @@ public class UserInfoActivity extends BaseActivity implements OnClickListener{
 			}
 		}
 
-		if("1".equals(mAppContext.getAppConfig().getChatFlag())){
+		if(jr.resultCode==1&&"1".equals(mAppContext.getAppConfig().getChatFlag())){
 			RongIM.getInstance().refreshUserInfoCache(new io.rong.imlib.model.UserInfo(mUser.getUserId(), mUser.getTrueName(), Uri.parse((String)jr.getResultMap().get("photourl"))));
 		}
 
@@ -196,6 +197,8 @@ public class UserInfoActivity extends BaseActivity implements OnClickListener{
 		}else {
 			mShouldShowDetail = true;
 		}
+		mBeginChatBtn = (LinearLayout) findViewById(R.id.userinfo_begin_talk);
+		mBeginChatBtn.setBackgroundColor(this.getThemeColor());
 	}
 
 	@Override

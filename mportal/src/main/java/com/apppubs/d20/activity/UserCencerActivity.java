@@ -4,7 +4,9 @@ import android.app.AlertDialog;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.net.Uri;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
@@ -18,7 +20,6 @@ import com.apppubs.d20.AppContext;
 import com.apppubs.d20.R;
 import com.apppubs.d20.asytask.AsyTaskCallback;
 import com.apppubs.d20.asytask.AsyTaskExecutor;
-import com.apppubs.d20.bean.User;
 import com.apppubs.d20.bean.UserInfo;
 import com.apppubs.d20.constant.URLs;
 import com.apppubs.d20.util.BitmapUtils;
@@ -36,6 +37,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+
 public class UserCencerActivity extends BaseActivity {
 
 	private final int REQUEST_CODE_PICTURES = 3;
@@ -49,27 +51,32 @@ public class UserCencerActivity extends BaseActivity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.act_peoplecencer);
-		init();
+		setTitle("账号信息");
+
+		fetchView();
+		showChangePwdIfNeed();
 	}
 
-	private void init() {
+	private void fetchView() {
 
-		setTitle("账号信息");
+
 		mAvatarIV = (CircleTextImageView) findViewById(R.id.usercenter_ctiv);
 		mMOdify = (Button) findViewById(R.id.people_logout);
 		mName = (EditText) findViewById(R.id.people_username);
 		mEmail = (EditText) findViewById(R.id.people_email);
 		mNicname = (EditText) findViewById(R.id.people_nicname);
 		mPhone = (EditText) findViewById(R.id.people_tel);
-		
+	}
+
+	private void showChangePwdIfNeed() {
 		String flags = mAppContext.getAppConfig().getAdbookAccountPWDFlags();
 		String[] params = TextUtils.isEmpty(flags)?null:flags.split(",");
-		
+
 		if(params!=null&&params.length>0){
 			if(params[0] .equals("1")){
 				mTitleBar.setRightText("修改密码");
 				mTitleBar.setRightBtnClickListener(new OnClickListener() {
-					
+
 					@Override
 					public void onClick(View arg0) {
 						Intent intent = new Intent(UserCencerActivity.this,ChangePasswordActivity.class);
@@ -77,51 +84,6 @@ public class UserCencerActivity extends BaseActivity {
 					}
 				});
 			}
-		}
-	}
-
-
-	@Override
-	public void onClick(View v) {
-		super.onClick(v);
-		switch (v.getId()) {
-
-		case R.id.people_logout:
-			
-			new ConfirmDialog(UserCencerActivity.this,
-					new ConfirmDialog.ConfirmListener() {
-
-						@Override
-						public void onOkClick() {
-							mUserBussiness.logout(UserCencerActivity.this);
-							UserCencerActivity.this.finish();
-						}
-
-						@Override
-						public void onCancelClick() {
-
-						}
-					}, "确定注销登陆吗？", "取消", "注销").show();
-
-			break;
-			case R.id.usercenter_avatar_rl:
-				View layout = this.getLayoutInflater().inflate(R.layout.dialog_change_avatar,null);
-				AlertDialog.Builder builder = new AlertDialog.Builder(this);
-				final AlertDialog dialog = builder.create();
-				dialog.setView(layout);
-				TextView tv = (TextView) layout.findViewById(R.id.dialog_change_avatar_tv);
-				tv.setOnClickListener(new OnClickListener() {
-					@Override
-					public void onClick(View v) {
-						dialog.cancel();
-						Intent intent = new Intent(UserCencerActivity.this, MultiImageSelectorActivity.class);
-						intent.putExtra(MultiImageSelectorActivity.EXTRA_SELECT_MODE,MultiImageSelectorActivity.MODE_SINGLE);
-						startActivityForResult(intent, REQUEST_CODE_PICTURES);
-					}
-				});
-				dialog.show();
-
-				break;
 		}
 	}
 
@@ -137,6 +99,69 @@ public class UserCencerActivity extends BaseActivity {
 		mAvatarIV.setText(user.getTrueName());
 	}
 
+
+	@Override
+	public void onClick(View v) {
+		super.onClick(v);
+		switch (v.getId()) {
+
+		case R.id.people_logout:
+			onLogout();
+			break;
+		case R.id.usercenter_avatar_rl:
+			onChangeAvatar();
+			break;
+		}
+	}
+
+	private void onChangeAvatar() {
+		View layout = this.getLayoutInflater().inflate(R.layout.dialog_change_avatar,null);
+		AlertDialog.Builder builder = new AlertDialog.Builder(this);
+		final AlertDialog dialog = builder.create();
+		dialog.setView(layout);
+		TextView tv = (TextView) layout.findViewById(R.id.dialog_change_avatar_tv);
+		tv.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				dialog.cancel();
+
+
+				Intent pickImageIntent = new Intent(Intent.ACTION_PICK, android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+
+				pickImageIntent.setType("image/*");
+				pickImageIntent.putExtra("crop", "true");
+				pickImageIntent.putExtra("outputX", 200);
+				pickImageIntent.putExtra("outputY", 200);
+				pickImageIntent.putExtra("aspectX", 1);
+				pickImageIntent.putExtra("aspectY", 1);
+				pickImageIntent.putExtra("scale", true);
+				pickImageIntent.putExtra(MediaStore.EXTRA_OUTPUT, "");
+				pickImageIntent.putExtra("outputFormat",
+
+						Bitmap.CompressFormat.JPEG.toString());
+				startActivityForResult(pickImageIntent, REQUEST_CODE_PICTURES);
+			}
+		});
+		dialog.show();
+	}
+
+	private void onLogout() {
+		new ConfirmDialog(UserCencerActivity.this,
+				new ConfirmDialog.ConfirmListener() {
+
+					@Override
+					public void onOkClick() {
+						mUserBussiness.logout(UserCencerActivity.this);
+						UserCencerActivity.this.finish();
+					}
+
+					@Override
+					public void onCancelClick() {
+
+					}
+				}, "确定注销登陆吗？", "取消", "注销").show();
+	}
+
 	@Override
 	public void finish() {
 		super.finish();
@@ -149,15 +174,26 @@ public class UserCencerActivity extends BaseActivity {
 		super.onActivityResult(requestCode, resultCode, data);
 		if(requestCode==REQUEST_CODE_PICTURES&&resultCode== RESULT_OK) {
 
-			final List<String> selectPath = data.getStringArrayListExtra(MultiImageSelectorActivity.EXTRA_RESULT);
-			Log.v(UserCencerActivity.class.getName(),selectPath.get(0));
+//			final List<String> selectPath = data.getStringArrayListExtra(MultiImageSelectorActivity.EXTRA_RESULT);
+
+
+			Bundle extras = data.getExtras();
+			Bitmap photo = null;
+			if(extras != null ) {
+				photo = extras.getParcelable("data");
+				ByteArrayOutputStream stream = new ByteArrayOutputStream();
+				photo.compress(Bitmap.CompressFormat.JPEG, 75, stream);
+			}
+
+//			Log.v(UserCencerActivity.class.getName(),selectPath.get(0));
 			ProgressHUD.show(this);
+			final Bitmap finalPhoto = photo;
 			AsyTaskExecutor.getInstance().startTask(1, new AsyTaskCallback() {
 				@Override
 				public Object onExecute(Integer tag, String[] params) throws Exception {
 					String url = String.format(URLs.URL_UPLOAD_AVATAR, AppContext.getInstance(mContext).getCurrentUser().getUserId());
 					Bitmap bitmap = BitmapFactory.decodeFile(params[0]);
-					Bitmap b = BitmapUtils.zoomImg(bitmap,400,400);
+					Bitmap b = BitmapUtils.zoomImg(finalPhoto,400,400);
 					ByteArrayOutputStream baos = new ByteArrayOutputStream();
 					b.compress(Bitmap.CompressFormat.PNG, 100, baos);
 					Map<String,String> paramsMap = new HashMap<String,String>();
@@ -183,7 +219,7 @@ public class UserCencerActivity extends BaseActivity {
 					ProgressHUD.dismissProgressHUDInThisContext(UserCencerActivity.this);
 					Toast.makeText(UserCencerActivity.this,"头像修改失败",Toast.LENGTH_SHORT).show();
 				}
-			},new String[]{selectPath.get(0), AppContext.getInstance(mContext).getCurrentUser().getUserId(),mAppContext.getSettings().getAppCode()});
+			},new String[]{"", AppContext.getInstance(mContext).getCurrentUser().getUserId(),mAppContext.getSettings().getAppCode()});
 
 		}
 

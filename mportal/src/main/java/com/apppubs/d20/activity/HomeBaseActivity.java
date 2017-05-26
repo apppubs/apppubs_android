@@ -95,7 +95,7 @@ public abstract class HomeBaseActivity extends BaseActivity {
 
 		mSystemBussiness.makeStartUpRequest();
 		if (mAppContext.getAppConfig().getChatFlag().equals("1")) {
-			mSystemBussiness.loginRC();
+			mMsgBussiness.loginRC();
 		}
 		initWeather();
 		requestWeather();

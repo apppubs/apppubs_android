@@ -1,6 +1,8 @@
 package com.apppubs.d20.model;
 
 import android.content.Context;
+import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager;
 import android.content.res.Resources;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
@@ -1166,120 +1168,6 @@ public class SystemBussiness extends BaseBussiness {
 
 	}
 
-	/**
-	 * 登录融云
-	 */
-	public void loginRC(){
-		post(new Runnable() {
-			@Override
-			public void run() {
-				String token = getRCToken();
-				if (token!=null){
-					loginRCWithToken(token);
-				}
-			}
-		});
-
-	}
-
-	private String getRCToken(){
-
-		String token = null;
-		String userId = AppContext.getInstance(mContext).getCurrentUser().getUserId();
-		String username = AppContext.getInstance(mContext).getCurrentUser().getTrueName();
-		String url = String.format(URLs.URL_RC_TOKEN,userId,username);
-		try {
-			String response = WebUtils.requestWithGet(url);
-			JSONResult jr = JSONResult.compile(response);
-			Map<String,String> map = jr.getResultMap();
-			token = map.get("token");
-		} catch (IOException e) {
-			e.printStackTrace();
-		} catch (InterruptedException e) {
-			e.printStackTrace();
-		}
-		return token;
-	}
-
-	private void loginRCWithToken(String token){
-		RongIM.connect(token, new RongIMClient.ConnectCallback() {
-
-			/**
-			 * Token 错误。可以从下面两点检查 1.  Token 是否过期，如果过期您需要向 App Server 重新请求一个新的 Token
-			 *                  2.  token 对应的 appKey 和工程里设置的 appKey 是否一致
-			 */
-			@Override
-			public void onTokenIncorrect() {
-
-			}
-
-			/**
-			 * 连接融云成功
-			 * @param userid 当前 token 对应的用户 id
-			 */
-			@Override
-			public void onSuccess(String userid) {
-				Log.d("LoginActivity", "--onSuccess" + userid);
-				setMyExtensionModule();
-				com.apppubs.d20.bean.UserInfo user = AppContext.getInstance(mContext).getCurrentUser();
-				if(user!=null){
-					UserInfo userinfo = new UserInfo(userid,user.getTrueName(), Uri.parse(user.getAvatarUrl()));
-					RongIM.getInstance().setCurrentUserInfo(userinfo);
-					RongIM.getInstance().setMessageAttachedUserInfo(true);
-				}
-
-			}
-
-			/**
-			 * 连接融云失败
-			 * @param errorCode 错误码，可到官网 查看错误码对应的注释
-			 */
-			@Override
-			public void onError(RongIMClient.ErrorCode errorCode) {
-
-			}
-		});
-	}
-
-	public void setMyExtensionModule() {
-		List<IExtensionModule> moduleList = RongExtensionManager.getInstance().getExtensionModules();
-		IExtensionModule defaultModule = null;
-		if (moduleList != null) {
-			for (IExtensionModule module : moduleList) {
-				if (module instanceof DefaultExtensionModule) {
-					defaultModule = module;
-					break;
-				}
-			}
-			if (defaultModule != null) {
-				RongExtensionManager.getInstance().unregisterExtensionModule(defaultModule);
-				RongExtensionManager.getInstance().registerExtensionModule(new MyExtensionModule());
-			}
-		}
-	}
-
-
-	public class MyExtensionModule extends DefaultExtensionModule {
-		private FilePlugin filePlugin;
-		private ImagePlugin imagePlugin;
-//		LocationPlugin locationPlugin;
-		List<IPluginModule> pluginModules ;
-		public MyExtensionModule(){
-			pluginModules = new ArrayList<IPluginModule>();
-//			filePlugin = new FilePlugin();
-			imagePlugin = new ImagePlugin();
-//			pluginModules.add(filePlugin);
-			pluginModules.add(imagePlugin);
-//			locationPlugin = new LocationPlugin();
-//			pluginModules.add(locationPlugin);
-		}
-		@Override
-		public List<IPluginModule> getPluginModules(Conversation.ConversationType conversationType) {
-
-			return pluginModules;
-		}
-
-	}
 	public void inviteUsers(@NonNull final List<String> userIds, @NonNull final BussinessCallbackCommon callback){
 		post(new Runnable() {
 			@Override
@@ -1375,6 +1263,20 @@ public class SystemBussiness extends BaseBussiness {
 		}
 
 
+	}
+
+	public String getVersionString(Context context){
+		PackageInfo pInfo = null;
+		try {
+			pInfo = context.getPackageManager().getPackageInfo(context.getPackageName(), 0);
+		} catch (PackageManager.NameNotFoundException e) {
+			e.printStackTrace();
+		}
+		if (pInfo!=null){
+			return "V" + pInfo.versionName+" ("+ Utils.getVersionCode(mContext)+")";
+		}else{
+			return null;
+		}
 	}
 
 }

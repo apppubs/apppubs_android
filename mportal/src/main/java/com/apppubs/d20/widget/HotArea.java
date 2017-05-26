@@ -7,6 +7,7 @@ public class HotArea {
 	public static final String TYPE_DEFAULT = "0";
 	public static final String TYPE_TEXT = "1";
 	public static final String TYPE_IMAGE = "2";
+	public static final String TYPE_BADGE = "3";
 
 	public static final String IMAGE_DISPLAY_MODE_CENTER_INSIDE = "centerinside";
 	public static final String IMAGE_DISPLAY_MODE_CENTER_CROP = "centercorp";

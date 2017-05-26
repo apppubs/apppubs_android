@@ -184,7 +184,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:gravity="center"
-                android:text="关于我们"
+                android:text="关于"
                 android:textColor="@color/common_text"
                 android:textSize="@dimen/item_text_size" />
 

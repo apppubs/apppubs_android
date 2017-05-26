@@ -348,15 +348,15 @@
         <ImageView
             android:layout_width="25dp"
             android:layout_height="25dp"
-            android:src="@drawable/message_list" />
+            android:src="@drawable/userinfo_chat_bubble" />
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginLeft="6dp"
             android:gravity="center"
-            android:text="开始交流"
-            android:textColor="?attr/appDefaultColor"
+            android:text="开启国投沟通"
+            android:textColor="#FFFFFF"
             android:textSize="@dimen/item_text_size" />
     </LinearLayout>
 
