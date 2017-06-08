@@ -507,7 +507,6 @@ public abstract class BaseActivity extends FragmentActivity implements OnClickLi
 
 	@Override
 	protected void onActivityResult(int requestCode, int resultCode, Intent intent) {
-		super.onActivityResult(requestCode, resultCode, intent);
 		LogM.log(this.getClass(), "onActivityResult");
 		if (requestCode == FILECHOOSER_RESULTCODE) {
 			if (null == mUploadMessage)
@@ -517,6 +516,7 @@ public abstract class BaseActivity extends FragmentActivity implements OnClickLi
 			mUploadMessage = null;
 		}
 
+		super.onActivityResult(requestCode, resultCode, intent);
 	}
 
 }

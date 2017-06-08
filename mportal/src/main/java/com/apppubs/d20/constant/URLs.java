@@ -666,7 +666,7 @@ public class URLs {
 	 */
 	public static final String URL_SYSTEM_CONFIG = baseURL+"wmh360/json/msg/getsysconfig.jsp?clientkey=bb7c1386d85044ba7a7ae53f3362d634&params=%s";
 	
-	public static final String URL_PAGE = baseURL+"wmh360/json/getpagejson.jsp?pageid=%s&appid="+appCode;
+	public static final String URL_PAGE = baseURL+"wmh360/json/getpagejson.jsp?pageid=%s&appid="+appCode+"&userid=%s";
 
 	/**
 	 * 获取融云token

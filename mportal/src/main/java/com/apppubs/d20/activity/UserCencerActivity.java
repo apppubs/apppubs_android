@@ -6,6 +6,7 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Environment;
 import android.provider.MediaStore;
 import android.text.TextUtils;
 import android.util.Log;
@@ -22,6 +23,8 @@ import com.apppubs.d20.asytask.AsyTaskCallback;
 import com.apppubs.d20.asytask.AsyTaskExecutor;
 import com.apppubs.d20.bean.UserInfo;
 import com.apppubs.d20.constant.URLs;
+import com.apppubs.d20.message.model.UserBasicInfo;
+import com.apppubs.d20.model.BussinessCallbackCommon;
 import com.apppubs.d20.util.BitmapUtils;
 import com.apppubs.d20.util.JSONResult;
 import com.apppubs.d20.util.Utils;
@@ -33,9 +36,13 @@ import com.apppubs.d20.widget.ProgressHUD;
 import com.apppubs.multi_image_selector.MultiImageSelectorActivity;
 
 import java.io.ByteArrayOutputStream;
+import java.io.FileNotFoundException;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
+import io.rong.imkit.RongIM;
 
 
 public class UserCencerActivity extends BaseActivity {
@@ -114,6 +121,7 @@ public class UserCencerActivity extends BaseActivity {
 		}
 	}
 
+	Uri uritempFile;
 	private void onChangeAvatar() {
 		View layout = this.getLayoutInflater().inflate(R.layout.dialog_change_avatar,null);
 		AlertDialog.Builder builder = new AlertDialog.Builder(this);
@@ -126,20 +134,11 @@ public class UserCencerActivity extends BaseActivity {
 				dialog.cancel();
 
 
-				Intent pickImageIntent = new Intent(Intent.ACTION_PICK, android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-
-				pickImageIntent.setType("image/*");
-				pickImageIntent.putExtra("crop", "true");
-				pickImageIntent.putExtra("outputX", 200);
-				pickImageIntent.putExtra("outputY", 200);
-				pickImageIntent.putExtra("aspectX", 1);
-				pickImageIntent.putExtra("aspectY", 1);
-				pickImageIntent.putExtra("scale", true);
-				pickImageIntent.putExtra(MediaStore.EXTRA_OUTPUT, "");
-				pickImageIntent.putExtra("outputFormat",
-
-						Bitmap.CompressFormat.JPEG.toString());
-				startActivityForResult(pickImageIntent, REQUEST_CODE_PICTURES);
+				Intent i = new Intent(Intent.ACTION_PICK, android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+				i.putExtra("crop", "true");
+				i.putExtra("aspectX", 1);
+				i.putExtra("aspectY", 1);
+				startActivityForResult(i, REQUEST_CODE_PICTURES);
 			}
 		});
 		dialog.show();
@@ -171,11 +170,8 @@ public class UserCencerActivity extends BaseActivity {
 
 	@Override
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-		super.onActivityResult(requestCode, resultCode, data);
+
 		if(requestCode==REQUEST_CODE_PICTURES&&resultCode== RESULT_OK) {
-
-//			final List<String> selectPath = data.getStringArrayListExtra(MultiImageSelectorActivity.EXTRA_RESULT);
-
 
 			Bundle extras = data.getExtras();
 			Bitmap photo = null;
@@ -183,22 +179,27 @@ public class UserCencerActivity extends BaseActivity {
 				photo = extras.getParcelable("data");
 				ByteArrayOutputStream stream = new ByteArrayOutputStream();
 				photo.compress(Bitmap.CompressFormat.JPEG, 75, stream);
+			}else{
+
+				try {
+					photo = BitmapFactory.decodeStream(getContentResolver().openInputStream(data.getData()));
+				} catch (FileNotFoundException e) {
+					e.printStackTrace();
+				}
 			}
 
-//			Log.v(UserCencerActivity.class.getName(),selectPath.get(0));
 			ProgressHUD.show(this);
 			final Bitmap finalPhoto = photo;
 			AsyTaskExecutor.getInstance().startTask(1, new AsyTaskCallback() {
 				@Override
 				public Object onExecute(Integer tag, String[] params) throws Exception {
 					String url = String.format(URLs.URL_UPLOAD_AVATAR, AppContext.getInstance(mContext).getCurrentUser().getUserId());
-					Bitmap bitmap = BitmapFactory.decodeFile(params[0]);
 					Bitmap b = BitmapUtils.zoomImg(finalPhoto,400,400);
 					ByteArrayOutputStream baos = new ByteArrayOutputStream();
 					b.compress(Bitmap.CompressFormat.PNG, 100, baos);
 					Map<String,String> paramsMap = new HashMap<String,String>();
-					paramsMap.put("userid",params[1]);
-					paramsMap.put("appcode",params[2]);
+					paramsMap.put("userid",params[0]);
+					paramsMap.put("appcode",params[1]);
 					String response = WebUtils.uploadFile(baos.toByteArray(),"file.jpg",url,paramsMap);
 					JSONResult jr = JSONResult.compile(response);
 					String avatarUrl = (String) jr.getResultMap().get("photourl");
@@ -212,6 +213,25 @@ public class UserCencerActivity extends BaseActivity {
 					ProgressHUD.dismissProgressHUDInThisContext(UserCencerActivity.this);
 					Toast.makeText(UserCencerActivity.this,"头像修改成功",Toast.LENGTH_SHORT).show();
 					mImageLoader.displayImage(AppContext.getInstance(mContext).getCurrentUser().getAvatarUrl(),mAvatarIV);
+					List<String> ids = new ArrayList<String>();
+					ids.add(mAppContext.getCurrentUser().getUserId());
+					mUserBussiness.cacheUserBasicInfoList(ids, new BussinessCallbackCommon<List<UserBasicInfo>>() {
+						@Override
+						public void onDone(List<UserBasicInfo> obj) {
+							if (obj!=null&&obj.size()>0){
+								UserBasicInfo ubi = obj.get(0);
+
+								io.rong.imlib.model.UserInfo ui = new io.rong.imlib.model.UserInfo(ubi.getUserId(),ubi.getTrueName(),Uri.parse(ubi.getAtatarUrl()));
+								RongIM.getInstance().refreshUserInfoCache(ui);
+							}
+						}
+
+						@Override
+						public void onException(int excepCode) {
+
+						}
+					});
+
 				}
 
 				@Override
@@ -219,9 +239,11 @@ public class UserCencerActivity extends BaseActivity {
 					ProgressHUD.dismissProgressHUDInThisContext(UserCencerActivity.this);
 					Toast.makeText(UserCencerActivity.this,"头像修改失败",Toast.LENGTH_SHORT).show();
 				}
-			},new String[]{"", AppContext.getInstance(mContext).getCurrentUser().getUserId(),mAppContext.getSettings().getAppCode()});
+			},new String[]{AppContext.getInstance(mContext).getCurrentUser().getUserId(),mAppContext.getSettings().getAppCode()});
 
 		}
+
+		super.onActivityResult(requestCode, resultCode, data);
 
 	}
 }

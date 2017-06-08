@@ -11,7 +11,6 @@ import android.util.Log;
 import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.LayoutInflater;
-import android.view.TextureView;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
@@ -20,7 +19,6 @@ import android.view.WindowManager;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.AdapterView;
-import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.ImageView.ScaleType;
@@ -37,13 +35,12 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.apppubs.d20.AppContext;
 import com.apppubs.d20.R;
-import com.apppubs.d20.activity.CustomWebAppUrlProtocolAndIpActivity;
 import com.apppubs.d20.activity.HomeBottomMenuActivity;
 import com.apppubs.d20.activity.ViewCourier;
 import com.apppubs.d20.adapter.PageFragmentPagerAdapter;
 import com.apppubs.d20.asytask.AsyTaskCallback;
 import com.apppubs.d20.asytask.AsyTaskExecutor;
-import com.apppubs.d20.bean.MenuItem;
+import com.apppubs.d20.bean.UserInfo;
 import com.apppubs.d20.constant.Constants;
 import com.apppubs.d20.constant.URLs;
 import com.apppubs.d20.util.FileUtils;
@@ -114,6 +111,13 @@ public class PageFragment extends TitleMenuFragment implements OnClickListener{
 		initRootView();
 		return mRootView;
 	}
+
+	@Override
+	public void onResume() {
+		super.onResume();
+		loadRemoteData();
+	}
+
 	@Override
 	public void onHiddenChanged(boolean hidden) {
 		super.onHiddenChanged(hidden);
@@ -136,7 +140,7 @@ public class PageFragment extends TitleMenuFragment implements OnClickListener{
 	}
 	
 	private void loadCache() {
-		String url = String.format(URLs.URL_PAGE, mPageId);
+		String url = getUrl();
 		if(mRequestQueue.getCache().get(url)!=null){
 			String cachedResponse = new String(mRequestQueue.getCache().get(url).data);
 			mCachedResponse = cachedResponse;
@@ -149,9 +153,20 @@ public class PageFragment extends TitleMenuFragment implements OnClickListener{
 			}
 		}
 	}
-	
+
+	private String getUrl() {
+		UserInfo ui = mAppContext.getCurrentUser();
+		String url = null;
+		if (ui!=null){
+			url = String.format(URLs.URL_PAGE, mPageId,ui.getUserId());
+		}else{
+			url = String.format(URLs.URL_PAGE, mPageId,"");
+		}
+		return url;
+	}
+
 	private void loadRemoteData() {
-		String url = String.format(URLs.URL_PAGE, mPageId);
+		String url = getUrl();
 
 		StringRequest request = new StringRequest(url, new Listener<String>() {
 
@@ -951,13 +966,14 @@ public class PageFragment extends TitleMenuFragment implements OnClickListener{
 					e.printStackTrace();
 				}
 			}
-		
+
+
 			if(item.has("texturl")&&!TextUtils.isEmpty(item.getString("texturl"))){
 				if (item.getString("texturl").equals("apppubs://macro/text/truename")){
 					ha.setText(AppContext.getInstance(mContext).getCurrentUser().getTrueName());
 				}else {
 					try {
-						ha.setText(WebUtils.requestWithGet(item.getString("texturl")));
+						ha.setText(WebUtils.requestWithGet(mAppContext.convertUrl(item.getString("texturl"))));
 					} catch (IOException e) {
 						e.printStackTrace();
 					} catch (InterruptedException e) {

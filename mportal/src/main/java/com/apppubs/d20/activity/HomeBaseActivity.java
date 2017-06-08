@@ -15,6 +15,7 @@ import android.widget.Toast;
 
 import com.apppubs.d20.AppContext;
 import com.apppubs.d20.bean.UserInfo;
+import com.apppubs.d20.message.model.UserBasicInfo;
 import com.apppubs.d20.model.BussinessCallbackCommon;
 import com.apppubs.d20.util.LogM;
 import com.apppubs.d20.MportalApplication;
@@ -105,6 +106,7 @@ public abstract class HomeBaseActivity extends BaseActivity {
 		SharedPreferenceUtils.getInstance(this).putBoolean(MPORTAL_PREFERENCE_NAME, MPORTAL_PREFERENCE_APP_RUNNING_KEY, true);
 
 
+
 		mUserBussiness.updateUserInfo(this, new BussinessCallbackCommon<UserInfo>() {
 			@Override
 			public void onDone(final UserInfo obj) {
@@ -113,8 +115,8 @@ public abstract class HomeBaseActivity extends BaseActivity {
 
 					@Override
 					public io.rong.imlib.model.UserInfo getUserInfo(String userId) {
-
-						io.rong.imlib.model.UserInfo ui = new io.rong.imlib.model.UserInfo(obj.getUserId(),obj.getTrueName(),Uri.parse(obj.getAvatarUrl()));
+						UserBasicInfo ubi = mUserBussiness.getCachedUserBasicInfo(userId);
+						io.rong.imlib.model.UserInfo ui = new io.rong.imlib.model.UserInfo(ubi.getUserId(),ubi.getTrueName(),Uri.parse(ubi.getAtatarUrl()));
 						return ui;//根据 userId 去你的用户系统里查询对应的用户信息返回给融云 SDK。
 					}
 
