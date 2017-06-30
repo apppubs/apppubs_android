@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    >
+
+    <RelativeLayout
+        android:layout_width="302dp"
+        android:layout_height="405dp"
+        android:background="@drawable/round_corner_bg"
+        >
+
+        <WebView
+            android:id="@+id/compel_dialog_wv"
+            android:layout_width="262dp"
+            android:layout_height="291dp"
+            android:layout_marginLeft="20dp"
+            android:layout_marginTop="10dp"
+            >
+        </WebView>
+        <TextView
+            android:id="@+id/compel_dialog_page_tv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="0/0"
+            android:layout_centerHorizontal="true"
+            android:layout_alignParentBottom="true"
+            android:layout_marginBottom="65dp"
+            android:textSize="13dp"
+            android:textColor="#9c9c9c"
+            />
+
+        <Button
+            android:id="@+id/compel_dialog_pre_btn"
+            android:layout_width="117dp"
+            android:layout_height="35dp"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentLeft="true"
+            android:layout_marginBottom="15dp"
+            android:layout_marginLeft="20dp"
+            android:background="@drawable/compel_message_alert_btn"
+            android:text="上一条"
+            android:textColor="#FFFFFF"
+            android:textSize="14dp"
+            />
+
+        <Button
+            android:id="@+id/compel_dialog_next_btn"
+            android:layout_width="117dp"
+            android:layout_height="35dp"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentRight="true"
+            android:layout_marginBottom="15dp"
+            android:layout_marginRight="20dp"
+            android:background="@drawable/compel_message_alert_btn"
+            android:text="下一条"
+            android:textColor="#FFFFFF"
+            android:textSize="14dp"
+            />
+
+    </RelativeLayout>
+</FrameLayout>
