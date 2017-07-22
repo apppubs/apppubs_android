@@ -10,6 +10,7 @@ import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.ImageView.ScaleType;
@@ -33,6 +34,7 @@ import com.apppubs.d20.model.BussinessCallbackCommon;
 import com.apppubs.d20.constant.URLs;
 import com.apppubs.d20.widget.CircleTextImageView;
 import com.apppubs.d20.widget.ProgressHUD;
+import com.apppubs.d20.widget.menudialog.MenuDialog;
 
 import io.rong.imkit.RongIM;
 import io.rong.imlib.model.Conversation;
@@ -230,29 +232,49 @@ public class UserInfoActivity extends BaseActivity implements OnClickListener{
 				if (TextUtils.isEmpty(mpbile)) {
 					Toast.makeText(this, "手机号不存在!", Toast.LENGTH_SHORT).show();
 				} else {
-
-					ContactDailog dialog = new ContactDailog(UserInfoActivity.this, R.style.dialog,
-							new ContactDailog.ContactDailogListener() {
-								String mpbile = mUser.getMobile();
-
-								@Override
-								public void onSmsClick() {
-									Uri smsToUri = Uri.parse("smsto:" + mpbile);
-									Intent mIntent = new Intent(android.content.Intent.ACTION_SENDTO);
-									mIntent.setData(smsToUri);
-									startActivity(mIntent);
-									mUserBussiness.recordUser(mUser.getUserId());
-								}
-
-								@Override
-								public void onCallClick() {
-									Intent intentCall = new Intent(android.content.Intent.ACTION_CALL);
-									intentCall.setData(Uri.parse("tel:" + mpbile));
-									startActivity(intentCall);
-									mUserBussiness.recordUser(mUser.getUserId());
-								}
-							});
-					dialog.show();
+					String[] menus = {"打电话","发信息"};
+					new MenuDialog(mContext, menus, new MenuDialog.MenuDialogListener() {
+						@Override
+						public void onItemClicked(int index) {
+							String mpbile = mUser.getMobile();
+							if (index==0){
+								Intent intentCall = new Intent(android.content.Intent.ACTION_CALL);
+								intentCall.setData(Uri.parse("tel:" + mpbile));
+								startActivity(intentCall);
+								mUserBussiness.recordUser(mUser.getUserId());
+							}else if (index==1){
+								Uri smsToUri = Uri.parse("smsto:" + mpbile);
+								Intent mIntent = new Intent(android.content.Intent.ACTION_SENDTO);
+								mIntent.setData(smsToUri);
+								startActivity(mIntent);
+								mUserBussiness.recordUser(mUser.getUserId());
+							}else{
+								Log.v("UserInfoActivity","鬼才知道发生什么");
+							}
+						}
+					}).show();
+//					ContactDailog dialog = new ContactDailog(UserInfoActivity.this, R.style.dialog,
+//							new ContactDailog.ContactDailogListener() {
+//								String mpbile = mUser.getMobile();
+//
+//								@Override
+//								public void onSmsClick() {
+//									Uri smsToUri = Uri.parse("smsto:" + mpbile);
+//									Intent mIntent = new Intent(android.content.Intent.ACTION_SENDTO);
+//									mIntent.setData(smsToUri);
+//									startActivity(mIntent);
+//									mUserBussiness.recordUser(mUser.getUserId());
+//								}
+//
+//								@Override
+//								public void onCallClick() {
+//									Intent intentCall = new Intent(android.content.Intent.ACTION_CALL);
+//									intentCall.setData(Uri.parse("tel:" + mpbile));
+//									startActivity(intentCall);
+//									mUserBussiness.recordUser(mUser.getUserId());
+//								}
+//							});
+//					dialog.show();
 				}
 			}
 			break;

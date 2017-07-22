@@ -40,7 +40,7 @@ import com.apppubs.d20.activity.ContainerActivity;
 import com.apppubs.d20.activity.HomeBaseActivity;
 import com.apppubs.d20.activity.ViewCourier;
 import com.apppubs.d20.constant.Constants;
-import com.apppubs.d20.fragment.FilePreviewFragment;
+import com.apppubs.d20.myfile.FilePreviewFragment;
 import com.apppubs.d20.util.HttpRequestParser;
 import com.apppubs.d20.util.WebUtils;
 import com.apppubs.d20.widget.AlertDialog.OnOkClickListener;

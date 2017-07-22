@@ -694,6 +694,18 @@ public class URLs {
 	 */
 	public static final String URL_UPLOAD_AVATAR = baseURL+"wmh360/json/user/uploadavatar.jsp?userid=%s&appcode="+appCode+"&clientkey=bb7c1386d85044ba7a7ae53f3362d634";
 
+//	NSString * const kURLMyFilePage = @"%@wmh360/json/user/getfilelist.jsp?appcode=%@&curp=%d&perp=20&username=%@&clientkey=bb7c1386d85044ba7a7ae53f3362d634";
+	public static final String URL_MY_FILE_PAGE = baseURL+"wmh360/json/user/getfilelist.jsp?appcode="+appCode+"&curp=%d&perp=20&username=%s&clientkey=bb7c1386d85044ba7a7ae53f3362d634";
 
+	/**
+		删除文件
+		http://60.205.140.176:8088/wmh360/json/user/delfile.jsp?appcode=D20&clientkey=bb7c1386d85044ba7a7ae53f3362d634&fileid=1
+	 */
+	public static final String URL_MY_FILE_DELETE = baseURL+"wmh360/json/user/delfile.jsp?appcode="+appCode+"&clientkey=bb7c1386d85044ba7a7ae53f3362d634&fileid=%s";
 
+	/**
+	 * 搜索文件
+	 * http://60.205.140.176:8088/wmh360/json/user/searchfile.jsp?filename=国&username=xdhryce&curp=1&perp=10&clientkey=bb7c1386d85044ba7a7ae53f3362d634&appcode=D20
+	 */
+	public static final String URL_MY_FILE_SEARCH = baseURL+"wmh360/json/user/searchfile.jsp?filename=%s&username=%s&curp=%d&perp=20&clientkey=bb7c1386d85044ba7a7ae53f3362d634&appcode="+appCode;
 }

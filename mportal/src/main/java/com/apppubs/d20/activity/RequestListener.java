@@ -1,4 +1,4 @@
-package com.apppubs.d20.net;
+package com.apppubs.d20.activity;
 
 import com.apppubs.d20.util.JSONResult;
 

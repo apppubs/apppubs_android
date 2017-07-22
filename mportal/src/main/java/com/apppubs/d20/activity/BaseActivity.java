@@ -8,7 +8,6 @@ import android.content.pm.ActivityInfo;
 import android.content.res.TypedArray;
 import android.graphics.Color;
 import android.net.Uri;
-import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -32,19 +31,16 @@ import com.android.volley.toolbox.Volley;
 import com.apppubs.d20.AppContext;
 import com.apppubs.d20.MportalApplication;
 import com.apppubs.d20.R;
-import com.apppubs.d20.bean.App;
 import com.apppubs.d20.bean.AppConfig;
 import com.apppubs.d20.bean.Settings;
 import com.apppubs.d20.bean.UserInfo;
 import com.apppubs.d20.constant.Actions;
-import com.apppubs.d20.constant.URLs;
 import com.apppubs.d20.message.model.UserBussiness;
 import com.apppubs.d20.model.BussinessCallbackCommon;
 import com.apppubs.d20.model.MsgBussiness;
 import com.apppubs.d20.model.NewsBussiness;
 import com.apppubs.d20.model.PaperBussiness;
 import com.apppubs.d20.model.SystemBussiness;
-import com.apppubs.d20.net.RequestListener;
 import com.apppubs.d20.service.DownloadAppService;
 import com.apppubs.d20.util.JSONResult;
 import com.apppubs.d20.util.LogM;
@@ -57,11 +53,6 @@ import com.nostra13.universalimageloader.core.ImageLoader;
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import java.io.UnsupportedEncodingException;
-import java.net.URLEncoder;
 
 public abstract class BaseActivity extends FragmentActivity implements OnClickListener {
 

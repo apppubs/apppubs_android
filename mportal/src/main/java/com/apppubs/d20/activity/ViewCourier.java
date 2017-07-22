@@ -1,11 +1,6 @@
 package com.apppubs.d20.activity;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-
+import android.app.Activity;
 import android.content.BroadcastReceiver;
 import android.content.ComponentName;
 import android.content.Context;
@@ -22,7 +17,8 @@ import android.view.View.OnClickListener;
 import android.widget.Toast;
 
 import com.apppubs.d20.AppContext;
-import com.apppubs.d20.MyFileActivity;
+import com.apppubs.d20.myfile.MyFileFragment;
+import com.apppubs.d20.R;
 import com.apppubs.d20.bean.App;
 import com.apppubs.d20.bean.MenuItem;
 import com.apppubs.d20.bean.NewsChannel;
@@ -44,6 +40,7 @@ import com.apppubs.d20.fragment.MenuGroupsFragment;
 import com.apppubs.d20.fragment.MoreFragment;
 import com.apppubs.d20.fragment.MsgRecordListFragment;
 import com.apppubs.d20.fragment.PageFragment;
+import com.apppubs.d20.fragment.PapersFragment;
 import com.apppubs.d20.fragment.SettingFragment;
 import com.apppubs.d20.fragment.TitleMenuFragment;
 import com.apppubs.d20.fragment.WebAppFragment;
@@ -55,9 +52,13 @@ import com.apppubs.d20.util.LogM;
 import com.apppubs.d20.util.StringUtils;
 import com.apppubs.d20.widget.ConfirmDialog;
 import com.apppubs.d20.widget.TitleBar;
-import com.apppubs.d20.R;
-import com.apppubs.d20.fragment.PapersFragment;
 import com.orm.SugarRecord;
+
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  * 界面控制器，用户跳转页面
@@ -205,7 +206,9 @@ public class ViewCourier {
             }
             context.startActivity(intent);
         } else if (url.equals("apppubs://closewindow")) {
-//            context.finish();
+			if (context instanceof Activity){
+				((Activity)context).finish();
+			}
         } else if (url.startsWith("apppubs://qrcode")) {
             Intent intent = new Intent(context, CaptureActivity.class);
             context.startActivity(intent);
@@ -236,7 +239,12 @@ public class ViewCourier {
             if (params.length > 1) {
                 Toast.makeText(context, params[1], Toast.LENGTH_LONG).show();
             }
-        } else {
+        }else if(url.startsWith("apppubs://myfile")){
+			String title = StringUtils.getQueryParameter(url, "title");
+			Bundle args = new Bundle();
+			args.putString(ContainerActivity.EXTRA_STRING_TITLE, title);
+			ContainerActivity.startActivity(context,MyFileFragment.class,args);
+		} else {
             Toast.makeText(context, "请求地址(" + url + ")错误", Toast.LENGTH_SHORT).show();
         }
 
@@ -554,7 +562,7 @@ public class ViewCourier {
             mFragmentsMap.put(item, frg);
             mHomeActivity.changeContent(frg);
         } else if (uri.equals(MenuItem.MENU_URL_MY_FILE)) {
-            intent = new Intent(mHomeActivity, MyFileActivity.class);
+            intent = new Intent(mHomeActivity, MyFileFragment.class);
             intent.putExtra(BaseActivity.EXTRA_STRING_TITLE, item.getName());
             mHomeActivity.startActivity(intent);
 

@@ -10,6 +10,7 @@ import android.util.Log;
 import android.view.Gravity;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.animation.AccelerateInterpolator;
 import android.view.animation.DecelerateInterpolator;
 import android.widget.AbsListView;
 import android.widget.AbsListView.OnScrollListener;
@@ -25,7 +26,7 @@ import com.apppubs.d20.R;
 
 public class CommonListView extends FrameLayout implements OnScrollListener {
 
-	
+
 	private Context mContext;
 	private MyListView mListView;
 	private Drawable mListSel;
@@ -61,19 +62,19 @@ public class CommonListView extends FrameLayout implements OnScrollListener {
 	private final static int SCROLLBACK_HEADER = 0;
 	private final static int SCROLLBACK_FOOTER = 1;
 
-	final static int SCROLL_DURATION = 300; // scroll back duration
+	final static int SCROLL_DURATION = 500; // scroll back duration
 	private final static int PULL_LOAD_MORE_DELTA = 50; // when pull up >= 50px
-														// at bottom, trigger
-														// load more.
+	// at bottom, trigger
+	// load more.
 	private final static float OFFSET_RADIO = 0.4f; // support iOS like pull
-													// feature.
+	// feature.
 
 	private View mListHeader;//list顶部的item 透明装，改变其高度可以显示出后面的图层
-	
+
 	private TextView mEmptyTv;//当列表为空时显示的文本框
 	private String mEmptyString;//列表为空时显示的文字
-	
-	
+
+
 	/**
 	 * @param context
 	 */
@@ -84,12 +85,12 @@ public class CommonListView extends FrameLayout implements OnScrollListener {
 	public CommonListView(Context context, AttributeSet attrs) {
 		super(context, attrs);
 		mContext = context;
-		TypedArray ta = context.obtainStyledAttributes(attrs,R.styleable.CommonListView);
+		TypedArray ta = context.obtainStyledAttributes(attrs, R.styleable.CommonListView);
 		mListSel = ta.getDrawable(R.styleable.CommonListView_list_sel);
 		mEmptyString = ta.getString(R.styleable.CommonListView_empty_string);
 		ta.recycle();
 		initWithContext(context);
-		
+
 	}
 
 	public CommonListView(Context context, AttributeSet attrs, int defStyle) {
@@ -102,24 +103,24 @@ public class CommonListView extends FrameLayout implements OnScrollListener {
 		//初始化设置请listview样式,listview的背景为透明，每个item赋给的颜色，留下，header 和 footer为透明滑动时改变header的高度
 		mListView = new MyListView(context);
 		mListView.setDivider(null);
-		if(Build.VERSION.SDK_INT>8){
+		if (Build.VERSION.SDK_INT > 8) {
 			mListView.setOverScrollMode(View.OVER_SCROLL_NEVER);
 		}
 		mListView.setEmptyView(mEmptyTv);
 		mEmptyTv = new TextView(mContext);
 		mEmptyTv.setText(mEmptyString);
-		
+
 		LayoutParams lp = new LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
 		lp.gravity = Gravity.CENTER;
-		addView(mEmptyTv,lp);
-		
-		mScroller = new Scroller(context, new DecelerateInterpolator());
+		addView(mEmptyTv, lp);
+
+		mScroller = new Scroller(context, new AccelerateInterpolator());
 		//  need the scroll event, and it will dispatch the event to
 		// user's listener (as a proxy).
 		mListView.setOnScrollListener(this);
 		mListHeader = new View(context);
 		mListView.addHeaderView(mListHeader);
-		if(mListSel!=null)
+		if (mListSel != null)
 			mListView.setSelector(mListSel);
 		// init header view
 		mHeaderBgView = new CommonListViewHeaderBackground(context);
@@ -130,34 +131,35 @@ public class CommonListView extends FrameLayout implements OnScrollListener {
 		mHeaderBgView.setVisibility(View.GONE);
 		addView(mHeaderBgView);
 		addView(mListView);
-		
+
 		// init footer view
 		mFooterView = new CommonListViewFooter(context);
 
 //		// init header height
 		mHeaderViewHeight = (int) context.getResources().getDimension(R.dimen.commonlistview_header_h);
-		mHeaderViewHeightReciprocal = 1.0f/mHeaderViewHeight;
+		mHeaderViewHeightReciprocal = 1.0f / mHeaderViewHeight;
 	}
 
 	public void setAdapter(ListAdapter adapter) {
-		
+
 		mListView.setAdapter(adapter);
-		
+
 		// make sure CommonListViewFooter is the last footer view, and only add once.
-		if(!adapter.isEmpty()&&mIsFooterReady == false){
-			
+		if (!adapter.isEmpty() && mIsFooterReady == false) {
+
 			mIsFooterReady = true;
 			mListView.addFooterView(mFooterView);
 		}
 	}
 
-	
-	public long getItemAtPosition(int position){
+
+	public long getItemAtPosition(int position) {
 		return mListView.getItemIdAtPosition(position);
 	}
+
 	/**
 	 * enable or disable pull down refresh feature.
-	 * 
+	 *
 	 * @param enable
 	 */
 	public void setPullRefreshEnable(boolean enable) {
@@ -171,7 +173,7 @@ public class CommonListView extends FrameLayout implements OnScrollListener {
 
 	/**
 	 * enable or disable pull up load more feature.
-	 * 
+	 *
 	 * @param enable
 	 */
 	public void setPullLoadEnable(boolean enable) {
@@ -200,17 +202,17 @@ public class CommonListView extends FrameLayout implements OnScrollListener {
 	public void stopRefresh() {
 		if (mPullRefreshing == true) {
 			mPullRefreshing = false;
-			resetHeaderHeight();
 			mHeaderBgView.setState(CommonListViewHeaderBackground.STATE_DONE);
-			Log.v("CommonListView","停止刷新。。。。");
+			resetHeaderHeight();
+			Log.v("CommonListView", "停止刷新。。。。");
 		}
 	}
 
-	
+
 	/**
 	 * 手动刷新
 	 */
-	public void refresh(){
+	public void refresh() {
 		mHeaderBgView.setVisibility(View.VISIBLE);
 		startRefresh();
 		mScroller.startScroll(0, 0, 0, mHeaderViewHeight,
@@ -221,7 +223,7 @@ public class CommonListView extends FrameLayout implements OnScrollListener {
 
 	}
 
-	private void startRefresh(){
+	private void startRefresh() {
 		if (mPullRefreshing)
 			return;
 		mPullRefreshing = true;
@@ -229,13 +231,14 @@ public class CommonListView extends FrameLayout implements OnScrollListener {
 		if (mListViewListener != null) {
 			mListViewListener.onRefresh();
 		}
-		
+
 		mFooterView.reset();
 	}
-	
-	public boolean isRefreshing(){
+
+	public boolean isRefreshing() {
 		return mPullRefreshing;
 	}
+
 	/**
 	 * stop load more, reset footer view.
 	 */
@@ -245,73 +248,73 @@ public class CommonListView extends FrameLayout implements OnScrollListener {
 			mFooterView.setState(CommonListViewFooter.STATE_NORMAL);
 		}
 	}
-	
+
 	/**
 	 * 已经加载了全部
 	 */
-	public void haveLoadAll(){
+	public void haveLoadAll() {
 		mFooterView.setState(CommonListViewFooter.STATE_ALL_LOADED);
 	}
 
 	/**
 	 * set last refresh time
-	 * 
+	 *
 	 * @param time
 	 */
 	public void setRefreshTime(String time) {
 		mHeaderTimeView.setText(time);
 	}
 
-	
+
 	//顶部拉动是执行，开始运行动画
 	private void onHeaderPull(float offset) {
-		Log.v("CommonListView","onHeaderPull"+offset);
-			mHeaderBgView.setProgressPieProgress(offset);
+		mHeaderBgView.setProgressPieProgress(offset);
 	}
-	private int getHeaderHeight(){
+
+	private int getHeaderHeight() {
 		AbsListView.LayoutParams lp = (AbsListView.LayoutParams) mListHeader.getLayoutParams();
-		if(lp==null) return 0;
+		if (lp == null) return 0;
 		return lp.height;
 	}
+
 	private void updateHeaderHeight(float delta) {
-		if(mEnablePullRefresh&&mHeaderBgView.getVisibility()==View.GONE){
+		if (mEnablePullRefresh && mHeaderBgView.getVisibility() == View.GONE) {
 			mHeaderBgView.setVisibility(View.VISIBLE);
 		}
 		AbsListView.LayoutParams lp = (AbsListView.LayoutParams) mListHeader.getLayoutParams();
 		int height = 0;
-		if(lp!=null){
-			
+		if (lp != null) {
+
 			height = (int) (lp.height + delta);
 			lp.height = height;
 			mListHeader.setLayoutParams(lp);
 		}
-		
-		if (mEnablePullRefresh && !mPullRefreshing) { 
+
+		if (mEnablePullRefresh && !mPullRefreshing) {
 			if (height > mHeaderViewHeight) {
 				mHeaderBgView.setState(CommonListViewHeaderBackground.STATE_READY);
 			} else {
 				mHeaderBgView.setState(CommonListViewHeaderBackground.STATE_NORMAL);
 			}
 		}
-		if(mEnablePullRefresh&&height<=mHeaderViewHeight){
-			onHeaderPull(height*mHeaderViewHeightReciprocal);
+		if (mEnablePullRefresh && height <= mHeaderViewHeight) {
+			onHeaderPull(height * mHeaderViewHeightReciprocal);
 		}
-		
-		
+
+
 //		mListView.setSelection(0); // scroll to top each time
 	}
-	
+
 	/**
 	 * reset header view's height.
 	 */
 	private void resetHeaderHeight() {
 //		int height = mHeaderView.getVisiableHeight();
-//		Log.v("commonListview:","resetHeaderHeight li.height"+lp.height+"headerheight:"+mHeaderViewHeight);
 		int headerHeight = getHeaderHeight();
 		if (headerHeight == 0) // not visible.
 			return;
 		// refreshing and header isn't shown fully. do nothing.
-		if (mPullRefreshing && headerHeight <=mHeaderViewHeight) {
+		if (mPullRefreshing && headerHeight <= mHeaderViewHeight) {
 			return;
 		}
 		int finalHeight = 0; // default: scroll back to dismiss header.
@@ -320,12 +323,14 @@ public class CommonListView extends FrameLayout implements OnScrollListener {
 			finalHeight = mHeaderViewHeight;
 		}
 		mScrollBack = SCROLLBACK_HEADER;
+
 		mScroller.startScroll(0, headerHeight, 0, finalHeight - headerHeight,
 				SCROLL_DURATION);
+		Log.v("CommonListView","startY:"+headerHeight+"dy:"+(finalHeight - headerHeight));
 		if(finalHeight==0){
-			
+
 			this.postDelayed(new Runnable() {
-				
+
 				@Override
 				public void run() {
 					mHeaderBgView.setVisibility(View.GONE);
@@ -340,15 +345,15 @@ public class CommonListView extends FrameLayout implements OnScrollListener {
 		int height = mFooterView.getBottomMargin() + (int) delta;
 		if (mEnablePullLoad && !mPullLoading) {
 			if (height > PULL_LOAD_MORE_DELTA) { // height enough to invoke load
-													// more.
+				// more.
 				mFooterView.setState(CommonListViewFooter.STATE_READY);
 			} else {
 				mFooterView.setState(CommonListViewFooter.STATE_NORMAL);
 			}
 		}
-		 mFooterView.setBottomMargin(height);
+		mFooterView.setBottomMargin(height);
 
-		 mListView.setSelection(mTotalItemCount - 1); // scroll to bottom
+		mListView.setSelection(mTotalItemCount - 1); // scroll to bottom
 	}
 
 	private void resetFooterHeight() {
@@ -362,7 +367,7 @@ public class CommonListView extends FrameLayout implements OnScrollListener {
 	}
 
 	private void startLoadMore() {
-		if(mFooterView.getState()==CommonListViewFooter.STATE_ALL_LOADED){
+		if (mFooterView.getState() == CommonListViewFooter.STATE_ALL_LOADED) {
 			return;
 		}
 		mPullLoading = true;
@@ -378,14 +383,14 @@ public class CommonListView extends FrameLayout implements OnScrollListener {
 		if (mScroller.computeScrollOffset()) {
 			if (mScrollBack == SCROLLBACK_HEADER) {
 				AbsListView.LayoutParams lp = (android.widget.AbsListView.LayoutParams) mListHeader.getLayoutParams();
-				if(lp==null){
+				if (lp == null) {
 					lp = new AbsListView.LayoutParams(LayoutParams.MATCH_PARENT, mScroller.getCurrY());
-				}else{
+				} else {
 					lp.height = mScroller.getCurrY();
 				}
 				mListHeader.setLayoutParams(lp);
-				if(mHeaderViewHeight>=lp.height){
-					onHeaderPull(lp.height/(float)mHeaderViewHeight);
+				if (mHeaderViewHeight >= lp.height) {
+					onHeaderPull(lp.height / (float) mHeaderViewHeight);
 				}
 			} else {
 				mFooterView.setBottomMargin(mScroller.getCurrY());
@@ -408,7 +413,7 @@ public class CommonListView extends FrameLayout implements OnScrollListener {
 
 	@Override
 	public void onScroll(AbsListView view, int firstVisibleItem,
-			int visibleItemCount, int totalItemCount) {
+						 int visibleItemCount, int totalItemCount) {
 		// send to user's listener
 		mTotalItemCount = totalItemCount;
 		if (mScrollListener != null) {
@@ -421,29 +426,32 @@ public class CommonListView extends FrameLayout implements OnScrollListener {
 		mListViewListener = l;
 	}
 
-	
+
 	public void setOnItemClickListener(OnItemClickListener listener) {
 		mListView.setOnItemClickListener(listener);
 	}
-	
+
 	public void addHeaderView(View v) {
 		mListView.addHeaderView(v);
 	}
-	
-	public void removeHeaderView (View v){
+
+	public void removeHeaderView(View v) {
 		mListView.removeHeaderView(v);
 	}
-	public void setSelection(int position){
+
+	public void setSelection(int position) {
 		mListView.setSelection(position);
 	}
-	
-	public void setStackFromBottom(boolean b){
+
+	public void setStackFromBottom(boolean b) {
 		mListView.setStackFromBottom(b);
 	}
-	public void setTranscriptMode(int mode){
+
+	public void setTranscriptMode(int mode) {
 		mListView.setTranscriptMode(mode);
 	}
-	class MyListView extends ListView{
+
+	class MyListView extends ListView {
 
 		public MyListView(Context context) {
 			super(context);
@@ -451,65 +459,65 @@ public class CommonListView extends FrameLayout implements OnScrollListener {
 
 		@Override
 		public boolean onTouchEvent(MotionEvent ev) {
-			
-			Log.v("MyListView","onTouchEvent "+ev.getActionMasked());
+
+			Log.v("MyListView", "onTouchEvent " + ev.getActionMasked());
 			if (mLastY == -1) {
 				mLastY = ev.getRawY();
 			}
 
 			switch (ev.getActionMasked()) {
-			case MotionEvent.ACTION_DOWN:
-				mLastY = ev.getRawY();
-				break;
-			case MotionEvent.ACTION_POINTER_DOWN:
-				Log.v("MyListView","ACTION_POINTER_DOWN "+ev.getActionMasked());
-			case MotionEvent.ACTION_POINTER_UP:
-				Log.v("MyListView","ACTION_POINTER_UP "+ev.getActionMasked());
-			case MotionEvent.ACTION_MOVE:
-				final float deltaY = ev.getRawY() - mLastY;
-				mLastY = ev.getRawY();
-				if (mListView.getFirstVisiblePosition() == 0
-						&& (getHeaderHeight()>0 || deltaY > 0)) {
-					// the first item is showing, header has shown or pull down.
-					updateHeaderHeight(deltaY *OFFSET_RADIO);
-					return true;
-				} else if (mListView.getLastVisiblePosition() == mTotalItemCount - 1
-						&& (mFooterView.getBottomMargin() > 0 || deltaY < 0)) {
-					// last item, already pulled up or want to pull up.
-					updateFooterHeight(-deltaY *OFFSET_RADIO);
-					
-				}
-				break;
-			case MotionEvent.ACTION_UP:
-				mLastY = -1; // reset
-				if (mListView.getFirstVisiblePosition() == 0) {
-					// invoke refresh
-					if (mEnablePullRefresh&& getHeaderHeight()> mHeaderViewHeight) {
-						startRefresh();
+				case MotionEvent.ACTION_DOWN:
+					mLastY = ev.getRawY();
+					break;
+				case MotionEvent.ACTION_POINTER_DOWN:
+					Log.v("MyListView", "ACTION_POINTER_DOWN " + ev.getActionMasked());
+				case MotionEvent.ACTION_POINTER_UP:
+					Log.v("MyListView", "ACTION_POINTER_UP " + ev.getActionMasked());
+				case MotionEvent.ACTION_MOVE:
+					final float deltaY = ev.getRawY() - mLastY;
+					mLastY = ev.getRawY();
+					if (mListView.getFirstVisiblePosition() == 0
+							&& (getHeaderHeight() > 0 || deltaY > 0)) {
+						// the first item is showing, header has shown or pull down.
+						updateHeaderHeight(deltaY * OFFSET_RADIO);
+						return true;
+					} else if (mListView.getLastVisiblePosition() == mTotalItemCount - 1
+							&& (mFooterView.getBottomMargin() > 0 || deltaY < 0)) {
+						// last item, already pulled up or want to pull up.
+						updateFooterHeight(-deltaY * OFFSET_RADIO);
+
 					}
-					resetHeaderHeight();
-					if(getHeaderHeight()>0)return true;
+					break;
+				case MotionEvent.ACTION_UP:
+					mLastY = -1; // reset
+					if (mListView.getFirstVisiblePosition() == 0) {
+						// invoke refresh
+						if (mEnablePullRefresh && getHeaderHeight() > mHeaderViewHeight) {
+							startRefresh();
+						}
+						resetHeaderHeight();
+						if (getHeaderHeight() > 0) return true;
 //					AbsListView.LayoutParams lp2 = (AbsListView.LayoutParams) mListHeader.getLayoutParams();
 //					if(lp2!=null&&lp2.height>0)
 //						return true;
-				} else if (mListView.getLastVisiblePosition() == mTotalItemCount - 1) {
-					// invoke load more.
-					if (mEnablePullLoad&&!mPullRefreshing&& mFooterView.getBottomMargin() > PULL_LOAD_MORE_DELTA
-							&& !mPullLoading) {
-						startLoadMore();
+					} else if (mListView.getLastVisiblePosition() == mTotalItemCount - 1) {
+						// invoke load more.
+						if (mEnablePullLoad && !mPullRefreshing && mFooterView.getBottomMargin() > PULL_LOAD_MORE_DELTA
+								&& !mPullLoading) {
+							startLoadMore();
+						}
+						resetFooterHeight();
 					}
-					resetFooterHeight();
-				}
-				break;
-			 case MotionEvent.ACTION_CANCEL:
-				 
-		        	return false;
-			default:
-				break;
+					break;
+				case MotionEvent.ACTION_CANCEL:
+
+					return false;
+				default:
+					break;
 			}
 			return super.onTouchEvent(ev);
 		}
-		float lastY = -1 ,lastX = -1,xDistance, yDistance;
-//		
+
+		float lastY = -1, lastX = -1, xDistance, yDistance;
 	}
 }

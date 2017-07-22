@@ -5,7 +5,7 @@ import android.content.Intent;
 import android.os.Bundle;
 
 import com.apppubs.d20.bean.NewsInfo;
-import com.apppubs.d20.fragment.FilePreviewFragment;
+import com.apppubs.d20.myfile.FilePreviewFragment;
 import com.apppubs.d20.fragment.WebAppFragment;
 
 /**

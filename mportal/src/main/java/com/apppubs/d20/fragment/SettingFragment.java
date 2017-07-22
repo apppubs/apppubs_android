@@ -37,16 +37,13 @@ import com.apppubs.d20.model.SystemBussiness;
 import com.apppubs.d20.widget.ConfirmDialog;
 import com.apppubs.d20.MportalApplication;
 import com.apppubs.d20.R;
-import com.apppubs.d20.activity.AboutUsActivity;
 import com.apppubs.d20.activity.ContainerActivity;
 import com.apppubs.d20.activity.CustomWebAppUrlProtocolAndIpActivity;
 import com.apppubs.d20.activity.LogsListActivity;
 import com.apppubs.d20.activity.ThemeSwitchActivity;
-import com.apppubs.d20.activity.WebAppActivity;
 import com.apppubs.d20.bean.MenuItem;
 import com.apppubs.d20.bean.Settings;
 import com.apppubs.d20.model.BussinessCallbackCommon;
-import com.apppubs.d20.constant.URLs;
 import com.apppubs.d20.service.DownloadAppService;
 import com.apppubs.d20.util.FileUtils;
 import com.apppubs.d20.util.Utils;
@@ -217,7 +214,7 @@ public class SettingFragment extends TitleMenuFragment implements OnClickListene
 		}
 	}
 	private void refreshCacheSize() {
-		mCacheTv.setText(FileUtils.FormetFileSize(mSystemBussiness.getCacheSize()));
+		mCacheTv.setText(FileUtils.formetFileSize(mSystemBussiness.getCacheSize()));
 	}
 
 	@Override

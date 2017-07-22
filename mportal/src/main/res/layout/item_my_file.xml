@@ -1,35 +1,72 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    style="@style/item_menu_lv_withpic"
-    android:orientation="horizontal" 
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/sel_common_item"
     >
-   <TextView 
-        android:id="@+id/my_file_name_tv"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textColor="@color/common_text"
-        android:textSize="@dimen/item_text_size"
-        />
-	<TextView 
-	    android:id="@+id/my_file_time_tv"
-	    android:layout_width="wrap_content"
-	    android:layout_height="wrap_content"
-	    android:layout_below="@id/my_file_name_tv"
-	    android:textColor="@color/common_text_gray"
-	    android:textSize="@dimen/item_text_size_small"
-	    android:layout_marginTop="3dp"
-	    android:text="2016-01-01"
-	    />
 
-	<TextView
-	    android:id="@+id/my_file_delete_tv"
-	    android:layout_width="wrap_content"
-	    android:layout_height="wrap_content"
-	    android:layout_alignParentRight="true"
-	    android:layout_centerVertical="true"
-	    android:text="删除"
-	    android:textColor="@color/common_text_gray" />
+    <ImageView
+        android:id="@+id/my_file_moreIv"
+        android:layout_width="50dp"
+        android:layout_height="56dp"
+        android:layout_alignParentRight="true"
+        android:layout_centerVertical="true"
+        android:scaleType="centerInside"
+        android:src="@drawable/myfile_more"
+        />
+
+    <RelativeLayout
+        android:id="@+id/myfile_left_rl"
+        style="@style/item_menu_lv_withpic"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_toLeftOf="@id/my_file_moreIv"
+        >
+
+        <ImageView
+            android:id="@+id/my_file_iv"
+            android:layout_width="36dp"
+            android:layout_height="36dp"/>
+
+        <TextView
+            android:id="@+id/my_file_name_tv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
+            android:layout_toRightOf="@id/my_file_iv"
+            android:textColor="@color/common_text"
+            android:textSize="@dimen/item_text_size"
+            />
+
+        <TextView
+            android:id="@+id/my_file_time_tv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/my_file_name_tv"
+            android:layout_marginLeft="10dp"
+            android:layout_marginTop="3dp"
+            android:layout_toRightOf="@+id/my_file_iv"
+            android:text="2016-01-01"
+            android:textColor="@color/common_text_gray"
+            android:textSize="@dimen/item_text_size_small"
+            />
+
+        <TextView
+            android:id="@+id/my_file_size_tv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignBaseline="@id/my_file_time_tv"
+            android:layout_marginLeft="10dp"
+            android:layout_toRightOf="@id/my_file_time_tv"
+            android:textColor="@color/common_text_gray"
+            android:textSize="@dimen/item_text_size_small"
+            />
+    </RelativeLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1px"
+        android:background="@color/common_divider"
+        ></View>
 
 </RelativeLayout>

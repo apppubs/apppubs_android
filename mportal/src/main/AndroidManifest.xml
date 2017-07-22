@@ -344,7 +344,7 @@
             android:screenOrientation="portrait"/>
         <activity android:name="com.artifex.mupdfdemo.MuPDFActivity"/>
         <activity
-            android:name=".MyFileActivity"
+            android:name=".myfile.MyFileFragment"
             android:label="@string/title_activity_my_file"/>
         <activity
             android:name=".SkipActivity"

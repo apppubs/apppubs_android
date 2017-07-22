@@ -117,7 +117,6 @@
     </style>
 	 <style name="item_menu_lv_withpic">
         <item name="android:paddingLeft">@dimen/item_padding_left</item>
-        <item name="android:paddingRight">@dimen/item_padding_right</item>
         <item name="android:paddingTop">@dimen/item_padding_top_narrow</item>
         <item name="android:paddingBottom">@dimen/item_padding_bottom_narrow</item>
         <item name="android:background">@drawable/sel_common_item</item>

@@ -7,6 +7,11 @@ import com.apppubs.d20.bean.AppConfig;
 import com.apppubs.d20.bean.Settings;
 import com.apppubs.d20.bean.User;
 import com.apppubs.d20.bean.UserInfo;
+import com.apppubs.d20.myfile.FileCacheManager;
+import com.apppubs.d20.myfile.FileCacheManagerImpl;
+import com.apppubs.d20.net.WMHHttpClient;
+import com.apppubs.d20.net.WMHHttpClientDefaultImpl;
+import com.apppubs.d20.net.WMHHttpErrorCode;
 import com.apppubs.d20.util.LogM;
 import com.apppubs.d20.util.Utils;
 
@@ -29,6 +34,8 @@ public class AppContext {
 	private UserInfo mCurrentUser;
 
 	private Settings mSettings;
+
+	private WMHHttpClient mHttpClient;
 
 	private AppContext(Context context) {
 		mContext = context;
@@ -148,4 +155,15 @@ public class AppContext {
 		return url;
 	}
 
+	public FileCacheManager getCacheManager(){
+
+		return FileCacheManagerImpl.getInstance();
+	}
+
+	public WMHHttpClient getHttpClient(){
+		if (mHttpClient==null){
+			mHttpClient = new WMHHttpClientDefaultImpl();
+		}
+		return mHttpClient;
+	}
 }

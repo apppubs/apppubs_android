@@ -1,7 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/commonlv_footer_content"
-    android:background="@android:color/transparent" >
+                android:id="@+id/commonlv_footer_content"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:background="@android:color/transparent">
 
     <TextView
         android:id="@+id/commonlv_footer_hint_textview"
@@ -9,7 +11,7 @@
         android:layout_height="60dp"
         android:layout_centerInParent="true"
         android:gravity="center_vertical"
-        android:textSize="14sp" />
+        android:textSize="14sp"/>
 
     <ProgressBar
         android:id="@+id/commonlv_footer_progressbar"
@@ -19,6 +21,6 @@
         android:layout_centerVertical="true"
         android:layout_marginRight="10dp"
         android:layout_toLeftOf="@id/commonlv_footer_hint_textview"
-        android:visibility="invisible" />
+        android:visibility="invisible"/>
 
 </RelativeLayout>

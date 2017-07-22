@@ -2,6 +2,9 @@
 <resources>
 
     <attr name="rightPadding" format="dimension"></attr>
+    <attr name="textColor" format="color|reference"></attr>
+    <attr name="textSize" format="dimension"></attr>
+    <attr name="myThemeStyle" format="reference"></attr>
 
     <declare-styleable name="SlidingMenu1">
         <attr name="rightPadding"></attr>
@@ -40,17 +43,13 @@
         <attr name="layout_space" format="dimension" />
     </declare-styleable>
 
-    <attr name="textColor" format="color|reference"></attr>
-    <attr name="textSize" format="dimension"></attr>
-    <attr name="needCursor" format="boolean"></attr>
-    <attr name="selectedTextColor" format="color|reference"></attr>
-
     <declare-styleable name="ScrollTabs">
         <attr name="textColor"></attr>
         <attr name="textSize"></attr>
-        <attr name="selectedTextColor"></attr>
+        <attr name="selectedTextColor" format="color|reference"></attr>
         <attr name="selectedTextSize" format="dimension"></attr>
         <attr name="tabMinWidth" format="dimension"></attr>
+        <attr name="needCursor" format="boolean"></attr>
     </declare-styleable>
     <declare-styleable name="Tabs">
         <attr name="textColor"></attr>
@@ -304,4 +303,10 @@
         <attr name="cropFlipHorizontally" format="boolean"/>
         <attr name="cropFlipVertically" format="boolean"/>
     </declare-styleable>
+
+    <declare-styleable name="SheetParams">
+        <attr name="textColor"></attr>
+        <attr name="textSize"></attr>
+    </declare-styleable>
+
 </resources>

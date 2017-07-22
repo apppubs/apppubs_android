@@ -38,7 +38,7 @@ import com.apppubs.d20.bean.NewsInfo;
 import com.apppubs.d20.bean.Settings;
 import com.apppubs.d20.model.BussinessCallbackCommon;
 import com.apppubs.d20.model.CollectionBussiness;
-import com.apppubs.d20.fragment.FilePreviewFragment;
+import com.apppubs.d20.myfile.FilePreviewFragment;
 import com.apppubs.d20.fragment.WebAppFragment;
 import com.apppubs.d20.util.LogM;
 import com.apppubs.d20.util.ShareTools;

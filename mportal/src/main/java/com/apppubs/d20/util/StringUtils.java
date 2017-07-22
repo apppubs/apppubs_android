@@ -1,5 +1,7 @@
 package com.apppubs.d20.util;
 
+import android.text.TextUtils;
+
 import java.net.URL;
 import java.net.URLConnection;
 import java.text.ParseException;
@@ -9,8 +11,6 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
-
-import android.text.TextUtils;
 
 public class StringUtils {
 	// 温度处理
@@ -375,6 +375,9 @@ public class StringUtils {
 		}
 		return sb.toString();
 	}
-	
-	
+
+	public static String formatDate(Date date,String pattern){
+		SimpleDateFormat sdf = TextUtils.isEmpty(pattern)?new SimpleDateFormat("yyyy-MM-dd HH:mm:ss"):new SimpleDateFormat(pattern);
+		return sdf.format(date);
+	}
 }

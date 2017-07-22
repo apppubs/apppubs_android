@@ -8,6 +8,7 @@ import android.widget.LinearLayout;
 
 import com.apppubs.d20.R;
 
+
 public class ContactDailog extends Dialog implements android.view.View.OnClickListener{
 
 	private ContactDailogListener listener;
@@ -27,6 +28,7 @@ public class ContactDailog extends Dialog implements android.view.View.OnClickLi
 	 * @param cancleStr 取消按钮显示文字
 	 * @param okStr 确定按钮显示文字
 	 */
+	@Deprecated
 	public ContactDailog(Context context, int theme, ContactDailogListener listener){
 		super(context, theme);
 		this.listener = listener;

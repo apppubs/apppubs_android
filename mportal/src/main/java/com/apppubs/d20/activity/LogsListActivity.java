@@ -13,7 +13,7 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import com.apppubs.d20.adapter.ViewHolder;
-import com.apppubs.d20.fragment.FilePreviewFragment;
+import com.apppubs.d20.myfile.FilePreviewFragment;
 import com.apppubs.d20.adapter.CommonAdapter;
 
 public class LogsListActivity extends BaseActivity{

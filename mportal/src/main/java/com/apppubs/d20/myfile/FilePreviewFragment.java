@@ -1,26 +1,11 @@
-package com.apppubs.d20.fragment;
-
-import java.io.BufferedInputStream;
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.io.OutputStream;
-import java.net.URL;
-import java.net.URLConnection;
+package com.apppubs.d20.myfile;
 
 import android.app.Activity;
 import android.content.ComponentName;
 import android.content.Intent;
 import android.net.Uri;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -30,13 +15,23 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.apppubs.d20.AppContext;
+import com.apppubs.d20.R;
+import com.apppubs.d20.activity.ContainerActivity;
 import com.apppubs.d20.bean.AppConfig;
+import com.apppubs.d20.fragment.BaseFragment;
+import com.apppubs.d20.fragment.WebAppFragment;
+import com.apppubs.d20.model.BussinessCallbackCommon;
 import com.apppubs.d20.util.LogM;
 import com.apppubs.d20.widget.AlertDialog;
 import com.apppubs.d20.widget.ConfirmDialog;
-import com.apppubs.d20.R;
-import com.apppubs.d20.activity.ContainerActivity;
-import com.apppubs.d20.model.BussinessCallbackCommon;
+
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.InputStreamReader;
 
 /**
  * 文件预览界面，用于办公应用的附件预览，聊天的附件预览，我的文件的文件预览等。
@@ -44,7 +39,7 @@ import com.apppubs.d20.model.BussinessCallbackCommon;
  * @author hezheng
  * 
  */
-public class FilePreviewFragment extends BaseFragment{
+public class FilePreviewFragment extends BaseFragment {
 
 	public static final int REQUEST_CODE_SAVE_PDF = 1;
 	
@@ -75,9 +70,8 @@ public class FilePreviewFragment extends BaseFragment{
 	private ImageView mTypeIv;
 	private TextView mDownloadProgressTv;
 	private Button mPreViewBtn;
+	private FileCacheManager mFileCacheManager;
 
-	private AsyncTask<String, Integer, String> mDownloadTask;
-	
 	private boolean isEnableQQShare;
 
 	@Override
@@ -90,13 +84,30 @@ public class FilePreviewFragment extends BaseFragment{
 			mFileUrl = args.getString(ARGS_STRING_URL).replaceAll("\r|\n", "");
 		}
 		mFileLocalPath = args.getString(ARGS_STRING_FILE_LOCAL_PATH);
-		mFileType = args.getInt(ARGS_INTEGER_FILE_TYPE);
+		mFileType = getFileType(args);
 		mTextCharSet = args.getInt(ARGS_TEXT_CHARSET);
 		mFileName = args.getString(ARGS_FILE_NAME);
 		if (TextUtils.isEmpty(mFileName)&&!TextUtils.isEmpty(mFileUrl)) {
-			String strArr[] = mFileUrl.split("/");
-			mFileName = strArr[strArr.length - 1];
+			mFileName = getFileName(mFileUrl);
 		}
+		mFileCacheManager = AppContext.getInstance(mContext).getCacheManager();
+	}
+
+	private String getFileName(String fileUrl) {
+		if (fileUrl==null){
+			return null;
+		}
+		String strArr[] = fileUrl.split("/");
+		return strArr[strArr.length - 1];
+	}
+
+	private int getFileType(Bundle args) {
+		int type = args.getInt(ARGS_INTEGER_FILE_TYPE);
+		// 默认如果未指定类型则从url中获取类型
+		if (type == FILE_TYPE_UNKNOW) {
+			type = parsetFileTypeFromUrl(TextUtils.isEmpty(mFileUrl)?mFileLocalPath:mFileUrl);
+		}
+		return type;
 	}
 
 	@Override
@@ -104,40 +115,36 @@ public class FilePreviewFragment extends BaseFragment{
 
 		super.onCreateView(inflater, container, savedInstanceState);
 
+		initView(inflater, container);
+		mPreViewBtn.setOnClickListener(new OnClickListener() {
+
+			@Override
+			public void onClick(View v) {
+				previewFile(mFileLocalPath);
+			}
+		});
+
+		return mRootView;
+	}
+
+	private void initView(LayoutInflater inflater, ViewGroup container) {
 		mRootView = inflater.inflate(R.layout.frg_file_preview, container, false);
 		mFileNameTv = (TextView) mRootView.findViewById(R.id.file_preview_filename);
 		mDownloadProgressTv = (TextView) mRootView.findViewById(R.id.file_preview_progress_tv);
 		mPreViewBtn = (Button) mRootView.findViewById(R.id.file_preview_pre_btn);
 		mTypeIv = (ImageView) mRootView.findViewById(R.id.file_preview_iv);
 
-		mDownloadTask = new DownloadAsyncTask();
-		if (!TextUtils.isEmpty(mFileLocalPath)) {
-			mPreViewBtn.setVisibility(View.VISIBLE);
-		}else{
-			mDownloadTask.execute(mFileUrl);
-		}
-		mFileNameTv.setText(mFileName);
-
-		mPreViewBtn.setOnClickListener(new OnClickListener() {
-
-			@Override
-			public void onClick(View v) {
-				if(mFileType==FILE_TYPE_TXT){
-					displayTXTByPath(mFileLocalPath);
-				}else{
-					previewFile(mFileLocalPath);
-				}
-			}
-		});
-
-		// 默认如果未指定类型则从url中获取类型
-		if (mFileType == FILE_TYPE_UNKNOW) {
-			mFileType = parsetFileTypeFromUrl(TextUtils.isEmpty(mFileUrl)?mFileLocalPath:mFileUrl);
-		}
-
 		replacePicByFileType(mFileType);
+	}
 
-		return mRootView;
+	private void onFileIsReady(String fileUrl) {
+		if (fileUrl == null) {
+			return;
+		}
+		mDownloadProgressTv.setVisibility(View.GONE);
+		mFileLocalPath = fileUrl;
+		mPreViewBtn.setVisibility(View.VISIBLE);
+		previewFile(mFileLocalPath);
 	}
 
 	@Override
@@ -152,6 +159,36 @@ public class FilePreviewFragment extends BaseFragment{
 				}
 			});
 		}
+
+		if (!TextUtils.isEmpty(mFileLocalPath)) {
+			mPreViewBtn.setVisibility(View.VISIBLE);
+		}else{
+			File cacheFile = mFileCacheManager.fetchCache(mFileUrl);
+			if (cacheFile!=null){
+				onFileIsReady(cacheFile.getAbsolutePath());
+			}else{
+				mFileCacheManager.cacheFile(mFileUrl, new CacheListener() {
+					@Override
+					public void onException(FileCacheErrorCode e) {
+						if (!e.equals(FileCacheErrorCode.DOWNLOAD_CANCELED)){
+							Toast.makeText(mContext, e.getMessage(), Toast.LENGTH_SHORT).show();
+						}
+					}
+
+					@Override
+					public void onDone(String fileUrl) {
+
+						onFileIsReady(fileUrl);
+					}
+
+					@Override
+					public void onProgress(float progress, long totalBytesExpectedToRead) {
+						mDownloadProgressTv.setText((int)(progress*100) + "%");
+					}
+				});
+			}
+		}
+		mFileNameTv.setText(mFileName);
 	}
 	
 	private void replacePicByFileType(int fileType) {
@@ -206,110 +243,14 @@ public class FilePreviewFragment extends BaseFragment{
 		    share.setType("*/*");
 		    startActivity(Intent.createChooser(share, "发送"));
 	}
-	private class DownloadAsyncTask extends AsyncTask<String, Integer, String> {
-
-		@Override
-		protected void onPreExecute() {
-
-		}
-
-		@Override
-		protected String doInBackground(String... params) {
-
-			int count;
-			String fileName = null;
-			InputStream input = null;
-			OutputStream output = null;
-			try {
-				if (TextUtils.isEmpty(params[0])) {
-					LogM.log(this.getClass(), "下载地址为空");
-					return null;
-				}
-				LogM.log(this.getClass(), "下载地址" + params[0]);
-				String dnurl = params[0];
-
-				int lastSplash = dnurl.lastIndexOf("/");
-				if (lastSplash > 0) {
-					fileName = dnurl.substring(lastSplash + 1, dnurl.length()).toLowerCase();
-					fileName.trim();
-					fileName = fileName.replaceAll("\r|\n", "");
-				}
-
-				URL url = new URL(params[0]);
-				URLConnection connection = url.openConnection();
-				connection.connect();
-
-				int lenghtOfFile = connection.getContentLength();
-
-				input = new BufferedInputStream(url.openStream());
-				File desFile = new File(mContext.getExternalFilesDir(""), fileName);
-
-				output = new FileOutputStream(desFile);
-
-				byte data[] = new byte[1024];
-
-				long total = 0;
-
-				float preProgress = 0;
-				while ((count = input.read(data)) != -1) {
-					if (Thread.interrupted()) {
-						throw new InterruptedException();
-					}
-					total += count;
-					float curProgress = (total * 100) / lenghtOfFile;
-					if (curProgress - preProgress >= 1) {
-						preProgress = curProgress;
-						publishProgress((int) preProgress);
-					}
-
-					output.write(data, 0, count);
-
-				}
-
-			} catch (Exception e) {
-
-				Log.e("FilePreviewFragement", e.getMessage().toString());
-				return null;
-
-			} finally {
-				try {
-					output.close();
-					input.close();
-				} catch (Exception e) {
-					e.printStackTrace();
-					return null;
-				}
-
-			}
-			return fileName;
-
-		}
-
-		@Override
-		protected void onProgressUpdate(Integer... values) {
-			mDownloadProgressTv.setText(values[0] + "%");
-		}
-
-		@Override
-		protected void onPostExecute(String filename) {
-
-			if (filename == null) {
-				return;
-			}
-			mFileLocalPath = filename;
-			mPreViewBtn.setVisibility(View.VISIBLE);
-			mPreViewBtn.performClick();
-		}
-
-	}
 
 	// 预览文件
-	private void previewFile(String filename) {
+	private void previewFile(String path) {
 
-		File sourceFile = new File(mContext.getExternalFilesDir(null), filename);
+		File sourceFile = new File(path);
 
 		if (mFileType == FILE_TYPE_TXT) {
-			displayTXT(filename);
+			displayTXT(sourceFile);
 		} else if (mFileType == FILE_TYPE_PDF) {
 			displayPdf(sourceFile);
 		} else if (mFileType == FILE_TYPE_DOC) {
@@ -317,7 +258,7 @@ public class FilePreviewFragment extends BaseFragment{
 		} else if (mFileType == FILE_TYPE_EXCEL) {
 			displayExcel(sourceFile);
 		} else if (mFileType == FILE_TYPE_PIC) {
-			displayPic(filename);
+			displayPic(sourceFile);
 		} else {
 			Toast.makeText(mContext, "系统不支持此文件预览", Toast.LENGTH_LONG).show();
 		}
@@ -331,7 +272,7 @@ public class FilePreviewFragment extends BaseFragment{
 	private void displayDoc(File sourceFile) {
 		try {
 			Intent intent = new Intent();
-			intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+			intent.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
 			intent.setAction(Intent.ACTION_VIEW);
 			intent.setDataAndType(Uri.fromFile(sourceFile), "application/msword");
 			startActivity(intent);
@@ -343,7 +284,7 @@ public class FilePreviewFragment extends BaseFragment{
 	private void displayExcel(File sourceFile) {
 		try {
 			Intent intent = new Intent();
-			intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+			intent.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
 			intent.setAction(Intent.ACTION_VIEW);
 			intent.setDataAndType(Uri.fromFile(sourceFile), "application/vnd.ms-excel");
 			startActivity(intent);
@@ -359,81 +300,22 @@ public class FilePreviewFragment extends BaseFragment{
 			Uri path = Uri.fromFile(sourceFile);
             Intent intent = new Intent(Intent.ACTION_VIEW);
             intent.setDataAndType(path, "application/pdf");
-            intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+            intent.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
             startActivity(intent);
-            
-//			Uri uri = Uri.parse(sourceFile.getAbsolutePath());
-//			Intent intent = new Intent(mHostActivity,MuPDFActivity.class);
-//			intent.putExtra(MuPDFActivity.EXTRA_BOOLEAN_EDITABLE, true);
-//			intent.setAction(Intent.ACTION_VIEW);
-//			intent.setData(uri);
-//			mContext.startActivity(intent);
-//			mHostActivity.startActivity(intent);
-//			String url = String.format(URLs.URL_APP_CONFIG, Constants.APP_CONFIG_PARAM_PDF_EDITABLE);
-//			mRequestQueue.add(new StringRequest(url, new Listener<String>() {
-//
-//				@Override
-//				public void onResponse(String response) {
-//					JSONResult jr = JSONResult.compile(response);
-//					if(jr.resultCode==JSONResult.RESULT_CODE_SUCCESS){
-//						int editable = 0;
-//						try {
-//							editable = Integer.parseInt(jr.getResultMap().get(Constants.APP_CONFIG_PARAM_PDF_EDITABLE));
-//						} catch (JSONException e) {
-//							e.printStackTrace();
-//						}
-//						Uri uri = Uri.parse(sourceFile.getAbsolutePath());
-//						Intent intent = new Intent(mHostActivity,MuPDFActivity.class);
-//						intent.putExtra(MuPDFActivity.EXTRA_BOOLEAN_EDITABLE, editable==0?false:true);
-//						intent.setAction(Intent.ACTION_VIEW);
-//						intent.setData(uri);
-//						mContext.startActivity(intent);
-//						mHostActivity.startActivity(intent);
-//
-//					}
-//				}
-//			}, new ErrorListener() {
-//
-//				@Override
-//				public void onErrorResponse(VolleyError arg0) {
-//					Toast.makeText(mContext, "网络异常", Toast.LENGTH_SHORT).show();
-//				}
-//			}));
-			
+
 		} catch (Exception e) {
 			e.printStackTrace();
 			showInstallAppDialog("请安装PDF阅读器！");
 		}
 	}
 
-	@Override
-	public void onActivityResult(int requestCode, int resultCode, Intent data) {
-		super.onActivityResult(requestCode, resultCode, data);
-//		try {
-//			String desPath = FileUtils.getAppExternalFilesStorageFile().getAbsolutePath()+"/document/"+new Date().getTime()+".pdf";
-//			String src = getIntent().getData().toString();
-//			FileUtils.copy(src,desPath );
-//			LocalFile localFile = new LocalFile();
-//			localFile.setName(src.substring(src.lastIndexOf("/")+1));
-//			localFile.setPath(desPath);
-//			localFile.setSize(new File(desPath).length());
-//			localFile.setType(LocalFile.TYPE_DOCUMENT);
-//			localFile.setSaveTime(new Date());
-//			localFile.setSourcePath(src);
-//			SugarRecord.save(localFile);
-//		} catch (IOException e) {
-//			e.printStackTrace();
-//		}
-	}
 	// 将下载的文本显示
-	private void displayTXT(String filename) {
+	private void displayTXT(File file) {
 		StringBuilder sb = new StringBuilder();
 		InputStreamReader isr = null;
 		BufferedReader br = null;
 		try {
-			File source = new File(mContext.getExternalFilesDir(null), filename);
-//			File source = new File(mContext.getExternalFilesDir(""), filename);
-			isr = new InputStreamReader(new FileInputStream(source), mTextCharSet == 1 ? "GBK" : "UTF-8");
+			isr = new InputStreamReader(new FileInputStream(file), mTextCharSet == 1 ? "GBK" : "UTF-8");
 			br = new BufferedReader(isr);
 
 			String temp = null;
@@ -458,52 +340,14 @@ public class FilePreviewFragment extends BaseFragment{
 		setVisibilityOfViewByResId(mRootView, R.id.file_preview_container_sv, View.VISIBLE);
 		fillTextView(R.id.file_preview_txt_tv, sb.toString());
 	}
-	
-	// 将下载的文本显示
-	private void displayTXTByPath(String filename) {
-		StringBuilder sb = new StringBuilder();
-		InputStreamReader isr = null;
-		BufferedReader br = null;
-		try {
-			File source = new File(mContext.getExternalFilesDir(null), filename);
-			isr = new InputStreamReader(new FileInputStream(source), mTextCharSet == 1 ? "GBK" : "UTF-8");
-			br = new BufferedReader(isr);
-
-			String temp = null;
-			while ((temp = br.readLine()) != null) {
-				sb.append(temp + "\n");
-			}
-
-		} catch (FileNotFoundException e) {
-			e.printStackTrace();
-		} catch (IOException e) {
-			e.printStackTrace();
-		} finally {
-			try {
-				if(isr!=null){
-					isr.close();
-				}
-				if(br!=null){
-					br.close();
-				}
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
-		}
-		setVisibilityOfViewByResId(mRootView, R.id.file_preview_info_con_ll, View.GONE);
-		setVisibilityOfViewByResId(mRootView, R.id.file_preview_pre_btn, View.GONE);
-		setVisibilityOfViewByResId(mRootView, R.id.file_preview_container_sv, View.VISIBLE);
-		fillTextView(R.id.file_preview_txt_tv, sb.toString());
-	}
 
 	// 显示图片
-	private void displayPic(String fileName) {
-		File source = new File(mContext.getExternalFilesDir(""), fileName);
+	private void displayPic(File file) {
 
 		setVisibilityOfViewByResId(mRootView, R.id.file_preview_info_con_ll, View.GONE);
 		setVisibilityOfViewByResId(mRootView, R.id.file_preview_pre_btn, View.GONE);
 		setVisibilityOfViewByResId(mRootView, R.id.file_preview_pic_div, View.VISIBLE);
-		fillImageView(R.id.file_preview_pic_div, "file://" + source.getAbsolutePath());
+		fillImageView(R.id.file_preview_pic_div, "file://" + file.getAbsolutePath());
 	}
 
 	//显示提示框之前首先获取服务端参数，如果已经配置好下载地址则允许用户点击下载按钮否则给出提示框即可
@@ -573,8 +417,8 @@ public class FilePreviewFragment extends BaseFragment{
 	@Override
 	public void onDestroy() {
 		super.onDestroy();
-		mDownloadTask.cancel(true);
 		LogM.log(getClass(), "onDestroy()");
+		mFileCacheManager.cancelCacheFile(mFileUrl);
 	}
 	
 	public static boolean isAbleToRead(String url){

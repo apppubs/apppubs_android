@@ -19,6 +19,9 @@ import com.google.gson.JsonParseException;
 import com.google.gson.reflect.TypeToken;
 import com.apppubs.ikidou.reflect.TypeBuilder;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 public class JSONUtils {
 	
 	private static Gson gson;
@@ -105,4 +108,8 @@ public class JSONUtils {
 		return map;
 	}
 
+	public static JSONObject parseJSONObject(String json) throws JSONException {
+		JSONObject jo = new JSONObject(json);
+		return jo;
+	}
 }

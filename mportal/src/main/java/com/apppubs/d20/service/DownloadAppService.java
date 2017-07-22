@@ -96,7 +96,8 @@ public class DownloadAppService extends Service {
 					// 更新参数,注意flags要使用FLAG_UPDATE_CURRENT
 					PendingIntent contentIntent = PendingIntent.getActivity(DownloadAppService.this, 0, intent,
 							PendingIntent.FLAG_UPDATE_CURRENT);
-					mNotification.setLatestEventInfo(DownloadAppService.this, "下载完成", "文件已下载完毕", contentIntent);
+//					mNotification.setLatestEventInfo(DownloadAppService.this, "下载完成", "文件已下载完毕", contentIntent);
+
 					//
 					stopSelf();// 停掉服务自身
 				}
