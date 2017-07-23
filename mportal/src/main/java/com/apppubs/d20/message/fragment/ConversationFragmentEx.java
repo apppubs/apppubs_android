@@ -2,12 +2,15 @@ package com.apppubs.d20.message.fragment;
 
 import android.net.Uri;
 
+import com.apppubs.d20.activity.ContainerActivity;
+import com.apppubs.d20.myfile.MyFileFragment;
 import com.apppubs.d20.util.LogM;
 
 import java.util.List;
 
 import io.rong.imkit.RongIM;
 import io.rong.imkit.fragment.ConversationFragment;
+import io.rong.imkit.plugin.IPluginModule;
 import io.rong.imlib.RongIMClient;
 import io.rong.imlib.model.Message;
 import io.rong.message.ImageMessage;
@@ -78,4 +81,13 @@ public class ConversationFragmentEx extends ConversationFragment {
         }
 
     }
+
+	@Override
+	public void onPluginClicked(IPluginModule pluginModule, int position) {
+		if (position==1){
+			ContainerActivity.startActivity(getContext(), MyFileFragment.class);
+		}else{
+//			super.onPluginClicked(pluginModule, position);
+		}
+	}
 }

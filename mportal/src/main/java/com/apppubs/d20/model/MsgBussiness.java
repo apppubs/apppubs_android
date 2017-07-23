@@ -857,10 +857,10 @@ public class MsgBussiness extends BaseBussiness {
 		List<IPluginModule> pluginModules ;
 		public MyExtensionModule(){
 			pluginModules = new ArrayList<IPluginModule>();
-//			filePlugin = new FilePlugin();
+			filePlugin = new FilePlugin();
 			imagePlugin = new ImagePlugin();
-//			pluginModules.add(filePlugin);
 			pluginModules.add(imagePlugin);
+			pluginModules.add(filePlugin);
 //			locationPlugin = new LocationPlugin();
 //			pluginModules.add(locationPlugin);
 		}
