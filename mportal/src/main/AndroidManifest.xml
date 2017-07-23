@@ -533,6 +533,11 @@
 
         <activity android:name=".activity.AboutActivity">
         </activity>
+
+        <activity android:name=".home.CompelMessageDialogActivity"
+                  android:theme="@style/CompelReadDialogStyle"
+            >
+        </activity>
     </application>
 
 </manifest>

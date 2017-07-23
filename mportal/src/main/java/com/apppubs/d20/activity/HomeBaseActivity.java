@@ -15,6 +15,8 @@ import android.widget.Toast;
 
 import com.apppubs.d20.AppContext;
 import com.apppubs.d20.bean.UserInfo;
+import com.apppubs.d20.home.CompelMessageDialogActivity;
+import com.apppubs.d20.home.CompelReadMessageModel;
 import com.apppubs.d20.message.model.UserBasicInfo;
 import com.apppubs.d20.model.BussinessCallbackCommon;
 import com.apppubs.d20.util.LogM;
@@ -22,7 +24,6 @@ import com.apppubs.d20.MportalApplication;
 import com.apppubs.d20.R;
 import com.apppubs.d20.bean.App;
 import com.apppubs.d20.bean.MenuItem;
-import com.apppubs.d20.bean.User;
 import com.apppubs.d20.bean.Weather;
 import com.apppubs.d20.constant.Actions;
 import com.apppubs.d20.fragment.BaseFragment;
@@ -31,7 +32,6 @@ import com.apppubs.d20.util.FileUtils;
 import com.apppubs.d20.util.SharedPreferenceUtils;
 import com.apppubs.d20.util.SystemUtils;
 import com.apppubs.d20.util.Tools;
-import com.apppubs.d20.util.Utils;
 import com.orm.SugarRecord;
 
 import io.rong.imkit.RongIM;
@@ -216,6 +216,24 @@ public abstract class HomeBaseActivity extends BaseActivity {
 				ViewCourier.execute(mContext, paddingUrl);
 			}
 		}
+
+//		Intent i = new Intent(this,CompelMessageDialogActivity.class);
+//
+//		CompelReadMessageModel model0 = new CompelReadMessageModel();
+//		model0.setmContent("<a href=http://www.baidu.com>http://www.baidu.com</a>");
+//		CompelReadMessageModel model1 = new CompelReadMessageModel();
+//		model1.setmContent("<a href=http://www.sogou.com>http://www.sogou.com</a>");
+//		CompelReadMessageModel model2 = new CompelReadMessageModel();
+//		model2.setmContent("<a href=http://www.yahoo.com>http://www.yahoo.com></a>");
+//		CompelReadMessageModel model3 = new CompelReadMessageModel();
+//		model3.setmContent("<a href=http://www.tencent.com>http://www.tencent.com</a>");
+//		ArrayList<CompelReadMessageModel> list = new ArrayList<CompelReadMessageModel>();
+//		list.add(model0);
+//		list.add(model1);
+//		list.add(model2);
+//		list.add(model3);
+//		i.putExtra(CompelMessageDialogActivity.EXTRA_DATAS,list);
+//		startActivity(i);
 
 	}
 

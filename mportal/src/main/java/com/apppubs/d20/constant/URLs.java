@@ -702,6 +702,18 @@ public class URLs {
 		http://60.205.140.176:8088/wmh360/json/user/delfile.jsp?appcode=D20&clientkey=bb7c1386d85044ba7a7ae53f3362d634&fileid=1
 	 */
 	public static final String URL_MY_FILE_DELETE = baseURL+"wmh360/json/user/delfile.jsp?appcode="+appCode+"&clientkey=bb7c1386d85044ba7a7ae53f3362d634&fileid=%s";
+	/*
+	强制阅读消息列表
+	http://60.205.140.176:8088/wmh360/json/msg/compelreadlist.jsp?appcode=D20&username=dacs&clientkey=bb7c1386d85044ba7a7ae53f3362d634
+ 	*/
+	public static final String URL_COMPEL_READ_LIST = baseURL+"%@wmh360/json/msg/compelreadlist.jsp?appcode=%s&username=%s&clientkey=bb7c1386d85044ba7a7ae53f3362d634";
+
+/*
+	标记已读
+    http://60.205.140.176:8088/wmh360/json/msg/compelreadedit.jsp?appcode=D20&serviceinfo_id=1497249699346&clientkey=bb7c1386d85044ba7a7ae53f3362d634
+ */
+	public static final String URL_MARK_AS_READ_FOR_COMPEL_MESSAGE = baseURL+"wmh360/json/msg/compelreadedit.jsp?appcode="+appCode+"&serviceinfo_id=%s&clientkey=bb7c1386d85044ba7a7ae53f3362d634";
+
 
 	/**
 	 * 搜索文件
