@@ -20,4 +20,6 @@ public interface FileCacheManager {
 	File fetchCache(String fileUrl);
 
 	boolean removeCache(String fileUrl);
+
+	void uploadFile(File file,CacheListener listener);
 }

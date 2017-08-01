@@ -37,7 +37,7 @@ import com.apppubs.d20.bean.UserInfo;
 import com.apppubs.d20.constant.Actions;
 import com.apppubs.d20.message.model.UserBussiness;
 import com.apppubs.d20.model.BussinessCallbackCommon;
-import com.apppubs.d20.model.MsgBussiness;
+import com.apppubs.d20.message.model.MsgBussiness;
 import com.apppubs.d20.model.NewsBussiness;
 import com.apppubs.d20.model.PaperBussiness;
 import com.apppubs.d20.model.SystemBussiness;

@@ -8,17 +8,21 @@ import android.graphics.drawable.Drawable;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Build;
+import android.os.Bundle;
 import android.support.multidex.MultiDex;
 import android.support.multidex.MultiDexApplication;
 import android.util.DisplayMetrics;
+import android.util.Log;
 import android.view.View;
 import android.view.WindowManager;
 
+import com.apppubs.d20.activity.ContainerActivity;
 import com.apppubs.d20.activity.MessageEvent;
 import com.apppubs.d20.activity.UserInfoActivity;
 import com.apppubs.d20.constant.Constants;
 import com.apppubs.d20.model.BussinessCallbackCommon;
 import com.apppubs.d20.model.SystemBussiness;
+import com.apppubs.d20.myfile.FilePreviewFragment;
 import com.apppubs.d20.util.MathUtils;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
@@ -42,6 +46,7 @@ import io.rong.imkit.manager.IUnReadMessageObserver;
 import io.rong.imlib.model.Conversation;
 import io.rong.imlib.model.Message;
 import io.rong.imlib.model.UserInfo;
+import io.rong.message.FileMessage;
 
 public class MportalApplication extends MultiDexApplication {
 
@@ -138,6 +143,14 @@ public class MportalApplication extends MultiDexApplication {
 
 		@Override
 		public boolean onMessageClick(Context context, View view, Message message) {
+			Log.v("MyConversationBehavior",message.getContent().toString());
+			if (message.getContent() instanceof FileMessage){
+				io.rong.message.FileMessage fileMessage = (FileMessage) message.getContent();
+				Bundle args = new Bundle();
+				args.putString(FilePreviewFragment.ARGS_STRING_URL, fileMessage.getFileUrl().toString());
+				ContainerActivity.startActivity(context, FilePreviewFragment.class, args, "文件预览");
+				return true;
+			}
 			return false;
 		}
 

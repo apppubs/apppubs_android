@@ -33,6 +33,7 @@ import com.apppubs.d20.widget.ProgressHUD;
 import com.apppubs.d20.widget.commonlist.CommonListView;
 import com.apppubs.d20.widget.commonlist.CommonListViewListener;
 import com.apppubs.d20.widget.menudialog.MenuDialog;
+import com.nostra13.universalimageloader.core.DisplayImageOptions;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -46,7 +47,6 @@ public class MyFileFragment extends BaseFragment implements OnClickListener {
 
 	private SearchView mSearchView;
 	private CommonListView mLv;
-
 	private CommonAdapter<MyFileModel> mAdapter;
 	private int mCurPage;
 	private List<MyFileModel> mDatas;
@@ -128,7 +128,7 @@ public class MyFileFragment extends BaseFragment implements OnClickListener {
 			} catch (UnsupportedEncodingException e) {
 				e.printStackTrace();
 			}
-			params = new Object[]{encodedQuery, user.getUsername(), 1};
+			params = new Object[]{encodedQuery, user.getUsername(), page};
 
 		}else{
 			url = URLs.URL_MY_FILE_PAGE;
@@ -232,15 +232,17 @@ public class MyFileFragment extends BaseFragment implements OnClickListener {
 					TextView sizeTv = holder.getView(R.id.my_file_size_tv);
 					sizeTv.setText(FileUtils.formetFileSize(bean.getBytes()));
 					ImageView iv = holder.getView(R.id.my_file_iv);
-					if ("doc".equals(bean.getTypeStr())) {
+					if ("docx".equals(bean.getTypeStr())||"doc".equals(bean.getTypeStr())) {
 						iv.setImageResource(R.drawable.myfile_file_type_word);
-					} else if ("xls".equals(bean.getTypeStr())) {
+					} else if ("xlsx".equals(bean.getTypeStr())||"xls".equals(bean.getTypeStr())) {
 						iv.setImageResource(R.drawable.myfile_file_type_excel);
-					} else if ("ppt".equals(bean.getTypeStr())) {
+					} else if ("pptx".equals(bean.getTypeStr())||"ppt".equals(bean.getTypeStr())) {
 						iv.setImageResource(R.drawable.myfile_file_type_ppt);
 					} else if ("pdf".equals(bean.getTypeStr())) {
 						iv.setImageResource(R.drawable.myfile_file_type_pdf);
-					} else {
+					} else if("jpeg".equals(bean.getTypeStr())||"jpg".equals(bean.getTypeStr())||"png".equals(bean.getTypeStr())||"gif".equals(bean.getTypeStr())){
+						iv.setImageResource(R.drawable.myfile_file_type_img);
+					}else {
 						iv.setImageResource(R.drawable.myfile_file_type_unknow);
 					}
 				}

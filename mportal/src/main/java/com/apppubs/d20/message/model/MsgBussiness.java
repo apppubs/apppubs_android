@@ -1,4 +1,4 @@
-package com.apppubs.d20.model;
+package com.apppubs.d20.message.model;
 
 import android.content.Context;
 import android.net.Uri;
@@ -23,6 +23,9 @@ import com.apppubs.d20.AppContext;
 import com.apppubs.d20.bean.Msg;
 import com.apppubs.d20.bean.MsgRecord;
 import com.apppubs.d20.bean.ServiceNOInfo;
+import com.apppubs.d20.message.MyFilePlugin;
+import com.apppubs.d20.model.BaseBussiness;
+import com.apppubs.d20.model.BussinessCallbackCommon;
 import com.apppubs.d20.util.LogM;
 import com.apppubs.d20.util.http.AjaxCallBack;
 import com.google.gson.reflect.TypeToken;
@@ -854,13 +857,15 @@ public class MsgBussiness extends BaseBussiness {
 		private FilePlugin filePlugin;
 		private ImagePlugin imagePlugin;
 		//		LocationPlugin locationPlugin;
+		private MyFilePlugin myFilePlugin;
 		List<IPluginModule> pluginModules ;
 		public MyExtensionModule(){
 			pluginModules = new ArrayList<IPluginModule>();
 			filePlugin = new FilePlugin();
 			imagePlugin = new ImagePlugin();
+			myFilePlugin = new MyFilePlugin();
 			pluginModules.add(imagePlugin);
-			pluginModules.add(filePlugin);
+			pluginModules.add(myFilePlugin);
 //			locationPlugin = new LocationPlugin();
 //			pluginModules.add(locationPlugin);
 		}

@@ -16,7 +16,7 @@ import android.widget.TextView;
 import com.android.volley.RequestQueue;
 import com.apppubs.d20.AppContext;
 import com.apppubs.d20.activity.BaseActivity;
-import com.apppubs.d20.model.MsgBussiness;
+import com.apppubs.d20.message.model.MsgBussiness;
 import com.apppubs.d20.model.SystemBussiness;
 import com.apppubs.d20.message.model.UserBussiness;
 import com.apppubs.d20.widget.TitleBar;

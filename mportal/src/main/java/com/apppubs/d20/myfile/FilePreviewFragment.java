@@ -35,14 +35,13 @@ import java.io.InputStreamReader;
 
 /**
  * 文件预览界面，用于办公应用的附件预览，聊天的附件预览，我的文件的文件预览等。
- * 
+ *
  * @author hezheng
- * 
  */
 public class FilePreviewFragment extends BaseFragment {
 
 	public static final int REQUEST_CODE_SAVE_PDF = 1;
-	
+
 	public static final String ARGS_STRING_URL = "url";// 文件的网络地址!!
 	public static final String ARGS_STRING_FILE_LOCAL_PATH = "local_path";//本地的地址，如果有了本地的地址则不会从网络下载
 	public static final String ARGS_INTEGER_FILE_TYPE = "type";// 文件类型
@@ -80,21 +79,21 @@ public class FilePreviewFragment extends BaseFragment {
 		Bundle args = getArguments();
 		mFileUrl = args.getString(ARGS_STRING_URL);
 		isEnableQQShare = args.getBoolean(ARGS_BOOLEAN_SHARE_2_QQ);
-		if(!TextUtils.isEmpty(mFileUrl)){
+		if (!TextUtils.isEmpty(mFileUrl)) {
 			mFileUrl = args.getString(ARGS_STRING_URL).replaceAll("\r|\n", "");
 		}
 		mFileLocalPath = args.getString(ARGS_STRING_FILE_LOCAL_PATH);
 		mFileType = getFileType(args);
 		mTextCharSet = args.getInt(ARGS_TEXT_CHARSET);
 		mFileName = args.getString(ARGS_FILE_NAME);
-		if (TextUtils.isEmpty(mFileName)&&!TextUtils.isEmpty(mFileUrl)) {
+		if (TextUtils.isEmpty(mFileName) && !TextUtils.isEmpty(mFileUrl)) {
 			mFileName = getFileName(mFileUrl);
 		}
 		mFileCacheManager = AppContext.getInstance(mContext).getCacheManager();
 	}
 
 	private String getFileName(String fileUrl) {
-		if (fileUrl==null){
+		if (fileUrl == null) {
 			return null;
 		}
 		String strArr[] = fileUrl.split("/");
@@ -105,7 +104,7 @@ public class FilePreviewFragment extends BaseFragment {
 		int type = args.getInt(ARGS_INTEGER_FILE_TYPE);
 		// 默认如果未指定类型则从url中获取类型
 		if (type == FILE_TYPE_UNKNOW) {
-			type = parsetFileTypeFromUrl(TextUtils.isEmpty(mFileUrl)?mFileLocalPath:mFileUrl);
+			type = parseFileTypeFromUrl(TextUtils.isEmpty(mFileUrl) ? mFileLocalPath : mFileUrl);
 		}
 		return type;
 	}
@@ -150,9 +149,9 @@ public class FilePreviewFragment extends BaseFragment {
 	@Override
 	public void onActivityCreated(Bundle savedInstanceState) {
 		super.onActivityCreated(savedInstanceState);
-		if(isEnableQQShare){
+		if (isEnableQQShare) {
 			mTitleBar.addRightBtnWithImageResourceIdAndClickListener(R.drawable.qq, new OnClickListener() {
-				
+
 				@Override
 				public void onClick(View v) {
 					share(mRootView);
@@ -162,15 +161,15 @@ public class FilePreviewFragment extends BaseFragment {
 
 		if (!TextUtils.isEmpty(mFileLocalPath)) {
 			mPreViewBtn.setVisibility(View.VISIBLE);
-		}else{
+		} else {
 			File cacheFile = mFileCacheManager.fetchCache(mFileUrl);
-			if (cacheFile!=null){
+			if (cacheFile != null) {
 				onFileIsReady(cacheFile.getAbsolutePath());
-			}else{
+			} else {
 				mFileCacheManager.cacheFile(mFileUrl, new CacheListener() {
 					@Override
 					public void onException(FileCacheErrorCode e) {
-						if (!e.equals(FileCacheErrorCode.DOWNLOAD_CANCELED)){
+						if (!e.equals(FileCacheErrorCode.DOWNLOAD_CANCELED)) {
 							Toast.makeText(mContext, e.getMessage(), Toast.LENGTH_SHORT).show();
 						}
 					}
@@ -183,39 +182,42 @@ public class FilePreviewFragment extends BaseFragment {
 
 					@Override
 					public void onProgress(float progress, long totalBytesExpectedToRead) {
-						mDownloadProgressTv.setText((int)(progress*100) + "%");
+						mDownloadProgressTv.setText((int) (progress * 100) + "%");
 					}
 				});
 			}
 		}
 		mFileNameTv.setText(mFileName);
 	}
-	
+
 	private void replacePicByFileType(int fileType) {
 
 		switch (fileType) {
 
-		case FILE_TYPE_PDF:
-			mTypeIv.setImageResource(R.drawable.file_preview_pdf);
-			break;
-		case FILE_TYPE_DOC:
-			mTypeIv.setImageResource(R.drawable.file_preview_word);
-			break;
-		case FILE_TYPE_EXCEL:
-			mTypeIv.setImageResource(R.drawable.file_preview_excel);
-			break;
-		case FILE_TYPE_TXT:
-			mTypeIv.setImageResource(R.drawable.file_preview_txt);
-			break;
-		default:
-			mTypeIv.setImageResource(R.drawable.file_preview_unknow);
+			case FILE_TYPE_PDF:
+				mTypeIv.setImageResource(R.drawable.file_preview_pdf);
+				break;
+			case FILE_TYPE_DOC:
+				mTypeIv.setImageResource(R.drawable.file_preview_word);
+				break;
+			case FILE_TYPE_EXCEL:
+				mTypeIv.setImageResource(R.drawable.file_preview_excel);
+				break;
+			case FILE_TYPE_PPT:
+				mTypeIv.setImageResource(R.drawable.file_preview_ppt);
+				break;
+			case FILE_TYPE_TXT:
+				mTypeIv.setImageResource(R.drawable.file_preview_txt);
+				break;
+			default:
+				mTypeIv.setImageResource(R.drawable.file_preview_unknow);
 		}
 
 	}
 
-	private int parsetFileTypeFromUrl(String url) {
+	private int parseFileTypeFromUrl(String url) {
 
-		if (url.endsWith(".txt")||url.endsWith(".log")) {
+		if (url.endsWith(".txt") || url.endsWith(".log")) {
 			return FILE_TYPE_TXT;
 		} else if (url.endsWith(".pdf")) {
 			return FILE_TYPE_PDF;
@@ -230,18 +232,18 @@ public class FilePreviewFragment extends BaseFragment {
 		} else {
 			return FILE_TYPE_UNKNOW;
 		}
-		
+
 	}
-	
+
 	public void share(View view) {
-		    Intent share = new Intent(Intent.ACTION_SEND);
-		    ComponentName component = new ComponentName("com.tencent.mobileqq","com.tencent.mobileqq.activity.JumpActivity");
-		    share.setComponent(component);
-		    File file = new File(mFileLocalPath);
-		    System.out.println("file " + file.exists());
-		    share.putExtra(Intent.EXTRA_STREAM, Uri.fromFile(file));
-		    share.setType("*/*");
-		    startActivity(Intent.createChooser(share, "发送"));
+		Intent share = new Intent(Intent.ACTION_SEND);
+		ComponentName component = new ComponentName("com.tencent.mobileqq", "com.tencent.mobileqq.activity.JumpActivity");
+		share.setComponent(component);
+		File file = new File(mFileLocalPath);
+		System.out.println("file " + file.exists());
+		share.putExtra(Intent.EXTRA_STREAM, Uri.fromFile(file));
+		share.setType("*/*");
+		startActivity(Intent.createChooser(share, "发送"));
 	}
 
 	// 预览文件
@@ -257,6 +259,8 @@ public class FilePreviewFragment extends BaseFragment {
 			displayDoc(sourceFile);
 		} else if (mFileType == FILE_TYPE_EXCEL) {
 			displayExcel(sourceFile);
+		} else if (mFileType == FILE_TYPE_PPT) {
+			displayPpt(sourceFile);
 		} else if (mFileType == FILE_TYPE_PIC) {
 			displayPic(sourceFile);
 		} else {
@@ -264,9 +268,23 @@ public class FilePreviewFragment extends BaseFragment {
 		}
 	}
 
+	private void displayPpt(File sourceFile) {
+
+		try {
+			Intent intent = new Intent("android.intent.action.VIEW");
+			intent.addCategory("android.intent.category.DEFAULT");
+			intent.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
+			Uri uri = Uri.fromFile(sourceFile);
+			intent.setDataAndType(uri, "application/vnd.ms-powerpoint");
+			mContext.startActivity(intent);
+		} catch (Exception e) {
+			showInstallAppDialog("请安装PPT阅读器！");
+		}
+	}
+
 	/**
 	 * 显示doc文档
-	 * 
+	 *
 	 * @param sourceFile
 	 */
 	private void displayDoc(File sourceFile) {
@@ -296,12 +314,12 @@ public class FilePreviewFragment extends BaseFragment {
 	// 显示pdf
 	private void displayPdf(final File sourceFile) {
 		try {
-			
+
 			Uri path = Uri.fromFile(sourceFile);
-            Intent intent = new Intent(Intent.ACTION_VIEW);
-            intent.setDataAndType(path, "application/pdf");
-            intent.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
-            startActivity(intent);
+			Intent intent = new Intent(Intent.ACTION_VIEW);
+			intent.setDataAndType(path, "application/pdf");
+			intent.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
+			startActivity(intent);
 
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -352,7 +370,7 @@ public class FilePreviewFragment extends BaseFragment {
 
 	//显示提示框之前首先获取服务端参数，如果已经配置好下载地址则允许用户点击下载按钮否则给出提示框即可
 	private void showInstallAppDialog(final String message) {
-		
+
 		mSystemBussiness.aSyncAppConfig(mContext, new BussinessCallbackCommon<AppConfig>() {
 
 			@Override
@@ -362,11 +380,11 @@ public class FilePreviewFragment extends BaseFragment {
 
 			@Override
 			public void onDone(AppConfig obj) {
-				 if(TextUtils.isEmpty(mAppContext.getApp().getDocumentReaderPageUrl())){
-					 showAlertDialog(message);
-				 }else{
-					 showSelectiveDialog(message);
-				 }
+				if (TextUtils.isEmpty(mAppContext.getApp().getDocumentReaderPageUrl())) {
+					showAlertDialog(message);
+				} else {
+					showSelectiveDialog(message);
+				}
 			}
 		});
 
@@ -381,35 +399,35 @@ public class FilePreviewFragment extends BaseFragment {
 			}
 		}, "提示信息", message, "确定").show();
 	}
-	
-	private void showSelectiveDialog(String message){
+
+	private void showSelectiveDialog(String message) {
 		new ConfirmDialog(mContext, new ConfirmDialog.ConfirmListener() {
-			
+
 			@Override
 			public void onOkClick() {
 				skip2DownloadPage();
 			}
-			
+
 			@Override
 			public void onCancelClick() {
-				
+
 			}
 		}, message, "是否下载推荐文档阅读器？", "取消", "前往下载").show();
 	}
-	
-	private void skip2DownloadPage(){
+
+	private void skip2DownloadPage() {
 		mSystemBussiness.aSyncAppConfig(mContext, new BussinessCallbackCommon<AppConfig>() {
-			
+
 			@Override
 			public void onException(int excepCode) {
 				Toast.makeText(mContext, "网络错误", Toast.LENGTH_SHORT).show();
 			}
-			
+
 			@Override
 			public void onDone(AppConfig obj) {
 				Bundle extra = new Bundle();
 				extra.putString(WebAppFragment.ARGUMENT_STRING_URL, mAppContext.getApp().getDocumentReaderPageUrl());
-				ContainerActivity.startActivity(mContext, WebAppFragment.class,extra);
+				ContainerActivity.startActivity(mContext, WebAppFragment.class, extra);
 			}
 		});
 	}
@@ -420,12 +438,12 @@ public class FilePreviewFragment extends BaseFragment {
 		LogM.log(getClass(), "onDestroy()");
 		mFileCacheManager.cancelCacheFile(mFileUrl);
 	}
-	
-	public static boolean isAbleToRead(String url){
-		
-		if(url.endsWith(".pdf") || url.endsWith(".txt") || url.endsWith(".doc") || url.endsWith(".docx")||url.endsWith(".xls")||url.endsWith(".xlsx")||url.endsWith(".ppt")||url.endsWith(".pptx")){
+
+	public static boolean isAbleToRead(String url) {
+
+		if (url.endsWith(".pdf") || url.endsWith(".txt") || url.endsWith(".doc") || url.endsWith(".docx") || url.endsWith(".xls") || url.endsWith(".xlsx") || url.endsWith(".ppt") || url.endsWith(".pptx")) {
 			return true;
-		}else{
+		} else {
 			return false;
 		}
 	}

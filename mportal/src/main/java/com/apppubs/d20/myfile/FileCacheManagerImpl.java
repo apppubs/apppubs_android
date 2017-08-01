@@ -6,16 +6,21 @@ import android.support.annotation.NonNull;
 import android.text.TextUtils;
 import android.util.Log;
 
+import com.apppubs.d20.constant.URLs;
 import com.apppubs.d20.exception.ESUnavailableException;
 import com.apppubs.d20.util.FileUtils;
+import com.apppubs.d20.util.LogM;
+import com.apppubs.d20.util.WebUtils;
 
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
+import java.io.DataOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.UnsupportedEncodingException;
@@ -43,7 +48,19 @@ public class FileCacheManagerImpl implements FileCacheManager {
 	private ExecutorService mExecutorService;
 	private Handler mHandler;
 
+	private static final int TIME_OUT_CONNECT_MILLISECOND = 5 * 1000;
+	private static final int TIME_OUT_READ_MILLISECOND = 15 * 1000;
+	private static final String CHARSET = "utf-8";
+
 	private static FileCacheManagerImpl sManager;
+
+	private interface CacheTaskInterface{
+		Runnable getTaskRunnable();
+		Runnable getOnDoneRunnable(final String filePath);
+		Runnable getOnProgressRunnable(final float progress, final long bytesExceptedRead);
+		Runnable getOnExceptionRunnable(final FileCacheErrorCode e);
+		void cancel();
+	}
 
 	private FileCacheManagerImpl() {
 		mTaskMap = new HashMap<String,CacheTask>();
@@ -84,7 +101,7 @@ public class FileCacheManagerImpl implements FileCacheManager {
 		}
 	}
 
-	private class CacheTask{
+	private class CacheTask implements CacheTaskInterface{
 		private String mFileUrl;
 		private Handler mHandler;
 		private CacheListener mListener;
@@ -95,6 +112,7 @@ public class FileCacheManagerImpl implements FileCacheManager {
 			mListener = listener;
 		}
 
+		@Override
 		public Runnable getTaskRunnable(){
 			return new Runnable(){
 				@Override
@@ -195,7 +213,7 @@ public class FileCacheManagerImpl implements FileCacheManager {
 			return fileUrl.replace(fileName,encodedFileName);
 		}
 
-		private Runnable getOnDoneRunnable(final String filePath){
+		public Runnable getOnDoneRunnable(final String filePath){
 			return new Runnable() {
 				@Override
 				public void run() {
@@ -204,7 +222,7 @@ public class FileCacheManagerImpl implements FileCacheManager {
 			};
 		}
 
-		private Runnable getOnProgressRunnable(final float progress, final long bytesExceptedRead){
+		public Runnable getOnProgressRunnable(final float progress, final long bytesExceptedRead){
 			return new Runnable() {
 				@Override
 				public void run() {
@@ -213,7 +231,7 @@ public class FileCacheManagerImpl implements FileCacheManager {
 			};
 		}
 
-		private Runnable getOnExceptionRunnable(final FileCacheErrorCode e){
+		public Runnable getOnExceptionRunnable(final FileCacheErrorCode e){
 			return new Runnable() {
 				@Override
 				public void run() {
@@ -228,7 +246,136 @@ public class FileCacheManagerImpl implements FileCacheManager {
 
 	}
 
+	private class UploadTask implements CacheTaskInterface{
 
+		private File mFile;
+		private CacheListener mListener;
+		private Handler mHandler;
+		UploadTask (File file,CacheListener listener,Handler handler){
+			mFile = file;
+			mListener = listener;
+			mHandler = handler;
+		}
+		@Override
+		public Runnable getTaskRunnable() {
+			return new Runnable() {
+
+				@Override
+				public void run() {
+					int res = 0;
+					String result = null;
+					String BOUNDARY = UUID.randomUUID().toString(); // 边界标识 随机生成
+					String PREFIX = "--", LINE_END = "\r\n";
+					String CONTENT_TYPE = "multipart/form-data"; // 内容类型
+
+					try {
+						URL url = new URL(URLs.URL_UPLOAD);
+						HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+						conn.setReadTimeout(TIME_OUT_READ_MILLISECOND);
+						conn.setConnectTimeout(TIME_OUT_CONNECT_MILLISECOND);
+						conn.setDoInput(true); // 允许输入流
+						conn.setDoOutput(true); // 允许输出流
+						conn.setUseCaches(false); // 不允许使用缓存
+						conn.setRequestMethod("POST"); // 请求方式
+						conn.setRequestProperty("Charset", CHARSET); // 设置编码
+						conn.setRequestProperty("connection", "keep-alive");
+						conn.setRequestProperty("Content-Type", CONTENT_TYPE + ";boundary=" + BOUNDARY);
+
+						if (mFile != null) {
+							/**
+							 * 当文件不为空时执行上传
+							 */
+							DataOutputStream dos = new DataOutputStream(conn.getOutputStream());
+							StringBuffer sb = new StringBuffer();
+							sb.append(PREFIX);
+							sb.append(BOUNDARY);
+							sb.append(LINE_END);
+							/**
+							 * 这里重点注意： name里面的值为服务器端需要key 只有这个key 才可以得到对应的文件
+							 * filename是文件的名字，包含后缀名
+							 */
+
+							sb.append("Content-Disposition: form-data; name=file; filename=\"" + mFile.getName() + "\""
+									+ LINE_END);
+							sb.append("Content-Type: application/octet-stream; charset=" + CHARSET + LINE_END);
+							sb.append(LINE_END);
+							dos.write(sb.toString().getBytes());
+							InputStream is = new FileInputStream(mFile);
+							byte[] bytes = new byte[1024];
+							int len = 0;
+							while ((len = is.read(bytes)) != -1) {
+								dos.write(bytes, 0, len);
+							}
+							is.close();
+							dos.write(LINE_END.getBytes());
+							byte[] end_data = (PREFIX + BOUNDARY + PREFIX + LINE_END).getBytes();
+							dos.write(end_data);
+							dos.flush();
+							/**
+							 * 获取响应码 200=成功 当响应成功，获取响应的流
+							 */
+							res = conn.getResponseCode();
+							LogM.log(WebUtils.class, "response code:" + res);
+							if (res == 200) {
+								LogM.log(WebUtils.class, "request success");
+								InputStreamReader isr = new InputStreamReader(conn.getInputStream());
+								StringBuffer sb1 = new StringBuffer();
+								char[] buffer = new char[1024];
+								int size = 0;
+								while ((size = isr.read(buffer)) != -1) {
+									sb1.append(buffer, 0, size);
+								}
+								result = sb1.toString();
+								LogM.log(WebUtils.class, "result : " + result);
+								mHandler.post(getOnDoneRunnable(""));
+							} else {
+								LogM.log(WebUtils.class, "request error");
+							}
+						}
+					} catch (MalformedURLException e) {
+						e.printStackTrace();
+					} catch (IOException e) {
+						e.printStackTrace();
+					}
+				}
+			};
+		}
+
+		@Override
+		public Runnable getOnDoneRunnable(final String filePath) {
+			return new Runnable() {
+				@Override
+				public void run() {
+					mListener.onDone(filePath);
+				}
+			};
+		}
+
+		@Override
+		public Runnable getOnProgressRunnable(final float progress, final long bytesExceptedRead) {
+			return new Runnable() {
+				@Override
+				public void run() {
+					mListener.onProgress(progress,bytesExceptedRead);
+				}
+			};
+		}
+
+		@Override
+		public Runnable getOnExceptionRunnable(final FileCacheErrorCode e) {
+			return new Runnable() {
+				@Override
+				public void run() {
+					mListener.onException(e);
+				}
+			};
+		}
+
+		@Override
+		public void cancel() {
+
+		}
+	}
 
 	@NonNull
 	private File getDesFile(String fileUrl) throws ESUnavailableException {
@@ -310,6 +457,19 @@ public class FileCacheManagerImpl implements FileCacheManager {
 			return new File(cachedPath).delete();
 		}
 		return false;
+	}
+
+
+	@Override
+	public void uploadFile(File file, CacheListener listener) {
+
+		if (file==null){
+			return;
+		}
+		UploadTask uploadTask = new UploadTask(file,listener,mHandler);
+
+		mExecutorService.execute(uploadTask.getTaskRunnable());
+
 	}
 }
 
