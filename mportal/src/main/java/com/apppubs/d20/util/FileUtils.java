@@ -346,15 +346,40 @@ public class FileUtils {
 
 	}
 
+	/**
+	 * @deprecated 使用 getAppExternalStorageFile(Context context) 代替，新方法为会根据包名不同建立不同目录
+	 * @return
+	 * @throws ESUnavailableException
+	 */
+	@Deprecated
 	public static File getAppExternalStorageFile() throws ESUnavailableException {
 
 		if (Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED)) {
 			return new File(Environment.getExternalStorageDirectory(), Constants.APP_FOLDER_NAME);
 		} else {
-			throw new ESUnavailableException("Thes sd card is unusable！！");
+			throw new ESUnavailableException("The sd card is unusable！！");
 		}
-
 	}
+
+	public static File getAppExternalStorageDictory(Context context) throws ESUnavailableException {
+		if (Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED)){
+			return new File(Environment.getExternalStorageDirectory(),Constants.APP_FOLDER_NAME+File.separator+context.getPackageName());
+		}else{
+			throw new ESUnavailableException("The sd card is unusable");
+		}
+	}
+
+	public static File getAppFilesDirectory(Context context) throws ESUnavailableException {
+		File file =  getAppExternalStorageDictory(context);
+		return new File(file.getAbsolutePath(),"files");
+	}
+
+	/**
+	 * @deprecated 请使用 getAppFilesDirectory(Context context)
+	 * @return
+	 * @throws ESUnavailableException
+	 */
+	@Deprecated
 	public static File getAppExternalFilesStorageFile() throws ESUnavailableException{
 		File file = getAppExternalStorageFile();
 		return new File(file.getAbsoluteFile(),"files");

@@ -1,10 +1,14 @@
 package com.apppubs.d20.myfile;
 
+import android.Manifest;
 import android.app.Activity;
 import android.content.ComponentName;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
+import android.support.v4.app.ActivityCompat;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -58,6 +62,8 @@ public class FilePreviewFragment extends BaseFragment {
 	public static final int FILE_TYPE_EXCEL = 4;// excel类型
 	public static final int FILE_TYPE_PPT = 5;// ppt
 	public static final int FILE_TYPE_PIC = 6;// 图片类型
+
+	private final int PERMISSION_STORAGE_REQUEST_CODE = 1;
 
 	private String mFileUrl;
 	private int mFileType;
@@ -162,32 +168,74 @@ public class FilePreviewFragment extends BaseFragment {
 		if (!TextUtils.isEmpty(mFileLocalPath)) {
 			mPreViewBtn.setVisibility(View.VISIBLE);
 		} else {
-			File cacheFile = mFileCacheManager.fetchCache(mFileUrl);
-			if (cacheFile != null) {
-				onFileIsReady(cacheFile.getAbsolutePath());
-			} else {
-				mFileCacheManager.cacheFile(mFileUrl, new CacheListener() {
-					@Override
-					public void onException(FileCacheErrorCode e) {
-						if (!e.equals(FileCacheErrorCode.DOWNLOAD_CANCELED)) {
-							Toast.makeText(mContext, e.getMessage(), Toast.LENGTH_SHORT).show();
-						}
-					}
-
-					@Override
-					public void onDone(String fileUrl) {
-
-						onFileIsReady(fileUrl);
-					}
-
-					@Override
-					public void onProgress(float progress, long totalBytesExpectedToRead) {
-						mDownloadProgressTv.setText((int) (progress * 100) + "%");
-					}
-				});
+			if (requestStoragePermissionsIfNeed()){
+				loadFile();
 			}
 		}
 		mFileNameTv.setText(mFileName);
+	}
+
+	private boolean requestStoragePermissionsIfNeed() {
+		int permission = ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.WRITE_EXTERNAL_STORAGE);
+		final String[] PERMISSIONS_STORAGE = {Manifest.permission.READ_EXTERNAL_STORAGE,Manifest.permission.WRITE_EXTERNAL_STORAGE};
+		if (permission != PackageManager.PERMISSION_GRANTED) {
+			FilePreviewFragment.this.requestPermissions(PERMISSIONS_STORAGE,PERMISSION_STORAGE_REQUEST_CODE);
+			return false;
+		}else{
+			return true;
+		}
+	}
+
+	@Override
+	public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+		super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+		if (requestCode==PERMISSION_STORAGE_REQUEST_CODE){
+			if (isAllPermissionGranted(grantResults)){
+				loadFile();
+			}else{
+				Toast.makeText(getContext(),"请在设置中允许访问存储",Toast.LENGTH_LONG).show();
+			}
+		}
+	}
+
+	private boolean isAllPermissionGranted(@NonNull int[] grantResults) {
+		for (int permission : grantResults){
+			if (permission!= PackageManager.PERMISSION_GRANTED){
+				return false;
+			}
+		}
+		return true;
+	}
+
+	private void loadFile() {
+		File cacheFile = mFileCacheManager.fetchCache(mFileUrl);
+		if (cacheFile != null) {
+			onFileIsReady(cacheFile.getAbsolutePath());
+		} else {
+			downloadFile();
+		}
+	}
+
+	private void downloadFile() {
+		mFileCacheManager.cacheFile(mFileUrl, new CacheListener() {
+			@Override
+			public void onException(FileCacheErrorCode e) {
+				if (!e.equals(FileCacheErrorCode.DOWNLOAD_CANCELED)) {
+					Toast.makeText(mContext, e.getMessage(), Toast.LENGTH_SHORT).show();
+				}
+			}
+
+			@Override
+			public void onDone(String fileUrl) {
+
+				onFileIsReady(fileUrl);
+			}
+
+			@Override
+			public void onProgress(float progress, long totalBytesExpectedToRead) {
+				mDownloadProgressTv.setText((int) (progress * 100) + "%");
+			}
+		});
 	}
 
 	private void replacePicByFileType(int fileType) {

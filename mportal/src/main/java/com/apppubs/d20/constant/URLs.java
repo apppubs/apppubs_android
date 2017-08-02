@@ -232,7 +232,7 @@ public class URLs {
 	 * apptest&fr=1
 	 */
 	public static final String URL_LOGIN_WITH_USERNAME = baseURL
-			+ "/wmh360/json/login/usersmslogin.jsp?username=%s&deviceid=%s&token=%s&os=%s&dev=%s&app=%s&appcodeversion=%d&fr=4&appcode="
+			+ "wmh360/json/login/usersmslogin.jsp?username=%s&deviceid=%s&token=%s&os=%s&dev=%s&app=%s&appcodeversion=%d&fr=4&appcode="
 			+ appCode;
 	
 	/**

@@ -1,5 +1,6 @@
 package com.apppubs.d20.myfile;
 
+import android.content.Context;
 import android.os.Handler;
 import android.os.Looper;
 import android.support.annotation.NonNull;
@@ -9,6 +10,7 @@ import android.util.Log;
 import com.apppubs.d20.constant.URLs;
 import com.apppubs.d20.exception.ESUnavailableException;
 import com.apppubs.d20.util.FileUtils;
+import com.apppubs.d20.util.JSONResult;
 import com.apppubs.d20.util.LogM;
 import com.apppubs.d20.util.WebUtils;
 
@@ -47,6 +49,7 @@ public class FileCacheManagerImpl implements FileCacheManager {
 	private Map<String,CacheTask> mTaskMap;
 	private ExecutorService mExecutorService;
 	private Handler mHandler;
+	private Context mContext;
 
 	private static final int TIME_OUT_CONNECT_MILLISECOND = 5 * 1000;
 	private static final int TIME_OUT_READ_MILLISECOND = 15 * 1000;
@@ -62,17 +65,18 @@ public class FileCacheManagerImpl implements FileCacheManager {
 		void cancel();
 	}
 
-	private FileCacheManagerImpl() {
+	private FileCacheManagerImpl(Context context) {
 		mTaskMap = new HashMap<String,CacheTask>();
 		mExecutorService = Executors.newFixedThreadPool(MAX_THREAD_NUM);
 		mHandler = new Handler(Looper.getMainLooper());
+		mContext = context;
 	}
 
-	public static FileCacheManagerImpl getInstance(){
+	public static FileCacheManagerImpl getInstance(Context context){
 		if (sManager==null){
 			synchronized (FileCacheManagerImpl.class){
 				if (sManager==null){
-					sManager = new FileCacheManagerImpl();
+					sManager = new FileCacheManagerImpl(context);
 				}
 			}
 		}
@@ -181,6 +185,7 @@ public class FileCacheManagerImpl implements FileCacheManager {
 					} catch (MalformedURLException e){
 						mHandler.post(getOnExceptionRunnable(FileCacheErrorCode.MALFORMEDA_URL));
 					}catch (IOException e){
+						e.printStackTrace();
 						mHandler.post(getOnExceptionRunnable(FileCacheErrorCode.IO_EXCEPTION));
 					}finally {
 						if (conn != null)
@@ -303,8 +308,12 @@ public class FileCacheManagerImpl implements FileCacheManager {
 							InputStream is = new FileInputStream(mFile);
 							byte[] bytes = new byte[1024];
 							int len = 0;
+							long totalBytes = mFile.length();
+							long uploadedBytes = 0;
 							while ((len = is.read(bytes)) != -1) {
 								dos.write(bytes, 0, len);
+								uploadedBytes+= len;
+								mHandler.post(getOnProgressRunnable(uploadedBytes/totalBytes,totalBytes));
 							}
 							is.close();
 							dos.write(LINE_END.getBytes());
@@ -327,7 +336,10 @@ public class FileCacheManagerImpl implements FileCacheManager {
 								}
 								result = sb1.toString();
 								LogM.log(WebUtils.class, "result : " + result);
-								mHandler.post(getOnDoneRunnable(""));
+								JSONResult jr = JSONResult.compile(result);
+								String str = (String) jr.getResultMap().get("photourl");
+								mHandler.post(getOnDoneRunnable(str));
+
 							} else {
 								LogM.log(WebUtils.class, "request error");
 							}
@@ -434,7 +446,7 @@ public class FileCacheManagerImpl implements FileCacheManager {
 	}
 
 	private File getCacheDirFile() throws ESUnavailableException {
-		File cacheDir = new File(FileUtils.getAppExternalFilesStorageFile(),"caches");
+		File cacheDir = new File(FileUtils.getAppFilesDirectory(mContext),"caches");
 		if (!cacheDir.exists()){
 			cacheDir.mkdirs();
 		}

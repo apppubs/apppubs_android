@@ -157,7 +157,7 @@ public class AppContext {
 
 	public FileCacheManager getCacheManager(){
 
-		return FileCacheManagerImpl.getInstance();
+		return FileCacheManagerImpl.getInstance(mContext);
 	}
 
 	public WMHHttpClient getHttpClient(){

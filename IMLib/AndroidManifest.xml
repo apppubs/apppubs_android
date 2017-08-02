@@ -2,7 +2,7 @@
     package="io.rong.imlib">
 
     <uses-sdk
-        android:minSdkVersion="9"
+        android:minSdkVersion="15"
         android:targetSdkVersion="20" />
 
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
@@ -84,9 +84,7 @@
                 <action android:name="android.intent.action.ACTION_POWER_DISCONNECTED" />
             </intent-filter>
         </receiver>
-
-
-
+        
         <!--必选： SDK 核心功能-->
 
         <!-- end -->

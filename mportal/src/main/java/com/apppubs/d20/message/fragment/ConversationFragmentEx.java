@@ -1,13 +1,12 @@
 package com.apppubs.d20.message.fragment;
 
+import android.content.Intent;
 import android.net.Uri;
 import android.util.Log;
 
 import com.apppubs.d20.AppContext;
 import com.apppubs.d20.myfile.CacheListener;
 import com.apppubs.d20.myfile.FileCacheErrorCode;
-import com.apppubs.d20.myfile.FileCacheManager;
-import com.apppubs.d20.util.LogM;
 
 import java.io.File;
 import java.util.List;
@@ -28,11 +27,8 @@ public class ConversationFragmentEx extends ConversationFragment {
     public void onImageResult(List<Uri> selectedImages, boolean origin) {
 //        super.onImageResult(selectedImages, origin);
         for (final Uri uri: selectedImages){
-           Message message = new Message();
-            ImageMessage imageMessage = new ImageMessage();
-            imageMessage.setLocalUri(uri);
-            message.setContent(imageMessage);
-            LogM.log(this.getClass(),uri.toString());
+			ImageMessage imageMessage = ImageMessage.obtain(uri, uri);
+			Message message = Message.obtain(getTargetId(), getConversationType(), imageMessage);
 
 			/**
 			 * <p>发送图片消息，可以使用该方法将图片上传到自己的服务器发送，同时更新图片状态。</p>
@@ -56,21 +52,24 @@ public class ConversationFragmentEx extends ConversationFragment {
 				public void onAttached(Message message, final RongIMClient.UploadImageStatusListener uploadImageStatusListener) {
          		/*上传图片到自己的服务器*/
 
-					Log.v("ConversationFragmentEx","发送图片");
-					AppContext.getInstance(getContext()).getCacheManager().uploadFile(new File(uri.toString()), new CacheListener() {
+					Log.v("ConversationFragmentEx","发送图片"+new File(uri.getPath()).getAbsolutePath());
+
+					AppContext.getInstance(getContext()).getCacheManager().uploadFile(new File(uri.getPath()), new CacheListener() {
 						@Override
 						public void onException(FileCacheErrorCode errorCode) {
 							Log.v("ConversationFragmentEx","发送图片异常"+errorCode.getMessage());
+							uploadImageStatusListener.error();
 						}
 
 						@Override
 						public void onDone(String fileUrl) {
-							Log.v("ConversationFragmentEx","发送图片完成");
+							uploadImageStatusListener.success(Uri.parse(fileUrl));
+							Log.v("ConversationFragmentEx","发送图片完成"+fileUrl);
 						}
 
 						@Override
 						public void onProgress(float progress, long totalBytesExpectedToRead) {
-
+							uploadImageStatusListener.update((int)(totalBytesExpectedToRead*progress));
 						}
 					});
 				}
@@ -98,4 +97,9 @@ public class ConversationFragmentEx extends ConversationFragment {
 
     }
 
+	@Override
+	public void onActivityResult(int requestCode, int resultCode, Intent data) {
+		super.onActivityResult(requestCode, resultCode, data);
+		Log.v("ConversationFragmentEx","onActivityResult");
+	}
 }
