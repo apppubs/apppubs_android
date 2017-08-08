@@ -1,24 +1,34 @@
 package com.apppubs.d20.activity;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
 
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.net.Uri;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.widget.Toast;
 
 import com.apppubs.d20.AppContext;
 import com.apppubs.d20.bean.UserInfo;
+import com.apppubs.d20.constant.URLs;
 import com.apppubs.d20.home.CompelMessageDialogActivity;
 import com.apppubs.d20.home.CompelReadMessageModel;
 import com.apppubs.d20.message.model.UserBasicInfo;
 import com.apppubs.d20.model.BussinessCallbackCommon;
+import com.apppubs.d20.net.WMHHttpErrorCode;
+import com.apppubs.d20.net.WMHRequestListener;
+import com.apppubs.d20.util.JSONResult;
+import com.apppubs.d20.util.JSONUtils;
 import com.apppubs.d20.util.LogM;
 import com.apppubs.d20.MportalApplication;
 import com.apppubs.d20.R;
@@ -33,6 +43,9 @@ import com.apppubs.d20.util.SharedPreferenceUtils;
 import com.apppubs.d20.util.SystemUtils;
 import com.apppubs.d20.util.Tools;
 import com.orm.SugarRecord;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import io.rong.imkit.RongIM;
 
@@ -217,24 +230,37 @@ public abstract class HomeBaseActivity extends BaseActivity {
 			}
 		}
 
-//		Intent i = new Intent(this,CompelMessageDialogActivity.class);
-//
-//		CompelReadMessageModel model0 = new CompelReadMessageModel();
-//		model0.setmContent("<a href=http://www.baidu.com>http://www.baidu.com</a>");
-//		CompelReadMessageModel model1 = new CompelReadMessageModel();
-//		model1.setmContent("<a href=http://www.sogou.com>http://www.sogou.com</a>");
-//		CompelReadMessageModel model2 = new CompelReadMessageModel();
-//		model2.setmContent("<a href=http://www.yahoo.com>http://www.yahoo.com></a>");
-//		CompelReadMessageModel model3 = new CompelReadMessageModel();
-//		model3.setmContent("<a href=http://www.tencent.com>http://www.tencent.com</a>");
-//		ArrayList<CompelReadMessageModel> list = new ArrayList<CompelReadMessageModel>();
-//		list.add(model0);
-//		list.add(model1);
-//		list.add(model2);
-//		list.add(model3);
-//		i.putExtra(CompelMessageDialogActivity.EXTRA_DATAS,list);
-//		startActivity(i);
 
+		mAppContext.getHttpClient().GET(URLs.URL_COMPEL_READ_LIST,new String[]{mAppContext.getCurrentUser().getUsername()}, new WMHRequestListener(){
+
+			@Override
+			public void onDone(JSONResult jsonResult, @Nullable WMHHttpErrorCode errorCode) {
+				if (errorCode==null){
+					if (jsonResult.resultCode==1){
+						String infoListJson = "";
+						try {
+							JSONObject jo = new JSONObject(jsonResult.result);
+							infoListJson = jo.getString("infolist");
+							Log.v("HomeBaseActivity","infolist"+infoListJson);
+							List<CompelReadMessageModel> l = JSONUtils.parseListFromJson(infoListJson,CompelReadMessageModel.class);
+							if (l.isEmpty()){
+								return;
+							}
+							ArrayList<CompelReadMessageModel> list = new ArrayList<CompelReadMessageModel>(l);
+							Intent i = new Intent(HomeBaseActivity.this,CompelMessageDialogActivity.class);
+							i.putExtra(CompelMessageDialogActivity.EXTRA_DATAS,list);
+							startActivity(i);
+						} catch (JSONException e) {
+							e.printStackTrace();
+						}
+					}else{
+						Log.e("HomeBaseActivity",jsonResult.reason);
+					}
+				}else{
+					Log.e("HomeBaseActivity",errorCode.getMessage());
+				}
+			}
+		});
 	}
 
 	@Override

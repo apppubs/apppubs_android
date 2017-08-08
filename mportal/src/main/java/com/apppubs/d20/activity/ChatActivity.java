@@ -55,7 +55,7 @@ import com.apppubs.d20.bean.Msg;
 import com.apppubs.d20.bean.UserInfo;
 import com.apppubs.d20.model.MsgController;
 import com.apppubs.d20.constant.Actions;
-import com.apppubs.d20.exception.ESUnavailableException;
+import com.apppubs.d20.exception.APUnavailableException;
 import com.apppubs.d20.util.SharedPreferenceUtils;
 import com.apppubs.d20.util.StringUtils;
 import com.apppubs.d20.widget.MyEditText;
@@ -342,7 +342,7 @@ public class ChatActivity extends BaseActivity implements OnClickListener {
 							dir.mkdirs();
 						}
 						mSoundPath = dir + "/" + UUID.randomUUID() + ".mp3";
-					} catch (ESUnavailableException e1) {
+					} catch (APUnavailableException e1) {
 						e1.printStackTrace();
 					}
 					mRecorder = new MP3Recorder(new File(mSoundPath));

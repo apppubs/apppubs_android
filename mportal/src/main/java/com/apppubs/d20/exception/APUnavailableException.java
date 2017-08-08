@@ -8,12 +8,12 @@ import java.io.IOException;
  *
  */
 @SuppressWarnings("serial")
-public class ESUnavailableException extends IOException {
-	public ESUnavailableException() {
+public class APUnavailableException extends IOException {
+	public APUnavailableException() {
 		super();
 	}
 
-	public ESUnavailableException(String detailMessage) {
+	public APUnavailableException(String detailMessage) {
 		super(detailMessage);
 	}
 	

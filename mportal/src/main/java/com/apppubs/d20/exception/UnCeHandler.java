@@ -1,14 +1,14 @@
 package com.apppubs.d20.exception;
 
-import java.io.PrintWriter;
-import java.io.StringWriter;
-import java.lang.Thread.UncaughtExceptionHandler;
-
 import android.os.Looper;
 import android.widget.Toast;
 
-import com.apppubs.d20.util.LogM;
 import com.apppubs.d20.MportalApplication;
+import com.apppubs.d20.util.LogM;
+
+import java.io.PrintWriter;
+import java.io.StringWriter;
+import java.lang.Thread.UncaughtExceptionHandler;
 
 public class UnCeHandler implements UncaughtExceptionHandler {  
     

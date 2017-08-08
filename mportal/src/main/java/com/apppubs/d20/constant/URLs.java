@@ -1,9 +1,9 @@
 package com.apppubs.d20.constant;
 
 import com.apppubs.d20.AppContext;
+import com.apppubs.d20.MportalApplication;
 import com.apppubs.d20.bean.Settings;
 import com.apppubs.d20.util.SystemUtils;
-import com.apppubs.d20.MportalApplication;
 
 public class URLs {
 	public static final String PROTOCOL_URL_CLIENTKEY = SystemUtils.md5("CmsClient");
@@ -706,7 +706,7 @@ public class URLs {
 	强制阅读消息列表
 	http://60.205.140.176:8088/wmh360/json/msg/compelreadlist.jsp?appcode=D20&username=dacs&clientkey=bb7c1386d85044ba7a7ae53f3362d634
  	*/
-	public static final String URL_COMPEL_READ_LIST = baseURL+"%@wmh360/json/msg/compelreadlist.jsp?appcode=%s&username=%s&clientkey=bb7c1386d85044ba7a7ae53f3362d634";
+	public static final String URL_COMPEL_READ_LIST = baseURL+"wmh360/json/msg/compelreadlist.jsp?appcode="+appCode+"&username=%s&clientkey=bb7c1386d85044ba7a7ae53f3362d634";
 
 /*
 	标记已读

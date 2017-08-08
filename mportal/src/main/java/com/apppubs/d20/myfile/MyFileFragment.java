@@ -72,7 +72,7 @@ public class MyFileFragment extends BaseFragment implements OnClickListener {
 			public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 
 				Bundle args = new Bundle();
-				args.putString(FilePreviewFragment.ARGS_STRING_URL, mDatas.get((int) parent.getItemIdAtPosition(position)).getFileUrl());
+				args.putString(FilePreviewFragment.ARGS_STRING_URL, isSearchMode?mSearchResults.get((int) parent.getItemIdAtPosition(position)).getFileUrl():mDatas.get((int) parent.getItemIdAtPosition(position)).getFileUrl());
 				ContainerActivity.startActivity(mContext, FilePreviewFragment.class, args, "文件预览");
 			}
 		});
@@ -138,7 +138,7 @@ public class MyFileFragment extends BaseFragment implements OnClickListener {
 
 		mAppContext.getHttpClient().GET(url, params, new WMHRequestListener() {
 			@Override
-			public void onDone(JSONResult jr, @NonNull WMHHttpErrorCode errorCode) {
+			public void onDone(JSONResult jr, WMHHttpErrorCode errorCode) {
 				Log.v("MyFileFragment", jr.result);
 				if (errorCode != null) {
 

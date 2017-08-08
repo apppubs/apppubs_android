@@ -1,5 +1,7 @@
 package com.apppubs.d20.home;
 
+import com.google.gson.annotations.SerializedName;
+
 import java.io.Serializable;
 
 /**
@@ -8,7 +10,9 @@ import java.io.Serializable;
 
 public class CompelReadMessageModel implements Serializable {
 
+	@SerializedName("content")
 	private String mContent;
+	@SerializedName("serviceinfo_id")
 	private String messageId;
 
 	public String getmContent() {

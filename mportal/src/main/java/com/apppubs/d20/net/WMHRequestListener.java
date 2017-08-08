@@ -1,6 +1,7 @@
 package com.apppubs.d20.net;
 
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 
 import com.apppubs.d20.util.JSONResult;
 
@@ -10,5 +11,5 @@ import com.apppubs.d20.util.JSONResult;
 
 public interface WMHRequestListener {
 
-	void onDone(JSONResult jsonResult,@NonNull WMHHttpErrorCode errorCode);
+	void onDone(JSONResult jsonResult,@Nullable WMHHttpErrorCode errorCode);
 }

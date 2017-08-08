@@ -1,9 +1,5 @@
 package com.apppubs.d20.myfile;
 
-import android.text.TextUtils;
-
-import com.apppubs.d20.exception.ESUnavailableException;
-
 import java.io.File;
 
 /**

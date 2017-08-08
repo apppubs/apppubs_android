@@ -37,7 +37,7 @@ import android.provider.DocumentsContract;
 import android.provider.MediaStore;
 import android.util.Log;
 
-import com.apppubs.d20.exception.ESUnavailableException;
+import com.apppubs.d20.exception.APUnavailableException;
 import com.apppubs.d20.model.BussinessCallbackCommon;
 import com.apppubs.d20.constant.Constants;
 
@@ -341,7 +341,7 @@ public class FileUtils {
 		if (Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED)) {
 			return Environment.getExternalStorageDirectory();
 		} else {
-			throw new ESUnavailableException("The sd card is unusable！！");
+			throw new APUnavailableException("The sd card is unusable！！");
 		}
 
 	}
@@ -349,27 +349,27 @@ public class FileUtils {
 	/**
 	 * @deprecated 使用 getAppExternalStorageFile(Context context) 代替，新方法为会根据包名不同建立不同目录
 	 * @return
-	 * @throws ESUnavailableException
+	 * @throws APUnavailableException
 	 */
 	@Deprecated
-	public static File getAppExternalStorageFile() throws ESUnavailableException {
+	public static File getAppExternalStorageFile() throws APUnavailableException {
 
 		if (Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED)) {
 			return new File(Environment.getExternalStorageDirectory(), Constants.APP_FOLDER_NAME);
 		} else {
-			throw new ESUnavailableException("The sd card is unusable！！");
+			throw new APUnavailableException("The sd card is unusable！！");
 		}
 	}
 
-	public static File getAppExternalStorageDictory(Context context) throws ESUnavailableException {
+	public static File getAppExternalStorageDictory(Context context) throws APUnavailableException {
 		if (Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED)){
 			return new File(Environment.getExternalStorageDirectory(),Constants.APP_FOLDER_NAME+File.separator+context.getPackageName());
 		}else{
-			throw new ESUnavailableException("The sd card is unusable");
+			throw new APUnavailableException("The sd card is unusable");
 		}
 	}
 
-	public static File getAppFilesDirectory(Context context) throws ESUnavailableException {
+	public static File getAppFilesDirectory(Context context) throws APUnavailableException {
 		File file =  getAppExternalStorageDictory(context);
 		return new File(file.getAbsolutePath(),"files");
 	}
@@ -377,15 +377,15 @@ public class FileUtils {
 	/**
 	 * @deprecated 请使用 getAppFilesDirectory(Context context)
 	 * @return
-	 * @throws ESUnavailableException
+	 * @throws APUnavailableException
 	 */
 	@Deprecated
-	public static File getAppExternalFilesStorageFile() throws ESUnavailableException{
+	public static File getAppExternalFilesStorageFile() throws APUnavailableException {
 		File file = getAppExternalStorageFile();
 		return new File(file.getAbsoluteFile(),"files");
 	}
 
-	public static File getPaperStorageFile() throws ESUnavailableException {
+	public static File getPaperStorageFile() throws APUnavailableException {
 
 		File file = getAppExternalStorageFile();
 		File newFile = new File(file, Constants.APP_FOLDER_NAME);
@@ -449,9 +449,9 @@ public class FileUtils {
 	 * 获取某一期的缓存文件夹File对象
 	 * 
 	 * @return
-	 * @throws ESUnavailableException
+	 * @throws APUnavailableException
 	 */
-	public static File getIssueDirectory(String paperCode, String issueName) throws ESUnavailableException {
+	public static File getIssueDirectory(String paperCode, String issueName) throws APUnavailableException {
 		File ereader = getAppExternalStorageFile();
 		return new File(ereader, paperCode + "/" + issueName);
 	}

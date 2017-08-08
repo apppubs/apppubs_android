@@ -8,7 +8,7 @@ import android.text.TextUtils;
 import android.util.Log;
 
 import com.apppubs.d20.constant.URLs;
-import com.apppubs.d20.exception.ESUnavailableException;
+import com.apppubs.d20.exception.APUnavailableException;
 import com.apppubs.d20.util.FileUtils;
 import com.apppubs.d20.util.JSONResult;
 import com.apppubs.d20.util.LogM;
@@ -390,7 +390,7 @@ public class FileCacheManagerImpl implements FileCacheManager {
 	}
 
 	@NonNull
-	private File getDesFile(String fileUrl) throws ESUnavailableException {
+	private File getDesFile(String fileUrl) throws APUnavailableException {
 		File cacheDir = getCacheDirFile();
 		File desFile = new File(cacheDir,getFileName(fileUrl));
 		while (desFile.exists()){
@@ -434,7 +434,7 @@ public class FileCacheManagerImpl implements FileCacheManager {
 		return "";
 	}
 
-	private File getTempDesFile (String fileUrl) throws ESUnavailableException {
+	private File getTempDesFile (String fileUrl) throws APUnavailableException {
 		File tempCacheDir = getCacheDirFile();
 		String fileName = UUID.randomUUID().toString().replaceAll("-","")+".temp";
 		return new File(tempCacheDir,fileName);
@@ -445,7 +445,7 @@ public class FileCacheManagerImpl implements FileCacheManager {
 		return fileName;
 	}
 
-	private File getCacheDirFile() throws ESUnavailableException {
+	private File getCacheDirFile() throws APUnavailableException {
 		File cacheDir = new File(FileUtils.getAppFilesDirectory(mContext),"caches");
 		if (!cacheDir.exists()){
 			cacheDir.mkdirs();
@@ -496,7 +496,7 @@ class FileCacheDataHelper {
 			if (mDataFile.exists()){
 				restoreFromDisk();
 			}
-		} catch (ESUnavailableException e) {
+		} catch (APUnavailableException e) {
 			e.printStackTrace();
 		}
 	}

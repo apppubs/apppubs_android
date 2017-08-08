@@ -16,7 +16,7 @@ import com.apppubs.d20.R;
 import com.apppubs.d20.activity.HomeSlideMenuActivity;
 import com.apppubs.d20.activity.StartUpActivity;
 import com.apppubs.d20.constant.Constants;
-import com.apppubs.d20.exception.ESUnavailableException;
+import com.apppubs.d20.exception.APUnavailableException;
 import com.apppubs.d20.model.CallbackResult;
 import com.apppubs.d20.model.SystemBussiness;
 import com.apppubs.d20.util.FileUtils;
@@ -185,14 +185,14 @@ public class DownloadAppService extends Service {
 
 			try {
 				saveFileName = FileUtils.getAppExternalStorageFile() + Constants.APK_FILE_NAME;
-			} catch (ESUnavailableException e) {
+			} catch (APUnavailableException e) {
 				e.printStackTrace();
 			}
 			mSystemBussiness = SystemBussiness.getInstance(this);
 			try {
 				savePath = FileUtils.getAppExternalStorageFile().getAbsolutePath() + "/" + Constants.APK_FILE_NAME;
 
-			} catch (ESUnavailableException e) {
+			} catch (APUnavailableException e) {
 				e.printStackTrace();
 			}
 			backActivity = intent.getIntExtra(SERVACESHARENAME, 0);

@@ -238,7 +238,7 @@ public class UserBussiness extends BaseBussiness {
 	 */
 	public List<User> listUser(String departmentId) {
 		String sql = "";
-		if (this.mAppContext.getAppConfig().getAdbookAuthFlag() < 1 || (this.mAppContext.getAppConfig().getAdbookAuthFlag() > 0 && mAppContext.getCurrentUser().getAddressbookPermissionString().contains(departmentId))
+		if (this.mAppContext.getAppConfig().getAdbookAuthFlag() < 1 || (this.mAppContext.getAppConfig().getAdbookAuthFlag() > 0 && hasReadPermissionOfDept(departmentId))
 				) {
 			sql = "select * from USER t1 join USER_DEPT_LINK t2 on t1.USER_ID = t2.USER_ID where t2.DEPT_ID = ? order by t2.sort_id";
 		} else {
@@ -838,8 +838,21 @@ public class UserBussiness extends BaseBussiness {
 	public boolean hasReadPermissionOfUser(String userid){
 		List<Department> dl = getDepartmentByUserId(userid);
 		for (Department d: dl){
-			String permissionStr = AppContext.getInstance(mContext).getCurrentUser().getAddressbookPermissionString();
-			if (!TextUtils.isEmpty(permissionStr)&&permissionStr.contains(d.getDeptId())){
+			if (hasReadPermissionOfDept(d.getDeptId())){
+				return true;
+			}
+		}
+		return false;
+	}
+
+	private boolean hasReadPermissionOfDept(String deptId){
+		if (TextUtils.isEmpty(deptId)){
+			return false;
+		}
+		String permissionStr = AppContext.getInstance(mContext).getCurrentUser().getAddressbookPermissionString();
+		String [] deptIds = permissionStr.split(",");
+		for (String curDeptId : deptIds){
+			if (deptId.equals(curDeptId)){
 				return true;
 			}
 		}
@@ -848,12 +861,27 @@ public class UserBussiness extends BaseBussiness {
 
 	public boolean hasChatPermissionOfUser(String userId){
 		List<Department> dl = getDepartmentByUserId(userId);
+		String permissionStr = AppContext.getInstance(mContext).getCurrentUser().getChatPermissionString();
 		for (Department d: dl){
-			String permissionStr = AppContext.getInstance(mContext).getCurrentUser().getChatPermissionString();
-			if (!TextUtils.isEmpty(permissionStr)&&permissionStr.contains(d.getDeptId())){
+			if (!TextUtils.isEmpty(permissionStr)&&hasChatPermissionOfDept(d.getDeptId())){
 				return true;
 			}
 		}
+		return false;
+	}
+
+	private boolean hasChatPermissionOfDept(String deptId){
+		if (TextUtils.isEmpty(deptId)){
+			return false;
+		}
+		String permissionStr = AppContext.getInstance(mContext).getCurrentUser().getChatPermissionString();
+		String[] deptIds = permissionStr.split(",");
+		for (String curDeptId : deptIds){
+			if (curDeptId.equals(deptId)){
+				return true;
+			}
+		}
+
 		return false;
 	}
 

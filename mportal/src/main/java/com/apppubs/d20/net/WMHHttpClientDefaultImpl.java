@@ -1,7 +1,11 @@
 package com.apppubs.d20.net;
 
+import android.util.Log;
+
 import com.apppubs.d20.util.JSONResult;
 import com.google.gson.JsonParseException;
+
+import org.json.JSONException;
 
 import java.io.IOException;
 
@@ -45,6 +49,7 @@ public class WMHHttpClientDefaultImpl implements WMHHttpClient {
 					 jr = JSONResult.compile(responseStr);
 					listener.onDone(jr, null);
 				}catch (JsonParseException e){
+					Log.v("WMHHttpClient",responseStr);
 					e.printStackTrace();
 					listener.onDone(null,WMHHttpErrorCode.JSON_PARSE_ERROR);
 				}
