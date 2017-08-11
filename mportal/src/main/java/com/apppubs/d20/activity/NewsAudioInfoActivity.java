@@ -33,6 +33,7 @@ import android.widget.Toast;
 import com.apppubs.d20.bean.Collection;
 import com.apppubs.d20.bean.Comment;
 import com.apppubs.d20.bean.NewsInfo;
+import com.apppubs.d20.model.APResultCallback;
 import com.apppubs.d20.model.CollectionBussiness;
 import com.apppubs.d20.model.NewsBussiness;
 import com.apppubs.d20.util.LogM;
@@ -41,7 +42,6 @@ import com.apppubs.d20.util.Utils;
 import com.apppubs.d20.widget.MyWebChromeClient;
 import com.apppubs.d20.R;
 import com.apppubs.d20.bean.Settings;
-import com.apppubs.d20.model.BussinessCallbackCommon;
 import com.orm.SugarRecord;
 
 /**
@@ -84,7 +84,7 @@ public class NewsAudioInfoActivity extends BaseActivity {
 		}
 		mNewsBussiness = NewsBussiness.getInstance(mContext);
 		mFuture = mNewsBussiness.getNewsInfo(mNewsInfo.getId(), mNewsInfo.getChannelCode(),
-				new BussinessCallbackCommon<NewsInfo>() {
+				new APResultCallback<NewsInfo>() {
 
 					@Override
 					public void onException(int excepCode) {
@@ -378,7 +378,7 @@ public class NewsAudioInfoActivity extends BaseActivity {
 	}
 
 	public void refreshCommet() {
-		mSystemBussiness.getCommentSizeZanCai(mInfoId, new BussinessCallbackCommon<Comment>() {
+		mSystemBussiness.getCommentSizeZanCai(mInfoId, new APResultCallback<Comment>() {
 			@Override
 			public void onException(int excepCode) {
 				mCommment = null;

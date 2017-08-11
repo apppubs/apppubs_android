@@ -36,7 +36,7 @@ import com.apppubs.d20.bean.Settings;
 import com.apppubs.d20.bean.UserInfo;
 import com.apppubs.d20.constant.Actions;
 import com.apppubs.d20.message.model.UserBussiness;
-import com.apppubs.d20.model.BussinessCallbackCommon;
+import com.apppubs.d20.model.APResultCallback;
 import com.apppubs.d20.message.model.MsgBussiness;
 import com.apppubs.d20.model.NewsBussiness;
 import com.apppubs.d20.model.PaperBussiness;
@@ -268,7 +268,7 @@ public abstract class BaseActivity extends FragmentActivity implements OnClickLi
 
 	protected void onAppActive() {
 		if (!(this instanceof FirstLoginActity)||(this instanceof StartUpActivity)){
-			mUserBussiness.updateUserInfo(this, new BussinessCallbackCommon<UserInfo>() {
+			mUserBussiness.updateUserInfo(this, new APResultCallback<UserInfo>() {
 				@Override
 				public void onDone(UserInfo obj) {
 					if (obj==null||TextUtils.isEmpty(obj.getUserId())){
@@ -284,7 +284,7 @@ public abstract class BaseActivity extends FragmentActivity implements OnClickLi
 				}
 			});
 
-			mSystemBussiness.aSyncAppConfig(this, new BussinessCallbackCommon<AppConfig>() {
+			mSystemBussiness.aSyncAppConfig(this, new APResultCallback<AppConfig>() {
 				@Override
 				public void onDone(AppConfig obj) {
 					System.out.print("同步appconfig成功");

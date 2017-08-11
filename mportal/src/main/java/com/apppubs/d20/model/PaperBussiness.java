@@ -49,7 +49,7 @@ public class PaperBussiness extends BaseBussiness{
 		return SugarRecord.listAll(Paper.class);
 	}
 
-	public Future<?> getPaperIssueList(final String paperCode, int page, final BussinessCallbackCommon<List<PaperIssue>> callback) {
+	public Future<?> getPaperIssueList(final String paperCode, int page, final APResultCallback<List<PaperIssue>> callback) {
 		Future<?> f = sDefaultExecutor.submit(new Runnable() {
 
 			@Override
@@ -83,7 +83,7 @@ public class PaperBussiness extends BaseBussiness{
 
 	}
 
-	public Future<?> getPaperIssueInfo(final String issueId, final BussinessCallbackCommon<PaperIssue> callback) {
+	public Future<?> getPaperIssueInfo(final String issueId, final APResultCallback<PaperIssue> callback) {
 		Future<?> f = sDefaultExecutor.submit(new Runnable() {
 
 			@Override
@@ -138,7 +138,7 @@ public class PaperBussiness extends BaseBussiness{
 
 	}
 
-	public Future<?> getCatalog(final String catalogId, final BussinessCallbackCommon<PaperCatalog> callback) {
+	public Future<?> getCatalog(final String catalogId, final APResultCallback<PaperCatalog> callback) {
 
 		Future<?> f = sDefaultExecutor.submit(new Runnable() {
 			@Override

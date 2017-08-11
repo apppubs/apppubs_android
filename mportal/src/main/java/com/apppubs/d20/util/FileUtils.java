@@ -38,7 +38,7 @@ import android.provider.MediaStore;
 import android.util.Log;
 
 import com.apppubs.d20.exception.APUnavailableException;
-import com.apppubs.d20.model.BussinessCallbackCommon;
+import com.apppubs.d20.model.APResultCallback;
 import com.apppubs.d20.constant.Constants;
 
 /**
@@ -561,7 +561,7 @@ public class FileUtils {
 
 	}
 
-	public static void asyDownload(final String url, final String desPath, final BussinessCallbackCommon<String> callback) {
+	public static void asyDownload(final String url, final String desPath, final APResultCallback<String> callback) {
 		new Thread("异步下载") {
 			@Override
 			public void run() {
@@ -595,7 +595,7 @@ public class FileUtils {
 						Log.v(TAG, "下载用时：" + (System.currentTimeMillis() - pre) + "ms" + "下载大小：" + tolLen + "bytes");
 						callback.onDone(desFile.getAbsolutePath());
 					}
-					callback.onException(BussinessCallbackCommon.EXCEPTION_COMMON);
+					callback.onException(APResultCallback.EXCEPTION_COMMON);
 
 				} catch (MalformedURLException e) {
 					e.printStackTrace();

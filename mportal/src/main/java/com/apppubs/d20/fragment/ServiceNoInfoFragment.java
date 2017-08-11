@@ -25,7 +25,7 @@ import com.apppubs.d20.util.DateUtils;
 import com.apppubs.d20.R;
 import com.apppubs.d20.activity.ContainerActivity;
 import com.apppubs.d20.bean.ServiceNo;
-import com.apppubs.d20.model.BussinessCallbackCommon;
+import com.apppubs.d20.model.APResultCallback;
 import com.apppubs.d20.constant.URLs;
 import com.apppubs.d20.util.JSONResult;
 
@@ -127,7 +127,7 @@ public class ServiceNoInfoFragment extends BaseFragment {
 				progressBar.setVisibility(View.VISIBLE);
 				if (attentionBt.getText().equals("关注")) {
 					mMsgBussiness.getServiceAttention(mServiceNoId, AppContext.getInstance(mContext).getCurrentUser().getUsername(),
-							new BussinessCallbackCommon<String>() {
+							new APResultCallback<String>() {
 
 								@Override
 								public void onException(int excepCode) {
@@ -152,7 +152,7 @@ public class ServiceNoInfoFragment extends BaseFragment {
 							});
 				} else {// 取消关注
 					mMsgBussiness.getServiceUnAttention(mServiceNoId, AppContext.getInstance(mContext).getCurrentUser().getUsername(),
-							new BussinessCallbackCommon<String>() {
+							new APResultCallback<String>() {
 
 								@Override
 								public void onException(int excepCode) {

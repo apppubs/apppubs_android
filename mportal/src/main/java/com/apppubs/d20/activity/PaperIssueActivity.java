@@ -16,7 +16,7 @@ import com.apppubs.d20.bean.PaperCatalog;
 import com.apppubs.d20.bean.PaperIssue;
 import com.apppubs.d20.widget.TitleBar;
 import com.apppubs.d20.R;
-import com.apppubs.d20.model.BussinessCallbackCommon;
+import com.apppubs.d20.model.APResultCallback;
 import com.apppubs.d20.fragment.PaperInfoListFragment;
 import com.apppubs.d20.fragment.PaperIssuePreviewFragment;
 
@@ -49,7 +49,7 @@ public class PaperIssueActivity extends BaseActivity {
 	}
 
 	private void fill() {
-		mGetPaperFuture = mPaperBussiness.getPaperIssueInfo(mIssueId, new BussinessCallbackCommon<PaperIssue>() {
+		mGetPaperFuture = mPaperBussiness.getPaperIssueInfo(mIssueId, new APResultCallback<PaperIssue>() {
 
 			@Override
 			public void onException(int excepCode) {

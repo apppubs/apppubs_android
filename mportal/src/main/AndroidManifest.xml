@@ -344,8 +344,8 @@
             android:screenOrientation="portrait"/>
         <activity android:name="com.artifex.mupdfdemo.MuPDFActivity"/>
         <activity
-            android:name=".myfile.MyFileFragment"
-            android:label="@string/title_activity_my_file"/>
+            android:name=".message.activity.TranspondActivity"
+            android:screenOrientation="portrait"/>
         <activity
             android:name=".SkipActivity"
             android:label="@string/title_activity_skip">
@@ -533,10 +533,11 @@
 
         <activity android:name=".activity.AboutActivity">
         </activity>
-
-        <activity android:name=".home.CompelMessageDialogActivity"
-                  android:theme="@style/CompelReadDialogStyle"
-            >
+        <activity
+            android:name=".home.CompelMessageDialogActivity"
+            android:theme="@style/CompelReadDialogStyle">
+        </activity>
+        <activity android:name=".message.FilePickerChooseActivity">
         </activity>
     </application>
 

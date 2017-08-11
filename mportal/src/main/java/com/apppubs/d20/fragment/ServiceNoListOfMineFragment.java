@@ -22,7 +22,7 @@ import com.apppubs.d20.AppContext;
 import com.apppubs.d20.R;
 import com.apppubs.d20.activity.ContainerActivity;
 import com.apppubs.d20.bean.ServiceNo;
-import com.apppubs.d20.model.BussinessCallbackCommon;
+import com.apppubs.d20.model.APResultCallback;
 import com.apppubs.d20.widget.CircularImage;
 import com.apppubs.d20.widget.TitleBar;
 
@@ -60,7 +60,7 @@ public class ServiceNoListOfMineFragment extends BaseFragment {
 		super.onResume();
 		attentionServiceMsg = getActivity().getSharedPreferences(USERATTECTIONSP, Context.MODE_PRIVATE);
 		mMsgBussiness.getUserServiceNoList(AppContext.getInstance(mContext).getCurrentUser().getUsername(),
-				new BussinessCallbackCommon<List<ServiceNo>>() {
+				new APResultCallback<List<ServiceNo>>() {
 
 					public void onException(int excepCode) {
 

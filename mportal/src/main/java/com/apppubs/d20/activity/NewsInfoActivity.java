@@ -36,7 +36,7 @@ import com.apppubs.d20.bean.Comment;
 import com.apppubs.d20.bean.LocalFile;
 import com.apppubs.d20.bean.NewsInfo;
 import com.apppubs.d20.bean.Settings;
-import com.apppubs.d20.model.BussinessCallbackCommon;
+import com.apppubs.d20.model.APResultCallback;
 import com.apppubs.d20.model.CollectionBussiness;
 import com.apppubs.d20.myfile.FilePreviewFragment;
 import com.apppubs.d20.fragment.WebAppFragment;
@@ -345,7 +345,7 @@ public class NewsInfoActivity extends BaseActivity implements AsyTaskCallback {
 	}
 
 	public void refreshCommet() {
-		mSystemBussiness.getCommentSizeZanCai(mInfoId, new BussinessCallbackCommon<Comment>() {
+		mSystemBussiness.getCommentSizeZanCai(mInfoId, new APResultCallback<Comment>() {
 			@Override
 			public void onException(int excepCode) {
 				mCommment = null;

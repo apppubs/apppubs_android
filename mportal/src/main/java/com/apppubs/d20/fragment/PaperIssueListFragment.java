@@ -19,7 +19,7 @@ import com.apppubs.d20.R;
 import com.apppubs.d20.activity.PaperIssueActivity;
 import com.apppubs.d20.bean.Paper;
 import com.apppubs.d20.bean.PaperIssue;
-import com.apppubs.d20.model.BussinessCallbackCommon;
+import com.apppubs.d20.model.APResultCallback;
 import com.apppubs.d20.model.PaperBussiness;
 import com.apppubs.d20.widget.commonlist.CommonListView;
 import com.apppubs.d20.widget.commonlist.CommonListViewListener;
@@ -69,7 +69,7 @@ public class PaperIssueListFragment extends BaseFragment {
 	}
 
 	private void load() {
-		mPaperBussiness.getPaperIssueList(mPaperCode, mCurPos, new BussinessCallbackCommon<List<PaperIssue>>() {
+		mPaperBussiness.getPaperIssueList(mPaperCode, mCurPos, new APResultCallback<List<PaperIssue>>() {
 
 			@Override
 			public void onException(int excepCode) {

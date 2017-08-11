@@ -5,7 +5,7 @@ import java.util.List;
 import android.os.Bundle;
 
 import com.apppubs.d20.bean.Msg;
-import com.apppubs.d20.model.BussinessCallbackCommon;
+import com.apppubs.d20.model.APResultCallback;
 
 /**
  * 测试的activity
@@ -26,7 +26,7 @@ public class DebugActivity extends BaseActivity{
 		
 		super.onCreate(arg0);
 //		
-//		mMsgBussiness.sendTextMsg("fanyi", "ly", "南哥", new BussinessCallbackCommon<Object>() {
+//		mMsgBussiness.sendTextMsg("fanyi", "ly", "南哥", new APResultCallback<Object>() {
 //			
 //			@Override
 //			public void onException(int excepCode) {
@@ -37,7 +37,7 @@ public class DebugActivity extends BaseActivity{
 //			}
 //		});
 		
-		mMsgBussiness.getChatList("ly", "fanyi", new BussinessCallbackCommon<List<Msg>>() {
+		mMsgBussiness.getChatList("ly", "fanyi", new APResultCallback<List<Msg>>() {
 			
 			@Override
 			public void onException(int excepCode) {

@@ -1,5 +1,8 @@
 package com.apppubs.d20.myfile;
 
+import android.content.Intent;
+import android.graphics.Color;
+import android.graphics.PorterDuff;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.SearchView;
@@ -23,12 +26,14 @@ import com.apppubs.d20.adapter.ViewHolder;
 import com.apppubs.d20.bean.UserInfo;
 import com.apppubs.d20.constant.URLs;
 import com.apppubs.d20.fragment.BaseFragment;
+import com.apppubs.d20.message.activity.TranspondActivity;
 import com.apppubs.d20.net.WMHHttpErrorCode;
 import com.apppubs.d20.net.WMHRequestListener;
 import com.apppubs.d20.util.FileUtils;
 import com.apppubs.d20.util.JSONResult;
 import com.apppubs.d20.util.JSONUtils;
 import com.apppubs.d20.util.StringUtils;
+import com.apppubs.d20.widget.ConfirmDialog;
 import com.apppubs.d20.widget.ProgressHUD;
 import com.apppubs.d20.widget.commonlist.CommonListView;
 import com.apppubs.d20.widget.commonlist.CommonListViewListener;
@@ -38,12 +43,17 @@ import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.File;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.List;
 
 public class MyFileFragment extends BaseFragment implements OnClickListener {
+
+	public static final String EXTRA_NAME_DISPLAY_MODE = "mode";
+	public static final int EXTRA_VALUE_DISPLAY_MODE_NORMAL = 0;
+	public static final int EXTRA_VALUE_DISPLAY_MODE_SELECT = 1;
 
 	private SearchView mSearchView;
 	private CommonListView mLv;
@@ -53,17 +63,43 @@ public class MyFileFragment extends BaseFragment implements OnClickListener {
 	private List<MyFileModel> mSearchResults;
 	private boolean isSearchMode;
 	private String mQueryText;
+	private int mMode;
+	private MyFilePickerHelper mHelper;
+
+
+
+	private void checkCheckBtn(ImageView checkBtnIv, boolean check,boolean lock) {
+		if (lock){
+			checkBtnIv.setSelected(true);
+			checkBtnIv.setEnabled(false);
+			checkBtnIv.setColorFilter(Color.GRAY, PorterDuff.Mode.SRC_ATOP);
+		}else{
+			if (check){
+				checkBtnIv.setSelected(true);
+				checkBtnIv.setColorFilter(mHostActivity.getThemeColor(), PorterDuff.Mode.SRC_ATOP);
+			}else{
+				checkBtnIv.setSelected(false);
+				checkBtnIv.clearColorFilter();
+			}
+		}
+	}
 
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-		mRootView = inflater.inflate(R.layout.act_my_file, null);
-		initViews();
+		initDatas();
+		initViews(inflater);
 
 		return mRootView;
 	}
 
-	private void initViews() {
+	private void initDatas() {
+		mMode = getArguments().getInt(EXTRA_NAME_DISPLAY_MODE,EXTRA_VALUE_DISPLAY_MODE_NORMAL);
+		mHelper = MyFilePickerHelper.getInstance(getContext());
+	}
+
+	private void initViews(LayoutInflater inflater) {
+		mRootView = inflater.inflate(R.layout.act_my_file, null);
 		mLv = (CommonListView) mRootView.findViewById(R.id.my_file_lv);
 
 		mLv.setOnItemClickListener(new OnItemClickListener() {
@@ -224,9 +260,18 @@ public class MyFileFragment extends BaseFragment implements OnClickListener {
 				protected void fillValues(ViewHolder holder, MyFileModel bean, int position) {
 					TextView nameTv = holder.getView(R.id.my_file_name_tv);
 					nameTv.setText(bean.getName());
-					ImageView moreIv = holder.getView(R.id.my_file_moreIv);
-					moreIv.setTag(R.id.temp_id, position);
-					moreIv.setOnClickListener(MyFileFragment.this);
+					if (mMode==EXTRA_VALUE_DISPLAY_MODE_NORMAL){
+						ImageView moreIv = holder.getView(R.id.my_file_moreIv);
+						moreIv.setVisibility(View.VISIBLE);
+						moreIv.setTag(R.id.temp_id, position);
+						moreIv.setOnClickListener(MyFileFragment.this);
+					}else if(mMode==EXTRA_VALUE_DISPLAY_MODE_SELECT){
+						ImageView selectIv = holder.getView(R.id.my_file_selector_iv);
+						selectIv.setVisibility(View.VISIBLE);
+						selectIv.setTag(R.id.temp_id,position);
+						selectIv.setOnClickListener(MyFileFragment.this);
+					}
+
 					TextView timeTv = holder.getView(R.id.my_file_time_tv);
 					timeTv.setText(StringUtils.formatDate(bean.getAddTime(), "yyyy/MM/dd HH:mm"));
 					TextView sizeTv = holder.getView(R.id.my_file_size_tv);
@@ -264,9 +309,23 @@ public class MyFileFragment extends BaseFragment implements OnClickListener {
 		if (v.getTag(R.id.temp_id) == null) {
 			return;
 		}
-		Integer index = (Integer) v.getTag(R.id.temp_id);
-		MyFileModel model = mDatas.get(index);
-		showMoreActionSheet(model);
+		if (mMode==EXTRA_VALUE_DISPLAY_MODE_NORMAL){
+			Integer index = (Integer) v.getTag(R.id.temp_id);
+			MyFileModel model = mDatas.get(index);
+			showMoreActionSheet(model);
+		}else if(mMode==EXTRA_VALUE_DISPLAY_MODE_SELECT){
+			Integer index = (Integer) v.getTag(R.id.temp_id);
+			MyFileModel model = mDatas.get(index);
+			onSelectDone(model);
+		}
+	}
+
+	private void onSelectDone(MyFileModel model){
+		if(mHelper.getListener()!=null){
+
+			mHelper.getListener().onSelectDone(mAppContext.getCacheManager().fetchCache(model.getFileUrl()));
+		}
+		mHostActivity.finish();
 	}
 
 	private void showMoreActionSheet(final MyFileModel model) {
@@ -278,9 +337,62 @@ public class MyFileFragment extends BaseFragment implements OnClickListener {
 				Log.v(MyFileFragment.class.getName(), "点击菜单" + position);
 				if (position == 1) {
 					showDeleteActionSheet(model);
+				}else if(position==0){
+					if (isDownloaded(model)){
+						showTranspondActivity(model);
+					}else{
+						showDownloadAlert(model);
+					}
 				}
 			}
 		}).show();
+	}
+
+	private void showDownloadAlert(final MyFileModel model) {
+		new ConfirmDialog(mContext, new ConfirmDialog.ConfirmListener() {
+			ProgressHUD mHUD;
+			@Override
+			public void onOkClick() {
+				mHUD = ProgressHUD.show(mContext);
+				mAppContext.getCacheManager().cacheFile(model.getFileUrl(), new CacheListener() {
+					@Override
+					public void onException(FileCacheErrorCode errorCode) {
+						ProgressHUD.dismissProgressHUDInThisContext(mContext);
+						Toast.makeText(mContext,"下载失败",Toast.LENGTH_SHORT).show();
+					}
+
+					@Override
+					public void onDone(String fileUrl) {
+						ProgressHUD.dismissProgressHUDInThisContext(mContext);
+						showTranspondActivity(model);
+					}
+
+					@Override
+					public void onProgress(float progress, long totalBytesExpectedToRead) {
+						mHUD.setMessage(String.format("%d%%",(int)(progress*100)));
+					}
+				});
+			}
+
+			@Override
+			public void onCancelClick() {
+
+			}
+		},"是否下载？","下载到本地后才可发送","取消","确定").show();
+	}
+
+	private boolean isDownloaded(MyFileModel model){
+		File file = mAppContext.getCacheManager().fetchCache(model.getFileUrl());
+		if (file!=null&&file.exists()){
+			return true;
+		}
+		return false;
+	}
+	private void showTranspondActivity(MyFileModel model) {
+		Intent i = new Intent(mContext,TranspondActivity.class);
+		File file = mAppContext.getCacheManager().fetchCache(model.getFileUrl());
+		i.putExtra(TranspondActivity.EXTRA_NAME_FILE_LOCATION,file.getAbsolutePath());
+		startActivity(i);
 	}
 
 	private void showDeleteActionSheet(final MyFileModel model) {

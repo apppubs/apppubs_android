@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/sel_common_item"
+    >
+
+    <ImageView
+        android:id="@+id/transpond_arrow"
+        android:layout_width="50dp"
+        android:layout_height="56dp"
+        android:layout_alignParentRight="true"
+        android:layout_centerVertical="true"
+        android:scaleType="centerInside"
+        android:src="@drawable/array_right_thin"
+        />
+
+    <RelativeLayout
+        android:id="@+id/transpond_left_rl"
+        style="@style/item_menu_lv_withpic"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_toLeftOf="@id/transpond_arrow"
+        >
+
+        <ImageView
+            android:id="@+id/transpond_image_iv"
+            android:layout_width="36dp"
+            android:layout_height="36dp"/>
+
+        <TextView
+            android:id="@+id/transpond_title_tv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
+            android:layout_toRightOf="@id/transpond_image_iv"
+            android:layout_centerVertical="true"
+            android:textColor="@color/common_text"
+            android:textSize="@dimen/item_text_size"
+            />
+
+    </RelativeLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1px"
+        android:background="@color/common_divider"
+        ></View>
+
+</RelativeLayout>

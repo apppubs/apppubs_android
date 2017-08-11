@@ -8,7 +8,7 @@ package com.apppubs.d20.model;
  *
  * @param <T>
  */
-public interface BussinessCallbackCommon<T>{
+public interface APResultCallback<T>{
 	/**
 	 *异常类型
 	 */

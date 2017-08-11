@@ -24,7 +24,7 @@ import com.apppubs.d20.activity.UserInfoActivity;
 import com.apppubs.d20.adapter.CommonAdapter;
 import com.apppubs.d20.bean.Department;
 import com.apppubs.d20.bean.User;
-import com.apppubs.d20.model.BussinessCallbackCommon;
+import com.apppubs.d20.model.APResultCallback;
 import com.apppubs.d20.message.model.UserBasicInfo;
 import com.apppubs.d20.message.model.UserBussiness;
 import com.apppubs.d20.message.model.UserPickerHelper;
@@ -245,7 +245,7 @@ public class AddressBookOrganizationFragement extends BaseFragment {
 			for (User user : mUserList){
 				userIds.add(user.getUserId());
 			}
-			mUserBussiness.cacheUserBasicInfoList(userIds, new BussinessCallbackCommon<List<UserBasicInfo>>() {
+			mUserBussiness.cacheUserBasicInfoList(userIds, new APResultCallback<List<UserBasicInfo>>() {
 				@Override
 				public void onDone(List<UserBasicInfo> obj) {
 

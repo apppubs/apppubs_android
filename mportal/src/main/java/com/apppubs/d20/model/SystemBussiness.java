@@ -16,17 +16,13 @@ import android.graphics.ColorMatrix;
 import android.graphics.ColorMatrixColorFilter;
 import android.graphics.Paint;
 import android.graphics.Rect;
-import android.net.Uri;
-import android.os.AsyncTask;
 import android.os.Build;
 import android.support.annotation.NonNull;
 import android.telephony.TelephonyManager;
 import android.text.TextUtils;
 import android.util.DisplayMetrics;
-import android.util.Log;
 import android.view.WindowManager;
 
-import com.amap.api.maps2d.model.Text;
 import com.apppubs.d20.AppContext;
 import com.apppubs.d20.R;
 import com.apppubs.d20.bean.App;
@@ -90,17 +86,6 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.concurrent.Future;
 
-import io.rong.imkit.DefaultExtensionModule;
-import io.rong.imkit.IExtensionModule;
-import io.rong.imkit.RongExtensionManager;
-import io.rong.imkit.RongIM;
-import io.rong.imkit.plugin.IPluginModule;
-import io.rong.imkit.plugin.ImagePlugin;
-import io.rong.imkit.widget.provider.FilePlugin;
-import io.rong.imlib.RongIMClient;
-import io.rong.imlib.model.Conversation;
-import io.rong.imlib.model.UserInfo;
-
 /**
  * 
  * 
@@ -138,7 +123,7 @@ public class SystemBussiness extends BaseBussiness {
 
 	}
 
-	public Future<?> update(final BussinessCallbackCommon<String[]> callback) {
+	public Future<?> update(final APResultCallback<String[]> callback) {
 		Future<?> f = sDefaultExecutor.submit(new Runnable() {
 
 			@Override
@@ -166,7 +151,7 @@ public class SystemBussiness extends BaseBussiness {
 		return f;
 	}
 
-	public void downloadApk(String url, BussinessCallbackCommon<String> callback) {
+	public void downloadApk(String url, APResultCallback<String> callback) {
 		try {
 			FileUtils.asyDownload(url, FileUtils.getAppExternalStorageFile().getAbsolutePath() + "/"
 					+ Constants.APK_FILE_NAME, callback);
@@ -175,7 +160,7 @@ public class SystemBussiness extends BaseBussiness {
 		}
 	}
 
-	public Future<?> initSystem(final BussinessCallbackCommon<Object> callback) {
+	public Future<?> initSystem(final APResultCallback<Object> callback) {
 		LogM.log(this.getClass(), "系统初始化");
 
 		Runnable run = new Runnable() {
@@ -491,7 +476,7 @@ public class SystemBussiness extends BaseBussiness {
 			localApp.setAppConfig(cfg);
 		}else{
 
-			aSyncAppConfig(mContext, new BussinessCallbackCommon<AppConfig>() {
+			aSyncAppConfig(mContext, new APResultCallback<AppConfig>() {
 				@Override
 				public void onDone(AppConfig obj) {
 					AppContext.getInstance(mContext).setAppConfig(obj);
@@ -718,7 +703,7 @@ public class SystemBussiness extends BaseBussiness {
 	/**
 	 * 同步服务号
 	 */
-	public void sycnServiceNo(final BussinessCallbackCommon<Object> callback) {
+	public void sycnServiceNo(final APResultCallback<Object> callback) {
 		sDefaultExecutor.submit(new Runnable() {
 
 			@Override
@@ -794,7 +779,7 @@ public class SystemBussiness extends BaseBussiness {
 	/**
 	 * 更新appconfig，将getappconfig中的数据同步到本地的APP对象中。
 	 */
-	public void aSyncAppConfig(final Context context, final BussinessCallbackCommon<AppConfig> callback) {
+	public void aSyncAppConfig(final Context context, final APResultCallback<AppConfig> callback) {
 		sDefaultExecutor.submit(new Runnable() {
 
 			@Override
@@ -812,7 +797,7 @@ public class SystemBussiness extends BaseBussiness {
 
 	}
 
-	public Future<?> getHistoryPage(final int page, final BussinessCallbackCommon<List<History>> callback) {
+	public Future<?> getHistoryPage(final int page, final APResultCallback<List<History>> callback) {
 		Future<?> f = sDefaultExecutor.submit(new Runnable() {
 
 			@Override
@@ -841,7 +826,7 @@ public class SystemBussiness extends BaseBussiness {
 		return f;
 	}
 
-	public Future<?> getWeiBoInfo(final BussinessCallbackCommon<List<WeiboInfo>> callback) {
+	public Future<?> getWeiBoInfo(final APResultCallback<List<WeiboInfo>> callback) {
 		Future<?> f = sDefaultExecutor.submit(new Runnable() {
 
 			@Override
@@ -879,7 +864,7 @@ public class SystemBussiness extends BaseBussiness {
 	 * @return
 	 */
 	public Future<?> postZhuce(final String usernamestr, final String emailstr, final String passwordstr,
-			final String mobilestr, final String nicknamestr, final BussinessCallbackCommon<String> callback) {
+			final String mobilestr, final String nicknamestr, final APResultCallback<String> callback) {
 		Future<?> f = sDefaultExecutor.submit(new Runnable() {
 
 			@Override
@@ -934,7 +919,7 @@ public class SystemBussiness extends BaseBussiness {
 	}
 
 	public Future<?> postZhuce1(final String usernamestr, final String emailstr, final String passwordstr,
-			final String mobilestr, final String nicknamestr, final BussinessCallbackCommon<String> callback) {
+			final String mobilestr, final String nicknamestr, final APResultCallback<String> callback) {
 		// TODO Auto-generated method stub
 		Future<?> f = sDefaultExecutor.submit(new Runnable() {
 
@@ -965,7 +950,7 @@ public class SystemBussiness extends BaseBussiness {
 	 * nicknamestr
 	 */
 	public Future<?> doModify(final String useridstr, final String emailstr, final String passwordstr,
-			final String mobilestr, final String nicknamestr, final BussinessCallbackCommon<String> callback) {
+			final String mobilestr, final String nicknamestr, final APResultCallback<String> callback) {
 		// TODO Auto-generated method stub
 		Future<?> f = sDefaultExecutor.submit(new Runnable() {
 
@@ -1021,7 +1006,7 @@ public class SystemBussiness extends BaseBussiness {
 	}
 
 	public Future<?> getCommentList(final String infoid, final int pno, final int pernum, final String clientkey,
-			final BussinessCallbackCommon<List<Comment>> callback) {
+			final APResultCallback<List<Comment>> callback) {
 		// TODO Auto-generated method stub
 		Future<?> f = sDefaultExecutor.submit(new Runnable() {
 
@@ -1049,7 +1034,7 @@ public class SystemBussiness extends BaseBussiness {
 		return f;
 	}
 
-	public Future<?> getCommentSizeZanCai(final String infoid, final BussinessCallbackCommon<Comment> callback) {
+	public Future<?> getCommentSizeZanCai(final String infoid, final APResultCallback<Comment> callback) {
 		// TODO Auto-generated method stub
 		Future<?> f = sDefaultExecutor.submit(new Runnable() {
 
@@ -1088,7 +1073,7 @@ public class SystemBussiness extends BaseBussiness {
 		return f;
 	}
 
-	public Future<?> getStandardDataTime(final BussinessCallbackCommon<Date> callback) {
+	public Future<?> getStandardDataTime(final APResultCallback<Date> callback) {
 		Future<?> f = sDefaultExecutor.submit(new Runnable() {
 			@Override
 			public void run() {
@@ -1125,7 +1110,7 @@ public class SystemBussiness extends BaseBussiness {
 		return 0;
 	}
 
-	public void clearCache(final BussinessCallbackCommon<Boolean> callback) {
+	public void clearCache(final APResultCallback<Boolean> callback) {
 		Runnable r = new Runnable() {
 			@Override
 			public void run() {
@@ -1168,7 +1153,7 @@ public class SystemBussiness extends BaseBussiness {
 
 	}
 
-	public void inviteUsers(@NonNull final List<String> userIds, @NonNull final BussinessCallbackCommon callback){
+	public void inviteUsers(@NonNull final List<String> userIds, @NonNull final APResultCallback callback){
 		post(new Runnable() {
 			@Override
 			public void run() {

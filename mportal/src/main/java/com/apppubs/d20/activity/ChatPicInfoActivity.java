@@ -27,7 +27,7 @@ import android.widget.Toast;
 import com.apppubs.d20.util.LogM;
 import com.apppubs.d20.widget.ZoomImageView;
 import com.apppubs.d20.R;
-import com.apppubs.d20.model.BussinessCallbackCommon;
+import com.apppubs.d20.model.APResultCallback;
 
 public class ChatPicInfoActivity extends BaseActivity implements OnClickListener {
 	private ViewPager mViewPager;
@@ -91,7 +91,7 @@ public class ChatPicInfoActivity extends BaseActivity implements OnClickListener
 			MediaStore.Images.Media.insertImage(getContentResolver(), bit, "标题", "描述");
 		} else {
 
-			mMsgBussiness.writePicUrlSD(mPicPath, file, new BussinessCallbackCommon<String>() {
+			mMsgBussiness.writePicUrlSD(mPicPath, file, new APResultCallback<String>() {
 
 				@Override
 				public void onException(int excepCode) {

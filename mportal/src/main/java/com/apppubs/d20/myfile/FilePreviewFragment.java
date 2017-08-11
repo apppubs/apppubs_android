@@ -25,7 +25,7 @@ import com.apppubs.d20.activity.ContainerActivity;
 import com.apppubs.d20.bean.AppConfig;
 import com.apppubs.d20.fragment.BaseFragment;
 import com.apppubs.d20.fragment.WebAppFragment;
-import com.apppubs.d20.model.BussinessCallbackCommon;
+import com.apppubs.d20.model.APResultCallback;
 import com.apppubs.d20.util.LogM;
 import com.apppubs.d20.widget.AlertDialog;
 import com.apppubs.d20.widget.ConfirmDialog;
@@ -419,7 +419,7 @@ public class FilePreviewFragment extends BaseFragment {
 	//显示提示框之前首先获取服务端参数，如果已经配置好下载地址则允许用户点击下载按钮否则给出提示框即可
 	private void showInstallAppDialog(final String message) {
 
-		mSystemBussiness.aSyncAppConfig(mContext, new BussinessCallbackCommon<AppConfig>() {
+		mSystemBussiness.aSyncAppConfig(mContext, new APResultCallback<AppConfig>() {
 
 			@Override
 			public void onException(int excepCode) {
@@ -464,7 +464,7 @@ public class FilePreviewFragment extends BaseFragment {
 	}
 
 	private void skip2DownloadPage() {
-		mSystemBussiness.aSyncAppConfig(mContext, new BussinessCallbackCommon<AppConfig>() {
+		mSystemBussiness.aSyncAppConfig(mContext, new APResultCallback<AppConfig>() {
 
 			@Override
 			public void onException(int excepCode) {

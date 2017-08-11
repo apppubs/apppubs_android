@@ -6,10 +6,7 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
-import android.os.Environment;
-import android.provider.MediaStore;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
@@ -24,7 +21,7 @@ import com.apppubs.d20.asytask.AsyTaskExecutor;
 import com.apppubs.d20.bean.UserInfo;
 import com.apppubs.d20.constant.URLs;
 import com.apppubs.d20.message.model.UserBasicInfo;
-import com.apppubs.d20.model.BussinessCallbackCommon;
+import com.apppubs.d20.model.APResultCallback;
 import com.apppubs.d20.util.BitmapUtils;
 import com.apppubs.d20.util.JSONResult;
 import com.apppubs.d20.util.Utils;
@@ -33,7 +30,6 @@ import com.apppubs.d20.widget.CircleTextImageView;
 import com.apppubs.d20.widget.ConfirmDialog;
 import com.apppubs.d20.widget.LoadingDialog;
 import com.apppubs.d20.widget.ProgressHUD;
-import com.apppubs.multi_image_selector.MultiImageSelectorActivity;
 
 import java.io.ByteArrayOutputStream;
 import java.io.FileNotFoundException;
@@ -215,7 +211,7 @@ public class UserCencerActivity extends BaseActivity {
 					mImageLoader.displayImage(AppContext.getInstance(mContext).getCurrentUser().getAvatarUrl(),mAvatarIV);
 					List<String> ids = new ArrayList<String>();
 					ids.add(mAppContext.getCurrentUser().getUserId());
-					mUserBussiness.cacheUserBasicInfoList(ids, new BussinessCallbackCommon<List<UserBasicInfo>>() {
+					mUserBussiness.cacheUserBasicInfoList(ids, new APResultCallback<List<UserBasicInfo>>() {
 						@Override
 						public void onDone(List<UserBasicInfo> obj) {
 							if (obj!=null&&obj.size()>0){

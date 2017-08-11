@@ -19,7 +19,7 @@ import android.widget.TextView;
 
 import com.apppubs.d20.activity.NewsPictureInfoActivity;
 import com.apppubs.d20.bean.NewsInfo;
-import com.apppubs.d20.model.BussinessCallbackCommon;
+import com.apppubs.d20.model.APResultCallback;
 import com.apppubs.d20.constant.URLs;
 import com.apppubs.d20.util.LogM;
 import com.apppubs.d20.widget.commonlist.CommonListView;
@@ -105,7 +105,7 @@ public class ChannelPictureFragment extends ChannelFragment {
 
 	private void load(){
 		
-		mNewsBussiness.getNewsInfoPage(NewsInfo.NEWS_TYPE_PICTURE,mChannelCode, mCurPage, URLs.PAGE_PIC_SIZE, new BussinessCallbackCommon<List<NewsInfo>>() {
+		mNewsBussiness.getNewsInfoPage(NewsInfo.NEWS_TYPE_PICTURE,mChannelCode, mCurPage, URLs.PAGE_PIC_SIZE, new APResultCallback<List<NewsInfo>>() {
 			
 			@Override
 			public void onException(int excepCode) {

@@ -29,10 +29,16 @@ public class UserPickerHelper {
     private Context mContext;
 
     private UserPickerListener mUserPickerListener;
+	private UserPickerMode mode;
+
 
     private UserPickerHelper(Context context){
         init(context);
     }
+
+    public enum UserPickerMode{
+		USER_PICKER_MODE_SINGLE,USER_PICKER_MODE_MULTI
+	}
 
     private void init(Context context) {
         mUserIds = new ArrayList<String>();
@@ -61,6 +67,13 @@ public class UserPickerHelper {
         }
     }
 
+    public UserPickerMode getMode(){
+		return mode;
+	}
+
+	public void setMode(UserPickerMode mode){
+		this.mode = mode;
+	}
     public void removeUser(String userId){
         mUserIds.remove(userId);
     }
@@ -113,9 +126,14 @@ public class UserPickerHelper {
 
     public static void startActivity(Context context,String title,List<String> preSelectUserIds,UserPickerListener listener){
 
+       startActivity(context,title,preSelectUserIds, UserPickerMode.USER_PICKER_MODE_MULTI,listener);
+    }
+    public static void startActivity(Context context,String title,List<String> preSelectUserIds,UserPickerMode mode,UserPickerListener listener){
+
         UserPickerHelper helper = UserPickerHelper.getInstance(context);
         helper.setPreSelectedUserIds(preSelectUserIds);
         helper.setUserPickerListener(listener);
+		helper.setMode(mode);
 
         Intent startIntent = new Intent(context,UserPickerActivity.class);
         if (TextUtils.isEmpty(title)){

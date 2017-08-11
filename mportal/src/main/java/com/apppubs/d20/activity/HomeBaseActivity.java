@@ -1,16 +1,13 @@
 package com.apppubs.d20.activity;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
-import java.util.Map;
 
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.net.Uri;
-import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.text.TextUtils;
 import android.util.Log;
@@ -24,7 +21,7 @@ import com.apppubs.d20.constant.URLs;
 import com.apppubs.d20.home.CompelMessageDialogActivity;
 import com.apppubs.d20.home.CompelReadMessageModel;
 import com.apppubs.d20.message.model.UserBasicInfo;
-import com.apppubs.d20.model.BussinessCallbackCommon;
+import com.apppubs.d20.model.APResultCallback;
 import com.apppubs.d20.net.WMHHttpErrorCode;
 import com.apppubs.d20.net.WMHRequestListener;
 import com.apppubs.d20.util.JSONResult;
@@ -48,6 +45,8 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import io.rong.imkit.RongIM;
+import io.rong.imlib.RongIMClient;
+import io.rong.imlib.model.Message;
 
 public abstract class HomeBaseActivity extends BaseActivity {
 
@@ -120,7 +119,7 @@ public abstract class HomeBaseActivity extends BaseActivity {
 
 
 
-		mUserBussiness.updateUserInfo(this, new BussinessCallbackCommon<UserInfo>() {
+		mUserBussiness.updateUserInfo(this, new APResultCallback<UserInfo>() {
 			@Override
 			public void onDone(final UserInfo obj) {
 
@@ -134,7 +133,12 @@ public abstract class HomeBaseActivity extends BaseActivity {
 					}
 
 				}, true);
-
+				RongIM.setOnReceiveMessageListener(new RongIMClient.OnReceiveMessageListener() {
+					@Override
+					public boolean onReceived(Message message, int i) {
+						return false;
+					}
+				});
 				if (obj==null||TextUtils.isEmpty(obj.getUserId())){
 					Intent closeI = new Intent(Actions.CLOSE_ALL_ACTIVITY);
 					sendBroadcast(closeI);

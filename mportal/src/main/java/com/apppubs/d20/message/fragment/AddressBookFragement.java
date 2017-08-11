@@ -1,6 +1,5 @@
 package com.apppubs.d20.message.fragment;
 
-import java.text.DecimalFormat;
 import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.List;
@@ -49,7 +48,7 @@ import com.apppubs.d20.widget.TitleBar;
 import com.apppubs.d20.R;
 import com.apppubs.d20.adapter.CommonAdapter;
 import com.apppubs.d20.model.AbstractBussinessCallback;
-import com.apppubs.d20.model.BussinessCallbackCommon;
+import com.apppubs.d20.model.APResultCallback;
 import com.apppubs.d20.constant.URLs;
 
 public class AddressBookFragement extends BaseFragment {
@@ -295,7 +294,7 @@ public class AddressBookFragement extends BaseFragment {
 	 */
 	private void sync() {
 		mProgressHUD = ProgressHUD.show(mHostActivity, "同步中", true, false, null);
-		mSystemBussiness.aSyncAppConfig(mHostActivity, new BussinessCallbackCommon<AppConfig>() {
+		mSystemBussiness.aSyncAppConfig(mHostActivity, new APResultCallback<AppConfig>() {
 
 			@Override
 			public void onDone(AppConfig obj) {

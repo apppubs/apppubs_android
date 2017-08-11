@@ -20,12 +20,12 @@ import android.widget.Toast;
 import com.apppubs.d20.AppContext;
 import com.apppubs.d20.bean.UserInfo;
 import com.apppubs.d20.constant.Constants;
+import com.apppubs.d20.model.APResultCallback;
 import com.apppubs.d20.util.LogM;
 import com.apppubs.d20.R;
 import com.apppubs.d20.asytask.AsyTaskCallback;
 import com.apppubs.d20.asytask.AsyTaskExecutor;
 import com.apppubs.d20.bean.App;
-import com.apppubs.d20.model.BussinessCallbackCommon;
 import com.apppubs.d20.model.SystemBussiness;
 import com.apppubs.d20.fragment.WelcomeFragment;
 import com.apppubs.d20.service.DownloadAppService;
@@ -264,7 +264,7 @@ public class StartUpActivity extends BaseActivity implements AsyTaskCallback{
 	}
 
 	private void initSystem() {
-		mFuture = mSystemBussiness.initSystem(new BussinessCallbackCommon<Object>() {
+		mFuture = mSystemBussiness.initSystem(new APResultCallback<Object>() {
 
 			@Override
 			public void onException(int excepCode) {

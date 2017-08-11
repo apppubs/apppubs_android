@@ -28,9 +28,8 @@ import com.apppubs.d20.bean.App;
 import com.apppubs.d20.bean.User;
 import com.apppubs.d20.util.JSONResult;
 import com.apppubs.d20.widget.ConfirmDialog;
-import com.apppubs.d20.widget.ContactDailog;
 import com.apppubs.d20.R;
-import com.apppubs.d20.model.BussinessCallbackCommon;
+import com.apppubs.d20.model.APResultCallback;
 import com.apppubs.d20.constant.URLs;
 import com.apppubs.d20.widget.CircleTextImageView;
 import com.apppubs.d20.widget.ProgressHUD;
@@ -329,7 +328,7 @@ public class UserInfoActivity extends BaseActivity implements OnClickListener{
 	private void sendInviteSms() {
 		ProgressHUD.show(this);
 		String[] userIdArr = new String[]{mUser.getUserId()};
-		mSystemBussiness.inviteUsers(Arrays.asList(userIdArr), new BussinessCallbackCommon() {
+		mSystemBussiness.inviteUsers(Arrays.asList(userIdArr), new APResultCallback() {
 			@Override
 			public void onDone(Object obj) {
 				ProgressHUD.dismissProgressHUDInThisContext(UserInfoActivity.this);

@@ -215,7 +215,7 @@ public class FileCacheManagerImpl implements FileCacheManager {
 			} catch (UnsupportedEncodingException e) {
 				e.printStackTrace();
 			}
-			return fileUrl.replace(fileName,encodedFileName);
+			return fileUrl.replace(fileName,encodedFileName.replace("+","%20"));
 		}
 
 		public Runnable getOnDoneRunnable(final String filePath){

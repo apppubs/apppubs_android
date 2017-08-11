@@ -31,7 +31,7 @@ import com.apppubs.d20.bean.ServiceNOInfo;
 import com.apppubs.d20.model.MsgController;
 import com.apppubs.d20.R;
 import com.apppubs.d20.activity.ContainerActivity;
-import com.apppubs.d20.model.BussinessCallbackCommon;
+import com.apppubs.d20.model.APResultCallback;
 import com.apppubs.d20.constant.URLs;
 import com.apppubs.d20.util.StringUtils;
 import com.apppubs.d20.util.SystemUtils;
@@ -119,7 +119,7 @@ public class ServiceNoInfoListFragement extends BaseFragment {
 	}
 	private void getPage(final int i) {
 		if (SystemUtils.canConnectNet(mContext)) {
-			mSystemBussiness.getStandardDataTime(new BussinessCallbackCommon<Date>() {
+			mSystemBussiness.getStandardDataTime(new APResultCallback<Date>() {
 
 				@Override
 				public void onException(int excepCode) {
@@ -166,7 +166,7 @@ public class ServiceNoInfoListFragement extends BaseFragment {
 	}
 
 	private void loadData(final int i) {
-		mMsgBussiness.getAloneServiceList(mServiceNoId, new BussinessCallbackCommon<List<ServiceNOInfo>>() {
+		mMsgBussiness.getAloneServiceList(mServiceNoId, new APResultCallback<List<ServiceNOInfo>>() {
 
 			@Override
 			public void onException(int excepCode) {

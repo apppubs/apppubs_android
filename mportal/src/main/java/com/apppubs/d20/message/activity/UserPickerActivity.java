@@ -1,6 +1,5 @@
 package com.apppubs.d20.message.activity;
 
-import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.PorterDuff;
 import android.os.Bundle;
@@ -9,19 +8,15 @@ import android.text.TextUtils;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ImageView;
-import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
 
-import com.amap.api.maps2d.model.Text;
 import com.apppubs.d20.AppContext;
 import com.apppubs.d20.activity.BaseActivity;
-import com.apppubs.d20.activity.UserInfoActivity;
 import com.apppubs.d20.adapter.ViewHolder;
 import com.apppubs.d20.bean.Department;
 import com.apppubs.d20.bean.User;
-import com.apppubs.d20.model.BussinessCallbackCommon;
-import com.apppubs.d20.model.SystemBussiness;
+import com.apppubs.d20.model.APResultCallback;
 import com.apppubs.d20.message.model.UserBasicInfo;
 import com.apppubs.d20.message.model.UserPickerHelper;
 import com.apppubs.d20.message.widget.Breadcrumb;
@@ -137,6 +132,9 @@ public class UserPickerActivity extends BaseActivity implements UserSelectionBar
                         }else{
 							uncheckUser(userId);
                         }
+						if (mUserPickerHelper.getMode()== UserPickerHelper.UserPickerMode.USER_PICKER_MODE_SINGLE){
+							selectComplete();
+						}
                     }
                 }else{
                     Department dep = mDepartmentList.get(position);
@@ -216,9 +214,7 @@ public class UserPickerActivity extends BaseActivity implements UserSelectionBar
             }
         });
 
-        mUserSelectBar = (UserSelectionBar) findViewById(R.id.user_picker_user_selection_bar);
-        mUserSelectBar.setMaxSelectCount(mUserPickerHelper.getRemainSelectionNum());
-        mUserSelectBar.setListener(this);
+		initUserSelectorBar();
 
 		mSearchView = (SearchView) findViewById(R.id.user_picker_sv);
 		mSearchResultLV = (ListView) findViewById(R.id.user_picker_search_result_lv);
@@ -292,12 +288,25 @@ public class UserPickerActivity extends BaseActivity implements UserSelectionBar
 					mSearchView.setQuery("", false);
 					mSearchView.clearFocus();
 					mSearchResultLV.setVisibility(View.GONE);
+					if (mUserPickerHelper.getMode()== UserPickerHelper.UserPickerMode.USER_PICKER_MODE_SINGLE){
+						selectComplete();
+					}
 				}
 			}
 		});
     }
 
-    @Override
+	private void initUserSelectorBar() {
+		mUserSelectBar = (UserSelectionBar) findViewById(R.id.user_picker_user_selection_bar);
+		if (mUserPickerHelper.getMode()== UserPickerHelper.UserPickerMode.USER_PICKER_MODE_MULTI){
+			mUserSelectBar.setMaxSelectCount(mUserPickerHelper.getRemainSelectionNum());
+			mUserSelectBar.setListener(this);
+		}else{
+			mUserSelectBar.setVisibility(View.GONE);
+		}
+	}
+
+	@Override
     public void finish() {
         super.finish();
         mUserPickerHelper.cancelSelect();
@@ -324,7 +333,7 @@ public class UserPickerActivity extends BaseActivity implements UserSelectionBar
             for (User user : mUserList){
                 userIds.add(user.getUserId());
             }
-            mUserBussiness.cacheUserBasicInfoList(userIds, new BussinessCallbackCommon<List<UserBasicInfo>>() {
+            mUserBussiness.cacheUserBasicInfoList(userIds, new APResultCallback<List<UserBasicInfo>>() {
                 @Override
                 public void onDone(List<UserBasicInfo> obj) {
 
@@ -397,6 +406,12 @@ public class UserPickerActivity extends BaseActivity implements UserSelectionBar
         return mUserBussiness.isLeaf(mSuperId);
     }
 
+    private void selectComplete(){
+		if (mUserPickerHelper.getUserPickerListener()!=null){
+			mUserPickerHelper.getUserPickerListener().onPickDone(mUserPickerHelper.getSelectedUserIds());
+			finish();
+		}
+	}
 
     @Override
     public void onItemClick(String userId) {
@@ -410,11 +425,10 @@ public class UserPickerActivity extends BaseActivity implements UserSelectionBar
 
     @Override
     public void onDoneClick() {
-        if (mUserPickerHelper.getUserPickerListener()!=null){
-            mUserPickerHelper.getUserPickerListener().onPickDone(mUserPickerHelper.getSelectedUserIds());
-            finish();
-        }
+        selectComplete();
     }
+
+
 
 
 }

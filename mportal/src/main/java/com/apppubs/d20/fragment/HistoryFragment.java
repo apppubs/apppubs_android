@@ -19,7 +19,7 @@ import android.widget.Toast;
 import com.apppubs.d20.R;
 import com.apppubs.d20.activity.NewsInfoActivity;
 import com.apppubs.d20.bean.ServiceNOInfo;
-import com.apppubs.d20.model.BussinessCallbackCommon;
+import com.apppubs.d20.model.APResultCallback;
 import com.apppubs.d20.util.StringUtils;
 import com.apppubs.d20.util.SystemUtils;
 import com.apppubs.d20.widget.ProgressHUD;
@@ -56,7 +56,7 @@ public class HistoryFragment extends BaseFragment {
 		
 		if (SystemUtils.canConnectNet(mContext)) {
 
-			mSystemBussiness.getStandardDataTime(new BussinessCallbackCommon<Date>() {
+			mSystemBussiness.getStandardDataTime(new APResultCallback<Date>() {
 
 				@Override
 				public void onException(int excepCode) {
@@ -68,7 +68,7 @@ public class HistoryFragment extends BaseFragment {
 					mStandardDateTime = obj;
 
 					mMsgBussiness.getAloneServiceList(mAppContext.getApp().getDefaultServiceNoId(),
-							new BussinessCallbackCommon<List<ServiceNOInfo>>() {
+							new APResultCallback<List<ServiceNOInfo>>() {
 
 								@Override
 								public void onDone(List<ServiceNOInfo> obj) {

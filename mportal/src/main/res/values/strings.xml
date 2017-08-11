@@ -176,7 +176,6 @@
     <string name="copy_text">拷贝文本</string>
     <string name="format_currently_not_supported">格式不支持</string>
     <string name="toggle_reflow_mode">更改模式</string>
-    <string name="title_activity_my_file">MyFileActivity</string>
     <string name="title_activity_skip">SkipActivity</string>
 
     <!-- 图片选择器 -->

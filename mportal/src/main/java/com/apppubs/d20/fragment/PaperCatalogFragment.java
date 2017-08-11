@@ -19,6 +19,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 
+import com.apppubs.d20.model.APResultCallback;
 import com.apppubs.d20.util.LogM;
 import com.artifex.mupdfdemo.MuPDFCore;
 import com.apppubs.d20.R;
@@ -27,7 +28,6 @@ import com.apppubs.d20.activity.PaperInfoActivity;
 import com.apppubs.d20.bean.Paper;
 import com.apppubs.d20.bean.PaperCatalog;
 import com.apppubs.d20.bean.PaperInfo;
-import com.apppubs.d20.model.BussinessCallbackCommon;
 import com.apppubs.d20.model.PaperBussiness;
 import com.apppubs.d20.widget.PdfViewWithHotArea;
 import com.apppubs.d20.widget.PdfViewWithHotArea.PdfViewWithHotAreaListener;
@@ -100,7 +100,7 @@ public class PaperCatalogFragment extends BaseFragment implements OnClickListene
 	private void fill(){
 		
 		mWaitLl.setVisibility(View.VISIBLE);
-		mPaperBussiness.getCatalog(mCatalogId, new BussinessCallbackCommon<PaperCatalog>() {
+		mPaperBussiness.getCatalog(mCatalogId, new APResultCallback<PaperCatalog>() {
 			
 			@Override
 			public void onException(int excepCode) {

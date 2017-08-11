@@ -7,11 +7,8 @@ import android.database.sqlite.SQLiteDatabase;
 import android.os.Build;
 import android.text.TextUtils;
 import android.util.Log;
-import android.widget.CheckBox;
 
 import com.apppubs.d20.AppContext;
-import com.apppubs.d20.R;
-import com.apppubs.d20.activity.FirstLoginActity;
 import com.apppubs.d20.bean.App;
 import com.apppubs.d20.bean.AppConfig;
 import com.apppubs.d20.bean.Department;
@@ -23,7 +20,7 @@ import com.apppubs.d20.constant.Actions;
 import com.apppubs.d20.constant.URLs;
 import com.apppubs.d20.model.AbstractBussinessCallback;
 import com.apppubs.d20.model.BaseBussiness;
-import com.apppubs.d20.model.BussinessCallbackCommon;
+import com.apppubs.d20.model.APResultCallback;
 import com.apppubs.d20.model.SystemBussiness;
 import com.apppubs.d20.util.ACache;
 import com.apppubs.d20.util.Des3;
@@ -336,7 +333,7 @@ public class UserBussiness extends BaseBussiness {
 		return SugarRecord.findWithQuery(User.class,sql);
 	}
 
-	public Future cacheUserBasicInfoList(final List<String> userIds, final BussinessCallbackCommon<List<UserBasicInfo>> callback){
+	public Future cacheUserBasicInfoList(final List<String> userIds, final APResultCallback<List<UserBasicInfo>> callback){
 		Future future = post(new Runnable() {
 			@Override
 			public void run() {
@@ -789,7 +786,7 @@ public class UserBussiness extends BaseBussiness {
 	/**
 	 * 客户端不需要登陆时，需要将设备的信息注册到服务端
 	 */
-	public void registerDevice(final BussinessCallbackCommon<Integer> callback) {
+	public void registerDevice(final APResultCallback<Integer> callback) {
 		sDefaultExecutor.submit(new Runnable() {
 
 			@Override
@@ -886,7 +883,7 @@ public class UserBussiness extends BaseBussiness {
 	}
 
 
-	public void updateUserInfo(final Context context, final BussinessCallbackCommon<UserInfo> callback){
+	public void updateUserInfo(final Context context, final APResultCallback<UserInfo> callback){
 
 		sDefaultExecutor.submit(new Runnable() {
 

@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@android:color/white"
+    android:orientation="vertical"
+    >
+
+    <LinearLayout
+        android:id="@+id/header_transpond_conversation_ll"
+        android:layout_width="match_parent"
+        android:layout_height="45dp"
+        android:orientation="horizontal"
+        android:paddingLeft="@dimen/item_padding_left"
+        android:background="@drawable/sel_common_item"
+        >
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:gravity="center_vertical"
+            android:text="选择人员"
+            android:textColor="@color/common_text"
+            android:textSize="15dp"
+            >
+        </TextView>
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:layout_marginRight="@dimen/item_padding_right_narrow"
+            android:src="@drawable/array_right_thin"
+            />
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/header_transpond_conversation_text_tv"
+        android:layout_width="match_parent"
+        android:layout_height="25dp"
+        android:background="#DFDFDF"
+        android:gravity="center_vertical"
+        android:paddingLeft="10dp"
+        android:text="会话"
+        android:textColor="@color/common_text_gray"
+        android:textSize="12dp"
+        />
+</LinearLayout>

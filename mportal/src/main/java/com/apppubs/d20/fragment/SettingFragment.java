@@ -33,6 +33,7 @@ import com.apppubs.d20.AppManager;
 import com.apppubs.d20.activity.AboutActivity;
 import com.apppubs.d20.activity.FeedbackActivity;
 import com.apppubs.d20.activity.StartUpActivity;
+import com.apppubs.d20.model.APResultCallback;
 import com.apppubs.d20.model.SystemBussiness;
 import com.apppubs.d20.widget.ConfirmDialog;
 import com.apppubs.d20.MportalApplication;
@@ -43,7 +44,6 @@ import com.apppubs.d20.activity.LogsListActivity;
 import com.apppubs.d20.activity.ThemeSwitchActivity;
 import com.apppubs.d20.bean.MenuItem;
 import com.apppubs.d20.bean.Settings;
-import com.apppubs.d20.model.BussinessCallbackCommon;
 import com.apppubs.d20.service.DownloadAppService;
 import com.apppubs.d20.util.FileUtils;
 import com.apppubs.d20.util.Utils;
@@ -255,7 +255,7 @@ public class SettingFragment extends TitleMenuFragment implements OnClickListene
 
 					@Override
 					public void onOkClick() {
-						mSystemBussiness.clearCache(new BussinessCallbackCommon<Boolean>() {
+						mSystemBussiness.clearCache(new APResultCallback<Boolean>() {
 
 							@Override
 							public void onException(int excepCode) {

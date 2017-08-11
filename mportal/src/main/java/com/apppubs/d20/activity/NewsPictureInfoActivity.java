@@ -30,6 +30,7 @@ import com.apppubs.d20.bean.Collection;
 import com.apppubs.d20.bean.Comment;
 import com.apppubs.d20.bean.NewsInfo;
 import com.apppubs.d20.bean.NewsPictureInfo;
+import com.apppubs.d20.model.APResultCallback;
 import com.apppubs.d20.util.LogM;
 import com.apppubs.d20.util.ShareTools;
 import com.apppubs.d20.util.Utils;
@@ -37,7 +38,6 @@ import com.apppubs.d20.widget.PictureInfoViewPager;
 import com.apppubs.d20.widget.ZoomImageView;
 import com.apppubs.d20.MportalApplication;
 import com.apppubs.d20.R;
-import com.apppubs.d20.model.BussinessCallbackCommon;
 import com.apppubs.d20.widget.ImageButton;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.orm.SugarRecord;
@@ -101,7 +101,7 @@ public class NewsPictureInfoActivity extends BaseActivity implements OnPageChang
 		.build();
 		
 		mFuture = mNewsBussiness.getPicInfoPage(mInfoId,
-				1, new BussinessCallbackCommon<List<NewsPictureInfo>>() {
+				1, new APResultCallback<List<NewsPictureInfo>>() {
 
 					@Override
 					public void onException(int excepCode) {
@@ -295,7 +295,7 @@ public class NewsPictureInfoActivity extends BaseActivity implements OnPageChang
 	}
 
 	public Comment initCommentCount() {
-		mSystemBussiness.getCommentSizeZanCai(mInfoId, new BussinessCallbackCommon<Comment>() {
+		mSystemBussiness.getCommentSizeZanCai(mInfoId, new APResultCallback<Comment>() {
 			@Override
 			public void onException(int excepCode) {
 				// TODO Auto-generated method stub

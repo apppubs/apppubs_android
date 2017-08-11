@@ -53,7 +53,7 @@ public class NewsBussiness extends BaseBussiness {
 	 * 获取某个频道下的某一页信息列表，如果获取的是第一页，则刷新数据库,并给此频道的刷新时间赋值 如果取第0页说明是要刷新
 	 */
 	public Future<?> getNewsInfoPage(final String type, final String channelCode, final int page, final int pageSize,
-			final BussinessCallbackCommon<List<NewsInfo>> callback) {
+			final APResultCallback<List<NewsInfo>> callback) {
 
 		Future<?> f = sDefaultExecutor.submit(new Runnable() {
 
@@ -153,7 +153,7 @@ public class NewsBussiness extends BaseBussiness {
 		return f;
 	}
 
-	public Future<?> getNewsChannelUpdateTime(final String channelCode, final BussinessCallbackCommon<Date> callback) {
+	public Future<?> getNewsChannelUpdateTime(final String channelCode, final APResultCallback<Date> callback) {
 
 		Future<?> f = sDefaultExecutor.submit(new Runnable() {
 
@@ -184,7 +184,7 @@ public class NewsBussiness extends BaseBussiness {
 		return f;
 	}
 
-	public Future<?> refreshChannelUpdateTime(final String channelCode, final BussinessCallbackCommon<Date> callback) {
+	public Future<?> refreshChannelUpdateTime(final String channelCode, final APResultCallback<Date> callback) {
 		Future<?> f = sDefaultExecutor.submit(new Runnable() {
 
 			@Override
@@ -219,7 +219,7 @@ public class NewsBussiness extends BaseBussiness {
 	/**
 	 * 更新某频道，如果有推广图，需要更新推广图
 	 */
-	public Future<?> refreshChannel(final String channelCode, final BussinessCallbackCommon<List<NewsInfo>> callback) {
+	public Future<?> refreshChannel(final String channelCode, final APResultCallback<List<NewsInfo>> callback) {
 
 		Future<?> f = sDefaultExecutor.submit(new Runnable() {
 
@@ -499,7 +499,7 @@ public class NewsBussiness extends BaseBussiness {
 	}
 
 	public Future<?> getNewsInfo(final String newsInfoId, final String channelCode,
-			final BussinessCallbackCommon<NewsInfo> callback) {
+			final APResultCallback<NewsInfo> callback) {
 		Future<?> f = sDefaultExecutor.submit(new Runnable() {
 
 			@Override
@@ -526,7 +526,7 @@ public class NewsBussiness extends BaseBussiness {
 	}
 
 	public Future<?> getPicInfoPage(final String infoId, final int page,
-			final BussinessCallbackCommon<List<NewsPictureInfo>> callback) {
+			final APResultCallback<List<NewsPictureInfo>> callback) {
 		Future<?> f = sDefaultExecutor.submit(new Runnable() {
 
 			@Override
@@ -619,7 +619,7 @@ public class NewsBussiness extends BaseBussiness {
 	}
 
 	public Future<?> refreshNewsInfoCommontNum(String newsInfoId, String channelCode,
-			BussinessCallbackCommon<Integer> callback) {
+			APResultCallback<Integer> callback) {
 
 		return null;
 	}

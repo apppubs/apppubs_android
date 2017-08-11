@@ -20,7 +20,7 @@ import com.apppubs.d20.activity.ContainerActivity;
 import com.apppubs.d20.activity.MessageEvent;
 import com.apppubs.d20.activity.UserInfoActivity;
 import com.apppubs.d20.constant.Constants;
-import com.apppubs.d20.model.BussinessCallbackCommon;
+import com.apppubs.d20.model.APResultCallback;
 import com.apppubs.d20.model.SystemBussiness;
 import com.apppubs.d20.myfile.FilePreviewFragment;
 import com.apppubs.d20.util.MathUtils;
@@ -111,7 +111,7 @@ public class MportalApplication extends MultiDexApplication {
 		sContext = getApplicationContext();
 
 
-		SystemBussiness.getInstance(this).initSystem(new BussinessCallbackCommon<Object>() {
+		SystemBussiness.getInstance(this).initSystem(new APResultCallback<Object>() {
 			@Override
 			public void onDone(Object obj) {
 				MessageEvent me = new MessageEvent();

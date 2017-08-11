@@ -91,8 +91,8 @@ public abstract class BaseBussiness {
     
     
 	protected class OnExceptionRun<T> implements Runnable {
-		private BussinessCallbackCommon<T> mCallback;
-		public  OnExceptionRun(BussinessCallbackCommon<T> callback){
+		private APResultCallback<T> mCallback;
+		public  OnExceptionRun(APResultCallback<T> callback){
 			mCallback = callback;
 		}
 		public void run() {
@@ -101,9 +101,9 @@ public abstract class BaseBussiness {
 	}
 	
 	protected class OnDoneRun<T> implements Runnable{
-		private BussinessCallbackCommon<T> mCallback;
+		private APResultCallback<T> mCallback;
 		private T mResult;
-		public OnDoneRun(BussinessCallbackCommon<T> callback,T obj){
+		public OnDoneRun(APResultCallback<T> callback, T obj){
 			mCallback = callback;
 			mResult = obj;
 		}
@@ -118,11 +118,11 @@ public abstract class BaseBussiness {
         return sDefaultExecutor.submit(runnable);
     }
 
-    protected <T> void onDone(BussinessCallbackCommon<T> callback,T obj){
+    protected <T> void onDone(APResultCallback<T> callback, T obj){
         sHandler.post(new OnDoneRun<T>(callback,obj));
     }
 
-    protected <T> void onException(BussinessCallbackCommon<T> callback){
+    protected <T> void onException(APResultCallback<T> callback){
         sHandler.post(new OnExceptionRun<T>(callback));
     }
    

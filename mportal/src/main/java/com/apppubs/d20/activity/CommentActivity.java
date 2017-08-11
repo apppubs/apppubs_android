@@ -29,7 +29,7 @@ import com.apppubs.d20.util.Tools;
 import com.apppubs.d20.widget.commonlist.CommonListView;
 import com.apppubs.d20.R;
 import com.apppubs.d20.adapter.CommonAdapter;
-import com.apppubs.d20.model.BussinessCallbackCommon;
+import com.apppubs.d20.model.APResultCallback;
 import com.apppubs.d20.constant.URLs;
 import com.apppubs.d20.util.SystemUtils;
 import com.apppubs.d20.widget.commonlist.CommonListViewListener;
@@ -255,7 +255,7 @@ public class CommentActivity extends BaseActivity {
 
 	private void getPage(final int page) {
 
-		mSystemBussiness.getStandardDataTime(new BussinessCallbackCommon<Date>() {
+		mSystemBussiness.getStandardDataTime(new APResultCallback<Date>() {
 
 			@Override
 			public void onException(int excepCode) {
@@ -266,7 +266,7 @@ public class CommentActivity extends BaseActivity {
 				
 				mStandardDateTime = obj;
 				LogM.log(this.getClass(), "当前服务器时间：" + mStandardDateTime.toString());
-				mSystemBussiness.getCommentList(mInfoId, mCurPage, 10, URLs.CLIENTKEY, new BussinessCallbackCommon<List<Comment>>() {
+				mSystemBussiness.getCommentList(mInfoId, mCurPage, 10, URLs.CLIENTKEY, new APResultCallback<List<Comment>>() {
 
 					@Override
 					public void onException(int excepCode) {

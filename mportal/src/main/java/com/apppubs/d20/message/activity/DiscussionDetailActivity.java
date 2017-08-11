@@ -17,11 +17,10 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.amap.api.maps2d.model.Text;
 import com.apppubs.d20.R;
 import com.apppubs.d20.activity.BaseActivity;
 import com.apppubs.d20.activity.UserInfoActivity;
-import com.apppubs.d20.model.BussinessCallbackCommon;
+import com.apppubs.d20.model.APResultCallback;
 import com.apppubs.d20.message.model.OperationRong;
 import com.apppubs.d20.message.model.UserBasicInfo;
 import com.apppubs.d20.message.model.UserPickerHelper;
@@ -37,7 +36,6 @@ import com.apppubs.d20.widget.SwitchButton;
 import com.apppubs.d20.widget.UserIconImageView;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 import io.rong.imkit.RongIM;
@@ -165,7 +163,7 @@ public class DiscussionDetailActivity extends BaseActivity implements CompoundBu
         ids = mDiscussion.getMemberIdList();
         if (ids != null) {
 //            request(FIND_USER_INFO);
-            mUserBussiness.cacheUserBasicInfoList(ids, new BussinessCallbackCommon<List<UserBasicInfo>>() {
+            mUserBussiness.cacheUserBasicInfoList(ids, new APResultCallback<List<UserBasicInfo>>() {
                 @Override
                 public void onDone(List<UserBasicInfo> infos) {
 					mCachedUserInfoList = infos;
@@ -356,7 +354,7 @@ public class DiscussionDetailActivity extends BaseActivity implements CompoundBu
 				idList.add(ubi.getUserId());
 			}
 		}
-		mSystemBussiness.inviteUsers(idList, new BussinessCallbackCommon() {
+		mSystemBussiness.inviteUsers(idList, new APResultCallback() {
 			@Override
 			public void onDone(Object obj) {
 				ProgressHUD.dismissProgressHUDInThisContext(mContext);
@@ -515,7 +513,7 @@ public class DiscussionDetailActivity extends BaseActivity implements CompoundBu
         }
 
         private void onAddMemberFinish(List<String> userIds) {
-            mUserBussiness.cacheUserBasicInfoList(userIds, new BussinessCallbackCommon<List<UserBasicInfo>>() {
+            mUserBussiness.cacheUserBasicInfoList(userIds, new APResultCallback<List<UserBasicInfo>>() {
                 @Override
                 public void onDone(List<UserBasicInfo> basicInfos) {
                     if (basicInfos != null && basicInfos.size() > 0) {
