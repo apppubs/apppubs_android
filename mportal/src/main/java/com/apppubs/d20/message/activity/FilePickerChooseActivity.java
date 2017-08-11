@@ -1,4 +1,4 @@
-package com.apppubs.d20.message;
+package com.apppubs.d20.message.activity;
 
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;

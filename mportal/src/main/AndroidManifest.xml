@@ -537,7 +537,7 @@
             android:name=".home.CompelMessageDialogActivity"
             android:theme="@style/CompelReadDialogStyle">
         </activity>
-        <activity android:name=".message.FilePickerChooseActivity">
+        <activity android:name=".message.activity.FilePickerChooseActivity">
         </activity>
     </application>
 

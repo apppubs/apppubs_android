@@ -12,7 +12,7 @@
         android:layout_alignParentRight="true"
         android:layout_centerVertical="true"
         android:scaleType="centerInside"
-        android:src="@drawable/array_right_thin"
+        android:src="@drawable/arrow_right_thin"
         />
 
     <RelativeLayout

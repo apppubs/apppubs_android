@@ -32,7 +32,7 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical"
             android:layout_marginRight="@dimen/item_padding_right_narrow"
-            android:src="@drawable/array_right_thin"
+            android:src="@drawable/arrow_right_thin"
             />
     </LinearLayout>
 

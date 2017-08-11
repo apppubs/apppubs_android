@@ -11,10 +11,9 @@ import android.widget.Toast;
 
 import com.apppubs.d20.AppContext;
 import com.apppubs.d20.R;
-import com.apppubs.d20.message.activity.TranspondActivity;
 import com.apppubs.d20.myfile.CacheListener;
 import com.apppubs.d20.myfile.FileCacheErrorCode;
-import com.apppubs.d20.myfile.MyFilePickerHelper;
+import com.apppubs.d20.message.model.MyFilePickerHelper;
 import com.apppubs.d20.widget.ProgressHUD;
 
 import java.io.File;

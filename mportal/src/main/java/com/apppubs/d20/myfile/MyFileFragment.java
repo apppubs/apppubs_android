@@ -27,6 +27,7 @@ import com.apppubs.d20.bean.UserInfo;
 import com.apppubs.d20.constant.URLs;
 import com.apppubs.d20.fragment.BaseFragment;
 import com.apppubs.d20.message.activity.TranspondActivity;
+import com.apppubs.d20.message.model.MyFilePickerHelper;
 import com.apppubs.d20.net.WMHHttpErrorCode;
 import com.apppubs.d20.net.WMHRequestListener;
 import com.apppubs.d20.util.FileUtils;
@@ -38,7 +39,6 @@ import com.apppubs.d20.widget.ProgressHUD;
 import com.apppubs.d20.widget.commonlist.CommonListView;
 import com.apppubs.d20.widget.commonlist.CommonListViewListener;
 import com.apppubs.d20.widget.menudialog.MenuDialog;
-import com.nostra13.universalimageloader.core.DisplayImageOptions;
 
 import org.json.JSONException;
 import org.json.JSONObject;

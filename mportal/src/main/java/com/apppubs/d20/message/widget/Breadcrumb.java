@@ -97,7 +97,7 @@ public class Breadcrumb extends ViewGroup {
 
         if (mPathList.size()>0){
             ImageView imageView = new ImageView(getContext());
-            imageView.setImageResource(R.drawable.array_right_thin);
+            imageView.setImageResource(R.drawable.arrow_right_thin);
             LinearLayout.LayoutParams lp1 = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT,ViewGroup.LayoutParams.MATCH_PARENT);
             mContainerLL.addView(imageView,lp1);
             mArrowList.add(imageView);

@@ -1,9 +1,10 @@
-package com.apppubs.d20.myfile;
+package com.apppubs.d20.message.model;
 
 import android.content.Context;
-import android.os.Bundle;
+import android.content.Intent;
 
-import com.apppubs.d20.activity.ContainerActivity;
+import com.apppubs.d20.activity.BaseActivity;
+import com.apppubs.d20.message.activity.FilePickerChooseActivity;
 
 import java.io.File;
 
@@ -48,9 +49,9 @@ public class MyFilePickerHelper {
 
 	public void startSelect(FilePickerListener listener){
 		mListener = listener;
-		Bundle extra = new Bundle();
-		extra.putInt(MyFileFragment.EXTRA_NAME_DISPLAY_MODE,MyFileFragment.EXTRA_VALUE_DISPLAY_MODE_SELECT);
-		ContainerActivity.startActivity(mContext, MyFileFragment.class,extra);
+		Intent intent = new Intent(mContext,FilePickerChooseActivity.class);
+		intent.putExtra(BaseActivity.EXTRA_STRING_TITLE,"选择文件");
+		mContext.startActivity(intent);
 	}
 
 }
