@@ -1,18 +1,34 @@
 package com.apppubs.d20.message.activity;
 
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.View;
+import android.widget.Toast;
 
+import com.apppubs.d20.AppContext;
 import com.apppubs.d20.R;
 import com.apppubs.d20.activity.BaseActivity;
+import com.apppubs.d20.message.model.FilePickerModel;
+import com.apppubs.d20.message.model.MyFilePickerHelper;
+import com.apppubs.d20.myfile.CacheListener;
+import com.apppubs.d20.myfile.FileCacheErrorCode;
+import com.apppubs.d20.util.LogM;
+import com.apppubs.d20.widget.ProgressHUD;
 
+import java.io.File;
+import java.util.List;
 import java.util.Locale;
 
 import io.rong.imkit.RongIM;
 import io.rong.imkit.fragment.UriFragment;
+import io.rong.imlib.IRongCallback;
+import io.rong.imlib.RongIMClient;
 import io.rong.imlib.model.Conversation;
+import io.rong.imlib.model.Message;
+import io.rong.message.FileMessage;
 
 public class ConversationActivity extends BaseActivity {
 
@@ -63,8 +79,68 @@ public class ConversationActivity extends BaseActivity {
 
     }
 
+	@Override
+	protected void onNewIntent(Intent intent) {
+		super.onNewIntent(intent);
+		LogM.log(this.getClass(),"onNewIntent");
 
-    /**
+		ProgressHUD.show(this);
+
+		List<FilePickerModel> models = MyFilePickerHelper.getInstance(this).getSelectionModels();
+		for (FilePickerModel model:models){
+
+		FileMessage fileMessage = FileMessage.obtain(Uri.parse("file://"+model.getFilePath()));
+		Message message = Message.obtain(mTargetId,mConversationType,fileMessage);
+		RongIM.getInstance().sendMediaMessage(message, "", "", new IRongCallback.ISendMediaMessageCallbackWithUploader() {
+			@Override
+			public void onAttached(Message message, final IRongCallback.MediaMessageUploader mediaMessageUploader) {
+				FileMessage me = (FileMessage) message.getContent();
+				AppContext.getInstance(ConversationActivity.this).getCacheManager().uploadFile(new File(me.getLocalPath().getPath()), new CacheListener() {
+					@Override
+					public void onException(FileCacheErrorCode errorCode) {
+						Log.v("ConversationFragmentEx","发送图片异常"+errorCode.getMessage());
+						mediaMessageUploader.error();
+					}
+
+					@Override
+					public void onDone(String fileUrl) {
+						mediaMessageUploader.success(Uri.parse(fileUrl));
+						Log.v("ConversationFragmentEx","发送图片完成"+fileUrl);
+					}
+
+					@Override
+					public void onProgress(float progress, long totalBytesExpectedToRead) {
+						mediaMessageUploader.update((int)(totalBytesExpectedToRead*progress));
+					}
+				});
+			}
+
+			@Override
+			public void onProgress(Message message, int i) {
+
+			}
+
+			@Override
+			public void onSuccess(Message message) {
+				Toast.makeText(ConversationActivity.this,"发送成功",Toast.LENGTH_SHORT).show();
+				ProgressHUD.dismissProgressHUDInThisContext(ConversationActivity.this);
+			}
+
+			@Override
+			public void onError(Message message, RongIMClient.ErrorCode errorCode) {
+				ProgressHUD.dismissProgressHUDInThisContext(ConversationActivity.this);
+				Toast.makeText(ConversationActivity.this,"发送失败",Toast.LENGTH_SHORT).show();
+			}
+
+			@Override
+			public void onCanceled(Message message) {
+				ProgressHUD.dismissProgressHUDInThisContext(ConversationActivity.this);
+			}
+		});
+		}
+	}
+
+	/**
      * 根据 targetid 和 ConversationType 进入到设置页面
      */
     private void enterSettingActivity() {

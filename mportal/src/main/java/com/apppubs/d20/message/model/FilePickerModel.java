@@ -32,4 +32,11 @@ public class FilePickerModel {
 	public void setSize(long size) {
 		this.size = size;
 	}
+
+	public boolean equals(FilePickerModel model){
+		if ((model.getFilePath()!=null&&model.getFilePath().equals(filePath))||(model.getFileUrl()!=null&&model.getFileUrl().equals(fileUrl))){
+			return true;
+		}
+		return false;
+	}
 }

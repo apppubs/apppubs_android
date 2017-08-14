@@ -12,6 +12,7 @@ import android.widget.TextView;
 
 import com.apppubs.d20.R;
 import com.apppubs.d20.message.model.FilePickerModel;
+import com.apppubs.d20.util.FileUtils;
 import com.apppubs.d20.util.Utils;
 
 import java.util.ArrayList;
@@ -21,7 +22,7 @@ import java.util.List;
  * Created by zhangwen on 2017/8/11.
  */
 
-public class FileSelectionBar extends FrameLayout implements View.OnClickListener{
+public class FileSelectionBar extends FrameLayout {
 
 	private LinearLayout mContainerLL;
 	private TextView mHintTV;
@@ -77,7 +78,7 @@ public class FileSelectionBar extends FrameLayout implements View.OnClickListene
 			@Override
 			public void onClick(View v) {
 				if (mListener!=null){
-					mListener.onDoneClick();
+					mListener.onOkClick();
 				}
 			}
 		});
@@ -97,6 +98,47 @@ public class FileSelectionBar extends FrameLayout implements View.OnClickListene
 		mListener = onItemClickListener;
 	}
 
+	public void setDatas(List<FilePickerModel> datas){
+		mDatas = new ArrayList<FilePickerModel>();
+		mDatas.addAll(datas);
+		updateHintAndOkBtn();
+	}
+
+	public void put(FilePickerModel model){
+		mDatas.add(model);
+		updateHintAndOkBtn();
+	}
+
+	private void updateHintText(){
+		mHintTV.setText("已选择 "+getTotalSize());
+	}
+
+	public FilePickerModel pop(FilePickerModel model){
+		FilePickerModel targetModel = null;
+		for (FilePickerModel m:mDatas){
+			if (model.equals(m)){
+				targetModel = m;
+			}
+		}
+		if (targetModel!=null){
+			mDatas.remove(targetModel);
+			updateHintAndOkBtn();
+		}
+		return model;
+	}
+
+	private void updateHintAndOkBtn() {
+		updateHintText();
+		updateOkBtn();
+	}
+
+	private String getTotalSize(){
+		long size = 0;
+		for (FilePickerModel m:mDatas){
+			size += m.getSize();
+		}
+		return FileUtils.formetFileSize(size);
+	}
 
 	/**
 	 * 刷新ok按钮
@@ -111,17 +153,8 @@ public class FileSelectionBar extends FrameLayout implements View.OnClickListene
 		}
 	}
 
-	@Override
-	public void onClick(View v) {
-		String userId = (String) v.getTag();
-		if (mListener !=null){
-			mListener.onItemClick(userId);
-		}
-	}
-
 	public interface FileSelectionBarListener{
-		void onItemClick(String userId);
-		void onDoneClick();
+		void onOkClick();
 	}
 
 }

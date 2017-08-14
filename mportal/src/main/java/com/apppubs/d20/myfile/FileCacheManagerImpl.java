@@ -31,6 +31,7 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLEncoder;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 import java.util.concurrent.ExecutorService;
@@ -92,6 +93,11 @@ public class FileCacheManagerImpl implements FileCacheManager {
 		CacheTask task = new CacheTask(fileUrl,mHandler,listener);
 		mTaskMap.put(fileUrl,task);
 		mExecutorService.execute(task.getTaskRunnable());
+	}
+
+	@Override
+	public void cacheFiles(List<String> fileUrls, CacheListener listener) {
+
 	}
 
 	@Override

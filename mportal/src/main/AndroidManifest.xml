@@ -417,6 +417,22 @@
                 <category android:name="com.apppubs.d20"/>
             </intent-filter>
         </activity>
+        <activity
+            android:name=".activity.AboutActivity"
+            android:screenOrientation="portrait">
+        </activity>
+        <activity
+            android:name=".home.CompelMessageDialogActivity"
+            android:theme="@style/CompelReadDialogStyle">
+        </activity>
+        <activity
+            android:name=".message.activity.FilePickerChooseActivity"
+            android:screenOrientation="portrait">
+        </activity>
+        <activity
+            android:name=".message.activity.FilePickerMyFileActivity"
+            android:screenOrientation="portrait">
+        </activity>
 
         <!-- Required  SDK核心功能 -->
         <service
@@ -531,13 +547,9 @@
             android:name="DISPLAY_ORIENTATION"
             android:value="${DISPLAY_ORIENTATION}"/>
 
-        <activity android:name=".activity.AboutActivity">
-        </activity>
-        <activity
-            android:name=".home.CompelMessageDialogActivity"
-            android:theme="@style/CompelReadDialogStyle">
-        </activity>
-        <activity android:name=".message.activity.FilePickerChooseActivity">
+        <activity android:name=".message.activity.FilePickerLocalActivity"
+            android:screenOrientation="portrait"
+            >
         </activity>
     </application>
 

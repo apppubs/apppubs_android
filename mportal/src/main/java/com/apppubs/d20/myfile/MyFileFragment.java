@@ -27,6 +27,7 @@ import com.apppubs.d20.bean.UserInfo;
 import com.apppubs.d20.constant.URLs;
 import com.apppubs.d20.fragment.BaseFragment;
 import com.apppubs.d20.message.activity.TranspondActivity;
+import com.apppubs.d20.message.model.FilePickerModel;
 import com.apppubs.d20.message.model.MyFilePickerHelper;
 import com.apppubs.d20.net.WMHHttpErrorCode;
 import com.apppubs.d20.net.WMHRequestListener;
@@ -65,25 +66,6 @@ public class MyFileFragment extends BaseFragment implements OnClickListener {
 	private String mQueryText;
 	private int mMode;
 	private MyFilePickerHelper mHelper;
-
-
-
-	private void checkCheckBtn(ImageView checkBtnIv, boolean check,boolean lock) {
-		if (lock){
-			checkBtnIv.setSelected(true);
-			checkBtnIv.setEnabled(false);
-			checkBtnIv.setColorFilter(Color.GRAY, PorterDuff.Mode.SRC_ATOP);
-		}else{
-			if (check){
-				checkBtnIv.setSelected(true);
-				checkBtnIv.setColorFilter(mHostActivity.getThemeColor(), PorterDuff.Mode.SRC_ATOP);
-			}else{
-				checkBtnIv.setSelected(false);
-				checkBtnIv.clearColorFilter();
-			}
-		}
-	}
-
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -270,6 +252,11 @@ public class MyFileFragment extends BaseFragment implements OnClickListener {
 						selectIv.setVisibility(View.VISIBLE);
 						selectIv.setTag(R.id.temp_id,position);
 						selectIv.setOnClickListener(MyFileFragment.this);
+						FilePickerModel pickerModel = new FilePickerModel();
+						pickerModel.setFilePath(bean.getFileLocalPath());
+						pickerModel.setFileUrl(bean.getFileUrl());
+						pickerModel.setSize(bean.getBytes());
+						checkCheckBtn(selectIv,MyFilePickerHelper.getInstance(getContext()).contains(pickerModel));
 					}
 
 					TextView timeTv = holder.getView(R.id.my_file_time_tv);
@@ -297,6 +284,31 @@ public class MyFileFragment extends BaseFragment implements OnClickListener {
 			mAdapter.setData(datas);
 			mAdapter.notifyDataSetChanged();
 		}
+
+	}
+
+	private void toggleCheckBtn(MyFileModel bean, ImageView selectIv) {
+		FilePickerModel pickerModel = new FilePickerModel();
+		pickerModel.setFilePath(bean.getFileLocalPath());
+		pickerModel.setFileUrl(bean.getFileUrl());
+		pickerModel.setSize(bean.getBytes());
+		if(MyFilePickerHelper.getInstance(getContext()).contains(pickerModel)){
+			MyFilePickerHelper.getInstance(getContext()).pop(pickerModel);
+			checkCheckBtn(selectIv,false);
+		}else{
+			MyFilePickerHelper.getInstance(getContext()).put(pickerModel);
+			checkCheckBtn(selectIv,true);
+		}
+	}
+
+	private void checkCheckBtn(ImageView checkBtnIv, boolean check) {
+		if (check){
+			checkBtnIv.setSelected(true);
+			checkBtnIv.setColorFilter(mHostActivity.getThemeColor(), PorterDuff.Mode.SRC_ATOP);
+		}else{
+			checkBtnIv.setSelected(false);
+			checkBtnIv.clearColorFilter();
+		}
 	}
 
 	private String getPageUrl(int page) {
@@ -316,16 +328,8 @@ public class MyFileFragment extends BaseFragment implements OnClickListener {
 		}else if(mMode==EXTRA_VALUE_DISPLAY_MODE_SELECT){
 			Integer index = (Integer) v.getTag(R.id.temp_id);
 			MyFileModel model = mDatas.get(index);
-			onSelectDone(model);
+			toggleCheckBtn(model,(ImageView)v);
 		}
-	}
-
-	private void onSelectDone(MyFileModel model){
-		if(mHelper.getListener()!=null){
-
-			mHelper.getListener().onSelectDone(mAppContext.getCacheManager().fetchCache(model.getFileUrl()));
-		}
-		mHostActivity.finish();
 	}
 
 	private void showMoreActionSheet(final MyFileModel model) {

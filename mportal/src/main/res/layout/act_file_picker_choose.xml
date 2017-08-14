@@ -20,6 +20,7 @@
             ></View>
 
         <LinearLayout
+            android:id="@+id/file_picker_myfile_ll"
             android:layout_width="match_parent"
             android:layout_height="44dp"
             android:background="@drawable/sel_common_item"
@@ -60,6 +61,7 @@
             ></View>
 
         <LinearLayout
+            android:id="@+id/file_picker_local_ll"
             android:layout_width="match_parent"
             android:layout_height="44dp"
             android:background="@drawable/sel_common_item"
@@ -100,6 +102,7 @@
             ></View>
     </LinearLayout>
     <com.apppubs.d20.message.widget.FileSelectionBar
+        android:id="@+id/file_picker_choose_selectionbar"
         android:layout_width="match_parent"
         android:layout_height="50dp"
         android:layout_alignParentBottom="true"

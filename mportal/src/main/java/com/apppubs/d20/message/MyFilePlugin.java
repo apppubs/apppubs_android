@@ -11,12 +11,15 @@ import android.widget.Toast;
 
 import com.apppubs.d20.AppContext;
 import com.apppubs.d20.R;
+import com.apppubs.d20.message.activity.ConversationActivity;
+import com.apppubs.d20.message.model.FilePickerModel;
 import com.apppubs.d20.myfile.CacheListener;
 import com.apppubs.d20.myfile.FileCacheErrorCode;
 import com.apppubs.d20.message.model.MyFilePickerHelper;
 import com.apppubs.d20.widget.ProgressHUD;
 
 import java.io.File;
+import java.util.List;
 
 import io.rong.imkit.RongExtension;
 import io.rong.imkit.RongIM;
@@ -60,56 +63,17 @@ public class MyFilePlugin implements IPluginModule {
 //            }
 //        });
 
-		MyFilePickerHelper.getInstance(currentFragment.getContext()).startSelect(new MyFilePickerHelper.FilePickerListener(){
+		MyFilePickerHelper helper = MyFilePickerHelper.getInstance(currentFragment.getContext());
+		helper.clear();
+		helper.startSelect(new MyFilePickerHelper.FilePickerListener(){
 
 			@Override
-			public void onSelectDone(final File file) {
-				FileMessage fileMessage = FileMessage.obtain(Uri.parse("file://"+file.getAbsolutePath()));
-				Message message = Message.obtain(targetId,conversationType,fileMessage);
-				RongIM.getInstance().sendMediaMessage(message, "", "", new IRongCallback.ISendMediaMessageCallbackWithUploader() {
-					@Override
-					public void onAttached(Message message, final IRongCallback.MediaMessageUploader mediaMessageUploader) {
-						AppContext.getInstance(currentFragment.getContext()).getCacheManager().uploadFile(file, new CacheListener() {
-							@Override
-							public void onException(FileCacheErrorCode errorCode) {
-								Log.v("ConversationFragmentEx","发送图片异常"+errorCode.getMessage());
-								mediaMessageUploader.error();
-							}
+			public void onSelectDone(List<FilePickerModel> model) {
+				Intent intent = new Intent(currentFragment.getContext(), ConversationActivity.class);
+				intent.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP
+						| Intent.FLAG_ACTIVITY_CLEAR_TOP);
+				currentFragment.startActivity(intent);
 
-							@Override
-							public void onDone(String fileUrl) {
-								mediaMessageUploader.success(Uri.parse(fileUrl));
-								Log.v("ConversationFragmentEx","发送图片完成"+fileUrl);
-							}
-
-							@Override
-							public void onProgress(float progress, long totalBytesExpectedToRead) {
-								mediaMessageUploader.update((int)(totalBytesExpectedToRead*progress));
-							}
-						});
-					}
-
-					@Override
-					public void onProgress(Message message, int i) {
-
-					}
-
-					@Override
-					public void onSuccess(Message message) {
-						Toast.makeText(currentFragment.getContext(),"发送成功",Toast.LENGTH_SHORT).show();
-					}
-
-					@Override
-					public void onError(Message message, RongIMClient.ErrorCode errorCode) {
-						ProgressHUD.dismissProgressHUDInThisContext(currentFragment.getContext());
-						Toast.makeText(currentFragment.getContext(),"发送失败",Toast.LENGTH_SHORT).show();
-					}
-
-					@Override
-					public void onCanceled(Message message) {
-
-					}
-				});
 			}
 		});
 //		Bundle extra = new Bundle();
