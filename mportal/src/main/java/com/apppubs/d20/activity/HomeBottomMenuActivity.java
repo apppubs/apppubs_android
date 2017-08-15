@@ -25,33 +25,31 @@ import java.util.List;
 
 import io.rong.imkit.RongIM;
 import io.rong.imkit.manager.IUnReadMessageObserver;
-import io.rong.imlib.RongIMClient;
 import io.rong.imlib.model.Conversation;
 
 /**
  * 区别于左右菜单的主界面此主界面为底部菜单类似zaker
- * 
+ * <p>
  * Copyright (c) heaven Inc.
- *
+ * <p>
  * Original Author: zhangwen
- *
+ * <p>
  * ChangeLog:
  * 2015年1月15日 by zhangwen create
- *
  */
 public class HomeBottomMenuActivity extends HomeBaseActivity {
-	
+
 	private MenuBar mMenuBar;
 	/**
 	 * 底部菜单数量最大值
 	 */
 	private final int MAX_MENU_NUM = 5;
-//	private MenuItem[] miArr;
+	//	private MenuItem[] miArr;
 	private int mCurPos;
 	private int mIntentCurPos;
 	private int mMenuBarBtnDefaultColor;
 	private BroadcastReceiver mLogoutBr;
-	private IUnReadMessageObserver mMessageUnReadCountObserver = new IUnReadMessageObserver(){
+	private IUnReadMessageObserver mMessageUnReadCountObserver = new IUnReadMessageObserver() {
 
 		@Override
 		public void onCountChanged(int i) {
@@ -60,7 +58,7 @@ public class HomeBottomMenuActivity extends HomeBaseActivity {
 			setMessageUnreadNum();
 		}
 	};
-	
+
 	@Override
 	protected void onCreate(Bundle arg0) {
 		LogM.log(this.getClass(), " HomeBottomMenuActivity onCreate");
@@ -68,7 +66,7 @@ public class HomeBottomMenuActivity extends HomeBaseActivity {
 		overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
 		setContentView(R.layout.act_home_bottommenu);
 		initComponent();
-		
+
 		initMenu();
 		mLogoutBr = new BroadcastReceiver() {
 
@@ -85,11 +83,12 @@ public class HomeBottomMenuActivity extends HomeBaseActivity {
 
 		RongIM.getInstance().addUnReadMessageCountChangedObserver(mMessageUnReadCountObserver, Conversation.ConversationType.DISCUSSION, Conversation.ConversationType.PRIVATE);
 	}
+
 	@Override
 	protected void onResume() {
-		
+
 		super.onResume();
-		
+
 	}
 
 	@Override
@@ -103,25 +102,25 @@ public class HomeBottomMenuActivity extends HomeBaseActivity {
 		LogM.log(this.getClass(), "onSaveInstanceState-->调用");
 	}
 
-	private void setMessageUnreadNum(){
+	private void setMessageUnreadNum() {
 		String messageMenuId = null;
-		for (MenuItem mi:mPrimaryMenuList){
-			if(mi.getUrl()!=null&&mi.getUrl().startsWith("apppubs://message")){
+		for (MenuItem mi : mPrimaryMenuList) {
+			if (mi.getUrl() != null && mi.getUrl().startsWith("apppubs://message")) {
 				messageMenuId = mi.getId();
 				break;
 			}
 		}
-		if (messageMenuId!=null){
-			mMenuBar.setUnreadNumForMenu(messageMenuId,mAppContext.getApp().getmMessageUnreadNum());
+		if (messageMenuId != null) {
+			mMenuBar.setUnreadNumForMenu(messageMenuId, mAppContext.getApp().getmMessageUnreadNum());
 		}
 	}
 
-	private void initComponent(){
+	private void initComponent() {
 		mMenuBarBtnDefaultColor = getResources().getColor(R.color.menubar_default);
 		mMenuBar = (MenuBar) findViewById(R.id.home_bottom_menubar);
 		int size = mPrimaryMenuList.size();
-		
-		if(size==1){
+
+		if (size == 1) {
 			mMenuBar.setVisibility(View.GONE);
 //			miArr = new MenuItem[1];
 //			miArr[0] = mPrimaryMenuList.get(0);
@@ -135,12 +134,12 @@ public class HomeBottomMenuActivity extends HomeBaseActivity {
 //			}
 
 		}
-		
+
 	}
-	
-	private void initMenu(){
+
+	private void initMenu() {
 		int size = mPrimaryMenuList.size();
-		for(int i=-1;++i<size;){
+		for (int i = -1; ++i < size; ) {
 			mMenuBar.addMenuItem(mPrimaryMenuList.get(i));
 		}
 		mMenuBar.setOnItemClickListener(new MenuBar.OnItemClickListener() {
@@ -149,50 +148,52 @@ public class HomeBottomMenuActivity extends HomeBaseActivity {
 				selectMenu(position);
 			}
 		});
-		if(mPrimaryMenuList!=null&&mPrimaryMenuList.size()>0){//判断是否有菜单如果没有提示用户配置菜单
+		if (mPrimaryMenuList != null && mPrimaryMenuList.size() > 0) {//判断是否有菜单如果没有提示用户配置菜单
 			selectMenu(mCurPos);
-		}else{
+		} else {
 			Toast.makeText(this, "请配置菜单", Toast.LENGTH_LONG).show();
 		}
-	
+
 	}
 
 	/**
 	 * 选择某个菜单
+	 *
 	 * @param position
 	 */
-	private void selectMenu(int position){
+	private void selectMenu(int position) {
 		mIntentCurPos = position;
 		MenuItem mi = mPrimaryMenuList.get(position);
-		if(ViewCourier.openLoginViewIfNeeded(mi.getUrl(), this)){
-			return ;
+		if (ViewCourier.openLoginViewIfNeeded(mi.getUrl(), this)) {
+			return;
 		}
 //		MenuItem mi = miArr[position];
-		mViewCourier.executeInHomeActivity(mi,this);
-		
+		mViewCourier.executeInHomeActivity(mi, this);
+
 		ImageView ivC = (ImageView) mMenuBar.getChildAt(mCurPos).findViewById(R.id.menu_buttom_iv);
-		ivC.setColorFilter(mMenuBarBtnDefaultColor,Mode.SRC_ATOP);
+		ivC.setColorFilter(mMenuBarBtnDefaultColor, Mode.SRC_ATOP);
 		TextView tvC = (TextView) mMenuBar.getChildAt(mCurPos).findViewById(R.id.menu_bottom_tv);
 		tvC.setTextColor(Color.parseColor("#8c8c8c"));
-		
+
 		ImageView iv = (ImageView) mMenuBar.getChildAt(position).findViewById(R.id.menu_buttom_iv);
-		iv.setColorFilter( mThemeColor, Mode.SRC_ATOP);
+		iv.setColorFilter(mThemeColor, Mode.SRC_ATOP);
 		TextView tv = (TextView) mMenuBar.getChildAt(position).findViewById(R.id.menu_bottom_tv);
 		tv.setTextColor(mThemeColor);
-		
+
 		mCurPos = position;
 	}
-	
+
 	private Fragment mCurFrg;
+
 	@Override
 	protected void changeContent(BaseFragment fragment) {
 
 		FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
 		List<Fragment> fragments = getSupportFragmentManager().getFragments();
-		if (fragments==null||!fragments.contains(fragment)) {
+		if (fragments == null || !fragments.contains(fragment)) {
 			transaction.add(R.id.home_bottom_container_fgm, fragment);
 		}
-		if (mCurFrg != null){
+		if (mCurFrg != null) {
 			transaction.hide(mCurFrg);
 		}
 		transaction.show(fragment);
@@ -201,18 +202,18 @@ public class HomeBottomMenuActivity extends HomeBaseActivity {
 		transaction.commitAllowingStateLoss();
 		mTitleBar.clearLeftAndRight();
 	}
-	
-	
+
+
 	@Override
 	protected void setUnreadNumForMenu(String menuId, int num) {
-		
+
 	}
-	
+
 	@Override
 	protected void onDestroy() {
 		super.onDestroy();
 		mViewCourier.destory();
-		if(mLogoutBr!=null){
+		if (mLogoutBr != null) {
 			unregisterReceiver(mLogoutBr);
 		}
 		LogM.log(this.getClass(), "销毁HomeBottomMenuActivity");
@@ -228,10 +229,10 @@ public class HomeBottomMenuActivity extends HomeBaseActivity {
 	@Override
 	protected void onActivityResult(int requestCode, int resultCode, Intent intent) {
 		super.onActivityResult(requestCode, resultCode, intent);
-		if(requestCode==LoginActivity.REQUEST_CODE&&resultCode==RESULT_OK){
+		if (requestCode == LoginActivity.REQUEST_CODE && resultCode == RESULT_OK) {
 			selectMenu(mIntentCurPos);
 		}
 	}
-	
-	
+
+
 }

@@ -5,10 +5,25 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="@color/app_common_bg"
     tools:context="com.apppubs.d20.message.activity.FilePickerLocalActivity">
 
     <com.apppubs.d20.message.widget.Breadcrumb
+        android:id="@+id/file_picker_local_breadcrumb"
         android:layout_width="match_parent"
         android:layout_height="50dp"
         ></com.apppubs.d20.message.widget.Breadcrumb>
+    <ListView
+        android:id="@+id/file_picker_local_lv"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:divider="@null"
+        ></ListView>
+    <com.apppubs.d20.message.widget.FileSelectionBar
+        android:id="@+id/file_picker_local_fileselectionbar"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        ></com.apppubs.d20.message.widget.FileSelectionBar>
 </LinearLayout>

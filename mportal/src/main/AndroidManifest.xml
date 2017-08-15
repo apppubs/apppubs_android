@@ -368,6 +368,11 @@
             android:name=".message.activity.UserPickerActivity"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="adjustUnspecified|stateHidden"/>
+        <activity
+            android:name=".message.activity.FilePickerLocalActivity"
+            android:screenOrientation="portrait"
+            >
+        </activity>
 
         <receiver
             android:name=".receiver.ConnectionChangeReceiver"
@@ -547,10 +552,6 @@
             android:name="DISPLAY_ORIENTATION"
             android:value="${DISPLAY_ORIENTATION}"/>
 
-        <activity android:name=".message.activity.FilePickerLocalActivity"
-            android:screenOrientation="portrait"
-            >
-        </activity>
     </application>
 
 </manifest>
