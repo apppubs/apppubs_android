@@ -45,6 +45,7 @@ import io.rong.imkit.RongIM;
 import io.rong.imkit.plugin.IPluginModule;
 import io.rong.imkit.plugin.ImagePlugin;
 import io.rong.imkit.widget.provider.FilePlugin;
+import io.rong.imkit.widget.provider.LocationPlugin;
 import io.rong.imlib.RongIMClient;
 import io.rong.imlib.model.Conversation;
 import io.rong.imlib.model.UserInfo;
@@ -856,18 +857,18 @@ public class MsgBussiness extends BaseBussiness {
 	public class MyExtensionModule extends DefaultExtensionModule {
 		private FilePlugin filePlugin;
 		private ImagePlugin imagePlugin;
-		//		LocationPlugin locationPlugin;
+		private	LocationPlugin locationPlugin;
 		private MyFilePlugin myFilePlugin;
 		List<IPluginModule> pluginModules ;
 		public MyExtensionModule(){
 			pluginModules = new ArrayList<IPluginModule>();
 			filePlugin = new FilePlugin();
 			imagePlugin = new ImagePlugin();
+			locationPlugin = new LocationPlugin();
 			myFilePlugin = new MyFilePlugin();
 			pluginModules.add(imagePlugin);
-			pluginModules.add(myFilePlugin);
-//			locationPlugin = new LocationPlugin();
 //			pluginModules.add(locationPlugin);
+			pluginModules.add(myFilePlugin);
 		}
 		@Override
 		public List<IPluginModule> getPluginModules(Conversation.ConversationType conversationType) {

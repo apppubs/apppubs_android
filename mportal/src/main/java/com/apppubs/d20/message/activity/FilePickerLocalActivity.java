@@ -1,6 +1,8 @@
 package com.apppubs.d20.message.activity;
 
+import android.graphics.PorterDuff;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ImageView;
@@ -11,10 +13,12 @@ import com.apppubs.d20.R;
 import com.apppubs.d20.activity.BaseActivity;
 import com.apppubs.d20.adapter.CommonAdapter;
 import com.apppubs.d20.adapter.ViewHolder;
+import com.apppubs.d20.message.model.FilePickerModel;
 import com.apppubs.d20.message.model.MyFilePickerHelper;
 import com.apppubs.d20.message.widget.Breadcrumb;
 import com.apppubs.d20.message.widget.FileSelectionBar;
 import com.apppubs.d20.util.FileUtils;
+import com.apppubs.d20.util.LogM;
 
 import java.io.File;
 import java.io.IOException;
@@ -48,7 +52,7 @@ public class FilePickerLocalActivity extends BaseActivity {
 		mBreadcrumb = (Breadcrumb) findViewById(R.id.file_picker_local_breadcrumb);
 		try {
 			mCurLocation = FileUtils.getExternalStorageFile();
-			gotoLocation(mCurLocation);
+			openDirectory(mCurLocation);
 			mBreadcrumb.push("手机",mCurLocation.getAbsolutePath());
 		} catch (IOException e) {
 			e.printStackTrace();
@@ -57,7 +61,7 @@ public class FilePickerLocalActivity extends BaseActivity {
 		mBreadcrumb.setOnItemClickListener(new Breadcrumb.OnItemClickListener() {
 			@Override
 			public void onItemClick(int index, String tag) {
-				gotoLocation(new File(tag));
+				openDirectory(new File(tag));
 			}
 		});
 
@@ -66,30 +70,64 @@ public class FilePickerLocalActivity extends BaseActivity {
 			public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 				File curFile = mCurFileList.get(position);
 				if (curFile.isDirectory()){
-					gotoLocation(curFile);
+					openDirectory(curFile);
 					pushCurLocaltion2Breadcrumb();
+				}else{
+
+
 				}
 			}
 		});
+
+		MyFilePickerHelper.getInstance(this).setSelectionBar((FileSelectionBar) findViewById(R.id.file_picker_local_fileselectionbar));
 	}
 
-	private void gotoLocation(File curFile) {
+	private void openDirectory(File curFile) {
 		mCurLocation = curFile;
 		mCurFileList = orderByName(Arrays.asList(curFile.listFiles()));
+		setVisibilityOfViewByResId(R.id.file_picker_local_empty_ll,mCurFileList.size()==0?View.VISIBLE:View.GONE);
 		if (mAdapter==null){
 			mAdapter = new CommonAdapter<File>(this, R.layout.item_file_picker_local) {
 				@Override
 				protected void fillValues(ViewHolder holder, File bean, int position) {
 					TextView tv = holder.getView(R.id.file_picker_local_title_tv);
 					tv.setText(bean.getName());
-					ImageView iv = holder.getView(R.id.file_picker_local_selector_fl);
-					if (bean.isFile()){
-						iv.setVisibility(View.VISIBLE);
-					}else{
-						iv.setVisibility(View.GONE);
-					}
 					ImageView typeIv = holder.getView(R.id.file_picker_local_iv);
-					typeIv.setImageResource(R.drawable.myfile_file_type_unknow);
+					typeIv.setImageResource(getFileTypeImageResId(bean));
+					View checkBtnCon  = holder.getView(R.id.file_picker_local_selector_fl);
+					if (bean.isFile()){
+						checkBtnCon.setVisibility(View.VISIBLE);
+						checkBtnCon.setTag(bean.getAbsolutePath());
+						checkBtnCon.setOnClickListener(FilePickerLocalActivity.this);
+						FilePickerModel model = new FilePickerModel();
+						model.setFilePath(bean.getAbsolutePath());
+						model.setSize(bean.length());
+						ImageView checkBtn = holder.getView(R.id.file_picker_local_selector_iv);
+						checkCheckBtn(checkBtn,MyFilePickerHelper.getInstance(FilePickerLocalActivity.this).contains(model));
+					}else{
+						checkBtnCon.setVisibility(View.GONE);
+					}
+				}
+				private int getFileTypeImageResId(File file){
+					if (file.isDirectory()){
+						return R.drawable.file_picker_local_folder;
+					}else{
+						String path = file.getAbsolutePath();
+						String suffix = path.substring(path.lastIndexOf(".")+1);
+						if ("docx".equals(suffix)||"doc".equals(suffix)) {
+							return R.drawable.myfile_file_type_word;
+						} else if ("xlsx".equals(suffix)||"xls".equals(suffix)) {
+							return R.drawable.myfile_file_type_excel;
+						} else if ("pptx".equals(suffix)||"ppt".equals(suffix)) {
+							return R.drawable.myfile_file_type_ppt;
+						} else if ("pdf".equals(suffix)) {
+							return R.drawable.myfile_file_type_pdf;
+						} else if("jpeg".equals(suffix)||"jpg".equals(suffix)||"png".equals(suffix)||"gif".equals(suffix)){
+							return R.drawable.myfile_file_type_img;
+						}else {
+							return R.drawable.myfile_file_type_unknow;
+						}
+					}
 				}
 			};
 			mAdapter.setData(mCurFileList);
@@ -116,5 +154,44 @@ public class FilePickerLocalActivity extends BaseActivity {
 			}
 		});
 		return fileList;
+	}
+
+	@Override
+	public void onClick(View v) {
+		super.onClick(v);
+		if (v.getId()==R.id.file_picker_local_selector_fl){
+			String absPath = (String) v.getTag();
+			File curFile = new File(absPath);
+			if (TextUtils.isEmpty(absPath)||!curFile.exists()){
+				LogM.log(this.getClass(),"文件不存在");
+				return;
+			}
+			boolean needCheck = checkFile(curFile);
+			checkCheckBtn((ImageView)v.findViewById(R.id.file_picker_local_selector_iv),needCheck);
+		}
+	}
+
+	private boolean checkFile(File bean) {
+		FilePickerModel pickerModel = new FilePickerModel();
+		pickerModel.setFilePath(bean.getAbsolutePath());
+		pickerModel.setFileUrl("");
+		pickerModel.setSize(bean.length());
+		if(MyFilePickerHelper.getInstance(this).contains(pickerModel)){
+			MyFilePickerHelper.getInstance(this).pop(pickerModel);
+			return false;
+		}else{
+			MyFilePickerHelper.getInstance(this).put(pickerModel);
+			return true;
+		}
+	}
+
+	private void checkCheckBtn(ImageView checkBtnIv, boolean check) {
+		if (check){
+			checkBtnIv.setSelected(true);
+			checkBtnIv.setColorFilter(getThemeColor(), PorterDuff.Mode.SRC_ATOP);
+		}else{
+			checkBtnIv.setSelected(false);
+			checkBtnIv.clearColorFilter();
+		}
 	}
 }

@@ -46,7 +46,7 @@ public class ConversationFragmentEx extends ConversationFragment {
 			 * @param callback    发送消息的回调，回调中携带 {@link RongIMClient.UploadImageStatusListener} 对象，用户调用该对象中的方法更新状态。
 			 *                    {@link #sendImageMessage(Message, String, String, RongIMClient.SendImageMessageCallback)}
 			 */
-			RongIM.getInstance().sendImageMessage(message, "[图片]", "[图片]", new RongIMClient.SendImageMessageWithUploadListenerCallback() {
+			RongIM.getInstance().sendImageMessage(message, null, null, new RongIMClient.SendImageMessageWithUploadListenerCallback() {
 
 				@Override
 				public void onAttached(Message message, final RongIMClient.UploadImageStatusListener uploadImageStatusListener) {

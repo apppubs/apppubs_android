@@ -258,7 +258,7 @@ public abstract class HomeBaseActivity extends BaseActivity {
 							e.printStackTrace();
 						}
 					}else{
-						Log.e("HomeBaseActivity",jsonResult.reason);
+//						Log.e("HomeBaseActivity",jsonResult.reason);
 					}
 				}else{
 					Log.e("HomeBaseActivity",errorCode.getMessage());

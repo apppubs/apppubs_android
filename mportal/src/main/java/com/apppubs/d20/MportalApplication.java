@@ -146,8 +146,15 @@ public class MportalApplication extends MultiDexApplication {
 			Log.v("MyConversationBehavior",message.getContent().toString());
 			if (message.getContent() instanceof FileMessage){
 				io.rong.message.FileMessage fileMessage = (FileMessage) message.getContent();
+
 				Bundle args = new Bundle();
-				args.putString(FilePreviewFragment.ARGS_STRING_URL, fileMessage.getFileUrl().toString());
+				String fileUrl = fileMessage.getFileUrl()!=null?fileMessage.getFileUrl().toString():null;
+				String localPath = null;
+				if (null!=fileMessage.getLocalPath()){
+					localPath = fileMessage.getLocalPath().getPath();
+				}
+				args.putString(FilePreviewFragment.ARGS_STRING_URL, fileUrl);
+				args.putString(FilePreviewFragment.ARGS_STRING_FILE_LOCAL_PATH,localPath);
 				ContainerActivity.startActivity(context, FilePreviewFragment.class, args, "文件预览");
 				return true;
 			}

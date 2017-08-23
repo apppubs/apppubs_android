@@ -41,7 +41,6 @@ public class DownloadAppService extends Service {
 	public static String BROOAWCASTSTOPSERVICE = "browcaststopervice";// 关闭下载服务
 	public static String serviceName = "DownloadAppService";
 	public static String downAppFinish = "downappfinish";
-	private static String saveFileName;
 	private CallbackResult callback;
 	private String apkurl;
 	protected SystemBussiness mSystemBussiness;
@@ -88,14 +87,14 @@ public class DownloadAppService extends Service {
 				} else {
 					System.out.println("下载完毕!!!!!!!!!!!");
 					// 下载完毕后变换通知形式
-					mNotification.flags = Notification.FLAG_AUTO_CANCEL;
-					mNotification.contentView = null;
-					Intent intent = new Intent(DownloadAppService.this, cls[backActivity]);
-					// 告知已完成
-					intent.putExtra("completed", "yes");
-					// 更新参数,注意flags要使用FLAG_UPDATE_CURRENT
-					PendingIntent contentIntent = PendingIntent.getActivity(DownloadAppService.this, 0, intent,
-							PendingIntent.FLAG_UPDATE_CURRENT);
+//					mNotification.flags = Notification.FLAG_AUTO_CANCEL;
+//					mNotification.contentView = null;
+//					Intent intent = new Intent(DownloadAppService.this, cls[backActivity]);
+//					// 告知已完成
+//					intent.putExtra("completed", "yes");
+//					// 更新参数,注意flags要使用FLAG_UPDATE_CURRENT
+//					PendingIntent contentIntent = PendingIntent.getActivity(DownloadAppService.this, 0, intent,
+//							PendingIntent.FLAG_UPDATE_CURRENT);
 //					mNotification.setLatestEventInfo(DownloadAppService.this, "下载完成", "文件已下载完毕", contentIntent);
 
 					//
@@ -183,14 +182,9 @@ public class DownloadAppService extends Service {
 		if (!isDownloading){
 			isDownloading = true;
 
-			try {
-				saveFileName = FileUtils.getAppExternalStorageFile() + Constants.APK_FILE_NAME;
-			} catch (APUnavailableException e) {
-				e.printStackTrace();
-			}
 			mSystemBussiness = SystemBussiness.getInstance(this);
 			try {
-				savePath = FileUtils.getAppExternalStorageFile().getAbsolutePath() + "/" + Constants.APK_FILE_NAME;
+				savePath = FileUtils.getAppExternalStorageDictory(this).getAbsolutePath() + "/" + Constants.APK_FILE_NAME;
 
 			} catch (APUnavailableException e) {
 				e.printStackTrace();
@@ -205,7 +199,7 @@ public class DownloadAppService extends Service {
 				public void run() {
 
 
-					LogM.log(this.getClass(), "开始下载");
+					LogM.log(this.getClass(), "开始下载"+apkurl);
 					int lastRate = 0;
 					int curProgress = 0;
 					try {
@@ -218,10 +212,9 @@ public class DownloadAppService extends Service {
 
 						File file = new File(savePath);
 						if (!file.exists()) {
-							file.mkdirs();
+							file.getParentFile().mkdirs();
 						}
-						File ApkFile = new File(saveFileName);
-						FileOutputStream fos = new FileOutputStream(ApkFile);
+						FileOutputStream fos = new FileOutputStream(file);
 
 						int count = 0;
 						byte buf[] = new byte[1024];
@@ -272,14 +265,14 @@ public class DownloadAppService extends Service {
 	 * 
 	 */
 	private void installApk() {
-		File apkfile = new File(saveFileName);
+		File apkfile = new File(savePath);
 		if (!apkfile.exists()) {
 			return;
 		}
 		Intent i = new Intent(Intent.ACTION_VIEW);
 		i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-		i.setDataAndType(Uri.parse("file://" + apkfile.toString()), "application/vnd.android.package-archive");
-		DownloadAppService.this.startActivity(i);
+		i.setDataAndType(Uri.parse("file://" + apkfile.getAbsolutePath()), "application/vnd.android.package-archive");
+		this.startActivity(i);
 
 	}
 

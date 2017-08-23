@@ -14,6 +14,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
+import android.webkit.CookieManager;
 import android.webkit.DownloadListener;
 import android.webkit.WebSettings;
 import android.widget.PopupWindow;
@@ -22,9 +23,11 @@ import com.apppubs.d20.AppContext;
 import com.apppubs.d20.AppManager;
 import com.apppubs.d20.MportalApplication;
 import com.apppubs.d20.R;
+import com.apppubs.d20.activity.ContainerActivity;
 import com.apppubs.d20.activity.HomeBaseActivity;
 import com.apppubs.d20.activity.ViewCourier;
 import com.apppubs.d20.bean.MenuItem;
+import com.apppubs.d20.myfile.FilePreviewFragment;
 import com.apppubs.d20.util.Base64;
 import com.apppubs.d20.util.BitmapUtils;
 import com.apppubs.d20.util.LogM;
@@ -444,8 +447,17 @@ public class WebAppFragment extends BaseFragment implements OnClickListener {
 			@Override
 			public void onDownloadStart(String url, String userAgent, String contentDisposition, String mimetype,
 					long contentLength) {
-				if (url != null && url.startsWith("http://"))
-					startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(url)));
+				CookieManager cookieManager = CookieManager.getInstance();
+				String cookieStr = cookieManager.getCookie(url);
+				if (!TextUtils.isEmpty(cookieStr)){
+					url += "&"+cookieStr;
+				}
+				if (!TextUtils.isEmpty(contentDisposition)){
+
+				}
+				Bundle args = new Bundle();
+				args.putString(FilePreviewFragment.ARGS_STRING_URL,url);
+				ContainerActivity.startActivity(getContext(),FilePreviewFragment.class,args);
 			}
 		});
 

@@ -12,15 +12,45 @@
     <com.apppubs.d20.message.widget.Breadcrumb
         android:id="@+id/file_picker_local_breadcrumb"
         android:layout_width="match_parent"
-        android:layout_height="50dp"
+        android:layout_height="48dp"
         ></com.apppubs.d20.message.widget.Breadcrumb>
-    <ListView
-        android:id="@+id/file_picker_local_lv"
+    <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1"
-        android:divider="@null"
-        ></ListView>
+        >
+
+        <ListView
+            android:id="@+id/file_picker_local_lv"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:divider="@null"
+            ></ListView>
+        <LinearLayout
+            android:id="@+id/file_picker_local_empty_ll"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:layout_gravity="center"
+            android:visibility="gone"
+            >
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:src="@drawable/folder_empty"
+                />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:text="文件夹为空"
+                android:textColor="@color/common_text_gray_light"
+                android:textSize="14dp"
+                />
+        </LinearLayout>
+    </FrameLayout>
     <com.apppubs.d20.message.widget.FileSelectionBar
         android:id="@+id/file_picker_local_fileselectionbar"
         android:layout_width="match_parent"

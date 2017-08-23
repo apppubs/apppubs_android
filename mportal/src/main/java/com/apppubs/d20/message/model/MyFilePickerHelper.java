@@ -79,9 +79,9 @@ public class MyFilePickerHelper {
 
 	public void put(FilePickerModel model){
 		if (!contains(model)){
-			if(null==model.getFilePath()){
-				model.setFilePath(AppContext.getInstance(mContext).getCacheManager().fetchCache(model.getFileUrl()).getAbsolutePath());
-			}
+//			if(null==model.getFilePath()){
+//				model.setFilePath(AppContext.getInstance(mContext).getCacheManager().fetchCache(model.getFileUrl()).getAbsolutePath());
+//			}
 			mDatas.add(model);
 			mSelectionBar.put(model);
 		}
@@ -102,6 +102,9 @@ public class MyFilePickerHelper {
 	}
 
 	public boolean contains(FilePickerModel model){
+		if (null==model){
+			return false;
+		}
 		for (FilePickerModel m:mDatas){
 			if (model.equals(m)){
 				return true;

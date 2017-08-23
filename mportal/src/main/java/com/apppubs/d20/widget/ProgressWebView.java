@@ -22,6 +22,8 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.util.AttributeSet;
+import android.util.Log;
+import android.webkit.CookieManager;
 import android.webkit.JsResult;
 import android.webkit.SslErrorHandler;
 import android.webkit.ValueCallback;
@@ -434,10 +436,6 @@ public class ProgressWebView extends BridgeWebView {
 
 				return true;
 
-			} else if (FilePreviewFragment.isAbleToRead(url)) {
-				openFileWithUrl(url);
-				mCounterDownTimer.cancel();
-				return true;
 			} else if (url.contains("target=_blank")) {
 				
 				Bundle args = new Bundle();

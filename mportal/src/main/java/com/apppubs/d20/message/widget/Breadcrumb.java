@@ -107,6 +107,9 @@ public class Breadcrumb extends ViewGroup {
         tv.setTag(tag);
         tv.setGravity(Gravity.CENTER);
         tv.setTextColor(mTextColor);
+		int dp5 = Utils.dip2px(getContext(),5);
+		tv.setPadding(dp5,0,dp5,0);
+		tv.setBackgroundResource(R.drawable.sel_rect_btn);
         LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.MATCH_PARENT);
         mContainerLL.addView(tv,lp);
         final int index = mPathList.size();

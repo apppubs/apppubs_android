@@ -1,5 +1,7 @@
 package com.apppubs.d20.message.model;
 
+import android.text.TextUtils;
+
 /**
  * Created by zhangwen on 2017/8/11.
  */
@@ -34,7 +36,7 @@ public class FilePickerModel {
 	}
 
 	public boolean equals(FilePickerModel model){
-		if ((model.getFilePath()!=null&&model.getFilePath().equals(filePath))||(model.getFileUrl()!=null&&model.getFileUrl().equals(fileUrl))){
+		if ((!TextUtils.isEmpty(model.getFilePath())&&model.getFilePath().equals(filePath))||(!TextUtils.isEmpty(model.getFileUrl())&&model.getFileUrl().equals(fileUrl))){
 			return true;
 		}
 		return false;

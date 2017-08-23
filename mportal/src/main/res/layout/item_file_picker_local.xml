@@ -4,23 +4,20 @@
                 android:layout_height="wrap_content"
                 android:background="@drawable/sel_common_item"
     >
-
     <FrameLayout
-        android:id="@+id/file_picker_local_right_fl"
+        android:id="@+id/file_picker_local_selector_fl"
         android:layout_width="50dp"
         android:layout_height="match_parent"
         android:layout_alignParentRight="true"
-        android:layout_centerVertical="true"
         >
 
         <ImageView
-            android:id="@+id/file_picker_local_selector_fl"
-            android:layout_width="50dp"
-            android:layout_height="44dp"
-            android:layout_centerVertical="true"
+            android:id="@+id/file_picker_local_selector_iv"
+            android:layout_width="30dp"
+            android:layout_height="52dp"
+            android:layout_gravity="center"
             android:scaleType="centerInside"
             android:src="@drawable/sel_checkable_btn"
-            android:visibility="gone"
             />
     </FrameLayout>
 
@@ -29,7 +26,7 @@
         style="@style/item_menu_lv_withpic"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_toLeftOf="@id/file_picker_local_right_fl"
+        android:layout_toLeftOf="@id/file_picker_local_selector_fl"
         >
 
         <ImageView

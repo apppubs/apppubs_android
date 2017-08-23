@@ -298,7 +298,6 @@ public class FilePreviewFragment extends BaseFragment {
 	private void previewFile(String path) {
 
 		File sourceFile = new File(path);
-
 		if (mFileType == FILE_TYPE_TXT) {
 			displayTXT(sourceFile);
 		} else if (mFileType == FILE_TYPE_PDF) {
@@ -312,10 +311,23 @@ public class FilePreviewFragment extends BaseFragment {
 		} else if (mFileType == FILE_TYPE_PIC) {
 			displayPic(sourceFile);
 		} else {
-			Toast.makeText(mContext, "系统不支持此文件预览", Toast.LENGTH_LONG).show();
+			displayOther(sourceFile);
 		}
 	}
 
+	private void displayOther(File sourceFile) {
+
+		try {
+			Intent intent = new Intent("android.intent.action.VIEW");
+			intent.addCategory("android.intent.category.DEFAULT");
+			intent.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
+			Uri uri = Uri.fromFile(sourceFile);
+			intent.setDataAndType(uri, "*/*");
+			mContext.startActivity(intent);
+		} catch (Exception e) {
+			showInstallAppDialog("打开错误！");
+		}
+	}
 	private void displayPpt(File sourceFile) {
 
 		try {

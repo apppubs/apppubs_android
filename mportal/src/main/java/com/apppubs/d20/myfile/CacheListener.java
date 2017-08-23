@@ -6,6 +6,6 @@ package com.apppubs.d20.myfile;
 
 public interface CacheListener{
 	void onException(FileCacheErrorCode errorCode);
-	void onDone(String fileUrl);
+	void onDone(String localPath);
 	void onProgress(float progress,long totalBytesExpectedToRead);
 }

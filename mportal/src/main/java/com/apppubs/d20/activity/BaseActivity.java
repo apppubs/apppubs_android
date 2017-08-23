@@ -284,26 +284,29 @@ public abstract class BaseActivity extends FragmentActivity implements OnClickLi
 				}
 			});
 
-			mSystemBussiness.aSyncAppConfig(this, new APResultCallback<AppConfig>() {
-				@Override
-				public void onDone(AppConfig obj) {
-					System.out.print("同步appconfig成功");
-					//避免在startupactivit中进行重复检测
-					if (!(BaseActivity.this instanceof StartUpActivity)){
-						checkUpdate();
-					}
-				}
-
-				@Override
-				public void onException(int excepCode) {
-					System.out.print("同步appconfig失败");
-				}
-			});
+			this.preCheckUpdate();
 
 		}
 
 	}
 
+	private void preCheckUpdate(){
+		mSystemBussiness.aSyncAppConfig(this, new APResultCallback<AppConfig>() {
+			@Override
+			public void onDone(AppConfig obj) {
+				System.out.print("同步appconfig成功");
+				//避免在startupactivit中进行重复检测
+				if (!(BaseActivity.this instanceof StartUpActivity)){
+					checkUpdate();
+				}
+			}
+
+			@Override
+			public void onException(int excepCode) {
+				System.out.print("同步appconfig失败");
+			}
+		});
+	}
 	protected void checkUpdate() {
 		mSystemBussiness.checkUpdate(BaseActivity.this,new SystemBussiness.CheckUpdateListener(){
 

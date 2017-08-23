@@ -254,44 +254,6 @@ public class ViewCourier {
         executeInHomeActivity(SugarRecord.findById(MenuItem.class, menuId), homeBaseActivity);
     }
 
-    public static void openMenu(String menuId, final BaseActivity context) {
-
-        MenuItem menuItem = SugarRecord.findById(MenuItem.class, menuId);
-        String uri = menuItem.getUrl();
-        if (uri.equals(MenuItem.MENU_URL_BAOLIAO)) {
-            Intent intent = new Intent(context, BaoliaoActivity.class);
-            context.startActivity(intent);
-        } else if (uri.equals(MenuItem.MENU_URL_USER_ACCOUNT)) {
-            String userId = AppContext.getInstance(context).getCurrentUser().getUserId();
-            Intent intent = null;
-            if (userId != null && !userId.equals("")) {// 已登录
-                intent = new Intent(context, UserCencerActivity.class);
-            } else {
-                intent = new Intent(context, LoginActivity.class);
-            }
-            context.startActivity(intent);
-        } else if (uri.equals(MenuItem.MENU_URL_LOGOUT)) {
-            new ConfirmDialog(context,
-                    new ConfirmDialog.ConfirmListener() {
-
-                        @Override
-                        public void onOkClick() {
-                            App app = AppContext.getInstance(context).getApp();
-                            if (app.getLoginFlag() == App.LOGIN_INAPP) {
-                                AppContext.getInstance(context).clearCurrentUser();
-                                context.finish();
-                            } else {
-                                context.sendBroadcast(new Intent(Actions.ACTION_LOGOUT));
-                            }
-                        }
-
-                        @Override
-                        public void onCancelClick() {
-
-                        }
-                    }, "确定注销登陆吗？", "取消", "注销").show();
-        }
-    }
 
     public static boolean openLoginViewIfNeeded(String url, BaseActivity context) {
         String apppubsloginFlag = StringUtils.getQueryParameter(url, "apppubslogin");
@@ -612,7 +574,7 @@ public class ViewCourier {
                 frg = new ExceptionFragment();
                 mHomeActivity.changeContent(frg);
             } else {
-                Toast.makeText(mHomeActivity, "应用类型不支持或者配置错误！", Toast.LENGTH_LONG).show();
+				execute(mHomeActivity,uri);
             }
 
 

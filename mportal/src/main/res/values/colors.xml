@@ -16,6 +16,7 @@
     <color name="common_item_bg_trans_h">#40333333</color>
     <color name="common_item_bg">#FFFFFF</color>
     <color name="common_item_bg_h">#E5E5E5</color>
+    <color name="gray_light">#E5E5E5</color>
     <color name="common_item_trans_bg">#30000000</color><!-- 点击时高亮透明颜色 -->
     <!--红色的提醒色-->
     <color name="common_notify_red">#ff4000</color>

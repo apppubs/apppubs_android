@@ -212,16 +212,16 @@ public class FileCacheManagerImpl implements FileCacheManager {
 			};
 		}
 
-		private String encodeFileName(String fileUrl) {
-			String[] arr = fileUrl.split("/");
-			String fileName = arr[arr.length-1];
-			String encodedFileName = null;
-			try {
-				encodedFileName = URLEncoder.encode(fileName,"UTF-8");
-			} catch (UnsupportedEncodingException e) {
-				e.printStackTrace();
+		private String encodeFileName(String fileUrl) throws UnsupportedEncodingException {
+			String zhPattern = "[[\u4e00-\u9fa5]|\\s|[\\uFE30-\\uFFA0]]+";
+			Pattern p = Pattern.compile(zhPattern);
+			Matcher m = p.matcher(fileUrl);
+			StringBuffer b = new StringBuffer();
+			while (m.find()) {
+				m.appendReplacement(b, URLEncoder.encode(m.group(0), "utf-8"));
 			}
-			return fileUrl.replace(fileName,encodedFileName.replace("+","%20"));
+			m.appendTail(b);
+			return b.toString();
 		}
 
 		public Runnable getOnDoneRunnable(final String filePath){
@@ -343,8 +343,12 @@ public class FileCacheManagerImpl implements FileCacheManager {
 								result = sb1.toString();
 								LogM.log(WebUtils.class, "result : " + result);
 								JSONResult jr = JSONResult.compile(result);
-								String str = (String) jr.getResultMap().get("photourl");
-								mHandler.post(getOnDoneRunnable(str));
+								if (jr.resultCode==1){
+									String str = (String) jr.getResultMap().get("photourl");
+									mHandler.post(getOnDoneRunnable(str));
+								}else{
+									mHandler.post(getOnDoneRunnable(null));
+								}
 
 							} else {
 								LogM.log(WebUtils.class, "request error");
