@@ -746,6 +746,7 @@ public class SystemBussiness extends BaseBussiness {
 			app.setAddressbookVersion(Integer.parseInt(resultMap.get("adbookversion")));
 			app.setAllowChat(Integer.parseInt(resultMap.get("chat_flag")));
 			AppConfig appconfig = (AppConfig) jsonResult.getResultObject(AppConfig.class);
+			app.setAppConfig(appconfig);
 
 			com.apppubs.d20.bean.UserInfo ui = AppContext.getInstance(mContext).getCurrentUser();
 			if (!TextUtils.isEmpty(ui.getUserId())&&appconfig.getAdbookAuthFlag()==1){

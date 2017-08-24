@@ -40,6 +40,8 @@ public class AppConfig implements Serializable{
 	private Integer adbookAuthFlag;
 	@SerializedName("chat_auth")
 	private Integer chatAuthFlag;
+	@SerializedName("about_properties")
+	private String aboutProperties;
 
     public AppConfig(){
         adbookRootId = "0";
@@ -172,6 +174,15 @@ public class AppConfig implements Serializable{
 	}
 
 	public void setChatAuthFlag(Integer chatAuthFlag) {
+
 		this.chatAuthFlag = chatAuthFlag;
+	}
+
+	public String getAboutProperties() {
+		return aboutProperties;
+	}
+
+	public void setAboutProperties(String aboutProperties) {
+		this.aboutProperties = aboutProperties;
 	}
 }
