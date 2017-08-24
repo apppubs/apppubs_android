@@ -72,7 +72,9 @@ public class ActionSheetFragment extends Fragment {
 		InputMethodManager manager = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
 		if (manager.isActive()) {
 			View focusView = getActivity().getCurrentFocus();
-			manager.hideSoftInputFromWindow(focusView.getWindowToken(), 0);
+			if (focusView!=null){
+				manager.hideSoftInputFromWindow(focusView.getWindowToken(), 0);
+			}
 		}
 
 		realView = inflater.inflate(R.layout.frg_myfile_actionsheet, container, false);

@@ -10,7 +10,15 @@ import java.util.List;
 
 public interface FileCacheManager {
 
+	/**
+	 * @deprecated void cacheFile(String fileUrl, String fileName,CacheListener listener) 代替
+	 * @param fileUrl
+	 * @param listener
+	 */
+	@Deprecated
 	void cacheFile(String fileUrl, CacheListener listener);
+
+	void cacheFile(String fileUrl, String fileName,CacheListener listener);
 
 	void cacheFiles(List<String> fileUrls, CacheListener listener);
 

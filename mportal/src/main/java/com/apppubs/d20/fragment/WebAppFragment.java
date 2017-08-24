@@ -452,12 +452,33 @@ public class WebAppFragment extends BaseFragment implements OnClickListener {
 				if (!TextUtils.isEmpty(cookieStr)){
 					url += "&"+cookieStr;
 				}
-				if (!TextUtils.isEmpty(contentDisposition)){
-
-				}
 				Bundle args = new Bundle();
+				String fileName = fetchFileName(contentDisposition);
+				if (!TextUtils.isEmpty(fileName)){
+					args.putString(FilePreviewFragment.ARGS_FILE_NAME,fileName);
+				}
 				args.putString(FilePreviewFragment.ARGS_STRING_URL,url);
+				args.putString(ContainerActivity.EXTRA_STRING_TITLE,"文件预览");
 				ContainerActivity.startActivity(getContext(),FilePreviewFragment.class,args);
+			}
+
+			private String fetchFileName(String contentDisposition) {
+				if (!TextUtils.isEmpty(contentDisposition)){
+					Pattern pattern = Pattern.compile("filename=\"(.*?)\"",Pattern.DOTALL);
+					Matcher matcher = pattern.matcher(contentDisposition);
+					while (matcher.find()){
+						String fileName = null;
+						if(!TextUtils.isEmpty(fileName=matcher.group(1))){
+							try {
+								fileName = URLDecoder.decode(fileName,"utf-8");
+								return  fileName;
+							} catch (UnsupportedEncodingException e) {
+								e.printStackTrace();
+							}
+						}
+					}
+				}
+				return null;
 			}
 		});
 

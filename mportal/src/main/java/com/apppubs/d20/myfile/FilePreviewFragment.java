@@ -10,6 +10,7 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -150,6 +151,26 @@ public class FilePreviewFragment extends BaseFragment {
 		mFileLocalPath = fileUrl;
 		mPreViewBtn.setVisibility(View.VISIBLE);
 		previewFile(mFileLocalPath);
+		mTitleBar.addRightBtnWithImageResourceIdAndClickListener(R.drawable.menu_more, new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				showMoreActionSheet();
+			}
+		});
+	}
+
+	private void showMoreActionSheet() {
+		ActionSheetFragment.build(getFragmentManager()).setChoice(ActionSheetFragment.Builder.CHOICE.GRID).setTitle(mFileName).setTag("MainActivity")
+				.setItems(new String[]{"其他应用打开"}).setImages(
+				new int[]{R.drawable.myfile_forward, R.drawable.myfile_delete}).setOnItemClickListener(new ActionSheetFragment.OnItemClickListener() {
+			@Override
+			public void onItemClick(int position) {
+				Log.v(MyFileFragment.class.getName(), "点击菜单" + position);
+				 if(position==0){
+					 previewFile(mFileLocalPath);
+				}
+			}
+		}).show();
 	}
 
 	@Override
@@ -217,7 +238,7 @@ public class FilePreviewFragment extends BaseFragment {
 	}
 
 	private void downloadFile() {
-		mFileCacheManager.cacheFile(mFileUrl, new CacheListener() {
+		mFileCacheManager.cacheFile(mFileUrl, mFileName,new CacheListener() {
 			@Override
 			public void onException(FileCacheErrorCode e) {
 				if (!e.equals(FileCacheErrorCode.DOWNLOAD_CANCELED)) {
@@ -299,7 +320,7 @@ public class FilePreviewFragment extends BaseFragment {
 
 		File sourceFile = new File(path);
 		if (mFileType == FILE_TYPE_TXT) {
-			displayTXT(sourceFile);
+			displayTXTWithExternalApp(sourceFile);
 		} else if (mFileType == FILE_TYPE_PDF) {
 			displayPdf(sourceFile);
 		} else if (mFileType == FILE_TYPE_DOC) {
@@ -387,6 +408,22 @@ public class FilePreviewFragment extends BaseFragment {
 		}
 	}
 
+	private void displayTXTWithExternalApp(final File sourceFile) {
+		try {
+
+			Uri path = Uri.fromFile(sourceFile);
+			Intent intent = new Intent(Intent.ACTION_VIEW);
+			intent.setDataAndType(path, "text/plain");
+			intent.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
+			startActivity(intent);
+
+		} catch (Exception e) {
+			e.printStackTrace();
+			showInstallAppDialog("请安装PDF阅读器！");
+		}
+	}
+
+
 	// 将下载的文本显示
 	private void displayTXT(File file) {
 		StringBuilder sb = new StringBuilder();
@@ -457,7 +494,7 @@ public class FilePreviewFragment extends BaseFragment {
 			public void onclick() {
 
 			}
-		}, "提示信息", message, "确定").show();
+		}, message, message, "确定").show();
 	}
 
 	private void showSelectiveDialog(String message) {

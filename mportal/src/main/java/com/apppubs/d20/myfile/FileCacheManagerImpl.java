@@ -86,11 +86,19 @@ public class FileCacheManagerImpl implements FileCacheManager {
 
 	@Override
 	public void cacheFile(String fileUrl,CacheListener listener){
+		cacheFile(fileUrl,null,listener);
+	}
+
+	@Override
+	public void cacheFile(String fileUrl, String fileName, CacheListener listener) {
 		if (TextUtils.isEmpty(fileUrl)){
 			return;
 		}
+		if (TextUtils.isEmpty(fileName)){
+			fileName = getFileName(fileUrl);
+		}
 		cancelCacheFile(fileUrl);
-		CacheTask task = new CacheTask(fileUrl,mHandler,listener);
+		CacheTask task = new CacheTask(fileUrl,fileName,mHandler,listener);
 		mTaskMap.put(fileUrl,task);
 		mExecutorService.execute(task.getTaskRunnable());
 	}
@@ -113,13 +121,15 @@ public class FileCacheManagerImpl implements FileCacheManager {
 
 	private class CacheTask implements CacheTaskInterface{
 		private String mFileUrl;
+		private String mFileName;
 		private Handler mHandler;
 		private CacheListener mListener;
 		private boolean mIsCancel;
-		CacheTask(String fileUrl,Handler handler,CacheListener listener){
+		CacheTask(String fileUrl,String fileName,Handler handler,CacheListener listener){
 			mHandler = handler;
 			mFileUrl = fileUrl;
 			mListener = listener;
+			mFileName = fileName;
 		}
 
 		@Override
@@ -144,7 +154,7 @@ public class FileCacheManagerImpl implements FileCacheManager {
 						Log.v("FileCacheManager","响应码："+conn.getResponseCode()+"");
 						if (conn.getResponseCode() / 100 == 2) {
 							long pre = System.currentTimeMillis();
-							desTempFile = getTempDesFile(mFileUrl);
+							desTempFile = getTempDesFile();
 							bis = new BufferedInputStream(conn.getInputStream(), 32 * 1024);
 							bos = new BufferedOutputStream(new FileOutputStream(desTempFile), 64 * 1024);
 							InputStream is = conn.getInputStream();
@@ -176,7 +186,7 @@ public class FileCacheManagerImpl implements FileCacheManager {
 								}
 							}
 							//下载完成
-							File desFile = getDesFile(mFileUrl);
+							File desFile = getDesFile(mFileName);
 							desTempFile.renameTo(desFile);
 							FileCacheDataHelper.getInstance().put(mFileUrl,desFile.getAbsolutePath());
 							mHandler.post(getOnProgressRunnable(1,totalLen));
@@ -400,9 +410,9 @@ public class FileCacheManagerImpl implements FileCacheManager {
 	}
 
 	@NonNull
-	private File getDesFile(String fileUrl) throws APUnavailableException {
+	private File getDesFile(String fileName) throws APUnavailableException {
 		File cacheDir = getCacheDirFile();
-		File desFile = new File(cacheDir,getFileName(fileUrl));
+		File desFile = new File(cacheDir,fileName);
 		while (desFile.exists()){
 			desFile = getNextSameNameFile(desFile);
 		}
@@ -444,7 +454,7 @@ public class FileCacheManagerImpl implements FileCacheManager {
 		return "";
 	}
 
-	private File getTempDesFile (String fileUrl) throws APUnavailableException {
+	private File getTempDesFile () throws APUnavailableException {
 		File tempCacheDir = getCacheDirFile();
 		String fileName = UUID.randomUUID().toString().replaceAll("-","")+".temp";
 		return new File(tempCacheDir,fileName);
