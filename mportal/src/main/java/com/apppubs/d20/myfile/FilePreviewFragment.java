@@ -53,6 +53,7 @@ public class FilePreviewFragment extends BaseFragment {
 	public static final String ARGS_TEXT_CHARSET = "charset";
 	public static final String ARGS_FILE_NAME = "file_name";// 文件名
 	public static final String ARGS_BOOLEAN_SHARE_2_QQ = "share_2_qq";
+	public static final String ARGS_STRING_MIME_TYPE = "mime_type";
 
 	public static final int TEXT_CHARSET_UTF8 = 0;// 文本编码
 	public static final int TEXT_CHARSET_CBK = 1;// 文本编码
@@ -71,6 +72,7 @@ public class FilePreviewFragment extends BaseFragment {
 	private String mFileLocalPath;// 本地地址
 	private int mTextCharSet;
 	private String mFileName;// 文件名，如果没有传入的值，则从url中找出
+	private String mMIMEType;
 
 	private TextView mFileNameTv;
 	private ImageView mTypeIv;
@@ -83,20 +85,35 @@ public class FilePreviewFragment extends BaseFragment {
 	@Override
 	public void onAttach(Activity activity) {
 		super.onAttach(activity);
+		initData();
+		mFileCacheManager = AppContext.getInstance(mContext).getCacheManager();
+	}
+
+	private void initData() {
 		Bundle args = getArguments();
-		mFileUrl = args.getString(ARGS_STRING_URL);
+		mFileUrl = getFileUrl(args);
 		isEnableQQShare = args.getBoolean(ARGS_BOOLEAN_SHARE_2_QQ);
-		if (!TextUtils.isEmpty(mFileUrl)) {
-			mFileUrl = args.getString(ARGS_STRING_URL).replaceAll("\r|\n", "");
-		}
 		mFileLocalPath = args.getString(ARGS_STRING_FILE_LOCAL_PATH);
+		mFileName = getFileName(args);
+		mMIMEType = args.getString(ARGS_STRING_MIME_TYPE);
 		mFileType = getFileType(args);
 		mTextCharSet = args.getInt(ARGS_TEXT_CHARSET);
-		mFileName = args.getString(ARGS_FILE_NAME);
-		if (TextUtils.isEmpty(mFileName) && !TextUtils.isEmpty(mFileUrl)) {
-			mFileName = getFileName(mFileUrl);
+	}
+
+	private String getFileUrl(Bundle args) {
+		String fileUrl = args.getString(ARGS_STRING_URL);
+		if (!TextUtils.isEmpty(fileUrl)) {
+			fileUrl = fileUrl.replaceAll("\r|\n", "");
 		}
-		mFileCacheManager = AppContext.getInstance(mContext).getCacheManager();
+		return fileUrl;
+	}
+
+	private String getFileName(Bundle args) {
+		String fileName = args.getString(ARGS_FILE_NAME);
+		if (TextUtils.isEmpty(fileName) && !TextUtils.isEmpty(mFileUrl)) {
+			fileName = getFileName(mFileUrl);
+		}
+		return fileName;
 	}
 
 	private String getFileName(String fileUrl) {
@@ -109,9 +126,15 @@ public class FilePreviewFragment extends BaseFragment {
 
 	private int getFileType(Bundle args) {
 		int type = args.getInt(ARGS_INTEGER_FILE_TYPE);
-		// 默认如果未指定类型则从url中获取类型
+
 		if (type == FILE_TYPE_UNKNOW) {
-			type = parseFileTypeFromUrl(TextUtils.isEmpty(mFileUrl) ? mFileLocalPath : mFileUrl);
+			type = getFileTypeFromExtention(mFileUrl);
+		}
+		if (type==FILE_TYPE_UNKNOW){
+			type = getFileTypeFromExtention(mFileLocalPath);
+		}
+		if (type==FILE_TYPE_UNKNOW){
+			type = getFileTypeFromExtention(mFileName);
 		}
 		return type;
 	}
@@ -281,22 +304,23 @@ public class FilePreviewFragment extends BaseFragment {
 			default:
 				mTypeIv.setImageResource(R.drawable.file_preview_unknow);
 		}
-
 	}
 
-	private int parseFileTypeFromUrl(String url) {
+	private int getFileTypeFromExtention(String name) {
 
-		if (url.endsWith(".txt") || url.endsWith(".log")) {
+		if (TextUtils.isEmpty(name)){
+			return FILE_TYPE_UNKNOW;
+		}else if (name.endsWith(".txt") || name.endsWith(".log")) {
 			return FILE_TYPE_TXT;
-		} else if (url.endsWith(".pdf")) {
+		} else if (name.endsWith(".pdf")) {
 			return FILE_TYPE_PDF;
-		} else if (url.endsWith(".doc") || url.endsWith(".docx")) {
+		} else if (name.endsWith(".doc") || name.endsWith(".docx")) {
 			return FILE_TYPE_DOC;
-		} else if (url.endsWith(".xls") || url.endsWith(".xlsx")) {
+		} else if (name.endsWith(".xls") || name.endsWith(".xlsx")) {
 			return FILE_TYPE_EXCEL;
-		} else if (url.endsWith(".jpg") || url.endsWith(".png") || url.endsWith(".jpeg")) {
+		} else if (name.endsWith(".jpg") || name.endsWith(".png") || name.endsWith(".jpeg")) {
 			return FILE_TYPE_PIC;
-		} else if (url.endsWith(".ppt") || url.endsWith(".pptx")) {
+		} else if (name.endsWith(".ppt") || name.endsWith(".pptx")) {
 			return FILE_TYPE_PPT;
 		} else {
 			return FILE_TYPE_UNKNOW;
@@ -338,12 +362,12 @@ public class FilePreviewFragment extends BaseFragment {
 
 	private void displayOther(File sourceFile) {
 
+		Uri uri = Uri.fromFile(sourceFile);
 		try {
 			Intent intent = new Intent("android.intent.action.VIEW");
 			intent.addCategory("android.intent.category.DEFAULT");
 			intent.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
-			Uri uri = Uri.fromFile(sourceFile);
-			intent.setDataAndType(uri, "*/*");
+			intent.setDataAndType(uri, TextUtils.isEmpty(mMIMEType)?"*/*":mMIMEType);
 			mContext.startActivity(intent);
 		} catch (Exception e) {
 			showInstallAppDialog("打开错误！");
@@ -494,7 +518,7 @@ public class FilePreviewFragment extends BaseFragment {
 			public void onclick() {
 
 			}
-		}, message, message, "确定").show();
+		}, message, null, "确定").show();
 	}
 
 	private void showSelectiveDialog(String message) {

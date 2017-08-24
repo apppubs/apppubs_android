@@ -459,6 +459,7 @@ public class WebAppFragment extends BaseFragment implements OnClickListener {
 				}
 				args.putString(FilePreviewFragment.ARGS_STRING_URL,url);
 				args.putString(ContainerActivity.EXTRA_STRING_TITLE,"文件预览");
+				args.putString(FilePreviewFragment.ARGS_STRING_MIME_TYPE,mimetype);
 				ContainerActivity.startActivity(getContext(),FilePreviewFragment.class,args);
 			}
 

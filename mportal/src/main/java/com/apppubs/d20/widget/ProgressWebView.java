@@ -263,7 +263,10 @@ public class ProgressWebView extends BridgeWebView {
 			// LogM.log(this.getClass(), "progressWebView-->出现5xx异常错误");
 			// loadUrl("file:///android_asset/web/500.html");
 			// } error.html
-			// loadUrl("file:///android_asset/web/error.html");
+//			 loadUrl("file:///android_asset/web/error.html");
+			goBack();
+			reload();
+			Toast.makeText(getContext(),"访问发生错误！返回上一层",Toast.LENGTH_SHORT).show();
 			// Message msg=handler.obtainMessage();//发送通知，加入线程
 			// msg.what=1;//通知加载自定义404页面
 			// handler.sendMessage(msg);//通知发送！
