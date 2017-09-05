@@ -160,7 +160,7 @@ public class SystemBussiness extends BaseBussiness {
 		}
 	}
 
-	public Future<?> initSystem(final APResultCallback<Object> callback) {
+	public Future<?> initSystem(final APResultCallback<App> callback) {
 		LogM.log(this.getClass(), "系统初始化");
 
 		Runnable run = new Runnable() {
@@ -171,19 +171,19 @@ public class SystemBussiness extends BaseBussiness {
 				SQLiteDatabase db = SugarRecord.getDatabase();
 				try {
 					db.beginTransaction();
-					init();
+					App app = init();
 					db.setTransactionSuccessful();
 					isInitialized = true;
-					sHandler.post(new OnDoneRun<Object>(callback, null));
+					sHandler.post(new OnDoneRun<App>(callback, app));
 				} catch (JSONException e) {
 					clearDataBase(isFirst);
-					sHandler.post(new OnExceptionRun<Object>(callback));
+					sHandler.post(new OnExceptionRun<App>(callback));
 					e.printStackTrace();
 					return;
 
 				} catch (IOException e) {
 					clearDataBase(isFirst);
-					sHandler.post(new OnExceptionRun<Object>(callback));
+					sHandler.post(new OnExceptionRun<App>(callback));
 					e.printStackTrace();
 					return;
 				} catch (InterruptedException e) {
@@ -193,7 +193,7 @@ public class SystemBussiness extends BaseBussiness {
 					return;
 				} catch (Exception e) {
 					e.printStackTrace();
-					sHandler.post(new OnExceptionRun<Object>(callback));
+					sHandler.post(new OnExceptionRun<App>(callback));
 				} finally {
 					db.endTransaction();
 				}
@@ -330,7 +330,7 @@ public class SystemBussiness extends BaseBussiness {
 		});
 	}
 
-	private synchronized void init() throws IOException, InterruptedException, JSONException {
+	private synchronized App init() throws IOException, InterruptedException, JSONException {
 
 		// 如果是第一次初始化，无论那init个步骤出现问题都清空数据库重新初始化
 		App localApp = AppContext.getInstance(mContext).getApp();
@@ -358,16 +358,13 @@ public class SystemBussiness extends BaseBussiness {
 					//下一个需要做升级处理的版
 					break;
 			}
-			localApp.setPreWorkingVersion(Utils.getVersionCode(mContext));
-			localApp.setWelcomePlayed(false);
 		}
 		String url = String.format(URLs.URL_APPINFO, AppContext.getInstance(mContext).getCurrentUser().getOrgCode(),orientationFlag,deviceFlag,screenDimenFlag);
 		App remoteApp = WebUtils.request(url, App.class, "app");
 
 		LogM.log(this.getClass(),"当前启动次数"+localApp.getInitTimes());
 		if (localApp.getInitTimes() == 0) {
-			localApp = remoteApp;
-			localApp.setLayoutLocalScheme(localApp.getLayoutScheme());
+			localApp.setLayoutLocalScheme(remoteApp.getLayoutScheme());
 			mAppContext.getSettings().setTheme(remoteApp.getDefaultTheme());
 			mAppContext.setSettings(mAppContext.getSettings());
 			LogM.log(this.getClass(), "初始化颜色 appRemote.getDefaultTheme" + remoteApp.getDefaultTheme());
@@ -379,31 +376,31 @@ public class SystemBussiness extends BaseBussiness {
 			SugarRecord.deleteAll(Department.class);
 			SugarRecord.deleteAll(MsgRecord.class);
 			LogM.log(this.getClass(),"删除用户信息"+localApp.getInitTimes());
-		} else {
-			localApp.setAllModifyUserInfo(remoteApp.getAllModifyUserInfo());
-			localApp.setAllowChat(remoteApp.getAllowChat());
-			localApp.setAllowRegister(remoteApp.getAllowRegister());
-			localApp.setBaiduPushApiKey(remoteApp.getBaiduPushApiKey());
-			localApp.setBgPicURL(remoteApp.getBgPicURL());
-			localApp.setChannelupdatetime(remoteApp.getChannelUpdateTime());
-			localApp.setCode(remoteApp.getCode());
-			localApp.setContent(remoteApp.getContent());
-			localApp.setLatestVersion(remoteApp.getLatestVersion());
-			localApp.setLayoutScheme(remoteApp.getLayoutScheme());
-			localApp.setLoginFlag(remoteApp.getLoginFlag());
-			localApp.setLoginPicUrl(remoteApp.getLoginPicUrl());
-			localApp.setMenuGroupUpdateTime(remoteApp.getMenuGroupUpdateTime());
-			localApp.setMenuUpdateTime(remoteApp.getMenuUpdateTime());
-			localApp.setName(remoteApp.getName());
-			localApp.setStartUpPic(remoteApp.getStartUpPic());
-			localApp.setWebAppCode(remoteApp.getWebAppCode());
-			localApp.setNeedForceUploadAddressbook(remoteApp.getNeedForceUploadAddressbook());
-			localApp.setAddressbookVersion(remoteApp.getAddressbookVersion());
-			localApp.setWeatherDisplayFlag(remoteApp.getWeatherDisplayFlag());
-			localApp.setPushVendorType(remoteApp.getPushVendorType());
-			localApp.setDefaultServiceNoId(remoteApp.getDefaultServiceNoId());
-			localApp.setWebLoginUrl(remoteApp.getWebLoginUrl());
 		}
+		localApp.setAllModifyUserInfo(remoteApp.getAllModifyUserInfo());
+		localApp.setAllowChat(remoteApp.getAllowChat());
+		localApp.setAllowRegister(remoteApp.getAllowRegister());
+		localApp.setBaiduPushApiKey(remoteApp.getBaiduPushApiKey());
+		localApp.setBgPicURL(remoteApp.getBgPicURL());
+		localApp.setChannelupdatetime(remoteApp.getChannelUpdateTime());
+		localApp.setCode(remoteApp.getCode());
+		localApp.setContent(remoteApp.getContent());
+		localApp.setLatestVersion(remoteApp.getLatestVersion());
+		localApp.setLayoutScheme(remoteApp.getLayoutScheme());
+		localApp.setLoginFlag(remoteApp.getLoginFlag());
+		localApp.setLoginPicUrl(remoteApp.getLoginPicUrl());
+		localApp.setMenuGroupUpdateTime(remoteApp.getMenuGroupUpdateTime());
+		localApp.setMenuUpdateTime(remoteApp.getMenuUpdateTime());
+		localApp.setName(remoteApp.getName());
+		localApp.setStartUpPic(remoteApp.getStartUpPic());
+		localApp.setWebAppCode(remoteApp.getWebAppCode());
+		localApp.setNeedForceUploadAddressbook(remoteApp.getNeedForceUploadAddressbook());
+		localApp.setAddressbookVersion(remoteApp.getAddressbookVersion());
+		localApp.setWeatherDisplayFlag(remoteApp.getWeatherDisplayFlag());
+		localApp.setPushVendorType(remoteApp.getPushVendorType());
+		localApp.setDefaultServiceNoId(remoteApp.getDefaultServiceNoId());
+		localApp.setWebLoginUrl(remoteApp.getWebLoginUrl());
+		localApp.setCustomThemeColor(remoteApp.getCustomThemeColor());
 
 		boolean haveNewspaperMenu = false;// 是否有报纸菜单
 		// 如果菜单更新了则全部初始化
@@ -508,6 +505,8 @@ public class SystemBussiness extends BaseBussiness {
 		localApp.addStartupTime();
 		AppContext.getInstance(mContext).setApp(localApp);
 		AppContext.getInstance(mContext).serializeApp();
+
+		return localApp;
 	}
 
 	/**

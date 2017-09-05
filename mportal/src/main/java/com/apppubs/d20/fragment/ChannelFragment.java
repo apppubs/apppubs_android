@@ -74,7 +74,6 @@ public abstract class ChannelFragment extends BaseFragment{
 		i.putExtra(NewsInfoActivity.EXTRA_STRING_NAME_ID,infoId);
 		i.putExtra(NewsInfoActivity.EXTRA_STRING_NAME_CHANNELCODE,  channelCode);
 		mHostActivity.startActivity(i);
-		mHostActivity.overridePendingTransition(R.anim.slide_in_from_right, R.anim.slide_out_to_left);
 	}
 	
 }

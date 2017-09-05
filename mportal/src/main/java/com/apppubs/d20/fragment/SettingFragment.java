@@ -32,7 +32,7 @@ import com.android.volley.toolbox.Volley;
 import com.apppubs.d20.AppManager;
 import com.apppubs.d20.activity.AboutActivity;
 import com.apppubs.d20.activity.FeedbackActivity;
-import com.apppubs.d20.activity.StartUpActivity;
+import com.apppubs.d20.start.StartUpActivity;
 import com.apppubs.d20.model.APResultCallback;
 import com.apppubs.d20.model.SystemBussiness;
 import com.apppubs.d20.widget.ConfirmDialog;

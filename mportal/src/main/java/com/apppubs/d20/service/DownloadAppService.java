@@ -14,7 +14,7 @@ import android.widget.RemoteViews;
 import com.apppubs.d20.AppContext;
 import com.apppubs.d20.R;
 import com.apppubs.d20.activity.HomeSlideMenuActivity;
-import com.apppubs.d20.activity.StartUpActivity;
+import com.apppubs.d20.start.StartUpActivity;
 import com.apppubs.d20.constant.Constants;
 import com.apppubs.d20.exception.APUnavailableException;
 import com.apppubs.d20.model.CallbackResult;

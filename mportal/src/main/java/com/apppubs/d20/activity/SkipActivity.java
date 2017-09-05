@@ -4,6 +4,8 @@ import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 
+import com.apppubs.d20.start.StartUpActivity;
+
 public class SkipActivity extends Activity{
 
 	@Override

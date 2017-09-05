@@ -23,6 +23,7 @@ import android.util.SparseIntArray;
 
 import com.apppubs.d20.AppContext;
 import com.apppubs.d20.fragment.WebAppFragment;
+import com.apppubs.d20.start.StartUpActivity;
 import com.apppubs.d20.util.LogM;
 import com.apppubs.d20.R;
 import com.apppubs.d20.activity.BaseActivity;
@@ -219,7 +220,7 @@ public class MsgController {
 			} else {
 				intents = new Intent[2];
 				intents[0] = Intent.makeRestartActivityTask(new ComponentName(context,
-						com.apppubs.d20.activity.StartUpActivity.class));
+						StartUpActivity.class));
 
 				intents[1] = new Intent(context, com.apppubs.d20.activity.NewsInfoActivity.class);
 				String[] arr = msgInfo.split("\\|");
@@ -244,7 +245,7 @@ public class MsgController {
 			} else {
 				intents = new Intent[2];
 				intents[0] = Intent.makeRestartActivityTask(new ComponentName(context,
-						com.apppubs.d20.activity.StartUpActivity.class));
+						StartUpActivity.class));
 
 				intents[1] =  new Intent(context, com.apppubs.d20.activity.WebAppActivity.class);
 				Bundle extras = new Bundle();
@@ -264,7 +265,7 @@ public class MsgController {
 			} else {
 				intents = new Intent[2];
 				intents[0] = Intent.makeRestartActivityTask(new ComponentName(context,
-						com.apppubs.d20.activity.StartUpActivity.class));
+						StartUpActivity.class));
 				Intent intent = new Intent(context,com.apppubs.d20.activity.ContainerActivity.class);
 				intent.putExtra(ContainerActivity.EXTRA_FRAGMENT_CLASS_NAME, WebAppFragment.class.getName());
 				intent.putExtra(WebAppFragment.ARGUMENT_STRING_URL, msgInfo);
@@ -281,7 +282,7 @@ public class MsgController {
 			} else {
 				intents = new Intent[2];
 				intents[0] = Intent.makeRestartActivityTask(new ComponentName(context,
-						com.apppubs.d20.activity.StartUpActivity.class));
+						StartUpActivity.class));
 				intents[0].putExtra(BaseActivity.EXTRA_STRING_TITLE, title);
 				Intent intent = new Intent(context,com.apppubs.d20.activity.ChatActivity.class);
 				intent.putExtra(ChatActivity.EXTRA_STRING_CHAT_ID, sender);

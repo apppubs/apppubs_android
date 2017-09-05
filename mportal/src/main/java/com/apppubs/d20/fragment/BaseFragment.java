@@ -15,10 +15,11 @@ import android.widget.TextView;
 
 import com.android.volley.RequestQueue;
 import com.apppubs.d20.AppContext;
+import com.apppubs.d20.R;
 import com.apppubs.d20.activity.BaseActivity;
 import com.apppubs.d20.message.model.MsgBussiness;
-import com.apppubs.d20.model.SystemBussiness;
 import com.apppubs.d20.message.model.UserBussiness;
+import com.apppubs.d20.model.SystemBussiness;
 import com.apppubs.d20.widget.TitleBar;
 import com.nostra13.universalimageloader.core.ImageLoader;
 
@@ -94,6 +95,7 @@ public class BaseFragment extends Fragment implements  KeyEvent.Callback{
 		return false;
 	}
 
+
 	@Override
 	public boolean onKeyLongPress(int keyCode, KeyEvent event) {
 		
@@ -111,6 +113,13 @@ public class BaseFragment extends Fragment implements  KeyEvent.Callback{
 		
 		return false;
 	}
+
+	@Override
+	public void startActivity(Intent intent) {
+		super.startActivity(intent);
+		getActivity().overridePendingTransition(R.anim.slide_in_from_right, R.anim.slide_out_to_left);
+	}
+
 	/**
 	 * 填充某View下的某TextView
 	 * @param rootView TextView的父view
