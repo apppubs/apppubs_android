@@ -9,14 +9,9 @@ import android.os.CountDownTimer;
 import android.support.annotation.Nullable;
 import android.util.AttributeSet;
 import android.util.Log;
-import android.view.MotionEvent;
 import android.view.View;
 
-import com.apppubs.d20.util.LogM;
 import com.apppubs.d20.util.Utils;
-import com.nostra13.universalimageloader.cache.disc.impl.UnlimitedDiskCache;
-
-import okhttp3.internal.Util;
 
 /**
  * Created by zhangwen on 2017/9/4.
@@ -35,6 +30,8 @@ public class ProgressSkipView extends View implements View.OnClickListener{
 	private Paint mTextPaint;
 	private float mTextSize;
 	private float mProgress;
+
+	private boolean isCanceled;
 
 	private SkipListener mListener;
 
@@ -130,7 +127,7 @@ public class ProgressSkipView extends View implements View.OnClickListener{
 
 	public void startProgress(final long millis, SkipListener listener){
 		mListener = listener;
-		CountDownTimer timer = new CountDownTimer(millis,50) {
+		final CountDownTimer timer = new CountDownTimer(millis,50) {
 			@Override
 			public void onTick(long millisUntilFinished) {
 				mProgress= (millis-millisUntilFinished)/((float)millis);
@@ -139,6 +136,9 @@ public class ProgressSkipView extends View implements View.OnClickListener{
 
 			@Override
 			public void onFinish() {
+				if (isCanceled){
+					return;
+				}
 				mProgress = 1;
 				invalidate();
 				if (mListener!=null){
@@ -151,6 +151,7 @@ public class ProgressSkipView extends View implements View.OnClickListener{
 
 	@Override
 	public void onClick(View v) {
+		isCanceled = true;
 		if (mListener!=null){
 			mListener.onClick();
 		}
@@ -160,5 +161,7 @@ public class ProgressSkipView extends View implements View.OnClickListener{
 		void onClick();
 		void onComplete();
 	}
+
+
 
 }
