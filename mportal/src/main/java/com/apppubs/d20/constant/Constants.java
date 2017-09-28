@@ -24,6 +24,7 @@ public class Constants {
 	public static final String PAGE_COMPONENT_SINGLE_PIC_DEFAULT = "2001";//默认单图组件
 	public static final String PAGE_COMPONENT_PIC = "2002";//简单图片组件（只显示一张图）
 	public static final String PAGE_COMPONENT_SLIDE_PIC_DEFAULT = "3001";//默认滚动图组件
+	public static final String PAGE_COMPONENT_SLIDE_PIC_WITH_PAGE_CONTROL_ONLY = "3002";
 	public static final String PAGE_COMPONENT_PIC_TEXT_LIST_DEFAULT = "4001";//默认图文列表组件
 //	NSString *const kPageComponentPicListDefault = @"5001";//默认图片列表组件
 //	NSString *const kPageComponentVideoListDefault = @"6001";//默认视频列表组件
@@ -31,6 +32,7 @@ public class Constants {
 	public static final String PAGE_COMPONENT_ICON_LIST_DEFAULT = "8001";//默认图标列表组件(四列)
 	public static final String PAGE_COMPONENT_ICON_LIST_3_COLUMN = "8002";//默认图标列表组件(三列)
 	public static final String PAGE_COMPONENT_ICON_PURE_TEXT_LIST = "8003";//流式圆角关键词
+	public static final String PAGE_COMPONENT_ICON_LIST = "8004";
 	public static final String PAGE_COMPONENT_ICON_LIST_VERTICAL = "8010";//默认纵向图标列表
 	public static final String PAGE_COMPONENT_HOT_AREA_DEFAULT = "9001";//默认热区组件
 	public static final String PAGE_COMPONENT_HOT_AREA_SINGLE_PAGE = "9002";//单页热区组件

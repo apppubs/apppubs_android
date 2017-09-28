@@ -28,11 +28,10 @@ public class WMHHttpClientDefaultImpl implements WMHHttpClient {
 	@Override
 	public void GET(String pattern, Object[] params, final WMHRequestListener listener) {
 		String url  = String.format(pattern,params);
-		OkHttpClient okHttpClient = new OkHttpClient();
 		final Request request = new Request.Builder()
 				.url(url)
 				.build();
-		Call call = okHttpClient.newCall(request);
+		Call call = mOkHttpClient.newCall(request);
 		call.enqueue(new Callback() {
 			@Override
 			public void onFailure(Call call, IOException e) {

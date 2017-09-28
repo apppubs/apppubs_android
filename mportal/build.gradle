@@ -7,7 +7,7 @@ android {
         applicationId "com.apppubs.d20"
         minSdkVersion 14
         targetSdkVersion 23
-        versionCode 200020
+        versionCode 200021
         versionName "3.1.0"
         compileOptions {
             sourceCompatibility JavaVersion.VERSION_1_7
@@ -25,7 +25,7 @@ android {
                 APPCODE            : "U1504531770900",
                 BASE_URL           : "http://47.93.123.37:8080/",
                 DISPLAY_ORIENTATION: "1",
-                ENABLE_SPLASH_SKIP:true
+                ENABLE_SPLASH_SKIP:false
         ]
 
 
