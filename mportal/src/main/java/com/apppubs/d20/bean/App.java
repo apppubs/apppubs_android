@@ -169,12 +169,9 @@ public class App implements Serializable{
 
 	private AppConfig appConfig;
 
-	private boolean mWelcomePlayed;
-
 	public App(){
 		LogM.log(App.class,"初始化App");
-		mWelcomePlayed = false;
-		appConfig = new AppConfig();
+		init();
 	}
 
 	public boolean isDownload() {
@@ -536,14 +533,6 @@ public class App implements Serializable{
 		this.mMessageUnreadNum = mMessageUnreadNum;
 	}
 
-	public boolean isWelcomePlayed() {
-		return mWelcomePlayed;
-	}
-
-	public void setWelcomePlayed(boolean mWelcomePlayed) {
-		this.mWelcomePlayed = mWelcomePlayed;
-	}
-
 	@Override
 	public String toString() {
 		return "App{" +
@@ -592,7 +581,11 @@ public class App implements Serializable{
 				", paddingUrlOnHomeActivityStartUp='" + paddingUrlOnHomeActivityStartUp + '\'' +
 				", mMessageUnreadNum=" + mMessageUnreadNum +
 				", appConfig=" + appConfig +
-				", mWelcomePlayed=" + mWelcomePlayed +
 				'}';
+	}
+
+	public void init() {
+		this.setStartupTimes(0);
+		appConfig = new AppConfig();
 	}
 }

@@ -9,7 +9,6 @@ import android.util.Log;
 
 import com.apppubs.d20.AppContext;
 import com.apppubs.d20.activity.HomeBaseActivity;
-import com.apppubs.d20.activity.StartUpActivity;
 import com.apppubs.d20.bean.Msg;
 import com.apppubs.d20.model.MsgController;
 import com.apppubs.d20.util.LogM;

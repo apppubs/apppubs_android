@@ -38,6 +38,7 @@ public class SlidePicView extends RelativeLayout implements OnPageChangeListener
 	
 	public static final int STYLE_NORMAL = 0;//默认的样式，指示器在图片下方在图片上堆叠
 	public static final int STYLE_UNDER_PIC = 1;//指示器在图片下方且和图片不重叠
+	public static final int STYLE_PAGE_CONTROL_ONLY = 2;
 	
 	
 	private final static  float PIC_RATIO = 0.56f;
@@ -71,11 +72,6 @@ public class SlidePicView extends RelativeLayout implements OnPageChangeListener
 		void onClick(int pos,SlidePicItem item);
 	}
 	
-	public SlidePicView(Context  context,String channelCode){
-		super(context);
-		
-		 initViewPager(context);
-	}
 	public SlidePicView(Context context, AttributeSet attrs) {
 		super(context,attrs);
 		initViewPager(context);
@@ -117,31 +113,33 @@ public class SlidePicView extends RelativeLayout implements OnPageChangeListener
 	private void initViewPager(Context context){
 		
 	
-		int height =  mStyle==STYLE_NORMAL?mPicHeight:(int) (mPicHeight+(30+0.5)*mScale);
+		int height =  (mStyle==STYLE_NORMAL||mStyle==STYLE_PAGE_CONTROL_ONLY)?mPicHeight:(int) (mPicHeight+(30+0.5)*mScale);
 		this.setLayoutParams(new android.widget.AbsListView.LayoutParams(LayoutParams.MATCH_PARENT, height));
 		
 		mViewPager = new ViewPager(context);
 		mViewLp = new LayoutParams(LayoutParams.MATCH_PARENT, mPicHeight);
 		addView(mViewPager,mViewLp);
-		mTitleTv = new TextView(context);
+		if (mStyle==STYLE_NORMAL||mStyle==STYLE_UNDER_PIC){
+			mTitleTv = new TextView(context);
 //		mTitleTv.setFilters(new InputFilter[] { new InputFilter.LengthFilter(17) });
 //		mTitleTv.setShadowLayer(1, 3, 3, Color.BLACK);
-		if(mStyle==STYLE_NORMAL){
-			mTitleTv.setBackgroundResource(R.drawable.slide_pic_gradient_title_bg);
+			if(mStyle==STYLE_NORMAL){
+				mTitleTv.setBackgroundResource(R.drawable.slide_pic_gradient_title_bg);
+			}
+			mTitleTv.setGravity(Gravity.CENTER_VERTICAL);
+			mTitleTv.setPadding((int)(mScale*10), 0, (int)(mScale*80), 0);
+			mTitleTv.setTextColor(mTitleTextColor);
+			mTitleTv.setText("");
+			mTitleTv.setSingleLine();
+			mTitleTv.setEllipsize(TextUtils.TruncateAt.END);
+			mTitleTv.setTextSize(TypedValue.COMPLEX_UNIT_PX,mTitleTextSize);
+
+
+			mTitleTvLp = new LayoutParams(LayoutParams.MATCH_PARENT, (int)(mTitleTextSize*2));
+			mTitleTvLp.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM,RelativeLayout.TRUE);
+			addView(mTitleTv,mTitleTvLp);
 		}
-		mTitleTv.setGravity(Gravity.CENTER_VERTICAL);
-		mTitleTv.setPadding((int)(mScale*10), 0, (int)(mScale*80), 0);
-		mTitleTv.setTextColor(mTitleTextColor);
-		mTitleTv.setText("");
-		mTitleTv.setSingleLine();
-		mTitleTv.setEllipsize(TextUtils.TruncateAt.END);
-		mTitleTv.setTextSize(TypedValue.COMPLEX_UNIT_PX,mTitleTextSize);
-		
-		
-		mTitleTvLp = new LayoutParams(LayoutParams.MATCH_PARENT, (int)(mTitleTextSize*2));
-		mTitleTvLp.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM,RelativeLayout.TRUE);
-		addView(mTitleTv,mTitleTvLp);
-		
+
 		try {
 			Field mScroller = null;
 			mScroller = ViewPager.class.getDeclaredField("mScroller");
@@ -208,15 +206,20 @@ public class SlidePicView extends RelativeLayout implements OnPageChangeListener
 		List<ImageView> viewList = new ArrayList<ImageView>();
 		for(int i=-1;++i<mList.size();){
 			ImageView iv = new ImageView(mContext);
-			iv.setScaleType(ScaleType.CENTER_CROP);
+			if (mStyle==STYLE_PAGE_CONTROL_ONLY){
+				iv.setScaleType(ScaleType.FIT_XY);
+			}else{
+				iv.setScaleType(ScaleType.CENTER_CROP);
+			}
 			viewList.add(iv);
 		}
 		PagerAdapter adapter = new MyPagerAdapter(viewList);
 		mViewPager.setAdapter(adapter);
 		mViewPager.setOnPageChangeListener(SlidePicView.this);
 //		mViewPager.setCurrentItem(1,false);
-		if(mSize>0)
+		if(mSize>0&&mTitleTv!=null){
 			mTitleTv.setText(mList.get(0).title);
+		}
 	}
 
 	
@@ -312,7 +315,9 @@ public class SlidePicView extends RelativeLayout implements OnPageChangeListener
 		
 //		int pos = getPosition(position);
 //		mCurPos = pos;
-		mTitleTv.setText(mList.get(position).title);
+		if (mTitleTv!=null){
+			mTitleTv.setText(mList.get(position).title);
+		}
 //		if(position>mList.size()-2){
 //			position = mList.size()-3;
 //		}else if(position<2){

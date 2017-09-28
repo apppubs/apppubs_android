@@ -1,4 +1,4 @@
-package com.apppubs.d20.fragment;
+package com.apppubs.d20.page;
 
 import android.graphics.Color;
 import android.graphics.Rect;
@@ -43,6 +43,11 @@ import com.apppubs.d20.asytask.AsyTaskExecutor;
 import com.apppubs.d20.bean.UserInfo;
 import com.apppubs.d20.constant.Constants;
 import com.apppubs.d20.constant.URLs;
+import com.apppubs.d20.fragment.BaseFragment;
+import com.apppubs.d20.fragment.ChannelFragment;
+import com.apppubs.d20.fragment.ChannelFragmentFactory;
+import com.apppubs.d20.fragment.TitleMenuFragment;
+import com.apppubs.d20.fragment.WebAppFragment;
 import com.apppubs.d20.util.FileUtils;
 import com.apppubs.d20.util.JSONResult;
 import com.apppubs.d20.util.LogM;
@@ -74,7 +79,7 @@ import java.util.UUID;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public class PageFragment extends TitleMenuFragment implements OnClickListener{
+public class PageFragment extends TitleMenuFragment implements OnClickListener,IPageView{
 
 	public static final String EXTRA_STRING_NAME_PAGE_ID = "page_id";
 	public static final String CUSTOM_WEB_APP_URL_SERIALIZED_FILE_NAME = "custom_web_app_url_map";
@@ -95,48 +100,55 @@ public class PageFragment extends TitleMenuFragment implements OnClickListener{
 	private LinearLayout mColumnView;
 	private List<String> mSelectedTabs;
 	private List<String> mUnselectedTabs;
-	
+
+	private TitleBar mTitleBar;
+	private PagePresenter mPresenter;
 	
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		mAnchorPointerViewList = new ArrayList<View>();
+		mPresenter = new PagePresenter(mContext,this);
+
 	}
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+
 		Bundle bundle = getArguments();
 		if(bundle!=null){
 			mPageId = bundle.getString(EXTRA_STRING_NAME_PAGE_ID);
 		}
 		initRootView();
+		mPresenter.onCreateView();
 		return mRootView;
 	}
 
 	@Override
 	public void onResume() {
 		super.onResume();
-		loadRemoteData();
+//		loadRemoteData();
+
 	}
 
 	@Override
 	public void onHiddenChanged(boolean hidden) {
 		super.onHiddenChanged(hidden);
 		if(!hidden){
-			loadRemoteData();
+//			loadRemoteData();
+			mPresenter.onResume();
 		}
 	}
 	@Override
 	public void onActivityCreated(Bundle savedInstanceState) {
 		super.onActivityCreated(savedInstanceState);
 		mInflater = LayoutInflater.from(mContext);
-		loadCache();
-		loadRemoteData();
+//		loadCache();
+//		loadRemoteData();
 	}
 
 	@Override
 	public void onDestroyView() {
 		super.onDestroyView();
-		
 	}
 	
 	private void loadCache() {
@@ -211,12 +223,12 @@ public class PageFragment extends TitleMenuFragment implements OnClickListener{
 		
 		mRootLl.removeAllViews();
 		//解析titlebar
-		if(info.has("titlebar")){
-			TitleBar titlebar = buildTitleBar(info);
-			titlebar.setId(R.id.page_title);
-			LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(LayoutParams.MATCH_PARENT, getResources().getDimensionPixelSize(R.dimen.title_height));
-			mRootLl.addView(titlebar,lp);
-		}
+//		if(info.has("titlebar")){
+//			TitleBar titlebar = buildTitleBar(info);
+//			titlebar.setId(R.id.page_title);
+//			LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(LayoutParams.MATCH_PARENT, getResources().getDimensionPixelSize(R.dimen.title_height));
+//			mRootLl.addView(titlebar,lp);
+//		}
 		
 		//优先级1.导航，2.webview，3.components
 		if(info.has("navbar")){
@@ -237,7 +249,7 @@ public class PageFragment extends TitleMenuFragment implements OnClickListener{
 			}
 			refreshFragmentsScrollView(urls);
 		}else{
-			renderContent(info);
+//			renderContent(info);
 		}
 	
 	}
@@ -486,7 +498,7 @@ public class PageFragment extends TitleMenuFragment implements OnClickListener{
 			mContentRL.removeView(mColumnView);
 		}
 	}
-	
+
 	class OnUnselectItemClickListener implements OnClickListener{
 		ViewGroup mUnselectContainer;
 		DraggableGridView mDragGridView;
@@ -508,7 +520,7 @@ public class PageFragment extends TitleMenuFragment implements OnClickListener{
 		}
 	}
 	
-	private void renderContent(JSONObject info) throws JSONException {
+	private void renderContent(PageNormalContentModel model) throws JSONException {
 		ScrollView sv = new ScrollView(mContext);
 		mScrollView = sv;
 		sv.setBackgroundResource(R.color.window_color);
@@ -519,7 +531,7 @@ public class PageFragment extends TitleMenuFragment implements OnClickListener{
 		mContainerLl.setOrientation(LinearLayout.VERTICAL);
 		FrameLayout.LayoutParams llLp = new FrameLayout.LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT);
 		mScrollView.addView(mContainerLl, llLp);
-		JSONArray jsonArr = info.getJSONArray("components");
+		JSONArray jsonArr = model.getComponents();
 		for (int i=-1;++i<jsonArr.length();) {
 			JSONObject component = jsonArr.getJSONObject(i);
 			String comType = component.getString("comtype");
@@ -616,6 +628,30 @@ public class PageFragment extends TitleMenuFragment implements OnClickListener{
 				spv.setData(list);
 				
 				mContainerLl.addView(spv);
+			}else if(comType.equals(Constants.PAGE_COMPONENT_SLIDE_PIC_WITH_PAGE_CONTROL_ONLY)){
+				float ratio = (float) component.getDouble("widthheightratio");
+				SlidePicView spv = new SlidePicView(mContext,SlidePicView.STYLE_PAGE_CONTROL_ONLY,ratio);
+				spv.setBackgroundColor(Color.WHITE);
+				List<SlidePicView.SlidePicItem> list = new ArrayList<SlidePicView.SlidePicItem>();
+				JSONArray items = component.getJSONArray("items");
+				for(int j=-1;++j<items.length();){
+					SlidePicView.SlidePicItem sp = new SlidePicView.SlidePicItem();
+					JSONObject item = items.getJSONObject(j);
+					sp.picURL = item.getString("picurl");
+					sp.linkValue = item.getString("url");
+					list.add(sp);
+				}
+				spv.setOnItemClickListener(new SlidePicView.OnItemClickListener() {
+
+					@Override
+					public void onClick(int pos, SlidePicView.SlidePicItem item) {
+						resolveUrl(item.linkValue);
+					}
+				});
+				spv.setData(list);
+
+				mContainerLl.addView(spv);
+
 			}else if(comType.equals(Constants.PAGE_COMPONENT_ICON_LIST_DEFAULT)){
 				JSONArray items = component.getJSONArray("items");
 				FrameLayout fl = new FrameLayout(mHostActivity);
@@ -993,73 +1029,44 @@ public class PageFragment extends TitleMenuFragment implements OnClickListener{
 		return hotAreas;
 	}
 	
-	private TitleBar buildTitleBar(JSONObject info) throws JSONException {
-		JSONObject titleJson = info.getJSONObject("titlebar");
+	private TitleBar buildTitleBar(TitleBarModel model) {
+		if (model==null){
+			return null;
+		}
 		TitleBar titlebar = null;
-		if(titleJson.getString("titletype").equals("0")){
+		if(model.getType().equals("0")){
 			titlebar = new TitleBar(mContext);
-			String title = titleJson.getString("title");
-			if (title.contains("$truename")){
-				title = title.replaceAll("\\$truename", AppContext.getInstance(mContext).getCurrentUser().getTrueName());
-			}
+			String title = model.getTitle();
 			titlebar.setTitle(title);
 			titlebar.setTitleTextSize(TypedValue.COMPLEX_UNIT_PX, getResources().getDimension(R.dimen.title_text_size));
-			String colorStr = titleJson.getString("bgcolor");
-			if(!TextUtils.isEmpty(colorStr)){
-				titlebar.setBackgroundColor(Color.parseColor(colorStr));
-				//浅色背景配黑色字体
-				int color = Color.parseColor(titleJson.getString("bgcolor"));
-				if(isLightColor(color)){
-					if(Color.parseColor(colorStr)==mHostActivity.getThemeColor()){
-						titlebar.setTitleTextColor(Color.BLACK);
-					}else{
-						titlebar.setTitleTextColor(mHostActivity.getThemeColor());
-					}
+			titlebar.setBackgroundColor(model.getBgColor());
+			if(isLightColor(model.getBgColor())){
+				if(model.getBgColor()==mHostActivity.getThemeColor()){
+					titlebar.setTitleTextColor(Color.BLACK);
 				}else{
-					titlebar.setTitleTextColor(Color.WHITE);
+					titlebar.setTitleTextColor(mHostActivity.getThemeColor());
 				}
 			}else{
-				titlebar.setBackgroundColor(Color.TRANSPARENT);
+				titlebar.setTitleTextColor(Color.WHITE);
 			}
-			
+
+
 			//显示图片
-			if(titleJson.has("titleimgurl")){
-				String titleImgUrl = titleJson.getString("titleimgurl");
-				if(!TextUtils.isEmpty(titleImgUrl)){
-					ImageView iv = new ImageView(mContext);
-					iv.setScaleType(ScaleType.CENTER_INSIDE);
-					mImageLoader.displayImage(titleImgUrl, iv);
-					titlebar.setTitleView(iv);
-				}
+			if(!TextUtils.isEmpty(model.getTitleImgUrl())){
+				ImageView iv = new ImageView(mContext);
+				iv.setScaleType(ScaleType.CENTER_INSIDE);
+				mImageLoader.displayImage(model.getTitleImgUrl(), iv);
+				titlebar.setTitleView(iv);
 			}
 			//显示左边按钮
-			if(titleJson.has("leftbtnimgurl")){
-				String leftBtnImgUrl = titleJson.getString("leftbtnimgurl");
-				if(!TextUtils.isEmpty(leftBtnImgUrl)){
-					String btnUrl = null;
-					if(titleJson.has("leftbtnurl")){
-						btnUrl = titleJson.getString("leftbtnurl");
-					}
-					titlebar.addLeftBtnWithImageUrlAndClickListener(leftBtnImgUrl, btnUrl, PageFragment.this);
-				}
+			if(!TextUtils.isEmpty(model.getLeftImgUrl())){
+				titlebar.addLeftBtnWithImageUrlAndClickListener(model.getLeftImgUrl(), model.getLeftAction(), PageFragment.this);
 			}
 			//显示右边按钮
-			if(titleJson.has("rightbtnimgurl")){
-				String rightBtnImgUrl = titleJson.getString("rightbtnimgurl");
-				if(!TextUtils.isEmpty(rightBtnImgUrl)){
-					String btnUrl = null;
-					if(titleJson.has("rightbtnurl")){
-						btnUrl = titleJson.getString("rightbtnurl");
-					}
-					titlebar.addRightBtnWithImageUrlAndClickListener(rightBtnImgUrl, btnUrl, PageFragment.this);
-				}
+			if(!TextUtils.isEmpty(model.getRightImgUrl())){
+				titlebar.addRightBtnWithImageUrlAndClickListener(model.getRightImgUrl(), model.getRightAction(), PageFragment.this);
 			}
-			if(titleJson.has("underlinecolor")){
-				String underLineColorStr = titleJson.getString("underlinecolor");
-				if(!TextUtils.isEmpty(underLineColorStr)){
-					titlebar.setUnderlineColor(Color.parseColor(underLineColorStr));
-				}
-			}
+			titlebar.setUnderlineColor(model.getUnderlineColor());
 		}
 		return titlebar;
 	}
@@ -1069,7 +1076,7 @@ public class PageFragment extends TitleMenuFragment implements OnClickListener{
 		float redRatio = ((colorWithoutAlpha&0xFF0000)>>16)/255.0f;
 		float greenRatio = ((colorWithoutAlpha&0x00FF00)>>8)/255.0f;
 		float blueRatio = (colorWithoutAlpha&0x0000FF)/255.0f;
-		return redRatio*greenRatio*blueRatio>0.9;
+		return redRatio*greenRatio*blueRatio>0.5;
 	}
 	/**
 	 * 增加20dp的空白行
@@ -1114,5 +1121,68 @@ public class PageFragment extends TitleMenuFragment implements OnClickListener{
 			}
 		}
 	}
-	
+
+	@Override
+	public void showTitleBar(TitleBarModel model) {
+
+		mRootLl.removeView(mTitleBar);
+		mTitleBar = buildTitleBar(model);
+		if (mTitleBar!=null){
+			mTitleBar.setId(R.id.page_title);
+			LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(LayoutParams.MATCH_PARENT, getResources().getDimensionPixelSize(R.dimen.title_height));
+			mRootLl.addView(mTitleBar,0,lp);
+		}
+	}
+
+	@Override
+	public void showContentView(PageContentModel model) {
+		if (model instanceof PageNormalContentModel){
+			try {
+				renderContent((PageNormalContentModel)model);
+			} catch (JSONException e) {
+				e.printStackTrace();
+			}
+		}else {
+			PageNavContentModel pageNav = (PageNavContentModel)model;
+			mContentRL = new RelativeLayout(mContext);
+			mRootLl.addView(mContentRL);
+			try {
+				refreshNav(pageNav.getNavBar());//刷新导航条
+			} catch (JSONException e) {
+				e.printStackTrace();
+			}
+			//构造viewpager
+			List<String> urls = new ArrayList<String>();
+			JSONArray items = pageNav.getNavItems();
+			for(String str:mSelectedTabs){
+				for(int i=-1;++i<items.length();){
+					try {
+
+						if(str.equals(items.getJSONObject(i).getString("title"))){
+							urls.add(items.getJSONObject(i).getString("url"));
+							break;
+						}
+					}catch (JSONException e){
+						e.printStackTrace();
+					}
+				}
+			}
+			try {
+				refreshFragmentsScrollView(urls);
+			} catch (JSONException e) {
+				e.printStackTrace();
+			}
+		}
+	}
+
+	@Override
+	public void showErrorView() {
+		Toast.makeText(mContext,"加载错误",Toast.LENGTH_SHORT).show();
+	}
+
+	@Override
+	public String getPageId() {
+		return mPageId;
+	}
+
 }

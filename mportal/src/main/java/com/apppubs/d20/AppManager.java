@@ -11,11 +11,12 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
-import com.apppubs.d20.activity.StartUpActivity;
+import com.apppubs.d20.start.StartUpActivity;
 import com.apppubs.d20.bean.App;
 import com.apppubs.d20.bean.Settings;
 import com.apppubs.d20.constant.URLs;
 import com.apppubs.d20.util.LogM;
+import com.apppubs.d20.util.Utils;
 import com.apppubs.d20.widget.ConfirmDialog;
 
 /**
@@ -48,15 +49,9 @@ public class AppManager {
 
 
     public void restart() {
-
-        Intent mStartActivity = new Intent(mContext, StartUpActivity.class);
-        mStartActivity.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-        int mPendingIntentId = 123456;
-        PendingIntent mPendingIntent = PendingIntent.getActivity(mContext, mPendingIntentId, mStartActivity,
-                PendingIntent.FLAG_CANCEL_CURRENT);
-        AlarmManager mgr = (AlarmManager) mContext.getSystemService(Context.ALARM_SERVICE);
-        mgr.set(AlarmManager.RTC, System.currentTimeMillis()+20 , mPendingIntent);
-        android.os.Process.killProcess(android.os.Process.myPid());
+        Intent intent = new Intent(mContext, StartUpActivity.class);
+		intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+		mContext.startActivity(intent);
     }
 
     public void switchLayout() {
@@ -87,7 +82,7 @@ public class AppManager {
                             AppContext.getInstance(context).setSettings(s);
                             mAppContext.clearCurrentUser();
                             App app = AppContext.getInstance(context).getApp();
-                            app.setStartupTimes(0);
+							app.init();
                             AppContext.getInstance(context).setApp(app);
 							AppContext.getInstance(context).serializeApp();
                             AppManager.getInstant(context).restart();
@@ -118,5 +113,9 @@ public class AppManager {
     }
 
 
-
+	public void destory() {
+		App app = mAppContext.getApp();
+		app.setPreWorkingVersion(Utils.getVersionCode(mContext));
+		mAppContext.serializeApp();
+	}
 }

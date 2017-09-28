@@ -14,11 +14,13 @@ import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.content.pm.PackageManager.NameNotFoundException;
+import android.graphics.Color;
 import android.graphics.Typeface;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.preference.PreferenceManager;
+import android.text.TextUtils;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.Gravity;
@@ -36,10 +38,20 @@ import com.apppubs.d20.bean.Collection;
 import com.orm.SugarRecord;
 
 public class Utils {
+
+	public static int parseColor(String colorStr){
+		try {
+			return Color.parseColor(colorStr);
+		}catch (IllegalArgumentException e){
+			e.printStackTrace();
+		}
+		return 0x000000;
+	}
+
 	private static Toast curToast;
 
 	/**
-	 * 
+	 *
 	 * @param context
 	 * @param info
 	 * @param millisecond
@@ -182,7 +194,21 @@ public class Utils {
 		return apiKey;
 	}
 
-	public static Integer getMetaDataInteger(Context context, String name) {
+	public static boolean getBooleanMetaValue(Context context,String metaKey){
+		boolean value = false;
+
+		PackageManager pm = context.getPackageManager();
+		try {
+			ApplicationInfo ai = pm.getApplicationInfo(context.getPackageName(), PackageManager.GET_META_DATA);
+			value = ai.metaData.getBoolean(metaKey);
+		} catch (Exception e) {
+			Log.d("mportal", "Couldn't find config value: " + metaKey);
+		}
+
+		return value;
+	}
+
+	public static Integer getIntegerMetaData(Context context, String name) {
 		Integer value = null;
 
 		PackageManager pm = context.getPackageManager();

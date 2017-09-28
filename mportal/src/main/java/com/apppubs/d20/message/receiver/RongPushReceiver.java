@@ -1,11 +1,9 @@
 package com.apppubs.d20.message.receiver;
 
 import android.content.Context;
-import android.content.Intent;
 
 import com.apppubs.d20.AppContext;
 import com.apppubs.d20.activity.HomeBaseActivity;
-import com.apppubs.d20.activity.StartUpActivity;
 
 import io.rong.push.notification.PushMessageReceiver;
 import io.rong.push.notification.PushNotificationMessage;

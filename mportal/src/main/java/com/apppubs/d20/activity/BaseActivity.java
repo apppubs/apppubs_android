@@ -42,6 +42,7 @@ import com.apppubs.d20.model.NewsBussiness;
 import com.apppubs.d20.model.PaperBussiness;
 import com.apppubs.d20.model.SystemBussiness;
 import com.apppubs.d20.service.DownloadAppService;
+import com.apppubs.d20.start.StartUpActivity;
 import com.apppubs.d20.util.JSONResult;
 import com.apppubs.d20.util.LogM;
 import com.apppubs.d20.util.Utils;
@@ -144,19 +145,18 @@ public abstract class BaseActivity extends FragmentActivity implements OnClickLi
 		}
 
 		// // 横竖屏 当方向标记为2,3时，平板为横屏，为3,4时手机为横屏
-		int orientationFlag = Utils.getMetaDataInteger(this, "DISPLAY_ORIENTATION");
+		int orientationFlag = Utils.getIntegerMetaData(this, "DISPLAY_ORIENTATION");
 		if (!Utils.isPad(this) && orientationFlag >= 3
 				|| (Utils.isPad(this) && (orientationFlag == 2 || orientationFlag == 3))) {
 			setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_REVERSE_LANDSCAPE);
 		}
 
-		System.out.println(Utils.getMetaDataInteger(this, "DISPLAY_ORIENTATION"));
+		System.out.println(Utils.getIntegerMetaData(this, "DISPLAY_ORIENTATION"));
 
 		TypedArray ta = obtainStyledAttributes(new int[] { R.attr.appDefaultColor });
 		mDefaultColor = ta.getColor(0, 0xffffff);
 		ta.recycle();
 
-		overridePendingTransition(R.anim.slide_in_from_right, R.anim.slide_out_to_left);
 		mImageLoader = ImageLoader.getInstance();
 		mApp = (MportalApplication) getApplication();
 
@@ -400,6 +400,12 @@ public abstract class BaseActivity extends FragmentActivity implements OnClickLi
 	public void finish() {
 		super.finish();
 		overridePendingTransition(R.anim.slide_in_from_left, R.anim.slide_out_to_right);
+	}
+
+	@Override
+	public void startActivity(Intent intent) {
+		super.startActivity(intent);
+		overridePendingTransition(R.anim.slide_in_from_right, R.anim.slide_out_to_left);
 	}
 
 	public TitleBar getTitleBar() {

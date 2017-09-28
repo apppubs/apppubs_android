@@ -16,6 +16,7 @@ import android.view.View;
 import android.widget.Toast;
 
 import com.apppubs.d20.AppContext;
+import com.apppubs.d20.AppManager;
 import com.apppubs.d20.bean.UserInfo;
 import com.apppubs.d20.constant.URLs;
 import com.apppubs.d20.home.CompelMessageDialogActivity;
@@ -361,7 +362,7 @@ public abstract class HomeBaseActivity extends BaseActivity {
 		mViewCourier.destory();
 		SharedPreferenceUtils.getInstance(this).putBoolean(MPORTAL_PREFERENCE_NAME, MPORTAL_PREFERENCE_APP_RUNNING_KEY, false);
 		unregisterReceiver(mLogoutBR);
-
+		AppManager.getInstant(this).destory();
 	}
 
 	private long lastClickTime = 0;

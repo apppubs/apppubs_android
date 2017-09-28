@@ -3,6 +3,7 @@ package com.apppubs.d20.fragment;
 import java.io.IOException;
 import java.io.InputStream;
 
+import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.v4.view.PagerAdapter;
@@ -18,8 +19,7 @@ import android.widget.ImageView;
 import android.widget.ImageView.ScaleType;
 import android.widget.RelativeLayout;
 
-import com.apppubs.d20.activity.HomeBaseActivity;
-import com.apppubs.d20.activity.StartUpActivity;
+import com.apppubs.d20.start.StartUpActivity;
 import com.apppubs.d20.util.Utils;
 import com.apppubs.d20.R;
 
@@ -102,8 +102,11 @@ public class WelcomeFragment extends BaseFragment implements OnPageChangeListene
 
 						@Override
 						public void onClick(View v) {
-							HomeBaseActivity.startHomeActivity(mHostActivity);
-							mHostActivity.finish();
+//							HomeBaseActivity.startHomeActivity(mHostActivity);
+//							mHostActivity.finish();
+							Intent i = new Intent(mContext,StartUpActivity.class);
+//							i.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP| Intent.FLAG_ACTIVITY_NEW_TASK);
+							startActivity(i);
 						}
 					});
 				} else {

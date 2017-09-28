@@ -19,6 +19,7 @@ import android.view.WindowManager;
 import com.apppubs.d20.activity.ContainerActivity;
 import com.apppubs.d20.activity.MessageEvent;
 import com.apppubs.d20.activity.UserInfoActivity;
+import com.apppubs.d20.bean.App;
 import com.apppubs.d20.constant.Constants;
 import com.apppubs.d20.model.APResultCallback;
 import com.apppubs.d20.model.SystemBussiness;
@@ -41,6 +42,7 @@ import java.io.ObjectOutputStream;
 import java.util.ArrayList;
 import java.util.List;
 
+import cn.jpush.android.api.JPushInterface;
 import io.rong.imkit.RongIM;
 import io.rong.imkit.manager.IUnReadMessageObserver;
 import io.rong.imlib.model.Conversation;
@@ -110,22 +112,8 @@ public class MportalApplication extends MultiDexApplication {
 		windowHeight = dm.heightPixels;
 		sContext = getApplicationContext();
 
-
-		SystemBussiness.getInstance(this).initSystem(new APResultCallback<Object>() {
-			@Override
-			public void onDone(Object obj) {
-				MessageEvent me = new MessageEvent();
-				me.tag = Constants.MESSAGE_EVENT_INIT_APP;
-				EventBus.getDefault().post(me);
-			}
-
-			@Override
-			public void onException(int excepCode) {
-				MessageEvent me = new MessageEvent();
-				me.tag = Constants.MESSAGE_EVENT_INIT_APP;
-				EventBus.getDefault().post(me);
-			}
-		});
+		JPushInterface.setDebugMode(true);
+		JPushInterface.init(this);
 	}
 
 
