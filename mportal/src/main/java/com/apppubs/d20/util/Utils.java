@@ -40,10 +40,12 @@ import com.orm.SugarRecord;
 public class Utils {
 
 	public static int parseColor(String colorStr){
-		try {
-			return Color.parseColor(colorStr);
-		}catch (IllegalArgumentException e){
-			e.printStackTrace();
+		if (!TextUtils.isEmpty(colorStr)){
+			try {
+				return Color.parseColor(colorStr);
+			}catch (IllegalArgumentException e){
+				e.printStackTrace();
+			}
 		}
 		return 0x000000;
 	}
