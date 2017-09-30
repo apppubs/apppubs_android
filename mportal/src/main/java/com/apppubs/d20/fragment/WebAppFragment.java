@@ -450,7 +450,11 @@ public class WebAppFragment extends BaseFragment implements OnClickListener {
 				CookieManager cookieManager = CookieManager.getInstance();
 				String cookieStr = cookieManager.getCookie(url);
 				if (!TextUtils.isEmpty(cookieStr)){
-					url += "&"+cookieStr;
+					if (url.contains("?")){
+						url += "&"+cookieStr;
+					}else{
+						url += "?"+cookieStr;
+					}
 				}
 				Bundle args = new Bundle();
 				String fileName = fetchFileName(contentDisposition);
