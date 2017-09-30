@@ -720,6 +720,10 @@ public class PageFragment extends TitleMenuFragment implements OnClickListener,I
 				}
 				fl.addView(gl, lp1);
 				mContainerLl.addView(fl);
+			}else if(comType.equals(Constants.PAGE_COMPONENT_ICON_LIST)){
+				PageGridView gridView = new PageGridView(getContext());
+				
+				mContainerLl.addView(gridView);
 			}else if(comType.equals(Constants.PAGE_COMPONENT_ICON_PURE_TEXT_LIST)){
 				View view = LayoutInflater.from(mContext).inflate(R.layout.page_component_flow_tags, null);
 				view.setBackgroundColor(Color.WHITE);

@@ -26,6 +26,7 @@ public class Constants {
 	public static final String PAGE_COMPONENT_SLIDE_PIC_DEFAULT = "3001";//默认滚动图组件
 	public static final String PAGE_COMPONENT_SLIDE_PIC_WITH_PAGE_CONTROL_ONLY = "3002";
 	public static final String PAGE_COMPONENT_PIC_TEXT_LIST_DEFAULT = "4001";//默认图文列表组件
+	public static final String PAGE_COMPONENT_PIC_TEXT_LIST = "4002";
 //	NSString *const kPageComponentPicListDefault = @"5001";//默认图片列表组件
 //	NSString *const kPageComponentVideoListDefault = @"6001";//默认视频列表组件
 //	NSString *const kPageComponentAudioListDefault = @"7001";//默认音频列表组件
