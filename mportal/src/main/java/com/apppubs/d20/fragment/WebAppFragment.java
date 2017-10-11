@@ -43,10 +43,13 @@ import com.apppubs.multi_image_selector.MultiImageSelectorActivity;
 
 import org.json.JSONArray;
 import org.json.JSONException;
+import org.w3c.dom.Text;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.net.URLDecoder;
 import java.util.List;
 import java.util.regex.Matcher;
@@ -447,17 +450,21 @@ public class WebAppFragment extends BaseFragment implements OnClickListener {
 			@Override
 			public void onDownloadStart(String url, String userAgent, String contentDisposition, String mimetype,
 					long contentLength) {
+
+				String downloadUrl = url;
 				CookieManager cookieManager = CookieManager.getInstance();
 				String cookieStr = cookieManager.getCookie(url);
 				if (!TextUtils.isEmpty(cookieStr)){
 					if (url.contains("?")){
-						url += "&"+cookieStr;
+						downloadUrl += "&"+cookieStr;
 					}else{
-						url += "?"+cookieStr;
+						downloadUrl += "?"+cookieStr;
 					}
 				}
 				Bundle args = new Bundle();
-				String fileName = fetchFileName(contentDisposition);
+
+
+				String fileName = fetchFileName(contentDisposition,url);
 				if (!TextUtils.isEmpty(fileName)){
 					args.putString(FilePreviewFragment.ARGS_FILE_NAME,fileName);
 				}
@@ -467,7 +474,8 @@ public class WebAppFragment extends BaseFragment implements OnClickListener {
 				ContainerActivity.startActivity(getContext(),FilePreviewFragment.class,args);
 			}
 
-			private String fetchFileName(String contentDisposition) {
+			private String fetchFileName(String contentDisposition,String url) {
+
 				if (!TextUtils.isEmpty(contentDisposition)){
 					Pattern pattern = Pattern.compile("filename=\"(.*?)\"",Pattern.DOTALL);
 					Matcher matcher = pattern.matcher(contentDisposition);
@@ -482,7 +490,17 @@ public class WebAppFragment extends BaseFragment implements OnClickListener {
 							}
 						}
 					}
+				}else{
+					try {
+						URL urlO=new URL(url);
+						if (!TextUtils.isEmpty(urlO.getFile())){
+							return urlO.getFile().substring(urlO.getFile().lastIndexOf("/") + 1);
+						}
+					} catch (MalformedURLException e) {
+						e.printStackTrace();
+					}
 				}
+
 				return null;
 			}
 		});
