@@ -17,20 +17,14 @@ import android.view.View;
 import android.view.WindowManager;
 
 import com.apppubs.d20.activity.ContainerActivity;
-import com.apppubs.d20.activity.MessageEvent;
-import com.apppubs.d20.activity.UserInfoActivity;
-import com.apppubs.d20.bean.App;
+import com.apppubs.d20.adbook.UserInfoActivity;
 import com.apppubs.d20.constant.Constants;
-import com.apppubs.d20.model.APResultCallback;
-import com.apppubs.d20.model.SystemBussiness;
 import com.apppubs.d20.myfile.FilePreviewFragment;
 import com.apppubs.d20.util.MathUtils;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
 import com.orm.SugarContext;
-
-import org.greenrobot.eventbus.EventBus;
 
 import java.io.File;
 import java.io.FileInputStream;

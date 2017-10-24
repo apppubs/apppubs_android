@@ -7,7 +7,7 @@ android {
         applicationId "com.apppubs.d20"
         minSdkVersion 14
         targetSdkVersion 23
-        versionCode 200023
+        versionCode 200024
         versionName "3.1.0"
         compileOptions {
             sourceCompatibility JavaVersion.VERSION_1_7
@@ -22,8 +22,8 @@ android {
                 JPUSH_PKGNAME      : applicationId,
                 JPUSH_APPKEY       : "85358a757b2da7055f45f83c", //JPush上注册的包名对应的appkey.
                 JPUSH_CHANNEL      : "developer-default", //暂时填写默认值即可.
-                APPCODE            : "U1506402896715",
-                BASE_URL           : "http://218.26.223.169:18080/",
+                APPCODE            : "D20",
+                BASE_URL           : "http://202.99.19.140:8080/",
                 DISPLAY_ORIENTATION: "1",
                 ENABLE_SPLASH_SKIP:false
         ]

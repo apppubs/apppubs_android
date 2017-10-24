@@ -34,6 +34,8 @@ public class AppConfig implements Serializable{
     private int minSupportedVersionCode;
     @SerializedName("android_updateurl")
     private String updateUrl;
+	@SerializedName("android_version_alert")
+	private Integer needVersionAlertFlag;
 	@SerializedName("chat_flag")
 	private String chatFlag;
 	@SerializedName("adbookauth")
@@ -152,6 +154,14 @@ public class AppConfig implements Serializable{
     public void setUpdateUrl(String updateUrl) {
         this.updateUrl = updateUrl;
     }
+
+	public Integer getNeedVersionAlertFlag() {
+		return needVersionAlertFlag;
+	}
+
+	public void setNeedVersionAlertFlag(Integer needVersionAlertFlag) {
+		this.needVersionAlertFlag = needVersionAlertFlag;
+	}
 
 	public String getChatFlag() {
 		return chatFlag;

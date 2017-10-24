@@ -32,7 +32,7 @@ import com.android.volley.Response.Listener;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.apppubs.d20.AppContext;
-import com.apppubs.d20.activity.UserInfoActivity;
+import com.apppubs.d20.adbook.UserInfoActivity;
 import com.apppubs.d20.adapter.ViewHolder;
 import com.apppubs.d20.bean.App;
 import com.apppubs.d20.bean.AppConfig;

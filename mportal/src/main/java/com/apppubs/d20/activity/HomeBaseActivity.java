@@ -155,8 +155,6 @@ public abstract class HomeBaseActivity extends BaseActivity {
 
 	}
 
-	;
-
 	/**
 	 * 初始化天气信息
 	 */
@@ -235,37 +233,8 @@ public abstract class HomeBaseActivity extends BaseActivity {
 			}
 		}
 
+		mAppContext.showCompelMessageIfHave();
 
-		mAppContext.getHttpClient().GET(URLs.URL_COMPEL_READ_LIST,new String[]{mAppContext.getCurrentUser().getUsername()}, new WMHRequestListener(){
-
-			@Override
-			public void onDone(JSONResult jsonResult, @Nullable WMHHttpErrorCode errorCode) {
-				if (errorCode==null){
-					if (jsonResult.resultCode==1){
-						String infoListJson = "";
-						try {
-							JSONObject jo = new JSONObject(jsonResult.result);
-							infoListJson = jo.getString("infolist");
-							Log.v("HomeBaseActivity","infolist"+infoListJson);
-							List<CompelReadMessageModel> l = JSONUtils.parseListFromJson(infoListJson,CompelReadMessageModel.class);
-							if (l.isEmpty()){
-								return;
-							}
-							ArrayList<CompelReadMessageModel> list = new ArrayList<CompelReadMessageModel>(l);
-							Intent i = new Intent(HomeBaseActivity.this,CompelMessageDialogActivity.class);
-							i.putExtra(CompelMessageDialogActivity.EXTRA_DATAS,list);
-							startActivity(i);
-						} catch (JSONException e) {
-							e.printStackTrace();
-						}
-					}else{
-//						Log.e("HomeBaseActivity",jsonResult.reason);
-					}
-				}else{
-					Log.e("HomeBaseActivity",errorCode.getMessage());
-				}
-			}
-		});
 	}
 
 	@Override

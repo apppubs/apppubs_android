@@ -1,19 +1,36 @@
 package com.apppubs.d20;
 
+import android.app.ActivityManager;
 import android.content.Context;
+import android.content.Intent;
+import android.support.annotation.Nullable;
+import android.util.Log;
 
+import com.apppubs.d20.activity.HomeBaseActivity;
 import com.apppubs.d20.bean.App;
 import com.apppubs.d20.bean.AppConfig;
 import com.apppubs.d20.bean.Settings;
 import com.apppubs.d20.bean.User;
 import com.apppubs.d20.bean.UserInfo;
+import com.apppubs.d20.constant.URLs;
+import com.apppubs.d20.home.CompelMessageDialogActivity;
+import com.apppubs.d20.home.CompelReadMessageModel;
 import com.apppubs.d20.myfile.FileCacheManager;
 import com.apppubs.d20.myfile.FileCacheManagerImpl;
 import com.apppubs.d20.net.WMHHttpClient;
 import com.apppubs.d20.net.WMHHttpClientDefaultImpl;
 import com.apppubs.d20.net.WMHHttpErrorCode;
+import com.apppubs.d20.net.WMHRequestListener;
+import com.apppubs.d20.util.JSONResult;
+import com.apppubs.d20.util.JSONUtils;
 import com.apppubs.d20.util.LogM;
 import com.apppubs.d20.util.Utils;
+
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by zhangwen on 2017/2/22.
@@ -165,5 +182,39 @@ public class AppContext {
 			mHttpClient = new WMHHttpClientDefaultImpl();
 		}
 		return mHttpClient;
+	}
+
+	public void showCompelMessageIfHave(){
+
+		getHttpClient().GET(URLs.URL_COMPEL_READ_LIST,new String[]{getCurrentUser().getUsername()}, new WMHRequestListener(){
+
+			@Override
+			public void onDone(JSONResult jsonResult, @Nullable WMHHttpErrorCode errorCode) {
+				if (errorCode==null){
+					if (jsonResult.resultCode==1){
+						String infoListJson = "";
+						try {
+							JSONObject jo = new JSONObject(jsonResult.result);
+							infoListJson = jo.getString("infolist");
+							Log.v("HomeBaseActivity","infolist"+infoListJson);
+							List<CompelReadMessageModel> l = JSONUtils.parseListFromJson(infoListJson,CompelReadMessageModel.class);
+							if (l.isEmpty()){
+								return;
+							}
+							ArrayList<CompelReadMessageModel> list = new ArrayList<CompelReadMessageModel>(l);
+							Intent i = new Intent(mContext,CompelMessageDialogActivity.class);
+							i.putExtra(CompelMessageDialogActivity.EXTRA_DATAS,list);
+							mContext.startActivity(i);
+						} catch (JSONException e) {
+							e.printStackTrace();
+						}
+					}else{
+//						Log.e("HomeBaseActivity",jsonResult.reason);
+					}
+				}else{
+					Log.e("HomeBaseActivity",errorCode.getMessage());
+				}
+			}
+		});
 	}
 }

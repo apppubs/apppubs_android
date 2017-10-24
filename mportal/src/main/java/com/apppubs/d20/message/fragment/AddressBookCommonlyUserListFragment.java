@@ -16,7 +16,7 @@ import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
 
-import com.apppubs.d20.activity.UserInfoActivity;
+import com.apppubs.d20.adbook.UserInfoActivity;
 import com.apppubs.d20.bean.User;
 import com.apppubs.d20.fragment.BaseFragment;
 import com.apppubs.d20.R;

@@ -123,12 +123,13 @@ public class CompelMessageDialogActivity extends Activity implements View.OnClic
 
 	private void setWebViewContent(int index) {
 		String content = mDatas.get(index).getmContent();
-		mWebView.loadData(content,"text/html","UTF-8");
+		mWebView.getSettings().setDefaultTextEncodingName("utf-8");
+		mWebView.loadDataWithBaseURL(null, content, "text/html", "utf-8", null);
 	}
 
 	private void changeNextBtnByIndex(int index) {
 		if (isLastItem(index)){
-			mNextBtn.setText("完成");
+			mNextBtn.setText("关闭");
 			mNextBtn.setBackgroundColor(Color.parseColor("#ff4000"));
 			Drawable drawable = getResources().getDrawable(R.drawable.compel_message_alert_done_btn);
 			mNextBtn.setBackgroundResource(R.drawable.compel_message_alert_done_btn);

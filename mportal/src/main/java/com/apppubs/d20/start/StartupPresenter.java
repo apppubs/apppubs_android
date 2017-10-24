@@ -8,6 +8,7 @@ import com.apppubs.d20.AppContext;
 import com.apppubs.d20.bean.App;
 import com.apppubs.d20.model.APResultCallback;
 import com.apppubs.d20.model.SystemBussiness;
+import com.apppubs.d20.model.VersionInfo;
 import com.apppubs.d20.service.DownloadAppService;
 import com.apppubs.d20.util.Utils;
 
@@ -87,10 +88,10 @@ public class StartupPresenter {
 		mSystemBussiness.checkUpdate(mContext, new SystemBussiness.CheckUpdateListener() {
 
 			@Override
-			public void onDone(boolean needUpdate, boolean needForceUpdate, String version, String updateDescribe, final String updateUrl) {
-				if (needUpdate) {
-					String title = String.format("检查到有新版 %s", TextUtils.isEmpty(version) ? "" : "V" + version);
-					mView.showUpdateDialog(title, updateDescribe, updateUrl, needForceUpdate);
+			public void onDone(VersionInfo vi) {
+				if (vi.isNeedUpdate()&&vi.isNeedAlert()) {
+					String title = String.format("检查到有新版 %s", TextUtils.isEmpty(vi.getVersion()) ? "" : "V" + vi.getVersion());
+					mView.showUpdateDialog(title, vi.getUpdateDescribe(), vi.getUpdateUrl(), vi.isNeedForceUpdate());
 				}else{
 					boolean enableSkip = Utils.getBooleanMetaValue(mContext,"ENABLE_SPLASH_SKIP");
 					if (enableSkip){

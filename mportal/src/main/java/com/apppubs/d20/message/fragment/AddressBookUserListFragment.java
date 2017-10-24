@@ -18,7 +18,7 @@ import android.widget.TextView;
 
 import com.apppubs.d20.fragment.BaseFragment;
 import com.apppubs.d20.R;
-import com.apppubs.d20.activity.UserInfoActivity;
+import com.apppubs.d20.adbook.UserInfoActivity;
 import com.apppubs.d20.bean.User;
 
 public class AddressBookUserListFragment extends BaseFragment implements OnClickListener{

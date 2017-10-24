@@ -4,6 +4,7 @@ import android.content.Context;
 import android.os.Handler;
 
 import com.apppubs.d20.model.APResultCallback;
+import com.apppubs.d20.util.LogM;
 
 /**
  * Created by zhangwen on 2017/9/27.
@@ -22,7 +23,8 @@ public class PagePresenter {
 		mPageView = view;
 	}
 
-	public void onResume(){
+	public void onVisiable(){
+		LogM.log(this.getClass(),"可以显示了");
 	}
 
 	public void onCreateView(){

@@ -19,7 +19,7 @@ import android.widget.Toast;
 
 import com.apppubs.d20.R;
 import com.apppubs.d20.activity.BaseActivity;
-import com.apppubs.d20.activity.UserInfoActivity;
+import com.apppubs.d20.adbook.UserInfoActivity;
 import com.apppubs.d20.model.APResultCallback;
 import com.apppubs.d20.message.model.OperationRong;
 import com.apppubs.d20.message.model.UserBasicInfo;

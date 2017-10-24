@@ -149,7 +149,7 @@
             android:screenOrientation="portrait"
             android:windowSoftInputMode="adjustUnspecified|stateHidden"/>
         <activity
-            android:name=".activity.UserInfoActivity"
+            android:name=".adbook.UserInfoActivity"
             android:screenOrientation="portrait"/>
         <activity
             android:name=".activity.WeatherCitySelectActivity"

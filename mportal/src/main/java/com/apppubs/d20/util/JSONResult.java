@@ -56,6 +56,15 @@ public class JSONResult<T> {
 		return JSONUtils.parseJSON2StringMap(result);
 	}
 
+	public JSONObject getResultJSONObject(){
+		try {
+			return new JSONObject(result);
+		} catch (JSONException e) {
+			e.printStackTrace();
+		}
+		return null;
+	}
+
 	public T getResultObject(Class<T> clazz){
 		return JSONUtils.getGson().fromJson(result,clazz);
 	}

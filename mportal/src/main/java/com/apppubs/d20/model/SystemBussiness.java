@@ -1182,24 +1182,24 @@ public class SystemBussiness extends BaseBussiness {
 	}
 
 	public interface CheckUpdateListener{
-		void onDone(boolean needUpdate,boolean needForceUpdate,String version,String updateDescribe,String updateUrl);
+		void onDone(VersionInfo info);
 	}
 
 	public void checkUpdate(Context context,CheckUpdateListener listener){
 		AppConfig appConfig = AppContext.getInstance(mContext).getAppConfig();
-		boolean needUpdate = false;
-		boolean needForceupdate = false;
-		String versionDes = null;
 		if (appConfig!=null&&compareVersion(appConfig.getLatestVersion(),Utils.getVersionName(context))>0){
-			needUpdate = true;
+			VersionInfo vi = new VersionInfo();
+			vi.setNeedUpdate(true);
 			if (appConfig.getMinSupportedVersionCode()>Utils.getVersionCode(context)){
-				needForceupdate = true;
+				vi.setNeedForceUpdate(true);
 			}
-			versionDes = appConfig.getLatestVersionDescribe();
-			String version = appConfig.getLatestVersion();
-			listener.onDone(needUpdate,needForceupdate,version,versionDes,appConfig.getUpdateUrl());
+			vi.setUpdateDescribe(appConfig.getLatestVersionDescribe());
+			vi.setVersion(appConfig.getLatestVersion());
+			vi.setUpdateUrl(appConfig.getUpdateUrl());
+			vi.setNeedAlert(appConfig.getNeedVersionAlertFlag()==1);
+			listener.onDone(vi);
 		}else{
-			listener.onDone(needUpdate,needForceupdate,null,null,null);
+			listener.onDone(new VersionInfo());
 
 		}
 	}
@@ -1263,5 +1263,4 @@ public class SystemBussiness extends BaseBussiness {
 			return null;
 		}
 	}
-
 }

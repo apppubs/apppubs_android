@@ -21,7 +21,7 @@ import com.apppubs.d20.AppContext;
 import com.apppubs.d20.bean.UserInfo;
 import com.apppubs.d20.widget.LetterListView;
 import com.apppubs.d20.R;
-import com.apppubs.d20.activity.UserInfoActivity;
+import com.apppubs.d20.adbook.UserInfoActivity;
 import com.apppubs.d20.bean.User;
 import com.apppubs.d20.fragment.BaseFragment;
 

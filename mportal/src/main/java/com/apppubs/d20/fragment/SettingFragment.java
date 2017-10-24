@@ -32,6 +32,7 @@ import com.android.volley.toolbox.Volley;
 import com.apppubs.d20.AppManager;
 import com.apppubs.d20.activity.AboutActivity;
 import com.apppubs.d20.activity.FeedbackActivity;
+import com.apppubs.d20.model.VersionInfo;
 import com.apppubs.d20.start.StartUpActivity;
 import com.apppubs.d20.model.APResultCallback;
 import com.apppubs.d20.model.SystemBussiness;
@@ -83,14 +84,14 @@ public class SettingFragment extends TitleMenuFragment implements OnClickListene
 	private void initState1() {
 		mSystemBussiness.checkUpdate(mHostActivity, new SystemBussiness.CheckUpdateListener() {
 			@Override
-			public void onDone(boolean needUpdate, boolean needForceUpdate, String version, String updateDescribe, String updateUrl) {
-				isHaveNewVersion = needUpdate;
-				if (isHaveNewVersion) {
+			public void onDone(VersionInfo info) {
+				if (info.isNeedUpdate()) {
 					newVresion.setVisibility(View.VISIBLE);
 				} else {
 					newVresion.setVisibility(View.GONE);
 				}
 			}
+
 		});
 
         currentVersionTv=(TextView) mRootView.findViewById(R.id.settting_update_version);
@@ -404,10 +405,10 @@ public class SettingFragment extends TitleMenuFragment implements OnClickListene
 
 		mSystemBussiness.checkUpdate(mHostActivity, new SystemBussiness.CheckUpdateListener() {
 			@Override
-			public void onDone(boolean needUpdate, boolean needForceUpdate, String version, String updateDescribe, final String updateUrl) {
+			public void onDone(final VersionInfo vi) {
 
-				if (needUpdate) {
-					String title = String.format("检查到有新版 %s", TextUtils.isEmpty(version)?"":"V"+version);
+				if (vi.isNeedUpdate()) {
+					String title = String.format("检查到有新版 %s", TextUtils.isEmpty(vi.getVersion())?"":"V"+vi.getVersion());
 					newVresion.setVisibility(View.VISIBLE);
 					ConfirmDialog dialog = new ConfirmDialog(mHostActivity, new ConfirmDialog.ConfirmListener() {
 
@@ -418,13 +419,13 @@ public class SettingFragment extends TitleMenuFragment implements OnClickListene
 						@Override
 						public void onOkClick() {
 							Intent it = new Intent(mHostActivity, DownloadAppService.class);
-							it.putExtra(DownloadAppService.SERVICRINTENTURL, updateUrl);
+							it.putExtra(DownloadAppService.SERVICRINTENTURL, vi.getUpdateUrl());
 							it.putExtra(DownloadAppService.SERVACESHARENAME, 0);
 							mHostActivity.startService(it);
 							// bindService(it, conn, Context.BIND_AUTO_CREATE);
 							mUserBussiness.logout(mHostActivity);
 						}
-					}, title , updateDescribe, "下次", "更新");
+					}, title , vi.getUpdateDescribe(), "下次", "更新");
 					dialog.show();
 					dialog.setCanceledOnTouchOutside(false);
 				} else {

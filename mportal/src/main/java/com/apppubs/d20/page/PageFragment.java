@@ -126,16 +126,14 @@ public class PageFragment extends TitleMenuFragment implements OnClickListener,I
 	@Override
 	public void onResume() {
 		super.onResume();
-//		loadRemoteData();
-
+		mPresenter.onVisiable();
 	}
 
 	@Override
 	public void onHiddenChanged(boolean hidden) {
 		super.onHiddenChanged(hidden);
 		if(!hidden){
-//			loadRemoteData();
-			mPresenter.onResume();
+			mPresenter.onVisiable();
 		}
 	}
 	@Override
@@ -150,64 +148,7 @@ public class PageFragment extends TitleMenuFragment implements OnClickListener,I
 	public void onDestroyView() {
 		super.onDestroyView();
 	}
-	
-	private void loadCache() {
-		String url = getUrl();
-		if(mRequestQueue.getCache().get(url)!=null){
-			String cachedResponse = new String(mRequestQueue.getCache().get(url).data);
-			mCachedResponse = cachedResponse;
-			System.out.println("缓存中的："+cachedResponse);
-			try {
-				JSONResult jr = JSONResult.compile(cachedResponse);
-				parse(new JSONObject(jr.result));
-			} catch (Exception e1) {
-				e1.printStackTrace();
-			}
-		}
-	}
 
-	private String getUrl() {
-		UserInfo ui = mAppContext.getCurrentUser();
-		String url = null;
-		if (ui!=null){
-			url = String.format(URLs.URL_PAGE, mPageId,ui.getUserId());
-		}else{
-			url = String.format(URLs.URL_PAGE, mPageId,"");
-		}
-		return url;
-	}
-
-	private void loadRemoteData() {
-		String url = getUrl();
-
-		StringRequest request = new StringRequest(url, new Listener<String>() {
-
-			@Override
-			public void onResponse(String response) {
-				LogM.log(this.getClass(), response);
-				mCachedResponse = response;
-				JSONResult jr = JSONResult.compile(response);
-				try {
-					parse(new JSONObject(jr.result));
-				} catch (Exception e) {
-					e.printStackTrace();
-					LogM.log(this.getClass(), e);
-				}
-
-			}
-		}, new ErrorListener() {
-
-			@Override
-			public void onErrorResponse(VolleyError arg0) {
-				Toast.makeText(mContext, "网络错误", Toast.LENGTH_SHORT).show();
-			}
-		});
-		request.setShouldCache(true);
-		mRequestQueue.add(request);
-		
-		LogM.log(this.getClass(), "请求page json："+url);
-	}
-	
 	/**
 	 * 初始化rootview
 	 */

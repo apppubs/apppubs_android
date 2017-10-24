@@ -59,10 +59,14 @@ public class UserInfo implements Serializable{
 
 	private String addressbookPermissionString;
 
+	@SerializedName("photourl")
 	private String avatarUrl;//20170113
 	private String orgCode;
 
 	private String chatPermissionString;
+
+	@SerializedName("appcodeversion")
+	private String appCodeVersion;
 
 	public UserInfo() {
 	}
@@ -277,5 +281,13 @@ public class UserInfo implements Serializable{
 
 	public void setChatPermissionString(String chatPermissionString) {
 		this.chatPermissionString = chatPermissionString;
+	}
+
+	public String getAppCodeVersion() {
+		return appCodeVersion;
+	}
+
+	public void setAppCodeVersion(String appCodeVersion) {
+		this.appCodeVersion = appCodeVersion;
 	}
 }

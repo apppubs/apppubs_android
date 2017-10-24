@@ -35,12 +35,13 @@ import com.apppubs.d20.bean.AppConfig;
 import com.apppubs.d20.bean.Settings;
 import com.apppubs.d20.bean.UserInfo;
 import com.apppubs.d20.constant.Actions;
+import com.apppubs.d20.message.model.MsgBussiness;
 import com.apppubs.d20.message.model.UserBussiness;
 import com.apppubs.d20.model.APResultCallback;
-import com.apppubs.d20.message.model.MsgBussiness;
 import com.apppubs.d20.model.NewsBussiness;
 import com.apppubs.d20.model.PaperBussiness;
 import com.apppubs.d20.model.SystemBussiness;
+import com.apppubs.d20.model.VersionInfo;
 import com.apppubs.d20.service.DownloadAppService;
 import com.apppubs.d20.start.StartUpActivity;
 import com.apppubs.d20.util.JSONResult;
@@ -284,7 +285,7 @@ public abstract class BaseActivity extends FragmentActivity implements OnClickLi
 				}
 			});
 
-			this.preCheckUpdate();
+//			this.preCheckUpdate();
 
 		}
 
@@ -311,21 +312,21 @@ public abstract class BaseActivity extends FragmentActivity implements OnClickLi
 		mSystemBussiness.checkUpdate(BaseActivity.this,new SystemBussiness.CheckUpdateListener(){
 
 			@Override
-			public void onDone(boolean needUpdate, boolean needForceUpdate, String version ,String updateDescribe, final String updateUrl) {
-				if (needUpdate){
-					String title = String.format("检查到有新版 %s", TextUtils.isEmpty(version)?"":"V"+version);
-					if(needForceUpdate){
+			public void onDone(final VersionInfo vi) {
+				if (vi.isNeedUpdate()&&vi.isNeedAlert()){
+					String title = String.format("检查到有新版 %s", TextUtils.isEmpty(vi.getVersion())?"":"V"+vi.getVersion());
+					if(vi.isNeedForceUpdate()){
 						AlertDialog ad = new AlertDialog(BaseActivity.this, new AlertDialog.OnOkClickListener() {
 
 							@Override
 							public void onclick() {
 								Intent it = new Intent(BaseActivity.this, DownloadAppService.class);
-								it.putExtra(DownloadAppService.SERVICRINTENTURL, updateUrl);
+								it.putExtra(DownloadAppService.SERVICRINTENTURL, vi.getUpdateUrl());
 								it.putExtra(DownloadAppService.SERVACESHARENAME, 0);
 								startService(it);
 								Toast.makeText(BaseActivity.this, "正在下载中，请稍候", Toast.LENGTH_SHORT).show();
 							}
-						}, title, updateDescribe,"更新");
+						}, title, vi.getUpdateDescribe(),"更新");
 						ad.show();
 						ad.setCancelable(false);
 						ad.setCanceledOnTouchOutside(false);
@@ -339,12 +340,12 @@ public abstract class BaseActivity extends FragmentActivity implements OnClickLi
 							@Override
 							public void onOkClick() {
 								Intent it = new Intent(BaseActivity.this, DownloadAppService.class);
-								it.putExtra(DownloadAppService.SERVICRINTENTURL, updateUrl);
+								it.putExtra(DownloadAppService.SERVICRINTENTURL, vi.getUpdateUrl());
 								it.putExtra(DownloadAppService.SERVACESHARENAME, 0);
 								startService(it);
 								mUserBussiness.logout(BaseActivity.this);
 							}
-						}, title , updateDescribe, "下次", "更新");
+						}, title , vi.getUpdateDescribe(), "下次", "更新");
 						dialog.show();
 						dialog.setCanceledOnTouchOutside(false);
 					}
