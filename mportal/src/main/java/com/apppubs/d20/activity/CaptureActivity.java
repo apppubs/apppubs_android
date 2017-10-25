@@ -4,20 +4,25 @@ import java.io.IOException;
 import java.util.Collection;
 import java.util.Hashtable;
 
+import android.Manifest;
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.ContentResolver;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
 import android.os.Message;
 import android.provider.MediaStore;
+import android.support.annotation.NonNull;
+import android.support.v4.app.ActivityCompat;
 import android.text.ClipboardManager;
 import android.util.Log;
 import android.view.KeyEvent;
@@ -29,6 +34,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.apppubs.d20.adbook.IUserInfoViewListener;
 import com.apppubs.d20.widget.ConfirmDialog;
 import com.google.zxing.BarcodeFormat;
 import com.google.zxing.BinaryBitmap;
@@ -51,6 +57,8 @@ import com.sitech.oncon.barcode.core.ViewfinderView;
 import com.sitech.oncon.barcode.executor.ResultHandler;
 
 public final class CaptureActivity extends BaseActivity implements OnClickListener, SurfaceHolder.Callback {
+
+	private static final int PERMISSION_CAMERA_REQUEST_CODE = 1;
 
 	private static final String TAG = CaptureActivity.class.getSimpleName();
 	private CameraManager cameraManager;
@@ -123,11 +131,36 @@ public final class CaptureActivity extends BaseActivity implements OnClickListen
 	public void onCreate(Bundle icicle) {
 		super.onCreate(icicle);
 
-//		setNeedTitleBar(true);
-		// Window window = getWindow();
-		// window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
 		setContentView(R.layout.act_capture);
 
+		setTitle("二维码扫描");
+
+		if (Build.VERSION.SDK_INT>=Build.VERSION_CODES.M){
+			int permission = ActivityCompat.checkSelfPermission(this, Manifest.permission.CAMERA);
+			if (permission != PackageManager.PERMISSION_GRANTED) {
+				requestPermissions(new String[]{Manifest.permission.CAMERA},PERMISSION_CAMERA_REQUEST_CODE);
+			}else{
+				init();
+			}
+		}else{
+			init();
+		}
+
+	}
+
+	@Override
+	public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+		super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+		if (requestCode==PERMISSION_CAMERA_REQUEST_CODE){
+			if (grantResults[0]==PackageManager.PERMISSION_GRANTED){
+				init();
+			}else{
+				Toast.makeText(this,"请在系统设置中打开相机权限",Toast.LENGTH_LONG).show();
+			}
+		}
+	}
+
+	private void init() {
 		hasSurface = false;
 		inactivityTimer = new InactivityTimer(this);
 
@@ -136,14 +169,6 @@ public final class CaptureActivity extends BaseActivity implements OnClickListen
 		viewfinderView = (ViewfinderView) findViewById(R.id.viewfinder_view);
 		viewfinderView.setCameraManager(cameraManager);
 		statusView = (TextView) findViewById(R.id.status_view);
-		
-		setTitle("二维码扫描");
-//		
-//		camera=(ImageView) findViewById(R.id.titlebar_right_iv);
-//		camera.setVisibility(View.VISIBLE);
-//		camera.setImageResource(R.drawable.barcode_gallery);
-		//from_gallery = (Button) findViewById(R.id.from_gallery);
-		// 为标题和底部按钮添加监听事件
 	}
 
 	public void showDialog(final String msg) {
@@ -276,6 +301,18 @@ public final class CaptureActivity extends BaseActivity implements OnClickListen
 	@Override
 	protected void onResume() {
 		super.onResume();
+
+		if (Build.VERSION.SDK_INT>=Build.VERSION_CODES.M){
+			int permission = ActivityCompat.checkSelfPermission(this, Manifest.permission.CAMERA);
+			if (permission == PackageManager.PERMISSION_GRANTED) {
+				resume();
+			}
+		}else{
+			resume();
+		}
+	}
+
+	private void resume() {
 		handler = null;
 		lastResult = null;
 		resetStatusView();
@@ -294,6 +331,19 @@ public final class CaptureActivity extends BaseActivity implements OnClickListen
 
 	@Override
 	protected void onPause() {
+
+		if (Build.VERSION.SDK_INT>=Build.VERSION_CODES.M){
+			int permission = ActivityCompat.checkSelfPermission(this, Manifest.permission.CAMERA);
+			if (permission == PackageManager.PERMISSION_GRANTED) {
+				pause();
+			}
+		}else{
+			pause();
+		}
+		super.onPause();
+	}
+
+	private void pause() {
 		if (handler != null) {
 			handler.quitSynchronously();
 			handler = null;
@@ -305,12 +355,13 @@ public final class CaptureActivity extends BaseActivity implements OnClickListen
 			SurfaceHolder surfaceHolder = surfaceView.getHolder();
 			surfaceHolder.removeCallback(this);
 		}
-		super.onPause();
 	}
 
 	@Override
 	protected void onDestroy() {
-		inactivityTimer.shutdown();
+		if (inactivityTimer!=null){
+			inactivityTimer.shutdown();
+		}
 		if (mProgress!= null) {
 			mProgress.dismiss();
 		}

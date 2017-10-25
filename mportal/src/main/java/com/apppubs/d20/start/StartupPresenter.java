@@ -10,6 +10,7 @@ import com.apppubs.d20.model.APResultCallback;
 import com.apppubs.d20.model.SystemBussiness;
 import com.apppubs.d20.model.VersionInfo;
 import com.apppubs.d20.service.DownloadAppService;
+import com.apppubs.d20.util.SharedPreferenceUtils;
 import com.apppubs.d20.util.Utils;
 
 import java.io.IOException;
@@ -21,6 +22,8 @@ import java.util.TimerTask;
  */
 
 public class StartupPresenter {
+
+	public static final String SHARED_PREFERENCE_NAME_WELCOME_LOAD_HISTORY = "welcome_load_history";
 
 	private final long SKIP_MILLIS = 5*1000;
 	private SystemBussiness mSystemBussiness;
@@ -68,8 +71,10 @@ public class StartupPresenter {
 
 	private boolean isNeedWelcome() {
 
+		String flag = SharedPreferenceUtils.getInstance(mContext).getString(SHARED_PREFERENCE_NAME_WELCOME_LOAD_HISTORY,Utils.getVersionCode(mContext)+"","");
+
 		//版本升级,并且有欢迎图
-		if(Utils.getVersionCode(mContext)>AppContext.getInstance(mContext).getApp().getPreWorkingVersion()){
+		if(TextUtils.isEmpty(flag)){
 
 			int welcomePicNum = 0;
 			try {

@@ -20,6 +20,8 @@ import android.widget.ImageView.ScaleType;
 import android.widget.RelativeLayout;
 
 import com.apppubs.d20.start.StartUpActivity;
+import com.apppubs.d20.start.StartupPresenter;
+import com.apppubs.d20.util.SharedPreferenceUtils;
 import com.apppubs.d20.util.Utils;
 import com.apppubs.d20.R;
 
@@ -92,26 +94,19 @@ public class WelcomeFragment extends BaseFragment implements OnPageChangeListene
 				RelativeLayout fl = new RelativeLayout(mContext);
 
 				fl.addView(iv, new RelativeLayout.LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT));
-//				Button btn = new Button(mContext);
-//				btn.setTextSize(13);
 
 				if (mHostActivity instanceof StartUpActivity) {
-//					btn.setText("点击进入");
 
 					iv.setOnClickListener(new OnClickListener() {
 
 						@Override
 						public void onClick(View v) {
-//							HomeBaseActivity.startHomeActivity(mHostActivity);
-//							mHostActivity.finish();
+							SharedPreferenceUtils.getInstance(getContext()).putString( StartupPresenter.SHARED_PREFERENCE_NAME_WELCOME_LOAD_HISTORY,Utils.getVersionCode(getContext())+"","f");
 							Intent i = new Intent(mContext,StartUpActivity.class);
-//							i.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP| Intent.FLAG_ACTIVITY_NEW_TASK);
 							startActivity(i);
 						}
 					});
 				} else {
-//					btn.setText("点击返回");
-
 					iv.setOnClickListener(new OnClickListener() {
 
 						@Override

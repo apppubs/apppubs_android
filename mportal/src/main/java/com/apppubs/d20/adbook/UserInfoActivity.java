@@ -1,40 +1,32 @@
 package com.apppubs.d20.adbook;
 
-import java.util.Arrays;
-import java.util.List;
-import java.util.Map;
-
+import android.Manifest;
+import android.annotation.TargetApi;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
+import android.support.v4.app.ActivityCompat;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.ImageView;
-import android.widget.ImageView.ScaleType;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.android.volley.Response.ErrorListener;
-import com.android.volley.Response.Listener;
-import com.android.volley.VolleyError;
-import com.apppubs.d20.AppContext;
-import com.apppubs.d20.activity.BaseActivity;
-import com.apppubs.d20.activity.ImageViewActivity;
-import com.apppubs.d20.bean.App;
-import com.apppubs.d20.bean.User;
-import com.apppubs.d20.util.JSONResult;
-import com.apppubs.d20.widget.ConfirmDialog;
 import com.apppubs.d20.R;
-import com.apppubs.d20.model.APResultCallback;
-import com.apppubs.d20.constant.URLs;
+import com.apppubs.d20.activity.BaseActivity;
+import com.apppubs.d20.bean.User;
 import com.apppubs.d20.widget.CircleTextImageView;
-import com.apppubs.d20.widget.ProgressHUD;
 import com.apppubs.d20.widget.menudialog.MenuDialog;
+
+import java.util.List;
 
 import io.rong.imkit.RongIM;
 import io.rong.imlib.model.Conversation;
@@ -42,6 +34,10 @@ import io.rong.imlib.model.Conversation;
 public class UserInfoActivity extends BaseActivity implements OnClickListener,IUserInfoView{
 
 	public static String EXTRA_STRING_USER_ID = "user_id";
+
+	private static int PERMISSION_CALL_REQUEST_CODE  = 1;
+	private static int PERMISSION_TEL_CALL_REQUEST_CODE  = 2;
+
 	
 	private User mUser;
 	private CircleTextImageView mIv;
@@ -93,7 +89,6 @@ public class UserInfoActivity extends BaseActivity implements OnClickListener,IU
 		}else{
 			setVisibilityOfViewByResId(R.id.act_userinfo_add2contact_ll,View.GONE);
 		}
-
 
 		mNameTv.setText(mUser.getTrueName());
 		fillDepartment();
@@ -160,76 +155,53 @@ public class UserInfoActivity extends BaseActivity implements OnClickListener,IU
 			break;
 		case R.id.userinfo_email_lay:
 			if (mShouldShowDetail){
-				if (TextUtils.isEmpty(mUser.getEmail())) {
-					Toast.makeText(this, "邮箱不存在!", Toast.LENGTH_SHORT).show();
-				}else{
-					// 系统邮件系统的动作为android.content.Intent.ACTION_SEND
-					Intent email = new Intent(android.content.Intent.ACTION_SEND);
-					email.setType("plain/text");
-					// 设置邮件默认地址
-					email.putExtra(android.content.Intent.EXTRA_EMAIL, mUser.getEmail());
-					// // 设置邮件默认标题
-					startActivity(Intent.createChooser(email, " 请选择邮件发送软件"));
-					mUserBussiness.recordUser(mUser.getUserId());
-				}
+				mListener.onButtonClicked(IUserInfoViewListener.EMAIL_BTN);
 			}
 			break;
 		case R.id.userinfo_mobile_lay:
 			if(mShouldShowDetail){
-				String mpbile = mUser.getMobile();
-				if (TextUtils.isEmpty(mpbile)) {
-					Toast.makeText(this, "手机号不存在!", Toast.LENGTH_SHORT).show();
-				} else {
-					String[] menus = {"打电话","发信息"};
-					new MenuDialog(mContext, menus, new MenuDialog.MenuDialogListener() {
-						@Override
-						public void onItemClicked(int index) {
-							String mpbile = mUser.getMobile();
-							if (index==0){
-								Intent intentCall = new Intent(android.content.Intent.ACTION_CALL);
-								intentCall.setData(Uri.parse("tel:" + mpbile));
-								startActivity(intentCall);
-								mUserBussiness.recordUser(mUser.getUserId());
-							}else if (index==1){
-								Uri smsToUri = Uri.parse("smsto:" + mpbile);
-								Intent mIntent = new Intent(android.content.Intent.ACTION_SENDTO);
-								mIntent.setData(smsToUri);
-								startActivity(mIntent);
-								mUserBussiness.recordUser(mUser.getUserId());
-							}else{
-								Log.v("UserInfoActivity","鬼才知道发生什么");
-							}
-						}
-					}).show();
+				if (Build.VERSION.SDK_INT>=Build.VERSION_CODES.M){
+					int permission = ActivityCompat.checkSelfPermission(this, Manifest.permission.CALL_PHONE);
+					if (permission != PackageManager.PERMISSION_GRANTED) {
+						final String[] PERMISSIONS = {Manifest.permission.CALL_PHONE};
+						requestPermissions(PERMISSIONS,PERMISSION_CALL_REQUEST_CODE);
+					}else{
+						mListener.onButtonClicked(IUserInfoViewListener.MOBILE_PHONE_BTN);
+					}
+				}else{
+					mListener.onButtonClicked(IUserInfoViewListener.MOBILE_PHONE_BTN);
 				}
 			}
 			break;
 		case R.id.userinfo_tel_lay:
 			if (mShouldShowDetail){
-				final String tel = mUser.getWorkTEL();
-				if (tel == null || tel.equals("")) {
-					Toast.makeText(this, "电话号码不存在!", Toast.LENGTH_SHORT).show();
-				} else {
-					Intent intentCall = new Intent(android.content.Intent.ACTION_CALL);
-					intentCall.setData(Uri.parse("tel:" + tel));
-					startActivity(intentCall);
-					mUserBussiness.recordUser(mUser.getUserId());
+				if (Build.VERSION.SDK_INT>=Build.VERSION_CODES.M){
+					int permission = ActivityCompat.checkSelfPermission(this, Manifest.permission.CALL_PHONE);
+					if (permission != PackageManager.PERMISSION_GRANTED) {
+						final String[] PERMISSIONS = {Manifest.permission.CALL_PHONE};
+						requestPermissions(PERMISSIONS,PERMISSION_TEL_CALL_REQUEST_CODE);
+					}else{
+						mListener.onButtonClicked(IUserInfoViewListener.TEL_PHONE_BTN);
+					}
+				}else{
+					mListener.onButtonClicked(IUserInfoViewListener.TEL_PHONE_BTN);
 				}
+
 			}
 			break;
 		case R.id.userinfo_add2contact:
 			if (mShouldShowDetail){
-				mListener.onAddContactClicked();
+				mListener.onButtonClicked(IUserInfoViewListener.ADD_CONTACT_BTN);
 			}
 			break;
 		case R.id.userinfo_icon_iv:
 			mListener.onIconClicked();
 			break;
 		case R.id.userinfo_welcome_tv:
-			mListener.onInviteButtonClicked();
+			mListener.onButtonClicked(IUserInfoViewListener.RE_SEND_INVITE_BTN);
 			break;
 		case R.id.act_userinfo_sendinvitemsg_rl:
-			mListener.onSendInviteBtnCliked();
+			mListener.onButtonClicked(IUserInfoViewListener.INVITE_BTN);
 			break;
 		default:
 			break;
@@ -237,7 +209,7 @@ public class UserInfoActivity extends BaseActivity implements OnClickListener,IU
 	}
 
 	private void onBeginTalkClicked() {
-		RongIM.getInstance().startConversation(this, Conversation.ConversationType.PRIVATE,mUser.getUserId(),mUser.getTrueName());
+		mListener.onButtonClicked(IUserInfoViewListener.START_CHAT_BTN);
 	}
 
 	public static void startActivity(Context context, String userId) {
@@ -278,5 +250,32 @@ public class UserInfoActivity extends BaseActivity implements OnClickListener,IU
 	@Override
 	public ImageView getIconImageView() {
 		return mIv;
+	}
+
+	@Override
+	public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+		super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+		if (requestCode==PERMISSION_CALL_REQUEST_CODE){
+			if (isAllPermissionGranted(grantResults)){
+				mListener.onButtonClicked(IUserInfoViewListener.MOBILE_PHONE_BTN);
+			}else {
+				Toast.makeText(this, "请在设置中允许拨打电话", Toast.LENGTH_LONG).show();
+			}
+		}else if(requestCode==PERMISSION_TEL_CALL_REQUEST_CODE){
+			if (isAllPermissionGranted(grantResults)){
+				mListener.onButtonClicked(IUserInfoViewListener.TEL_PHONE_BTN);
+			}else {
+				Toast.makeText(this, "请在设置中允许拨打电话", Toast.LENGTH_LONG).show();
+			}
+		}
+	}
+
+	private boolean isAllPermissionGranted(@NonNull int[] grantResults) {
+		for (int permission : grantResults){
+			if (permission!= PackageManager.PERMISSION_GRANTED){
+				return false;
+			}
+		}
+		return true;
 	}
 }

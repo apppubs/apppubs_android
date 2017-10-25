@@ -1,11 +1,15 @@
 package com.apppubs.d20.adbook;
 
+import android.Manifest;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Handler;
 import android.support.annotation.Nullable;
+import android.support.v4.app.ActivityCompat;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.Toast;
@@ -20,15 +24,18 @@ import com.apppubs.d20.message.model.UserBussiness;
 import com.apppubs.d20.model.APResultCallback;
 import com.apppubs.d20.model.SystemBussiness;
 import com.apppubs.d20.model.WMHErrorCode;
+import com.apppubs.d20.myfile.FilePreviewFragment;
 import com.apppubs.d20.util.JSONResult;
 import com.apppubs.d20.widget.ConfirmDialog;
 import com.apppubs.d20.widget.ProgressHUD;
+import com.apppubs.d20.widget.menudialog.MenuDialog;
 import com.nostra13.universalimageloader.core.ImageLoader;
 
 import java.util.Arrays;
 import java.util.Map;
 
 import io.rong.imkit.RongIM;
+import io.rong.imlib.model.Conversation;
 
 /**
  * Created by zhangwen on 2017/10/24.
@@ -138,22 +145,6 @@ public class UserInfoPresenter implements IUserInfoViewListener{
 	}
 
 	@Override
-	public void onInviteButtonClicked() {
-		ConfirmDialog dialog = new ConfirmDialog(mContext, new ConfirmDialog.ConfirmListener() {
-			@Override
-			public void onOkClick() {
-				sendInviteSms();
-			}
-
-			@Override
-			public void onCancelClick() {
-
-			}
-		}, "确定发送？","给 "+mCurrentUser.getTrueName()+" 发送客户端安装短信", "取消", "确定");
-		dialog.show();
-	}
-
-	@Override
 	public void onIconClicked() {
 		String[] iconConfigParams = getIconParams();
 		boolean isAllowOpen = iconConfigParams!=null&&iconConfigParams.length>3&&"1".equals(iconConfigParams[3]);
@@ -185,7 +176,6 @@ public class UserInfoPresenter implements IUserInfoViewListener{
 	}
 
 
-	@Override
 	public void onAddContactClicked() {
 
 		Intent it = new Intent(Intent.ACTION_INSERT, Uri.withAppendedPath(
@@ -216,7 +206,86 @@ public class UserInfoPresenter implements IUserInfoViewListener{
 	}
 
 	@Override
-	public void onSendInviteBtnCliked() {
-		this.onInviteButtonClicked();
+	public void onButtonClicked(int index) {
+		final User user = UserBussiness.getInstance(mContext).getUserByUserId(mView.getUserId());
+		switch (index){
+			case START_CHAT_BTN:
+				RongIM.getInstance().startConversation(mContext, Conversation.ConversationType.PRIVATE,mCurrentUser.getUserId(),mCurrentUser.getTrueName());
+				break;
+			case MOBILE_PHONE_BTN:
+
+				if (TextUtils.isEmpty(user.getMobile())) {
+					Toast.makeText(mContext, "手机号不存在!", Toast.LENGTH_SHORT).show();
+				} else {
+					String[] menus = {"打电话","发信息"};
+					new MenuDialog(mContext, menus, new MenuDialog.MenuDialogListener() {
+						@Override
+						public void onItemClicked(int index) {
+							if (index==0){
+								Intent intentCall = new Intent(android.content.Intent.ACTION_CALL);
+								intentCall.setData(Uri.parse("tel:" + user.getMobile()));
+								mContext.startActivity(intentCall);
+								UserBussiness.getInstance(mContext).recordUser(user.getUserId());
+							}else if (index==1){
+								Uri smsToUri = Uri.parse("smsto:" + user.getMobile());
+								Intent mIntent = new Intent(android.content.Intent.ACTION_SENDTO);
+								mIntent.setData(smsToUri);
+								mContext.startActivity(mIntent);
+								UserBussiness.getInstance(mContext).recordUser(user.getUserId());
+							}else{
+								Log.v("UserInfoActivity","鬼才知道发生什么");
+							}
+						}
+					}).show();
+				}
+				break;
+			case TEL_PHONE_BTN:
+				final String tel = user.getWorkTEL();
+				if (tel == null || tel.equals("")) {
+					Toast.makeText(mContext, "电话号码不存在!", Toast.LENGTH_SHORT).show();
+				} else {
+					Intent intentCall = new Intent(android.content.Intent.ACTION_CALL);
+					intentCall.setData(Uri.parse("tel:" + tel));
+					mContext.startActivity(intentCall);
+					UserBussiness.getInstance(mContext).recordUser(user.getUserId());
+				}
+				break;
+			case EMAIL_BTN:
+				if (TextUtils.isEmpty(user.getEmail())) {
+					Toast.makeText(mContext, "邮箱不存在!", Toast.LENGTH_SHORT).show();
+				}else{
+					// 系统邮件系统的动作为android.content.Intent.ACTION_SEND
+					Intent email = new Intent(android.content.Intent.ACTION_SEND);
+					email.setType("plain/text");
+					// 设置邮件默认地址
+					email.putExtra(android.content.Intent.EXTRA_EMAIL, user.getEmail());
+					// // 设置邮件默认标题
+					mContext.startActivity(Intent.createChooser(email, " 请选择邮件发送软件"));
+					UserBussiness.getInstance(mContext).recordUser(user.getUserId());
+				}
+				break;
+			case INVITE_BTN:
+			case RE_SEND_INVITE_BTN:
+				ConfirmDialog dialog = new ConfirmDialog(mContext, new ConfirmDialog.ConfirmListener() {
+					@Override
+					public void onOkClick() {
+						sendInviteSms();
+					}
+
+					@Override
+					public void onCancelClick() {
+
+					}
+				}, "确定发送？","给 "+mCurrentUser.getTrueName()+" 发送客户端安装短信", "取消", "确定");
+				dialog.show();
+				break;
+			case ADD_CONTACT_BTN:
+				onAddContactClicked();
+				break;
+			default:
+
+		}
+
 	}
+
 }
