@@ -140,6 +140,9 @@ public class ViewCourier {
      * @param url
      */
     public static void execute(Context context, String url) {
+		if (TextUtils.isEmpty(url)){
+			return;
+		}
         if (url.startsWith("http://") || url.startsWith("https://")) {
             WebAppFragment frg = new WebAppFragment();
             Bundle args = new Bundle();
@@ -243,7 +246,29 @@ public class ViewCourier {
 			Bundle args = new Bundle();
 			args.putString(ContainerActivity.EXTRA_STRING_TITLE, title);
 			ContainerActivity.startActivity(context,MyFileFragment.class,args);
-		} else {
+		}else if(url.startsWith("hxLink://")){
+			String username = AppContext.getInstance(context).getCurrentUser().getUsername();
+			String password = AppContext.getInstance(context).getCurrentUser().getPassword();
+			Intent intent = new Intent();
+			//启动IM
+			ComponentName comp = new ComponentName("elink.mobile.im", "elink.mobile.im.splash.SplashFragment");
+			intent.setComponent(comp);
+			intent.setAction("android.intent.action.MAIN");
+			intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+			Bundle bundle = new Bundle();
+			//传入参数
+			bundle.putString("userName", username);	//用户名
+			bundle.putString("passWord", password);	//密码
+//			bundle.putString("ip","192.168.0.2");	//服务器IP
+//			bundle.putString("port","9000");		//即时通讯端口
+//			bundle.putString("httpPort","9090");	//http端口
+			intent.putExtras(bundle);
+			try{
+				context.startActivity(intent);
+			}catch (Exception e){
+				Toast.makeText(context,"启动E-Link失败",Toast.LENGTH_LONG).show();
+			}
+		}else{
             Toast.makeText(context, "请求地址(" + url + ")错误", Toast.LENGTH_SHORT).show();
         }
 

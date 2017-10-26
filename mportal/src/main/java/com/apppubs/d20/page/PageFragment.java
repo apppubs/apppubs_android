@@ -1050,20 +1050,18 @@ public class PageFragment extends TitleMenuFragment implements OnClickListener,I
 	}
 	//解析url
 	private void resolveUrl(String url) {
-		if(null!=url&&(url.startsWith("apppubs://")||url.startsWith("http://")||url.startsWith("https://")||url.startsWith("tel:"))){
-			if(url.contains("anchorpointer")){
-				mScrollView.scrollTo(0, 100);
-				for(int i=-1;++i<mAnchorPointerViewList.size();){
-					View view = mAnchorPointerViewList.get(i);
-					String[] params = StringUtils.getPathParams(url);
-					
-					if(params[1].equals(view.getTag().toString())){
-						mScrollView.smoothScrollTo(0,view.getTop());
-					}
+		if(null!=url&&(url.startsWith("apppubs://")&&url.contains("anchorpointer"))){
+			mScrollView.scrollTo(0, 100);
+			for(int i=-1;++i<mAnchorPointerViewList.size();){
+				View view = mAnchorPointerViewList.get(i);
+				String[] params = StringUtils.getPathParams(url);
+
+				if(params[1].equals(view.getTag().toString())){
+					mScrollView.smoothScrollTo(0,view.getTop());
 				}
-			}else{
-				ViewCourier.execute(mHostActivity, url);
 			}
+		}else{
+			ViewCourier.execute(mHostActivity, url);
 		}
 	}
 

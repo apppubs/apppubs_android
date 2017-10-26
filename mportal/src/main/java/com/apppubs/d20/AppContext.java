@@ -146,7 +146,7 @@ public class AppContext {
 	public static final String PLACEHOLDER_USERID = "$userid";//用户ID；
 	public static final String PLACEHOLDER_APPID = "$appid";//appid==appcode
 	public static final String PLACEHOLDER_COPER_CODE = "$corpcode";
-
+	public static final String PLACEHOLDER_PASSWORD = "$password";
 
 	/**
 	 * 转换服务器传来的url
@@ -168,6 +168,9 @@ public class AppContext {
 		}
 		if (url.contains(PLACEHOLDER_COPER_CODE)) {
 			url = url.replace(PLACEHOLDER_COPER_CODE, getCurrentUser().getOrgCode());
+		}
+		if (url.contains(PLACEHOLDER_PASSWORD)){
+			url = url.replace(PLACEHOLDER_PASSWORD,getCurrentUser().getPassword());
 		}
 		return url;
 	}
