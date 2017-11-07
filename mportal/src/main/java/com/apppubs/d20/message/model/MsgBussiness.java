@@ -94,7 +94,7 @@ public class MsgBussiness extends BaseBussiness {
 
 			@Override
 			public void run() {
-				String url = String.format(URLs.URL_CHAT_LIST, receiverUsername,senderUsername,"","1","30");
+				String url = String.format(URLs.URL_CHAT_LIST,URLs.baseURL,URLs.appCode, receiverUsername,senderUsername,"","1","30");
 				try {
 					
 					String responseString = WebUtils.requestWithGet(url);
@@ -142,7 +142,7 @@ public class MsgBussiness extends BaseBussiness {
 					// TODO Auto-generated catch block
 					e1.printStackTrace();
 				}
-				String url = String.format(URLs.URL_CHAT_LIST, receiverUsername,"",groupid,"1","30",encodedTimeStr);
+				String url = String.format(URLs.URL_CHAT_LIST,URLs.baseURL,URLs.appCode, receiverUsername,"",groupid,"1","30",encodedTimeStr);
 				try {
 					
 					String responseString = WebUtils.requestWithGet(url);
@@ -198,7 +198,7 @@ public class MsgBussiness extends BaseBussiness {
 			public void run() {
 				try {
 					String encodeContent = URLEncoder.encode(content, "UTF-8");
-					String url = String.format(URLs.URL_CHAT_SEND_MSG,groupId,senderUsername,receiverUsername,encodeContent,Msg.TYPE_CONTENT_TEXT+"","",""); 
+					String url = String.format(URLs.URL_CHAT_SEND_MSG,URLs.baseURL,URLs.appCode,groupId,senderUsername,receiverUsername,encodeContent,Msg.TYPE_CONTENT_TEXT+"","","");
 					String result = WebUtils.requestWithGet(url);
 					JSONResult jr = JSONResult.compile(result);
 					if(jr.resultCode==JSONResult.RESULT_CODE_SUCCESS){
@@ -317,7 +317,7 @@ public class MsgBussiness extends BaseBussiness {
 			@Override
 			public void run() {
 
-				String uploadURL = URLs.URL_UPLOAD;
+				String uploadURL = URLs.baseURL+URLs.URL_UPLOAD;
 				String picURL = WebUtils.uploadFile(new File(src), "zipfile", uploadURL);
 				LogM.log(this.getClass(), "上传成功结果是：" + picURL);
 
@@ -325,7 +325,7 @@ public class MsgBussiness extends BaseBussiness {
 
 //					String url = URLs.URL_CHAT_SEND + "&receiver=" + receiverUsername + "&sender=" + senderUsername
 //							+ "&content=" + "&contentType=" + Msg.TYPE_CONTENT_IMAGE + "&fileName=" + picURL + "";
-					String url = String.format(URLs.URL_CHAT_SEND_MSG,"",senderUsername,receiverUsername,URLEncoder.encode("图片", "utf-8"),Msg.TYPE_CONTENT_IMAGE+"",URLEncoder.encode(picURL.trim(),"UTF-8"),"");
+					String url = String.format(URLs.URL_CHAT_SEND_MSG,URLs.baseURL,URLs.appCode,"",senderUsername,receiverUsername,URLEncoder.encode("图片", "utf-8"),Msg.TYPE_CONTENT_IMAGE+"",URLEncoder.encode(picURL.trim(),"UTF-8"),"");
 				
 					String result = WebUtils.requestWithGet(url);
 
@@ -348,7 +348,7 @@ public class MsgBussiness extends BaseBussiness {
 			@Override
 			public void run() {
 				
-				String uploadURL = URLs.URL_UPLOAD;
+				String uploadURL = URLs.baseURL+URLs.URL_UPLOAD;
 				String picURL = WebUtils.uploadFile(new File(src), "zipfile", uploadURL);
 				LogM.log(this.getClass(), "上传成功结果是：" + picURL);
 				
@@ -356,7 +356,7 @@ public class MsgBussiness extends BaseBussiness {
 					
 //					String url = URLs.URL_CHAT_SEND + "&receiver=" + receiverUsername + "&sender=" + senderUsername
 //							+ "&content=" + "&contentType=" + Msg.TYPE_CONTENT_IMAGE + "&fileName=" + picURL + "";
-					String url = String.format(URLs.URL_CHAT_SEND_MSG,groupid,senderUsername,"",URLEncoder.encode("图片", "utf-8"),Msg.TYPE_CONTENT_IMAGE+"",URLEncoder.encode(picURL.trim(),"UTF-8"),"");
+					String url = String.format(URLs.URL_CHAT_SEND_MSG,URLs.baseURL,URLs.appCode,groupid,senderUsername,"",URLEncoder.encode("图片", "utf-8"),Msg.TYPE_CONTENT_IMAGE+"",URLEncoder.encode(picURL.trim(),"UTF-8"),"");
 					
 					String result = WebUtils.requestWithGet(url);
 					
@@ -380,7 +380,7 @@ public class MsgBussiness extends BaseBussiness {
 			public void run() {
 				
 				try {
-					String uploadURL = URLs.URL_UPLOAD;
+					String uploadURL = URLs.baseURL+URLs.URL_UPLOAD;
 //					String picURL = WebUtils.uploadFile(new File(src), "zipfile", uploadURL);
 					
 					  AjaxParams params = new AjaxParams();
@@ -394,7 +394,7 @@ public class MsgBussiness extends BaseBussiness {
 								try {
 //									url = URLs.URL_CHAT_SEND + "&receiver=" + receiverUsername + "&sender=" + senderUsername
 //											+ "&content=" + "&contentType=" + Msg.TYPE_CONTENT_VIDEO + "&fileName=" + URLEncoder.encode(t, "utf-8") + "";
-									String url = String.format(URLs.URL_CHAT_SEND_MSG,"",senderUsername,receiverUsername,URLEncoder.encode("[视频]","utf-8"),Msg.TYPE_CONTENT_VIDEO+"",URLEncoder.encode(t.trim(), "utf-8"),"");
+									String url = String.format(URLs.URL_CHAT_SEND_MSG,URLs.baseURL,URLs.appCode,"",senderUsername,receiverUsername,URLEncoder.encode("[视频]","utf-8"),Msg.TYPE_CONTENT_VIDEO+"",URLEncoder.encode(t.trim(), "utf-8"),"");
 									fh.get(url, new AjaxCallBack<String>(){
 										public void onSuccess(String t) {
 											sHandler.post(new OnDoneRun<Object>(callback, null));
@@ -427,7 +427,7 @@ public class MsgBussiness extends BaseBussiness {
 			public void run() {
 				
 				try {
-					String uploadURL = URLs.URL_UPLOAD;
+					String uploadURL = URLs.baseURL+URLs.URL_UPLOAD;
 //					String picURL = WebUtils.uploadFile(new File(src), "zipfile", uploadURL);
 					
 					AjaxParams params = new AjaxParams();
@@ -441,7 +441,7 @@ public class MsgBussiness extends BaseBussiness {
 							try {
 //									url = URLs.URL_CHAT_SEND + "&receiver=" + receiverUsername + "&sender=" + senderUsername
 //											+ "&content=" + "&contentType=" + Msg.TYPE_CONTENT_VIDEO + "&fileName=" + URLEncoder.encode(t, "utf-8") + "";
-								String url = String.format(URLs.URL_CHAT_SEND_MSG,groupid,senderUsername,"",URLEncoder.encode("[视频]","utf-8"),Msg.TYPE_CONTENT_VIDEO+"",URLEncoder.encode(t.trim(), "utf-8"),"");
+								String url = String.format(URLs.URL_CHAT_SEND_MSG,URLs.baseURL,URLs.appCode,groupid,senderUsername,"",URLEncoder.encode("[视频]","utf-8"),Msg.TYPE_CONTENT_VIDEO+"",URLEncoder.encode(t.trim(), "utf-8"),"");
 								fh.get(url, new AjaxCallBack<String>(){
 									public void onSuccess(String t) {
 										sHandler.post(new OnDoneRun<Object>(callback, null));
@@ -468,39 +468,6 @@ public class MsgBussiness extends BaseBussiness {
 		return f;
 	}
 
-	public Future<?> sendSoundMsg(final String senderUsername, final String receiverUsername, final String src,
-			final int length) {
-		Future<?> f = sDefaultExecutor.submit(new Runnable() {
-
-			@Override
-			public void run() {
-
-				String uploadURL = URLs.URL_UPLOAD;
-				String picURL = WebUtils.uploadFile(new File(src), "zipfile", uploadURL);
-				LogM.log(this.getClass(), "上传成功结果是：" + picURL);
-
-				try {
-
-//					String url = URLs.URL_CHAT_SEND + "&receiver=" + receiverUsername + "&sender=" + senderUsername
-//							+ "&content=" + "&contentType=" + Msg.TYPE_CONTENT_SOUND + "&length=" + length + ""
-//							+ "&fileName=" + picURL;
-					String url = String.format(URLs.URL_CHAT_SEND_MSG,"",senderUsername,receiverUsername,URLEncoder.encode("[语音]", "utf-8"),Msg.TYPE_CONTENT_SOUND+"",URLEncoder.encode(picURL.trim(),"UTF-8"),""+length);
-					
-					String result = WebUtils.requestWithGet(url);
-
-					sHandler.post(null);
-					LogM.log(this.getClass(), "发送完成 发送结果：" + result);
-				} catch (IOException e) {
-					e.printStackTrace();
-				} catch (InterruptedException e) {
-					e.printStackTrace();
-				}
-			}
-
-		});
-
-		return f;
-	}
 	public Future<?> sendGroupSoundMsg(final String senderUsername, final String groupId, final String src,
 			final int length) {
 		Future<?> f = sDefaultExecutor.submit(new Runnable() {
@@ -508,7 +475,7 @@ public class MsgBussiness extends BaseBussiness {
 			@Override
 			public void run() {
 				
-				String uploadURL = URLs.URL_UPLOAD;
+				String uploadURL = URLs.baseURL+URLs.URL_UPLOAD;
 				String picURL = WebUtils.uploadFile(new File(src), "zipfile", uploadURL);
 				LogM.log(this.getClass(), "上传成功结果是：" + picURL);
 				
@@ -517,7 +484,7 @@ public class MsgBussiness extends BaseBussiness {
 //					String url = URLs.URL_CHAT_SEND + "&receiver=" + receiverUsername + "&sender=" + senderUsername
 //							+ "&content=" + "&contentType=" + Msg.TYPE_CONTENT_SOUND + "&length=" + length + ""
 //							+ "&fileName=" + picURL;
-					String url = String.format(URLs.URL_CHAT_SEND_MSG,groupId,senderUsername,"",URLEncoder.encode("[语音]", "utf-8"),Msg.TYPE_CONTENT_SOUND+"",URLEncoder.encode(picURL.trim(),"UTF-8"),""+length);
+					String url = String.format(URLs.URL_CHAT_SEND_MSG,URLs.baseURL,URLs.appCode,groupId,senderUsername,"",URLEncoder.encode("[语音]", "utf-8"),Msg.TYPE_CONTENT_SOUND+"",URLEncoder.encode(picURL.trim(),"UTF-8"),""+length);
 					
 					String result = WebUtils.requestWithGet(url);
 					
@@ -539,35 +506,6 @@ public class MsgBussiness extends BaseBussiness {
 		return SugarRecord.find(MsgRecord.class, null, null, null, "update_time desc", null);
 	}
 
-	public Future<?> getServiceNoList(final APResultCallback<List<ServiceNo>> callback) {
-		Future<?> f = sDefaultExecutor.submit(new Runnable() {
-
-			@Override
-			public void run() {
-				try {
-					List<ServiceNo> snl = WebUtils.requestList(URLs.URL_SERVICE_LIST, ServiceNo.class);
-					SugarRecord.deleteAll(ServiceNo.class);
-					for (ServiceNo s : snl) {
-						s.save();
-					}
-					sHandler.post(new OnDoneRun<List<ServiceNo>>(callback, snl));
-				} catch (IOException e) {
-
-					e.printStackTrace();
-				} catch (InterruptedException e) {
-
-					e.printStackTrace();
-				} catch (JSONException e) {
-
-					e.printStackTrace();
-				}
-			}
-
-		});
-
-		return f;
-	}
-
 	public ServiceNo getServiceNoById(String id) {
 		return SugarRecord.findById(ServiceNo.class, id);
 	}
@@ -579,7 +517,7 @@ public class MsgBussiness extends BaseBussiness {
 			public void run() {
 				try {
 					// http://www.wmh360.com/wmh360/json/msg/getserviceinfolist.jsp?appcode=U1433417616429&service_id=1433580152045&username=ceshi6&userid=&curp=1&perp=10&clientkey=bb7c1386d85044ba7a7ae53f3362d634
-					String url = URLs.URL_SERVICE_MESSAGE_INFO_LIST + "&service_id="+serviceid+"&username="+ AppContext.getInstance(mContext).getCurrentUser().getUsername()+"&userid="+ AppContext.getInstance(mContext).getCurrentUser().getUserId()
+					String url = String.format(URLs.URL_SERVICE_MESSAGE_INFO_LIST,URLs.baseURL,URLs.appCode) + "&service_id="+serviceid+"&username="+ AppContext.getInstance(mContext).getCurrentUser().getUsername()+"&userid="+ AppContext.getInstance(mContext).getCurrentUser().getUserId()
 					+"&curp=1&perp=10";
 					List<ServiceNOInfo> snl = WebUtils.requestList(url, ServiceNOInfo.class);
 					sHandler.post(new OnDoneRun<List<ServiceNOInfo>>(callback, snl));
@@ -610,7 +548,7 @@ public class MsgBussiness extends BaseBussiness {
 			@Override
 			public void run() {
 				try {
-					String str = WebUtils.requestAloneRequest(URLs.URL_SERVICE_ATTENTION + "&service_id=" + serviceid
+					String str = WebUtils.requestAloneRequest(String.format(URLs.URL_SERVICE_ATTENTION,URLs.baseURL,URLs.appCode )+ "&service_id=" + serviceid
 							+ "&username=" + username);
 
 					sHandler.post(new OnDoneRun<String>(callback, str));
@@ -674,7 +612,7 @@ public class MsgBussiness extends BaseBussiness {
 			@Override
 			public void run() {
 				try {
-					List<ServiceNo> snl = WebUtils.requestList(URLs.URL_USERSERVICELIST + "&username=" + username,
+					List<ServiceNo> snl = WebUtils.requestList(String.format(URLs.URL_USERSERVICELIST,URLs.baseURL,URLs.appCode) + "&username=" + username,
 							ServiceNo.class);
 					sHandler.post(new OnDoneRun<List<ServiceNo>>(callback, snl));
 				} catch (IOException e) {
@@ -705,7 +643,7 @@ public class MsgBussiness extends BaseBussiness {
 			@Override
 			public void run() {
 				try {
-					List<ServiceNo> snl = WebUtils.requestList(URLs.URL_SERVICE_NO_SUBSCRIBEABLE,ServiceNo.class);
+					List<ServiceNo> snl = WebUtils.requestList(String.format(URLs.URL_SERVICE_NO_SUBSCRIBEABLE, URLs.baseURL,URLs.appCode),ServiceNo.class);
 					sHandler.post(new OnDoneRun<List<ServiceNo>>(callback, snl));
 				} catch (IOException e) {
 
@@ -781,7 +719,7 @@ public class MsgBussiness extends BaseBussiness {
 		String token = null;
 		String userId = AppContext.getInstance(mContext).getCurrentUser().getUserId();
 		String username = AppContext.getInstance(mContext).getCurrentUser().getTrueName();
-		String url = String.format(URLs.URL_RC_TOKEN,userId,username);
+		String url = String.format(URLs.URL_RC_TOKEN,URLs.baseURL,URLs.appCode,userId,username);
 		try {
 			String response = WebUtils.requestWithGet(url);
 			JSONResult jr = JSONResult.compile(response);

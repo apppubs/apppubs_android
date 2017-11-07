@@ -1,27 +1,27 @@
 package com.apppubs.d20.model;
 
-import java.io.File;
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.concurrent.Future;
+import android.text.TextUtils;
+
+import com.apppubs.d20.bean.Paper;
+import com.apppubs.d20.bean.PaperCatalog;
+import com.apppubs.d20.bean.PaperInfo;
+import com.apppubs.d20.bean.PaperIssue;
+import com.apppubs.d20.constant.URLs;
+import com.apppubs.d20.util.FileUtils;
+import com.apppubs.d20.util.LogM;
+import com.apppubs.d20.util.WebUtils;
+import com.google.gson.Gson;
+import com.orm.SugarRecord;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import android.text.TextUtils;
-
-import com.apppubs.d20.bean.PaperCatalog;
-import com.apppubs.d20.bean.PaperInfo;
-import com.apppubs.d20.bean.PaperIssue;
-import com.apppubs.d20.util.LogM;
-import com.apppubs.d20.util.WebUtils;
-import com.google.gson.Gson;
-import com.apppubs.d20.bean.Paper;
-import com.apppubs.d20.constant.URLs;
-import com.apppubs.d20.util.FileUtils;
-import com.orm.SugarRecord;
+import java.io.File;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.concurrent.Future;
 
 
 /**
@@ -57,7 +57,7 @@ public class PaperBussiness extends BaseBussiness{
 
 				List<PaperIssue> piList = null;
 				try {
-					String url = URLs.URL_ISSUE_LIST + "?papercode=" + paperCode;
+					String url = String.format(URLs.URL_ISSUE_LIST,URLs.baseURL,paperCode);
 					piList = WebUtils.requestList(url, PaperIssue.class, "qi");
 					for (PaperIssue pi : piList) {
 						pi.setPaperCode(paperCode);
@@ -104,7 +104,7 @@ public class PaperBussiness extends BaseBussiness{
 
 	// 通过id获取某一期对象,并存库
 	private PaperIssue getIssue(String issueId) throws IOException, JSONException, InterruptedException {
-		String remoteStr = WebUtils.requestWithGet(URLs.URL_ISSUE_INFO + "?qiid=" + issueId);
+		String remoteStr = WebUtils.requestWithGet(String.format(URLs.URL_ISSUE_INFO,URLs.baseURL) + "?qiid=" + issueId);
 		// 获取此期的版面信息
 		JSONObject jsonO = new JSONObject(remoteStr);
 		JSONArray catalogsArr = jsonO.getJSONArray("qi");

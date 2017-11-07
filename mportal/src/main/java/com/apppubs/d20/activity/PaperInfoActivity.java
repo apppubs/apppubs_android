@@ -93,7 +93,7 @@ public class PaperInfoActivity extends BaseActivity implements OnClickListener {
 			}
 
 		});
-		mWebView.loadUrl(URLs.URL_PAPER_INFO + "?id=" + mInfoId);
+		mWebView.loadUrl(String.format(URLs.URL_PAPER_INFO, URLs.baseURL) + "?id=" + mInfoId);
 	}
 
 	@Override

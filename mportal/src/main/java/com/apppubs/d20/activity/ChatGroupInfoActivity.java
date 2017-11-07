@@ -76,7 +76,7 @@ public class ChatGroupInfoActivity extends BaseActivity{
 	@Override
 	protected void onResume() {
 		super.onResume();
-		String url = String.format(URLs.URL_CHAT_GROUD_INFO, mChatGroupId, AppContext.getInstance(mContext).getCurrentUser().getUsername());
+		String url = String.format(URLs.URL_CHAT_GROUD_INFO, URLs.baseURL,URLs.appCode,mChatGroupId, AppContext.getInstance(mContext).getCurrentUser().getUsername());
 		mRequestQueue.add(new StringRequest(url, new Listener<String>() {
 			
 			@Override
@@ -180,7 +180,7 @@ public class ChatGroupInfoActivity extends BaseActivity{
 	}
 
 	private void exitGroupChat() {
-		String url = String.format(URLs.URL_CHAT_EXIT_CHAT_GROUP, mChatGroupId, AppContext.getInstance(mContext).getCurrentUser().getUsername());
+		String url = String.format(URLs.URL_CHAT_EXIT_CHAT_GROUP,URLs.baseURL,URLs.appCode, mChatGroupId, AppContext.getInstance(mContext).getCurrentUser().getUsername());
 		mRequestQueue.add(new StringRequest(url, new Listener<String>() {
 
 			@Override
@@ -236,7 +236,7 @@ public class ChatGroupInfoActivity extends BaseActivity{
 			
 			String url = null;
 			try {
-				url = String.format(URLs.URL_CHAT_CHANGE_GROUP_NAME, mChatGroupId,URLEncoder.encode(newGroupName,"utf-8"));
+				url = String.format(URLs.URL_CHAT_CHANGE_GROUP_NAME,URLs.baseURL,URLs.appCode, mChatGroupId,URLEncoder.encode(newGroupName,"utf-8"));
 			} catch (UnsupportedEncodingException e) {
 				e.printStackTrace();
 			}

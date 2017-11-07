@@ -154,7 +154,7 @@ public class ChannelAudioFragment extends ChannelFragment implements AsyTaskCall
 	public Object onExecute(Integer tag, String[] params) {
 		Object result = null;
 		if (tag==REQUEST_TAG_AUDIO_LIST) {
-			String url = String.format(URLs.URL_AUDIO_LIST,mChannel.getCode(),mCurPage);
+			String url = String.format(URLs.URL_AUDIO_LIST,URLs.baseURL,mChannel.getCode(),mCurPage);
 				try {
 					result = WebUtils.requestList(url, NewsAudioInfo.class,"resultinfo");
 				} catch (JSONException e) {

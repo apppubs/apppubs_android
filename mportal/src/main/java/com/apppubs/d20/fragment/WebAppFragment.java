@@ -190,7 +190,7 @@ public class WebAppFragment extends BaseFragment implements OnClickListener {
 			@Override
 			public void onReceiveTitle(String title) {
 				// 之前如果没有设置过标题则将网页的title当做标题
-				if (mTitleBar!=null&&(TextUtils.isEmpty(mTitleBar.getTitle()) || mTitleBar.getTitle().equals(mOnloadingText))) {
+				if (mTitleBar!=null&&!TextUtils.isEmpty(title) ) {
 					mTitleBar.setTitle(title);
 				}
 
@@ -242,7 +242,7 @@ public class WebAppFragment extends BaseFragment implements OnClickListener {
 		mWebView.registerHandler("openWindow", new BridgeHandler() {
 	        @Override
 	        public void handler(String data, CallBackFunction function) {
-	        	ViewCourier.execute(mHostActivity, data);
+	        	ViewCourier.getInstance(mHostActivity).execute(mHostActivity, data);
 	            function.onCallBack("请求结束");
 	        }
 	    });
@@ -271,7 +271,7 @@ public class WebAppFragment extends BaseFragment implements OnClickListener {
 			
 			@Override
 			public void handler(String data, CallBackFunction function) {
-				ViewCourier.execute(mHostActivity, "apppubs://qrcode");
+				ViewCourier.getInstance(mHostActivity).execute(mHostActivity, "apppubs://qrcode");
 			}
 			
 		});

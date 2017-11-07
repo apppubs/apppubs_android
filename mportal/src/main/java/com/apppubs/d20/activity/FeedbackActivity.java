@@ -89,7 +89,7 @@ public class FeedbackActivity extends BaseActivity {
 		} catch (UnsupportedEncodingException e) {
 			e.printStackTrace();
 		}
-		String url = String.format(URLs.URL_FEEDBACK,
+		String url = String.format(URLs.URL_FEEDBACK,URLs.baseURL,URLs.appCode,
 				AppContext.getInstance(mContext).getCurrentUser().getUserId(), "android", phone, content);
 		LogM.log(this.getClass(), url);
 		mRequestQueue.add(new StringRequest(url, new Listener<String>() {

@@ -67,7 +67,7 @@ public class NewsBussiness extends BaseBussiness {
 						if (type == NewsInfo.NEWS_TYPE_NORAML) {
 
 							// 如果page==0，刷新数据库信息
-							String url = URLs.URL_NEWS_LIST_OF_CHANNEL + "&channelcode=" + channelCode
+							String url = String.format(URLs.URL_NEWS_LIST_OF_CHANNEL,URLs.baseURL) + "&channelcode=" + channelCode
 									+ "&pno=1&pernum=" + pageSize;
 
 							infoList = WebUtils.requestList(url, NewsInfo.class, "info");
@@ -79,7 +79,7 @@ public class NewsBussiness extends BaseBussiness {
 							saveList(infoList, channelCode);
 						} else if (type == NewsInfo.NEWS_TYPE_PICTURE) {
 							// 如果page==0，刷新数据库信息
-							String url = URLs.URL_PIC_LIST + "&channelcode=" + channelCode + "&pno=1&pernum="
+							String url = String.format(URLs.URL_PIC_LIST,URLs.baseURL) + "&channelcode=" + channelCode + "&pno=1&pernum="
 									+ pageSize;
 							List<NewsPictureInfo> picList = WebUtils.requestList(url, NewsPictureInfo.class, "data");
 
@@ -99,12 +99,12 @@ public class NewsBussiness extends BaseBussiness {
 								null, "PUB_TIME desc", (page - 1) * pageSize + "," + pageSize);
 						if (infoList.size() != pageSize && type == NewsInfo.NEWS_TYPE_NORAML) {
 
-							String url = URLs.URL_NEWS_LIST_OF_CHANNEL + "&channelcode=" + channelCode + "&pno=" + page
+							String url = String.format(URLs.URL_NEWS_LIST_OF_CHANNEL,URLs.baseURL) + "&channelcode=" + channelCode + "&pno=" + page
 									+ "&pernum=" + pageSize;
 							infoList = WebUtils.requestList(url, NewsInfo.class, "info");
 							saveList(infoList, channelCode);
 						} else if (infoList.size() == 0 && type == NewsInfo.NEWS_TYPE_PICTURE) {
-							String url = URLs.URL_PIC_LIST + "&channelcode=" + channelCode + "&pno=" + page
+							String url = String.format(URLs.URL_PIC_LIST,URLs.baseURL) + "&channelcode=" + channelCode + "&pno=" + page
 									+ "&pernum=" + pageSize;
 							;
 							List<NewsPictureInfo> picList = WebUtils.requestList(url, NewsPictureInfo.class, "data");
@@ -161,7 +161,7 @@ public class NewsBussiness extends BaseBussiness {
 			public void run() {
 
 				try {
-					String url = URLs.URL_CHANNEL_UPDATE_TIME + "&channelcode=" + channelCode;
+					String url = String.format(URLs.URL_CHANNEL_UPDATE_TIME, URLs.baseURL) + "&channelcode=" + channelCode;
 					JSONObject jo = new JSONObject(WebUtils.requestWithGet(url));
 					Date date = mSdf.parse(jo.getString("lastupdatetime"));
 					sHandler.post(new OnDoneRun<Date>(callback, date));
@@ -191,7 +191,7 @@ public class NewsBussiness extends BaseBussiness {
 			public void run() {
 
 				try {
-					String url = URLs.URL_CHANNEL_UPDATE_TIME + "&channelcode=" + channelCode;
+					String url = String.format(URLs.URL_CHANNEL_UPDATE_TIME, URLs.baseURL) + "&channelcode=" + channelCode;
 					JSONObject jo = new JSONObject(WebUtils.requestWithGet(url));
 					Date date = mSdf.parse(jo.getString("lastupdatetime"));
 					SugarRecord.update(NewsChannel.class, "LAST_UPDATE_TIME", date.getTime() + "", "CODE = ?",
@@ -233,7 +233,7 @@ public class NewsBussiness extends BaseBussiness {
 				try {
 					if (showType == NewsChannel.SHOWTYPE_HEADLINE) {
 
-						String url = URLs.URL_HEAD_PIC + "&channelcode=" + channelCode + "&webappcode="
+						String url = String.format(URLs.URL_HEAD_PIC,URLs.baseURL) + "&channelcode=" + channelCode + "&webappcode="
 								+ AppContext.getInstance(mContext).getApp().getWebAppCode();
 						List<HeadPic> hList = WebUtils.requestList(url, HeadPic.class, "tgpic");
 
@@ -243,7 +243,7 @@ public class NewsBussiness extends BaseBussiness {
 						}
 
 					}
-					String url = URLs.URL_NEWS_LIST_OF_CHANNEL + "&channelcode=" + channelCode + "&pno=1&pernum="
+					String url = String.format(URLs.URL_NEWS_LIST_OF_CHANNEL,URLs.baseURL) + "&channelcode=" + channelCode + "&pno=1&pernum="
 							+ URLs.PAGE_SIZE;
 
 					List<NewsInfo> infoList = WebUtils.requestList(url, NewsInfo.class, "info");
@@ -333,7 +333,7 @@ public class NewsBussiness extends BaseBussiness {
 
 	public NewsInfo getNewInfo(String newsInfoId, String channelCode) throws IOException, InterruptedException,JsonParseException {
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd hh:mm",Locale.CHINA);
-		String url = URLs.URL_NEWS_INFO + "&infoid=" + newsInfoId + "&channelcode=" + channelCode;
+		String url = String.format(URLs.URL_NEWS_INFO, URLs.baseURL) + "&infoid=" + newsInfoId + "&channelcode=" + channelCode;
 
 		NewsInfo newsInfo = null;
 
@@ -533,7 +533,7 @@ public class NewsBussiness extends BaseBussiness {
 			public void run() {
 
 				try {
-					String url = URLs.URL_PIC_INFO_LIST + "&infoid=" + infoId +"&pno=" + page;
+					String url = String.format(URLs.URL_PIC_INFO_LIST,URLs.baseURL) + "&infoid=" + infoId +"&pno=" + page;
 
 					List<NewsPictureInfo> pList = WebUtils.requestList(url, NewsPictureInfo.class, "data");
 					if (page == 0) {

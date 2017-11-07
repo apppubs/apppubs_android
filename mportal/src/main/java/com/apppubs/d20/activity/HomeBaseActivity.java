@@ -1,49 +1,37 @@
 package com.apppubs.d20.activity;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.net.Uri;
-import android.support.annotation.Nullable;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.widget.Toast;
 
 import com.apppubs.d20.AppContext;
 import com.apppubs.d20.AppManager;
-import com.apppubs.d20.bean.UserInfo;
-import com.apppubs.d20.constant.URLs;
-import com.apppubs.d20.home.CompelMessageDialogActivity;
-import com.apppubs.d20.home.CompelReadMessageModel;
-import com.apppubs.d20.message.model.UserBasicInfo;
-import com.apppubs.d20.model.APResultCallback;
-import com.apppubs.d20.net.WMHHttpErrorCode;
-import com.apppubs.d20.net.WMHRequestListener;
-import com.apppubs.d20.util.JSONResult;
-import com.apppubs.d20.util.JSONUtils;
-import com.apppubs.d20.util.LogM;
 import com.apppubs.d20.MportalApplication;
 import com.apppubs.d20.R;
 import com.apppubs.d20.bean.App;
 import com.apppubs.d20.bean.MenuItem;
+import com.apppubs.d20.bean.UserInfo;
 import com.apppubs.d20.bean.Weather;
 import com.apppubs.d20.constant.Actions;
 import com.apppubs.d20.fragment.BaseFragment;
+import com.apppubs.d20.message.model.UserBasicInfo;
+import com.apppubs.d20.model.APResultCallback;
 import com.apppubs.d20.service.DownloadAppService;
 import com.apppubs.d20.util.FileUtils;
+import com.apppubs.d20.util.LogM;
 import com.apppubs.d20.util.SharedPreferenceUtils;
 import com.apppubs.d20.util.SystemUtils;
 import com.apppubs.d20.util.Tools;
 import com.orm.SugarRecord;
 
-import org.json.JSONException;
-import org.json.JSONObject;
+import java.util.ArrayList;
+import java.util.List;
 
 import io.rong.imkit.RongIM;
 import io.rong.imlib.RongIMClient;
@@ -225,11 +213,12 @@ public abstract class HomeBaseActivity extends BaseActivity {
 				for (MenuItem mi:mPrimaryMenuList){
 					if (mi.getUrl().startsWith("apppubs://message")){
 						mViewCourier.executeInHomeActivity(mi,HomeBaseActivity.this);
+
 						break;
 					}
 				}
 			}else{
-				ViewCourier.execute(mContext, paddingUrl);
+				ViewCourier.getInstance(mContext).execute(mContext, paddingUrl);
 			}
 		}
 

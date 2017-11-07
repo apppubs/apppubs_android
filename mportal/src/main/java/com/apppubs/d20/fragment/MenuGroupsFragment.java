@@ -159,7 +159,7 @@ public class MenuGroupsFragment extends HomeFragment implements OnClickListener{
 	}
 	
 	private void loadRemoteMenuData() {
-		String url = String.format(URLs.URL_MENUS, mMenuId);
+		String url = String.format(URLs.URL_MENUS,URLs.baseURL,URLs.appCode, mMenuId);
 		mRequestQueue.add(new StringRequest(url, new Listener<String>() {
 
 			@Override
@@ -171,7 +171,7 @@ public class MenuGroupsFragment extends HomeFragment implements OnClickListener{
 	}
 	
 	private void loadRemoteMenugroup(){
-		String url = URLs.URL_SUBMENU_GROUP + "&id=" +mMenuId;
+		String url = String.format(URLs.URL_SUBMENU_GROUP , URLs.baseURL,URLs.appCode)+ "&id=" +mMenuId;
 		mRequestQueue.add(new StringRequest(url, new Listener<String>() {
 			@Override
 			public void onResponse(String response) {
@@ -197,7 +197,7 @@ public class MenuGroupsFragment extends HomeFragment implements OnClickListener{
 	}
 	
 	private String getMenuCache(){
-		String url = String.format(URLs.URL_MENUS, mMenuId);
+		String url = String.format(URLs.URL_MENUS, URLs.baseURL,URLs.appCode,mMenuId);
 		String cache = null;
 		if(mRequestQueue.getCache().get(url)!=null){
 			cache = new String(mRequestQueue.getCache().get(url).data);
@@ -206,7 +206,7 @@ public class MenuGroupsFragment extends HomeFragment implements OnClickListener{
 	}
 	
 	private String getMenuGroupCache(){
-		String menuGroupUrl = URLs.URL_SUBMENU_GROUP + "&id=" +mMenuId;
+		String menuGroupUrl = String.format(URLs.URL_SUBMENU_GROUP ,URLs.baseURL,URLs.appCode)+ "&id=" +mMenuId;
 		String cache = null;
 		if(mRequestQueue.getCache().get(menuGroupUrl)!=null){
 			cache = new String(mRequestQueue.getCache().get(menuGroupUrl).data);
@@ -503,7 +503,7 @@ public class MenuGroupsFragment extends HomeFragment implements OnClickListener{
 				
 			};
 			
-		}.execute(String.format(URLs.URL_PROMOTION_PIC_LIST, channelTypeId));
+		}.execute(String.format(URLs.URL_PROMOTION_PIC_LIST,URLs.baseURL,URLs.appCode, channelTypeId));
 		
 	}
 

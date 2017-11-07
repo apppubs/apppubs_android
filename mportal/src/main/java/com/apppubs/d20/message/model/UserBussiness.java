@@ -338,7 +338,7 @@ public class UserBussiness extends BaseBussiness {
 			@Override
 			public void run() {
 				String userIdsStr = StringUtils.join(userIds);
-				String url = String.format(URLs.URL_USER_BASIC_INFO,userIdsStr);
+				String url = String.format(URLs.URL_USER_BASIC_INFO,URLs.baseURL,URLs.appCode,userIdsStr);
 				try {
 					String response = WebUtils.requestWithGet(url);
 					JSONResult jo = JSONResult.compile(response);
@@ -716,7 +716,7 @@ public class UserBussiness extends BaseBussiness {
 			requestParamsMap.put("app", currentVersionName);
 			requestParamsMap.put("fr", "4");
 
-			String data = WebUtils.requestWithPost(URLs.URL_LOGIN, requestParamsMap);
+			String data = WebUtils.requestWithPost(String.format(URLs.URL_LOGIN, URLs.baseURL,URLs.appCode), requestParamsMap);
 			JSONObject jo = new JSONObject(data);
 			/**
 			 * //0、用户名或密码错误 //1、还未注册 //2、已经注册并且信息一致 //3、已经注册但信息不一致，该帐户被其他人注册
@@ -759,7 +759,7 @@ public class UserBussiness extends BaseBussiness {
 			requestParamsMap.put("app", currentVersionName);
 			requestParamsMap.put("fr", "4");
 			
-			String data = WebUtils.requestWithPost(URLs.URL_LOGIN, requestParamsMap);
+			String data = WebUtils.requestWithPost(String.format(URLs.URL_LOGIN,URLs.baseURL,URLs.appCode), requestParamsMap);
 			JSONObject jo = new JSONObject(data);
 			/**
 			 * //0、用户名或密码错误 //1、还未注册 //2、已经注册并且信息一致 //3、已经注册但信息不一致，该帐户被其他人注册
@@ -798,7 +798,7 @@ public class UserBussiness extends BaseBussiness {
 				String systemVresion = Utils.getAndroidSDKVersion();// 操作系统号
 				String currentVersionCode = Utils.getVersionName(mContext);// app版本号
 				try {
-					String url = String.format(URLs.URL_REGISTER_DEVICE, token, deviceId, systemVresion,
+					String url = String.format(URLs.URL_REGISTER_DEVICE, URLs.baseURL,URLs.appCode, token, deviceId, systemVresion,
 							URLEncoder.encode(Build.MODEL, "utf-8"), currentVersionCode,
 							mAppContext.getApp().getCode());
 					String result = WebUtils.requestWithGet(url);
@@ -899,7 +899,7 @@ public class UserBussiness extends BaseBussiness {
 					try {
 						// /wmh360/json/login/usersmslogin.jsp?username=%s&deviceid=%s&token=%s&os=%s&dev=%s&app=%s&fr=4&appcode="+appCode;
 						UserInfo currentUser = AppContext.getInstance(mContext).getCurrentUser();
-						url = String.format(URLs.URL_LOGIN_WITH_USERNAME, currentUser.getUsername(),
+						url = String.format(URLs.URL_LOGIN_WITH_USERNAME, URLs.baseURL,URLs.appCode, currentUser.getUsername(),
 								machineId, JPushInterface.getRegistrationID(mContext), osVersion,
 								URLEncoder.encode(Build.MODEL, "utf-8"), currentVersionName,appCode);
 					} catch (UnsupportedEncodingException e) {
@@ -977,7 +977,7 @@ public class UserBussiness extends BaseBussiness {
 						requestParamsMap.put("appcodeversion",Utils.getVersionCode(mContext)+"");
 						requestParamsMap.put("fr", "4");
 
-						String data = WebUtils.requestWithPost(URLs.URL_LOGIN, requestParamsMap);
+						String data = WebUtils.requestWithPost(String.format(URLs.URL_LOGIN, URLs.baseURL,URLs.appCode), requestParamsMap);
 						JSONObject jo = new JSONObject(data);
 						/**
 						 * //0、用户名或密码错误 //1、还未注册 //2、已经注册并且信息一致

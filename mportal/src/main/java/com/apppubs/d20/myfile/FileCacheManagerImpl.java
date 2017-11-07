@@ -290,7 +290,7 @@ public class FileCacheManagerImpl implements FileCacheManager {
 					String CONTENT_TYPE = "multipart/form-data"; // 内容类型
 
 					try {
-						URL url = new URL(URLs.URL_UPLOAD);
+						URL url = new URL(String.format(URLs.URL_UPLOAD,URLs.baseURL));
 						HttpURLConnection conn = (HttpURLConnection) url.openConnection();
 						conn.setReadTimeout(TIME_OUT_READ_MILLISECOND);
 						conn.setConnectTimeout(TIME_OUT_CONNECT_MILLISECOND);

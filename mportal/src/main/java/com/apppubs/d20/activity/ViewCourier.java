@@ -139,7 +139,7 @@ public class ViewCourier {
      * @param context
      * @param url
      */
-    public static void execute(Context context, String url) {
+    public void execute(Context context, String url) {
 		if (TextUtils.isEmpty(url)){
 			return;
 		}
@@ -174,11 +174,13 @@ public class ViewCourier {
             PageFragment pageF = new PageFragment();
             String[] pathParams = StringUtils.getPathParams(url);
             String titlebarFlag = StringUtils.getQueryParameter(url, "titlebar");
+			String title = StringUtils.getQueryParameter(url,"title");
             Bundle args = new Bundle();
             if (!TextUtils.isEmpty(titlebarFlag) && titlebarFlag.equals("0")) {
                 args.putBoolean(ContainerActivity.EXTRA_BOOLEAN_IS_FULLSCREEN, true);
             }
             args.putString(PageFragment.EXTRA_STRING_NAME_PAGE_ID, pathParams[1]);
+			args.putString(ContainerActivity.EXTRA_STRING_TITLE,title);
             ContainerActivity.startActivity(context, pageF.getClass(), args);
         } else if (url.matches("apppubs:\\/\\/addressbook[\\S]*")) {
             String rootSuperId = StringUtils.getQueryParameter(url, "rootsuperid");
@@ -268,6 +270,8 @@ public class ViewCourier {
 			}catch (Exception e){
 				Toast.makeText(context,"启动E-Link失败",Toast.LENGTH_LONG).show();
 			}
+		}else if(url.equals(MenuItem.MENU_URL_EMAIL)||url.startsWith("apppubs://email")){
+			openEmailApp();
 		}else{
             Toast.makeText(context, "请求地址(" + url + ")错误", Toast.LENGTH_SHORT).show();
         }
@@ -483,62 +487,7 @@ public class ViewCourier {
             startSettingView(mContext, item.getId());
         } else if (uri.equals(MenuItem.MENU_URL_EMAIL)) {
 
-            try {
-                //获得邮箱包名信息
-                PackageInfo pi = mHomeActivity.getPackageManager().getPackageInfo("com.android.email", 0);
-                //获得当前应用程序的包管理器
-                PackageManager pm = mHomeActivity.getPackageManager();
-
-                Intent resolveIntent = new Intent(Intent.ACTION_MAIN, null);
-
-                resolveIntent.addCategory(Intent.CATEGORY_LAUNCHER);
-
-                resolveIntent.setPackage(pi.packageName);
-
-                List<ResolveInfo> apps = pm.queryIntentActivities(resolveIntent, 0);
-
-                ResolveInfo ri = apps.iterator().next();
-
-                if (ri != null) {
-
-                    String packageName = ri.activityInfo.packageName;
-
-                    String className = ri.activityInfo.name;
-
-
-                    intent = new Intent(Intent.ACTION_MAIN);
-
-                    intent.addCategory(Intent.CATEGORY_LAUNCHER);
-
-                    ComponentName cn = new ComponentName(packageName, className);
-
-                    intent.setComponent(cn);
-
-                    mHomeActivity.startActivity(intent);
-
-                }
-
-            } catch (Exception e) {
-
-                e.printStackTrace();
-                Toast.makeText(mHomeActivity, "没有安装邮件客户端!", Toast.LENGTH_SHORT).show();
-
-            }
-
-
-//			intent = new Intent(Intent.ACTION_SENDTO);
-//		    intent.setData(Uri.parse("mailto:"));
-////		    intent.putExtra(Intent.EXTRA_EMAIL, addresses);
-////		    intent.putExtra(Intent.EXTRA_SUBJECT, subject);
-////		    intent.putExtra(Intent.EXTRA_STREAM, attachment);
-//		    if (intent.resolveActivity(mHomeActivity.getPackageManager()) != null) {
-//		        mHomeActivity.startActivity(intent);
-//		    }else{
-//		    	Toast.makeText(mHomeActivity, "没有邮件客户端", Toast.LENGTH_LONG).show();
-//		    	
-//		    }
-
-
+			openEmailApp();
         } else if (uri.equals("app:{$menu_extra}")) {
             frg = new MenuGroupsFragment();
             Bundle args = new Bundle();
@@ -646,7 +595,20 @@ public class ViewCourier {
 
     }
 
-    private String convertUri(MenuItem item, final String uri) {
+	private void openEmailApp() {
+		Intent intent;
+
+		intent = new Intent(Intent.ACTION_SENDTO);
+		intent.setData(Uri.parse("mailto:"));
+		if (intent.resolveActivity(mContext.getPackageManager()) != null) {
+			mContext.startActivity(intent);
+		} else {
+			Toast.makeText(mContext, "没有邮件客户端", Toast.LENGTH_LONG).show();
+
+		}
+	}
+
+	private String convertUri(MenuItem item, final String uri) {
         String tempUri = uri;
         Map<String, String> customIpMap = (Map<String, String>) FileUtils.readObj(mContext, CustomWebAppUrlProtocolAndIpActivity.CUSTOM_WEB_APP_URL_SERIALIZED_FILE_NAME);
         if (customIpMap != null) {

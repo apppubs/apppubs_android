@@ -329,7 +329,7 @@ public class AddressBookFragement extends BaseFragment {
 
 				if (mAppContext.getApp().getAddressbookNeedPermission() == App.NEED) {
 					final UserInfo currentUser = AppContext.getInstance(mContext).getCurrentUser();
-					String url = String.format(URLs.URL_ADDRESS_PERMISSION,currentUser.getUserId());
+					String url = String.format(URLs.baseURL,URLs.appCode,URLs.URL_ADDRESS_PERMISSION,currentUser.getUserId());
 					mRequestQueue.add(new StringRequest(url, new Listener<String>() {
 
 						@Override

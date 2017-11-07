@@ -46,7 +46,7 @@ public class UserBiz {
 	}
 
 	public void getUserInfo(String userid, final GetUserInfoCallback callback){
-		String userInfoUrl =  String.format(URLs.URL_USER_INFO, userid);
+		String userInfoUrl =  String.format(URLs.URL_USER_INFO,URLs.baseURL,URLs.appCode, userid);
 		WMHHttpClient httpClient = AppContext.getInstance(mContext).getHttpClient();
 		httpClient.GET(userInfoUrl, null, new WMHRequestListener() {
 			@Override

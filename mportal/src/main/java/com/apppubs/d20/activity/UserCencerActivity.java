@@ -189,7 +189,7 @@ public class UserCencerActivity extends BaseActivity {
 			AsyTaskExecutor.getInstance().startTask(1, new AsyTaskCallback() {
 				@Override
 				public Object onExecute(Integer tag, String[] params) throws Exception {
-					String url = String.format(URLs.URL_UPLOAD_AVATAR, AppContext.getInstance(mContext).getCurrentUser().getUserId());
+					String url = String.format(URLs.URL_UPLOAD_AVATAR,URLs.baseURL,URLs.appCode, AppContext.getInstance(mContext).getCurrentUser().getUserId());
 					Bitmap b = BitmapUtils.zoomImg(finalPhoto,400,400);
 					ByteArrayOutputStream baos = new ByteArrayOutputStream();
 					b.compress(Bitmap.CompressFormat.PNG, 100, baos);

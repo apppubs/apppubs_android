@@ -1,5 +1,7 @@
 package com.apppubs.d20.bean;
 
+import com.apppubs.d20.constant.URLs;
+
 import java.io.Serializable;
 
 public class Settings implements Serializable{
@@ -102,12 +104,14 @@ public class Settings implements Serializable{
 		return baseURL;
 	}
 	public void setBaseURL(String baseURL) {
+		URLs.baseURL = baseURL;
 		this.baseURL = baseURL;
 	}
 	public String getAppCode() {
 		return appCode;
 	}
 	public void setAppCode(String appCode) {
+		URLs.appCode = appCode;
 		this.appCode = appCode;
 	}
 	public boolean isDevMode() {

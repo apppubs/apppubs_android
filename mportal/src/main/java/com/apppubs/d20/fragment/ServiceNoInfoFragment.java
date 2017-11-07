@@ -66,7 +66,7 @@ public class ServiceNoInfoFragment extends BaseFragment {
 	@Override
 	public void onResume() {
 		super.onResume();
-		String url = String.format(URLs.URL_SERVICE_NO, mServiceNoId, AppContext.getInstance(mContext).getCurrentUser().getUsername());
+		String url = String.format(URLs.URL_SERVICE_NO,URLs.baseURL,URLs.appCode, mServiceNoId, AppContext.getInstance(mContext).getCurrentUser().getUsername());
 		mRequestQueue.add(new StringRequest(url, new Listener<String>() {
 
 			@Override

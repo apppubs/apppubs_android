@@ -235,7 +235,7 @@ public class MsgController {
 				intents = new Intent[1];
 				intents[0] = new Intent(context, com.apppubs.d20.activity.WebAppActivity.class);
 				Bundle extras = new Bundle();
-				String url = URLs.URL_SERVICEINFO + "&serviceinfo_id=" + msgInfo + "&service_id="
+				String url = String.format(URLs.URL_SERVICEINFO,URLs.baseURL,URLs.appCode) + "&serviceinfo_id=" + msgInfo + "&service_id="
 				+ sender;
 				extras.putString(WebAppFragment.ARGUMENT_STRING_URL, url);
 				extras.putBoolean(WebAppActivity.EXTRA_NAME_BOOL_NEED_CLEAR_SERVERCE_NO_UNREAD_NUM, true);
@@ -249,7 +249,7 @@ public class MsgController {
 
 				intents[1] =  new Intent(context, com.apppubs.d20.activity.WebAppActivity.class);
 				Bundle extras = new Bundle();
-				String url = URLs.URL_SERVICEINFO + "&serviceinfo_id=" + msgInfo + "&service_id="+ sender;
+				String url = String.format(URLs.URL_SERVICEINFO, URLs.baseURL,URLs.appCode) + "&serviceinfo_id=" + msgInfo + "&service_id="+ sender;
 				extras.putString(WebAppFragment.ARGUMENT_STRING_URL, url);
 				intents[1].putExtras(extras);
 

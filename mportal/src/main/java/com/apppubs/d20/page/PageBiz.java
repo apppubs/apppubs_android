@@ -58,9 +58,9 @@ public class PageBiz implements IPageBiz {
 		UserInfo ui = AppContext.getInstance(mContext).getCurrentUser();
 		String url = null;
 		if (ui!=null){
-			url = String.format(URLs.URL_PAGE, pageId,ui.getUserId());
+			url = String.format(URLs.URL_PAGE,URLs.baseURL,URLs.appCode, pageId,ui.getUserId());
 		}else{
-			url = String.format(URLs.URL_PAGE, pageId,"");
+			url = String.format(URLs.URL_PAGE,URLs.baseURL,URLs.appCode, pageId,"");
 		}
 		return url;
 	}

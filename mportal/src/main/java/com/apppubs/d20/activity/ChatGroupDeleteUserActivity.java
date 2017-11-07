@@ -163,7 +163,7 @@ public class ChatGroupDeleteUserActivity extends BaseActivity {
 			}
 			sb.append(mCheckedUserList.get(i).getUsername());
 		}
-		String url = String.format(URLs.URL_CHAT_DELETE_CHAT_USER, mChatGroupId, AppContext.getInstance(mContext).getCurrentUser().getUsername(),sb.toString());
+		String url = String.format(URLs.URL_CHAT_DELETE_CHAT_USER, URLs.baseURL,URLs.appCode, mChatGroupId, AppContext.getInstance(mContext).getCurrentUser().getUsername(),sb.toString());
 		mRequestQueue.add(new StringRequest(url, new Listener<String>() {
 
 			@Override

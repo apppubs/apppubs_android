@@ -301,7 +301,7 @@ public class ChatActivity extends BaseActivity implements OnClickListener {
 	private void cleanUnreadNum() {
 		if (!TextUtils.isEmpty(mChatGroupId)) {
 			UserInfo currentUser = AppContext.getInstance(mContext).getCurrentUser();
-			String url = String.format(URLs.URL_CLEAR_UNREAD_NUM_FOR_SERVICE_NO_AND_CHAT, mChatGroupId,
+			String url = String.format(URLs.URL_CLEAR_UNREAD_NUM_FOR_SERVICE_NO_AND_CHAT,URLs.baseURL,URLs.appCode,URLs.baseURL,URLs.appCode, mChatGroupId,
 					currentUser.getUsername());
 			mRequestQueue.add(new StringRequest(url, new Listener<String>() {
 

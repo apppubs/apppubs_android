@@ -82,7 +82,7 @@ public class VerificationCodeActivity extends BaseActivity implements ErrorListe
 		};
 		timer.start();
 		
-		String url = String.format(URLs.URL_SEND_SMS, mUsername,mPhone,mSystemBussiness.getMachineId());
+		String url = String.format(URLs.URL_SEND_SMS,URLs.baseURL,URLs.appCode, mUsername,mPhone,mSystemBussiness.getMachineId());
 		StringRequest request = new StringRequest(url, new Listener<String>() {
 			@Override
 			public void onResponse(String response) {

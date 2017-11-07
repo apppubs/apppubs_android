@@ -25,31 +25,6 @@ public class Tools {
 		this.context = context;
 	}
 
-	/**
-	 * 提交意见反馈
-	 * 
-	 * @return
-	 */
-	public int submmitFeedback(String webappcode, int fdtype, String fdcontract, String fdcontent, String clientkey) {
-		String requestUrl = URLs.URL_FEEDBACK;
-		int back = 0;
-		Map<String, Object> requestParamsMap = new HashMap<String, Object>();
-		requestParamsMap.put("webappcode", webappcode);
-		requestParamsMap.put("fdtype", fdtype + "");
-		requestParamsMap.put("fdcontract", fdcontract);
-		requestParamsMap.put("fdcontent", fdcontent);
-		requestParamsMap.put("clientkey", clientkey);
-		String resurt = "";
-		resurt = WebUtils.requestWithPost(requestUrl, requestParamsMap);
-		try {
-			JSONObject jo = new JSONObject(resurt);
-			back = Integer.parseInt(jo.getString("result"));
-			return back;
-		} catch (JSONException e) {
-			e.printStackTrace();
-		}
-		return back;
-	}
 
 	/**
 	 * 提交报料报料 http://www.sxxynews.com:8080/wmh360/epaper/json/ readernews.jsp?
@@ -60,7 +35,7 @@ public class Tools {
 	 */
 	public int submmitBaoliao(String userid, String title, String name, String content, String contract, String picurl,
 			String appcode) {
-		String requestUrl = URLs.URL_BAOLIAO;
+		String requestUrl = String.format(URLs.URL_BAOLIAO,URLs.baseURL);
 		Map<String, Object> requestParamsMap = new HashMap<String, Object>();
 		requestParamsMap.put("userid", userid);
 		requestParamsMap.put("title", title);
@@ -153,7 +128,7 @@ public class Tools {
 	 * &keyword=1 &pno=1&pernum=10&clientkey=bb7c1386d85044ba7a7ae53f3362d634
 	 */
 	public List<SearchInfo> getSearchInfos(String webappcode, String keyword, int pno, int pernum, String clientkey) {
-		String requestUrl = URLs.URL_SEARCH;
+		String requestUrl = String.format(URLs.URL_SEARCH,URLs.baseURL);
 		List<SearchInfo> infos = new ArrayList<SearchInfo>();
 		Map<String, Object> requestParamsMap = new HashMap<String, Object>();
 		requestParamsMap.put("webappcode", webappcode);

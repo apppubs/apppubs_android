@@ -204,7 +204,7 @@ public class MsgRecordListFragment extends BaseFragment implements OnClickListen
 		mHostActivity.unregisterReceiver(mRefreshBR);
 	}
 	private void refreshList() {
-		String url = String.format(URLs.URL_SERVICE_NO_FOR_USER, AppContext.getInstance(mContext).getCurrentUser().getUsername());
+		String url = String.format(URLs.URL_SERVICE_NO_FOR_USER,URLs.baseURL,URLs.appCode, AppContext.getInstance(mContext).getCurrentUser().getUsername());
 		mRequestQueue.add(new StringRequest(url,new Listener<String>() {
 
 			@Override
@@ -297,7 +297,7 @@ public class MsgRecordListFragment extends BaseFragment implements OnClickListen
 						
 //					User otherU = mUserBussiness.getUserByUsername(mr.getSourceUsernameOrId());
 //					User otherU = mUserBussiness.getUserByUserId(mr.getSourceUsernameOrId());
-						String url = String.format(URLs.URL_CHAT_GROUD_INFO, mr.getSourceUsernameOrId(), AppContext.getInstance(mContext).getCurrentUser().getUsername());
+						String url = String.format(URLs.URL_CHAT_GROUD_INFO,URLs.baseURL,URLs.appCode, mr.getSourceUsernameOrId(), AppContext.getInstance(mContext).getCurrentUser().getUsername());
 						mRequestQueue.add(new StringRequest(url, new Listener<String>() {
 							
 							@Override
@@ -414,7 +414,7 @@ public class MsgRecordListFragment extends BaseFragment implements OnClickListen
 						map.put(mMsgRecordL.get(pos).getSourceUsernameOrId(),mSimpleDateFormat.format(new Date()));
 						MportalApplication.writeObj(mContext, map, MportalApplication.MSG_DELETED_CHAT_GROUP_MAP);
 						
-						String url = String.format(URLs.URL_CLEAR_UNREAD_NUM_FOR_SERVICE_NO_AND_CHAT, mMsgRecordL.get(pos).getSourceUsernameOrId(),
+						String url = String.format(URLs.URL_CLEAR_UNREAD_NUM_FOR_SERVICE_NO_AND_CHAT,URLs.baseURL,URLs.appCode, mMsgRecordL.get(pos).getSourceUsernameOrId(),
 								AppContext.getInstance(mContext).getCurrentUser().getUsername());
 						mRequestQueue.add(new StringRequest(url, new Listener<String>() {
 

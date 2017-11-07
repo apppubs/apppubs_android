@@ -114,7 +114,7 @@ public class ChannelVideoFragment extends ChannelFragment implements AsyTaskCall
 	public Object onExecute(Integer tag, String[] params) {
 		Object result = null;
 		if (tag==REQUEST_TAG_VIDEO_LIST) {
-			String url = String.format(URLs.URL_VIDEO_LIST,mChannel.getCode(),mCurPage);
+			String url = String.format(URLs.URL_VIDEO_LIST, URLs.baseURL,mChannel.getCode(),mCurPage);
 				try {
 					result = WebUtils.requestList(url, NewsVideoInfo.class,"info");
 				} catch (JSONException e) {

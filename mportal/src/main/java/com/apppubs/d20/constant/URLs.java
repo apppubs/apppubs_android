@@ -34,24 +34,24 @@ public class URLs {
 	 * orientation 0纵向 1横向
 	 * device 1:iphone  2IPAD 3Android手机 4 android pad
 	 */
-	public static final String URL_APPINFO = baseURL + "wmh360/json/getappinfo.jsp?appcode=" + appCode
+	public static final String URL_APPINFO = "%s" + "wmh360/json/getappinfo.jsp?appcode=" + "%s"
 			+ "&corpcode=%s&orientation=%s&device=%s&screen=%s&imei=imeitest&clientkey=bb7c1386d85044ba7a7ae53f3362d634";
 	// public static final String URL_APPINFO =
-	// URl_BASE+"wmh360/json/getappinfo.jsp?appcode="+APP_CODE+"&imei=imeitest&clientkey=bb7c1386d85044ba7a7ae53f3362d634";
+	// URl_BASE+"wmh360/json/getappinfo.jsp?"%s"="+APP_CODE+"&imei=imeitest&clientkey=bb7c1386d85044ba7a7ae53f3362d634";
 	/**
-	 * 启动图 http://123.56.46.218/wmh360/json/getadpiclist.jsp?appcode=D01&
+	 * 启动图 http://123.56.46.218/wmh360/json/getadpiclist.jsp?"%s"=D01&
 	 * clientkey=bb7c1386d85044ba7a7ae53f3362d634
 	 */
 	// public static final String URL_STARTUP_PIC =
 	// URl_BASE+"wmh360/json/getadpiclist.jsp?appcode="+APP_CODE+"&clientkey="+CLIENTKEY;
-	public static final String URL_STARTUP_PIC = baseURL + "wmh360/json/getadpiclist.jsp?appcode=" + appCode
+	public static final String URL_STARTUP_PIC = "%s" + "wmh360/json/getadpiclist.jsp?appcode=" + "%s"
 			+ "&clientkey=" + CLIENTKEY;
 
 	/**
 	 * http://www.wmh360.com/wmh360/json/msg/getappconfig.jsp?appcode=D20&
 	 * clientkey=bb7c1386d85044ba7a7ae53f3362d634
 	 */
-	public static final String URL_APP_CONFIG = baseURL + "wmh360/json/msg/getappconfig.jsp?appcode=" + appCode
+	public static final String URL_APP_CONFIG = "%s" + "wmh360/json/msg/getappconfig.jsp?appcode=" + "%s"
 			+ "&params=%s&clientkey=bb7c1386d85044ba7a7ae53f3362d634";
 
 	/**
@@ -60,24 +60,24 @@ public class URLs {
 	 */
 	// public static final String URL_MENU=
 	// URl_BASE+"wmh360/json/getapp.jsp?appcode="+APP_CODE+"&clientkey="+CLIENTKEY;
-	public static final String URL_MENU = baseURL + "wmh360/json/getapp.jsp?appcode=" + appCode + "&clientkey="
+	public static final String URL_MENU = "%s" + "wmh360/json/getapp.jsp?appcode=" + "%s" + "&clientkey="
 			+ CLIENTKEY;
 	/*
 	 * 通过superid来获取菜单
 	 * http://192.168.1.103/wmh360/json/getmenu.jsp?appcode=U1431761314224&imei=imeitest&clientkey=bb7c1386d85044ba7a7ae53f3362d634
 	 */
-	public static final String URL_MENUS = baseURL + "wmh360/json/getmenu.jsp?appcode=" + appCode + "&superid=%s&imei=imeitest&clientkey=bb7c1386d85044ba7a7ae53f3362d634";
+	public static final String URL_MENUS = "%s" + "wmh360/json/getmenu.jsp?appcode=" + "%s" + "&superid=%s&imei=imeitest&clientkey=bb7c1386d85044ba7a7ae53f3362d634";
 	/**
 	 * 推广图 http://123.56.46.218/wmh360/json/gettgpiclist.jsp?webappcode=A09
 	 * &clientkey=bb7c1386d85044ba7a7ae53f3362d634&channelcode=A090102
 	 * &channelcode=A090102 &webappcode = A09
 	 */
-	public static final String URL_HEAD_PIC = baseURL + "wmh360/json/gettgpiclist.jsp?clientkey=" + CLIENTKEY;
+	public static final String URL_HEAD_PIC = "%s"+"wmh360/json/gettgpiclist.jsp?clientkey=" + CLIENTKEY;
 
 	/**
 	 * http://120.27.5.117/wmh360/json/getchannelbycode.jsp?channelcode=A080402&clientkey=bb7c1386d85044ba7a7ae53f3362d634
 	 */
-	public static final String URL_CHANNEL = baseURL + "wmh360/json/getchannelbycode.jsp?channelcode=%s&clientkey=bb7c1386d85044ba7a7ae53f3362d634";
+	public static final String URL_CHANNEL = "%s" + "wmh360/json/getchannelbycode.jsp?channelcode=%s&clientkey=bb7c1386d85044ba7a7ae53f3362d634";
 
 	// public static final String URL_HEAD_PIC =
 	// URl_BASE+"wmh360/json/gettgpiclist.jsp?clientkey="+CLIENTKEY+"";
@@ -86,7 +86,7 @@ public class URLs {
 	 * =A09&typeidID=1366524543362&clientkey=bb7c1386d85044ba7a7ae53f3362d634
 	 * typeidID=1366524543362 webappcode = A09
 	 */
-	public static final String URL_CHANNEL_LIST = baseURL
+	public static final String URL_CHANNEL_LIST = "%s"
 			+ "wmh360/json/getchannellist.jsp?clientkey=bb7c1386d85044ba7a7ae53f3362d634";
 	// public static final String URL_CHANNEL_LIST =
 	// URl_BASE+"/wmh360/json/getchannellist.jsp?clientkey=bb7c1386d85044ba7a7ae53f3362d634";
@@ -94,7 +94,7 @@ public class URLs {
 	 * 版本更新 http://123.56.46.218/wmh360/json/getversion.jsp?appcode=D03&type=
 	 * iphone&clientkey=bb7c1386d85044ba7a7ae53f3362d634
 	 */
-	public static final String URL_UPDATE = baseURL + "wmh360/json/getversion.jsp?";
+	public static final String URL_UPDATE = "%s" + "wmh360/json/getversion.jsp?";
 
 	/**
 	 * 某一个频道的信息列表 http://123.56.46.218/wmh360/json/getchannelinfolist.jsp?
@@ -102,8 +102,7 @@ public class URLs {
 	 * =A090102&pernum=10&clientkey=bb7c1386d85044ba7a7ae53f3362d634&pno=1
 	 * &pno=1 &channelcode=A090102
 	 */
-	public static final String URL_NEWS_LIST_OF_CHANNEL = baseURL
-			+ "wmh360/json/getchannelinfolist.jsp?clientkey=bb7c1386d85044ba7a7ae53f3362d634";
+	public static final String URL_NEWS_LIST_OF_CHANNEL = "%s"+"wmh360/json/getchannelinfolist.jsp?clientkey=bb7c1386d85044ba7a7ae53f3362d634";
 	// public static final String URL_NEWS_LIST_OF_CHANNEL =
 	// URl_BASE+"wmh360/json/getchannelinfolist.jsp?pernum="+PAGE_SIZE+"&clientkey=bb7c1386d85044ba7a7ae53f3362d634";
 
@@ -113,7 +112,7 @@ public class URLs {
 	 * &clientkey=bb7c1386d85044ba7a7ae53f3362d634&channelcode=A090104
 	 * infoid=1414611497793770 channelcode=A090104
 	 */
-	public static final String URL_NEWS_INFO = baseURL + "wmh360/json/getchannelinfodetail.jsp?appcode=" + appCode + "&device=android"
+	public static final String URL_NEWS_INFO = "%s" + "wmh360/json/getchannelinfodetail.jsp?appcode=" + "%s" + "&device=android"
 			+ "&clientkey=" + CLIENTKEY + "";
 	// public static final String URL_NEWS_INFO =
 	// URl_BASE+"wmh360/json/getchannelinfodetail.jsp?clientkey="+CLIENTKEY+"";
@@ -125,38 +124,38 @@ public class URLs {
 	 * =%s&fdtype=%s&fdcontract=%s&fdcontent
 	 * =%s&clientkey=bb7c1386d85044ba7a7ae53f3362d634
 	 */
-	public static final String URL_FEEDBACK = baseURL + "wmh360/json/feedback.jsp?appcode=" + appCode
+	public static final String URL_FEEDBACK = "%s" + "wmh360/json/feedback.jsp?appcode=" + "%s"
 			+ "&userid=%s&fdtype=%s&fdcontract=%s&fdcontent=%s&clientkey=bb7c1386d85044ba7a7ae53f3362d634";
 	/**
 	 * 视频列表 http://123.56.46.218/wmh360/json/getchannelinfomedialist.jsp?
 	 * channelcode
 	 * =A070107&pno=1&pernum=10&clientkey=bb7c1386d85044ba7a7ae53f3362d634
 	 */
-	public static final String URL_VIDEO_LIST = baseURL + "wmh360/json/getvideolist.jsp?channelcode=%s&pno=%d&pernum=10&clientkey=" + CLIENTKEY;
+	public static final String URL_VIDEO_LIST = "%s" + "wmh360/json/getvideolist.jsp?channelcode=%s&pno=%d&pernum=10&clientkey=" + CLIENTKEY;
 
 	/**
 	 * 视频详情
 	 * http://123.57.13.138:8088/wmh360/json/getvideodetail.jsp?infoid=1465023705987501&channelcode=A8502&clientkey=bb7c1386d85044ba7a7ae53f3362d634
 	 */
-	public static final String URL_VIDEO = baseURL + "wmh360/json/getvideodetail.jsp?infoid=%s&channelcode=%s&clientkey=bb7c1386d85044ba7a7ae53f3362d634";
+	public static final String URL_VIDEO = "%s" + "wmh360/json/getvideodetail.jsp?infoid=%s&channelcode=%s&clientkey=bb7c1386d85044ba7a7ae53f3362d634";
 
 	/**
 	 * 音频列表
 	 * http://123.57.13.138:8088/wmh360/json/getaudiolist.jsp?channelcode=A8501&clientkey=bb7c1386d85044ba7a7ae53f3362d634
 	 */
-	public static final String URL_AUDIO_LIST = baseURL + "wmh360/json/getaudiolist.jsp?channelcode=%s&pno=%d&pernum=10&clientkey=bb7c1386d85044ba7a7ae53f3362d634";
+	public static final String URL_AUDIO_LIST = "%s" + "wmh360/json/getaudiolist.jsp?channelcode=%s&pno=%d&pernum=10&clientkey=bb7c1386d85044ba7a7ae53f3362d634";
 
 	/**
 	 * 专题列表
 	 * http://123.57.13.138:8088/wmh360/json/getsubjectlist.jsp?channelcode=A8504&pno=1&pernum=10&clientkey=bb7c1386d85044ba7a7ae53f3362d634
 	 */
-	public static final String URL_SPECIALS_LIST = baseURL + "wmh360/json/getsubjectlist.jsp?channelcode=%s&pno=%d&pernum=10&clientkey=bb7c1386d85044ba7a7ae53f3362d634";
+	public static final String URL_SPECIALS_LIST = "%s" + "wmh360/json/getsubjectlist.jsp?channelcode=%s&pno=%d&pernum=10&clientkey=bb7c1386d85044ba7a7ae53f3362d634";
 	/**
 	 * 获得微博列表
 	 * http://202.85.221.113/wmh360/json/getweiboinfo.jsp?appcode=D01&imei
 	 * =imeitest
 	 */
-	public static final String URL_WEIBO = baseURL + "wmh360/json/getweiboinfo.jsp?imei=imeitest&appcode=" + appCode;
+	public static final String URL_WEIBO = "%s" + "wmh360/json/getweiboinfo.jsp?imei=imeitest&appcode=" + "%s";
 	/**
 	 * 搜索
 	 * http://124.205.71.106:8080/wmh360/json/getsearchlist.jsp?webappcode=A09
@@ -165,28 +164,28 @@ public class URLs {
 	 * ://202.85.221.113/wmh360/json/getsearchlist.jsp?webappcode=A09&keyword
 	 * =交通&pno=1&pernum=10&clientkey=bb7c1386d85044ba7a7ae53f3362d634
 	 */
-	public static final String URL_SEARCH = baseURL + "wmh360/json/getsearchlist.jsp?";
+	public static final String URL_SEARCH = "%s" + "wmh360/json/getsearchlist.jsp?";
 	/**
 	 * 用户评论结果提交 http://123.56.46.218/wmh360/json/updatecomment.jsp?infoid=
 	 * 1226239645973833&imei=imeitest&content=contenttest&clientkey=
 	 * bb7c1386d85044ba7a7ae53f3362d634
 	 */
-	public static final String URL_COMMENT_SUMMIT = baseURL + "wmh360/json/updatecomment.jsp?";
+	public static final String URL_COMMENT_SUMMIT = "%s" + "wmh360/json/updatecomment.jsp?";
 	/**
 	 * // * 历史消息 // *
 	 * http://123.56.46.218/wmh360/push/json/getmsglist.jsp?pno=1&pernum=10& //
 	 * * clientid=D35&&clientkey=bb7c1386d85044ba7a7ae53f3362d634 //
 	 */
-	// public static final String URL_HISTORY = baseURL +
+	// public static final String URL_HISTORY = "%s" +
 	// "wmh360/push/json/getmsglist.jsp?&pernum=10&clientkey=" + CLIENTKEY
-	// + "&clientid=" + appCode;
+	// + "&clientid=" + "%s";
 	/**
 	 * 图片列表
 	 * http://123.56.46.218/wmh360/json/getpiclist.jsp?channelcode=A48&pno
 	 * =1&pernum=10&clientkey=bb7c1386d85044ba7a7ae53f3362d634
 	 * pernum="+PAGE_PIC_SIZE+"&
 	 */
-	public static final String URL_PIC_LIST = baseURL
+	public static final String URL_PIC_LIST = "%s"
 			+ "wmh360/json/getpiclist.jsp?clientkey=bb7c1386d85044ba7a7ae53f3362d634";
 
 	/**
@@ -194,8 +193,7 @@ public class URLs {
 	 * A4807&infoid=1422535398644904&pno=1&pernum=10&clientkey=
 	 * bb7c1386d85044ba7a7ae53f3362d634 &infoid=1422535398644904 &pno=1
 	 */
-	public static final String URL_PIC_INFO_LIST = baseURL
-			+ "wmh360/json/getpiclistbyid.jsp?pernum=20&clientkey=bb7c1386d85044ba7a7ae53f3362d634";
+	public static final String URL_PIC_INFO_LIST = "%s" + "wmh360/json/getpiclistbyid.jsp?pernum=20&clientkey=bb7c1386d85044ba7a7ae53f3362d634";
 
 	public static final int IO_BUFFER_SIZE = 2 * 1024;
 	/**
@@ -203,27 +201,27 @@ public class URLs {
 	 * http://www.sxxynews.com:8080/wmh360/epaper/json/readernews.jsp?&userid=
 	 * 123&title=123&name=1233&content=123&contract=123&picurl=123&appcode=D01
 	 */
-	public static final String URL_BAOLIAO = baseURL + "wmh360/epaper/json/readernews.jsp?";
+	public static final String URL_BAOLIAO = "%s" + "wmh360/epaper/json/readernews.jsp?";
 
 	/**
 	 * 评论列表 http://123.56.46.218/wmh360/json/getchannelcomment.jsp?
 	 * infoid=1411214958719254
 	 * &pno=1&pernum=20&clientkey=bb7c1386d85044ba7a7ae53f3362d634
 	 */
-	public static final String URL_COMMENTLIST = baseURL + "wmh360/json/getchannelcomment.jsp";
+	public static final String URL_COMMENTLIST = "%s" + "wmh360/json/getchannelcomment.jsp";
 	/**
 	 * 登陆 http://123.56.46.218/wmh360/wmhadmin/ucenter/dologin.jsp?username=
 	 * admin&password=123 login/userlogin
 	 * {"result":"0","username":"","userid":"","cnname":"","password":"11111"}
 	 */
-	public static final String URL_LOGIN = baseURL + "wmh360/json/login/userlogin.jsp?" + "appcode=" + appCode;
+	public static final String URL_LOGIN = "%s" + "wmh360/json/login/userlogin.jsp?" + "appcode=" + "%s";
 
 	/**
 	 * http://www.apppubs.com/wmh360/json/login/mobilesmslogin.jsp?mobile=
 	 * 13811708941&deviceid=erewrer3433243242&appcode=D20
 	 */
-	public static final String URL_LOGIN_WITH_PHONE = baseURL
-			+ "wmh360/json/login/mobilesmslogin.jsp?mobile=%s&deviceid=%s&appcode=" + appCode;
+	public static final String URL_LOGIN_WITH_PHONE = "%s"
+			+ "wmh360/json/login/mobilesmslogin.jsp?&appcode=%s&mobile=%s&deviceid=%s";
 
 	/**
 	 * 通过用户名获取验证码
@@ -231,16 +229,15 @@ public class URLs {
 	 * =xiwang&deviceid=erewrer3433243242&appcode=D20&os=ostest&dev=devtest&app=
 	 * apptest&fr=1
 	 */
-	public static final String URL_LOGIN_WITH_USERNAME = baseURL
-			+ "wmh360/json/login/usersmslogin.jsp?username=%s&deviceid=%s&token=%s&os=%s&dev=%s&app=%s&appcodeversion=%d&fr=4&appcode="
-			+ appCode;
+	public static final String URL_LOGIN_WITH_USERNAME = "%s"
+			+ "wmh360/json/login/usersmslogin.jsp?appcode=%s&username=%s&deviceid=%s&token=%s&os=%s&dev=%s&app=%s&appcodeversion=%d&fr=4";
 
 	/**
 	 * 通过组织机构登录
 	 * http://www.apppubs.com/wmh360/json/login/usercroplogin.jsp?username=xiwang&deviceid=erewrer3433243242&appcode=D20&os=ostest&dev=devtest&app=apptest&fr=1
-	 * wmh360/json/login/usercroplogin.jsp?username=%s&password=%s&corpcode=%s&deviceid=%s&os=%s&dev=%s&app=%s&fr=4&appcode="+appCode+"
+	 * wmh360/json/login/usercroplogin.jsp?username=%s&password=%s&corpcode=%s&deviceid=%s&os=%s&dev=%s&app=%s&fr=4&appcode="+"%s"+"
 	 */
-	public static final String URL_LOGIN_WITH_ORG = baseURL + "wmh360/json/login/usercroplogin.jsp?username=%s&password=%s&corpcode=%s&deviceid=%s&os=%s&token=%s&dev=%s&app=%s&fr=4&appcode=" + appCode + "";
+	public static final String URL_LOGIN_WITH_ORG = "%s" + "wmh360/json/login/usercroplogin.jsp?appcode=%s&username=%s&password=%s&corpcode=%s&deviceid=%s&os=%s&token=%s&dev=%s&app=%s&fr=4";
 
 	/**
 	 * 无需登陆时注册设备信息
@@ -251,8 +248,8 @@ public class URLs {
 	 * deviceid
 	 * =deviceidtest&os=ostest&dev=devtest&app=1&fr=1&appcode=U1435426278267
 	 */
-	public static final String URL_REGISTER_DEVICE = baseURL
-			+ "wmh360/json/login/nologin.jsp?token=%s&deviceid=%s&os=%s&dev=%s&app=%s&fr=4&appcode=%s";
+	public static final String URL_REGISTER_DEVICE = "%s"
+			+ "wmh360/json/login/nologin.jsp?appcode=%s&token=%s&deviceid=%s&os=%s&dev=%s&app=%s&fr=4";
 
 	/**
 	 * 注册 http://123.56.46.218/wmh360/wmhadmin/ucenter/doreg.jsp?usernamestr=
@@ -261,73 +258,73 @@ public class URLs {
 	 * 156728933398&nicknamestr=dfssf usernamestr emailstr passwordstr
 	 * clientidstr mobilestr nicknamestr
 	 */
-	public static final String URL_ZHUCE = baseURL + "wmh360/wmhadmin/ucenter/doreg.jsp?";
+	public static final String URL_ZHUCE = "%s" + "wmh360/wmhadmin/ucenter/doreg.jsp?";
 	/**
 	 * 关于我们 http://123.56.46.218/wmh360/json/getappwebinfo.jsp?clientid=D58&what
 	 * =appdesc
 	 */
-	public static final String URL_ABOUT = baseURL + "wmh360/json/getappwebinfo.jsp?clientid=" + appCode
+	public static final String URL_ABOUT = "%s" + "wmh360/json/getappwebinfo.jsp?clientid=" + "%s"
 			+ "&what=appdesc";
 	/**
 	 * 修改用户信息 http://123.56.46.218/wmh360/wmhadmin/ucenter/domodify.jsp
 	 * http://123.56.46.218/wmh360/json/login/domodify.jsp useridstr 用户的id
 	 * emailstr passwordstr clientidstr mobilestr nicknamestr
 	 */
-	public static final String URL_DOMODIFY = baseURL + "wmh360/json/login/domodify.jsp";
+	public static final String URL_DOMODIFY = "%s" + "wmh360/json/login/domodify.jsp";
 
 	/**
 	 * http://123.56.46.218/wmh360/json/getappextrainfo.jsp?clientid=D58&what=
 	 * reginfo
 	 */
-	public static final String URL_REGMIANZE = baseURL + "wmh360/json/getappextrainfo.jsp?clientid=" + appCode
+	public static final String URL_REGMIANZE = "%s" + "wmh360/json/getappextrainfo.jsp?clientid=" + "%s"
 			+ "&what=reginfo";
 
 	/**
 	 * 根据infoID获得评论数 http://123.56.46.218/wmh360/json/getinfocomment.jsp?infoid=
 	 * 1411143367293075&clientkey=bb7c1386d85044ba7a7ae53f3362d634
 	 */
-	public static final String URL_INFOIDCOMMENTSIZE = baseURL + "wmh360/json/getinfocomment.jsp";
+	public static final String URL_INFOIDCOMMENTSIZE = "%s" + "wmh360/json/getinfocomment.jsp";
 
 	/**
 	 * 获得一区地址 http://123.56.46.218/wmh360/json/getweathercode.jsp?clientkey=
 	 * bb7c1386d85044ba7a7ae53f3362d634
 	 */
-	public static final String URL_ONEPLEASE = baseURL + "wmh360/json/getweathercode.jsp?clientkey=" + CLIENTKEY;
+	public static final String URL_ONEPLEASE = "%s" + "wmh360/json/getweathercode.jsp?clientkey=" + CLIENTKEY;
 	/**
 	 * 获得二区地址
 	 * http://123.56.46.218/wmh360/json/getweathercodesub.jsp?code=101010100
 	 * &clientkey=bb7c1386d85044ba7a7ae53f3362d634
 	 */
-	public static final String URL_SECONDPLEASE = baseURL + "wmh360/json/getweathercodesub.jsp?";
+	public static final String URL_SECONDPLEASE = "%s" + "wmh360/json/getweathercodesub.jsp?";
 
 	/**
 	 * 报纸
 	 */
-	public static final String URL_PAPER_LIST = baseURL + "wmh360/epaper/json/getpaperinfo.jsp?appcode=" + appCode
+	public static final String URL_PAPER_LIST = "%s" + "wmh360/epaper/json/getpaperinfo.jsp?appcode=" + "%s"
 			+ "&imei=imeitest";
 
 	// 报纸期列表
 	// ?papercode=xxrb"
-	public static final String URL_ISSUE_LIST = baseURL + "wmh360/epaper/json/getqilist_all.jsp";
+	public static final String URL_ISSUE_LIST = "%s" + "wmh360/epaper/json/getqilist_all.jsp?papercode=%s";
 
 	// 某期报纸内容列表
 	// ?qiid=1411815505567
-	public static final String URL_ISSUE_INFO = baseURL + "wmh360/epaper/json/getqiinfo.jsp";
+	public static final String URL_ISSUE_INFO = "%s" + "wmh360/epaper/json/getqiinfo.jsp";
 
 	/**
 	 * 取得某一期报纸详情 http://123.56.46.218/wmh360/epaper/json/getnewspage.jsp?id=
 	 * 1411817974211
 	 */
-	public static final String URL_PAPER_INFO = baseURL + "wmh360/epaper/json/getnewspage.jsp";
+	public static final String URL_PAPER_INFO = "%s" + "wmh360/epaper/json/getnewspage.jsp";
 	// 往期报纸
-	public static final String URL_LAST_ISSUE_ = baseURL + "wmh360/epaper/json/getqilist_old.jsp?papercode=xxrb";
+	public static final String URL_LAST_ISSUE_ = "%s" + "wmh360/epaper/json/getqilist_old.jsp?papercode=xxrb";
 
 	/**
 	 * 获取频道更新时间
 	 * http://123.56.46.218/wmh360/json/getchannelupdate.jsp?channelcode
 	 * =A4801&clientkey=bb7c1386d85044ba7a7ae53f3362d634 &channelcode=A4801
 	 */
-	public static final String URL_CHANNEL_UPDATE_TIME = baseURL + "wmh360/json/getchannelupdate.jsp?clientkey="
+	public static final String URL_CHANNEL_UPDATE_TIME = "%s"+"wmh360/json/getchannelupdate.jsp?clientkey="
 			+ CLIENTKEY + "";
 
 	/**
@@ -335,14 +332,13 @@ public class URLs {
 	 * clientkey=bb7c1386d85044ba7a7ae53f3362d634 id=1426613042915&
 	 */
 
-	public static final String URL_SUBMENU_GROUP = baseURL + "wmh360/json/getmenugroup.jsp?clientkey=" + CLIENTKEY
-			+ "&appcode=" + appCode + "";
+	public static final String URL_SUBMENU_GROUP = "%s" + "wmh360/json/getmenugroup.jsp?appcode=%s&clientkey=" + CLIENTKEY;
 
 	/**
 	 * 布局刷新时间 http://123.56.46.218/wmh360/json/getappinfo.jsp?appcode=D63&imei=
 	 * imeitest&clientkey=bb7c1386d85044ba7a7ae53f3362d634
 	 */
-	public static final String URL_SUBMENU_GROUP_UPDATETIME = baseURL + "wmh360/json/getappinfo.jsp?appcode=" + appCode
+	public static final String URL_SUBMENU_GROUP_UPDATETIME = "%s" + "wmh360/json/getappinfo.jsp?appcode=" + "%s"
 			+ "&imei=imeitest&clientkey=bb7c1386d85044ba7a7ae53f3362d634";
 
 	/**
@@ -351,8 +347,8 @@ public class URLs {
 	 * =D20&username
 	 * =dadcs&receiver=xiwang&clientkey=bb7c1386d85044ba7a7ae53f3362d634
 	 */
-	public static final String URL_CHAT_GET_CHAT_GROUP_ID = baseURL + "wmh360/json/msg/getchatgroupid.jsp?appcode="
-			+ appCode + "&username=%s&receiver=%s&clientkey=bb7c1386d85044ba7a7ae53f3362d634";
+	public static final String URL_CHAT_GET_CHAT_GROUP_ID = "%s" + "wmh360/json/msg/getchatgroupid.jsp?appcode="
+			+ "%s" + "&username=%s&receiver=%s&clientkey=bb7c1386d85044ba7a7ae53f3362d634";
 
 	/**
 	 * 新建聊天
@@ -362,7 +358,7 @@ public class URLs {
 	 * bb7c1386d85044ba7a7ae53f3362d634 username 创建者用户名 groupname 群组名称
 	 * groupuserall 群组成员 多个以逗号分隔 grouptype 1单聊 2群聊 返回： groupid 创建的聊天群组ID
 	 */
-	public static final String URL_CHAT_CREATE_CHAT = baseURL + "wmh360/json/msg/addgchat.jsp?appcode=" + appCode
+	public static final String URL_CHAT_CREATE_CHAT = "%s" + "wmh360/json/msg/addgchat.jsp?appcode=" + "%s"
 			+ "&username=%s&groupname=&groupuserall=%s&grouptype=%s&clientkey=bb7c1386d85044ba7a7ae53f3362d634";
 
 	/**
@@ -370,7 +366,7 @@ public class URLs {
 	 * groupid=1447914062284&groupuserall=xiwang,jiangrui,wubin&clientkey=
 	 * bb7c1386d85044ba7a7ae53f3362d634
 	 */
-	public static final String URL_CHAT_ADD_CHAT_USER = baseURL + "wmh360/json/msg/addchatuser.jsp?appcode=" + appCode
+	public static final String URL_CHAT_ADD_CHAT_USER = "%s" + "wmh360/json/msg/addchatuser.jsp?appcode=" + "%s"
 			+ "&groupid=%s&groupuserall=%s&clientkey=bb7c1386d85044ba7a7ae53f3362d634";
 
 	/**
@@ -380,8 +376,8 @@ public class URLs {
 	 * =bb7c1386d85044ba7a7ae53f3362d634 groupid 群组ID username 群主用户名
 	 * groupuserall 要删除的群组成员， 多个以逗号分隔
 	 */
-	public static final String URL_CHAT_DELETE_CHAT_USER = baseURL
-			+ "wmh360/json/msg/delchatuser.jsp?appcode=" + appCode + "&groupid=%s&username=%s&groupuserall=%s&clientkey=bb7c1386d85044ba7a7ae53f3362d634";
+	public static final String URL_CHAT_DELETE_CHAT_USER = "%s"
+			+ "wmh360/json/msg/delchatuser.jsp?appcode=" + "%s" + "&groupid=%s&username=%s&groupuserall=%s&clientkey=bb7c1386d85044ba7a7ae53f3362d634";
 
 	/**
 	 * .聊天列表显示接口 只返回未读信息 其他已经读过的应该缓存到客户端本地
@@ -395,7 +391,7 @@ public class URLs {
 	 * 接收者 可以为空 curp 当前第几页 perp 每页多少条
 	 */
 
-	public static final String URL_CHAT_LIST = baseURL + "wmh360/json/msg/getchatlist.jsp?appcode=" + appCode
+	public static final String URL_CHAT_LIST = "%s" + "wmh360/json/msg/getchatlist.jsp?appcode=" + "%s"
 			+ "&receiver=%s&sender=%s&groupid=%s&curp=%s&perp=%s&starttime=%s&clientkey=bb7c1386d85044ba7a7ae53f3362d634";
 
 	/**
@@ -420,12 +416,12 @@ public class URLs {
 	 * 如果是图片则此处为图片或文件此处单位为byte，如果为声音此处单位为millisecond //msginfo 推送的信息ID
 	 * 也可以是一个链接地址 //appcode 客户ID 我们系统会为每个客户分配一个ID
 	 */
-	public static final String URL_CHAT_SEND = baseURL
-			+ "wmh360/json/msg/insertchatinfo.jsp?clientkey=bb7c1386d85044ba7a7ae53f3362d634&appcode=" + appCode
+	public static final String URL_CHAT_SEND = "%s"
+			+ "wmh360/json/msg/insertchatinfo.jsp?clientkey=bb7c1386d85044ba7a7ae53f3362d634&appcode=" + "%s"
 			+ "&fromtype=5&flag=4";
 
 	// public static final String URL_CHAT_SEND_MSG =
-	// baseURL+"wmh360/json/msg/insertchatinfo.jsp?appcode="+appCode+"&sender=%s&receiver=%s&contentType=%s&content=%s&fileName=%s&fromtype=5&flag=4&totype=&length=&clientkey=bb7c1386d85044ba7a7ae53f3362d634";
+	// "%s"+"wmh360/json/msg/insertchatinfo.jsp?appcode="+"%s"+"&sender=%s&receiver=%s&contentType=%s&content=%s&fileName=%s&fromtype=5&flag=4&totype=&length=&clientkey=bb7c1386d85044ba7a7ae53f3362d634";
 
 	/**
 	 * 聊天信息发送 http://www.wmh360.com/wmh360/json/msg/addchatinfo.jsp?appcode=D20&
@@ -442,9 +438,9 @@ public class URLs {
 	 * bb7c1386d85044ba7a7ae53f3362d634
 	 */
 
-	public static final String URL_CHAT_SEND_MSG = baseURL
+	public static final String URL_CHAT_SEND_MSG = "%s"
 			+ "wmh360/json/msg/addchatinfo.jsp?appcode="
-			+ appCode
+			+ "%s"
 			+ "&groupid=%s&username=%s&receiver=%s&content=%s&contenttype=%s&fromtype=5&filename=%s&length=%s&clientkey=bb7c1386d85044ba7a7ae53f3362d634";
 
 	/**
@@ -467,8 +463,8 @@ public class URLs {
 	 * 是否接收消息 1接收 0不接收
 	 */
 
-	public static final String URL_CHAT_GROUD_INFO = baseURL + "wmh360/json/msg/getchatgroupinfo.jsp?appcode="
-			+ appCode + "&groupid=%s&username=%s&clientkey=bb7c1386d85044ba7a7ae53f3362d634";
+	public static final String URL_CHAT_GROUD_INFO = "%s" + "wmh360/json/msg/getchatgroupinfo.jsp?appcode="
+			+ "%s" + "&groupid=%s&username=%s&clientkey=bb7c1386d85044ba7a7ae53f3362d634";
 
 	/**
 	 * 修改群聊天名称
@@ -476,8 +472,8 @@ public class URLs {
 	 * =D20&groupid=1448008312259&groupname=hello&clientkey=
 	 * bb7c1386d85044ba7a7ae53f3362d634
 	 */
-	public static final String URL_CHAT_CHANGE_GROUP_NAME = baseURL + "wmh360/json/msg/setchatgroupname.jsp?appcode="
-			+ appCode + "&groupid=%s&groupname=%s&clientkey=bb7c1386d85044ba7a7ae53f3362d634";
+	public static final String URL_CHAT_CHANGE_GROUP_NAME = "%s" + "wmh360/json/msg/setchatgroupname.jsp?appcode="
+			+ "%s" + "&groupid=%s&groupname=%s&clientkey=bb7c1386d85044ba7a7ae53f3362d634";
 
 	/**
 	 * 删除群成员，退出群聊
@@ -485,21 +481,21 @@ public class URLs {
 	 * groupid
 	 * =1448008312259&username=dacs&clientkey=bb7c1386d85044ba7a7ae53f3362d634
 	 */
-	public static final String URL_CHAT_EXIT_CHAT_GROUP = baseURL + "wmh360/json/msg/delchatgroupbyuser.jsp?appcode="
-			+ appCode + "&groupid=%s&username=%s&clientkey=bb7c1386d85044ba7a7ae53f3362d634";
+	public static final String URL_CHAT_EXIT_CHAT_GROUP = "%s" + "wmh360/json/msg/delchatgroupbyuser.jsp?appcode="
+			+ "%s" + "&groupid=%s&username=%s&clientkey=bb7c1386d85044ba7a7ae53f3362d634";
 
 	/**
 	 * 服务号列表
 	 * http://www.wmh360.com/wmh360/json/msg/getservicelistbyall.jsp?appcode=D20
 	 */
-	public static final String URL_SERVICE_LIST = baseURL + "wmh360/json/msg/getservicelistbyall.jsp?appcode="
-			+ appCode + "&clientkey=bb7c1386d85044ba7a7ae53f3362d634";
+	public static final String URL_SERVICE_LIST = "%s" + "wmh360/json/msg/getservicelistbyall.jsp?appcode="
+			+ "%s" + "&clientkey=bb7c1386d85044ba7a7ae53f3362d634";
 	/*
 	 * http://www.wmh360.com/wmh360/json/msg/getallservicelistbyuser.jsp?appcode=
 	 * D20&username=dacs&clientkey=bb7c1386d85044ba7a7ae53f3362d634
 	 */
-	public static final String URL_SERVICE_NO_FOR_USER = baseURL
-			+ "wmh360/json/msg/getallservicelistbyuser.jsp?appcode=" + appCode
+	public static final String URL_SERVICE_NO_FOR_USER = "%s"
+			+ "wmh360/json/msg/getallservicelistbyuser.jsp?appcode=" + "%s"
 			+ "&username=%s&clientkey=bb7c1386d85044ba7a7ae53f3362d634";
 
 	/**
@@ -508,7 +504,7 @@ public class URLs {
 	 * =D20&service_id
 	 * =1445543142727&username=dacs&clientkey=bb7c1386d85044ba7a7ae53f3362d634
 	 */
-	public static final String URL_SERVICE_NO = baseURL + "wmh360/json/msg/getservicebyid.jsp?appcode=" + appCode
+	public static final String URL_SERVICE_NO = "%s" + "wmh360/json/msg/getservicebyid.jsp?appcode=" + "%s"
 			+ "&service_id=%s&username=%s&clientkey=bb7c1386d85044ba7a7ae53f3362d634";
 
 	/**
@@ -517,8 +513,7 @@ public class URLs {
 	 * http://www.wmh360.com/wmh360/json/msg/getserviceinfolist.jsp?appcode=D20&
 	 * service_id=1427461856233&clientkey=bb7c1386d85044ba7a7ae53f3362d634
 	 */
-	public static final String URL_SERVICE_MESSAGE_INFO_LIST = baseURL
-			+ "wmh360/json/msg/getserviceinfolist.jsp?appcode=" + appCode
+	public static final String URL_SERVICE_MESSAGE_INFO_LIST = "%s"+"wmh360/json/msg/getserviceinfolist.jsp?appcode=" + "%s"
 			+ "&clientkey=bb7c1386d85044ba7a7ae53f3362d634";
 
 	/**
@@ -528,8 +523,8 @@ public class URLs {
 	 * http://www.wmh360.com/wmh360/json/msg/getservicelistbyorder.jsp?appcode
 	 * =U1433417616429&clientkey=bb7c1386d85044ba7a7ae53f3362d634
 	 */
-	public static final String URL_SERVICE_NO_SUBSCRIBEABLE = baseURL
-			+ "wmh360/json/msg/getservicelistbyorder.jsp?appcode=" + appCode
+	public static final String URL_SERVICE_NO_SUBSCRIBEABLE = "%s"
+			+ "wmh360/json/msg/getservicelistbyorder.jsp?appcode=" + "%s"
 			+ "&clientkey=bb7c1386d85044ba7a7ae53f3362d634";
 
 	/**
@@ -538,16 +533,16 @@ public class URLs {
 	 * .jsp?appcode=D20&service_id=1427461856233&username=xiwang&clientkey=
 	 * bb7c1386d85044ba7a7ae53f3362d634 {"result": "1"} result:0失败，1成功，2已经关注
 	 */
-	public static final String URL_SERVICE_ATTENTION = baseURL + "wmh360/json/msg/addservicebyuser.jsp?appcode="
-			+ appCode + "&clientkey=bb7c1386d85044ba7a7ae53f3362d634";
+	public static final String URL_SERVICE_ATTENTION = "%s" + "wmh360/json/msg/addservicebyuser.jsp?appcode="
+			+ "%s" + "&clientkey=bb7c1386d85044ba7a7ae53f3362d634";
 	/**
 	 * 获得某一用户订阅的服务号列表
 	 * http://www.wmh360.com/wmh360/json/msg/getservicelistbyuser.
 	 * jsp?appcode=D20
 	 * &username=xiwang&clientkey=bb7c1386d85044ba7a7ae53f3362d634
 	 */
-	public static final String URL_USERSERVICELIST = baseURL + "wmh360/json/msg/getservicelistbyuser.jsp?appcode="
-			+ appCode + "&clientkey=bb7c1386d85044ba7a7ae53f3362d634";
+	public static final String URL_USERSERVICELIST = "%s" + "wmh360/json/msg/getservicelistbyuser.jsp?appcode="
+			+ "%s" + "&clientkey=bb7c1386d85044ba7a7ae53f3362d634";
 
 	/**
 	 * g.取消关注 用户订阅服务
@@ -557,8 +552,8 @@ public class URLs {
 	 * <p>
 	 * {"result": "1"} result:0失败，1成功
 	 */
-	public static final String URL_UNATTENTION_SERVICE = baseURL + "wmh360/json/msg/delservicebyuser.jsp?appcode="
-			+ appCode + "&clientkey=bb7c1386d85044ba7a7ae53f3362d634";
+	public static final String URL_UNATTENTION_SERVICE = "%s" + "wmh360/json/msg/delservicebyuser.jsp?appcode="
+			+ "%s" + "&clientkey=bb7c1386d85044ba7a7ae53f3362d634";
 
 	/**
 	 * 显示某一条信息的详细信息 http://www.wmh360.com/wmh360/json/msg/getserviceinfodetail.
@@ -569,7 +564,7 @@ public class URLs {
 	 * serviceinfo_summary 消息摘要 serviceinfo_content 消息内容 serviceinfo_thedate
 	 * 消息时间
 	 */
-	public static final String URL_SERVICEINFO = baseURL + "wmh360/json/msg/serviceinfo.jsp?appcode=" + appCode
+	public static final String URL_SERVICEINFO = "%s" + "wmh360/json/msg/serviceinfo.jsp?appcode=" + "%s"
 			+ "&clientkey=bb7c1386d85044ba7a7ae53f3362d634";
 
 	/**
@@ -578,8 +573,8 @@ public class URLs {
 	 * D20&service_id
 	 * =1428155175898&username=dacs&clientkey=bb7c1386d85044ba7a7ae53f3362d634
 	 */
-	public static final String URL_CLEAR_UNREAD_NUM_FOR_SERVICE_NO_AND_CHAT = baseURL
-			+ "wmh360/json/msg/setreadinfo.jsp?appcode=" + appCode
+	public static final String URL_CLEAR_UNREAD_NUM_FOR_SERVICE_NO_AND_CHAT = "%s"
+			+ "wmh360/json/msg/setreadinfo.jsp?appcode=" + "%s"
 			+ "&service_id=%s&username=%s&clientkey=bb7c1386d85044ba7a7ae53f3362d634";
 
 	/**
@@ -587,8 +582,8 @@ public class URLs {
 	 * http://www.wmh360.com/wmh360/json/msg/setreadinfoone.jsp?appcode
 	 * =D20&id=1428155175898&clientkey=bb7c1386d85044ba7a7ae53f3362d634
 	 */
-	public static final String URL_CLEAR_UNREAD_NUM_FOR_SINGLE_SERVICE_NO = baseURL
-			+ "wmh360/json/msg/setreadinfoone.jsp?appcode=" + appCode
+	public static final String URL_CLEAR_UNREAD_NUM_FOR_SINGLE_SERVICE_NO = "%s"
+			+ "wmh360/json/msg/setreadinfoone.jsp?appcode=" + "%s"
 			+ "&id=%s&clientkey=bb7c1386d85044ba7a7ae53f3362d634";
 
 	/**
@@ -598,16 +593,16 @@ public class URLs {
 	 * =imeitest&clientkey=bb7c1386d85044ba7a7ae53f3362d634&slidingid=1001
 	 * slidingid：channeltypeid，一个推广图菜单对应一个推广图的频道，通过channeltypeid来得到此推广图频道的信息
 	 */
-	public static final String URL_PROMOTION_PIC_LIST = baseURL
-			+ "wmh360/json/getsliding.jsp?imei=imeitest&clientkey=bb7c1386d85044ba7a7ae53f3362d634&appcode=" + appCode
+	public static final String URL_PROMOTION_PIC_LIST = "%s"
+			+ "wmh360/json/getsliding.jsp?imei=imeitest&clientkey=bb7c1386d85044ba7a7ae53f3362d634&appcode=" + "%s"
 			+ "&slidingid=%s";
 
 	/**
 	 * http://www.apppubs.com/wmh360/json/login/smsresend.jsp?mobile=13811708941
 	 * &deviceid=erewrer3433243242&appcode=D20
 	 */
-	public static final String URL_SEND_SMS = baseURL
-			+ "wmh360/json/login/smsresend.jsp?username=%s&mobile=%s&deviceid=%s&appcode=" + appCode
+	public static final String URL_SEND_SMS = "%s"
+			+ "wmh360/json/login/smsresend.jsp?appcode=%s&username=%s&mobile=%s&deviceid=%s"
 			+ "&clientkey=bb7c1386d85044ba7a7ae53f3362d634";
 	public static final int RESULT_CODE_SEND_SMS_ERROR = -1;
 
@@ -618,9 +613,9 @@ public class URLs {
 	 * 5465465656567&os=ostest&
 	 * dev=devtest&app=apptest&fr=1&clientkey=bb7c1386d85044ba7a7ae53f3362d634
 	 */
-	public static final String URL_CONFIRM_VERIFICATION_CODE = baseURL
+	public static final String URL_CONFIRM_VERIFICATION_CODE = "%s"
 			+ "wmh360/json/login/smsconfirm.jsp?mobile=%s&deviceid=%s&smscode=%s&username=%s&token=%s&os=%s&dev=%s&app=%s&appcodeversion=%d&fr=4&clientkey=bb7c1386d85044ba7a7ae53f3362d634&appcode="
-			+ appCode;
+			+ "%s";
 	public static final int RESULT_CODE_CONFIRM_VERIFICATION_CODE_ERROR = -1;
 
 	/**
@@ -628,12 +623,12 @@ public class URLs {
 	 * U1443595553587
 	 * &supermenuid=1444337659819&clientkey=bb7c1386d85044ba7a7ae53f3362d634
 	 */
-	public static final String URL_TITLE_MENU = baseURL + "wmh360/json/gettitlemenu.jsp?appcode=" + appCode
+	public static final String URL_TITLE_MENU = "%s" + "wmh360/json/gettitlemenu.jsp?appcode=" + "%s"
 			+ "&supermenuid=%s&clientkey=bb7c1386d85044ba7a7ae53f3362d634";
 	/**
 	 * 修改密码
 	 */
-	public static final String URL_MODIFY_PASSWORD = baseURL + "wmh360/json/modifypwd.jsp?appcode=" + appCode
+	public static final String URL_MODIFY_PASSWORD = "%s" + "wmh360/json/modifypwd.jsp?appcode=" + "%s"
 			+ "&userid=%s&oldpassword=%s&newpassword=%s";
 
 	/**
@@ -642,80 +637,80 @@ public class URLs {
 	 * =D20&userid=8a80c6533629df2f01362e0db94e01c8&clientkey=
 	 * bb7c1386d85044ba7a7ae53f3362d634
 	 */
-	public static final String URL_ADDRESS_PERMISSION = baseURL + "wmh360/json/msg/getdept_authsetl.jsp?appcode="
-			+ appCode + "&userid=%s&clientkey=bb7c1386d85044ba7a7ae53f3362d634";
+	public static final String URL_ADDRESS_PERMISSION = "%s" + "wmh360/json/msg/getdept_authsetl.jsp?appcode="
+			+ "%s" + "&userid=%s&clientkey=bb7c1386d85044ba7a7ae53f3362d634";
 	/**
 	 * http://60.205.140.176:8088/wmh360/json/msg/getdept_imauthset.jsp?appcode=D20&userid=8a80c6533629df2f01362e0db94e01c8&clientkey=bb7c1386d85044ba7a7ae53f3362d634
 	 */
-	public static final String URL_USER_PERMISSION = baseURL + "wmh360/json/msg/getdept_imauthset.jsp?appcode=" + appCode + "&userid=%s&clientkey=bb7c1386d85044ba7a7ae53f3362d634";
+	public static final String URL_USER_PERMISSION = "%s" + "wmh360/json/msg/getdept_imauthset.jsp?appcode=" + "%s" + "&userid=%s&clientkey=bb7c1386d85044ba7a7ae53f3362d634";
 
 	/**
 	 * http://123.57.13.138:8088/wmh360/json/getaddressicon.jsp?username=xiwang&appcode=D20&clientkey=bb7c1386d85044ba7a7ae53f3362d634
 	 */
-	public static final String URL_ADDRESS_USER_ICON = baseURL + "wmh360/json/getaddressicon.jsp?appcode=" + appCode + "&username=%s&clientkey=bb7c1386d85044ba7a7ae53f3362d634";
+	public static final String URL_ADDRESS_USER_ICON = "%s" + "wmh360/json/getaddressicon.jsp?appcode=" + "%s" + "&username=%s&clientkey=bb7c1386d85044ba7a7ae53f3362d634";
 	/**
 	 * String uploadURL = "http://www.wmh360.com/wmh360/json/msg/uploadfile.jsp";
 	 * 上传接口
 	 */
-	public static final String URL_UPLOAD = baseURL + "wmh360/json/msg/uploadfile.jsp";
+	public static final String URL_UPLOAD = "%s" + "wmh360/json/msg/uploadfile.jsp";
 
 	/**
 	 * http://123.56.46.218/wmh360/json/msg/getsysconfig.jsp?clientkey=bb7c1386d85044ba7a7ae53f3362d634&params=min_android_code_version
 	 */
-	public static final String URL_SYSTEM_CONFIG = baseURL + "wmh360/json/msg/getsysconfig.jsp?clientkey=bb7c1386d85044ba7a7ae53f3362d634&params=%s";
+	public static final String URL_SYSTEM_CONFIG = "%s" + "wmh360/json/msg/getsysconfig.jsp?clientkey=bb7c1386d85044ba7a7ae53f3362d634&params=%s";
 
-	public static final String URL_PAGE = baseURL + "wmh360/json/getpagejson.jsp?pageid=%s&appid=" + appCode + "&userid=%s";
+	public static final String URL_PAGE = "%s" + "wmh360/json/getpagejson.jsp?appid=%s&pageid=%s&userid=%s";
 
 	/**
 	 * 获取融云token
 	 */
-	public static final String URL_RC_TOKEN = baseURL + "wmh360/json/getrongToken.jsp?userid=%s&username=%s&appid=" + appCode + "&clientkey=bb7c1386d85044ba7a7ae53f3362d634";
+	public static final String URL_RC_TOKEN = "%s" + "wmh360/json/getrongToken.jsp?appid=" + "%s&userid=%s&username=%s" + "&clientkey=bb7c1386d85044ba7a7ae53f3362d634";
 
 	/**
 	 * 获取用户详情
 	 */
-	public static final String URL_USER_INFO = baseURL + "wmh360/json/user/getuser.jsp?userid=%s&appcode=" + appCode + "&clientkey=bb7c1386d85044ba7a7ae53f3362d634";
+	public static final String URL_USER_INFO = "%s" + "wmh360/json/user/getuser.jsp?&appcode=%s&userid=%s&clientkey=bb7c1386d85044ba7a7ae53f3362d634";
 
 	/**
 	 * 获取用户基本信息，userid，username，truename，photourl，appclientcode
 	 */
-	public static final String URL_USER_BASIC_INFO = baseURL + "wmh360/json/user/getbasicinfolist.jsp?userids=%s&appcode=" + appCode + "&clientkey=bb7c1386d85044ba7a7ae53f3362d634";
+	public static final String URL_USER_BASIC_INFO = "%s" + "wmh360/json/user/getbasicinfolist.jsp?appcode=%s&userids=%s&clientkey=bb7c1386d85044ba7a7ae53f3362d634";
 
 	/**
 	 * 发送邀请短信
 	 */
-	public static final String URL_SEND_INVITE_SMS = baseURL + "wmh360/json/msg/sendinvitesms.jsp?userids=%s&appcode=" + appCode + "&clientkey=bb7c1386d85044ba7a7ae53f3362d634";
+	public static final String URL_SEND_INVITE_SMS = "%s" + "wmh360/json/msg/sendinvitesms.jsp?appcode=%s&userids=%s&clientkey=bb7c1386d85044ba7a7ae53f3362d634";
 
 	/**
 	 * 上传头像
 	 * "%@wmh360/json/user/uploadavatar.jsp?userid=%@&appcode=%@&clientkey=bb7c1386d85044ba7a7ae53f3362d634
 	 */
-	public static final String URL_UPLOAD_AVATAR = baseURL + "wmh360/json/user/uploadavatar.jsp?userid=%s&appcode=" + appCode + "&clientkey=bb7c1386d85044ba7a7ae53f3362d634";
+	public static final String URL_UPLOAD_AVATAR = "%s" + "wmh360/json/user/uploadavatar.jsp?appcode=" + "%s" + "&userid=%s&clientkey=bb7c1386d85044ba7a7ae53f3362d634";
 
 	//	NSString * const kURLMyFilePage = @"%@wmh360/json/user/getfilelist.jsp?appcode=%@&curp=%d&perp=20&username=%@&clientkey=bb7c1386d85044ba7a7ae53f3362d634";
-	public static final String URL_MY_FILE_PAGE = baseURL + "wmh360/json/user/getfilelist.jsp?appcode=" + appCode + "&curp=%d&perp=20&username=%s&clientkey=bb7c1386d85044ba7a7ae53f3362d634";
+	public static final String URL_MY_FILE_PAGE = "%s" + "wmh360/json/user/getfilelist.jsp?appcode=" + "%s" + "&curp=%d&perp=20&username=%s&clientkey=bb7c1386d85044ba7a7ae53f3362d634";
 
 	/**
 	 * 删除文件
 	 * http://60.205.140.176:8088/wmh360/json/user/delfile.jsp?appcode=D20&clientkey=bb7c1386d85044ba7a7ae53f3362d634&fileid=1
 	 */
-	public static final String URL_MY_FILE_DELETE = baseURL + "wmh360/json/user/delfile.jsp?appcode=" + appCode + "&clientkey=bb7c1386d85044ba7a7ae53f3362d634&fileid=%s";
+	public static final String URL_MY_FILE_DELETE = "%s" + "wmh360/json/user/delfile.jsp?appcode=" + "%s" + "&clientkey=bb7c1386d85044ba7a7ae53f3362d634&fileid=%s";
 	/*
 	强制阅读消息列表
 	http://60.205.140.176:8088/wmh360/json/msg/compelreadlist.jsp?appcode=D20&username=dacs&clientkey=bb7c1386d85044ba7a7ae53f3362d634
  	*/
-	public static final String URL_COMPEL_READ_LIST = baseURL + "wmh360/json/msg/compelreadlist.jsp?appcode=" + appCode + "&username=%s&clientkey=bb7c1386d85044ba7a7ae53f3362d634";
+	public static final String URL_COMPEL_READ_LIST = "%s" + "wmh360/json/msg/compelreadlist.jsp?appcode=" + "%s" + "&username=%s&clientkey=bb7c1386d85044ba7a7ae53f3362d634";
 
 	/*
 		标记已读
 		http://60.205.140.176:8088/wmh360/json/msg/compelreadedit.jsp?appcode=D20&serviceinfo_id=1497249699346&clientkey=bb7c1386d85044ba7a7ae53f3362d634
 	 */
-	public static final String URL_MARK_AS_READ_FOR_COMPEL_MESSAGE = baseURL + "wmh360/json/msg/compelreadedit.jsp?appcode=" + appCode + "&serviceinfo_id=%s&clientkey=bb7c1386d85044ba7a7ae53f3362d634";
+	public static final String URL_MARK_AS_READ_FOR_COMPEL_MESSAGE = "%s" + "wmh360/json/msg/compelreadedit.jsp?appcode=" + "%s" + "&serviceinfo_id=%s&clientkey=bb7c1386d85044ba7a7ae53f3362d634";
 
 
 	/**
 	 * 搜索文件
 	 * http://60.205.140.176:8088/wmh360/json/user/searchfile.jsp?filename=国&username=xdhryce&curp=1&perp=10&clientkey=bb7c1386d85044ba7a7ae53f3362d634&appcode=D20
 	 */
-	public static final String URL_MY_FILE_SEARCH = baseURL + "wmh360/json/user/searchfile.jsp?filename=%s&username=%s&curp=%d&perp=20&clientkey=bb7c1386d85044ba7a7ae53f3362d634&appcode=" + appCode;
+	public static final String URL_MY_FILE_SEARCH = "%s" + "wmh360/json/user/searchfile.jsp?appcode=%s&filename=%s&username=%s&curp=%d&perp=20&clientkey=bb7c1386d85044ba7a7ae53f3362d634";
 }

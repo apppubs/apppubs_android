@@ -137,7 +137,7 @@ public class MyFileFragment extends BaseFragment implements OnClickListener {
 		String url = null;
 		Object[] params;
 		if (isSearchMode){
-			url = URLs.URL_MY_FILE_SEARCH;
+			url = String.format(URLs.URL_MY_FILE_SEARCH,URLs.baseURL,URLs.appCode);
 			UserInfo user = AppContext.getInstance(mContext).getCurrentUser();
 			String encodedQuery = null;
 			try {
@@ -148,7 +148,7 @@ public class MyFileFragment extends BaseFragment implements OnClickListener {
 			params = new Object[]{encodedQuery, user.getUsername(), page};
 
 		}else{
-			url = URLs.URL_MY_FILE_PAGE;
+			url = String.format(URLs.URL_MY_FILE_PAGE, URLs.baseURL,URLs.appCode);
 			UserInfo user = AppContext.getInstance(mContext).getCurrentUser();;
 			params = new Object[]{page,user.getUsername()};
 		}
@@ -312,7 +312,7 @@ public class MyFileFragment extends BaseFragment implements OnClickListener {
 
 	private String getPageUrl(int page) {
 		UserInfo user = AppContext.getInstance(mContext).getCurrentUser();
-		return String.format(URLs.URL_MY_FILE_PAGE, page, user.getUsername());
+		return String.format(URLs.URL_MY_FILE_PAGE, URLs.baseURL,URLs.appCode, page, user.getUsername());
 	}
 
 	@Override
@@ -408,7 +408,7 @@ public class MyFileFragment extends BaseFragment implements OnClickListener {
 				if (index == 0) {
 					ProgressHUD.show(mHostActivity, "请稍候...", true, false, null);
 					String[] params = {model.getFileId()};
-					mAppContext.getHttpClient().GET(URLs.URL_MY_FILE_DELETE, params, new WMHRequestListener() {
+					mAppContext.getHttpClient().GET(String.format(URLs.URL_MY_FILE_DELETE,URLs.baseURL,URLs.appCode), params, new WMHRequestListener() {
 						@Override
 						public void onDone(JSONResult jsonResult, @NonNull WMHHttpErrorCode errorCode) {
 

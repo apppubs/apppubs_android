@@ -271,7 +271,7 @@ public class FirstLoginActity extends BaseActivity implements ErrorListener, Asy
 
 		ProgressHUD.show(this);
 
-		String url = String.format(URLs.URL_LOGIN_WITH_PHONE, phone, mSystemBussiness.getMachineId());
+		String url = String.format(URLs.URL_LOGIN_WITH_PHONE,URLs.baseURL,URLs.appCode, phone, mSystemBussiness.getMachineId());
 		LogM.log(this.getClass(), "请求url:" + url);
 		mRequestQueue.add(new StringRequest(url, new Listener<String>() {
 
@@ -299,7 +299,7 @@ public class FirstLoginActity extends BaseActivity implements ErrorListener, Asy
 		String url = null;
 		try {
 			// /wmh360/json/login/usersmslogin.jsp?username=%s&deviceid=%s&token=%s&os=%s&dev=%s&app=%s&fr=4&appcode="+appCode;
-			url = String.format(URLs.URL_LOGIN_WITH_USERNAME, username, mSystemBussiness.getMachineId(),
+			url = String.format(URLs.URL_LOGIN_WITH_USERNAME,URLs.baseURL,URLs.appCode, username, mSystemBussiness.getMachineId(),
 					mAppContext.getApp().getPushToken(), osVersion, URLEncoder.encode(Build.MODEL, "utf-8"),
 					currentVersionName,versionCode);
 		} catch (UnsupportedEncodingException e) {
@@ -390,7 +390,7 @@ public class FirstLoginActity extends BaseActivity implements ErrorListener, Asy
 		String url = null;
 		try {
 			// wmh360/json/login/usercroplogin.jsp?username=%s&password=%s&cropid=%s&deviceid=%s&os=%s&token=%sdev=%s&app=%s&fr=4&appcode="+appCode+"";
-			url = String.format(URLs.URL_LOGIN_WITH_ORG, username, password, orgCode, mSystemBussiness.getMachineId(),
+			url = String.format(URLs.URL_LOGIN_WITH_ORG,URLs.baseURL,URLs.appCode, username, password, orgCode, mSystemBussiness.getMachineId(),
 					osVersion, mAppContext.getApp().getPushToken(), URLEncoder.encode(Build.MODEL, "utf-8"),
 					currentVersionName);
 		} catch (UnsupportedEncodingException e) {
@@ -500,7 +500,7 @@ public class FirstLoginActity extends BaseActivity implements ErrorListener, Asy
 				requestParamsMap.put("appcodeversion",Utils.getVersionCode(mContext)+"");
 				requestParamsMap.put("fr", "4");
 
-				String data = WebUtils.requestWithPost(URLs.URL_LOGIN, requestParamsMap);
+				String data = WebUtils.requestWithPost(String.format(URLs.URL_LOGIN,URLs.baseURL,URLs.appCode), requestParamsMap);
 				JSONObject jo = new JSONObject(data);
 				/**
 				 * //0、用户名或密码错误 //1、还未注册 //2、已经注册并且信息一致

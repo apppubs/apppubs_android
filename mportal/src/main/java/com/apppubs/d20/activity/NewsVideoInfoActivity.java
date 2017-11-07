@@ -170,7 +170,7 @@ public class NewsVideoInfoActivity extends BaseActivity implements AsyTaskCallba
 	public Object onExecute(Integer tag, String[] params) throws IOException, InterruptedException, JSONException {
 		Object result = null;
 		if (tag==TASK_TAG_LOAD_DATA) {
-			String url = String.format(URLs.URL_VIDEO, params[0],params[1]);
+			String url = String.format(URLs.URL_VIDEO,URLs.baseURL, params[0],params[1]);
 				result = WebUtils.request(url, NewsVideoInfo.class, "resultinfo");
 		}
 		return result;

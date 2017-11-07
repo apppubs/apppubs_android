@@ -1,16 +1,13 @@
 package com.apppubs.d20;
 
-import android.app.ActivityManager;
 import android.content.Context;
 import android.content.Intent;
 import android.support.annotation.Nullable;
 import android.util.Log;
 
-import com.apppubs.d20.activity.HomeBaseActivity;
 import com.apppubs.d20.bean.App;
 import com.apppubs.d20.bean.AppConfig;
 import com.apppubs.d20.bean.Settings;
-import com.apppubs.d20.bean.User;
 import com.apppubs.d20.bean.UserInfo;
 import com.apppubs.d20.constant.URLs;
 import com.apppubs.d20.home.CompelMessageDialogActivity;
@@ -189,7 +186,7 @@ public class AppContext {
 
 	public void showCompelMessageIfHave(){
 
-		getHttpClient().GET(URLs.URL_COMPEL_READ_LIST,new String[]{getCurrentUser().getUsername()}, new WMHRequestListener(){
+		getHttpClient().GET(URLs.URL_COMPEL_READ_LIST,new String[]{URLs.baseURL,URLs.appCode,getCurrentUser().getUsername()}, new WMHRequestListener(){
 
 			@Override
 			public void onDone(JSONResult jsonResult, @Nullable WMHHttpErrorCode errorCode) {

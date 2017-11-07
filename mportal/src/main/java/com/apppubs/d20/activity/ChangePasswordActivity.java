@@ -56,7 +56,7 @@ public class ChangePasswordActivity extends BaseActivity implements OnClickListe
 			} else {
 				ProgressHUD.show(this);
 				UserInfo currentUser = AppContext.getInstance(mContext).getCurrentUser();
-				String url = String.format(URLs.URL_MODIFY_PASSWORD, currentUser.getUserId(), mOriginalEt
+				String url = String.format(URLs.baseURL,URLs.appCode,URLs.URL_MODIFY_PASSWORD, currentUser.getUserId(), mOriginalEt
 						.getText().toString().trim(), mNewEt.getText().toString().trim());
 				mRequestQueue.add(new StringRequest(url, new Listener<String>() {
 

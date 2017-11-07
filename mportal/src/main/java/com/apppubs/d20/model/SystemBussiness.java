@@ -129,7 +129,7 @@ public class SystemBussiness extends BaseBussiness {
 			@Override
 			public void run() {
 
-				String updateverurl = URLs.URL_UPDATE + "appcode=" + URLs.appCode + "&type=android&clientkey="
+				String updateverurl = String.format(URLs.URL_UPDATE,URLs.baseURL) + "appcode=" + URLs.appCode + "&type=android&clientkey="
 						+ URLs.CLIENTKEY;
 				System.out.println("更新链接 ，，，" + updateverurl);
 				try {
@@ -227,7 +227,7 @@ public class SystemBussiness extends BaseBussiness {
 		for (MenuItem mi : messMIList) {
 			// 如果此资讯菜单上次可配置则需要恢复之前已经“订阅”的频道
 			// http://124.205.71.106:8080/wmh360/json/getchannellist.jsp?webappcode=A09&typeidID=1366524543362&clientkey=bb7c1386d85044ba7a7ae53f3362d634
-			String url = URLs.URL_CHANNEL_LIST + "&typeidID=" + mi.getChannelTypeId() + "&webappcode=" + webAppCode;
+			String url = String.format(URLs.URL_CHANNEL_LIST,URLs.baseURL) + "&typeidID=" + mi.getChannelTypeId() + "&webappcode=" + webAppCode;
 			// 将之前的已经“订阅”的频道按序提取出，然后从服务器获取新的频道列表，根据之前的频道进行保存
 			List<NewsChannel> oldChannelL = SugarRecord.find(NewsChannel.class, "TYPE_ID=? and DISPLAY_ORDER > 0",
 					new String[] { mi.getChannelTypeId() + "" }, null, "DISPLAY_ORDER", null);
@@ -257,7 +257,7 @@ public class SystemBussiness extends BaseBussiness {
 			}
 
 			// 初始化资讯菜单下"头图"
-			String churl = URLs.URL_HEAD_PIC + "&channeltypeid=" + mi.getChannelTypeId() + "&webappcode=" + webAppCode;
+			String churl = String.format(URLs.URL_HEAD_PIC,URLs.baseURL) + "&channeltypeid=" + mi.getChannelTypeId() + "&webappcode=" + webAppCode;
 			List<HeadPic> chList = WebUtils.requestList(churl, HeadPic.class, "tgpic");
 			for (HeadPic hp : chList) {
 				hp.setChannelTypeId(mi.getChannelTypeId() + "");
@@ -280,7 +280,7 @@ public class SystemBussiness extends BaseBussiness {
 	private void initPaper() throws IOException, InterruptedException, JSONException {
 		LogM.log(this.getClass(), "初始化报纸");
 		SugarRecord.deleteAll(Paper.class);
-		String url = URLs.URL_PAPER_LIST;
+		String url = String.format(URLs.URL_PAPER_LIST,URLs.baseURL,URLs.appCode);
 		List<Paper> paperList = WebUtils.requestList(url, Paper.class, "paper");
 		for (Paper p : paperList) {
 			p.save();
@@ -293,7 +293,7 @@ public class SystemBussiness extends BaseBussiness {
 		SugarRecord.deleteAll(MenuGroup.class);
 
 		for (MenuItem mi : menuItemList) {
-			List<MenuGroup> mgList = WebUtils.requestList(URLs.URL_SUBMENU_GROUP + "&id=" + mi.getId(),
+			List<MenuGroup> mgList = WebUtils.requestList(String.format(URLs.URL_SUBMENU_GROUP,URLs.baseURL,URLs.appCode) + "&id=" + mi.getId(),
 					MenuGroup.class, "appsubmenus");
 
 			if (mgList != null) {
@@ -359,7 +359,7 @@ public class SystemBussiness extends BaseBussiness {
 					break;
 			}
 		}
-		String url = String.format(URLs.URL_APPINFO, AppContext.getInstance(mContext).getCurrentUser().getOrgCode(),orientationFlag,deviceFlag,screenDimenFlag);
+		String url = String.format(URLs.URL_APPINFO, URLs.baseURL,URLs.appCode,AppContext.getInstance(mContext).getCurrentUser().getOrgCode(),orientationFlag,deviceFlag,screenDimenFlag);
 		App remoteApp = WebUtils.request(url, App.class, "app");
 
 		LogM.log(this.getClass(),"当前启动次数"+localApp.getInitTimes());
@@ -408,7 +408,7 @@ public class SystemBussiness extends BaseBussiness {
 				|| !localApp.getMenuLocalUpdateTime().equals(localApp.getMenuUpdateTime())) {
 
 			// 初始化菜单,
-			List<MenuItem> menuList = WebUtils.requestList(URLs.URL_MENU, MenuItem.class, "apps");
+			List<MenuItem> menuList = WebUtils.requestList(String.format(URLs.URL_MENU,URLs.baseURL,URLs.appCode), MenuItem.class, "apps");
 
 			// 清除菜单，资讯，以及头图等信息
 			SugarRecord.deleteAll(MenuItem.class);
@@ -518,7 +518,7 @@ public class SystemBussiness extends BaseBussiness {
 	 */
 	private void initTitleMenu() throws IOException, InterruptedException, JSONException {
 		SugarRecord.deleteAll(TitleMenu.class);
-		List<TitleMenu> list = WebUtils.requestList(String.format(URLs.URL_TITLE_MENU, ""), TitleMenu.class,
+		List<TitleMenu> list = WebUtils.requestList(String.format(URLs.URL_TITLE_MENU,URLs.baseURL,URLs.appCode, ""), TitleMenu.class,
 				"resultinfo");
 		SugarRecord.saveInTx(list);
 	}
@@ -709,7 +709,7 @@ public class SystemBussiness extends BaseBussiness {
 			public void run() {
 				List<ServiceNo> snl = null;
 				try {
-					snl = WebUtils.requestList(URLs.URL_SERVICE_LIST, ServiceNo.class);
+					snl = WebUtils.requestList(String.format(URLs.URL_SERVICE_LIST,URLs.baseURL,URLs.appCode), ServiceNo.class);
 
 				} catch (Exception e) {
 					e.printStackTrace();
@@ -728,7 +728,7 @@ public class SystemBussiness extends BaseBussiness {
 
 	public AppConfig syncAppConfig() throws IOException, InterruptedException {
 
-		String result = WebUtils.requestWithGet(String.format(URLs.URL_APP_CONFIG,""));
+		String result = WebUtils.requestWithGet(String.format(URLs.URL_APP_CONFIG,URLs.baseURL,URLs.appCode,""));
 		JSONResult jsonResult = JSONResult.compile(result);
 		if (jsonResult.resultCode != 1) {
 			LogM.log(this.getClass(), "获取appconfig错误");
@@ -749,7 +749,7 @@ public class SystemBussiness extends BaseBussiness {
 
 			com.apppubs.d20.bean.UserInfo ui = AppContext.getInstance(mContext).getCurrentUser();
 			if (!TextUtils.isEmpty(ui.getUserId())&&appconfig.getAdbookAuthFlag()==1){
-				String url = String.format(URLs.URL_ADDRESS_PERMISSION, AppContext.getInstance(mContext).getCurrentUser().getUserId());
+				String url = String.format(URLs.URL_ADDRESS_PERMISSION,URLs.baseURL,URLs.appCode, AppContext.getInstance(mContext).getCurrentUser().getUserId());
 				String permissionResult = WebUtils.requestWithGet(url);
 				JSONResult jr = JSONResult.compile(permissionResult);
 				if (jr.resultCode==1){
@@ -760,7 +760,7 @@ public class SystemBussiness extends BaseBussiness {
 			}
 
 			if(!TextUtils.isEmpty(ui.getUserId())&&appconfig.getChatAuthFlag()==1){
-				String url = String.format(URLs.URL_USER_PERMISSION, AppContext.getInstance(mContext).getCurrentUser().getUserId());
+				String url = String.format(URLs.URL_USER_PERMISSION,URLs.baseURL,URLs.appCode, AppContext.getInstance(mContext).getCurrentUser().getUserId());
 				String permissionResult = WebUtils.requestWithGet(url);
 				JSONResult jr = JSONResult.compile(permissionResult);
 				if (jr.resultCode==1){
@@ -804,7 +804,7 @@ public class SystemBussiness extends BaseBussiness {
 			public void run() {
 
 				try {
-					String url = URLs.URL_SERVICE_MESSAGE_INFO_LIST + "&service_id="
+					String url = String.format(URLs.URL_SERVICE_MESSAGE_INFO_LIST,URLs.baseURL,URLs.appCode) + "&service_id="
 							+ AppContext.getInstance(mContext).getApp().getDefaultServiceNoId() + "&username="
 							+ AppContext.getInstance(mContext).getCurrentUser().getUsername() + "&userid=" + AppContext.getInstance(mContext).getCurrentUser().getUserId()
 							+ "&curp=1&perp=10";
@@ -833,7 +833,7 @@ public class SystemBussiness extends BaseBussiness {
 			public void run() {
 
 				try {
-					String url = URLs.URL_WEIBO;
+					String url = String.format(URLs.URL_WEIBO,URLs.baseURL,URLs.appCode);
 					List<WeiboInfo> list = WebUtils.requestList(url, WeiboInfo.class, "weibo");
 					sHandler.post(new OnDoneRun<List<WeiboInfo>>(callback, list));// 与主线程的通信
 				} catch (IOException e) {
@@ -870,7 +870,7 @@ public class SystemBussiness extends BaseBussiness {
 			@Override
 			public void run() {
 				String info = "";
-				String url = URLs.URL_ZHUCE;
+				String url = String.format(URLs.URL_ZHUCE,URLs.baseURL);
 				HttpClient hc = new DefaultHttpClient();
 				HttpPost hp = new HttpPost(url);
 
@@ -1014,7 +1014,7 @@ public class SystemBussiness extends BaseBussiness {
 			public void run() {
 
 				try {
-					String url = URLs.URL_COMMENTLIST + "?infoid=" + infoid + "&pno=" + pno + "&pernum=" + pernum
+					String url = String.format(URLs.URL_COMMENTLIST,URLs.baseURL) + "?infoid=" + infoid + "&pno=" + pno + "&pernum=" + pernum
 							+ "&clientkey=" + clientkey;
 					List<Comment> list = WebUtils.requestList(url, Comment.class, "comment");
 					sHandler.post(new OnDoneRun<List<Comment>>(callback, list));// 与主线程的通信
@@ -1042,7 +1042,7 @@ public class SystemBussiness extends BaseBussiness {
 			public void run() {
 
 				try {
-					String url = URLs.URL_INFOIDCOMMENTSIZE + "?infoid=" + infoid + "&clientkey=" + URLs.CLIENTKEY;
+					String url = String.format(URLs.URL_INFOIDCOMMENTSIZE,URLs.baseURL) + "?infoid=" + infoid + "&clientkey=" + URLs.CLIENTKEY;
 					String data = WebUtils.requestWithGet(url);
 					JSONObject jo = null;
 					try {
@@ -1164,7 +1164,7 @@ public class SystemBussiness extends BaseBussiness {
 					}
 					sb.append(userId);
 				}
-				String url = String.format(URLs.URL_SEND_INVITE_SMS,sb.toString());
+				String url = String.format(URLs.URL_SEND_INVITE_SMS,URLs.baseURL,URLs.appCode,sb.toString());
 				try {
 					String response = WebUtils.requestWithGet(url);
 					JSONResult jr = JSONResult.compile(response);

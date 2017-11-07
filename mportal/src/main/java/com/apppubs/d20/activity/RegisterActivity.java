@@ -95,7 +95,7 @@ public class RegisterActivity extends BaseActivity {
 		case R.id.zhuce_mianzetv:
 			Intent intent=new Intent(RegisterActivity.this,WebAppActivity.class);
 			intent.putExtra(WebAppActivity.EXTRA_NAME_TITLE, "免责声明");
-			intent.putExtra(WebAppActivity.EXTRA_NAME_URL,URLs.URL_REGMIANZE);
+			intent.putExtra(WebAppActivity.EXTRA_NAME_URL,String.format(URLs.URL_REGMIANZE,URLs.baseURL));
 			startActivity(intent);
 			break;
 		case R.id.zhuce_zhuce:

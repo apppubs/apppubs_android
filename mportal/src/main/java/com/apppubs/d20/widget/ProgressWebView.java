@@ -455,7 +455,7 @@ public class ProgressWebView extends BridgeWebView {
 				mContext.startActivity(skipIntent);
 				return true;
 			} else if(url.startsWith(Constants.CUSTOM_SCHEMA_APPPUBS+"://")){
-				ViewCourier.execute(mHostActivity, url);
+				ViewCourier.getInstance(mHostActivity).execute(mHostActivity, url);
 				cancelNetworkError();
 				return true;
 			}else if (url.startsWith(BridgeUtil.YY_RETURN_DATA)) { // 如果是返回数据

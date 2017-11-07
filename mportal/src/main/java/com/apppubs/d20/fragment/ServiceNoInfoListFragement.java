@@ -72,7 +72,7 @@ public class ServiceNoInfoListFragement extends BaseFragment {
 	}
 
 	private void clearUnreadNum() {
-		String url = String.format(URLs.URL_CLEAR_UNREAD_NUM_FOR_SERVICE_NO_AND_CHAT, mServiceNoId, AppContext.getInstance(mContext).getCurrentUser().getUsername());
+		String url = String.format(URLs.URL_CLEAR_UNREAD_NUM_FOR_SERVICE_NO_AND_CHAT,URLs.baseURL,URLs.appCode, mServiceNoId, AppContext.getInstance(mContext).getCurrentUser().getUsername());
 		mRequestQueue.add(new StringRequest(url, new Listener<String>() {
 
 			@Override
@@ -265,7 +265,7 @@ public class ServiceNoInfoListFragement extends BaseFragment {
 					// 需要根据不同类型进行不通动作
 					String url = null;
 					if (history.getType() == ServiceNOInfo.TYPE_NORMAL) {
-						url = URLs.URL_SERVICEINFO + "&serviceinfo_id=" + history.getId() + "&service_id="
+						url = String.format(URLs.URL_SERVICEINFO,URLs.baseURL,URLs.appCode) + "&serviceinfo_id=" + history.getId() + "&service_id="
 								+ mServiceNoId;
 					} else if (history.getType() == ServiceNOInfo.TYPE_LINK) {
 						url = history.getLink();

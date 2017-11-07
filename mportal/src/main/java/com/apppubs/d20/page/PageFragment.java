@@ -29,10 +29,6 @@ import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.android.volley.Response.ErrorListener;
-import com.android.volley.Response.Listener;
-import com.android.volley.VolleyError;
-import com.android.volley.toolbox.StringRequest;
 import com.apppubs.d20.AppContext;
 import com.apppubs.d20.R;
 import com.apppubs.d20.activity.HomeBottomMenuActivity;
@@ -40,9 +36,7 @@ import com.apppubs.d20.activity.ViewCourier;
 import com.apppubs.d20.adapter.PageFragmentPagerAdapter;
 import com.apppubs.d20.asytask.AsyTaskCallback;
 import com.apppubs.d20.asytask.AsyTaskExecutor;
-import com.apppubs.d20.bean.UserInfo;
 import com.apppubs.d20.constant.Constants;
-import com.apppubs.d20.constant.URLs;
 import com.apppubs.d20.fragment.BaseFragment;
 import com.apppubs.d20.fragment.ChannelFragment;
 import com.apppubs.d20.fragment.ChannelFragmentFactory;
@@ -1061,7 +1055,7 @@ public class PageFragment extends TitleMenuFragment implements OnClickListener,I
 				}
 			}
 		}else{
-			ViewCourier.execute(mHostActivity, url);
+			ViewCourier.getInstance(mHostActivity).execute(mHostActivity, url);
 		}
 	}
 

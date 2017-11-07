@@ -298,7 +298,7 @@ public class ChatNewGroupChatOrAddUserActivity extends BaseActivity {
 		}
 		String url = null;
 		try {
-			url = String.format(URLs.URL_CHAT_ADD_CHAT_USER, mChatGroupId,URLEncoder.encode(sb.toString(), "utf-8"));
+			url = String.format(URLs.URL_CHAT_ADD_CHAT_USER, URLs.baseURL,URLs.appCode,mChatGroupId,URLEncoder.encode(sb.toString(), "utf-8"));
 		} catch (UnsupportedEncodingException e1) {
 			e1.printStackTrace();
 		}
@@ -333,7 +333,7 @@ public class ChatNewGroupChatOrAddUserActivity extends BaseActivity {
 		}
 		String url = null;
 		try {
-			url = String.format(URLs.URL_CHAT_CREATE_CHAT, AppContext.getInstance(mContext).getCurrentUser().getUsername(),URLEncoder.encode(sb.toString(),"utf-8"),"2");
+			url = String.format(URLs.URL_CHAT_CREATE_CHAT,URLs.baseURL,URLs.appCode, AppContext.getInstance(mContext).getCurrentUser().getUsername(),URLEncoder.encode(sb.toString(),"utf-8"),"2");
 		} catch (UnsupportedEncodingException e) {
 			e.printStackTrace();
 		}

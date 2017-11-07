@@ -117,7 +117,7 @@ public class ChannelSpecialsFragment extends ChannelFragment implements AsyTaskC
 	public Object onExecute(Integer tag, String[] params) {
 		Object result = null;
 		if (tag==REQUEST_TAG_SPECIALS_LIST) {
-			String url = String.format(URLs.URL_SPECIALS_LIST,mChannel.getCode(),mCurPage);
+			String url = String.format(URLs.URL_SPECIALS_LIST,URLs.baseURL,mChannel.getCode(),mCurPage);
 				try {
 					result = WebUtils.requestList(url, NewsSpecialsInfo.class,"resultinfo");
 				} catch (JSONException e) {

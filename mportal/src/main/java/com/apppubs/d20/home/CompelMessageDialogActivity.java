@@ -104,7 +104,7 @@ public class CompelMessageDialogActivity extends Activity implements View.OnClic
 		if (mDatas==null||index<0||index>=mDatas.size()){
 			return;
 		}
-		String url = String.format(URLs.URL_MARK_AS_READ_FOR_COMPEL_MESSAGE,mDatas.get(index).getMessageId());
+		String url = String.format(URLs.URL_MARK_AS_READ_FOR_COMPEL_MESSAGE,URLs.baseURL,URLs.appCode,mDatas.get(index).getMessageId());
 
 		mRequestQueue.add(new StringRequest(url, new Response.Listener<String>() {
 
