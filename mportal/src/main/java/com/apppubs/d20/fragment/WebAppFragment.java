@@ -8,7 +8,10 @@ import android.graphics.BitmapFactory;
 import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -19,6 +22,7 @@ import android.webkit.DownloadListener;
 import android.webkit.WebSettings;
 import android.widget.PopupWindow;
 
+import com.alipay.sdk.app.PayTask;
 import com.apppubs.d20.AppContext;
 import com.apppubs.d20.AppManager;
 import com.apppubs.d20.MportalApplication;
@@ -30,6 +34,7 @@ import com.apppubs.d20.bean.MenuItem;
 import com.apppubs.d20.myfile.FilePreviewFragment;
 import com.apppubs.d20.util.Base64;
 import com.apppubs.d20.util.BitmapUtils;
+import com.apppubs.d20.util.JSONUtils;
 import com.apppubs.d20.util.LogM;
 import com.apppubs.d20.util.SystemUtils;
 import com.apppubs.d20.widget.ProgressHUD;
@@ -40,10 +45,11 @@ import com.apppubs.jsbridge.BridgeHandler;
 import com.apppubs.jsbridge.CallBackFunction;
 import com.apppubs.jsbridge.DefaultHandler;
 import com.apppubs.multi_image_selector.MultiImageSelectorActivity;
+import com.google.gson.JsonObject;
 
 import org.json.JSONArray;
 import org.json.JSONException;
-import org.w3c.dom.Text;
+import org.json.JSONObject;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -52,6 +58,7 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLDecoder;
 import java.util.List;
+import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -72,6 +79,8 @@ public class WebAppFragment extends BaseFragment implements OnClickListener {
 	public static final int REQUEST_CODE_PICTURES = 100;
 	
 	private final String JS_MENU_ITEM_REFRESH = "menu_item_refresh";
+
+	private static final int SDK_PAY_FLAG = 1;
 	
 	private String mUrl;
 	private String mMoreMenusStr;
@@ -87,6 +96,25 @@ public class WebAppFragment extends BaseFragment implements OnClickListener {
 	private CallBackFunction mTmpHandelCallbackFunction;
 
 	private String mOnloadingText = "载入中 ···";
+
+	@SuppressLint("HandlerLeak")
+	private Handler mHandler = new Handler() {
+		@SuppressWarnings("unused")
+		public void handleMessage(Message msg) {
+			switch (msg.what) {
+				case SDK_PAY_FLAG: {
+					JSONObject json=new JSONObject((Map<String, String>) msg.obj);
+					mTmpHandelCallbackFunction.onCallBack(json.toString());
+					break;
+				}
+
+				default:
+					break;
+			}
+		};
+	};
+
+
 
 	@Override
 	public void onAttach(Activity activity) {
@@ -291,7 +319,33 @@ public class WebAppFragment extends BaseFragment implements OnClickListener {
 				});
 	        }
 	    });
-		
+
+		//支付宝支付
+		mWebView.registerHandler("alipay", new BridgeHandler() {
+			@Override
+			public void handler(String data, CallBackFunction function) {
+				mTmpHandelCallbackFunction = function;
+				final String[] strArr = data.split(",");
+				LogM.log(this.getClass(),"支付宝进行宝支付");
+				try {
+					JSONObject jo = new JSONObject(data);
+					awakenAlipay(jo.getString("orderstr"));
+				} catch (JSONException e) {
+					e.printStackTrace();
+				}
+
+
+				mWebView.post(new Runnable() {
+
+					@Override
+					public void run() {
+
+					}
+				});
+			}
+		});
+
+
 		//分享
 		mWebView.registerHandler("share", new BridgeHandler() {
 	        @Override
@@ -352,6 +406,27 @@ public class WebAppFragment extends BaseFragment implements OnClickListener {
 
 	        }
 	    });
+	}
+
+	private void awakenAlipay(final String orderStr){
+
+		Runnable payRunnable = new Runnable() {
+
+			@Override
+			public void run() {
+				PayTask alipay = new PayTask(getActivity());
+				Map<String, String> result = alipay.payV2(orderStr, true);
+				Log.i("msp", result.toString());
+
+				Message msg = new Message();
+				msg.what = SDK_PAY_FLAG;
+				msg.obj = result;
+				mHandler.sendMessage(msg);
+			}
+		};
+
+		Thread payThread = new Thread(payRunnable);
+		payThread.start();
 	}
 
 	@Override
