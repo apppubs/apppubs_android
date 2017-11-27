@@ -46,6 +46,9 @@ import com.apppubs.jsbridge.CallBackFunction;
 import com.apppubs.jsbridge.DefaultHandler;
 import com.apppubs.multi_image_selector.MultiImageSelectorActivity;
 import com.google.gson.JsonObject;
+import com.tencent.mm.opensdk.modelpay.PayReq;
+import com.tencent.mm.opensdk.openapi.IWXAPI;
+import com.tencent.mm.opensdk.openapi.WXAPIFactory;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -345,6 +348,28 @@ public class WebAppFragment extends BaseFragment implements OnClickListener {
 			}
 		});
 
+		//微信支付
+		mWebView.registerHandler("wxpay", new BridgeHandler() {
+			@Override
+			public void handler(String data, CallBackFunction function) {
+				mTmpHandelCallbackFunction = function;
+				LogM.log(this.getClass(),"微信支付");
+				try {
+					awakeWxpay(data);
+				} catch (JSONException e) {
+					e.printStackTrace();
+				}
+
+				mWebView.post(new Runnable() {
+
+					@Override
+					public void run() {
+
+					}
+				});
+			}
+		});
+
 
 		//分享
 		mWebView.registerHandler("share", new BridgeHandler() {
@@ -427,6 +452,27 @@ public class WebAppFragment extends BaseFragment implements OnClickListener {
 
 		Thread payThread = new Thread(payRunnable);
 		payThread.start();
+	}
+
+	private void awakeWxpay(String content) throws JSONException {
+		JSONObject json = new JSONObject(content);
+		if(null != json && !json.has("retcode") ){
+			PayReq req = new PayReq();
+			//req.appId = "wxf8b4f85f3a794e77";  // 测试用appId
+			req.appId			= json.getString("appid");
+			req.partnerId		= json.getString("partnerid");
+			req.prepayId		= json.getString("prepayid");
+			req.nonceStr		= json.getString("noncestr");
+			req.timeStamp		= json.getString("timestamp");
+			req.packageValue	= json.getString("package");
+			req.sign			= json.getString("sign");
+			req.extData			= "app data"; // optional
+			// 在支付之前，如果应用没有注册到微信，应该先调用IWXMsg.registerApp将应用注册到微信
+			IWXAPI api = WXAPIFactory.createWXAPI(mContext, req.appId);
+			api.sendReq(req);
+		}else{
+			Log.d("PAY_GET", "返回错误"+json.getString("retmsg"));
+		}
 	}
 
 	@Override
