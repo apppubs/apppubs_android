@@ -316,13 +316,13 @@ public class ChannelDefaultFragment extends ChannelFragment  implements OnClickL
 	public Object onExecute(Integer tag, String[] params) throws Exception {
 		Object obj = null;
 		if(tag==TAST_CODE_REQUEST_CHANNEL){
-			String url = String.format(URLs.URL_CHANNEL, params[0]);
+			String url = String.format(URLs.URL_CHANNEL,URLs.baseURL,params[0]);
 			String result = WebUtils.requestWithGet(url);
 			JSONResult jr = JSONResult.compile(result);
 			obj = JSONUtils.getGson().fromJson(jr.result, NewsChannel.class);
 		}else if(tag==TAST_CODE_REFRESH_NEWS){
 			// 如果page==0，刷新数据库信息
-			String url = URLs.baseURL+ URLs.URL_NEWS_LIST_OF_CHANNEL + "&channelcode=" + mChannelCode
+			String url = String.format(URLs.URL_NEWS_LIST_OF_CHANNEL,URLs.baseURL) + "&channelcode=" + mChannelCode
 					+ "&pno=1&pernum=" + 10;
 
 			List<NewsInfo> infoList = WebUtils.requestList(url, NewsInfo.class, "info");
@@ -341,7 +341,7 @@ public class ChannelDefaultFragment extends ChannelFragment  implements OnClickL
 			int showType = newsChannel.getShowType();
 			if (showType == NewsChannel.SHOWTYPE_HEADLINE) {
 
-				String url = URLs.baseURL+URLs.URL_HEAD_PIC + "&channelcode=" + mChannelCode + "&webappcode="
+				String url = String.format(URLs.URL_HEAD_PIC,URLs.baseURL)+"&channelcode=" + mChannelCode + "&webappcode="
 						+ mAppContext.getApp().getWebAppCode();
 				List<HeadPic> hList = WebUtils.requestList(url, HeadPic.class, "tgpic");
 
@@ -351,7 +351,7 @@ public class ChannelDefaultFragment extends ChannelFragment  implements OnClickL
 				}
 
 			}
-			String url = URLs.baseURL+URLs.URL_NEWS_LIST_OF_CHANNEL + "&channelcode=" + mChannelCode + "&pno=1&pernum="
+			String url = String.format(URLs.URL_NEWS_LIST_OF_CHANNEL,URLs.baseURL)+ "&channelcode=" + mChannelCode + "&pno=1&pernum="
 					+ URLs.PAGE_SIZE;
 
 			List<NewsInfo> infoList = WebUtils.requestList(url, NewsInfo.class, "info");
@@ -376,7 +376,7 @@ public class ChannelDefaultFragment extends ChannelFragment  implements OnClickL
 			if (mCurPage == 0) {
 
 					// 如果page==0，刷新数据库信息
-					String url = URLs.baseURL+URLs.URL_NEWS_LIST_OF_CHANNEL + "&channelcode=" + mChannelCode
+					String url = String.format(URLs.URL_NEWS_LIST_OF_CHANNEL,URLs.baseURL)+ "&channelcode=" + mChannelCode
 							+ "&pno=1&pernum=" + URLs.PAGE_SIZE;
 
 					infoList = WebUtils.requestList(url, NewsInfo.class, "info");
@@ -399,7 +399,7 @@ public class ChannelDefaultFragment extends ChannelFragment  implements OnClickL
 						null, "PUB_TIME desc", (mCurPage - 1) * URLs.PAGE_SIZE + "," + URLs.PAGE_SIZE);
 				if (infoList.size() != URLs.PAGE_SIZE) {
 
-					String url = URLs.baseURL+URLs.URL_NEWS_LIST_OF_CHANNEL + "&channelcode=" + mChannelCode + "&pno=" + mCurPage
+					String url = String.format(URLs.URL_NEWS_LIST_OF_CHANNEL,URLs.baseURL)+ "&channelcode=" + mChannelCode + "&pno=" + mCurPage
 							+ "&pernum=" + URLs.PAGE_SIZE;
 					infoList = WebUtils.requestList(url, NewsInfo.class, "info");
 					mNewsBussiness.saveList(infoList, mChannelCode);

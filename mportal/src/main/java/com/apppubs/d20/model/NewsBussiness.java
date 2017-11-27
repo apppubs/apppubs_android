@@ -333,7 +333,7 @@ public class NewsBussiness extends BaseBussiness {
 
 	public NewsInfo getNewInfo(String newsInfoId, String channelCode) throws IOException, InterruptedException,JsonParseException {
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd hh:mm",Locale.CHINA);
-		String url = String.format(URLs.URL_NEWS_INFO, URLs.baseURL) + "&infoid=" + newsInfoId + "&channelcode=" + channelCode;
+		String url = String.format(URLs.URL_NEWS_INFO, URLs.baseURL,URLs.appCode) + "&infoid=" + newsInfoId + "&channelcode=" + channelCode;
 
 		NewsInfo newsInfo = null;
 

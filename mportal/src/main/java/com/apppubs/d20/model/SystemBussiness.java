@@ -743,7 +743,9 @@ public class SystemBussiness extends BaseBussiness {
 			app.setAddressbookNeedPermission(Integer.parseInt(resultMap.get("adbookauth")));
 			app.setDocumentReaderPageUrl(resultMap.get("document_reader_url"));
 			app.setAddressbookVersion(Integer.parseInt(resultMap.get("adbookversion")));
-			app.setAllowChat(Integer.parseInt(resultMap.get("chat_flag")));
+			if (resultMap.containsKey("chat_flag")) {
+				app.setAllowChat(Integer.parseInt(resultMap.get("chat_flag")));
+			}
 			AppConfig appconfig = (AppConfig) jsonResult.getResultObject(AppConfig.class);
 			app.setAppConfig(appconfig);
 
