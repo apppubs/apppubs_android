@@ -289,17 +289,20 @@ public abstract class HomeBaseActivity extends BaseActivity {
 		LogM.log(Class.class, "startHomeActivity-->启动主界面");
 
 		Intent intent = null;
-		if (AppContext.getInstance(fromActivy).getApp().getLoginFlag()!=App.LOGIN_INAPP){
+		AppContext appContext = AppContext.getInstance(fromActivy);
+		if (appContext.getApp().getLoginFlag()!=App.LOGIN_INAPP){
 			UserInfo currentUser = AppContext.getInstance(fromActivy).getCurrentUser();
 
 			int layout = AppContext.getInstance(fromActivy).getApp().getLayoutLocalScheme();
 
-			if (currentUser==null||TextUtils.isEmpty(currentUser.getUserId())){
+			if (isNeedLogin(appContext)){
 				intent = new Intent(fromActivy,FirstLoginActity.class);
-			}else if (layout == App.STYLE_SLIDE_MENU) {
-				intent = new Intent(fromActivy, HomeSlideMenuActivity.class);
-			} else {
-				intent = new Intent(fromActivy, HomeBottomMenuActivity.class);
+			}else{
+				if (layout == App.STYLE_SLIDE_MENU) {
+					intent = new Intent(fromActivy, HomeSlideMenuActivity.class);
+				} else {
+					intent = new Intent(fromActivy, HomeBottomMenuActivity.class);
+				}
 			}
 		}else{
 			int layout = AppContext.getInstance(fromActivy).getApp().getLayoutLocalScheme();
@@ -314,6 +317,10 @@ public abstract class HomeBaseActivity extends BaseActivity {
 
 	}
 
+	private static boolean isNeedLogin(AppContext context) {
+		return context.getCurrentUser()==null|| TextUtils.isEmpty(context.getCurrentUser().getUserId());
+	}
+
 	@Override
 	protected void onDestroy() {
 		super.onDestroy();
@@ -321,6 +328,11 @@ public abstract class HomeBaseActivity extends BaseActivity {
 		SharedPreferenceUtils.getInstance(this).putBoolean(MPORTAL_PREFERENCE_NAME, MPORTAL_PREFERENCE_APP_RUNNING_KEY, false);
 		unregisterReceiver(mLogoutBR);
 		AppManager.getInstant(this).destory();
+
+		//如果是用户名密码登录，没有自动登录时候清空用户信息
+		if(mAppContext.getApp().getLoginFlag()==App.LOGIN_ONSTART_USE_USERNAME_PASSWORD&&!mAppContext.getSettings().isAllowAutoLogin()){
+			mAppContext.clearCurrentUser();
+		}
 	}
 
 	private long lastClickTime = 0;
