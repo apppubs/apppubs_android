@@ -1,15 +1,9 @@
 package com.apppubs.d20.activity;
 
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
-import android.location.Location;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v4.app.Fragment;
@@ -37,20 +31,15 @@ import android.widget.Toast;
 
 import com.amap.api.location.AMapLocation;
 import com.amap.api.location.AMapLocationListener;
-import com.amap.api.location.LocationManagerProxy;
-import com.amap.api.location.LocationProviderProxy;
-import com.apppubs.d20.bean.UserInfo;
-import com.apppubs.d20.model.APResultCallback;
-import com.jeremyfeinstein.slidingmenu.lib.SlidingMenu;
-import com.jeremyfeinstein.slidingmenu.lib.app.SlidingActivityHelper;
+import com.apppubs.d20.AppContext;
 import com.apppubs.d20.R;
 import com.apppubs.d20.bean.App;
 import com.apppubs.d20.bean.MenuItem;
+import com.apppubs.d20.bean.UserInfo;
 import com.apppubs.d20.bean.Weather;
-import com.apppubs.d20.AppContext;
 import com.apppubs.d20.fragment.BaseFragment;
+import com.apppubs.d20.model.APResultCallback;
 import com.apppubs.d20.service.DownloadAppService;
-import com.apppubs.d20.util.LocationUtils;
 import com.apppubs.d20.util.LogM;
 import com.apppubs.d20.util.ServiceUtils;
 import com.apppubs.d20.util.StringUtils;
@@ -60,7 +49,14 @@ import com.apppubs.d20.util.Utils;
 import com.apppubs.d20.util.WeatherUtils;
 import com.apppubs.d20.widget.ConfirmDialog;
 import com.apppubs.d20.widget.TitleBar;
+import com.jeremyfeinstein.slidingmenu.lib.SlidingMenu;
+import com.jeremyfeinstein.slidingmenu.lib.app.SlidingActivityHelper;
 import com.nostra13.universalimageloader.core.ImageLoader;
+
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
 
 /**
  * 主界面
@@ -80,9 +76,7 @@ public class HomeSlideMenuActivity extends HomeBaseActivity implements OnItemCli
 	private TextView mWeatherTempTv;
 	private TextView mWeatherCityName;
 	private RelativeLayout mWeather;
-	private LocationUtils mLocationUtl;
 	private String mcityname;
-	private LocationManagerProxy aMapLocManager = null;
 	private AMapLocation aMapLocation;// 用于判断定位超时
 	private TextView versionTV;
 	private ImageView newVersion;
@@ -174,8 +168,7 @@ public class HomeSlideMenuActivity extends HomeBaseActivity implements OnItemCli
 			String wetherpic = getShare.getString(WeatherActivity.WEATHERPIC, "");
 			
 			if (temp.equals("") || mcityname.equals("") || wetherpic.equals("")) {
-				aMapLocManager = LocationManagerProxy.getInstance(this);
-				
+
 				/*
 				 * * mAMapLocManager.setGpsEnable(false);// ======= /*
 				 * aMapLocManager = LocationManagerProxy.getInstance(this);
@@ -184,7 +177,6 @@ public class HomeSlideMenuActivity extends HomeBaseActivity implements OnItemCli
 				 * ，第一个参数是定位provider，第二个参数时间最短是2000毫秒，第三个参数距离间隔单位是米，第四个参数是定位监听者
 				 */
 				
-				aMapLocManager.requestLocationUpdates(LocationProviderProxy.AMapNetwork, 2000, 10, this);
 				handler.postDelayed(this, 20000);// 设置超过12秒还没有定位到就停止定位
 			} else {
 				
@@ -233,7 +225,7 @@ public class HomeSlideMenuActivity extends HomeBaseActivity implements OnItemCli
 										public void onOkClick() {
 											if (ServiceUtils.isServiceRunning(HomeSlideMenuActivity.this,
 													DownloadAppService.serviceName)) {
-												Toast.makeText(HomeSlideMenuActivity.this, "升级服务已经启动,无需再次启动", 1000)
+												Toast.makeText(HomeSlideMenuActivity.this, "升级服务已经启动,无需再次启动", Toast.LENGTH_LONG)
 														.show();
 											} else {
 												Intent it = new Intent(HomeSlideMenuActivity.this,
@@ -258,7 +250,7 @@ public class HomeSlideMenuActivity extends HomeBaseActivity implements OnItemCli
 				@Override
 				public void onClick(View arg0) {
 					// TODO Auto-generated method stub
-					Toast.makeText(HomeSlideMenuActivity.this, "当前已是最新版本", 1000).show();
+					Toast.makeText(HomeSlideMenuActivity.this, "当前已是最新版本", Toast.LENGTH_LONG).show();
 				}
 			});
 		}
@@ -759,34 +751,8 @@ public class HomeSlideMenuActivity extends HomeBaseActivity implements OnItemCli
 	 * 销毁定位
 	 */
 	private void stopLocation() {
-		if (aMapLocManager != null) {
-			aMapLocManager.removeUpdates(this);
-			aMapLocManager.destory();
-		}
-		aMapLocManager = null;
 	}
 
-	/**
-	 * 此方法已经废弃
-	 */
-	@Override
-	public void onLocationChanged(Location location) {
-	}
-
-	@Override
-	public void onProviderDisabled(String provider) {
-
-	}
-
-	@Override
-	public void onProviderEnabled(String provider) {
-
-	}
-
-	@Override
-	public void onStatusChanged(String provider, int status, Bundle extras) {
-
-	}
 
 	/**
 	 * 混合定位回调函数

@@ -10,7 +10,6 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
-import com.amap.api.maps2d.model.Text;
 import com.apppubs.d20.R;
 
 public class EditTextDialog extends Dialog implements View.OnClickListener {
