@@ -542,7 +542,22 @@ public class ViewCourier {
 			mFragmentsMap.put(item, frg);
 			mHomeActivity.changeContent(frg);
 
-		} else {
+		} else if(uri.matches("apppubs:\\/\\/setting[\\S]*")){
+			String title = StringUtils.getQueryParameter(uri, "title");
+			frg = new SettingFragment();
+			Bundle args = new Bundle();
+			String[] params = StringUtils.getPathParams(uri);
+			frg.setArguments(args);
+			mFragmentsMap.put(item, frg);
+			mHomeActivity.changeContent(frg);
+		}else if (uri.matches("apppubs:\\/\\/channel\\/[0-9]\\/[A-Za-z0-9]*")) {
+			String[] arr = StringUtils.getPathParams(uri);
+			frg = ChannelFragmentFactory.getChannelFragment(Integer.parseInt(arr[1]));
+			Bundle args = new Bundle();
+			args.putString(ChannelFragment.ARG_KEY, arr[2]);
+			frg.setArguments(args);
+			mHomeActivity.changeContent(frg);
+		}else {
             if (type == MenuItem.MENU_LOCATION_PRIMARY) {
                 frg = new ExceptionFragment();
                 mHomeActivity.changeContent(frg);
