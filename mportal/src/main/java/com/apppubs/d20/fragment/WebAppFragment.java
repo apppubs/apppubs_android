@@ -23,6 +23,8 @@ import android.webkit.WebSettings;
 import android.widget.PopupWindow;
 
 import com.alipay.sdk.app.PayTask;
+import com.amap.api.location.AMapLocation;
+import com.amap.api.location.AMapLocationListener;
 import com.apppubs.d20.AppContext;
 import com.apppubs.d20.AppManager;
 import com.apppubs.d20.MportalApplication;
@@ -35,6 +37,7 @@ import com.apppubs.d20.myfile.FilePreviewFragment;
 import com.apppubs.d20.util.Base64;
 import com.apppubs.d20.util.BitmapUtils;
 import com.apppubs.d20.util.JSONUtils;
+import com.apppubs.d20.util.LocationManager;
 import com.apppubs.d20.util.LogM;
 import com.apppubs.d20.util.SystemUtils;
 import com.apppubs.d20.widget.ProgressHUD;
@@ -370,6 +373,22 @@ public class WebAppFragment extends BaseFragment implements OnClickListener {
 			}
 		});
 
+		mWebView.registerHandler("amap", new BridgeHandler() {
+			@Override
+			public void handler(String data, final CallBackFunction function) {
+				System.out.println("amap点击");
+				LocationManager manager = LocationManager.getInstance(mContext);
+				manager.setListener(new LocationManager.LocationListener() {
+					@Override
+					public void onLocationChanded(AMapLocation location) {
+						String data = "{\"latitude\":"+location.getLatitude()+",\"longtitude\":"+location.getLongitude()+"}";
+						System.out.println(data);
+						function.onCallBack(data);
+					}
+				});
+				manager.requestLocation();
+			}
+		});
 
 		//分享
 		mWebView.registerHandler("share", new BridgeHandler() {
