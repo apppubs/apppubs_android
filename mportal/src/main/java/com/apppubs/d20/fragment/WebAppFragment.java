@@ -81,13 +81,13 @@ public class WebAppFragment extends BaseFragment implements OnClickListener {
 	public static final String ARGUMENT_INT_MENUBARTYPE = "menu_bar_type";
 	public static final String ARGUMENT_STRING_URL = "url";
 	public static final String ARGUMENT_STRING_MORE_MENUS = "more_menus";
-	
+
 	public static final int REQUEST_CODE_PICTURES = 100;
-	
+
 	private final String JS_MENU_ITEM_REFRESH = "menu_item_refresh";
 
 	private static final int SDK_PAY_FLAG = 1;
-	
+
 	private String mUrl;
 	private String mMoreMenusStr;
 
@@ -109,7 +109,7 @@ public class WebAppFragment extends BaseFragment implements OnClickListener {
 		public void handleMessage(Message msg) {
 			switch (msg.what) {
 				case SDK_PAY_FLAG: {
-					JSONObject json=new JSONObject((Map<String, String>) msg.obj);
+					JSONObject json = new JSONObject((Map<String, String>) msg.obj);
 					mTmpHandelCallbackFunction.onCallBack(json.toString());
 					break;
 				}
@@ -117,9 +117,10 @@ public class WebAppFragment extends BaseFragment implements OnClickListener {
 				default:
 					break;
 			}
-		};
-	};
+		}
 
+		;
+	};
 
 
 	@Override
@@ -134,7 +135,7 @@ public class WebAppFragment extends BaseFragment implements OnClickListener {
 		}
 		mUrl = AppContext.getInstance(mContext).convertUrl(mUrl);
 		mHostActivity.setShouldInterceptBackClick(true);
-		
+
 	}
 
 	@Override
@@ -158,11 +159,11 @@ public class WebAppFragment extends BaseFragment implements OnClickListener {
 		super.onActivityCreated(savedInstanceState);
 
 		// 如果没有标题，则标题为“载入中。。。”
-		if (mTitleBar!=null&&TextUtils.isEmpty(mTitleBar.getTitle())) {
+		if (mTitleBar != null && TextUtils.isEmpty(mTitleBar.getTitle())) {
 			mTitleBar.setTitle(mOnloadingText);
 		}
 
-		if (!(mHostActivity instanceof HomeBaseActivity)&&mTitleBar!=null) {
+		if (!(mHostActivity instanceof HomeBaseActivity) && mTitleBar != null) {
 			mTitleBar.setLeftBtnClickListener(new OnClickListener() {
 
 				@Override
@@ -173,8 +174,9 @@ public class WebAppFragment extends BaseFragment implements OnClickListener {
 				}
 			});
 		}
-		
+
 	}
+
 	@Override
 	public void onHiddenChanged(boolean hidden) {
 		super.onHiddenChanged(hidden);
@@ -185,6 +187,7 @@ public class WebAppFragment extends BaseFragment implements OnClickListener {
 		super.onResume();
 
 	}
+
 	@Override
 	public boolean onKeyDown(int keyCode, KeyEvent event) {
 		if (event.getAction() == KeyEvent.ACTION_DOWN && keyCode == KeyEvent.KEYCODE_BACK && webviewGoBack()) {
@@ -193,13 +196,13 @@ public class WebAppFragment extends BaseFragment implements OnClickListener {
 		return super.onKeyDown(keyCode, event);
 	}
 
-	@SuppressLint({ "NewApi", "SetJavaScriptEnabled" })
+	@SuppressLint({"NewApi", "SetJavaScriptEnabled"})
 	private void initComponent(View v) {
 
 		mWebView = (ProgressWebView) mRootView.findViewById(R.id.webapp_wb);
 		mWebView.setInitialScale(1);
 		mWebView.setHostActivity(mHostActivity);
-		
+
 		mSettings = mWebView.getSettings();
 		mSettings.setJavaScriptEnabled(true);
 		mSettings.setAppCacheEnabled(true);
@@ -224,7 +227,7 @@ public class WebAppFragment extends BaseFragment implements OnClickListener {
 			@Override
 			public void onReceiveTitle(String title) {
 				// 之前如果没有设置过标题则将网页的title当做标题
-				if (mTitleBar!=null&&!TextUtils.isEmpty(title) ) {
+				if (mTitleBar != null && !TextUtils.isEmpty(title)) {
 					mTitleBar.setTitle(title);
 				}
 
@@ -232,99 +235,98 @@ public class WebAppFragment extends BaseFragment implements OnClickListener {
 
 			@Override
 			public void onFinished() {
-				if (mTitleBar!=null&&mTitleBar.getTitle().equals(mOnloadingText)) {
+				if (mTitleBar != null && mTitleBar.getTitle().equals(mOnloadingText)) {
 					mTitleBar.setTitle("");
 				}
 			}
 		});
-		
+
 
 		mWebView.registerHandler("getUserInfo", new BridgeHandler() {
-	        @Override
-	        public void handler(String data, CallBackFunction function) {
-	        	LogM.log(WebAppFragment.class, "getUserInfo");
+			@Override
+			public void handler(String data, CallBackFunction function) {
+				LogM.log(WebAppFragment.class, "getUserInfo");
 
-	            function.onCallBack(AppContext.getInstance(mContext).getCurrentUser().getUserId());
-	        }
-	    });
-		
+				function.onCallBack(AppContext.getInstance(mContext).getCurrentUser().getUserId());
+			}
+		});
+
 		mWebView.registerHandler("hideMenuItems", new BridgeHandler() {
-	        @Override
-	        public void handler(String data, CallBackFunction function) {
-	        	System.out.println("hideMenuItems"+data);
-				if(!TextUtils.isEmpty(data)&&!TextUtils.isEmpty(mMoreMenusStr)&&data.contains(JS_MENU_ITEM_REFRESH)){
+			@Override
+			public void handler(String data, CallBackFunction function) {
+				System.out.println("hideMenuItems" + data);
+				if (!TextUtils.isEmpty(data) && !TextUtils.isEmpty(mMoreMenusStr) && data.contains(JS_MENU_ITEM_REFRESH)) {
 					mMoreMenusStr = mMoreMenusStr.replaceAll("0", "").replaceAll(",0", "").replaceAll("0", "");
 				}
 				mWebView.post(new Runnable() {
-					
+
 					@Override
 					public void run() {
 						changeActivityTitleView(mTitleBar);
 					}
 				});
-	        }
-	    });
+			}
+		});
 		mWebView.registerHandler("closeWindow", new BridgeHandler() {
-	        @Override
-	        public void handler(String data, CallBackFunction function) {
-	        	
-	        	mHostActivity.finish();
-	            function.onCallBack("请求结束");
-	        }
-	    });
-		
+			@Override
+			public void handler(String data, CallBackFunction function) {
+
+				mHostActivity.finish();
+				function.onCallBack("请求结束");
+			}
+		});
 		mWebView.registerHandler("openWindow", new BridgeHandler() {
-	        @Override
-	        public void handler(String data, CallBackFunction function) {
-	        	ViewCourier.getInstance(mHostActivity).execute(mHostActivity, data);
-	            function.onCallBack("请求结束");
-	        }
-	    });
+			@Override
+			public void handler(String data, CallBackFunction function) {
+				ViewCourier.getInstance(mHostActivity).execute(mHostActivity, data);
+				function.onCallBack("请求结束");
+			}
+		});
 		//选择图片
 		mWebView.registerHandler("chooseImage", new BridgeHandler() {
-	        
+
 
 			@Override
-	        public void handler(String data, CallBackFunction function) {
-	        	mTmpHandelCallbackFunction = function;
-	        	Intent intent = new Intent(mHostActivity, MultiImageSelectorActivity.class);
-	        	startActivityForResult(intent, REQUEST_CODE_PICTURES);
-	        }
-	    });
+			public void handler(String data, CallBackFunction function) {
+				mTmpHandelCallbackFunction = function;
+				Intent intent = new Intent(mHostActivity, MultiImageSelectorActivity.class);
+				startActivityForResult(intent, REQUEST_CODE_PICTURES);
+			}
+		});
 		//获取设备id
 		mWebView.registerHandler("getDeviceId", new BridgeHandler() {
 
 			@Override
-	        public void handler(String data, CallBackFunction function) {
+			public void handler(String data, CallBackFunction function) {
 				function.onCallBack(MportalApplication.getMachineId());
-	        }
+			}
 
-	    });
+		});
 		//扫描二维码
 		mWebView.registerHandler("scanQRCode", new BridgeHandler() {
-			
+
 			@Override
 			public void handler(String data, CallBackFunction function) {
 				ViewCourier.getInstance(mHostActivity).execute(mHostActivity, "apppubs://qrcode");
 			}
-			
+
 		});
 		//切换app
 		mWebView.registerHandler("changeApp", new BridgeHandler() {
-	        @Override
-	        public void handler(String data, CallBackFunction function) {
-	        	final String[] strArr = data.split(",");
-	        	
+			@Override
+			public void handler(String data, CallBackFunction function) {
+				final String[] strArr = data.split(",");
+
 				mWebView.post(new Runnable() {
-					
+
 					@Override
 					public void run() {
 						AppManager.getInstant(mContext).showChangeDialog(mContext, strArr[0], strArr[1]);
 						changeActivityTitleView(mTitleBar);
 					}
 				});
-	        }
-	    });
+			}
+		});
 
 		//支付宝支付
 		mWebView.registerHandler("alipay", new BridgeHandler() {
@@ -332,7 +334,7 @@ public class WebAppFragment extends BaseFragment implements OnClickListener {
 			public void handler(String data, CallBackFunction function) {
 				mTmpHandelCallbackFunction = function;
 				final String[] strArr = data.split(",");
-				LogM.log(this.getClass(),"支付宝进行宝支付");
+				LogM.log(this.getClass(), "支付宝进行宝支付");
 				try {
 					JSONObject jo = new JSONObject(data);
 					awakenAlipay(jo.getString("orderstr"));
@@ -356,7 +358,7 @@ public class WebAppFragment extends BaseFragment implements OnClickListener {
 			@Override
 			public void handler(String data, CallBackFunction function) {
 				mTmpHandelCallbackFunction = function;
-				LogM.log(this.getClass(),"微信支付");
+				LogM.log(this.getClass(), "微信支付");
 				try {
 					awakeWxpay(data);
 				} catch (JSONException e) {
@@ -381,7 +383,7 @@ public class WebAppFragment extends BaseFragment implements OnClickListener {
 				manager.setListener(new LocationManager.LocationListener() {
 					@Override
 					public void onLocationChanded(AMapLocation location) {
-						String data = "{\"latitude\":"+location.getLatitude()+",\"longtitude\":"+location.getLongitude()+"}";
+						String data = "{\"latitude\":" + location.getLatitude() + ",\"longtitude\":" + location.getLongitude() + "}";
 						System.out.println(data);
 						function.onCallBack(data);
 					}
@@ -392,8 +394,8 @@ public class WebAppFragment extends BaseFragment implements OnClickListener {
 
 		//分享
 		mWebView.registerHandler("share", new BridgeHandler() {
-	        @Override
-	        public void handler(String data, CallBackFunction function) {
+			@Override
+			public void handler(String data, CallBackFunction function) {
 
 				try {
 					JSONArray arr = new JSONArray(data);
@@ -405,37 +407,36 @@ public class WebAppFragment extends BaseFragment implements OnClickListener {
 					String type = arr.getString(0);
 
 
-
-					if ("wechat".equals(type)){
-						if (arr.length()>1){
+					if ("wechat".equals(type)) {
+						if (arr.length() > 1) {
 							String msg = arr.getString(1);
 							sp.setText(msg);
 						}
 						Platform p = ShareSDK.getPlatform(Wechat.NAME);
 						p.share(sp);
-					}else if("wechat_timeline".equals(type)){
-						if (arr.length()>1){
+					} else if ("wechat_timeline".equals(type)) {
+						if (arr.length() > 1) {
 							String msg = arr.getString(1);
 							sp.setText(msg);
 						}
 						Platform p = ShareSDK.getPlatform(WechatMoments.NAME);
-						Bitmap bmp= BitmapFactory.decodeResource(getResources(), R.drawable.icon);
+						Bitmap bmp = BitmapFactory.decodeResource(getResources(), R.drawable.icon);
 						sp.setImageData(bmp);
 						p.share(sp);
-					}else if("qq".equals(type)){
-						if (arr.length()>1){
+					} else if ("qq".equals(type)) {
+						if (arr.length() > 1) {
 							String msg = arr.getString(1);
 							sp.setText(msg);
 						}
-						if (arr.length()>2){
+						if (arr.length() > 2) {
 							sp.setTitleUrl(arr.getString(2));
 							sp.setUrl(arr.getString(2));
 						}
 						sp.setShareType(Platform.SHARE_TEXT);
 						Platform p = ShareSDK.getPlatform(QQ.NAME);
 						p.share(sp);
-					}else if("sms".equals(type)){
-						if (arr.length()>1){
+					} else if ("sms".equals(type)) {
+						if (arr.length() > 1) {
 							String msg = arr.getString(1);
 							sp.setText(msg);
 						}
@@ -448,11 +449,11 @@ public class WebAppFragment extends BaseFragment implements OnClickListener {
 					e.printStackTrace();
 				}
 
-	        }
-	    });
+			}
+		});
 	}
 
-	private void awakenAlipay(final String orderStr){
+	private void awakenAlipay(final String orderStr) {
 
 		Runnable payRunnable = new Runnable() {
 
@@ -475,31 +476,31 @@ public class WebAppFragment extends BaseFragment implements OnClickListener {
 
 	private void awakeWxpay(String content) throws JSONException {
 		JSONObject json = new JSONObject(content);
-		if(null != json && !json.has("retcode") ){
+		if (null != json && !json.has("retcode")) {
 			PayReq req = new PayReq();
 			//req.appId = "wxf8b4f85f3a794e77";  // 测试用appId
-			req.appId			= json.getString("appid");
-			req.partnerId		= json.getString("partnerid");
-			req.prepayId		= json.getString("prepayid");
-			req.nonceStr		= json.getString("noncestr");
-			req.timeStamp		= json.getString("timestamp");
-			req.packageValue	= json.getString("package");
-			req.sign			= json.getString("sign");
-			req.extData			= "app data"; // optional
+			req.appId = json.getString("appid");
+			req.partnerId = json.getString("partnerid");
+			req.prepayId = json.getString("prepayid");
+			req.nonceStr = json.getString("noncestr");
+			req.timeStamp = json.getString("timestamp");
+			req.packageValue = json.getString("package");
+			req.sign = json.getString("sign");
+			req.extData = "app data"; // optional
 			// 在支付之前，如果应用没有注册到微信，应该先调用IWXMsg.registerApp将应用注册到微信
 			IWXAPI api = WXAPIFactory.createWXAPI(mContext, req.appId);
 			api.sendReq(req);
-		}else{
-			Log.d("PAY_GET", "返回错误"+json.getString("retmsg"));
+		} else {
+			Log.d("PAY_GET", "返回错误" + json.getString("retmsg"));
 		}
 	}
 
 	@Override
 	public void changeActivityTitleView(TitleBar titleBar) {
 		super.changeActivityTitleView(titleBar);
-		if(titleBar!=null){
+		if (titleBar != null) {
 			titleBar.reset();
-			titleBar.setTitle(titleBar.getTitle()+"");
+			titleBar.setTitle(titleBar.getTitle() + "");
 			if (mHostActivity instanceof HomeBaseActivity) {
 				isCloseButtonAdded = true;// 避免出现关闭
 //			titleBar.addLeftBtnWithImageResourceIdAndClickListener(R.drawable.top_back_btn, new OnClickListener() {
@@ -510,11 +511,11 @@ public class WebAppFragment extends BaseFragment implements OnClickListener {
 //				}
 //			});
 			}
-			
-			
+
+
 			if (mMoreMenusStr != null && !mMoreMenusStr.equals("") && mMoreMenusStr.split(",").length > 1) {
 				titleBar.addRightBtnWithImageResourceIdAndClickListener(R.drawable.title_more, new OnClickListener() {
-					
+
 					@Override
 					public void onClick(View arg0) {
 						openMenu();
@@ -523,7 +524,7 @@ public class WebAppFragment extends BaseFragment implements OnClickListener {
 			} else if (mMoreMenusStr != null && !mMoreMenusStr.equals("") && mMoreMenusStr.split(",").length == 1) {
 				if (mMoreMenusStr.equals(MenuItem.WEB_APP_MENU_REFRESH + "")) {
 					titleBar.addRightBtnWithImageResourceIdAndClickListener(R.drawable.titlebar_refresh, new OnClickListener() {
-						
+
 						@Override
 						public void onClick(View v) {
 							refresh();
@@ -531,14 +532,14 @@ public class WebAppFragment extends BaseFragment implements OnClickListener {
 					});
 				} else if (mMoreMenusStr.equals(MenuItem.WEB_APP_MENU_SHARE + "")) {
 					titleBar.addRightBtnWithTextAndClickListener("分享", new OnClickListener() {
-						
+
 						@Override
 						public void onClick(View v) {
 						}
 					});
 				} else if (mMoreMenusStr.equals(MenuItem.WEB_APP_MENU_OPEN_WITH_BROWSER + "")) {
 					titleBar.addRightBtnWithTextAndClickListener("浏览器打开", new OnClickListener() {
-						
+
 						@Override
 						public void onClick(View v) {
 							openInBrowser();
@@ -564,17 +565,17 @@ public class WebAppFragment extends BaseFragment implements OnClickListener {
 
 			int menuIntValue = Integer.parseInt(s);
 			switch (menuIntValue) {
-			case MenuItem.WEB_APP_MENU_REFRESH:
-				setVisibilityOfViewByResId(menuPop, R.id.pop_ref_ll, View.VISIBLE);
-				break;
-			case MenuItem.WEB_APP_MENU_OPEN_WITH_BROWSER:
-				setVisibilityOfViewByResId(menuPop, R.id.pop_browser_ll, View.VISIBLE);
-				break;
-			case MenuItem.WEB_APP_MENU_SHARE:
-				setVisibilityOfViewByResId(menuPop, R.id.pop_share_ll, View.VISIBLE);
-				break;
-			default:
-				break;
+				case MenuItem.WEB_APP_MENU_REFRESH:
+					setVisibilityOfViewByResId(menuPop, R.id.pop_ref_ll, View.VISIBLE);
+					break;
+				case MenuItem.WEB_APP_MENU_OPEN_WITH_BROWSER:
+					setVisibilityOfViewByResId(menuPop, R.id.pop_browser_ll, View.VISIBLE);
+					break;
+				case MenuItem.WEB_APP_MENU_SHARE:
+					setVisibilityOfViewByResId(menuPop, R.id.pop_share_ll, View.VISIBLE);
+					break;
+				default:
+					break;
 			}
 		}
 		View refV = menuPop.findViewById(R.id.pop_ref_ll);
@@ -589,51 +590,51 @@ public class WebAppFragment extends BaseFragment implements OnClickListener {
 
 			@Override
 			public void onDownloadStart(String url, String userAgent, String contentDisposition, String mimetype,
-					long contentLength) {
+										long contentLength) {
 
 				String downloadUrl = url;
 				CookieManager cookieManager = CookieManager.getInstance();
 				String cookieStr = cookieManager.getCookie(url);
-				if (!TextUtils.isEmpty(cookieStr)){
-					if (url.contains("?")){
-						downloadUrl += "&"+cookieStr;
-					}else{
-						downloadUrl += "?"+cookieStr;
+				if (!TextUtils.isEmpty(cookieStr)) {
+					if (url.contains("?")) {
+						downloadUrl += "&" + cookieStr;
+					} else {
+						downloadUrl += "?" + cookieStr;
 					}
 				}
 				Bundle args = new Bundle();
 
 
-				String fileName = fetchFileName(contentDisposition,url);
-				if (!TextUtils.isEmpty(fileName)){
-					args.putString(FilePreviewFragment.ARGS_FILE_NAME,fileName);
+				String fileName = fetchFileName(contentDisposition, url);
+				if (!TextUtils.isEmpty(fileName)) {
+					args.putString(FilePreviewFragment.ARGS_FILE_NAME, fileName);
 				}
-				args.putString(FilePreviewFragment.ARGS_STRING_URL,url);
-				args.putString(ContainerActivity.EXTRA_STRING_TITLE,"文件预览");
-				args.putString(FilePreviewFragment.ARGS_STRING_MIME_TYPE,mimetype);
-				ContainerActivity.startActivity(getContext(),FilePreviewFragment.class,args);
+				args.putString(FilePreviewFragment.ARGS_STRING_URL, url);
+				args.putString(ContainerActivity.EXTRA_STRING_TITLE, "文件预览");
+				args.putString(FilePreviewFragment.ARGS_STRING_MIME_TYPE, mimetype);
+				ContainerActivity.startActivity(getContext(), FilePreviewFragment.class, args);
 			}
 
-			private String fetchFileName(String contentDisposition,String url) {
+			private String fetchFileName(String contentDisposition, String url) {
 
-				if (!TextUtils.isEmpty(contentDisposition)){
-					Pattern pattern = Pattern.compile("filename=\"(.*?)\"",Pattern.DOTALL);
+				if (!TextUtils.isEmpty(contentDisposition)) {
+					Pattern pattern = Pattern.compile("filename=\"(.*?)\"", Pattern.DOTALL);
 					Matcher matcher = pattern.matcher(contentDisposition);
-					while (matcher.find()){
+					while (matcher.find()) {
 						String fileName = null;
-						if(!TextUtils.isEmpty(fileName=matcher.group(1))){
+						if (!TextUtils.isEmpty(fileName = matcher.group(1))) {
 							try {
-								fileName = URLDecoder.decode(fileName,"utf-8");
-								return  fileName;
+								fileName = URLDecoder.decode(fileName, "utf-8");
+								return fileName;
 							} catch (UnsupportedEncodingException e) {
 								e.printStackTrace();
 							}
 						}
 					}
-				}else{
+				} else {
 					try {
-						URL urlO=new URL(url);
-						if (!TextUtils.isEmpty(urlO.getFile())){
+						URL urlO = new URL(url);
+						if (!TextUtils.isEmpty(urlO.getFile())) {
 							return urlO.getFile().substring(urlO.getFile().lastIndexOf("/") + 1);
 						}
 					} catch (MalformedURLException e) {
@@ -729,16 +730,16 @@ public class WebAppFragment extends BaseFragment implements OnClickListener {
 	public void onClick(View v) {
 		switch (v.getId()) {
 
-		case R.id.pop_ref_ll:
-			this.refresh();
-			mPopWin.dismiss();
-			break;
-		case R.id.pop_browser_ll:
-			this.openInBrowser();
-			mPopWin.dismiss();
-			break;
-		default:
-			break;
+			case R.id.pop_ref_ll:
+				this.refresh();
+				mPopWin.dismiss();
+				break;
+			case R.id.pop_browser_ll:
+				this.openInBrowser();
+				mPopWin.dismiss();
+				break;
+			default:
+				break;
 		}
 	}
 
@@ -760,39 +761,40 @@ public class WebAppFragment extends BaseFragment implements OnClickListener {
 	public void onActivityResult(int requestCode, int resultCode, Intent data) {
 		super.onActivityResult(requestCode, resultCode, data);
 		LogM.log(this.getClass(), "onActivityResult");
-		
-		
-		if(requestCode==REQUEST_CODE_PICTURES&&resultCode==Activity.RESULT_OK){
-			mProgressHUD = ProgressHUD.show(mContext,null, true, false, null);
-			
+
+
+		if (requestCode == REQUEST_CODE_PICTURES && resultCode == Activity.RESULT_OK) {
+			mProgressHUD = ProgressHUD.show(mContext, null, true, false, null);
+
 			List<String> selectPath = data.getStringArrayListExtra(MultiImageSelectorActivity.EXTRA_RESULT);
-            StringBuilder sb = new StringBuilder();
-            sb.append("[");
-            for (String p : selectPath) {
-            	Bitmap bitmap = BitmapUtils.convertToBitmap(p, 800, 800);
-                ByteArrayOutputStream stream = new ByteArrayOutputStream();
-                bitmap.compress(Bitmap.CompressFormat.PNG, 100, stream);
-                byte[] byteArray = stream.toByteArray();
-                String base64 = Base64.encode(byteArray);
-                if(sb.length()>1){
-                	sb.append(",\""+base64+"\"");
-                }else{
-                	sb.append("\""+base64+"\"");
-                }
-                bitmap = null;
-                try {
-                	if(stream!=null){
-                		stream.close();
-                	}
+			StringBuilder sb = new StringBuilder();
+			sb.append("[");
+			for (String p : selectPath) {
+				Bitmap bitmap = BitmapUtils.convertToBitmap(p, 800, 800);
+				ByteArrayOutputStream stream = new ByteArrayOutputStream();
+				bitmap.compress(Bitmap.CompressFormat.PNG, 100, stream);
+				byte[] byteArray = stream.toByteArray();
+				String base64 = Base64.encode(byteArray);
+				if (sb.length() > 1) {
+					sb.append(",\"" + base64 + "\"");
+				} else {
+					sb.append("\"" + base64 + "\"");
+				}
+				bitmap = null;
+				try {
+					if (stream != null) {
+						stream.close();
+					}
 				} catch (IOException e) {
 					e.printStackTrace();
 				}
-            }
-            sb.append("]");
-			mTmpHandelCallbackFunction.onCallBack( sb.toString());
+			}
+			sb.append("]");
+			mTmpHandelCallbackFunction.onCallBack(sb.toString());
 			mProgressHUD.hide();
 		}
 	}
+
 	@Override
 	public void onDestroy() {
 		super.onDestroy();
