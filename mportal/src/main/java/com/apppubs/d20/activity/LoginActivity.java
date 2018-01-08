@@ -12,7 +12,7 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Toast;
 
-import com.apppubs.d20.fragment.WebAppFragment;
+import com.apppubs.d20.webapp.WebAppFragment;
 import com.apppubs.d20.R;
 import com.apppubs.d20.asytask.AsyTaskCallback;
 import com.apppubs.d20.asytask.AsyTaskExecutor;

@@ -55,7 +55,7 @@ public class FirstLoginActity extends BaseActivity implements ErrorListener, Asy
 
 	public static final int REQUEST_CODE_VERIFICATION = 100;
 	public static final int LOGIN_WITH_USERNAME_AND_PASSWORD_TASK = 200;
-	
+
 	private LinearLayout mContainerLl;
 	private TextView mTitleTv, mFristZhuce;
 	private ImageView mBgIv;
@@ -72,6 +72,7 @@ public class FirstLoginActity extends BaseActivity implements ErrorListener, Asy
 	private int mLoginType;// 登陆类型
 
 	private UserInfo mLoginingUser;//正在登录的用户
+
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -96,7 +97,7 @@ public class FirstLoginActity extends BaseActivity implements ErrorListener, Asy
 		mContainerLl.startAnimation(animSet);
 	}
 
-	@SuppressLint("SetJavaScriptEnabled") 
+	@SuppressLint("SetJavaScriptEnabled")
 	private void init() {
 
 		mLoginType = mAppContext.getApp().getLoginFlag();
@@ -105,9 +106,7 @@ public class FirstLoginActity extends BaseActivity implements ErrorListener, Asy
 		mFristZhuce = (TextView) findViewById(R.id.frist_login_reg);
 		mFristZhuce.setOnClickListener(this);
 		mFristZhuce.setTextColor(mThemeColor);
-		if (mAppContext.getApp().getAllowRegister() == 1) {// 不允许注册
-			mFristZhuce.setVisibility(View.GONE);
-		}
+		mFristZhuce.setVisibility(mAppContext.getApp().getAllowRegister() == 0 ? View.GONE : View.VISIBLE);
 		mUsernameTv = (EditText) findViewById(R.id.fristregist_name);
 		mPasswordTv = (EditText) findViewById(R.id.fristregist_password);
 		mPhoneEt = (EditText) findViewById(R.id.firstlogin_phone_et);
@@ -202,12 +201,12 @@ public class FirstLoginActity extends BaseActivity implements ErrorListener, Asy
 	public void onClick(View v) {
 
 		switch (v.getId()) {
-		case R.id.frist_login_reg:
-			startActivity(RegisterActivity.class);
-			break;
-		case R.id.frist_login_login:
-			login();
-			break;
+			case R.id.frist_login_reg:
+				startActivity(RegisterActivity.class);
+				break;
+			case R.id.frist_login_login:
+				login();
+				break;
 		}
 	}
 
@@ -261,7 +260,7 @@ public class FirstLoginActity extends BaseActivity implements ErrorListener, Asy
 			}
 
 			mProgressHUD = ProgressHUD.show(this, "系统登录中", true, false, null);
-			AsyTaskExecutor.getInstance().startTask(LOGIN_WITH_USERNAME_AND_PASSWORD_TASK, this,new String[]{username,password});
+			AsyTaskExecutor.getInstance().startTask(LOGIN_WITH_USERNAME_AND_PASSWORD_TASK, this, new String[]{username, password});
 
 		}
 
@@ -271,7 +270,7 @@ public class FirstLoginActity extends BaseActivity implements ErrorListener, Asy
 
 		ProgressHUD.show(this);
 
-		String url = String.format(URLs.URL_LOGIN_WITH_PHONE,URLs.baseURL,URLs.appCode, phone, mSystemBussiness.getMachineId());
+		String url = String.format(URLs.URL_LOGIN_WITH_PHONE, URLs.baseURL, URLs.appCode, phone, mSystemBussiness.getMachineId());
 		LogM.log(this.getClass(), "请求url:" + url);
 		mRequestQueue.add(new StringRequest(url, new Listener<String>() {
 
@@ -299,9 +298,9 @@ public class FirstLoginActity extends BaseActivity implements ErrorListener, Asy
 		String url = null;
 		try {
 			// /wmh360/json/login/usersmslogin.jsp?username=%s&deviceid=%s&token=%s&os=%s&dev=%s&app=%s&fr=4&appcode="+appCode;
-			url = String.format(URLs.URL_LOGIN_WITH_USERNAME,URLs.baseURL,URLs.appCode, username, mSystemBussiness.getMachineId(),
+			url = String.format(URLs.URL_LOGIN_WITH_USERNAME, URLs.baseURL, URLs.appCode, username, mSystemBussiness.getMachineId(),
 					mAppContext.getApp().getPushToken(), osVersion, URLEncoder.encode(Build.MODEL, "utf-8"),
-					currentVersionName,versionCode);
+					currentVersionName, versionCode);
 		} catch (UnsupportedEncodingException e) {
 			e.printStackTrace();
 		}
@@ -337,7 +336,7 @@ public class FirstLoginActity extends BaseActivity implements ErrorListener, Asy
 				Intent intent = new Intent(this, VerificationCodeActivity.class);
 				Bundle extras = new Bundle();
 				extras.putString(VerificationCodeActivity.EXTRA_STRING_PHONE, phone);
-				extras.putString(VerificationCodeActivity.EXTRA_STRING_USERNAME,mLoginingUser.getUsername());
+				extras.putString(VerificationCodeActivity.EXTRA_STRING_USERNAME, mLoginingUser.getUsername());
 				intent.putExtras(extras);
 				startActivityForResult(intent, REQUEST_CODE_VERIFICATION);
 
@@ -356,10 +355,10 @@ public class FirstLoginActity extends BaseActivity implements ErrorListener, Asy
 		try {
 			JSONObject jo = new JSONObject(response);
 			int result = jo.getInt("result");
-			if (result==1||result==2){
+			if (result == 1 || result == 2) {
 				mLoginingUser = new UserInfo(jo.getString("userid"), jo.getString("username"), jo.getString("cnname"), "",
-						jo.getString("email"), jo.getString("mobile"),jo.getString("menupower"));
-				if (jo.has("photourl")){
+						jo.getString("email"), jo.getString("mobile"), jo.getString("menupower"));
+				if (jo.has("photourl")) {
 					mLoginingUser.setAvatarUrl(jo.getString("photourl"));
 				}
 			}
@@ -371,7 +370,7 @@ public class FirstLoginActity extends BaseActivity implements ErrorListener, Asy
 				Intent intent = new Intent(this, VerificationCodeActivity.class);
 				Bundle extras = new Bundle();
 				extras.putString(VerificationCodeActivity.EXTRA_STRING_PHONE, mLoginingUser.getMobile());
-				extras.putString(VerificationCodeActivity.EXTRA_STRING_USERNAME,mLoginingUser.getUsername());
+				extras.putString(VerificationCodeActivity.EXTRA_STRING_USERNAME, mLoginingUser.getUsername());
 				intent.putExtras(extras);
 				startActivityForResult(intent, REQUEST_CODE_VERIFICATION);
 			} else {
@@ -390,7 +389,7 @@ public class FirstLoginActity extends BaseActivity implements ErrorListener, Asy
 		String url = null;
 		try {
 			// wmh360/json/login/usercroplogin.jsp?username=%s&password=%s&cropid=%s&deviceid=%s&os=%s&token=%sdev=%s&app=%s&fr=4&appcode="+appCode+"";
-			url = String.format(URLs.URL_LOGIN_WITH_ORG,URLs.baseURL,URLs.appCode, username, password, orgCode, mSystemBussiness.getMachineId(),
+			url = String.format(URLs.URL_LOGIN_WITH_ORG, URLs.baseURL, URLs.appCode, username, password, orgCode, mSystemBussiness.getMachineId(),
 					osVersion, mAppContext.getApp().getPushToken(), URLEncoder.encode(Build.MODEL, "utf-8"),
 					currentVersionName);
 		} catch (UnsupportedEncodingException e) {
@@ -411,17 +410,17 @@ public class FirstLoginActity extends BaseActivity implements ErrorListener, Asy
 
 		if (jr.resultCode == 1) {
 			UserInfo user = new UserInfo();
-            user.setUsername((String)jr.getResultMap().get("username"));
-            user.setUserId((String)jr.getResultMap().get("userid"));
-            user.setOrgCode(orgCode);
+			user.setUsername((String) jr.getResultMap().get("username"));
+			user.setUserId((String) jr.getResultMap().get("userid"));
+			user.setOrgCode(orgCode);
 			AppContext.getInstance(mContext).setCurrentUser(user);
 			Settings settings = mAppContext.getSettings();
 			settings.setIsAllowAutoLogin(mCheckBox.isChecked());
 			mAppContext.setSettings(settings);
-            enterHome();
-        } else {
-            Toast.makeText(this, "登录失败", Toast.LENGTH_SHORT).show();
-        }
+			enterHome();
+		} else {
+			Toast.makeText(this, "登录失败", Toast.LENGTH_SHORT).show();
+		}
 	}
 
 	@Override
@@ -440,7 +439,7 @@ public class FirstLoginActity extends BaseActivity implements ErrorListener, Asy
 
 	/**
 	 * 登录结果返回时执行
-	 * 
+	 *
 	 * @param result
 	 */
 	private void onLoginDone(Integer result) {
@@ -477,30 +476,30 @@ public class FirstLoginActity extends BaseActivity implements ErrorListener, Asy
 	}
 
 	@Override
-	public Object onExecute(Integer tag,String[] params) {
+	public Object onExecute(Integer tag, String[] params) {
 
-		if(tag==LOGIN_WITH_USERNAME_AND_PASSWORD_TASK){
+		if (tag == LOGIN_WITH_USERNAME_AND_PASSWORD_TASK) {
 			String token = mAppContext.getApp().getPushVendorType() == App.PUSH_VENDOR_TYPE_BAIDU ? mAppContext.getApp()
 					.getBaiduPushUserId() : JPushInterface.getRegistrationID(this);// 百度硬件设备号
 			String osVersion = Utils.getAndroidSDKVersion();// 操作系统号
 			String currentVersionName = Utils.getVersionName(FirstLoginActity.this);// app版本号
 
 			CheckBox cb = (CheckBox) findViewById(R.id.firstlogin_ckb);
-			
-			int result =0;
+
+			int result = 0;
 			try {
 				Map<String, Object> requestParamsMap = new HashMap<String, Object>();
 				requestParamsMap.put("username", params[0]);
 				requestParamsMap.put("password", params[1]);
-				requestParamsMap.put("deviceid",  mSystemBussiness.getMachineId());
-				requestParamsMap.put("token",  token);
+				requestParamsMap.put("deviceid", mSystemBussiness.getMachineId());
+				requestParamsMap.put("token", token);
 				requestParamsMap.put("dev", URLEncoder.encode(Build.MODEL, "utf-8"));
 				requestParamsMap.put("os", osVersion);
 				requestParamsMap.put("app", currentVersionName);
-				requestParamsMap.put("appcodeversion",Utils.getVersionCode(mContext)+"");
+				requestParamsMap.put("appcodeversion", Utils.getVersionCode(mContext) + "");
 				requestParamsMap.put("fr", "4");
 
-				String data = WebUtils.requestWithPost(String.format(URLs.URL_LOGIN,URLs.baseURL,URLs.appCode), requestParamsMap);
+				String data = WebUtils.requestWithPost(String.format(URLs.URL_LOGIN, URLs.baseURL, URLs.appCode), requestParamsMap);
 				JSONObject jo = new JSONObject(data);
 				/**
 				 * //0、用户名或密码错误 //1、还未注册 //2、已经注册并且信息一致
@@ -520,14 +519,14 @@ public class FirstLoginActity extends BaseActivity implements ErrorListener, Asy
 				Settings settings = mAppContext.getSettings();
 				settings.setIsAllowAutoLogin(cb.isChecked());
 				mAppContext.setSettings(settings);
-			}catch(Exception e){
+			} catch (Exception e) {
 				e.printStackTrace();
 			}
 			return result;
 		}
 
 		return null;
-		
+
 	}
 
 	@Override
@@ -536,8 +535,8 @@ public class FirstLoginActity extends BaseActivity implements ErrorListener, Asy
 	}
 
 	@Override
-	public void onTaskFail(Integer tag,Exception e) {
-		
+	public void onTaskFail(Integer tag, Exception e) {
+
 	}
 
 }

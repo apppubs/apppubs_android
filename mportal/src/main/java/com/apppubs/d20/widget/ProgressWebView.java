@@ -22,8 +22,6 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.util.AttributeSet;
-import android.util.Log;
-import android.webkit.CookieManager;
 import android.webkit.JsResult;
 import android.webkit.SslErrorHandler;
 import android.webkit.ValueCallback;
@@ -33,7 +31,7 @@ import android.webkit.WebViewClient;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
-import com.apppubs.d20.fragment.WebAppFragment;
+import com.apppubs.d20.webapp.WebAppFragment;
 import com.apppubs.d20.util.LogM;
 import com.apppubs.d20.R;
 import com.apppubs.d20.SkipActivity;

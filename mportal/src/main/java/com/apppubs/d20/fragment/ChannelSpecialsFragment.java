@@ -21,6 +21,7 @@ import com.apppubs.d20.asytask.AsyTaskExecutor;
 import com.apppubs.d20.bean.NewsSpecialsInfo;
 import com.apppubs.d20.constant.URLs;
 import com.apppubs.d20.util.WebUtils;
+import com.apppubs.d20.webapp.WebAppFragment;
 import com.apppubs.d20.widget.commonlist.CommonListView;
 import com.apppubs.d20.widget.commonlist.CommonListViewListener;
 import com.apppubs.d20.R;

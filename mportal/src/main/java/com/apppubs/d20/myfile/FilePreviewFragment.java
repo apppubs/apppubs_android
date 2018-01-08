@@ -25,7 +25,7 @@ import com.apppubs.d20.R;
 import com.apppubs.d20.activity.ContainerActivity;
 import com.apppubs.d20.bean.AppConfig;
 import com.apppubs.d20.fragment.BaseFragment;
-import com.apppubs.d20.fragment.WebAppFragment;
+import com.apppubs.d20.webapp.WebAppFragment;
 import com.apppubs.d20.model.APResultCallback;
 import com.apppubs.d20.util.LogM;
 import com.apppubs.d20.widget.AlertDialog;

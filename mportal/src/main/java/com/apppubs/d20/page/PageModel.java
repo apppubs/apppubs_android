@@ -4,15 +4,13 @@ import android.content.Context;
 
 import com.apppubs.d20.AppContext;
 import com.apppubs.d20.util.Utils;
-import com.apppubs.d20.widget.ColorUtils;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.ArrayList;
 import java.util.List;
-
-import okhttp3.internal.Util;
 
 /**
  * Created by zhangwen on 2017/9/27.
@@ -20,18 +18,18 @@ import okhttp3.internal.Util;
 
 public class PageModel {
 	private String pageId;
-	private  PageContentModel content;
+	private PageContentModel content;
 	private TitleBarModel titleBarModel;
 
-	public PageModel(Context context,String json){
+	public PageModel(Context context, String json) {
 		try {
 			JSONObject pageObject = new JSONObject(json);
-			if(pageObject.has("titlebar")){
-				titleBarModel = new TitleBarModel(context,pageObject.getString("titlebar"));
+			if (pageObject.has("titlebar")) {
+				titleBarModel = new TitleBarModel(context, pageObject.getString("titlebar"));
 			}
-			if (pageObject.has("navbar")){
+			if (pageObject.has("navbar")) {
 				content = new PageNavContentModel(json);
-			}else{
+			} else {
 				content = new PageNormalContentModel(pageObject.getString("components"));
 			}
 		} catch (JSONException e) {
@@ -66,15 +64,15 @@ public class PageModel {
 }
 
 
-interface PageContentModel{
+interface PageContentModel {
 
 }
 
-class PageNormalContentModel implements PageContentModel{
+class PageNormalContentModel implements PageContentModel {
 
 	private JSONArray components;
 
-	public PageNormalContentModel(String jsonArr){
+	public PageNormalContentModel(String jsonArr) {
 		try {
 			components = new JSONArray(jsonArr);
 		} catch (JSONException e) {
@@ -91,13 +89,13 @@ class PageNormalContentModel implements PageContentModel{
 	}
 }
 
-class PageNavContentModel implements PageContentModel{
+class PageNavContentModel implements PageContentModel {
 
 	private JSONObject navBar;
 	private JSONArray navItems;
 	private List<PageNormalContentModel> items;
 
-	public PageNavContentModel(String json){
+	public PageNavContentModel(String json) {
 		try {
 			navBar = new JSONObject(json).getJSONObject("navbar");
 			navItems = navBar.getJSONArray("items");
@@ -131,7 +129,7 @@ class PageNavContentModel implements PageContentModel{
 	}
 }
 
-class TitleBarModel{
+class TitleBarModel {
 
 	private String type;
 	private String title;
@@ -143,7 +141,7 @@ class TitleBarModel{
 	private String rightAction;
 	private int underlineColor;
 
-	public TitleBarModel(Context context, String json){
+	public TitleBarModel(Context context, String json) {
 		try {
 			JSONObject jo = new JSONObject(json);
 			type = jo.getString("titletype");
@@ -155,7 +153,7 @@ class TitleBarModel{
 			leftAction = jo.getString("leftbtnurl");
 			rightAction = jo.getString("rightbtnurl");
 			int underColor = Utils.parseColor(jo.getString("underlinecolor"));
-			if (underColor>-1){
+			if (underColor > -1) {
 				underlineColor = underColor;
 			}
 		} catch (JSONException e) {
@@ -233,6 +231,139 @@ class TitleBarModel{
 
 	public void setUnderlineColor(int underlineColor) {
 		this.underlineColor = underlineColor;
+	}
+}
+
+class GridViewModel {
+	private Integer column;
+	private Integer maxRow;
+	private List<GridViewItem> items;
+
+	public GridViewModel(String jsonStr) {
+		try {
+			JSONObject jo = new JSONObject(jsonStr);
+			this.column = jo.getInt("column");
+			this.maxRow = jo.getInt("maxrow");
+			JSONArray items = jo.getJSONArray("items");
+			List<GridViewItem> list = new ArrayList<GridViewItem>();
+			for (int i = -1; ++i < items.length(); ) {
+				GridViewItem item = new GridViewItem(items.getString(i));
+				list.add(item);
+			}
+			this.items = list;
+		} catch (JSONException e) {
+			e.printStackTrace();
+		}
+	}
+
+	public Integer getColumn() {
+		return column;
+	}
+
+	public void setColumn(Integer column) {
+		this.column = column;
+	}
+
+	public Integer getMaxRow() {
+		return maxRow;
+	}
+
+	public void setMaxRow(Integer maxRow) {
+		this.maxRow = maxRow;
+	}
+
+	public List<GridViewItem> getItems() {
+		return items;
+	}
+
+	public void setItems(List<GridViewItem> items) {
+		this.items = items;
+	}
+
+	public List<GridViewItem> getItemsForPage(int pageIndex) {
+		List<GridViewItem> list = new ArrayList<GridViewItem>();
+		int pageSize = maxRow * column;
+		int pageStartIndex = pageSize * pageIndex;
+		if (items.size() > pageStartIndex + pageSize) {
+			list.addAll(items.subList(pageStartIndex, pageStartIndex + pageSize));
+		} else if (items.size() > pageStartIndex) {
+			list.addAll(items.subList(pageStartIndex, items.size()));
+		} else {
+			//do nothing
+		}
+		return list;
+	}
+
+	public int getTotalPage() {
+		return items.size() % (maxRow * column) == 0 ? items.size() / (maxRow * column) : items.size() / (maxRow * column) + 1;
+	}
+
+	public int getRealMaxRow() {
+		if (items.size() <= maxRow * column) {
+			return items.size() % column == 0 ? items.size() / column : items.size() / column + 1;
+		} else {
+			return maxRow;
+		}
+	}
+}
+
+class GridViewItem {
+	private String title;
+	private String picUrl;
+	private String action;
+	private String badgeURL;
+	private String badgeTxt;
+
+	public GridViewItem(String jsonStr) {
+		try {
+			JSONObject jo = new JSONObject(jsonStr);
+			this.title = jo.getString("title");
+			this.picUrl = jo.getString("picurl");
+			this.action = jo.getString("url");
+			this.badgeURL = jo.getString("badgeurl");
+		} catch (JSONException e) {
+			e.printStackTrace();
+		}
+	}
+
+	public String getTitle() {
+		return title;
+	}
+
+	public void setTitle(String title) {
+		this.title = title;
+	}
+
+	public String getPicUrl() {
+		return picUrl;
+	}
+
+	public void setPicUrl(String picUrl) {
+		this.picUrl = picUrl;
+	}
+
+	public String getAction() {
+		return action;
+	}
+
+	public void setAction(String action) {
+		this.action = action;
+	}
+
+	public String getBadgeURL() {
+		return badgeURL;
+	}
+
+	public void setBadgeURL(String badgeURL) {
+		this.badgeURL = badgeURL;
+	}
+
+	public String getBadgeTxt() {
+		return badgeTxt;
+	}
+
+	public void setBadgeTxt(String badgeTxt) {
+		this.badgeTxt = badgeTxt;
 	}
 }
 

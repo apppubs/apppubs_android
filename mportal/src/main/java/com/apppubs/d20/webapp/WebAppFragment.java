@@ -1,4 +1,4 @@
-package com.apppubs.d20.fragment;
+package com.apppubs.d20.webapp;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
@@ -24,7 +24,6 @@ import android.widget.PopupWindow;
 
 import com.alipay.sdk.app.PayTask;
 import com.amap.api.location.AMapLocation;
-import com.amap.api.location.AMapLocationListener;
 import com.apppubs.d20.AppContext;
 import com.apppubs.d20.AppManager;
 import com.apppubs.d20.MportalApplication;
@@ -33,10 +32,10 @@ import com.apppubs.d20.activity.ContainerActivity;
 import com.apppubs.d20.activity.HomeBaseActivity;
 import com.apppubs.d20.activity.ViewCourier;
 import com.apppubs.d20.bean.MenuItem;
+import com.apppubs.d20.fragment.BaseFragment;
 import com.apppubs.d20.myfile.FilePreviewFragment;
 import com.apppubs.d20.util.Base64;
 import com.apppubs.d20.util.BitmapUtils;
-import com.apppubs.d20.util.JSONUtils;
 import com.apppubs.d20.util.LocationManager;
 import com.apppubs.d20.util.LogM;
 import com.apppubs.d20.util.SystemUtils;
@@ -48,7 +47,6 @@ import com.apppubs.jsbridge.BridgeHandler;
 import com.apppubs.jsbridge.CallBackFunction;
 import com.apppubs.jsbridge.DefaultHandler;
 import com.apppubs.multi_image_selector.MultiImageSelectorActivity;
-import com.google.gson.JsonObject;
 import com.tencent.mm.opensdk.modelpay.PayReq;
 import com.tencent.mm.opensdk.openapi.IWXAPI;
 import com.tencent.mm.opensdk.openapi.WXAPIFactory;

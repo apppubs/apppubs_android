@@ -2,12 +2,16 @@ package com.apppubs.d20.page;
 
 import android.content.Context;
 import android.graphics.Color;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.v4.view.PagerAdapter;
+import android.support.v4.view.ViewPager;
 import android.support.v7.widget.GridLayout;
 import android.util.AttributeSet;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
@@ -17,9 +21,9 @@ import android.widget.TextView;
 
 import com.apppubs.d20.R;
 import com.apppubs.d20.util.Utils;
-
-import org.json.JSONArray;
-import org.json.JSONObject;
+import com.apppubs.d20.widget.Indicator;
+import com.artifex.mupdfdemo.PageView;
+import com.nostra13.universalimageloader.core.ImageLoader;
 
 import java.util.List;
 
@@ -27,10 +31,16 @@ import java.util.List;
  * Created by zhangwen on 2017/9/29.
  */
 
-public class PageGridView extends FrameLayout{
+public class PageGridView extends RelativeLayout implements View.OnClickListener, ViewPager.OnPageChangeListener {
 
+	private ViewPager mViewPager;
+	private PagerAdapter mPagerAdapter;
+	private Indicator mIndicator;
 
-	private GridLayout mGridLayout;
+	private GridViewModel mModel;
+
+	private OnItemClickListener mListener;
+
 	public PageGridView(Context context) {
 		super(context);
 		initView();
@@ -41,68 +51,141 @@ public class PageGridView extends FrameLayout{
 		initView();
 	}
 
-	private void initView(){
-		mGridLayout = new GridLayout(getContext());
-		mGridLayout.setBackgroundColor(Color.WHITE);
-		LinearLayout.LayoutParams lp1 = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT,
-				LinearLayout.LayoutParams.WRAP_CONTENT);
-		this.addView(mGridLayout, lp1);
+	public interface OnItemClickListener {
+		void onItemClick(String action);
 	}
 
-	public void setItems(List<GrideViewItem> items){
-		if (items==null||items.size()<1){
-			return ;
-		}
-		mGridLayout.setColumnCount(items.size());
-//		WindowManager wm = mHostActivity.getWindowManager();
-//		int width = wm.getDefaultDisplay().getWidth();
+	private void initView() {
+		mViewPager = new ViewPager(getContext());
+		mViewPager.setBackgroundColor(Color.WHITE);
+		mViewPager.addOnPageChangeListener(this);
+		FrameLayout.LayoutParams lp1 = new FrameLayout.LayoutParams(FrameLayout.LayoutParams.MATCH_PARENT,
+				LayoutParams.WRAP_CONTENT);
+		this.addView(mViewPager, lp1);
+	}
 
-		for (int i = -1; ++i < items.size();) {
-			GrideViewItem item = items.get(i);
-//			GridLayout.LayoutParams glp = new GridLayout.LayoutParams();
-//			glp.width = (width-padding*2) / gl.getColumnCount();
-//			glp.setGravity(Gravity.FILL);
+	public void setModel(final GridViewModel model) {
+		this.mModel = model;
+		if (model == null) {
+			throw new IllegalArgumentException("model不可为空");
+		}
+		getAdapter(model);
+		mViewPager.setAdapter(mPagerAdapter);
+		if (model.getTotalPage() > 1) {
+			addIndicator(model);
+		}
+		int pageHeight = getViewPagerHeight(model);
+		ViewGroup.LayoutParams lp = mViewPager.getLayoutParams();
+		lp.height = pageHeight;
+	}
+
+	public void setOnItemClickListener(OnItemClickListener listener) {
+		mListener = listener;
+	}
+
+	//pargma private
+	private void getAdapter(final GridViewModel model) {
+		mPagerAdapter = new PagerAdapter() {
+			@Override
+			public int getCount() {
+				return model.getTotalPage();
+			}
+
+			@Override
+			public boolean isViewFromObject(View view, Object object) {
+				return view == object;
+			}
+
+			@Override
+			public Object instantiateItem(ViewGroup container, int position) {
+				GridLayout gridLayout = getGridLayout(position);
+				container.addView(gridLayout);
+				return gridLayout;
+			}
+
+			@Override
+			public void destroyItem(ViewGroup container, int position, Object object) {
+				super.destroyItem(container, position, object);
+			}
+		};
+	}
+
+	private int getViewPagerHeight(GridViewModel model) {
+		WindowManager wm = (WindowManager) getContext()
+				.getSystemService(Context.WINDOW_SERVICE);
+		int width = wm.getDefaultDisplay().getWidth();
+		int itemWidth = width / model.getColumn();
+		int pageHeight = 0;
+		int indicatorHeight = Utils.dip2px(getContext(), 30);
+		if (model.getTotalPage() > 1) {
+			pageHeight = (int) (itemWidth * 1.1) * model.getRealMaxRow() + indicatorHeight;
+		} else {
+			pageHeight = (int) (itemWidth * 1.1) * model.getRealMaxRow();
+		}
+		return pageHeight;
+	}
+
+	private void addIndicator(GridViewModel model) {
+		mIndicator = new Indicator(getContext(), model.getTotalPage(), Indicator.STYLE_DARK);
+		mIndicator.setPadding(0, 0, 0, Utils.dip2px(getContext(), 10));
+		mIndicator.setCurItem(0);
+		mIndicator.setGravity(Gravity.CENTER);
+		LayoutParams indicatorLp = new LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
+		indicatorLp.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM, RelativeLayout.TRUE);
+		indicatorLp.addRule(RelativeLayout.CENTER_HORIZONTAL, RelativeLayout.TRUE);
+		addView(mIndicator, indicatorLp);
+	}
+
+	@NonNull
+	private GridLayout getGridLayout(int index) {
+		GridLayout gridLayout = new GridLayout(getContext());
+		gridLayout.setColumnCount(mModel.getColumn());
+		WindowManager wm = (WindowManager) getContext()
+				.getSystemService(Context.WINDOW_SERVICE);
+		int width = wm.getDefaultDisplay().getWidth();
+
+		List<GridViewItem> items = mModel.getItemsForPage(index);
+		for (int i = -1; ++i < items.size(); ) {
+			GridViewItem item = items.get(i);
 			RelativeLayout rl = (RelativeLayout) LayoutInflater.from(getContext()).inflate(R.layout.item_menu_gv, null);
 			View verticalLine = rl.findViewById(R.id.vertical_line);
 			verticalLine.setVisibility(View.GONE);
 			TextView tv = (TextView) rl.findViewById(R.id.menu_tv);
 			tv.setText(item.getTitle());
 			ImageView iv = (ImageView) rl.findViewById(R.id.menu_iv);
-//			mImageLoader.displayImage(item.getString("picurl"), iv);
-//			rl.setOnClickListener(this);
-//			rl.setTag(item.getString("url"));
-			mGridLayout.addView(rl);
+			ImageLoader.getInstance().displayImage(item.getPicUrl(), iv);
+			rl.setOnClickListener(this);
+			rl.setTag(item.getAction());
+			GridLayout.LayoutParams glp = new GridLayout.LayoutParams();
+			glp.width = width / gridLayout.getColumnCount();
+			glp.height = (int) (glp.width * 1.1);
+			glp.setGravity(Gravity.FILL);
+			gridLayout.addView(rl, glp);
+		}
+		return gridLayout;
+	}
 
+	//OnClickListener
+	@Override
+	public void onClick(View v) {
+		if (mListener != null) {
+			mListener.onItemClick(v.getTag().toString());
 		}
 	}
 
-	class GrideViewItem{
-		private String title;
-		private String picUrl;
-		private String action;
+	//OnPageChangeListener
+	@Override
+	public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
 
-		public String getTitle() {
-			return title;
-		}
+	}
 
-		public void setTitle(String title) {
-			this.title = title;
-		}
+	@Override
+	public void onPageSelected(int position) {
+		mIndicator.setCurItem(position);
+	}
 
-		public String getPicUrl() {
-			return picUrl;
-		}
+	@Override
+	public void onPageScrollStateChanged(int state) {
 
-		public void setPicUrl(String picUrl) {
-			this.picUrl = picUrl;
-		}
-
-		public String getAction() {
-			return action;
-		}
-
-		public void setAction(String action) {
-			this.action = action;
-		}
 	}
 }

@@ -39,7 +39,7 @@ import com.apppubs.d20.bean.Settings;
 import com.apppubs.d20.model.APResultCallback;
 import com.apppubs.d20.model.CollectionBussiness;
 import com.apppubs.d20.myfile.FilePreviewFragment;
-import com.apppubs.d20.fragment.WebAppFragment;
+import com.apppubs.d20.webapp.WebAppFragment;
 import com.apppubs.d20.util.LogM;
 import com.apppubs.d20.util.ShareTools;
 import com.apppubs.d20.util.Utils;

@@ -41,7 +41,7 @@ import com.apppubs.d20.fragment.BaseFragment;
 import com.apppubs.d20.fragment.ChannelFragment;
 import com.apppubs.d20.fragment.ChannelFragmentFactory;
 import com.apppubs.d20.fragment.TitleMenuFragment;
-import com.apppubs.d20.fragment.WebAppFragment;
+import com.apppubs.d20.webapp.WebAppFragment;
 import com.apppubs.d20.util.FileUtils;
 import com.apppubs.d20.util.JSONResult;
 import com.apppubs.d20.util.LogM;
@@ -73,7 +73,7 @@ import java.util.UUID;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public class PageFragment extends TitleMenuFragment implements OnClickListener,IPageView{
+public class PageFragment extends TitleMenuFragment implements OnClickListener, IPageView {
 
 	public static final String EXTRA_STRING_NAME_PAGE_ID = "page_id";
 	public static final String CUSTOM_WEB_APP_URL_SERIALIZED_FILE_NAME = "custom_web_app_url_map";
@@ -81,12 +81,12 @@ public class PageFragment extends TitleMenuFragment implements OnClickListener,I
 
 	private final int ASY_TASK_TAG_RESOLVE_HOTAREAS = 100;//异步解析热区信息
 	private String mPageId;
-	
+
 	private LinearLayout mRootLl;
 	private LinearLayout mContainerLl;
 	private ScrollView mScrollView;
 	private List<View> mAnchorPointerViewList;//锚点view
-	
+
 	private RelativeLayout mContentRL;//包含导航和滚动fragment
 	private ScrollTabs mScrollTabs;
 	private ViewPager mViewPager;
@@ -97,19 +97,20 @@ public class PageFragment extends TitleMenuFragment implements OnClickListener,I
 
 	private TitleBar mTitleBar;
 	private PagePresenter mPresenter;
-	
+
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		mAnchorPointerViewList = new ArrayList<View>();
-		mPresenter = new PagePresenter(mContext,this);
+		mPresenter = new PagePresenter(mContext, this);
 
 	}
+
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
 		Bundle bundle = getArguments();
-		if(bundle!=null){
+		if (bundle != null) {
 			mPageId = bundle.getString(EXTRA_STRING_NAME_PAGE_ID);
 		}
 		initRootView();
@@ -126,10 +127,11 @@ public class PageFragment extends TitleMenuFragment implements OnClickListener,I
 	@Override
 	public void onHiddenChanged(boolean hidden) {
 		super.onHiddenChanged(hidden);
-		if(!hidden){
+		if (!hidden) {
 			mPresenter.onVisiable();
 		}
 	}
+
 	@Override
 	public void onActivityCreated(Bundle savedInstanceState) {
 		super.onActivityCreated(savedInstanceState);
@@ -153,9 +155,9 @@ public class PageFragment extends TitleMenuFragment implements OnClickListener,I
 
 		mRootView = rootLl;
 	}
-	
-	private void parse(JSONObject info) throws JSONException{
-		
+
+	private void parse(JSONObject info) throws JSONException {
+
 		mRootLl.removeAllViews();
 		//解析titlebar
 //		if(info.has("titlebar")){
@@ -164,9 +166,9 @@ public class PageFragment extends TitleMenuFragment implements OnClickListener,I
 //			LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(LayoutParams.MATCH_PARENT, getResources().getDimensionPixelSize(R.dimen.title_height));
 //			mRootLl.addView(titlebar,lp);
 //		}
-		
+
 		//优先级1.导航，2.webview，3.components
-		if(info.has("navbar")){
+		if (info.has("navbar")) {
 			mContentRL = new RelativeLayout(mContext);
 			mRootLl.addView(mContentRL);
 			JSONObject navBarObj = info.getJSONObject("navbar");
@@ -174,26 +176,26 @@ public class PageFragment extends TitleMenuFragment implements OnClickListener,I
 			//构造viewpager
 			List<String> urls = new ArrayList<String>();
 			JSONArray items = navBarObj.getJSONArray("items");
-			for(String str:mSelectedTabs){
-				for(int i=-1;++i<items.length();){
-					if(str.equals(items.getJSONObject(i).getString("title"))){
+			for (String str : mSelectedTabs) {
+				for (int i = -1; ++i < items.length(); ) {
+					if (str.equals(items.getJSONObject(i).getString("title"))) {
 						urls.add(items.getJSONObject(i).getString("url"));
 						break;
 					}
 				}
 			}
 			refreshFragmentsScrollView(urls);
-		}else{
+		} else {
 //			renderContent(info);
 		}
-	
+
 	}
-	
+
 	private void refreshFragmentsScrollView(List<String> urls) throws JSONException {
 		mViewPager = new ViewPager(mContext);
 		PageFragmentPagerAdapter mFragmentAdapter = new PageFragmentPagerAdapter(getChildFragmentManager());
 		List<BaseFragment> channels = new ArrayList<BaseFragment>();
-		for(int i=-1;++i<urls.size();){
+		for (int i = -1; ++i < urls.size(); ) {
 			channels.add(getFragmentByUrl(urls.get(i)));
 		}
 		mFragmentAdapter.setData(channels);
@@ -201,78 +203,79 @@ public class PageFragment extends TitleMenuFragment implements OnClickListener,I
 		mViewPager.setAdapter(mFragmentAdapter);
 		mViewPager.setOnPageChangeListener(new OnPageChangeListener() {
 			private int curPos;
+
 			@Override
 			public void onPageSelected(int position) {
 				curPos = position;
-	
+
 			}
-			
+
 			@Override
 			public void onPageScrolled(int position, float offset, int arg2) {
 				mScrollTabs.onPageScrolled(position, offset);
 			}
-			
+
 			@Override
 			public void onPageScrollStateChanged(int state) {
-				if(state==ViewPager.SCROLL_STATE_IDLE){
+				if (state == ViewPager.SCROLL_STATE_IDLE) {
 					mScrollTabs.setCurrentTab(curPos);
-					LogM.log(this.getClass(), "onPageScrollStateChanged 0 mCurPos"+curPos);
+					LogM.log(this.getClass(), "onPageScrollStateChanged 0 mCurPos" + curPos);
 				}
 			}
 		});
 		RelativeLayout.LayoutParams lp = new RelativeLayout.LayoutParams(android.widget.RelativeLayout.LayoutParams.MATCH_PARENT, android.widget.RelativeLayout.LayoutParams.MATCH_PARENT);
 		lp.addRule(RelativeLayout.BELOW, R.id.page_nav);
-		mContentRL.addView(mViewPager,lp);
+		mContentRL.addView(mViewPager, lp);
 		mScrollTabs.setOnItemClickListener(new ScrollTabs.OnItemClickListener() {
-			
+
 			@Override
 			public void onclick(int pos) {
 				mViewPager.setCurrentItem(pos, false);
 			}
 		});
-		
+
 	}
-	
-	
-	public BaseFragment getFragmentByUrl(String url){
+
+
+	public BaseFragment getFragmentByUrl(String url) {
 		BaseFragment result = null;
-		if(url.startsWith("http://")||url.startsWith("https://")){
+		if (url.startsWith("http://") || url.startsWith("https://")) {
 			WebAppFragment frg = new WebAppFragment();
 			Bundle args = new Bundle();
 			args.putString(WebAppFragment.ARGUMENT_STRING_URL, url);
 			frg.setArguments(args);
 			result = frg;
-		}else if(url.matches("apppubs:\\/\\/channel\\/[0-9]\\/[A-Za-z0-9]*")){
+		} else if (url.matches("apppubs:\\/\\/channel\\/[0-9]\\/[A-Za-z0-9]*")) {
 			String[] arr = StringUtils.getPathParams(url);
 			ChannelFragment cf = ChannelFragmentFactory.getChannelFragment(Integer.parseInt(arr[1]));
 			Bundle args = new Bundle();
 			args.putString(ChannelFragment.ARG_KEY, arr[2]);
 			cf.setArguments(args);
 			result = cf;
-		}else if(url.matches("apppubs:\\/\\/page\\/[\\S]*")){
+		} else if (url.matches("apppubs:\\/\\/page\\/[\\S]*")) {
 			PageFragment pageF = new PageFragment();
 			String[] pathParams = StringUtils.getPathParams(url);
 			Bundle args = new Bundle();
-			args.putString(PageFragment.EXTRA_STRING_NAME_PAGE_ID,pathParams[1] );
+			args.putString(PageFragment.EXTRA_STRING_NAME_PAGE_ID, pathParams[1]);
 			pageF.setArguments(args);
 			result = pageF;
 		}
 		return result;
 	}
-	
+
 	private void refreshNav(JSONObject navBarObj) throws JSONException {
 		mContentRL.removeView(mScrollTabs);
 		mScrollTabs = new ScrollTabs(mContext);
 		int bgColor = Color.parseColor(navBarObj.getString("bgcolor"));
 		mScrollTabs.setBackgroundColor(bgColor);
-		if(isLightColor(bgColor)){
+		if (isLightColor(bgColor)) {
 			mScrollTabs.setSelectedTextColor(mHostActivity.getThemeColor());
 			mScrollTabs.setTextColor(Color.parseColor("#8b8b8b"));
-		}else{
+		} else {
 			mScrollTabs.setSelectedTextColor(Color.WHITE);
 			mScrollTabs.setTextColor(Color.parseColor("#D0D0D0"));
 		}
-		if("2".equals(navBarObj.getString("navtype"))){
+		if ("2".equals(navBarObj.getString("navtype"))) {
 			mScrollTabs.setHaveDownArrow(true);
 		}
 		mScrollTabs.setSelectedSize(Utils.dip2px(mContext, 15));
@@ -280,90 +283,91 @@ public class PageFragment extends TitleMenuFragment implements OnClickListener,I
 		JSONArray items = navBarObj.getJSONArray("items");
 		LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(LayoutParams.MATCH_PARENT, Utils.dip2px(mContext, 40));
 		List<String> savedTabList = (List<String>) FileUtils.readObj(mContext, String.format(Constants.FILE_NAME_SELECTED_NAV_TGABS, mPageId));
-		if(savedTabList==null||savedTabList.size()<1){
+		if (savedTabList == null || savedTabList.size() < 1) {
 			mSelectedTabs = new ArrayList<String>();
 			mUnselectedTabs = new ArrayList<String>();
-			for(int i=-1;++i<items.length();){
+			for (int i = -1; ++i < items.length(); ) {
 				JSONObject item = items.getJSONObject(i);
 				mScrollTabs.addTab(item.getString("title"));
 				mSelectedTabs.add(item.getString("title"));
 			}
 			FileUtils.writeObj(mContext, mSelectedTabs, String.format(Constants.FILE_NAME_SELECTED_NAV_TGABS, mPageId));
-		}else{
-			mSelectedTabs = new ArrayList<String>();;
+		} else {
+			mSelectedTabs = new ArrayList<String>();
+			;
 			mUnselectedTabs = new ArrayList<String>();
 			//将未保存的所有的均作为为选定的标签
-			for(int i=-1;++i<items.length();){
-				
-				if(!savedTabList.contains(items.getJSONObject(i).getString("title"))){
+			for (int i = -1; ++i < items.length(); ) {
+
+				if (!savedTabList.contains(items.getJSONObject(i).getString("title"))) {
 					mUnselectedTabs.add(items.getJSONObject(i).getString("title"));
 				}
 			}
 			//验证已经存储的标签是否还存在于服务端如果存在则显示否则不显示
-			for(int i=-1;++i<savedTabList.size();){
+			for (int i = -1; ++i < savedTabList.size(); ) {
 				String tempStr = savedTabList.get(i);
-				for(int j=-1;++j<items.length();){
-					if(tempStr.equals(items.getJSONObject(j).getString("title"))){
+				for (int j = -1; ++j < items.length(); ) {
+					if (tempStr.equals(items.getJSONObject(j).getString("title"))) {
 						mSelectedTabs.add(tempStr);
 						mScrollTabs.addTab(tempStr);
 						break;
 					}
 				}
 			}
-			
+
 		}
-		
+
 		mScrollTabs.setId(R.id.page_nav);
-		mContentRL.addView(mScrollTabs,lp);
-		
+		mContentRL.addView(mScrollTabs, lp);
+
 		mScrollTabs.setOnColumnBtnClickListener(new ScrollTabs.OnColunmBtnClickListener() {
-			
+
 			@Override
 			public void onClick(boolean isOpen) {
-				openOrClose(true,mSelectedTabs,mUnselectedTabs);
+				openOrClose(true, mSelectedTabs, mUnselectedTabs);
 			}
 		});
 	}
-	
-	private void openOrClose(boolean isOpen,List<String> selected,List<String> unselectList){
+
+	private void openOrClose(boolean isOpen, List<String> selected, List<String> unselectList) {
 		Animation showAnim = AnimationUtils.loadAnimation(mHostActivity, R.anim.slide_in_from_top);
 		Animation hideAnim = AnimationUtils.loadAnimation(mHostActivity, R.anim.slide_out_to_top);
-		if(isOpen){
+		if (isOpen) {
 			mColumnView = (LinearLayout) LayoutInflater.from(mContext).inflate(R.layout.page_column_config_pannel, null);
 			mColumnView.startAnimation(showAnim);
 			mColumnView.findViewById(R.id.page_up_arrow_iv).setOnClickListener(new OnClickListener() {
-				
+
 				@Override
 				public void onClick(View v) {
-					openOrClose(false,null,null);
+					openOrClose(false, null, null);
 				}
 			});
 			final DraggableGridView dgv = (DraggableGridView) mColumnView.findViewById(R.id.page_dgv);
-			for(String name:selected){
+			for (String name : selected) {
 				//初始化栏目
 				LayoutInflater li = LayoutInflater.from(mHostActivity);
-				TextView tv = (TextView) li.inflate(R.layout.page_column_sort_item,null);
+				TextView tv = (TextView) li.inflate(R.layout.page_column_sort_item, null);
 				tv.setText(name);
 				dgv.addView(tv);
 			}
-			
+
 			dgv.setOnRearrangeListener(new OnRearrangeListener() {
-				
+
 				@Override
 				public void onRearrange(int oldIndex, int newIndex) {
-					Log.v("ChannelsF","onRearrange oldIndex:"+oldIndex+"new Index:"+newIndex);
-					if(oldIndex==newIndex){
+					Log.v("ChannelsF", "onRearrange oldIndex:" + oldIndex + "new Index:" + newIndex);
+					if (oldIndex == newIndex) {
 						return;
-					}else if (newIndex>oldIndex){
+					} else if (newIndex > oldIndex) {
 						String temp = mSelectedTabs.get(oldIndex);
-						for(int i=oldIndex;i<newIndex;i++){
-							mSelectedTabs.set(i, mSelectedTabs.get(i+1));
+						for (int i = oldIndex; i < newIndex; i++) {
+							mSelectedTabs.set(i, mSelectedTabs.get(i + 1));
 						}
 						mSelectedTabs.set(newIndex, temp);
-					}else{
+					} else {
 						String temp = mSelectedTabs.get(oldIndex);
-						for(int i=oldIndex;i>newIndex;i--){
-							mSelectedTabs.set(i, mSelectedTabs.get(i-1));
+						for (int i = oldIndex; i > newIndex; i--) {
+							mSelectedTabs.set(i, mSelectedTabs.get(i - 1));
 						}
 						mSelectedTabs.set(newIndex, temp);
 					}
@@ -371,13 +375,13 @@ public class PageFragment extends TitleMenuFragment implements OnClickListener,I
 				}
 
 				@Override
-				public void onRemove(View view,int index) {
-					Log.v("ChannelsF","onRemove index:"+index);
+				public void onRemove(View view, int index) {
+					Log.v("ChannelsF", "onRemove index:" + index);
 				}
 
 				@Override
 				public void onAdd() {
-					Log.v("ChannelsF","onAdd");
+					Log.v("ChannelsF", "onAdd");
 				}
 			});
 			final LinearLayout unselectedContainerLL = (LinearLayout) mColumnView.findViewById(R.id.page_column_unselect_container_ll);
@@ -389,34 +393,34 @@ public class PageFragment extends TitleMenuFragment implements OnClickListener,I
 					TextView tv = (TextView) view;
 					tv.setGravity(Gravity.CENTER);
 					LayoutInflater li = LayoutInflater.from(mHostActivity);
-					RelativeLayout rl = (RelativeLayout) li.inflate(R.layout.page_column_unselected_item,null);
+					RelativeLayout rl = (RelativeLayout) li.inflate(R.layout.page_column_unselected_item, null);
 					TextView titleTv = (TextView) rl.findViewById(R.id.page_column_unselected_title_tv);
 					titleTv.setText(tv.getText());
-					rl.setOnClickListener(new OnUnselectItemClickListener(unselectedContainerLL,dgv));
+					rl.setOnClickListener(new OnUnselectItemClickListener(unselectedContainerLL, dgv));
 					unselectedContainerLL.addView(rl);
 					mSelectedTabs.remove(tv.getText());
 					mUnselectedTabs.add(tv.getText().toString());
 					FileUtils.writeObj(mContext, mSelectedTabs, String.format(Constants.FILE_NAME_SELECTED_NAV_TGABS, mPageId));
 				}
 			});
-			
-			
-			for(String name:unselectList){
+
+
+			for (String name : unselectList) {
 				//初始化栏目
 				LayoutInflater li = LayoutInflater.from(mHostActivity);
-				RelativeLayout rl = (RelativeLayout) li.inflate(R.layout.page_column_unselected_item,null);
+				RelativeLayout rl = (RelativeLayout) li.inflate(R.layout.page_column_unselected_item, null);
 				TextView titleTv = (TextView) rl.findViewById(R.id.page_column_unselected_title_tv);
 				titleTv.setText(name);
-				rl.setOnClickListener(new OnUnselectItemClickListener(unselectedContainerLL,dgv));
+				rl.setOnClickListener(new OnUnselectItemClickListener(unselectedContainerLL, dgv));
 				unselectedContainerLL.addView(rl);
 			}
-			
-			mContentRL.addView(mColumnView,new LayoutParams(android.view.ViewGroup.LayoutParams.MATCH_PARENT, android.view.ViewGroup.LayoutParams.MATCH_PARENT));
 
-		}else{
+			mContentRL.addView(mColumnView, new LayoutParams(android.view.ViewGroup.LayoutParams.MATCH_PARENT, android.view.ViewGroup.LayoutParams.MATCH_PARENT));
+
+		} else {
 			mColumnView.startAnimation(hideAnim);
 			mColumnView.postDelayed(new Runnable() {
-				
+
 				@Override
 				public void run() {
 					mColumnView.setVisibility(ViewGroup.GONE);
@@ -428,25 +432,27 @@ public class PageFragment extends TitleMenuFragment implements OnClickListener,I
 						LogM.log(this.getClass(), e);
 					}
 				}
-			},hideAnim.getDuration());
+			}, hideAnim.getDuration());
 			FileUtils.writeObj(mContext, mSelectedTabs, String.format(Constants.FILE_NAME_SELECTED_NAV_TGABS, mPageId));
 			mContentRL.removeView(mColumnView);
 		}
 	}
 
-	class OnUnselectItemClickListener implements OnClickListener{
+	class OnUnselectItemClickListener implements OnClickListener {
 		ViewGroup mUnselectContainer;
 		DraggableGridView mDragGridView;
-		public OnUnselectItemClickListener(ViewGroup container,DraggableGridView dgv) {
+
+		public OnUnselectItemClickListener(ViewGroup container, DraggableGridView dgv) {
 			mUnselectContainer = container;
 			mDragGridView = dgv;
 		}
+
 		@Override
 		public void onClick(View v) {
 			mUnselectContainer.removeView(v);
 			TextView titleView = (TextView) v.findViewById(R.id.page_column_unselected_title_tv);
 			LayoutInflater li = LayoutInflater.from(mHostActivity);
-			TextView tv = (TextView) li.inflate(R.layout.page_column_sort_item,null);
+			TextView tv = (TextView) li.inflate(R.layout.page_column_sort_item, null);
 			tv.setText(titleView.getText());
 			mDragGridView.addView(tv);
 			mSelectedTabs.add(titleView.getText().toString());
@@ -454,48 +460,48 @@ public class PageFragment extends TitleMenuFragment implements OnClickListener,I
 			FileUtils.writeObj(mContext, mSelectedTabs, String.format(Constants.FILE_NAME_SELECTED_NAV_TGABS, mPageId));
 		}
 	}
-	
+
 	private void renderContent(PageNormalContentModel model) throws JSONException {
 		ScrollView sv = new ScrollView(mContext);
 		mScrollView = sv;
 		sv.setBackgroundResource(R.color.window_color);
 		mRootLl.addView(sv);
-		
+
 		//首先清除容器内的所有view
 		mContainerLl = new LinearLayout(mContext);
 		mContainerLl.setOrientation(LinearLayout.VERTICAL);
 		FrameLayout.LayoutParams llLp = new FrameLayout.LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT);
 		mScrollView.addView(mContainerLl, llLp);
 		JSONArray jsonArr = model.getComponents();
-		for (int i=-1;++i<jsonArr.length();) {
+		for (int i = -1; ++i < jsonArr.length(); ) {
 			JSONObject component = jsonArr.getJSONObject(i);
 			String comType = component.getString("comtype");
-			if(comType.equals(Constants.PAGE_COMPONENT_SINGLE_PIC_DEFAULT)){
+			if (comType.equals(Constants.PAGE_COMPONENT_SINGLE_PIC_DEFAULT)) {
 				View view = LayoutInflater.from(mContext).inflate(R.layout.page_item_single_pic, null);
 				ImageView iv = (ImageView) view.findViewById(R.id.single_pic_iv);
-				TextView tv  = (TextView) view.findViewById(R.id.single_pic_title_tv);
+				TextView tv = (TextView) view.findViewById(R.id.single_pic_title_tv);
 				tv.setText(component.getString("title"));
 				mImageLoader.displayImage(component.getString("picurl"), iv);
 				mContainerLl.addView(view);
 				view.setTag(component.getString("url"));
 				view.setOnClickListener(this);
-			}else if(comType.equals(Constants.PAGE_COMPONENT_PIC)){
+			} else if (comType.equals(Constants.PAGE_COMPONENT_PIC)) {
 				double ratio = component.getDouble("picheightwidthratio");
-				RatioLayout rl = new RatioLayout(mContext,(float)ratio);
+				RatioLayout rl = new RatioLayout(mContext, (float) ratio);
 				ImageView iv = new ImageView(mContext);
 				iv.setScaleType(ScaleType.CENTER_CROP);
 				RelativeLayout.LayoutParams picLp = new RelativeLayout.LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT);
-				rl.addView(iv,picLp);
+				rl.addView(iv, picLp);
 				mImageLoader.displayImage(component.getString("picurl"), iv);
 				mContainerLl.addView(rl);
 				rl.setTag(component.getString("url"));
 				rl.setOnClickListener(this);
-				
-			}else if(comType.equals(Constants.PAGE_COMPONENT_BLANK_ROW)){
+
+			} else if (comType.equals(Constants.PAGE_COMPONENT_BLANK_ROW)) {
 				addBlank(20);
-			}else if(comType.equals(Constants.PAGE_COMPONENT_HORIZONTALL_LINE)){
+			} else if (comType.equals(Constants.PAGE_COMPONENT_HORIZONTALL_LINE)) {
 				addDivider();
-			}else if(comType.equals(Constants.PAGE_COMPONENT_TAG)){
+			} else if (comType.equals(Constants.PAGE_COMPONENT_TAG)) {
 				String title = component.getString("title");
 				TextView tv = new TextView(mContext);
 				int padding = Utils.dip2px(mContext, 10);
@@ -506,7 +512,7 @@ public class PageFragment extends TitleMenuFragment implements OnClickListener,I
 				tv.setText(title);
 				LayoutParams lp = new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT);
 				mContainerLl.addView(tv, lp);
-			}else if(comType.equals(Constants.PAGE_COMPONENT_TAB_WITH_ANCHOR)){
+			} else if (comType.equals(Constants.PAGE_COMPONENT_TAB_WITH_ANCHOR)) {
 				String title = component.getString("title");
 				TextView tv = new TextView(mContext);
 				int padding = Utils.dip2px(mContext, 10);
@@ -519,17 +525,17 @@ public class PageFragment extends TitleMenuFragment implements OnClickListener,I
 				mContainerLl.addView(tv, lp);
 				tv.setTag(component.getString("anchor"));
 				mAnchorPointerViewList.add(tv);
-			}else if(comType.equals(Constants.PAGE_COMPONENT_PIC_TEXT_LIST_DEFAULT)){
+			} else if (comType.equals(Constants.PAGE_COMPONENT_PIC_TEXT_LIST_DEFAULT)) {
 				JSONArray items = component.getJSONArray("items");
-				for (int j = -1; ++j < items.length();) {
+				for (int j = -1; ++j < items.length(); ) {
 					View view = LayoutInflater.from(mContext).inflate(R.layout.page_component_pic_text_list_item, null);
 					ImageView iv = (ImageView) view.findViewById(R.id.pic_text_iv);
 					TextView tv = (TextView) view.findViewById(R.id.pic_text_title_tv);
 					TextView pubTv = (TextView) view.findViewById(R.id.pic_text_pubtime_tv);
 					JSONObject item = items.getJSONObject(j);
-					if(TextUtils.isEmpty(item.getString("picurl"))){
+					if (TextUtils.isEmpty(item.getString("picurl"))) {
 						iv.setVisibility(View.GONE);
-					}else{
+					} else {
 						mImageLoader.displayImage(item.getString("picurl"), iv);
 					}
 					tv.setText(item.getString("title"));
@@ -538,38 +544,38 @@ public class PageFragment extends TitleMenuFragment implements OnClickListener,I
 					view.setTag(item.get("url"));
 					mContainerLl.addView(view);
 				}
-				
-			}else if(comType.equals(Constants.PAGE_COMPONENT_SLIDE_PIC_DEFAULT)){
-				
-				SlidePicView spv = new SlidePicView(mContext,SlidePicView.STYLE_UNDER_PIC);
+
+			} else if (comType.equals(Constants.PAGE_COMPONENT_SLIDE_PIC_DEFAULT)) {
+
+				SlidePicView spv = new SlidePicView(mContext, SlidePicView.STYLE_UNDER_PIC);
 				spv.setBackgroundColor(Color.WHITE);
 				List<SlidePicView.SlidePicItem> list = new ArrayList<SlidePicView.SlidePicItem>();
 				JSONArray items = component.getJSONArray("items");
-				for(int j=-1;++j<items.length();){
+				for (int j = -1; ++j < items.length(); ) {
 					SlidePicView.SlidePicItem sp = new SlidePicView.SlidePicItem();
 					JSONObject item = items.getJSONObject(j);
 					sp.picURL = item.getString("picurl");
-					sp.title =item.getString("title");
+					sp.title = item.getString("title");
 					sp.linkValue = item.getString("url");
 					list.add(sp);
 				}
 				spv.setOnItemClickListener(new SlidePicView.OnItemClickListener() {
-					
+
 					@Override
 					public void onClick(int pos, SlidePicView.SlidePicItem item) {
 						resolveUrl(item.linkValue);
 					}
 				});
 				spv.setData(list);
-				
+
 				mContainerLl.addView(spv);
-			}else if(comType.equals(Constants.PAGE_COMPONENT_SLIDE_PIC_WITH_PAGE_CONTROL_ONLY)){
+			} else if (comType.equals(Constants.PAGE_COMPONENT_SLIDE_PIC_WITH_PAGE_CONTROL_ONLY)) {
 				float ratio = (float) component.getDouble("widthheightratio");
-				SlidePicView spv = new SlidePicView(mContext,SlidePicView.STYLE_PAGE_CONTROL_ONLY,ratio);
+				SlidePicView spv = new SlidePicView(mContext, SlidePicView.STYLE_PAGE_CONTROL_ONLY, ratio);
 				spv.setBackgroundColor(Color.WHITE);
 				List<SlidePicView.SlidePicItem> list = new ArrayList<SlidePicView.SlidePicItem>();
 				JSONArray items = component.getJSONArray("items");
-				for(int j=-1;++j<items.length();){
+				for (int j = -1; ++j < items.length(); ) {
 					SlidePicView.SlidePicItem sp = new SlidePicView.SlidePicItem();
 					JSONObject item = items.getJSONObject(j);
 					sp.picURL = item.getString("picurl");
@@ -587,7 +593,7 @@ public class PageFragment extends TitleMenuFragment implements OnClickListener,I
 
 				mContainerLl.addView(spv);
 
-			}else if(comType.equals(Constants.PAGE_COMPONENT_ICON_LIST_DEFAULT)){
+			} else if (comType.equals(Constants.PAGE_COMPONENT_ICON_LIST_DEFAULT)) {
 				JSONArray items = component.getJSONArray("items");
 				FrameLayout fl = new FrameLayout(mHostActivity);
 				fl.setBackgroundColor(Color.WHITE);
@@ -600,12 +606,12 @@ public class PageFragment extends TitleMenuFragment implements OnClickListener,I
 				gl.setColumnCount(4);
 				WindowManager wm = mHostActivity.getWindowManager();
 				int width = wm.getDefaultDisplay().getWidth();
-				
-				for (int j = -1; ++j < items.length();) {
+
+				for (int j = -1; ++j < items.length(); ) {
 
 					JSONObject item = items.getJSONObject(j);
 					GridLayout.LayoutParams glp = new GridLayout.LayoutParams();
-					glp.width = (width-padding*2) / gl.getColumnCount();
+					glp.width = (width - padding * 2) / gl.getColumnCount();
 					glp.setGravity(Gravity.FILL);
 					RelativeLayout rl = (RelativeLayout) LayoutInflater.from(mContext).inflate(R.layout.item_menu_gv, null);
 					View verticalLine = rl.findViewById(R.id.vertical_line);
@@ -617,11 +623,11 @@ public class PageFragment extends TitleMenuFragment implements OnClickListener,I
 					rl.setOnClickListener(this);
 					rl.setTag(item.getString("url"));
 					gl.addView(rl, glp);
-					
+
 				}
 				fl.addView(gl, lp1);
 				mContainerLl.addView(fl);
-			}else if(comType.equals(Constants.PAGE_COMPONENT_ICON_LIST_3_COLUMN)){
+			} else if (comType.equals(Constants.PAGE_COMPONENT_ICON_LIST_3_COLUMN)) {
 				JSONArray items = component.getJSONArray("items");
 				FrameLayout fl = new FrameLayout(mHostActivity);
 				fl.setBackgroundColor(Color.WHITE);
@@ -634,12 +640,12 @@ public class PageFragment extends TitleMenuFragment implements OnClickListener,I
 				gl.setColumnCount(3);
 				WindowManager wm = mHostActivity.getWindowManager();
 				int width = wm.getDefaultDisplay().getWidth();
-				
-				for (int j = -1; ++j < items.length();) {
+
+				for (int j = -1; ++j < items.length(); ) {
 
 					JSONObject item = items.getJSONObject(j);
 					GridLayout.LayoutParams glp = new GridLayout.LayoutParams();
-					glp.width = (width-padding*2) / gl.getColumnCount();
+					glp.width = (width - padding * 2) / gl.getColumnCount();
 					glp.setGravity(Gravity.FILL);
 					RelativeLayout rl = (RelativeLayout) LayoutInflater.from(mContext).inflate(R.layout.item_menu_gv, null);
 					View verticalLine = rl.findViewById(R.id.vertical_line);
@@ -651,24 +657,33 @@ public class PageFragment extends TitleMenuFragment implements OnClickListener,I
 					rl.setOnClickListener(this);
 					rl.setTag(item.getString("url"));
 					gl.addView(rl, glp);
-					
+
 				}
 				fl.addView(gl, lp1);
 				mContainerLl.addView(fl);
-			}else if(comType.equals(Constants.PAGE_COMPONENT_ICON_LIST)){
+			} else if (comType.equals(Constants.PAGE_COMPONENT_ICON_LIST)) {
 				PageGridView gridView = new PageGridView(getContext());
-				
-				mContainerLl.addView(gridView);
-			}else if(comType.equals(Constants.PAGE_COMPONENT_ICON_PURE_TEXT_LIST)){
+				GridViewModel m = new GridViewModel(component.toString());
+				LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(LayoutParams.MATCH_PARENT,
+						LayoutParams.WRAP_CONTENT);
+				gridView.setModel(m);
+				gridView.setOnItemClickListener(new PageGridView.OnItemClickListener() {
+					@Override
+					public void onItemClick(String action) {
+						resolveUrl(action);
+					}
+				});
+				mContainerLl.addView(gridView, lp);
+			} else if (comType.equals(Constants.PAGE_COMPONENT_ICON_PURE_TEXT_LIST)) {
 				View view = LayoutInflater.from(mContext).inflate(R.layout.page_component_flow_tags, null);
 				view.setBackgroundColor(Color.WHITE);
 				CheckableFlowLayout cfl = (CheckableFlowLayout) view.findViewById(R.id.tag_fl);
 				final JSONArray items = component.getJSONArray("items");
-				for(int j=-1;++j<items.length();){
+				for (int j = -1; ++j < items.length(); ) {
 					cfl.addTag(items.getJSONObject(j).getString("title"));
 				}
-				cfl.setOnItemClickListener(new  com.apppubs.d20.widget.CheckableFlowLayout.OnItemClickListener() {
-					
+				cfl.setOnItemClickListener(new com.apppubs.d20.widget.CheckableFlowLayout.OnItemClickListener() {
+
 					@Override
 					public void onItemClick(int pos, String tag, boolean isSelect) {
 						try {
@@ -680,57 +695,57 @@ public class PageFragment extends TitleMenuFragment implements OnClickListener,I
 							e.printStackTrace();
 						}
 					}
-					
+
 					@Override
 					public void onExceedMaxSelectedNum() {
-						
+
 					}
 				});
 				mContainerLl.addView(view);
-			}else if(comType.equals(Constants.PAGE_COMPONENT_HOT_AREA_DEFAULT)){
+			} else if (comType.equals(Constants.PAGE_COMPONENT_HOT_AREA_DEFAULT)) {
 				double ratio = component.getDouble("picheightwidthratio");
 				HotAreaImageView iv = new HotAreaImageView(mContext);
 				JSONArray items = component.getJSONArray("items");
 				UUID uuid = UUID.randomUUID();
 				iv.setTag(uuid.toString());
 				iv.setPicWidth(component.getInt("picwidth"));
-				
+
 				AsyTaskExecutor.getInstance().startTask(ASY_TASK_TAG_RESOLVE_HOTAREAS, new AsyTaskCallback() {
-					
+
 					@Override
 					public void onTaskSuccess(Integer tag, Object obj) {
-						Map<String,Object> map = (Map<String, Object>) obj;
+						Map<String, Object> map = (Map<String, Object>) obj;
 						String viewTag = (String) map.get("viewTag");
 						List<HotArea> hotAreas = (List<HotArea>) map.get("hotareas");
 						HotAreaImageView iv = (HotAreaImageView) mContainerLl.findViewWithTag(viewTag);
-						if (iv!=null){
+						if (iv != null) {
 							iv.setHotAreas(hotAreas);
 						}
 					}
-					
+
 					@Override
 					public void onTaskFail(Integer tag, Exception e) {
-						
+
 					}
 
 					@Override
 					public Object onExecute(Integer tag, String[] params) throws Exception {
 						System.out.println(params[0]);
 						List<HotArea> areas = resolveHotareaItems(params[0]);
-						Map<String,Object> map = new HashMap<String,Object>();
+						Map<String, Object> map = new HashMap<String, Object>();
 						map.put("viewTag", params[1]);
 						map.put("hotareas", areas);
 						return map;
 					}
-				}, new String[]{items.toString(),uuid.toString()});
+				}, new String[]{items.toString(), uuid.toString()});
 				iv.setListener(new HotAreaClickListener() {
-					
+
 					@Override
 					public void onItemClick(int index, HotArea hotArea) {
 
-						if (!TextUtils.isEmpty(getUrlReplacement(hotArea.getUrl()))){
+						if (!TextUtils.isEmpty(getUrlReplacement(hotArea.getUrl()))) {
 							resolveUrl(convertUri(hotArea.getUrl()));
-						}else{
+						} else {
 							resolveUrl(hotArea.getUrl());
 						}
 
@@ -738,20 +753,20 @@ public class PageFragment extends TitleMenuFragment implements OnClickListener,I
 
 					@Override
 					public void onItemLongClick(int index, final HotArea hotArea) {
-						if (configurable(hotArea.getUrl())){
+						if (configurable(hotArea.getUrl())) {
 
 
 							EditTextDialog dialog = new EditTextDialog(mContext, new EditTextDialog.ConfirmListener() {
 								@Override
 								public void onOkClick(String result) {
-									setUrlReplecement(hotArea.getUrl(),result);
+									setUrlReplecement(hotArea.getUrl(), result);
 								}
 
 								@Override
 								public void onCancelClick() {
 
 								}
-							},"自定义服务地址","格式示例 \n http://www.example.com/","取消","确定");
+							}, "自定义服务地址", "格式示例 \n http://www.example.com/", "取消", "确定");
 							dialog.setDefaultText(getUrlReplacement(hotArea.getUrl()));
 							dialog.show();
 						}
@@ -769,30 +784,31 @@ public class PageFragment extends TitleMenuFragment implements OnClickListener,I
 						}
 						return tempUri;
 					}
+
 					private String getUrlReplacement(String url) {
-						Map<String,String> customIpMap = (Map<String, String>) FileUtils.readObj(mContext, CUSTOM_WEB_APP_URL_SERIALIZED_FILE_NAME);
-						if(customIpMap==null){
+						Map<String, String> customIpMap = (Map<String, String>) FileUtils.readObj(mContext, CUSTOM_WEB_APP_URL_SERIALIZED_FILE_NAME);
+						if (customIpMap == null) {
 							customIpMap = new HashMap<String, String>();
 						}
 
 						return customIpMap.get(url);
 					}
 
-					private void setUrlReplecement(String url,String replacement){
-						Map<String,String> customIpMap = (Map<String, String>) FileUtils.readObj(mContext, CUSTOM_WEB_APP_URL_SERIALIZED_FILE_NAME);
-						if (customIpMap==null){
+					private void setUrlReplecement(String url, String replacement) {
+						Map<String, String> customIpMap = (Map<String, String>) FileUtils.readObj(mContext, CUSTOM_WEB_APP_URL_SERIALIZED_FILE_NAME);
+						if (customIpMap == null) {
 							customIpMap = new HashMap<String, String>();
 						}
 						customIpMap.put(url, replacement);
 						FileUtils.writeObj(mContext, customIpMap, CUSTOM_WEB_APP_URL_SERIALIZED_FILE_NAME);
 					}
 
-					private boolean configurable(String url){
-						if (TextUtils.isEmpty(url)){
+					private boolean configurable(String url) {
+						if (TextUtils.isEmpty(url)) {
 							return false;
 						}
-						String configurable = StringUtils.getQueryParameter(url,"configurable");
-						if("1".equals(configurable)){
+						String configurable = StringUtils.getQueryParameter(url, "configurable");
+						if ("1".equals(configurable)) {
 							return true;
 						}
 						return false;
@@ -800,39 +816,39 @@ public class PageFragment extends TitleMenuFragment implements OnClickListener,I
 				});
 				WindowManager wm = mHostActivity.getWindowManager();
 				int width = wm.getDefaultDisplay().getWidth();
-				LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(width, (int)(ratio*width));
+				LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(width, (int) (ratio * width));
 				mImageLoader.displayImage(component.getString("picurl"), iv);
 				mContainerLl.addView(iv, lp);
-			}else if(comType.equals(Constants.PAGE_COMPONENT_HOT_AREA_SINGLE_PAGE)){
+			} else if (comType.equals(Constants.PAGE_COMPONENT_HOT_AREA_SINGLE_PAGE)) {
 				RelativeLayout picCon = new RelativeLayout(mContext);
-				
+
 				double ratio = component.getDouble("picheightwidthratio");
 				HotAreaImageView iv = new HotAreaImageView(mContext);
 				JSONArray items = component.getJSONArray("items");
 				List<HotArea> hotAreas = new ArrayList<HotArea>();
 				iv.setPicWidth(component.getInt("picwidth"));
-				for(int j=-1;++j<items.length();){
+				for (int j = -1; ++j < items.length(); ) {
 					JSONObject item = items.getJSONObject(j);
 					HotArea ha = new HotArea();
-					if(item.has("type")){
+					if (item.has("type")) {
 					}
-					if(item.has("shape")){
+					if (item.has("shape")) {
 						ha.setShape(item.getString("shape"));
 					}
-					if(item.has("url")){
+					if (item.has("url")) {
 						ha.setUrl(item.getString("url"));
 					}
-					if(item.has("coords")){
+					if (item.has("coords")) {
 						ha.setCoords(item.getString("coords"));
 					}
-					if(item.has("news")){
+					if (item.has("news")) {
 						ha.setUrl("");
 					}
 					hotAreas.add(ha);
 				}
 				iv.setHotAreas(hotAreas);
 				iv.setListener(new HotAreaClickListener() {
-					
+
 					@Override
 					public void onItemClick(int index, HotArea hotArea) {
 						resolveUrl(hotArea.getUrl());
@@ -845,108 +861,109 @@ public class PageFragment extends TitleMenuFragment implements OnClickListener,I
 				});
 				WindowManager wm = mHostActivity.getWindowManager();
 				int width = wm.getDefaultDisplay().getWidth();
-				int height = (int)(ratio*width);
-				RelativeLayout.LayoutParams lp = new RelativeLayout.LayoutParams(width,height);
+				int height = (int) (ratio * width);
+				RelativeLayout.LayoutParams lp = new RelativeLayout.LayoutParams(width, height);
 				lp.addRule(RelativeLayout.CENTER_IN_PARENT);
 				mImageLoader.displayImage(component.getString("picurl"), iv);
 				iv.setBackgroundColor(Color.BLACK);
 				picCon.addView(iv, lp);
-				
+
 				Rect rectangle = new Rect();
 				Window window = mHostActivity.getWindow();
 				window.getDecorView().getWindowVisibleDisplayFrame(rectangle);
 				int contentHeight = rectangle.height();
-				if(null!=mRootLl.findViewById(R.id.page_title)){
+				if (null != mRootLl.findViewById(R.id.page_title)) {
 					contentHeight -= mContext.getResources().getDimensionPixelSize(R.dimen.title_height);
 				}
-				if(mHostActivity instanceof HomeBottomMenuActivity){
+				if (mHostActivity instanceof HomeBottomMenuActivity) {
 					contentHeight -= mContext.getResources().getDimensionPixelSize(R.dimen.menubar_home_bottom_height);
 				}
 				//状态栏高度
-			
+
 				LinearLayout.LayoutParams lp1 = new LinearLayout.LayoutParams(android.view.ViewGroup.LayoutParams.MATCH_PARENT, contentHeight);
-				
-				mContainerLl.addView(picCon,lp1);
-			}else if(comType.equals(Constants.PAGE_COMPONENT_ICON_LIST_VERTICAL)){
+
+				mContainerLl.addView(picCon, lp1);
+			} else if (comType.equals(Constants.PAGE_COMPONENT_ICON_LIST_VERTICAL)) {
 				JSONArray items = component.getJSONArray("items");
-				for (int j=-1;++j<items.length();) {
+				for (int j = -1; ++j < items.length(); ) {
 					JSONObject item = items.getJSONObject(j);
 					RelativeLayout rl = (RelativeLayout) mInflater.inflate(R.layout.page_component_icon_list_item, null);
 					TextView tv = (TextView) rl.findViewById(R.id.menu_tv);
 					tv.setText(item.getString("title"));
 					ImageView iv = (ImageView) rl.findViewById(R.id.menu_iv);
-					
+
 					String picUrl = item.getString("picurl");
-					if(!TextUtils.isEmpty(picUrl)){
+					if (!TextUtils.isEmpty(picUrl)) {
 						mImageLoader.displayImage(picUrl, iv);
-					}else{
+					} else {
 						iv.setVisibility(View.GONE);
 					}
 					rl.setTag(item.getString("url"));
 					rl.setOnClickListener(this);
-					
+
 					mContainerLl.addView(rl);
 					//分割线
-					if(j!=items.length()-1){
-						
+					if (j != items.length() - 1) {
+
 						View line = new View(mHostActivity);
 						LayoutParams lp1 = new LayoutParams(Utils.dip2px(mContext, 20), 1);
 						line.setBackgroundColor(Color.parseColor("#FFFFFF"));
 						mContainerLl.addView(line, lp1);
 					}
-					
-					
+
+
 				}
 			}
 		}
 	}
+
 	//解析热区，取出热区内动态数据，最后放到热区内
 	private List<HotArea> resolveHotareaItems(String itemsStr) throws JSONException {
 		List<HotArea> hotAreas = new ArrayList<HotArea>();
 		JSONArray items = new JSONArray(itemsStr);
-		for(int j=-1;++j<items.length();){
+		for (int j = -1; ++j < items.length(); ) {
 			JSONObject item = items.getJSONObject(j);
 			HotArea ha = new HotArea();
-			if(item.has("type")){
+			if (item.has("type")) {
 				ha.setType(item.getString("type"));
 			}
-			if(item.has("shape")){
+			if (item.has("shape")) {
 				ha.setShape(item.getString("shape"));
 			}
-			if(item.has("url")){
+			if (item.has("url")) {
 				ha.setUrl(item.getString("url"));
 			}
-			if(item.has("coords")){
+			if (item.has("coords")) {
 				ha.setCoords(item.getString("coords"));
 			}
-			if(item.has("textcolor")&&!TextUtils.isEmpty(item.getString("textcolor"))){
-				try{
+			if (item.has("textcolor") && !TextUtils.isEmpty(item.getString("textcolor"))) {
+				try {
 					ha.setTextColor(Color.parseColor(item.getString("textcolor")));
-				}catch(Exception e){
+				} catch (Exception e) {
 					e.printStackTrace();
 				}
 			}
-			if(item.has("textsize")&& !TextUtils.isEmpty(item.getString("textsize"))){
+			if (item.has("textsize") && !TextUtils.isEmpty(item.getString("textsize"))) {
 				ha.setTextSize(item.getInt("textsize"));
 			}
 
-			if(item.has("textalign")){
+			if (item.has("textalign")) {
 				ha.setTextAlign(item.getString("textalign"));
 			}
 
-			if(item.has("bgcolor")&&!TextUtils.isEmpty(item.getString("bgcolor"))){
-				try{
+			if (item.has("bgcolor") && !TextUtils.isEmpty(item.getString("bgcolor"))) {
+				try {
 					ha.setBgColor(Color.parseColor(item.getString("bgcolor")));
-				}catch(Exception e){
+				} catch (Exception e) {
 					e.printStackTrace();
 				}
 			}
 
 
-			if(item.has("texturl")&&!TextUtils.isEmpty(item.getString("texturl"))){
-				if (item.getString("texturl").equals("apppubs://macro/text/truename")){
+			if (item.has("texturl") && !TextUtils.isEmpty(item.getString("texturl"))) {
+				if (item.getString("texturl").equals("apppubs://macro/text/truename")) {
 					ha.setText(AppContext.getInstance(mContext).getCurrentUser().getTrueName());
-				}else {
+				} else {
 					try {
 						ha.setText(WebUtils.requestWithGet(mAppContext.convertUrl(item.getString("texturl"))));
 					} catch (IOException e) {
@@ -956,10 +973,10 @@ public class PageFragment extends TitleMenuFragment implements OnClickListener,I
 					}
 				}
 			}
-			if(item.has("imageurl")){
-				if ("apppubs://macro/text/useravatarurl".equals(item.getString("imageurl"))){
+			if (item.has("imageurl")) {
+				if ("apppubs://macro/text/useravatarurl".equals(item.getString("imageurl"))) {
 					ha.setImage(mImageLoader.loadImageSync(AppContext.getInstance(mContext).getCurrentUser().getAvatarUrl()));
-				}else{
+				} else {
 					ha.setImage(mImageLoader.loadImageSync(item.getString("imageurl")));
 				}
 			}
@@ -967,56 +984,57 @@ public class PageFragment extends TitleMenuFragment implements OnClickListener,I
 		}
 		return hotAreas;
 	}
-	
+
 	private TitleBar buildTitleBar(TitleBarModel model) {
-		if (model==null){
+		if (model == null) {
 			return null;
 		}
 		TitleBar titlebar = null;
-		if(model.getType().equals("0")){
+		if (model.getType().equals("0")) {
 			titlebar = new TitleBar(mContext);
 			String title = model.getTitle();
 			titlebar.setTitle(title);
 			titlebar.setTitleTextSize(TypedValue.COMPLEX_UNIT_PX, getResources().getDimension(R.dimen.title_text_size));
 			titlebar.setBackgroundColor(model.getBgColor());
-			if(isLightColor(model.getBgColor())){
-				if(model.getBgColor()==mHostActivity.getThemeColor()){
+			if (isLightColor(model.getBgColor())) {
+				if (model.getBgColor() == mHostActivity.getThemeColor()) {
 					titlebar.setTitleTextColor(Color.BLACK);
-				}else{
+				} else {
 					titlebar.setTitleTextColor(mHostActivity.getThemeColor());
 				}
-			}else{
+			} else {
 				titlebar.setTitleTextColor(Color.WHITE);
 			}
 
 
 			//显示图片
-			if(!TextUtils.isEmpty(model.getTitleImgUrl())){
+			if (!TextUtils.isEmpty(model.getTitleImgUrl())) {
 				ImageView iv = new ImageView(mContext);
 				iv.setScaleType(ScaleType.CENTER_INSIDE);
 				mImageLoader.displayImage(model.getTitleImgUrl(), iv);
 				titlebar.setTitleView(iv);
 			}
 			//显示左边按钮
-			if(!TextUtils.isEmpty(model.getLeftImgUrl())){
+			if (!TextUtils.isEmpty(model.getLeftImgUrl())) {
 				titlebar.addLeftBtnWithImageUrlAndClickListener(model.getLeftImgUrl(), model.getLeftAction(), PageFragment.this);
 			}
 			//显示右边按钮
-			if(!TextUtils.isEmpty(model.getRightImgUrl())){
+			if (!TextUtils.isEmpty(model.getRightImgUrl())) {
 				titlebar.addRightBtnWithImageUrlAndClickListener(model.getRightImgUrl(), model.getRightAction(), PageFragment.this);
 			}
 			titlebar.setUnderlineColor(model.getUnderlineColor());
 		}
 		return titlebar;
 	}
-	
+
 	private boolean isLightColor(int color) {
-		int colorWithoutAlpha = color&0xFFFFFF;
-		float redRatio = ((colorWithoutAlpha&0xFF0000)>>16)/255.0f;
-		float greenRatio = ((colorWithoutAlpha&0x00FF00)>>8)/255.0f;
-		float blueRatio = (colorWithoutAlpha&0x0000FF)/255.0f;
-		return redRatio*greenRatio*blueRatio>0.5;
+		int colorWithoutAlpha = color & 0xFFFFFF;
+		float redRatio = ((colorWithoutAlpha & 0xFF0000) >> 16) / 255.0f;
+		float greenRatio = ((colorWithoutAlpha & 0x00FF00) >> 8) / 255.0f;
+		float blueRatio = (colorWithoutAlpha & 0x0000FF) / 255.0f;
+		return redRatio * greenRatio * blueRatio > 0.5;
 	}
+
 	/**
 	 * 增加20dp的空白行
 	 */
@@ -1035,26 +1053,27 @@ public class PageFragment extends TitleMenuFragment implements OnClickListener,I
 		lineV.setBackgroundColor(getResources().getColor(R.color.common_divider));
 		mContainerLl.addView(lineV, lineLp);
 	}
-	
-	
+
+
 	@Override
 	public void onClick(View v) {
 		String tag = (String) v.getTag();
 		resolveUrl(tag);
 	}
+
 	//解析url
 	private void resolveUrl(String url) {
-		if(null!=url&&(url.startsWith("apppubs://")&&url.contains("anchorpointer"))){
+		if (null != url && (url.startsWith("apppubs://") && url.contains("anchorpointer"))) {
 			mScrollView.scrollTo(0, 100);
-			for(int i=-1;++i<mAnchorPointerViewList.size();){
+			for (int i = -1; ++i < mAnchorPointerViewList.size(); ) {
 				View view = mAnchorPointerViewList.get(i);
 				String[] params = StringUtils.getPathParams(url);
 
-				if(params[1].equals(view.getTag().toString())){
-					mScrollView.smoothScrollTo(0,view.getTop());
+				if (params[1].equals(view.getTag().toString())) {
+					mScrollView.smoothScrollTo(0, view.getTop());
 				}
 			}
-		}else{
+		} else {
 			ViewCourier.getInstance(mHostActivity).execute(mHostActivity, url);
 		}
 	}
@@ -1064,23 +1083,23 @@ public class PageFragment extends TitleMenuFragment implements OnClickListener,I
 
 		mRootLl.removeView(mTitleBar);
 		mTitleBar = buildTitleBar(model);
-		if (mTitleBar!=null){
+		if (mTitleBar != null) {
 			mTitleBar.setId(R.id.page_title);
 			LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(LayoutParams.MATCH_PARENT, getResources().getDimensionPixelSize(R.dimen.title_height));
-			mRootLl.addView(mTitleBar,0,lp);
+			mRootLl.addView(mTitleBar, 0, lp);
 		}
 	}
 
 	@Override
 	public void showContentView(PageContentModel model) {
-		if (model instanceof PageNormalContentModel){
+		if (model instanceof PageNormalContentModel) {
 			try {
-				renderContent((PageNormalContentModel)model);
+				renderContent((PageNormalContentModel) model);
 			} catch (JSONException e) {
 				e.printStackTrace();
 			}
-		}else {
-			PageNavContentModel pageNav = (PageNavContentModel)model;
+		} else {
+			PageNavContentModel pageNav = (PageNavContentModel) model;
 			mContentRL = new RelativeLayout(mContext);
 			mRootLl.addView(mContentRL);
 			try {
@@ -1091,15 +1110,15 @@ public class PageFragment extends TitleMenuFragment implements OnClickListener,I
 			//构造viewpager
 			List<String> urls = new ArrayList<String>();
 			JSONArray items = pageNav.getNavItems();
-			for(String str:mSelectedTabs){
-				for(int i=-1;++i<items.length();){
+			for (String str : mSelectedTabs) {
+				for (int i = -1; ++i < items.length(); ) {
 					try {
 
-						if(str.equals(items.getJSONObject(i).getString("title"))){
+						if (str.equals(items.getJSONObject(i).getString("title"))) {
 							urls.add(items.getJSONObject(i).getString("url"));
 							break;
 						}
-					}catch (JSONException e){
+					} catch (JSONException e) {
 						e.printStackTrace();
 					}
 				}
@@ -1114,7 +1133,7 @@ public class PageFragment extends TitleMenuFragment implements OnClickListener,I
 
 	@Override
 	public void showErrorView() {
-		Toast.makeText(mContext,"加载错误",Toast.LENGTH_SHORT).show();
+		Toast.makeText(mContext, "加载错误", Toast.LENGTH_SHORT).show();
 	}
 
 	@Override

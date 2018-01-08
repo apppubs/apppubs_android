@@ -49,6 +49,7 @@ import com.apppubs.d20.util.JSONUtils;
 import com.apppubs.d20.util.LogM;
 import com.apppubs.d20.util.Utils;
 import com.apppubs.d20.util.WebUtils;
+import com.apppubs.d20.webapp.WebAppFragment;
 import com.apppubs.d20.widget.ConfirmDialog;
 import com.apppubs.d20.widget.SlidePicView;
 import com.apppubs.d20.R;
