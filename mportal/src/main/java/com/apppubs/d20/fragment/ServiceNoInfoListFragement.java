@@ -35,6 +35,7 @@ import com.apppubs.d20.model.APResultCallback;
 import com.apppubs.d20.constant.URLs;
 import com.apppubs.d20.util.StringUtils;
 import com.apppubs.d20.util.SystemUtils;
+import com.apppubs.d20.webapp.WebAppFragment;
 import com.apppubs.d20.widget.commonlist.CommonListView;
 import com.apppubs.d20.widget.commonlist.CommonListViewListener;
 

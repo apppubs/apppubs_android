@@ -41,7 +41,7 @@ import com.apppubs.d20.fragment.BaseFragment;
 import com.apppubs.d20.fragment.ChannelFragment;
 import com.apppubs.d20.fragment.ChannelFragmentFactory;
 import com.apppubs.d20.fragment.TitleMenuFragment;
-import com.apppubs.d20.fragment.WebAppFragment;
+import com.apppubs.d20.webapp.WebAppFragment;
 import com.apppubs.d20.util.FileUtils;
 import com.apppubs.d20.util.JSONResult;
 import com.apppubs.d20.util.LogM;

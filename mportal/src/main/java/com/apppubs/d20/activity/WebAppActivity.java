@@ -12,7 +12,7 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.apppubs.d20.R;
 import com.apppubs.d20.constant.URLs;
-import com.apppubs.d20.fragment.WebAppFragment;
+import com.apppubs.d20.webapp.WebAppFragment;
 
 /**
  * WebApp界面,打开此webapp需要传入url和title等信息

@@ -22,7 +22,7 @@ import android.text.TextUtils;
 import android.util.SparseIntArray;
 
 import com.apppubs.d20.AppContext;
-import com.apppubs.d20.fragment.WebAppFragment;
+import com.apppubs.d20.webapp.WebAppFragment;
 import com.apppubs.d20.start.StartUpActivity;
 import com.apppubs.d20.util.LogM;
 import com.apppubs.d20.R;
