@@ -116,8 +116,8 @@ public class Breadcrumb extends ViewGroup {
         tv.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (onItemClickListener!=null){
-                    pop2index(index);
+				pop2index(index);
+				if (onItemClickListener!=null){
                     onItemClickListener.onItemClick(index,tag);
                 }
             }

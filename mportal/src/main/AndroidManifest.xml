@@ -397,6 +397,11 @@
             android:screenOrientation="portrait"
             >
         </activity>
+        <activity
+            android:name=".webapp.WebUserPickerActivity"
+            android:screenOrientation="portrait"
+            >
+        </activity>
 
         <receiver
             android:name=".receiver.ConnectionChangeReceiver"

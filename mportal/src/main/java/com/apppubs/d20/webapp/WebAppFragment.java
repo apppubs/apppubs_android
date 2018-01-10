@@ -44,6 +44,7 @@ import com.apppubs.d20.widget.ProgressWebView;
 import com.apppubs.d20.widget.ProgressWebView.ProgressWebViewListener;
 import com.apppubs.d20.widget.TitleBar;
 import com.apppubs.jsbridge.BridgeHandler;
+import com.apppubs.jsbridge.BridgeWebView;
 import com.apppubs.jsbridge.CallBackFunction;
 import com.apppubs.jsbridge.DefaultHandler;
 import com.apppubs.multi_image_selector.MultiImageSelectorActivity;
@@ -74,7 +75,7 @@ import cn.sharesdk.tencent.qq.QQ;
 import cn.sharesdk.wechat.friends.Wechat;
 import cn.sharesdk.wechat.moments.WechatMoments;
 
-public class WebAppFragment extends BaseFragment implements OnClickListener {
+public class WebAppFragment extends BaseFragment implements OnClickListener, IWebAppView {
 
 	public static final String ARGUMENT_INT_MENUBARTYPE = "menu_bar_type";
 	public static final String ARGUMENT_STRING_URL = "url";
@@ -101,6 +102,8 @@ public class WebAppFragment extends BaseFragment implements OnClickListener {
 
 	private String mOnloadingText = "载入中 ···";
 
+	private WebAppPresenter mPresenter;
+
 	@SuppressLint("HandlerLeak")
 	private Handler mHandler = new Handler() {
 		@SuppressWarnings("unused")
@@ -120,7 +123,6 @@ public class WebAppFragment extends BaseFragment implements OnClickListener {
 		;
 	};
 
-
 	@Override
 	public void onAttach(Activity activity) {
 		super.onAttach(activity);
@@ -133,22 +135,20 @@ public class WebAppFragment extends BaseFragment implements OnClickListener {
 		}
 		mUrl = AppContext.getInstance(mContext).convertUrl(mUrl);
 		mHostActivity.setShouldInterceptBackClick(true);
-
 	}
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-
 	}
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 		mRootView = inflater.inflate(R.layout.frg_webapp, null);
-
 		initComponent(mRootView);
 		initStates();
-
+		initPresenter();
+		mPresenter.onCreateView();
 		return mRootView;
 	}
 
@@ -183,7 +183,6 @@ public class WebAppFragment extends BaseFragment implements OnClickListener {
 	@Override
 	public void onResume() {
 		super.onResume();
-
 	}
 
 	@Override
@@ -194,9 +193,12 @@ public class WebAppFragment extends BaseFragment implements OnClickListener {
 		return super.onKeyDown(keyCode, event);
 	}
 
+	private void initPresenter() {
+		mPresenter  = new WebAppPresenter(getContext(),this);
+	}
+
 	@SuppressLint({"NewApi", "SetJavaScriptEnabled"})
 	private void initComponent(View v) {
-
 		mWebView = (ProgressWebView) mRootView.findViewById(R.id.webapp_wb);
 		mWebView.setInitialScale(1);
 		mWebView.setHostActivity(mHostActivity);
@@ -339,8 +341,6 @@ public class WebAppFragment extends BaseFragment implements OnClickListener {
 				} catch (JSONException e) {
 					e.printStackTrace();
 				}
-
-
 				mWebView.post(new Runnable() {
 
 					@Override
@@ -800,4 +800,9 @@ public class WebAppFragment extends BaseFragment implements OnClickListener {
 		mWebView.cancelNetworkError();
 	}
 
+	//IWebAppView
+	@Override
+	public BridgeWebView getBridgeWebView() {
+		return mWebView;
+	}
 }

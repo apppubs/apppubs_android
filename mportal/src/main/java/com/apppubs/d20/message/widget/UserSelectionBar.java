@@ -131,9 +131,11 @@ public class UserSelectionBar extends ViewGroup implements View.OnClickListener{
 
     public void setMaxSelectCount(int count){
         mMaxSelectCount = count;
-        mHintText = String.format("请选择1-%s人",count);
-        mHintTV.setText(mHintText);
-        invalidate();
+        if (count>0){
+			mHintText = String.format("请选择1-%s人",count);
+			mHintTV.setText(mHintText);
+			invalidate();
+		}
     }
 
     public void setListener(UserSelectionBarListener onItemClickListener){
@@ -199,7 +201,8 @@ public class UserSelectionBar extends ViewGroup implements View.OnClickListener{
     private void updateOkBtn() {
         if (mUserIconMap.size()>0){
             mOkButton.setEnabled(true);
-            mOkButton.setText("确定("+mUserIconMap.size()+"/"+mMaxSelectCount+")");
+            String btnText = mMaxSelectCount>0?"确定("+mUserIconMap.size()+"/"+mMaxSelectCount+")":"确定("+mUserIconMap.size()+")";
+            mOkButton.setText(btnText);
         }else{
             mOkButton.setEnabled(false);
             mOkButton.setText("确定");
