@@ -21,7 +21,6 @@
         android:layout_height="match_parent"
         android:layout_below="@id/my_file_sv"
         android:background="@color/app_common_bg"
-        app:empty_string="没有文件！"
         ></com.apppubs.d20.widget.commonlist.CommonListView>
 
 </RelativeLayout>

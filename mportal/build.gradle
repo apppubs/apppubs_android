@@ -21,8 +21,8 @@ android {
                 JPUSH_PKGNAME      : applicationId,
                 JPUSH_APPKEY       : "85358a757b2da7055f45f83c", //JPush上注册的包名对应的appkey.
                 JPUSH_CHANNEL      : "developer-default", //暂时填写默认值即可.
-                APPCODE            : "U1513322282744",
-                BASE_URL           : "http://111.205.95.32:8088/",
+                APPCODE            : "D20",
+                BASE_URL           : "http://202.99.19.140:8080/",
                 DISPLAY_ORIENTATION: "1",
                 ENABLE_SPLASH_SKIP:false
         ]
