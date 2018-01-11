@@ -92,6 +92,7 @@ public class WebUserPickerActivity extends BaseActivity implements IWebUserPicke
 	public void setDepts(List<DeptVO> depts) {
 		mDepts = depts;
 		mDeptAdapter.setData(depts);
+		mDeptAdapter.notifyDataSetChanged();
 		if (!mDeptAdapter.equals(mLv.getAdapter())) {
 			mLv.setAdapter(mDeptAdapter);
 			mLv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -117,7 +118,7 @@ public class WebUserPickerActivity extends BaseActivity implements IWebUserPicke
 		mLv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 			@Override
 			public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-
+				mPresenter.onUserItemClick(mUsers.get(position));
 			}
 		});
 	}

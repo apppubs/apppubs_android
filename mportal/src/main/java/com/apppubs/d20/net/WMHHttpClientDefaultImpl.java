@@ -3,10 +3,7 @@ package com.apppubs.d20.net;
 import android.util.Log;
 
 import com.apppubs.d20.util.JSONResult;
-import com.apppubs.d20.util.StringUtils;
 import com.google.gson.JsonParseException;
-
-import org.json.JSONException;
 
 import java.io.IOException;
 
