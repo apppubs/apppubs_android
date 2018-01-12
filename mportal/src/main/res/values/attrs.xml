@@ -5,6 +5,7 @@
     <attr name="textColor" format="color|reference"></attr>
     <attr name="textSize" format="dimension"></attr>
     <attr name="myThemeStyle" format="reference"></attr>
+    <attr name="selectedTextColor" format="color|reference"></attr>
 
     <declare-styleable name="SlidingMenu1">
         <attr name="rightPadding"></attr>
@@ -21,7 +22,7 @@
     </declare-styleable>
     <declare-styleable name="TitleBar">
         <attr name="leftText" format="string" />
-        <attr name="leftTextSize" format="dimension"/>
+        <attr name="leftTextSize" format="dimension" />
         <attr name="leftBackground" format="reference" />
         <attr name="leftImgSrc" format="reference"></attr>
         <attr name="leftTextColor" format="reference|color" />
@@ -46,7 +47,7 @@
     <declare-styleable name="ScrollTabs">
         <attr name="textColor"></attr>
         <attr name="textSize"></attr>
-        <attr name="selectedTextColor" format="color|reference"></attr>
+        <attr name="selectedTextColor"></attr>
         <attr name="selectedTextSize" format="dimension"></attr>
         <attr name="tabMinWidth" format="dimension"></attr>
         <attr name="needCursor" format="boolean"></attr>
@@ -74,7 +75,7 @@
     <declare-styleable name="CommonListView">
         <attr name="list_sel" format="reference" />
         <attr name="empty_string" format="string"></attr>
-        
+
     </declare-styleable>
     <declare-styleable name="SlidingMenu">
         <attr name="mode">
@@ -177,8 +178,8 @@
         <attr name="swipeDrawableChecked" format="reference" />
         <attr name="swipeDrawableUnchecked" format="reference" />
     </declare-styleable>
-    
-	<declare-styleable name="SwipeLayout">
+
+    <declare-styleable name="SwipeLayout">
         <attr name="drag_edge">
             <flag name="left" value="1" />
             <flag name="right" value="2" />
@@ -201,34 +202,34 @@
         <attr name="citv_border_color" format="color" />
         <attr name="citv_border_overlay" format="boolean" />
         <attr name="citv_fill_color" format="color" />
-        <attr name="citv_text_text" format="string"/>
-        <attr name="citv_text_color" format="color"/>
+        <attr name="citv_text_text" format="string" />
+        <attr name="citv_text_color" format="color" />
         <attr name="citv_text_max_length" format="dimension"></attr>
-        <attr name="citv_text_size" format="dimension"/>
-        <attr name="citv_text_padding" format="dimension"/>
+        <attr name="citv_text_size" format="dimension" />
+        <attr name="citv_text_padding" format="dimension" />
     </declare-styleable>
 
     <declare-styleable name="SwitchButton">
-        <attr name="kswThumbDrawable" format="reference"/>
-        <attr name="kswThumbColor" format="color|reference"/>
-        <attr name="kswThumbMargin" format="dimension|reference"/>
-        <attr name="kswThumbMarginTop" format="dimension|reference"/>
-        <attr name="kswThumbMarginBottom" format="dimension|reference"/>
-        <attr name="kswThumbMarginLeft" format="dimension|reference"/>
-        <attr name="kswThumbMarginRight" format="dimension|reference"/>
-        <attr name="kswThumbWidth" format="dimension|reference"/>
-        <attr name="kswThumbHeight" format="dimension|reference"/>
-        <attr name="kswThumbRadius" format="dimension|reference"/>
-        <attr name="kswBackRadius" format="dimension|reference"/>
-        <attr name="kswBackDrawable" format="reference"/>
-        <attr name="kswBackColor" format="color|reference"/>
-        <attr name="kswFadeBack" format="boolean"/>
-        <attr name="kswBackMeasureRatio" format="float"/>
-        <attr name="kswAnimationDuration" format="integer"/>
-        <attr name="kswTintColor" format="color|reference"/>
-        <attr name="kswTextOn" format="string"/>
-        <attr name="kswTextOff" format="string"/>
-        <attr name="kswTextMarginH" format="dimension"/>
+        <attr name="kswThumbDrawable" format="reference" />
+        <attr name="kswThumbColor" format="color|reference" />
+        <attr name="kswThumbMargin" format="dimension|reference" />
+        <attr name="kswThumbMarginTop" format="dimension|reference" />
+        <attr name="kswThumbMarginBottom" format="dimension|reference" />
+        <attr name="kswThumbMarginLeft" format="dimension|reference" />
+        <attr name="kswThumbMarginRight" format="dimension|reference" />
+        <attr name="kswThumbWidth" format="dimension|reference" />
+        <attr name="kswThumbHeight" format="dimension|reference" />
+        <attr name="kswThumbRadius" format="dimension|reference" />
+        <attr name="kswBackRadius" format="dimension|reference" />
+        <attr name="kswBackDrawable" format="reference" />
+        <attr name="kswBackColor" format="color|reference" />
+        <attr name="kswFadeBack" format="boolean" />
+        <attr name="kswBackMeasureRatio" format="float" />
+        <attr name="kswAnimationDuration" format="integer" />
+        <attr name="kswTintColor" format="color|reference" />
+        <attr name="kswTextOn" format="string" />
+        <attr name="kswTextOff" format="string" />
+        <attr name="kswTextMarginH" format="dimension" />
     </declare-styleable>
 
 
@@ -259,54 +260,59 @@
 
     <declare-styleable name="CropImageView">
         <attr name="cropGuidelines">
-            <enum name="off" value="0"/>
-            <enum name="onTouch" value="1"/>
-            <enum name="on" value="2"/>
+            <enum name="off" value="0" />
+            <enum name="onTouch" value="1" />
+            <enum name="on" value="2" />
         </attr>
         <attr name="cropScaleType">
-            <enum name="fitCenter" value="0"/>
-            <enum name="center" value="1"/>
-            <enum name="centerCrop" value="2"/>
-            <enum name="centerInside" value="3"/>
+            <enum name="fitCenter" value="0" />
+            <enum name="center" value="1" />
+            <enum name="centerCrop" value="2" />
+            <enum name="centerInside" value="3" />
         </attr>
         <attr name="cropShape">
-            <enum name="rectangle" value="0"/>
-            <enum name="oval" value="1"/>
+            <enum name="rectangle" value="0" />
+            <enum name="oval" value="1" />
         </attr>
-        <attr name="cropAutoZoomEnabled" format="boolean"/>
-        <attr name="cropMaxZoom" format="integer"/>
-        <attr name="cropMultiTouchEnabled" format="boolean"/>
-        <attr name="cropFixAspectRatio" format="boolean"/>
-        <attr name="cropAspectRatioX" format="integer"/>
-        <attr name="cropAspectRatioY" format="integer"/>
-        <attr name="cropInitialCropWindowPaddingRatio" format="float"/>
-        <attr name="cropBorderLineThickness" format="dimension"/>
-        <attr name="cropBorderLineColor" format="color"/>
-        <attr name="cropBorderCornerThickness" format="dimension"/>
-        <attr name="cropBorderCornerOffset" format="dimension"/>
-        <attr name="cropBorderCornerLength" format="dimension"/>
-        <attr name="cropBorderCornerColor" format="color"/>
-        <attr name="cropGuidelinesThickness" format="dimension"/>
-        <attr name="cropGuidelinesColor" format="color"/>
-        <attr name="cropBackgroundColor" format="color"/>
-        <attr name="cropSnapRadius" format="dimension"/>
-        <attr name="cropTouchRadius" format="dimension"/>
-        <attr name="cropSaveBitmapToInstanceState" format="boolean"/>
-        <attr name="cropShowCropOverlay" format="boolean"/>
-        <attr name="cropShowProgressBar" format="boolean"/>
-        <attr name="cropMinCropWindowWidth" format="dimension"/>
-        <attr name="cropMinCropWindowHeight" format="dimension"/>
-        <attr name="cropMinCropResultWidthPX" format="float"/>
-        <attr name="cropMinCropResultHeightPX" format="float"/>
-        <attr name="cropMaxCropResultWidthPX" format="float"/>
-        <attr name="cropMaxCropResultHeightPX" format="float"/>
-        <attr name="cropFlipHorizontally" format="boolean"/>
-        <attr name="cropFlipVertically" format="boolean"/>
+        <attr name="cropAutoZoomEnabled" format="boolean" />
+        <attr name="cropMaxZoom" format="integer" />
+        <attr name="cropMultiTouchEnabled" format="boolean" />
+        <attr name="cropFixAspectRatio" format="boolean" />
+        <attr name="cropAspectRatioX" format="integer" />
+        <attr name="cropAspectRatioY" format="integer" />
+        <attr name="cropInitialCropWindowPaddingRatio" format="float" />
+        <attr name="cropBorderLineThickness" format="dimension" />
+        <attr name="cropBorderLineColor" format="color" />
+        <attr name="cropBorderCornerThickness" format="dimension" />
+        <attr name="cropBorderCornerOffset" format="dimension" />
+        <attr name="cropBorderCornerLength" format="dimension" />
+        <attr name="cropBorderCornerColor" format="color" />
+        <attr name="cropGuidelinesThickness" format="dimension" />
+        <attr name="cropGuidelinesColor" format="color" />
+        <attr name="cropBackgroundColor" format="color" />
+        <attr name="cropSnapRadius" format="dimension" />
+        <attr name="cropTouchRadius" format="dimension" />
+        <attr name="cropSaveBitmapToInstanceState" format="boolean" />
+        <attr name="cropShowCropOverlay" format="boolean" />
+        <attr name="cropShowProgressBar" format="boolean" />
+        <attr name="cropMinCropWindowWidth" format="dimension" />
+        <attr name="cropMinCropWindowHeight" format="dimension" />
+        <attr name="cropMinCropResultWidthPX" format="float" />
+        <attr name="cropMinCropResultHeightPX" format="float" />
+        <attr name="cropMaxCropResultWidthPX" format="float" />
+        <attr name="cropMaxCropResultHeightPX" format="float" />
+        <attr name="cropFlipHorizontally" format="boolean" />
+        <attr name="cropFlipVertically" format="boolean" />
     </declare-styleable>
 
     <declare-styleable name="SheetParams">
         <attr name="textColor"></attr>
         <attr name="textSize"></attr>
+    </declare-styleable>
+
+    <declare-styleable name="SegmentedGroup">
+        <attr name="selectedTextColor"></attr>
+        <attr name="selectedBtnColor" format="color|reference"></attr>
     </declare-styleable>
 
 </resources>

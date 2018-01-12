@@ -4,6 +4,7 @@ import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.res.ColorStateList;
 import android.content.res.Resources;
+import android.content.res.TypedArray;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.graphics.drawable.GradientDrawable;
@@ -20,22 +21,25 @@ import com.apppubs.d20.R;
 public class SegmentedGroup extends RadioGroup {
 
     private int oneDP;
-    private Resources resources;
+    private Resources mResources;
     private int mTintColor;
     private int mCheckedTextColor = Color.BLACK;
 
     public SegmentedGroup(Context context) {
         super(context);
-        resources = getResources();
-        mTintColor = resources.getColor(R.color.radio_button_selected_color);
-        oneDP = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 1, resources.getDisplayMetrics());
+        mResources = getResources();
+        mTintColor = mResources.getColor(R.color.radio_button_selected_color);
+        oneDP = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 1, mResources.getDisplayMetrics());
     }
 
     public SegmentedGroup(Context context, AttributeSet attrs) {
         super(context, attrs);
-        resources = getResources();
-        mTintColor = resources.getColor(R.color.radio_button_selected_color);
-        oneDP = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 1, resources.getDisplayMetrics());
+        mResources = getResources();
+        TypedArray ta = context.obtainStyledAttributes(attrs, R.styleable.SegmentedGroup);
+        mTintColor = ta.getColor(R.styleable.SegmentedGroup_selectedBtnColor, mResources.getColor(R.color.radio_button_selected_color));
+        mCheckedTextColor = ta.getColor(R.styleable.SegmentedGroup_selectedTextColor, Color.BLACK);
+        ta.recycle();
+        oneDP = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 1, mResources.getDisplayMetrics());
     }
 
     @Override
@@ -80,7 +84,7 @@ public class SegmentedGroup extends RadioGroup {
     }
 
     @SuppressLint("NewApi")
-	private void updateBackground(View view, int checked, int unchecked) {
+    private void updateBackground(View view, int checked, int unchecked) {
         //Set text color
         ColorStateList colorStateList = new ColorStateList(new int[][]{
                 {android.R.attr.state_pressed},
@@ -90,8 +94,8 @@ public class SegmentedGroup extends RadioGroup {
         ((Button) view).setTextColor(colorStateList);
 
         //Redraw with tint color
-        Drawable checkedDrawable = resources.getDrawable(checked).mutate();
-        Drawable uncheckedDrawable = resources.getDrawable(unchecked).mutate();
+        Drawable checkedDrawable = mResources.getDrawable(checked).mutate();
+        Drawable uncheckedDrawable = mResources.getDrawable(unchecked).mutate();
         ((GradientDrawable) checkedDrawable).setColor(mTintColor);
         ((GradientDrawable) uncheckedDrawable).setStroke(oneDP, mTintColor);
 
