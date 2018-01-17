@@ -5,6 +5,9 @@ import android.os.Handler;
 
 import com.apppubs.d20.model.APResultCallback;
 import com.apppubs.d20.util.LogM;
+import com.apppubs.d20.util.Utils;
+
+import okhttp3.internal.Util;
 
 /**
  * Created by zhangwen on 2017/9/27.
@@ -26,20 +29,32 @@ public class PagePresenter {
 
 	public void onVisiable(){
 		LogM.log(this.getClass(),"可以显示了");
+		loadPage();
 	}
 
 	public void onCreateView(){
+		loadPage();
+	}
+
+	private void loadPage() {
 		String pageId = mPageView.getPageId();
 		mPageBiz.loadPage(pageId, new APResultCallback<PageModel>() {
 			@Override
-			public void onDone(final PageModel obj) {
-				mHandler.post(new Runnable() {
-					@Override
-					public void run() {
-						mPageView.showTitleBar(obj.getTitleBarModel());
-						mPageView.showContentView(obj.getContent());
-					}
-				});
+			public void onDone(final PageModel model) {
+				if (mPageModel!=null&&mPageModel.equals(model)){
+					//不需要更新
+					LogM.log(PagePresenter.class,"is equal");
+				}else{
+					mPageModel = model;
+
+					mHandler.post(new Runnable() {
+						@Override
+						public void run() {
+							mPageView.showTitleBar(mPageModel.getTitleBarModel());
+							mPageView.showContentView(mPageModel.getContent());
+						}
+					});
+				}
 			}
 
 			@Override

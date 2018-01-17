@@ -484,6 +484,7 @@ public class PageFragment extends TitleMenuFragment implements OnClickListener, 
     }
 
     private void renderContent(PageNormalContentModel model) throws JSONException {
+        mRootLl.removeView(mScrollView);
         ScrollView sv = new ScrollView(mContext);
         mScrollView = sv;
         sv.setBackgroundResource(R.color.window_color);
