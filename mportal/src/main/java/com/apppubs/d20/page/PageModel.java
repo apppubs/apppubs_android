@@ -321,6 +321,7 @@ class GridViewItem {
 			this.picUrl = jo.getString("picurl");
 			this.action = jo.getString("url");
 			this.badgeURL = jo.getString("badgeurl");
+			this.badgeTxt = jo.has("badgetext")?jo.getString("badgetext"):null;
 		} catch (JSONException e) {
 			e.printStackTrace();
 		}
