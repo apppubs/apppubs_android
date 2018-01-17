@@ -16,7 +16,6 @@ public class PagePresenter {
 	private IPageBiz mPageBiz;
 	private IPageView mPageView;
 	private Handler mHandler = new Handler();
-	private PageModel mPageModel;
 
 	public PagePresenter(Context context,IPageView view){
 		mContext = context;
@@ -33,6 +32,7 @@ public class PagePresenter {
 		mPageBiz.loadPage(pageId, new APResultCallback<PageModel>() {
 			@Override
 			public void onDone(final PageModel obj) {
+
 				mHandler.post(new Runnable() {
 					@Override
 					public void run() {

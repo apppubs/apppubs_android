@@ -13,15 +13,12 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 public class StringUtils {
     // 温度处理
     public static String getTemp(String str) {
         if (str.length() > 0 && str.indexOf("~") != -1) {
-            return str.substring(0, str.indexOf("~")) + "°/" + str.substring(str.indexOf("~") +
-                    1, str.indexOf("℃")) + "°";
+            return str.substring(0, str.indexOf("~")) + "°/" + str.substring(str.indexOf("~") + 1, str.indexOf("℃")) + "°";
         } else {
             return str;
         }
@@ -206,8 +203,7 @@ public class StringUtils {
         }
     }
 
-    private static String[] yues = {"January", "February", "Marcy", "April", "May", "June",
-            "July", "August",
+    private static String[] yues = {"January", "February", "Marcy", "April", "May", "June", "July", "August",
             "September", "October", "November", "December"};
 
     // private static int[] myues = { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12 };
@@ -309,6 +305,7 @@ public class StringUtils {
 
     /**
      * 由数组生成一个由分隔符分隔的字符串
+     *
      */
     public static String array2Str(List<String> list, String regularExpression) {
         String result = "";
@@ -445,20 +442,7 @@ public class StringUtils {
     }
 
     public static String formatDate(Date date, String pattern) {
-        SimpleDateFormat sdf = TextUtils.isEmpty(pattern) ? new SimpleDateFormat("yyyy-MM-dd " +
-                "HH:mm:ss") : new SimpleDateFormat(pattern);
+        SimpleDateFormat sdf = TextUtils.isEmpty(pattern) ? new SimpleDateFormat("yyyy-MM-dd HH:mm:ss") : new SimpleDateFormat(pattern);
         return sdf.format(date);
     }
-
-    public static boolean isDigist(String str) {
-        if (!TextUtils.isEmpty(str)){
-            Pattern pattern = Pattern.compile("-?[0-9]+.?[0-9]+");
-            Matcher isNum = pattern.matcher(str);
-            if (!isNum.matches()) {
-                return true;
-            }
-        }
-        return false;
-    }
-
 }
