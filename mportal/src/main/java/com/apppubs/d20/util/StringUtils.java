@@ -451,7 +451,7 @@ public class StringUtils {
     }
 
     public static boolean isDigist(String str) {
-        if (!TextUtils.isEmpty(str)){
+        if (!TextUtils.isEmpty(str)) {
             Pattern pattern = Pattern.compile("-?[0-9]+.?[0-9]+");
             Matcher isNum = pattern.matcher(str);
             if (!isNum.matches()) {
@@ -459,6 +459,16 @@ public class StringUtils {
             }
         }
         return false;
+    }
+
+    public static boolean equals(String res, String des) {
+        LogM.log(StringUtils.class,"比较字符串:"+res);
+        LogM.log(StringUtils.class,"比较字符串 第二个："+des);
+        if (res == null || des == null) {
+            return res == des;
+        } else {
+            return res.equals(des);
+        }
     }
 
 }
