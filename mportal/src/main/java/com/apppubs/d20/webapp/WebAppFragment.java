@@ -10,6 +10,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.support.annotation.NonNull;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.Gravity;
@@ -45,6 +46,7 @@ import com.apppubs.d20.util.BitmapUtils;
 import com.apppubs.d20.util.LocationManager;
 import com.apppubs.d20.util.LogM;
 import com.apppubs.d20.util.SystemUtils;
+import com.apppubs.d20.widget.HorizontalScrollLabels;
 import com.apppubs.d20.widget.ProgressHUD;
 import com.apppubs.d20.widget.ProgressWebView;
 import com.apppubs.d20.widget.ProgressWebView.ProgressWebViewListener;
@@ -157,7 +159,8 @@ public class WebAppFragment extends BaseFragment implements OnClickListener, IWe
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle
+            savedInstanceState) {
         mRootView = inflater.inflate(R.layout.frg_webapp, null);
         initComponent(mRootView);
         initStates();
@@ -201,7 +204,8 @@ public class WebAppFragment extends BaseFragment implements OnClickListener, IWe
 
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
-        if (event.getAction() == KeyEvent.ACTION_DOWN && keyCode == KeyEvent.KEYCODE_BACK && webviewGoBack()) {
+        if (event.getAction() == KeyEvent.ACTION_DOWN && keyCode == KeyEvent.KEYCODE_BACK &&
+                webviewGoBack()) {
             return true;
         }
         return super.onKeyDown(keyCode, event);
@@ -269,8 +273,10 @@ public class WebAppFragment extends BaseFragment implements OnClickListener, IWe
             @Override
             public void handler(String data, CallBackFunction function) {
                 System.out.println("hideMenuItems" + data);
-                if (!TextUtils.isEmpty(data) && !TextUtils.isEmpty(mMoreMenusStr) && data.contains(JS_MENU_ITEM_REFRESH)) {
-                    mMoreMenusStr = mMoreMenusStr.replaceAll("0", "").replaceAll(",0", "").replaceAll("0", "");
+                if (!TextUtils.isEmpty(data) && !TextUtils.isEmpty(mMoreMenusStr) && data
+                        .contains(JS_MENU_ITEM_REFRESH)) {
+                    mMoreMenusStr = mMoreMenusStr.replaceAll("0", "").replaceAll(",0", "")
+                            .replaceAll("0", "");
                 }
                 mWebView.post(new Runnable() {
 
@@ -335,7 +341,8 @@ public class WebAppFragment extends BaseFragment implements OnClickListener, IWe
 
                     @Override
                     public void run() {
-                        AppManager.getInstant(mContext).showChangeDialog(mContext, strArr[0], strArr[1]);
+                        AppManager.getInstant(mContext).showChangeDialog(mContext, strArr[0],
+                                strArr[1]);
                         changeActivityTitleView(mTitleBar);
                     }
                 });
@@ -395,7 +402,8 @@ public class WebAppFragment extends BaseFragment implements OnClickListener, IWe
                 manager.setListener(new LocationManager.LocationListener() {
                     @Override
                     public void onLocationChanded(AMapLocation location) {
-                        String data = "{\"latitude\":" + location.getLatitude() + ",\"longtitude\":" + location.getLongitude() + "}";
+                        String data = "{\"latitude\":" + location.getLatitude() + "," +
+                                "\"longtitude\":" + location.getLongitude() + "}";
                         System.out.println(data);
                         function.onCallBack(data);
                     }
@@ -515,7 +523,8 @@ public class WebAppFragment extends BaseFragment implements OnClickListener, IWe
             titleBar.setTitle(titleBar.getTitle() + "");
             if (mHostActivity instanceof HomeBaseActivity) {
                 isCloseButtonAdded = true;// 避免出现关闭
-//			titleBar.addLeftBtnWithImageResourceIdAndClickListener(R.drawable.top_back_btn, new OnClickListener() {
+//			titleBar.addLeftBtnWithImageResourceIdAndClickListener(R.drawable.top_back_btn, new
+// OnClickListener() {
 //
 //				@Override
 //				public void onClick(View v) {
@@ -525,17 +534,21 @@ public class WebAppFragment extends BaseFragment implements OnClickListener, IWe
             }
 
 
-            if (mMoreMenusStr != null && !mMoreMenusStr.equals("") && mMoreMenusStr.split(",").length > 1) {
-                titleBar.addRightBtnWithImageResourceIdAndClickListener(R.drawable.title_more, new OnClickListener() {
+            if (mMoreMenusStr != null && !mMoreMenusStr.equals("") && mMoreMenusStr.split(",")
+                    .length > 1) {
+                titleBar.addRightBtnWithImageResourceIdAndClickListener(R.drawable.title_more,
+                        new OnClickListener() {
 
                     @Override
                     public void onClick(View arg0) {
                         openMenu();
                     }
                 });
-            } else if (mMoreMenusStr != null && !mMoreMenusStr.equals("") && mMoreMenusStr.split(",").length == 1) {
+            } else if (mMoreMenusStr != null && !mMoreMenusStr.equals("") && mMoreMenusStr.split
+                    (",").length == 1) {
                 if (mMoreMenusStr.equals(MenuItem.WEB_APP_MENU_REFRESH + "")) {
-                    titleBar.addRightBtnWithImageResourceIdAndClickListener(R.drawable.titlebar_refresh, new OnClickListener() {
+                    titleBar.addRightBtnWithImageResourceIdAndClickListener(R.drawable
+                            .titlebar_refresh, new OnClickListener() {
 
                         @Override
                         public void onClick(View v) {
@@ -566,7 +579,8 @@ public class WebAppFragment extends BaseFragment implements OnClickListener, IWe
 
         View menuPop = LayoutInflater.from(mHostActivity).inflate(R.layout.pop_web_menu, null);
 
-        mPopWin = new PopupWindow(menuPop, ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+        mPopWin = new PopupWindow(menuPop, ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup
+                .LayoutParams.WRAP_CONTENT);
         mPopWin.setFocusable(true);
         mPopWin.setOutsideTouchable(true);
         mPopWin.setBackgroundDrawable(new BitmapDrawable());
@@ -601,7 +615,8 @@ public class WebAppFragment extends BaseFragment implements OnClickListener, IWe
         mWebView.setDownloadListener(new DownloadListener() {
 
             @Override
-            public void onDownloadStart(String url, String userAgent, String contentDisposition, String mimetype,
+            public void onDownloadStart(String url, String userAgent, String contentDisposition,
+                                        String mimetype,
                                         long contentLength) {
 
                 String downloadUrl = url;
@@ -709,7 +724,8 @@ public class WebAppFragment extends BaseFragment implements OnClickListener, IWe
     private void addClose() {
         // 当主界面跳转时判断此button是否需要，如果需要才显示，判断需要的方式则为此button是否被加载过
         // 根据此fragment嵌入的activity不同，显示不同的样式
-        mTitleBar.addLeftBtnWithImageResourceIdAndClickListener(R.drawable.close_circle, new OnClickListener() {
+        mTitleBar.addLeftBtnWithImageResourceIdAndClickListener(R.drawable.close_circle, new
+                OnClickListener() {
 
             @Override
             public void onClick(View arg0) {
@@ -778,7 +794,8 @@ public class WebAppFragment extends BaseFragment implements OnClickListener, IWe
         if (requestCode == REQUEST_CODE_PICTURES && resultCode == Activity.RESULT_OK) {
             mProgressHUD = ProgressHUD.show(mContext, null, true, false, null);
 
-            List<String> selectPath = data.getStringArrayListExtra(MultiImageSelectorActivity.EXTRA_RESULT);
+            List<String> selectPath = data.getStringArrayListExtra(MultiImageSelectorActivity
+                    .EXTRA_RESULT);
             StringBuilder sb = new StringBuilder();
             sb.append("[");
             for (String p : selectPath) {
@@ -823,14 +840,26 @@ public class WebAppFragment extends BaseFragment implements OnClickListener, IWe
     @Override
     public void showSignaturePanel(JSONObject jsonObject) {
         View contentView = LayoutInflater.from(mContext).inflate(R.layout.pop_signature, null);
-        RadioButton inputSegmentBtn = (RadioButton) contentView.findViewById(R.id.pop_signature_segmented_button1);
-        RadioButton handwritingBtn = (RadioButton) contentView.findViewById(R.id.pop_signature_segmented_button2);
+        RadioButton inputSegmentBtn = (RadioButton) contentView.findViewById(R.id
+                .pop_signature_segmented_button1);
+        RadioButton handwritingBtn = (RadioButton) contentView.findViewById(R.id
+                .pop_signature_segmented_button2);
         Button doneBtn = (Button) contentView.findViewById(R.id.pop_signature_done_btn);
-        mSignatureSegmentedGroup = (SegmentedGroup) contentView.findViewById(R.id.pop_signature_segment_sg);
+        mSignatureSegmentedGroup = (SegmentedGroup) contentView.findViewById(R.id
+                .pop_signature_segment_sg);
         mSignatureET = (EditText) contentView.findViewById(R.id.pop_signature_et);
         mSignatureSignatureView = (SignatureView) contentView.findViewById(R.id.pop_signature_sv);
 
-        mSignatureSegmentedGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
+        HorizontalScrollLabels hsl = (HorizontalScrollLabels) contentView.findViewById(R.id
+                .pop_signature_hsl);
+        hsl.setListener(new HorizontalScrollLabels.HorizontalScrollLabelsListener() {
+            @Override
+            public void onClick(String text) {
+                mSignatureET.setText(mSignatureET.getText()+text);
+            }
+        });
+        mSignatureSegmentedGroup.setOnCheckedChangeListener(new RadioGroup
+                .OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(RadioGroup radioGroup, int i) {
                 if (i == R.id.pop_signature_segmented_button2) {
@@ -845,7 +874,9 @@ public class WebAppFragment extends BaseFragment implements OnClickListener, IWe
         try {
             inputSegmentBtn.setText(jsonObject.getString("inputTitle"));
             handwritingBtn.setText(jsonObject.getString("handwritingTitle"));
+            hsl.setLabels(getCommonWords(jsonObject));
             mSignatureET.setHint(jsonObject.getString("handwritingDes"));
+            mSignatureET.setText(jsonObject.getString("defaultTxt"));
             mSignatureSignatureView.setHintText(jsonObject.getString("handwritingDes"));
             doneBtn.setText(jsonObject.getString("doneTxt"));
         } catch (JSONException e) {
@@ -878,7 +909,8 @@ public class WebAppFragment extends BaseFragment implements OnClickListener, IWe
                         result.put("image", "");
                     } else {
                         result.put("text", "");
-                        result.put("image", base64Bitmap(getCacheBitmapFromView(mSignatureSignatureView)));
+                        result.put("image", base64Bitmap(getCacheBitmapFromView
+                                (mSignatureSignatureView)));
                     }
                     jo.put("result", result);
                 } catch (JSONException e) {
@@ -942,5 +974,15 @@ public class WebAppFragment extends BaseFragment implements OnClickListener, IWe
         byte[] byteArray = stream.toByteArray();
         String base64 = Base64.encode(byteArray);
         return base64;
+    }
+
+    @NonNull
+    private String[] getCommonWords(JSONObject jsonObject) throws JSONException {
+        JSONArray ja = jsonObject.getJSONArray("commonWords");
+        String[] labels  = new String[ja.length()];
+        for (int i=-1;++i<ja.length();){
+            labels[i] = ja.getString(i);
+        }
+        return labels;
     }
 }

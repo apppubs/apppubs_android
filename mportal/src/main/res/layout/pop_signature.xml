@@ -37,18 +37,18 @@
                 android:text="手写"
                 android:textSize="@dimen/item_text_size" />
         </com.apppubs.d20.widget.SegmentedGroup>
+
         <Button
             android:id="@+id/pop_signature_clear_btn"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_centerVertical="true"
             android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
             android:layout_marginRight="@dimen/app_padding_right"
-            android:textColor="@color/common_notify_red"
-            android:textSize="@dimen/item_text_size"
-            android:text="清除"
             android:background="@android:color/white"
-            />
+            android:text="清除"
+            android:textColor="@color/common_notify_red"
+            android:textSize="@dimen/item_text_size" />
     </RelativeLayout>
 
     <LinearLayout
@@ -59,27 +59,40 @@
     <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="280dp"
-        android:background="@android:color/white"
-        >
-        <EditText
-            android:id="@+id/pop_signature_et"
-            android:background="@android:color/white"
+        android:background="@android:color/white">
+
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:padding="20dp"
-            android:gravity="top"
-            android:hint="请输入！"
-            android:inputType="textMultiLine"
-            android:textColorHint="@color/common_hint"
-            android:textSize="@dimen/item_text_size" >
-        </EditText>
+            android:orientation="vertical">
+
+            <com.apppubs.d20.widget.HorizontalScrollLabels
+                android:id="@+id/pop_signature_hsl"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"></com.apppubs.d20.widget.HorizontalScrollLabels>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="1px"
+                android:background="@color/common_divider"></LinearLayout>
+            <EditText
+                android:id="@+id/pop_signature_et"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@android:color/white"
+                android:gravity="top"
+                android:hint="请输入！"
+                android:inputType="textMultiLine"
+                android:padding="20dp"
+                android:textColorHint="@color/common_hint"
+                android:textSize="@dimen/item_text_size"></EditText>
+        </LinearLayout>
+
         <com.apppubs.d20.widget.SignatureView
             android:id="@+id/pop_signature_sv"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:background="@android:color/white"
-            android:visibility="gone"
-            />
+            android:visibility="gone" />
     </FrameLayout>
 
     <Button
