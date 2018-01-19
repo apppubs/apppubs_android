@@ -21,6 +21,18 @@
         android:layout_marginTop="20dp"
         android:visibility="gone"
         />
+    <TextView
+        android:id="@+id/act_startup_version_tv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Current Version"
+        android:textSize="13dp"
+        android:textColor="#c3c3c3"
+        android:layout_centerHorizontal="true"
+        android:layout_alignParentBottom="true"
+        android:layout_marginBottom="20dp"
+        android:visibility="gone"
+        />
 
     <FrameLayout 
         android:id="@+id/startup_frg_con"

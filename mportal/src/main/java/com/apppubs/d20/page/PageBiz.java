@@ -16,6 +16,7 @@ import com.apppubs.d20.util.JSONResult;
 import com.apppubs.d20.util.LogM;
 import com.apppubs.d20.util.StringUtils;
 import com.apppubs.d20.util.SystemUtils;
+import com.apppubs.d20.util.WebUtils;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -101,7 +102,10 @@ public class PageBiz implements IPageBiz {
      */
     private JSONObject handleComponent(JSONObject jo) throws JSONException, IOException {
         String comtype = jo.getString("comtype");
-        if (!TextUtils.isEmpty(comtype) && comtype.equals(Constants.PAGE_COMPONENT_ICON_LIST)) {
+        if (TextUtils.isEmpty(comtype)) {
+            return jo;
+        }
+        if (comtype.equals(Constants.PAGE_COMPONENT_ICON_LIST)) {
             JSONArray items = jo.getJSONArray("items");
             for (int i = -1; ++i < items.length(); ) {
                 JSONObject item = items.getJSONObject(i);
@@ -118,6 +122,28 @@ public class PageBiz implements IPageBiz {
                     item.put("badgetext", badgeText);
                 }
             }
+        } else if (comtype.equals(Constants.PAGE_COMPONENT_HOT_AREA_DEFAULT)) {
+            JSONArray items = jo.getJSONArray("items");
+            for (int i = -1; ++i < items.length(); ) {
+                JSONObject item = items.getJSONObject(i);
+                if (item.has("texturl") && !TextUtils.isEmpty(item.getString("texturl"))) {
+                    if (item.getString("texturl").equals("apppubs://macro/text/truename")) {
+                        item.put("text", AppContext.getInstance(mContext).getCurrentUser()
+                                .getTrueName());
+                    } else {
+                        try {
+                            AppContext appContext = AppContext.getInstance(mContext);
+                            item.put("text", WebUtils.requestWithGet(appContext.convertUrl(item
+                                    .getString("texturl"))));
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        } catch (InterruptedException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                }
+            }
+
         }
         return jo;
     }
@@ -139,5 +165,10 @@ public class PageBiz implements IPageBiz {
             url = String.format(URLs.URL_PAGE, URLs.baseURL, URLs.appCode, pageId, "");
         }
         return url;
+    }
+
+    private void resolveHotArea() {
+
+
     }
 }

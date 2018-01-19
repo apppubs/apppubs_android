@@ -9,6 +9,7 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.apppubs.d20.R;
@@ -200,5 +201,12 @@ public class StartUpActivity extends BaseActivity implements IStartUpView {
 		confirmDialog.setCancelable(false);
 		confirmDialog.setCanceledOnTouchOutside(false);
 		confirmDialog.show();
+	}
+
+	@Override
+	public void showVersion(String versionStr) {
+		TextView tv = (TextView) findViewById(R.id.act_startup_version_tv);
+		tv.setVisibility(View.VISIBLE);
+		tv.setText(versionStr);
 	}
 }

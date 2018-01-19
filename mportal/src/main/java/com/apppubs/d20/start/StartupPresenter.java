@@ -48,6 +48,10 @@ public class StartupPresenter {
 		}else{
 			init();
 		}
+		if (Utils.getBooleanMetaValue(mContext,"NEED_START_UP_VERSION")){
+			String versionStr = SystemBussiness.getInstance(mContext).getVersionString();
+			mView.showVersion(versionStr);
+		}
 	}
 
 	public void init(){

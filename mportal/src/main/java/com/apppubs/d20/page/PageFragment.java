@@ -41,20 +41,19 @@ import com.apppubs.d20.fragment.BaseFragment;
 import com.apppubs.d20.fragment.ChannelFragment;
 import com.apppubs.d20.fragment.ChannelFragmentFactory;
 import com.apppubs.d20.fragment.TitleMenuFragment;
-import com.apppubs.d20.webapp.WebAppFragment;
 import com.apppubs.d20.util.FileUtils;
 import com.apppubs.d20.util.JSONResult;
 import com.apppubs.d20.util.LogM;
 import com.apppubs.d20.util.StringUtils;
 import com.apppubs.d20.util.Utils;
-import com.apppubs.d20.util.WebUtils;
+import com.apppubs.d20.webapp.WebAppFragment;
 import com.apppubs.d20.widget.CheckableFlowLayout;
 import com.apppubs.d20.widget.DraggableGridView;
 import com.apppubs.d20.widget.DraggableGridView.OnRearrangeListener;
 import com.apppubs.d20.widget.EditTextDialog;
 import com.apppubs.d20.widget.HotArea;
-import com.apppubs.d20.widget.HotAreaImageView;
-import com.apppubs.d20.widget.HotAreaImageView.HotAreaClickListener;
+import com.apppubs.d20.widget.HotAreaView;
+import com.apppubs.d20.widget.HotAreaView.HotAreaClickListener;
 import com.apppubs.d20.widget.RatioLayout;
 import com.apppubs.d20.widget.ScrollTabs;
 import com.apppubs.d20.widget.SlidePicView;
@@ -64,7 +63,6 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -741,7 +739,7 @@ public class PageFragment extends TitleMenuFragment implements OnClickListener, 
                 mContainerLl.addView(view);
             } else if (comType.equals(Constants.PAGE_COMPONENT_HOT_AREA_DEFAULT)) {
                 double ratio = component.getDouble("picheightwidthratio");
-                HotAreaImageView iv = new HotAreaImageView(mContext);
+                HotAreaView iv = new HotAreaView(mContext);
                 JSONArray items = component.getJSONArray("items");
                 UUID uuid = UUID.randomUUID();
                 iv.setTag(uuid.toString());
@@ -755,9 +753,8 @@ public class PageFragment extends TitleMenuFragment implements OnClickListener, 
                                 Map<String, Object> map = (Map<String, Object>) obj;
                                 String viewTag = (String) map.get("viewTag");
                                 List<HotArea> hotAreas = (List<HotArea>) map.get("hotareas");
-                                HotAreaImageView iv = (HotAreaImageView) mContainerLl
-                                        .findViewWithTag
-                                                (viewTag);
+                                HotAreaView iv = (HotAreaView) mContainerLl
+                                        .findViewWithTag(viewTag);
                                 if (iv != null) {
                                     iv.setHotAreas(hotAreas);
                                 }
@@ -868,7 +865,7 @@ public class PageFragment extends TitleMenuFragment implements OnClickListener, 
                 RelativeLayout picCon = new RelativeLayout(mContext);
 
                 double ratio = component.getDouble("picheightwidthratio");
-                HotAreaImageView iv = new HotAreaImageView(mContext);
+                HotAreaView iv = new HotAreaView(mContext);
                 JSONArray items = component.getJSONArray("items");
                 List<HotArea> hotAreas = new ArrayList<HotArea>();
                 iv.setPicWidth(component.getInt("picwidth"));
@@ -1008,21 +1005,6 @@ public class PageFragment extends TitleMenuFragment implements OnClickListener, 
                 }
             }
 
-
-            if (item.has("texturl") && !TextUtils.isEmpty(item.getString("texturl"))) {
-                if (item.getString("texturl").equals("apppubs://macro/text/truename")) {
-                    ha.setText(AppContext.getInstance(mContext).getCurrentUser().getTrueName());
-                } else {
-                    try {
-                        ha.setText(WebUtils.requestWithGet(mAppContext.convertUrl(item.getString
-                                ("texturl"))));
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    } catch (InterruptedException e) {
-                        e.printStackTrace();
-                    }
-                }
-            }
             if (item.has("imageurl")) {
                 if ("apppubs://macro/text/useravatarurl".equals(item.getString("imageurl"))) {
                     ha.setImage(mImageLoader.loadImageSync(AppContext.getInstance(mContext)
@@ -1031,6 +1013,7 @@ public class PageFragment extends TitleMenuFragment implements OnClickListener, 
                     ha.setImage(mImageLoader.loadImageSync(item.getString("imageurl")));
                 }
             }
+            ha.setText(item.has("text")?item.getString("text"):"");
             hotAreas.add(ha);
         }
         return hotAreas;
