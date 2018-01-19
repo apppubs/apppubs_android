@@ -406,6 +406,7 @@
             </intent-filter>
         </receiver>
 
+
         <service android:name=".service.DownloadAppService"/>
         <service android:name=".service.LocationService"/>
         <!-- <service android:name=".service.SearchService" > -->
@@ -535,6 +536,14 @@
             </intent-filter>
         </receiver>
 
+        <receiver
+            android:name=".receiver.DownloadAppReceiver"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.DOWNLOAD_COMPLETE" />
+                <action android:name="android.intent.action.DOWNLOAD_NOTIFICATION_CLICKED"/>
+            </intent-filter>
+        </receiver>
         <service android:name="com.amap.api.location.APSService"></service>
 
         <provider

@@ -17,6 +17,7 @@ public class Constants {
 	
 	public static final String DEFAULT_SHARED_PREFERENCE_NAME = "mportal_shared_preference";
 	public static final String SHAREDPREFERENCE_KEY_DElETED_CHAT_IDS = "delete_chat_ids";
+	public static final String SHAREDPREFRERENCE_KEY_DOWNLOAD_REFERENCE = "download_reference";
 	
 	public static final String PAGE_COMPONENT_NAV_DEFAULT = "1001";//默认导航组件
 	public static final String PAGE_COMPONENT_TAG = "1003";//标签

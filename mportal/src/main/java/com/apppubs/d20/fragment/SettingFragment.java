@@ -418,12 +418,13 @@ public class SettingFragment extends TitleMenuFragment implements OnClickListene
 
 						@Override
 						public void onOkClick() {
-							Intent it = new Intent(mHostActivity, DownloadAppService.class);
-							it.putExtra(DownloadAppService.SERVICRINTENTURL, vi.getUpdateUrl());
-							it.putExtra(DownloadAppService.SERVACESHARENAME, 0);
-							mHostActivity.startService(it);
+							AppManager.getInstant(mContext).downloadApp( vi.getUpdateUrl());
+//							Intent it = new Intent(mHostActivity, DownloadAppService.class);
+//							it.putExtra(DownloadAppService.SERVICRINTENTURL, vi.getUpdateUrl());
+//							it.putExtra(DownloadAppService.SERVACESHARENAME, 0);
+//							mHostActivity.startService(it);
 							// bindService(it, conn, Context.BIND_AUTO_CREATE);
-							mUserBussiness.logout(mHostActivity);
+//							mUserBussiness.logout(mHostActivity);
 						}
 					}, title , vi.getUpdateDescribe(), "下次", "更新");
 					dialog.show();
