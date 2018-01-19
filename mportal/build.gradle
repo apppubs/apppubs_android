@@ -6,7 +6,7 @@ android {
         applicationId "com.apppubs.d20"
         minSdkVersion 14
         targetSdkVersion 19
-        versionCode 210100
+        versionCode 210101
         versionName "3.1.1"
         compileOptions {
             sourceCompatibility JavaVersion.VERSION_1_7
