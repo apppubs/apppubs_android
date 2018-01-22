@@ -13,4 +13,5 @@ public interface IStartUpView {
 	void skip2Home();
 	void showUpdateDialog(String title,String message,String updateUrl,boolean needForceUpdate);
 	void showInitFailDialog();
+	void showVersion(String version);
 }

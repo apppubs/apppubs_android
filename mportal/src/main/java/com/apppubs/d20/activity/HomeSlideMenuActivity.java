@@ -32,6 +32,7 @@ import android.widget.Toast;
 import com.amap.api.location.AMapLocation;
 import com.amap.api.location.AMapLocationListener;
 import com.apppubs.d20.AppContext;
+import com.apppubs.d20.AppManager;
 import com.apppubs.d20.R;
 import com.apppubs.d20.bean.App;
 import com.apppubs.d20.bean.MenuItem;
@@ -228,11 +229,12 @@ public class HomeSlideMenuActivity extends HomeBaseActivity implements OnItemCli
 												Toast.makeText(HomeSlideMenuActivity.this, "升级服务已经启动,无需再次启动", Toast.LENGTH_LONG)
 														.show();
 											} else {
-												Intent it = new Intent(HomeSlideMenuActivity.this,
-														DownloadAppService.class);
-												it.putExtra(DownloadAppService.SERVICRINTENTURL, obj[1]);
-												it.putExtra(DownloadAppService.SERVACESHARENAME, 0);
-												startService(it);
+												AppManager.getInstant(mContext).downloadApp(obj[1]);
+//												Intent it = new Intent(HomeSlideMenuActivity.this,
+//														DownloadAppService.class);
+//												it.putExtra(DownloadAppService.SERVICRINTENTURL, obj[1]);
+//												it.putExtra(DownloadAppService.SERVACESHARENAME, 0);
+//												startService(it);
 												System.out.println("启动服务。。。。。。。。。。。。。。");
 											}
 										}

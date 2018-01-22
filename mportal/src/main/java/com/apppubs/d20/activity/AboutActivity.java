@@ -1,8 +1,11 @@
 package com.apppubs.d20.activity;
 
+import android.Manifest;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.v4.app.ActivityCompat;
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.TextView;
@@ -13,7 +16,7 @@ import com.apppubs.d20.bean.AppConfig;
 
 public class AboutActivity extends BaseActivity {
 
-	private View mWebsiteLL,mContactLL;
+	private View mWebsiteLL, mContactLL;
 	private TextView mAppNameTV, mVersionTV;
 	private String mSupportCompany;
 	private String mOfficialWebsite;
@@ -33,9 +36,9 @@ public class AboutActivity extends BaseActivity {
 	private void initData() {
 		AppConfig config = AppContext.getInstance(mContext).getApp().getAppConfig();
 		String properties = config.getAboutProperties();
-		if (!TextUtils.isEmpty(properties)){
+		if (!TextUtils.isEmpty(properties)) {
 			String[] args = properties.split(";");
-			if (args!=null&&args.length>2){
+			if (args != null && args.length > 2) {
 				mSupportCompany = args[0];
 				mOfficialWebsite = args[1];
 				mContact = args[2];
@@ -52,14 +55,14 @@ public class AboutActivity extends BaseActivity {
 
 	private void fillText() {
 		mAppNameTV.setText(mAppContext.getApp().getName());
-		mVersionTV.setText(mSystemBussiness.getVersionString(this));
-		setTextForTestView(mSupportCompany,R.id.about_supportcompany_tv);
-		setTextForTestView(mOfficialWebsite,R.id.about_officialwebsite_tv);
-		setTextForTestView(mContact,R.id.about_contact_tv);
+		mVersionTV.setText(mSystemBussiness.getVersionString());
+		setTextForTestView(mSupportCompany, R.id.about_supportcompany_tv);
+		setTextForTestView(mOfficialWebsite, R.id.about_officialwebsite_tv);
+		setTextForTestView(mContact, R.id.about_contact_tv);
 	}
 
-	private void setTextForTestView(String text,int resId) {
-		if (!TextUtils.isEmpty(text)){
+	private void setTextForTestView(String text, int resId) {
+		if (!TextUtils.isEmpty(text)) {
 			TextView supportCompanyTv = (TextView) findViewById(resId);
 			supportCompanyTv.setText(text);
 		}
@@ -74,7 +77,7 @@ public class AboutActivity extends BaseActivity {
 	public void onClick(View v) {
 		super.onClick(v);
 		int id = v.getId();
-		switch (id){
+		switch (id) {
 			case R.id.about_website_ll:
 				onWebSiteClicked();
 				break;
@@ -87,7 +90,19 @@ public class AboutActivity extends BaseActivity {
 	}
 
 	private void onContactClicked() {
-		Intent intent = new Intent(Intent.ACTION_CALL,Uri.parse(TextUtils.isEmpty(mContact)?"tel:010-62955760":mContact));
+		Intent intent = new Intent(Intent.ACTION_CALL, Uri.parse(TextUtils.isEmpty(mContact) ? "tel:010-62955760" : mContact));
+
+		if (ActivityCompat.checkSelfPermission(this, Manifest.permission.CALL_PHONE) !=
+				PackageManager.PERMISSION_GRANTED) {
+			// TODO: Consider calling
+			//    ActivityCompat#requestPermissions
+			// here to request the missing permissions, and then overriding
+			//   public void onRequestPermissionsResult(int requestCode, String[] permissions,
+			//                                          int[] grantResults)
+			// to handle the case where the user grants the permission. See the documentation
+			// for ActivityCompat#requestPermissions for more details.
+			return;
+		}
 		startActivity(intent);
 	}
 

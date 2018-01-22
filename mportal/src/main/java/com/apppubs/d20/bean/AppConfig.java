@@ -8,7 +8,7 @@ import java.io.Serializable;
  * Created by zhangwen on 2017/1/5.
  */
 
-public class AppConfig implements Serializable{
+public class AppConfig implements Serializable {
 
     @SerializedName("adbook_rootid")
     private String adbookRootId;
@@ -32,20 +32,20 @@ public class AppConfig implements Serializable{
     private String latestVersionDescribe;
     @SerializedName("android_min_app_code_version")
     private int minSupportedVersionCode;
-    @SerializedName("android_updateurl")
+    @SerializedName("android_download_url")
     private String updateUrl;
-	@SerializedName("android_version_alert")
-	private Integer needVersionAlertFlag;
-	@SerializedName("chat_flag")
-	private String chatFlag;
-	@SerializedName("adbookauth")
-	private Integer adbookAuthFlag;
-	@SerializedName("chat_auth")
-	private Integer chatAuthFlag;
-	@SerializedName("about_properties")
-	private String aboutProperties;
+    @SerializedName("android_version_alert")
+    private Integer needVersionAlertFlag;
+    @SerializedName("chat_flag")
+    private String chatFlag;
+    @SerializedName("adbookauth")
+    private Integer adbookAuthFlag;
+    @SerializedName("chat_auth")
+    private Integer chatAuthFlag;
+    @SerializedName("about_properties")
+    private String aboutProperties;
 
-    public AppConfig(){
+    public AppConfig() {
         adbookRootId = "0";
         adbookVersion = 0;
         adbookOrgCountFlag = "1";
@@ -54,9 +54,9 @@ public class AppConfig implements Serializable{
         pdfEditableFlag = "0";
         regURL = "";
         forgetPasswordUrl = "";
-		chatFlag = "0";
-		adbookAuthFlag = 0;
-		chatAuthFlag = 0;
+        chatFlag = "0";
+        adbookAuthFlag = 0;
+        chatAuthFlag = 0;
     }
 
     public String getAdbookRootId() {
@@ -155,44 +155,44 @@ public class AppConfig implements Serializable{
         this.updateUrl = updateUrl;
     }
 
-	public Integer getNeedVersionAlertFlag() {
-		return needVersionAlertFlag;
-	}
+    public Integer getNeedVersionAlertFlag() {
+        return needVersionAlertFlag;
+    }
 
-	public void setNeedVersionAlertFlag(Integer needVersionAlertFlag) {
-		this.needVersionAlertFlag = needVersionAlertFlag;
-	}
+    public void setNeedVersionAlertFlag(Integer needVersionAlertFlag) {
+        this.needVersionAlertFlag = needVersionAlertFlag;
+    }
 
-	public String getChatFlag() {
-		return chatFlag;
-	}
+    public String getChatFlag() {
+        return chatFlag;
+    }
 
-	public void setChatFlag(String chatFlag) {
-		this.chatFlag = chatFlag;
-	}
+    public void setChatFlag(String chatFlag) {
+        this.chatFlag = chatFlag;
+    }
 
-	public Integer getAdbookAuthFlag() {
-		return adbookAuthFlag;
-	}
+    public Integer getAdbookAuthFlag() {
+        return adbookAuthFlag;
+    }
 
-	public void setAdbookAuthFlag(Integer adbookAuthFlag) {
-		this.adbookAuthFlag = adbookAuthFlag;
-	}
+    public void setAdbookAuthFlag(Integer adbookAuthFlag) {
+        this.adbookAuthFlag = adbookAuthFlag;
+    }
 
-	public Integer getChatAuthFlag() {
-		return chatAuthFlag;
-	}
+    public Integer getChatAuthFlag() {
+        return chatAuthFlag;
+    }
 
-	public void setChatAuthFlag(Integer chatAuthFlag) {
+    public void setChatAuthFlag(Integer chatAuthFlag) {
 
-		this.chatAuthFlag = chatAuthFlag;
-	}
+        this.chatAuthFlag = chatAuthFlag;
+    }
 
-	public String getAboutProperties() {
-		return aboutProperties;
-	}
+    public String getAboutProperties() {
+        return aboutProperties;
+    }
 
-	public void setAboutProperties(String aboutProperties) {
-		this.aboutProperties = aboutProperties;
-	}
+    public void setAboutProperties(String aboutProperties) {
+        this.aboutProperties = aboutProperties;
+    }
 }

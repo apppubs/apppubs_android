@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.text.TextUtils;
 
 import com.apppubs.d20.AppContext;
+import com.apppubs.d20.AppManager;
 import com.apppubs.d20.bean.App;
 import com.apppubs.d20.model.APResultCallback;
 import com.apppubs.d20.model.SystemBussiness;
@@ -47,6 +48,10 @@ public class StartupPresenter {
 			mView.showWelcomeFragment();
 		}else{
 			init();
+		}
+		if (Utils.getBooleanMetaValue(mContext,"NEED_START_UP_VERSION")){
+			String versionStr = SystemBussiness.getInstance(mContext).getVersionString();
+			mView.showVersion(versionStr);
 		}
 	}
 
@@ -110,10 +115,11 @@ public class StartupPresenter {
 	}
 
 	public void startDownloadApp(String updateUrl) {
-		Intent it = new Intent(mContext, DownloadAppService.class);
-		it.putExtra(DownloadAppService.SERVICRINTENTURL, updateUrl);
-		it.putExtra(DownloadAppService.SERVACESHARENAME, 0);
-		mContext.startService(it);
+//		Intent it = new Intent(mContext, DownloadAppService.class);
+//		it.putExtra(DownloadAppService.SERVICRINTENTURL, updateUrl);
+//		it.putExtra(DownloadAppService.SERVACESHARENAME, 0);
+//		mContext.startService(it);
+		AppManager.getInstant(mContext).downloadApp(updateUrl);
 	}
 
 	public void preSkip2Home(){

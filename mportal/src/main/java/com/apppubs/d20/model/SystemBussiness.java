@@ -87,14 +87,14 @@ import java.util.Map;
 import java.util.concurrent.Future;
 
 /**
- * 
- * 
+ *
+ *
  * Copyright (c) heaven Inc.
- * 
+ *
  * Original Author: zhangwen 此类处理系统级别的业务，如初始化系统 包括初始化应用信息，菜单信息，资讯频道 ChangeLog:
  * 2015年1月4日 by zhangwen create
- * 
- * 
+ *
+ *
  */
 public class SystemBussiness extends BaseBussiness {
 
@@ -207,7 +207,7 @@ public class SystemBussiness extends BaseBussiness {
 
 	/**
 	 * 清除数据库
-	 * 
+	 *
 	 * @param need
 	 */
 	private void clearDataBase(boolean need) {
@@ -272,7 +272,7 @@ public class SystemBussiness extends BaseBussiness {
 
 	/**
 	 * 初始化报纸
-	 * 
+	 *
 	 * @throws IOException
 	 * @throws InterruptedException
 	 * @throws JSONException
@@ -466,7 +466,7 @@ public class SystemBussiness extends BaseBussiness {
 		}
 
 		//初始化appconfig,首次初始化必须使用同步方法
-		
+
 		Object appConfig = localApp.getAppConfig();
 		if(appConfig==null){
 			AppConfig cfg = syncAppConfig();
@@ -499,7 +499,7 @@ public class SystemBussiness extends BaseBussiness {
 //				}
 //			};
 //			asyncTask.execute("");
-			
+
 		}
 
 		localApp.addStartupTime();
@@ -511,7 +511,7 @@ public class SystemBussiness extends BaseBussiness {
 
 	/**
 	 * 初始化标题栏左右的菜单
-	 * 
+	 *
 	 * @throws JSONException
 	 * @throws InterruptedException
 	 * @throws IOException
@@ -526,7 +526,7 @@ public class SystemBussiness extends BaseBussiness {
 	/**
 	 * 生成站位图保存在本地files文件夹下名称为stance.png 中的大小的站位图 stance_medium.png
 	 * 与屏幕相同的展位图stance_pic.png
-	 * 
+	 *
 	 * @throws FileNotFoundException
 	 */
 	private void generateStanceDrawable(String str) throws FileNotFoundException {
@@ -1215,7 +1215,7 @@ public class SystemBussiness extends BaseBussiness {
 	}
 
 	public static int compareVersion(String version1, String version2) {
-		if(TextUtils.isEmpty(version1)||TextUtils.isEmpty(version2)){
+		if (TextUtils.isEmpty(version1) || TextUtils.isEmpty(version2)) {
 			return 0;
 		}
 		if (version1.equals(version2)) {
@@ -1228,7 +1228,8 @@ public class SystemBussiness extends BaseBussiness {
 		int minLen = Math.min(version1Array.length, version2Array.length);
 		int diff = 0;
 		//循环判断每位的大小
-		while (index < minLen && (diff = Integer.parseInt(version1Array[index]) - Integer.parseInt(version2Array[index])) == 0) {
+		while (index < minLen && (diff = Integer.parseInt(version1Array[index]) - Integer.parseInt
+				(version2Array[index])) == 0) {
 			index++;
 		}
 		if (diff == 0) {
@@ -1252,10 +1253,10 @@ public class SystemBussiness extends BaseBussiness {
 
 	}
 
-	public String getVersionString(Context context){
+	public String getVersionString(){
 		PackageInfo pInfo = null;
 		try {
-			pInfo = context.getPackageManager().getPackageInfo(context.getPackageName(), 0);
+			pInfo = mContext.getPackageManager().getPackageInfo(mContext.getPackageName(), 0);
 		} catch (PackageManager.NameNotFoundException e) {
 			e.printStackTrace();
 		}

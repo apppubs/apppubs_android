@@ -29,6 +29,7 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.apppubs.d20.AppContext;
+import com.apppubs.d20.AppManager;
 import com.apppubs.d20.MportalApplication;
 import com.apppubs.d20.R;
 import com.apppubs.d20.bean.AppConfig;
@@ -320,10 +321,11 @@ public abstract class BaseActivity extends FragmentActivity implements OnClickLi
 
 							@Override
 							public void onclick() {
-								Intent it = new Intent(BaseActivity.this, DownloadAppService.class);
-								it.putExtra(DownloadAppService.SERVICRINTENTURL, vi.getUpdateUrl());
-								it.putExtra(DownloadAppService.SERVACESHARENAME, 0);
-								startService(it);
+								AppManager.getInstant(mContext).downloadApp(vi.getUpdateUrl());
+//								Intent it = new Intent(BaseActivity.this, DownloadAppService.class);
+//								it.putExtra(DownloadAppService.SERVICRINTENTURL, vi.getUpdateUrl());
+//								it.putExtra(DownloadAppService.SERVACESHARENAME, 0);
+//								startService(it);
 								Toast.makeText(BaseActivity.this, "正在下载中，请稍候", Toast.LENGTH_SHORT).show();
 							}
 						}, title, vi.getUpdateDescribe(),"更新");
@@ -339,11 +341,12 @@ public abstract class BaseActivity extends FragmentActivity implements OnClickLi
 
 							@Override
 							public void onOkClick() {
-								Intent it = new Intent(BaseActivity.this, DownloadAppService.class);
-								it.putExtra(DownloadAppService.SERVICRINTENTURL, vi.getUpdateUrl());
-								it.putExtra(DownloadAppService.SERVACESHARENAME, 0);
-								startService(it);
-								mUserBussiness.logout(BaseActivity.this);
+								AppManager.getInstant(mContext).downloadApp(vi.getUpdateUrl());
+//								Intent it = new Intent(BaseActivity.this, DownloadAppService.class);
+//								it.putExtra(DownloadAppService.SERVICRINTENTURL, vi.getUpdateUrl());
+//								it.putExtra(DownloadAppService.SERVACESHARENAME, 0);
+//								startService(it);
+//								mUserBussiness.logout(BaseActivity.this);
 							}
 						}, title , vi.getUpdateDescribe(), "下次", "更新");
 						dialog.show();

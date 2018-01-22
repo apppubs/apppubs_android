@@ -3,6 +3,7 @@ package com.apppubs.d20.widget;
 import java.util.ArrayList;
 import java.util.List;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Color;
@@ -20,7 +21,8 @@ import android.view.TextureView;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-public class HotAreaImageView extends ImageView {
+@SuppressLint("AppCompatCustomView")
+public class HotAreaView extends ImageView {
 
 	private List<HotArea> mHotAreas;
 	private List<TextView> mTextHotAreas;// 文本热区集合
@@ -30,12 +32,12 @@ public class HotAreaImageView extends ImageView {
 	private float mPicAndViewRatio;//图片尺寸比view尺寸
 	private GestureDetector mLongGestureDetector;
 
-	public HotAreaImageView(Context context) {
+	public HotAreaView(Context context) {
 		super(context);
 		init(context);
 	}
 
-	public HotAreaImageView(Context context, AttributeSet attrs) {
+	public HotAreaView(Context context, AttributeSet attrs) {
 		super(context, attrs);
 		init(context);
 	}
