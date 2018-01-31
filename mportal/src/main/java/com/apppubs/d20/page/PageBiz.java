@@ -83,12 +83,13 @@ public class PageBiz implements IPageBiz {
      */
     private PageNormalContentModel handleNormalPageContent(PageNormalContentModel normalContent)
             throws JSONException, IOException {
-        JSONArray components = normalContent.getComponents();
-        for (int i = -1; ++i < components.length(); ) {
-            JSONObject jo = components.getJSONObject(i);
-            handleComponent(jo);
+        if (normalContent != null) {
+            JSONArray components = normalContent.getComponents();
+            for (int i = -1; ++i < components.length(); ) {
+                JSONObject jo = components.getJSONObject(i);
+                handleComponent(jo);
+            }
         }
-
         return normalContent;
     }
 
