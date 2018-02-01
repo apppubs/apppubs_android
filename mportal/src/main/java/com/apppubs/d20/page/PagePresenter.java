@@ -2,12 +2,11 @@ package com.apppubs.d20.page;
 
 import android.content.Context;
 import android.os.Handler;
+import android.text.TextUtils;
 
+import com.apppubs.d20.AppManager;
 import com.apppubs.d20.model.APResultCallback;
 import com.apppubs.d20.util.LogM;
-import com.apppubs.d20.util.Utils;
-
-import okhttp3.internal.Util;
 
 /**
  * Created by zhangwen on 2017/9/27.
@@ -15,59 +14,96 @@ import okhttp3.internal.Util;
 
 public class PagePresenter {
 
-	private Context mContext;
-	private IPageBiz mPageBiz;
-	private IPageView mPageView;
-	private Handler mHandler = new Handler();
-	private PageModel mPageModel;
+    private Context mContext;
+    private IPageBiz mPageBiz;
+    private IPageView mPageView;
+    private Handler mHandler = new Handler();
+    private PageModel mPageModel;
 
-	public PagePresenter(Context context,IPageView view){
-		mContext = context;
-		mPageBiz = new PageBiz(context);
-		mPageView = view;
-	}
+    public PagePresenter(Context context, IPageView view) {
+        mContext = context;
+        mPageBiz = new PageBiz(context);
+        mPageView = view;
+    }
 
-	public void onVisiable(){
-		LogM.log(this.getClass(),"可以显示了");
-		loadPage();
-	}
+    public void onVisiable() {
+        LogM.log(this.getClass(), "可以显示了");
+        loadPage();
+    }
 
-	public void onCreateView(){
-		loadPage();
-	}
+    public void onCreateView() {
+        loadPage();
+    }
 
-	private void loadPage() {
-		String pageId = mPageView.getPageId();
-		mPageBiz.loadPage(pageId, new APResultCallback<PageModel>() {
-			@Override
-			public void onDone(final PageModel model) {
-				if (mPageModel!=null&&mPageModel.equals(model)){
-					//不需要更新
-					LogM.log(PagePresenter.class,"is equal");
-				}else{
-					mPageModel = model;
+    public void onAddressSelected(AddressModel model) {
+        AppManager.getInstant(mContext).saveCurrentAddress(model.getName(), model.getCode());
+        mPageView.setTitleBarAddress(model.getName());
+    }
 
-					mHandler.post(new Runnable() {
-						@Override
-						public void run() {
-							mPageView.showTitleBar(mPageModel.getTitleBarModel());
-							mPageView.showContentView(mPageModel.getContent());
-						}
-					});
-				}
-			}
+    //private
+    private void loadPage() {
+        String pageId = mPageView.getPageId();
+        mPageBiz.loadPage(pageId, new APResultCallback<PageModel>() {
+            @Override
+            public void onDone(final PageModel model) {
+                if (mPageModel != null && mPageModel.equals(model)) {
+                    //不需要更新
+                    LogM.log(PagePresenter.class, "is equal");
+                } else {
+                    onDataUpdated(model);
+                }
+            }
 
-			@Override
-			public void onException(int excepCode) {
-				mHandler.post(new Runnable() {
-					@Override
-					public void run() {
-						mPageView.showErrorView();
-					}
-				});
+            @Override
+            public void onException(int excepCode) {
+                mHandler.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        mPageView.showErrorView();
+                    }
+                });
 
-			}
-		});
-	}
+            }
+        });
+    }
+
+    private void onDataUpdated(final PageModel model) {
+        mPageModel = model;
+        saveCurAddressIfEmpty(model);
+        mHandler.post(new Runnable() {
+            @Override
+            public void run() {
+                mPageView.showTitleBar(model.getTitleBarModel());
+                mPageView.showContentView(model.getContent());
+
+                //显示地址
+                if (isAddressTitleBar(model)) {
+                    AppManager manager = AppManager.getInstant(mContext);
+                    String addressName = manager.getCurrentAddressName();
+                    mPageView.setTitleBarAddress(addressName);
+                }
+
+            }
+        });
+    }
+
+    private void saveCurAddressIfEmpty(PageModel model) {
+        if (isAddressTitleBar(model)) {
+            String addressName = AppManager.getInstant(mContext).getCurrentAddressName();
+            if (TextUtils.isEmpty(addressName)) {
+                TitleBarAddressModel titleBarModel = (TitleBarAddressModel)
+                        model.getTitleBarModel();
+                AppManager.getInstant(mContext)
+                        .saveCurrentAddress(titleBarModel.getDefaultAddress(),
+                                titleBarModel.getDefaultAddressCode());
+            }
+        }
+    }
+
+    private boolean isAddressTitleBar(PageModel model) {
+        return model.getTitleBarModel() != null &&
+                (model.getTitleBarModel() instanceof TitleBarAddressModel);
+    }
+
 
 }

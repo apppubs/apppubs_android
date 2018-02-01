@@ -148,4 +148,27 @@ public class AppManager {
                 .DEFAULT_SHARED_PREFERENCE_NAME, Constants
                 .SHAREDPREFRERENCE_KEY_DOWNLOAD_REFERENCE, refernece);
     }
+
+    public void saveCurrentAddress(String addressName, String addressCode) {
+        SharedPreferenceUtils utils = SharedPreferenceUtils.getInstance(mContext);
+        SharedPreferenceUtils.getInstance(mContext).putString(
+                Constants.DEFAULT_SHARED_PREFERENCE_NAME,
+                Constants.SHAREDPREFRERENCE_KEY_ADDRESS_CODE,
+                addressCode);
+        utils.putString(Constants.DEFAULT_SHARED_PREFERENCE_NAME,
+                Constants.SHAREDPREFRERENCE_KEY_ADDRESS_NAME,
+                addressName);
+    }
+
+    public String getCurrentAddressName() {
+        SharedPreferenceUtils utils = SharedPreferenceUtils.getInstance(mContext);
+        return utils.getString(Constants.DEFAULT_SHARED_PREFERENCE_NAME, Constants
+                .SHAREDPREFRERENCE_KEY_ADDRESS_NAME, "");
+    }
+
+    public String getCurrentAddressCode() {
+        SharedPreferenceUtils utils = SharedPreferenceUtils.getInstance(mContext);
+        return utils.getString(Constants.DEFAULT_SHARED_PREFERENCE_NAME, Constants
+                .SHAREDPREFRERENCE_KEY_ADDRESS_CODE, "");
+    }
 }

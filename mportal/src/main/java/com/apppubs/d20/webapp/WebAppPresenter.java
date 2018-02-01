@@ -12,6 +12,7 @@ import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.PopupWindow;
 
+import com.apppubs.d20.AppManager;
 import com.apppubs.d20.R;
 import com.apppubs.d20.activity.BaseActivity;
 import com.apppubs.d20.webapp.model.UserPickerVO;
@@ -100,6 +101,27 @@ public class WebAppPresenter {
                 mPaddingCallbackFunction = function;
                 try {
                     mView.showSignaturePanel(new JSONObject(data));
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+
+            }
+        });
+
+        mView.getBridgeWebView().registerHandler("getaddress", new BridgeHandler() {
+
+            @Override
+            public void handler(String data, CallBackFunction function) {
+                try {
+                    String code = AppManager.getInstant(mContext).getCurrentAddressCode();
+                    String name = AppManager.getInstant(mContext).getCurrentAddressName();
+                    JSONObject result = new JSONObject();
+                    result.put("name",name);
+                    result.put("code",code);
+                    JSONObject jo = new JSONObject();
+                    jo.put("success",true);
+                    jo.put("result",result);
+                    function.onCallBack(jo.toString());
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }

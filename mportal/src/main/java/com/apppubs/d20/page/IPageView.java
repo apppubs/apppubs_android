@@ -8,9 +8,12 @@ public interface IPageView {
 
 	void showTitleBar(TitleBarModel model);
 
+	void setTitleBarAddress(String text);
+
 	void showContentView(PageContentModel model);
 
 	void showErrorView();
 
 	String getPageId();
+
 }

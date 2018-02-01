@@ -28,7 +28,8 @@ public class PageModel {
         try {
             JSONObject pageObject = new JSONObject(json);
             if (pageObject.has("titlebar")) {
-                titleBarModel = new TitleBarModel(context, pageObject.getString("titlebar"));
+                titleBarModel = TitleBarModel.buildTitleBarModel(context,
+                        pageObject.getString("titlebar"));
             }
             if (pageObject.has("navbar")) {
                 content = new PageNavContentModel(json);
@@ -172,14 +173,15 @@ class PageNavContentModel implements PageContentModel {
 
 class TitleBarModel {
 
+    public static final String TYPE_NORMAL = "0";
+    public static final String TYPE_ADDRESS = "1";
+
     private String mJson;
     private String type;
     private String title;
     private int bgColor;
     private String titleImgUrl;
-    private String leftImgUrl;
     private String rightImgUrl;
-    private String leftAction;
     private String rightAction;
     private int underlineColor;
 
@@ -192,9 +194,7 @@ class TitleBarModel {
                     (context).getCurrentUser().getTrueName());
             bgColor = Utils.parseColor(jo.getString("bgcolor"));
             titleImgUrl = jo.getString("titleimgurl");
-            leftImgUrl = jo.getString("leftbtnimgurl");
             rightImgUrl = jo.getString("rightbtnimgurl");
-            leftAction = jo.getString("leftbtnurl");
             rightAction = jo.getString("rightbtnurl");
             int underColor = Utils.parseColor(jo.getString("underlinecolor"));
             if (underColor > -1) {
@@ -203,6 +203,22 @@ class TitleBarModel {
         } catch (JSONException e) {
             e.printStackTrace();
         }
+    }
+
+    public static TitleBarModel buildTitleBarModel(Context context, String json) {
+        JSONObject jo = null;
+        try {
+            jo = new JSONObject(json);
+            String type = jo.getString("titletype");
+            if (TYPE_NORMAL.equals(type)) {
+                return new TitleBarNomalModel(context, json);
+            } else {
+                return new TitleBarAddressModel(context, json);
+            }
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 
     public String getType() {
@@ -237,28 +253,12 @@ class TitleBarModel {
         this.titleImgUrl = titleImgUrl;
     }
 
-    public String getLeftImgUrl() {
-        return leftImgUrl;
-    }
-
-    public void setLeftImgUrl(String leftImgUrl) {
-        this.leftImgUrl = leftImgUrl;
-    }
-
     public String getRightImgUrl() {
         return rightImgUrl;
     }
 
     public void setRightImgUrl(String rightImgUrl) {
         this.rightImgUrl = rightImgUrl;
-    }
-
-    public String getLeftAction() {
-        return leftAction;
-    }
-
-    public void setLeftAction(String leftAction) {
-        this.leftAction = leftAction;
     }
 
     public String getRightAction() {
@@ -292,6 +292,105 @@ class TitleBarModel {
             return false;
         }
         return true;
+    }
+}
+
+class TitleBarNomalModel extends TitleBarModel {
+
+    private String leftImgUrl;
+    private String leftAction;
+
+    public TitleBarNomalModel(Context context, String json) {
+        super(context, json);
+        JSONObject jo = null;
+        try {
+            jo = new JSONObject(json);
+            leftAction = jo.getString("leftbtnurl");
+            leftImgUrl = jo.getString("leftbtnimgurl");
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public String getLeftImgUrl() {
+        return leftImgUrl;
+    }
+
+    public void setLeftImgUrl(String leftImgUrl) {
+        this.leftImgUrl = leftImgUrl;
+    }
+
+
+    public String getLeftAction() {
+        return leftAction;
+    }
+
+    public void setLeftAction(String leftAction) {
+        this.leftAction = leftAction;
+    }
+
+}
+
+class TitleBarAddressModel extends TitleBarModel {
+
+    private String rootCode;
+    private String defaultAddress;
+    private String defaultAddressCode;
+    private String rightBtnImgURL;
+    private String rightBtnAction;
+
+    public TitleBarAddressModel(Context context, String json) {
+        super(context, json);
+        try {
+            JSONObject jo = new JSONObject(json);
+            rootCode = jo.getString("rootcode");
+            defaultAddress = jo.getString("defaultaddress");
+            defaultAddressCode = jo.getString("defaultaddresscode");
+            rightBtnImgURL = jo.getString("rightbtnimgurl");
+            rightBtnAction = jo.getString("rightbtnurl");
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public String getRootCode() {
+        return rootCode;
+    }
+
+    public void setRootCode(String rootCode) {
+        this.rootCode = rootCode;
+    }
+
+    public String getDefaultAddress() {
+        return defaultAddress;
+    }
+
+    public void setDefaultAddress(String defaultAddress) {
+        this.defaultAddress = defaultAddress;
+    }
+
+    public String getDefaultAddressCode() {
+        return defaultAddressCode;
+    }
+
+    public void setDefaultAddressCode(String defaultAddressCode) {
+        this.defaultAddressCode = defaultAddressCode;
+    }
+
+    public String getRightBtnImgURL() {
+        return rightBtnImgURL;
+    }
+
+    public void setRightBtnImgURL(String rightBtnImgURL) {
+        this.rightBtnImgURL = rightBtnImgURL;
+    }
+
+    public String getRightBtnAction() {
+        return rightBtnAction;
+    }
+
+    public void setRightBtnAction(String rightBtnAction) {
+        this.rightBtnAction = rightBtnAction;
     }
 }
 

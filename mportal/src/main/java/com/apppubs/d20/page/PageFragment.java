@@ -1,5 +1,6 @@
 package com.apppubs.d20.page;
 
+import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.Rect;
 import android.os.Bundle;
@@ -31,6 +32,7 @@ import android.widget.Toast;
 
 import com.apppubs.d20.AppContext;
 import com.apppubs.d20.R;
+import com.apppubs.d20.activity.BaseActivity;
 import com.apppubs.d20.activity.HomeBottomMenuActivity;
 import com.apppubs.d20.activity.ViewCourier;
 import com.apppubs.d20.adapter.PageFragmentPagerAdapter;
@@ -137,6 +139,16 @@ public class PageFragment extends TitleMenuFragment implements OnClickListener, 
         mInflater = LayoutInflater.from(mContext);
 //		loadCache();
 //		loadRemoteData();
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == AddressPickerActivity.REQUEST_CODE && resultCode ==
+                AddressPickerActivity.RESULT_SUCCESS) {
+            AddressModel address = (AddressModel) data.getSerializableExtra(AddressPickerActivity.RESULT_EXTRA_KEY_ADDRESS);
+            mPresenter.onAddressSelected(address);
+        }
     }
 
     @Override
@@ -1013,7 +1025,7 @@ public class PageFragment extends TitleMenuFragment implements OnClickListener, 
                     ha.setImage(mImageLoader.loadImageSync(item.getString("imageurl")));
                 }
             }
-            ha.setText(item.has("text")?item.getString("text"):"");
+            ha.setText(item.has("text") ? item.getString("text") : "");
             hotAreas.add(ha);
         }
         return hotAreas;
@@ -1025,14 +1037,15 @@ public class PageFragment extends TitleMenuFragment implements OnClickListener, 
         }
         TitleBar titlebar = null;
         if (model.getType().equals("0")) {
+            TitleBarNomalModel normalMordel  = (TitleBarNomalModel) model;
             titlebar = new TitleBar(mContext);
-            String title = model.getTitle();
+            String title = normalMordel.getTitle();
             titlebar.setTitle(title);
             titlebar.setTitleTextSize(TypedValue.COMPLEX_UNIT_PX, getResources().getDimension(R
                     .dimen.title_text_size));
-            titlebar.setBackgroundColor(model.getBgColor());
-            if (isLightColor(model.getBgColor())) {
-                if (model.getBgColor() == mHostActivity.getThemeColor()) {
+            titlebar.setBackgroundColor(normalMordel.getBgColor());
+            if (isLightColor(normalMordel.getBgColor())) {
+                if (normalMordel.getBgColor() == mHostActivity.getThemeColor()) {
                     titlebar.setTitleTextColor(Color.BLACK);
                 } else {
                     titlebar.setTitleTextColor(mHostActivity.getThemeColor());
@@ -1043,23 +1056,66 @@ public class PageFragment extends TitleMenuFragment implements OnClickListener, 
 
 
             //显示图片
-            if (!TextUtils.isEmpty(model.getTitleImgUrl())) {
+            if (!TextUtils.isEmpty(normalMordel.getTitleImgUrl())) {
                 ImageView iv = new ImageView(mContext);
                 iv.setScaleType(ScaleType.CENTER_INSIDE);
-                mImageLoader.displayImage(model.getTitleImgUrl(), iv);
+                mImageLoader.displayImage(normalMordel.getTitleImgUrl(), iv);
                 titlebar.setTitleView(iv);
             }
             //显示左边按钮
-            if (!TextUtils.isEmpty(model.getLeftImgUrl())) {
-                titlebar.addLeftBtnWithImageUrlAndClickListener(model.getLeftImgUrl(), model
+            if (!TextUtils.isEmpty(normalMordel.getLeftImgUrl())) {
+                titlebar.addLeftBtnWithImageUrlAndClickListener(normalMordel.getLeftImgUrl(), normalMordel
                         .getLeftAction(), PageFragment.this);
             }
             //显示右边按钮
-            if (!TextUtils.isEmpty(model.getRightImgUrl())) {
-                titlebar.addRightBtnWithImageUrlAndClickListener(model.getRightImgUrl(), model
+            if (!TextUtils.isEmpty(normalMordel.getRightImgUrl())) {
+                titlebar.addRightBtnWithImageUrlAndClickListener(normalMordel.getRightImgUrl(), normalMordel
                         .getRightAction(), PageFragment.this);
             }
-            titlebar.setUnderlineColor(model.getUnderlineColor());
+            titlebar.setUnderlineColor(normalMordel.getUnderlineColor());
+        } else if (model.getType().equals(TitleBarModel.TYPE_ADDRESS)) {
+            TitleBarAddressModel addressModel = (TitleBarAddressModel) model;
+            titlebar = new TitleBar(mContext);
+            String title = addressModel.getTitle();
+            titlebar.setTitle(title);
+            titlebar.setTitleTextSize(TypedValue.COMPLEX_UNIT_PX, getResources().getDimension(R
+                    .dimen.title_text_size));
+            titlebar.setBackgroundColor(addressModel.getBgColor());
+            if (isLightColor(addressModel.getBgColor())) {
+                if (addressModel.getBgColor() == mHostActivity.getThemeColor()) {
+                    titlebar.setTitleTextColor(Color.BLACK);
+                } else {
+                    titlebar.setTitleTextColor(mHostActivity.getThemeColor());
+                }
+            } else {
+                titlebar.setTitleTextColor(Color.WHITE);
+            }
+
+            //显示图片
+            if (!TextUtils.isEmpty(addressModel.getTitleImgUrl())) {
+                ImageView iv = new ImageView(mContext);
+                iv.setScaleType(ScaleType.CENTER_INSIDE);
+                mImageLoader.displayImage(addressModel.getTitleImgUrl(), iv);
+                titlebar.setTitleView(iv);
+            }
+            //显示地址
+            if (!TextUtils.isEmpty(addressModel.getDefaultAddress())) {
+                titlebar.setOnClickListener(new OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        Intent intent = new Intent(mContext, AddressPickerActivity.class);
+                        intent.putExtra(BaseActivity.EXTRA_STRING_TITLE, "选择地址");
+                        startActivityForResult(intent, AddressPickerActivity.REQUEST_CODE);
+                    }
+                });
+            }
+            //显示右边按钮
+            if (!TextUtils.isEmpty(addressModel.getRightImgUrl())) {
+                titlebar.addRightBtnWithImageUrlAndClickListener(addressModel.getRightImgUrl(),
+                        addressModel
+                        .getRightAction(), PageFragment.this);
+            }
+            titlebar.setUnderlineColor(addressModel.getUnderlineColor());
         }
         return titlebar;
     }
@@ -1120,13 +1176,20 @@ public class PageFragment extends TitleMenuFragment implements OnClickListener, 
     public void showTitleBar(TitleBarModel model) {
 
         mRootLl.removeView(mTitleBar);
+
         mTitleBar = buildTitleBar(model);
         if (mTitleBar != null) {
             mTitleBar.setId(R.id.page_title);
             LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(LayoutParams
                     .MATCH_PARENT, getResources().getDimensionPixelSize(R.dimen.title_height));
             mRootLl.addView(mTitleBar, 0, lp);
+
         }
+    }
+
+    @Override
+    public void setTitleBarAddress(String text) {
+        mTitleBar.setAddressText(text);
     }
 
     @Override

@@ -429,7 +429,7 @@ public abstract class BaseActivity extends FragmentActivity implements OnClickLi
 	/**
 	 * 隐藏titlebar
 	 */
-	protected void hideTitleBar() {
+	public void hideTitleBar() {
 		if (mTitleBar != null)
 			mTitleBar.setVisibility(View.GONE);
 	}

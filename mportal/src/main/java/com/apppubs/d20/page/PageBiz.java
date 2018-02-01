@@ -48,6 +48,7 @@ public class PageBiz implements IPageBiz {
     @Override
     public void loadPage(String pageId, final APResultCallback<PageModel> callback) {
         String url = getUrl(pageId);
+        url = "http://result.eolinker.com/gN1zjDlc87a75d671a2d954f809ebcdd19e7698dc2478fa?uri=page";
         mHttpClient.GET(url, null, new WMHRequestListener() {
             @Override
             public void onDone(JSONResult jsonResult, @Nullable WMHHttpErrorCode errorCode) {
