@@ -160,7 +160,7 @@ public class MsgRecordListFragment extends BaseFragment implements OnClickListen
 				mMenuPW.setOutsideTouchable(true);
 				mMenuPW.setBackgroundDrawable(new BitmapDrawable());
 				mMenuPW.showAsDropDown(mTitleBar.getRightView());
-				if (mAppContext.getApp().getAllowChat() == App.ALLOW_CHAT_FALSE) {
+				if (mAppContext.getApp().isAllowChat()) {
 					// 当没有聊天功能时隐藏新建聊天
 					setVisibilityOfViewByResId(menuPop, R.id.pop_msg_record_add_chat_ll, View.GONE);
 					setVisibilityOfViewByResId(menuPop, R.id.pop_msg_record_add_group_chat_ll, View.GONE);

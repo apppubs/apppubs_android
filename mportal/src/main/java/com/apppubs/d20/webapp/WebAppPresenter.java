@@ -1,19 +1,8 @@
 package com.apppubs.d20.webapp;
 
 import android.content.Context;
-import android.content.Intent;
-import android.graphics.Color;
-import android.graphics.drawable.BitmapDrawable;
 import android.support.annotation.NonNull;
-import android.view.Gravity;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-import android.view.WindowManager;
-import android.widget.PopupWindow;
 
-import com.apppubs.d20.R;
-import com.apppubs.d20.activity.BaseActivity;
 import com.apppubs.d20.webapp.model.UserPickerVO;
 import com.apppubs.d20.webapp.model.UserVO;
 import com.apppubs.jsbridge.BridgeHandler;

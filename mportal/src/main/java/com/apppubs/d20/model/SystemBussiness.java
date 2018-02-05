@@ -378,7 +378,6 @@ public class SystemBussiness extends BaseBussiness {
 			LogM.log(this.getClass(),"删除用户信息"+localApp.getInitTimes());
 		}
 		localApp.setAllModifyUserInfo(remoteApp.getAllModifyUserInfo());
-		localApp.setAllowChat(remoteApp.getAllowChat());
 		localApp.setAllowRegister(remoteApp.getAllowRegister());
 		localApp.setBaiduPushApiKey(remoteApp.getBaiduPushApiKey());
 		localApp.setBgPicURL(remoteApp.getBgPicURL());
@@ -743,9 +742,7 @@ public class SystemBussiness extends BaseBussiness {
 			app.setAddressbookNeedPermission(Integer.parseInt(resultMap.get("adbookauth")));
 			app.setDocumentReaderPageUrl(resultMap.get("document_reader_url"));
 			app.setAddressbookVersion(Integer.parseInt(resultMap.get("adbookversion")));
-			if (resultMap.containsKey("chat_flag")) {
-				app.setAllowChat(Integer.parseInt(resultMap.get("chat_flag")));
-			}
+
 			AppConfig appconfig = (AppConfig) jsonResult.getResultObject(AppConfig.class);
 			app.setAppConfig(appconfig);
 

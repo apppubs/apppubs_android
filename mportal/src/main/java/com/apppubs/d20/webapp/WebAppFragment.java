@@ -46,6 +46,7 @@ import com.apppubs.d20.util.BitmapUtils;
 import com.apppubs.d20.util.LocationManager;
 import com.apppubs.d20.util.LogM;
 import com.apppubs.d20.util.SystemUtils;
+import com.apppubs.d20.util.Utils;
 import com.apppubs.d20.widget.HorizontalScrollLabels;
 import com.apppubs.d20.widget.ProgressHUD;
 import com.apppubs.d20.widget.ProgressWebView;
@@ -922,8 +923,8 @@ public class WebAppFragment extends BaseFragment implements OnClickListener, IWe
         });
         mSignaturePopWin = new PopupWindow(contentView,
                 ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-        mSignaturePopWin.setFocusable(true);
         mSignaturePopWin.setOutsideTouchable(true);
+        mSignaturePopWin.setFocusable(true);
         mSignaturePopWin.setAnimationStyle(R.style.popwin_channel_anim_style);
         mSignaturePopWin.setOnDismissListener(new PopupWindow.OnDismissListener() {
 
@@ -942,15 +943,11 @@ public class WebAppFragment extends BaseFragment implements OnClickListener, IWe
     }
 
     private void dim() {
-        WindowManager.LayoutParams params = getActivity().getWindow().getAttributes();
-        params.alpha = 0.7f;
-        getActivity().getWindow().setAttributes(params);
+        Utils.setBackgroundAlpha(getActivity(),0.7f);
     }
 
     private void light() {
-        WindowManager.LayoutParams params = getActivity().getWindow().getAttributes();
-        params.alpha = 1f;
-        getActivity().getWindow().setAttributes(params);
+        Utils.setBackgroundAlpha(getActivity(),1f);
     }
 
     private Bitmap getCacheBitmapFromView(View view) {

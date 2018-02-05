@@ -43,7 +43,6 @@ import com.apppubs.d20.model.NewsBussiness;
 import com.apppubs.d20.model.PaperBussiness;
 import com.apppubs.d20.model.SystemBussiness;
 import com.apppubs.d20.model.VersionInfo;
-import com.apppubs.d20.service.DownloadAppService;
 import com.apppubs.d20.start.StartUpActivity;
 import com.apppubs.d20.util.JSONResult;
 import com.apppubs.d20.util.LogM;
@@ -256,7 +255,7 @@ public abstract class BaseActivity extends FragmentActivity implements OnClickLi
 		super.onResume();
 
 		mActiveActivityNum++;
-		
+
 		if (mActiveActivityNum == 1) {
 			onAppActive();
 		}
@@ -418,7 +417,7 @@ public abstract class BaseActivity extends FragmentActivity implements OnClickLi
 
 	/**
 	 * 设置标题文字
-	 * 
+	 *
 	 * @param title
 	 */
 	protected void setTitle(String title) {
@@ -440,7 +439,7 @@ public abstract class BaseActivity extends FragmentActivity implements OnClickLi
 
 	/**
 	 * 设置此activity是否需要titlebar 必须在setconview之前进行设置
-	 * 
+	 *
 	 * @param need
 	 */
 	protected void setNeedTitleBar(boolean need) {
@@ -480,7 +479,7 @@ public abstract class BaseActivity extends FragmentActivity implements OnClickLi
 
 	/**
 	 * 填充某View下的某TextView
-	 * 
+	 *
 	 * @param resId
 	 *            TextView 的id
 	 * @param content
