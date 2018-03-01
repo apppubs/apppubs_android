@@ -7,11 +7,13 @@ import com.apppubs.d20.webapp.model.UserPickerVO;
 import com.apppubs.d20.webapp.model.UserVO;
 import com.apppubs.jsbridge.BridgeHandler;
 import com.apppubs.jsbridge.CallBackFunction;
+import com.jelly.mango.MultiplexImage;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -89,6 +91,27 @@ public class WebAppPresenter {
                 mPaddingCallbackFunction = function;
                 try {
                     mView.showSignaturePanel(new JSONObject(data));
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+
+            }
+        });
+
+        mView.getBridgeWebView().registerHandler("displayImg", new BridgeHandler() {
+
+            @Override
+            public void handler(String data, CallBackFunction function) {
+                try {
+                    JSONObject jo = new JSONObject(data);
+                    JSONArray ja = jo.getJSONArray("imgs");
+                    String[] imgs = new String[ja.length()];
+                    List<MultiplexImage> images = new ArrayList<>();
+                    for (int i=-1;++i<ja.length();){
+                        imgs[i] = ja.getString(i);
+                        images.add(new MultiplexImage(ja.getString(i),ja.getString(i),MultiplexImage.ImageType.NORMAL));
+                    }
+                    mView.showImages(images);
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }

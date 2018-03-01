@@ -59,6 +59,9 @@ import com.apppubs.jsbridge.BridgeWebView;
 import com.apppubs.jsbridge.CallBackFunction;
 import com.apppubs.jsbridge.DefaultHandler;
 import com.apppubs.multi_image_selector.MultiImageSelectorActivity;
+import com.jelly.mango.ImageSelectListener;
+import com.jelly.mango.Mango;
+import com.jelly.mango.MultiplexImage;
 import com.tencent.mm.opensdk.modelpay.PayReq;
 import com.tencent.mm.opensdk.openapi.IWXAPI;
 import com.tencent.mm.opensdk.openapi.WXAPIFactory;
@@ -85,6 +88,7 @@ import cn.sharesdk.system.text.ShortMessage;
 import cn.sharesdk.tencent.qq.QQ;
 import cn.sharesdk.wechat.friends.Wechat;
 import cn.sharesdk.wechat.moments.WechatMoments;
+import io.rong.imkit.MainActivity;
 
 public class WebAppFragment extends BaseFragment implements OnClickListener, IWebAppView {
 
@@ -940,6 +944,24 @@ public class WebAppFragment extends BaseFragment implements OnClickListener, IWe
     @Override
     public void hideSignaturePanel() {
         mSignaturePopWin.dismiss();
+    }
+
+    @Override
+    public void showImages(List<MultiplexImage> images) {
+
+        Mango.setImages(images);
+        Mango.setPosition(0);
+        Mango.setImageSelectListener(new ImageSelectListener() {
+            @Override
+            public void select(int index) {
+                Log.d("Mango", "select: "+index);
+            }
+        });
+        try {
+            Mango.open(mContext);
+        }catch (Exception e){
+            e.printStackTrace();
+        }
     }
 
     private void dim() {

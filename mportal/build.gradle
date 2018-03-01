@@ -63,7 +63,7 @@ dependencies {
     compile project(':sugar_orm')
     compile project(':ShareSDK')
     compile project(':IMKit')
-
+    compile project(':mango')
     // JUnit4 Rules
 
 //// Espresso core
