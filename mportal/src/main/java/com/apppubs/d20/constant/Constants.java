@@ -51,4 +51,6 @@ public class Constants {
 	public static final int MESSAGE_EVENT_INIT_APP = 0;
 
 	public static final boolean IS_DEBUG = false;
+
+	public static final String META_KEY_SERVER_CONTEXT = "SERVER_CONTEXT";
 }

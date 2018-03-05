@@ -608,6 +608,9 @@
         <meta-data
             android:name="NEED_START_UP_VERSION"
             android:value="${NEED_START_UP_VERSION}"/>
+        <meta-data
+            android:name="SERVER_CONTEXT"
+            android:value="${SERVER_CONTEXT}"/>
     </application>
 
 </manifest>
