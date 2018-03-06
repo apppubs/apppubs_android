@@ -122,13 +122,20 @@ public class AppContext {
 				}
 
 				if (mSettings == null) {
-					String baseUrl = Utils.getMetaValue(mContext, "BASE_URL");
-					String appCode = Utils.getMetaValue(mContext, "APPCODE");
-					mSettings = new Settings(baseUrl, appCode);
+					mSettings = new Settings();
+					resetBaseUrlAndAppCode();
 				}
 			}
 		}
 		return mSettings;
+	}
+
+	public void resetBaseUrlAndAppCode(){
+		String baseUrl = Utils.getMetaValue(mContext, "BASE_URL");
+		String appCode = Utils.getMetaValue(mContext, "APPCODE");
+		mSettings.setBaseURL(baseUrl);
+		mSettings.setAppCode(appCode);
+		setSettings(mSettings);
 	}
 
 	public void setSettings(Settings mSettings) {

@@ -36,7 +36,8 @@ public class Settings implements Serializable{
 	private String appCode = "U1433417616429";//国华
 //	private String baseURL = "http://124.205.71.106:8080/";
 //	private String appCode = "D63";
-	
+
+	public Settings(){}
 	public Settings(String baseUrl,String appCode){
 		this.baseURL = baseUrl;
 		this.appCode = appCode;

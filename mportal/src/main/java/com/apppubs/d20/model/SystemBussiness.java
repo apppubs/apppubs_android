@@ -24,6 +24,7 @@ import android.util.DisplayMetrics;
 import android.view.WindowManager;
 
 import com.apppubs.d20.AppContext;
+import com.apppubs.d20.AppManager;
 import com.apppubs.d20.R;
 import com.apppubs.d20.bean.App;
 import com.apppubs.d20.bean.AppConfig;
@@ -346,8 +347,9 @@ public class SystemBussiness extends BaseBussiness {
 		screenDimenFlag = dm.widthPixels+"X"+dm.heightPixels;
 		//如果是新版本第一次启动
 		System.out.println("当前版本，"+Utils.getVersionCode(mContext)+"上一次启动的版本："+localApp.getPreWorkingVersion());
-		if(Utils.getVersionCode(mContext)>localApp.getPreWorkingVersion()){
+		if(AppManager.getInstant(mContext).isFirstStartupOfNewVersion()){
 			System.out.println("新版本第一次启动");
+			AppContext.getInstance(mContext).resetBaseUrlAndAppCode();
 			switch (localApp.getPreWorkingVersion()){
 				case 200001:
 					UserBussiness userBussiness = UserBussiness.getInstance(mContext);

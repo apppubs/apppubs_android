@@ -127,6 +127,11 @@ public class AppManager {
         mAppContext.serializeApp();
     }
 
+    public boolean isFirstStartupOfNewVersion() {
+        App app = AppContext.getInstance(mContext).getApp();
+        return Utils.getVersionCode(mContext) > app.getPreWorkingVersion();
+    }
+
     public void downloadApp(String url) {
         final DownloadManager dManager = (DownloadManager) mContext.getSystemService(Context
                 .DOWNLOAD_SERVICE);
