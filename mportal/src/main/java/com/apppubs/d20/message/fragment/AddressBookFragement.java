@@ -380,7 +380,7 @@ public class AddressBookFragement extends BaseFragment {
 		FragmentTransaction transaction = getActivity().getSupportFragmentManager().beginTransaction();
 		List<Fragment> fragments = getActivity().getSupportFragmentManager().getFragments();
 		if (fragments == null || !fragments.contains(fragment)) {
-			transaction.remove(fragment);
+//			transaction.remove(fragment);
 			transaction.add(R.id.fragment_container, fragment);
 		}
 		if (mCurFrg != null) {
