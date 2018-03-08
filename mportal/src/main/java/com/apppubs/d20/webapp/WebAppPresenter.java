@@ -37,6 +37,24 @@ public class WebAppPresenter {
     }
 
     private void resisterHandler() {
+
+        //扫描二维码
+        mView.getBridgeWebView().registerHandler("scanQRCode", new BridgeHandler() {
+
+            @Override
+            public void handler(String data, CallBackFunction function) {
+                mPaddingCallbackFunction = function;
+                try {
+                    JSONObject jo = new JSONObject(data);
+                    boolean selfResovle = jo.getBoolean("selfResolve");
+                    mView.showScanQRCode(selfResovle);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    mView.showScanQRCode(true);
+                }
+            }
+        });
+
         //选择图片
         mView.getBridgeWebView().registerHandler("userpicker", new BridgeHandler() {
             @Override
@@ -124,6 +142,25 @@ public class WebAppPresenter {
         System.out.println(result);
         mPaddingCallbackFunction.onCallBack(result);
         mView.hideSignaturePanel();
+    }
+
+    public void onQRCodeDone(String result){
+        System.out.println("onQRCodeDone:"+result);
+        String json = getQRCodeResultJsonString(result);
+        mPaddingCallbackFunction.onCallBack(json);
+    }
+
+    private String getQRCodeResultJsonString(String result) {
+        JSONObject jo = new JSONObject();
+        try {
+            jo.put("success",true);
+            JSONObject resultJO = new JSONObject();
+            resultJO.put("msg",result);
+            jo.put("result",resultJO);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        return jo.toString();
     }
 
 

@@ -60,6 +60,9 @@ public final class CaptureActivity extends BaseActivity implements OnClickListen
 
 	private static final int PERMISSION_CAMERA_REQUEST_CODE = 1;
 
+	public static final String EXTRA_NAME_BOOLEAN_NEED_SELF_RESOLVE = "self_resolve";
+	public static final String EXTRA_NAME_STRING_RESULT = "result";
+
 	private static final String TAG = CaptureActivity.class.getSimpleName();
 	private CameraManager cameraManager;
 	private CaptureActivityHandler handler;
@@ -78,6 +81,7 @@ public final class CaptureActivity extends BaseActivity implements OnClickListen
 	static final int PARSE_BARCODE_FAIL = 3036;
 	String photoPath;
 	ProgressDialog mProgress;
+	private boolean needSelfResolve;//是否需要自己处理，如：网址提醒打开，文本则复制到内存
 
 	// Dialog dialog;
 
@@ -169,53 +173,23 @@ public final class CaptureActivity extends BaseActivity implements OnClickListen
 		viewfinderView = (ViewfinderView) findViewById(R.id.viewfinder_view);
 		viewfinderView.setCameraManager(cameraManager);
 		statusView = (TextView) findViewById(R.id.status_view);
+
+		needSelfResolve = getIntent().getBooleanExtra(EXTRA_NAME_BOOLEAN_NEED_SELF_RESOLVE,true);
 	}
 
-	public void showDialog(final String msg) {
+	public void showDialog(String msg) {
 
 		if (mProgress != null && mProgress.isShowing()) {
 			mProgress.dismiss();
 		}
-		if(msg.startsWith("http")){
-			 new ConfirmDialog(this, new ConfirmDialog.ConfirmListener() {
-				@Override
-				public void onOkClick() {
-					Intent intent = new Intent();
-					intent.setAction("android.intent.action.VIEW");
-					Uri content_url = Uri.parse(msg);
-					intent.setData(content_url);
-					startActivity(intent);
-				}
-
-				@Override
-				public void onCancelClick() {
-					if ((source == IntentSource.NONE || source == IntentSource.ZXING_LINK) && lastResult != null) {
-						restartPreviewAfterDelay(0L);
-					}
-				}
-			},getString(R.string.memo),String.format(getString(R.string.barcode_tow_dimen_success), msg),getString(R.string.cancel),getString(R.string.confirm)).show();
+		if (needSelfResolve){
+			resolveResult(msg);
 		}else{
-			new ConfirmDialog(this, new ConfirmDialog.ConfirmListener() {
-				@Override
-				public void onOkClick() {
-					//获取剪贴板管理服务
-					ClipboardManager cm =(ClipboardManager) getSystemService(CLIPBOARD_SERVICE);
-					//将文本数据复制到剪贴板
-					cm.setText(msg);
-					//读取剪贴板数据
-					//cm.getText();
-					Toast.makeText(mContext,"已复制",Toast.LENGTH_SHORT).show();
-				}
-
-				@Override
-				public void onCancelClick() {
-					if ((source == IntentSource.NONE || source == IntentSource.ZXING_LINK) && lastResult != null) {
-						restartPreviewAfterDelay(0L);
-					}
-				}
-			},getString(R.string.memo),String.format(getString(R.string.barcode_one_dimen_success), msg),getString(R.string.cancel),"复制").show();
-
-		}
+		    Intent data = new Intent();
+            data.putExtra(EXTRA_NAME_STRING_RESULT,msg);
+		    setResult(RESULT_OK,data);
+		    finish();
+        }
 
 	}
 
@@ -479,7 +453,7 @@ public final class CaptureActivity extends BaseActivity implements OnClickListen
 	public void drawViewfinder() {
 		viewfinderView.drawViewfinder();
 	}
-  
+
 	@Override
 	public void onClick(View view) {
 		super.onClick(view);
@@ -489,7 +463,52 @@ public final class CaptureActivity extends BaseActivity implements OnClickListen
 //			break;
 		default:
 			break;
-		}	
+		}
+	}
+
+	//pragma private
+	private void resolveResult(final String msg){
+		if(msg.startsWith("http")){
+			new ConfirmDialog(this, new ConfirmDialog.ConfirmListener() {
+				@Override
+				public void onOkClick() {
+					Intent intent = new Intent();
+					intent.setAction("android.intent.action.VIEW");
+					Uri content_url = Uri.parse(msg);
+					intent.setData(content_url);
+					startActivity(intent);
+				}
+
+				@Override
+				public void onCancelClick() {
+					if ((source == IntentSource.NONE || source == IntentSource.ZXING_LINK) && lastResult != null) {
+						restartPreviewAfterDelay(0L);
+					}
+				}
+			},getString(R.string.memo),String.format(getString(R.string.barcode_tow_dimen_success), msg),getString(R.string.cancel),getString(R.string.confirm)).show();
+		}else{
+			new ConfirmDialog(this, new ConfirmDialog.ConfirmListener() {
+				@Override
+				public void onOkClick() {
+					//获取剪贴板管理服务
+					ClipboardManager cm =(ClipboardManager) getSystemService(CLIPBOARD_SERVICE);
+					//将文本数据复制到剪贴板
+					cm.setText(msg);
+					//读取剪贴板数据
+					//cm.getText();
+					Toast.makeText(mContext,"已复制",Toast.LENGTH_SHORT).show();
+				}
+
+				@Override
+				public void onCancelClick() {
+					if ((source == IntentSource.NONE || source == IntentSource.ZXING_LINK) && lastResult != null) {
+						restartPreviewAfterDelay(0L);
+					}
+				}
+			},getString(R.string.memo),String.format(getString(R.string.barcode_one_dimen_success), msg),getString(R.string.cancel),"复制").show();
+
+		}
+
 	}
 
 }

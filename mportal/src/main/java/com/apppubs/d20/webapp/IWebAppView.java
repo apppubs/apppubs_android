@@ -1,5 +1,6 @@
 package com.apppubs.d20.webapp;
 
+import com.apppubs.d20.model.WMHErrorCode;
 import com.apppubs.jsbridge.BridgeWebView;
 import com.jelly.mango.MultiplexImage;
 
@@ -20,4 +21,7 @@ public interface IWebAppView {
     void hideSignaturePanel();
 
     void showImages(List<MultiplexImage> images);
+
+    void showScanQRCode(boolean needSelfResolve);
+
 }
