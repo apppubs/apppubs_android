@@ -3,6 +3,7 @@ package com.apppubs.d20.page;
 import android.content.Context;
 import android.os.Handler;
 
+import com.apppubs.d20.activity.MainHandler;
 import com.apppubs.d20.model.APResultCallback;
 import com.apppubs.d20.util.LogM;
 import com.apppubs.d20.util.Utils;
@@ -18,7 +19,6 @@ public class PagePresenter {
 	private Context mContext;
 	private IPageBiz mPageBiz;
 	private IPageView mPageView;
-	private Handler mHandler = new Handler();
 	private PageModel mPageModel;
 
 	public PagePresenter(Context context,IPageView view){
@@ -46,8 +46,7 @@ public class PagePresenter {
 					LogM.log(PagePresenter.class,"is equal");
 				}else{
 					mPageModel = model;
-
-					mHandler.post(new Runnable() {
+					MainHandler.getInstance().post(new Runnable() {
 						@Override
 						public void run() {
 							mPageView.showTitleBar(mPageModel.getTitleBarModel());
@@ -59,13 +58,12 @@ public class PagePresenter {
 
 			@Override
 			public void onException(int excepCode) {
-				mHandler.post(new Runnable() {
+				MainHandler.getInstance().post(new Runnable() {
 					@Override
 					public void run() {
 						mPageView.showErrorView();
 					}
 				});
-
 			}
 		});
 	}

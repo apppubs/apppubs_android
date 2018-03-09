@@ -22,7 +22,7 @@ android {
                 JPUSH_APPKEY         : "85358a757b2da7055f45f83c", //JPush上注册的包名对应的appkey.
                 JPUSH_CHANNEL        : "developer-default", //暂时填写默认值即可.
                 APPCODE              : "U1521681745888",
-                BASE_URL             : "http://49.4.12.131:8086/",
+                BASE_URL             : "http://39.107.13.225/",
                 DISPLAY_ORIENTATION  : "1",
                 ENABLE_SPLASH_SKIP   : false,
                 NEED_START_UP_VERSION: true,

@@ -3,6 +3,7 @@ package com.apppubs.d20.page;
 import android.content.Context;
 
 import com.apppubs.d20.AppContext;
+import com.apppubs.d20.constant.Constants;
 import com.apppubs.d20.util.StringUtils;
 import com.apppubs.d20.util.Utils;
 
@@ -88,21 +89,31 @@ interface PageContentModel {
 
 class PageNormalContentModel implements PageContentModel {
 
-    private JSONArray components;
+    private List<PageComponent> components;
 
-    public PageNormalContentModel(String jsonArr) {
+    public PageNormalContentModel(String jsonArrStr) {
         try {
-            components = new JSONArray(jsonArr);
+            JSONArray jsonArr = null;
+            jsonArr = new JSONArray(jsonArrStr);
+            if (jsonArr != null) {
+                components = new ArrayList<PageComponent>();
+                for (int i = -1; ++i < jsonArr.length(); ) {
+                    PageComponent p = PageComponentFactory.getPageComponent(jsonArr.getJSONObject
+                            (i));
+                    components.add(p);
+                }
+            }
         } catch (JSONException e) {
             e.printStackTrace();
         }
+
     }
 
-    public JSONArray getComponents() {
+    public List<PageComponent> getComponents() {
         return components;
     }
 
-    public void setComponents(JSONArray components) {
+    public void setComponents(List<PageComponent> components) {
         this.components = components;
     }
 
@@ -292,6 +303,87 @@ class TitleBarModel {
             return false;
         }
         return true;
+    }
+}
+
+class PageComponentFactory {
+    public static PageComponent getPageComponent(JSONObject component) {
+        String componentCode = null;
+        try {
+            componentCode = component.getString("comtype");
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        if (component == null || componentCode == null) {
+            return null;
+        }
+        if (Constants.PAGE_COMPONENT_DEFAULT_USER_INFO.equals(componentCode)) {
+            return new DefaultUserinfoComponent(component.toString());
+        } else {
+            return new PageComponent(component.toString());
+        }
+    }
+}
+
+class PageComponent {
+    private String jsonStr;
+    private String code;
+    private JSONObject jo;
+
+    public PageComponent(String json) {
+        jsonStr = json;
+        try {
+            jo = new JSONObject(json);
+            code = jo.getString("comtype");
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public String getJson() {
+        return jsonStr;
+    }
+
+    public void setJson(String jsonStr) {
+        this.jsonStr = jsonStr;
+    }
+
+    public String getCode() {
+        return code;
+    }
+
+    public void setCode(String code) {
+        this.code = code;
+    }
+
+    public JSONObject getJSONObject(){
+        return jo;
+    }
+}
+
+class DefaultUserinfoComponent extends PageComponent {
+
+    private String username;
+    private String avatarURL;
+
+    public DefaultUserinfoComponent(String json) {
+        super(json);
+    }
+
+    public String getUsername() {
+        return username;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
+    }
+
+    public String getAvatarURL() {
+        return avatarURL;
+    }
+
+    public void setAvatarURL(String avatarURL) {
+        this.avatarURL = avatarURL;
     }
 }
 

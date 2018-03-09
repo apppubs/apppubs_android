@@ -40,7 +40,7 @@ public class Constants {
 	public static final String PAGE_COMPONENT_HOT_AREA_SINGLE_PAGE = "9002";//单页热区组件
 	public static final String PAGE_COMPONENT_BLANK_ROW = "11001";//空白行
 	public static final String PAGE_COMPONENT_HORIZONTALL_LINE = "11002";//横线
-	
+	public static final String PAGE_COMPONENT_DEFAULT_USER_INFO ="11020";//默认用户信息组件
 	
 	public static final String FILE_NAME_APP_CONFIG = "appconfig";
 	public static final String FILE_NAME_SELECTED_NAV_TGABS = "selected_tabs_%s";//已订阅的标签，保存时文件名用page id拼接于末尾
