@@ -10,6 +10,8 @@ public interface IPageView {
 
 	void showContentView(PageContentModel model);
 
+	void showLoadingView();
+
 	void showErrorView();
 
 	String getPageId();

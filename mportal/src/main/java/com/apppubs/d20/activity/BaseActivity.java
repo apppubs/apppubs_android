@@ -6,7 +6,9 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.pm.ActivityInfo;
 import android.content.res.TypedArray;
+import android.graphics.Bitmap;
 import android.graphics.Color;
+import android.net.ConnectivityManager;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
@@ -50,6 +52,7 @@ import com.apppubs.d20.util.Utils;
 import com.apppubs.d20.widget.AlertDialog;
 import com.apppubs.d20.widget.ConfirmDialog;
 import com.apppubs.d20.widget.TitleBar;
+import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
 
 import org.greenrobot.eventbus.EventBus;
@@ -157,7 +160,7 @@ public abstract class BaseActivity extends FragmentActivity implements OnClickLi
 		TypedArray ta = obtainStyledAttributes(new int[] { R.attr.appDefaultColor });
 		mDefaultColor = ta.getColor(0, 0xffffff);
 		ta.recycle();
-
+		getDefaultImageLoaderOption();
 		mImageLoader = ImageLoader.getInstance();
 		mApp = (MportalApplication) getApplication();
 
@@ -179,6 +182,22 @@ public abstract class BaseActivity extends FragmentActivity implements OnClickLi
 
 		mRequestQueue = Volley.newRequestQueue(this);
 
+	}
+
+	public DisplayImageOptions getDefaultImageLoaderOption() {
+		DisplayImageOptions options = new DisplayImageOptions.Builder()
+				.showImageOnLoading(R.drawable.white)
+				.showImageOnFail(R.drawable.white)
+				.showImageForEmptyUri(R.drawable.white)
+				.cacheInMemory(true)
+				.cacheOnDisk(true)
+				.considerExifParams(true)
+				.bitmapConfig(Bitmap.Config.ARGB_8888)
+				.denyNetworkDownload(MportalApplication.systemState.getNetworkState() !=
+						ConnectivityManager.TYPE_WIFI && !mAppContext.getSettings()
+						.isAllowDowPicUse2G())
+				.build();
+		return options;
 	}
 
 	public RequestQueue getRequestQueue() {

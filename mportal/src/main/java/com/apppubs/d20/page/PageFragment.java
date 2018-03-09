@@ -205,6 +205,11 @@ public class PageFragment extends TitleMenuFragment implements OnClickListener, 
     }
 
     @Override
+    public void showLoadingView() {
+        
+    }
+
+    @Override
     public void showErrorView() {
         Toast.makeText(mContext, "加载错误", Toast.LENGTH_SHORT).show();
     }
@@ -555,7 +560,6 @@ public class PageFragment extends TitleMenuFragment implements OnClickListener, 
         mRootLl.removeView(mScrollView);
         ScrollView sv = new ScrollView(mContext);
         mScrollView = sv;
-        sv.setBackgroundResource(R.color.window_color);
         mRootLl.addView(sv);
 
         //首先清除容器内的所有view
@@ -878,7 +882,7 @@ public class PageFragment extends TitleMenuFragment implements OnClickListener, 
         int width = wm.getDefaultDisplay().getWidth();
         LayoutParams lp = new LayoutParams(width, (int) (ratio
                 * width));
-        mImageLoader.displayImage(component.getString("picurl"), iv);
+        mImageLoader.displayImage(component.getString("picurl"), iv,getDefaultImageLoaderOptions());
         mContainerLl.addView(iv, lp);
     }
 

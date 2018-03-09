@@ -13,8 +13,8 @@
 
         <com.apppubs.d20.widget.RoundImageView
             android:id="@+id/default_userinfo_ri"
-            android:layout_width="80dp"
-            android:layout_height="80dp"
+            android:layout_width="70dp"
+            android:layout_height="70dp"
             android:layout_gravity="center"
             />
         <TextView
