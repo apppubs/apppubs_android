@@ -1,6 +1,7 @@
 package com.apppubs.d20.page;
 
 import android.content.Context;
+import android.graphics.pdf.PdfDocument;
 
 import com.apppubs.d20.AppContext;
 import com.apppubs.d20.constant.Constants;
@@ -72,6 +73,10 @@ public class PageModel {
             return false;
         }
         PageModel des = (PageModel) o;
+        System.out.println("比较pagemodel pageId相同？" + Utils.compare(this.pageId, des.getPageId()));
+        System.out.println("比较pagemodel content？" + Utils.compare(this.content, des.getContent()));
+        System.out.println("比较pagemodel titleBarModel相同？" + Utils.compare(this.titleBarModel, des
+                .getTitleBarModel()));
         if (!Utils.compare(this.pageId, des.getPageId())
                 || !Utils.compare(this.content, des.getContent())
                 || !Utils.compare(this.titleBarModel, des.getTitleBarModel())) {
@@ -123,13 +128,20 @@ class PageNormalContentModel implements PageContentModel {
             return false;
         }
         PageNormalContentModel des = (PageNormalContentModel) o;
-        if ((this.components == null && des.getComponents() != null)
-                || (this.components != null && des.getComponents() == null)) {
+        if (this.components == null && des.getComponents() != null) {
+            return false;
+        }
+        if (this.components != null && des.getComponents() == null) {
             return false;
         }
         if ((this.components != null && des.getComponents() != null)) {
-            if (!StringUtils.equals(this.components.toString(), des.getComponents().toString())) {
+            if (this.components.size() != des.getComponents().size()) {
                 return false;
+            }
+            for (int i = -1; ++i < this.components.size(); ) {
+                if (!this.components.get(i).equals(des.getComponents().get(i))) {
+                    return false;
+                }
             }
         }
         return true;
@@ -356,8 +368,20 @@ class PageComponent {
         this.code = code;
     }
 
-    public JSONObject getJSONObject(){
+    public JSONObject getJSONObject() {
         return jo;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (!(o instanceof PageComponent)) {
+            return false;
+        }
+        PageComponent des = (PageComponent) o;
+        if (!Utils.compare(jsonStr, des.getJson())) {
+            return false;
+        }
+        return true;
     }
 }
 
@@ -384,6 +408,24 @@ class DefaultUserinfoComponent extends PageComponent {
 
     public void setAvatarURL(String avatarURL) {
         this.avatarURL = avatarURL;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (!super.equals(o)) {
+            return false;
+        }
+        if (!(o instanceof DefaultUserinfoComponent)) {
+            return false;
+        }
+        DefaultUserinfoComponent des = (DefaultUserinfoComponent) o;
+        if (!Utils.compare(username, des.getUsername())) {
+            return false;
+        }
+        if (!Utils.compare(avatarURL, des.getAvatarURL())) {
+            return false;
+        }
+        return true;
     }
 }
 

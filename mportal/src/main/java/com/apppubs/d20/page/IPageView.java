@@ -12,6 +12,8 @@ public interface IPageView {
 
 	void showLoadingView();
 
+	void hideLoadingView();
+
 	void showErrorView();
 
 	String getPageId();

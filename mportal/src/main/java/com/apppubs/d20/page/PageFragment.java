@@ -3,7 +3,6 @@ package com.apppubs.d20.page;
 import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.graphics.Rect;
-import android.graphics.drawable.Drawable;
 import android.net.ConnectivityManager;
 import android.os.Bundle;
 import android.support.v4.view.ViewPager;
@@ -59,11 +58,11 @@ import com.apppubs.d20.widget.HotArea;
 import com.apppubs.d20.widget.HotAreaView;
 import com.apppubs.d20.widget.HotAreaView.HotAreaClickListener;
 import com.apppubs.d20.widget.RatioLayout;
-import com.apppubs.d20.widget.RoundImageView;
 import com.apppubs.d20.widget.ScrollTabs;
 import com.apppubs.d20.widget.SlidePicView;
 import com.apppubs.d20.widget.TitleBar;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
+import com.wang.avi.AVLoadingIndicatorView;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -86,20 +85,21 @@ public class PageFragment extends TitleMenuFragment implements OnClickListener, 
     private final int ASY_TASK_TAG_RESOLVE_HOTAREAS = 100;//异步解析热区信息
     private String mPageId;
 
-    private LinearLayout mRootLl;
-    private LinearLayout mContainerLl;
-    private ScrollView mScrollView;
-    private List<View> mAnchorPointerViewList;//锚点view
-
-    private RelativeLayout mContentRL;//包含导航和滚动fragment
+    private FrameLayout mRootFL;//包含loading和RootLl
+    private AVLoadingIndicatorView mLoadingView;
+    private LinearLayout mRootLl;//包含titlebar和contentRL
+    private RelativeLayout mContentRL;//包含导航和滚动fragment或者ScrollView
     private ScrollTabs mScrollTabs;
+    private ScrollView mScrollView;//包含mContainerLl
+    private LinearLayout mContainerLl;//包含components
+
+    private List<View> mAnchorPointerViewList;//锚点view
     private ViewPager mViewPager;
     private String mCachedResponse;
     private LinearLayout mColumnView;
     private List<String> mSelectedTabs;
     private List<String> mUnselectedTabs;
 
-    private TitleBar mTitleBar;
     private PagePresenter mPresenter;
 
     @Override
@@ -107,7 +107,6 @@ public class PageFragment extends TitleMenuFragment implements OnClickListener, 
         super.onCreate(savedInstanceState);
         mAnchorPointerViewList = new ArrayList<View>();
         mPresenter = new PagePresenter(mContext, this);
-
     }
 
     @Override
@@ -118,9 +117,9 @@ public class PageFragment extends TitleMenuFragment implements OnClickListener, 
         if (bundle != null) {
             mPageId = bundle.getString(EXTRA_STRING_NAME_PAGE_ID);
         }
-        initRootView();
+        initView();
         mPresenter.onCreateView();
-        return mRootView;
+        return mRootFL;
     }
 
     @Override
@@ -153,28 +152,22 @@ public class PageFragment extends TitleMenuFragment implements OnClickListener, 
     @Override
     public void showTitleBar(TitleBarModel model) {
 
-        mRootLl.removeView(mTitleBar);
-        mTitleBar = buildTitleBar(model);
-        if (mTitleBar != null) {
-            mTitleBar.setId(R.id.page_title);
-            LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(LayoutParams
-                    .MATCH_PARENT, getResources().getDimensionPixelSize(R.dimen.title_height));
-            mRootLl.addView(mTitleBar, 0, lp);
-        }
+        TitleBar titleBar = buildTitleBar(model);
+        replaceTitleBar(titleBar);
     }
 
     @Override
     public void showContentView(PageContentModel model) {
+        resetContentView();
         if (model instanceof PageNormalContentModel) {
             try {
-                renderContent((PageNormalContentModel) model);
+                renderNormalContent((PageNormalContentModel) model);
             } catch (JSONException e) {
                 e.printStackTrace();
+                Toast.makeText(mContext, "普通页面渲染错误", Toast.LENGTH_LONG).show();
             }
         } else {
             PageNavContentModel pageNav = (PageNavContentModel) model;
-            mContentRL = new RelativeLayout(mContext);
-            mRootLl.addView(mContentRL);
             try {
                 refreshNav(pageNav.getNavBar());//刷新导航条
             } catch (JSONException e) {
@@ -206,12 +199,17 @@ public class PageFragment extends TitleMenuFragment implements OnClickListener, 
 
     @Override
     public void showLoadingView() {
-        
+        mLoadingView.show();
+    }
+
+    @Override
+    public void hideLoadingView() {
+        mLoadingView.hide();
     }
 
     @Override
     public void showErrorView() {
-        Toast.makeText(mContext, "加载错误", Toast.LENGTH_SHORT).show();
+        Toast.makeText(mContext, "加载失败！", Toast.LENGTH_SHORT).show();
     }
 
     @Override
@@ -219,15 +217,44 @@ public class PageFragment extends TitleMenuFragment implements OnClickListener, 
         return mPageId;
     }
 
+    //pragma private
+    private void replaceTitleBar(TitleBar titlebar) {
+        if (titlebar == null) {
+            return;
+        }
+        View oldTitleBar = mRootLl.findViewById(R.id.page_title);
+        mRootLl.removeView(oldTitleBar);
+        LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(LayoutParams
+                .MATCH_PARENT, getResources().getDimensionPixelSize(R.dimen.title_height));
+        titlebar.setId(R.id.page_title);
+        mRootLl.addView(titlebar, 0, lp);
+    }
+
+    private void resetContentView() {
+        if (mContentRL != null) {
+            mRootLl.removeView(mContentRL);
+        }
+        mContentRL = new RelativeLayout(mContext);
+        mRootLl.addView(mContentRL);
+    }
+
     /**
      * 初始化rootview
      */
-    private void initRootView() {
+    private void initView() {
         LinearLayout rootLl = new LinearLayout(mContext);
         rootLl.setOrientation(LinearLayout.VERTICAL);
         mRootLl = rootLl;
 
-        mRootView = rootLl;
+        mRootFL = new FrameLayout(mContext);
+        mRootFL.addView(mRootLl);
+        mLoadingView = new AVLoadingIndicatorView(mContext);
+        mLoadingView.setIndicator("BallBeatIndicator");
+        mLoadingView.setIndicatorColor(Color.parseColor("#C0C0C0"));
+        FrameLayout.LayoutParams loadingLP = new FrameLayout.LayoutParams(Utils.dip2px(mContext,
+                40), Utils.dip2px(mContext, 40));
+        loadingLP.gravity = Gravity.CENTER;
+        mRootFL.addView(mLoadingView, loadingLP);
     }
 
     private void parse(JSONObject info) throws JSONException {
@@ -244,8 +271,7 @@ public class PageFragment extends TitleMenuFragment implements OnClickListener, 
 
         //优先级1.导航，2.webview，3.components
         if (info.has("navbar")) {
-            mContentRL = new RelativeLayout(mContext);
-            mRootLl.addView(mContentRL);
+            resetContentView();
             JSONObject navBarObj = info.getJSONObject("navbar");
             refreshNav(navBarObj);//刷新导航条
             //构造viewpager
@@ -556,18 +582,8 @@ public class PageFragment extends TitleMenuFragment implements OnClickListener, 
         }
     }
 
-    private void renderContent(PageNormalContentModel model) throws JSONException {
-        mRootLl.removeView(mScrollView);
-        ScrollView sv = new ScrollView(mContext);
-        mScrollView = sv;
-        mRootLl.addView(sv);
-
-        //首先清除容器内的所有view
-        mContainerLl = new LinearLayout(mContext);
-        mContainerLl.setOrientation(LinearLayout.VERTICAL);
-        FrameLayout.LayoutParams llLp = new FrameLayout.LayoutParams(LayoutParams.MATCH_PARENT,
-                LayoutParams.WRAP_CONTENT);
-        mScrollView.addView(mContainerLl, llLp);
+    private void renderNormalContent(PageNormalContentModel model) throws JSONException {
+        resetContentViewWithScrollView();
         List<PageComponent> components = model.getComponents();
         for (int i = -1; ++i < components.size(); ) {
             PageComponent component = components.get(i);
@@ -610,6 +626,22 @@ public class PageFragment extends TitleMenuFragment implements OnClickListener, 
         }
     }
 
+    private void resetContentViewWithScrollView() {
+        if (mScrollView != null) {
+            mContentRL.removeView(mScrollView);
+        }
+        ScrollView sv = new ScrollView(mContext);
+        mScrollView = sv;
+        mContentRL.addView(sv);
+
+        //首先清除容器内的所有view
+        mContainerLl = new LinearLayout(mContext);
+        mContainerLl.setOrientation(LinearLayout.VERTICAL);
+        FrameLayout.LayoutParams llLp = new FrameLayout.LayoutParams(LayoutParams.MATCH_PARENT,
+                LayoutParams.WRAP_CONTENT);
+        mScrollView.addView(mContainerLl, llLp);
+    }
+
     private void addDefaultUserInfoComponent(PageComponent pc) {
         JSONObject component = pc.getJSONObject();
         DefaultUserinfoComponent userInfoComponent = (DefaultUserinfoComponent) pc;
@@ -634,7 +666,7 @@ public class PageFragment extends TitleMenuFragment implements OnClickListener, 
         ll.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
-                ViewCourier.getInstance(mContext).execute(mContext,"apppubs://user_account");
+                ViewCourier.getInstance(mContext).execute(mContext, "apppubs://user_account");
             }
         });
 
@@ -651,7 +683,7 @@ public class PageFragment extends TitleMenuFragment implements OnClickListener, 
                         .isAllowDowPicUse2G())
                 .build();
         mImageLoader.displayImage(userInfoComponent.getAvatarURL(), iv, options);
-        usernameTV.setText(TextUtils.isEmpty(userInfoComponent.getUsername()) ? "匿名用户":
+        usernameTV.setText(TextUtils.isEmpty(userInfoComponent.getUsername()) ? "匿名用户" :
                 userInfoComponent.getUsername());
         rl.setBackgroundColor(bgColor);
         mContainerLl.addView(rl);
@@ -676,11 +708,12 @@ public class PageFragment extends TitleMenuFragment implements OnClickListener, 
             }
             rl.setTag(item.getString("url"));
             rl.setOnClickListener(this);
+            LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(LayoutParams.MATCH_PARENT, Utils.dip2px(mContext,
+                    50));
+            mContainerLl.addView(rl, lp);
 
-            mContainerLl.addView(rl);
             //分割线
             if (j != items.length() - 1) {
-
                 View line = new View(mHostActivity);
                 LayoutParams lp1 = new LayoutParams(Utils.dip2px(mContext, 20), 1);
                 line.setBackgroundColor(Color.parseColor("#FFFFFF"));
@@ -882,7 +915,8 @@ public class PageFragment extends TitleMenuFragment implements OnClickListener, 
         int width = wm.getDefaultDisplay().getWidth();
         LayoutParams lp = new LayoutParams(width, (int) (ratio
                 * width));
-        mImageLoader.displayImage(component.getString("picurl"), iv,getDefaultImageLoaderOptions());
+        mImageLoader.displayImage(component.getString("picurl"), iv, getDefaultImageLoaderOptions
+                ());
         mContainerLl.addView(iv, lp);
     }
 

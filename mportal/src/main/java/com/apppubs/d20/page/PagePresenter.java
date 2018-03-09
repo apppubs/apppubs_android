@@ -33,17 +33,24 @@ public class PagePresenter {
 	}
 
 	public void onCreateView(){
-		loadPage();
+//		loadPage();
 	}
 
 	private void loadPage() {
 		String pageId = mPageView.getPageId();
+		mPageView.showLoadingView();
 		mPageBiz.loadPage(pageId, new APResultCallback<PageModel>() {
 			@Override
 			public void onDone(final PageModel model) {
 				if (mPageModel!=null&&mPageModel.equals(model)){
 					//不需要更新
 					LogM.log(PagePresenter.class,"is equal");
+					MainHandler.getInstance().post(new Runnable() {
+						@Override
+						public void run() {
+							mPageView.hideLoadingView();
+						}
+					});
 				}else{
 					mPageModel = model;
 					MainHandler.getInstance().post(new Runnable() {
@@ -51,6 +58,7 @@ public class PagePresenter {
 						public void run() {
 							mPageView.showTitleBar(mPageModel.getTitleBarModel());
 							mPageView.showContentView(mPageModel.getContent());
+							mPageView.hideLoadingView();
 						}
 					});
 				}
@@ -62,6 +70,7 @@ public class PagePresenter {
 					@Override
 					public void run() {
 						mPageView.showErrorView();
+						mPageView.hideLoadingView();
 					}
 				});
 			}
