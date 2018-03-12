@@ -19,7 +19,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
-import android.view.WindowManager;
 import android.webkit.CookieManager;
 import android.webkit.DownloadListener;
 import android.webkit.WebSettings;
@@ -35,6 +34,7 @@ import com.apppubs.d20.AppContext;
 import com.apppubs.d20.AppManager;
 import com.apppubs.d20.MportalApplication;
 import com.apppubs.d20.R;
+import com.apppubs.d20.activity.CaptureActivity;
 import com.apppubs.d20.activity.ContainerActivity;
 import com.apppubs.d20.activity.HomeBaseActivity;
 import com.apppubs.d20.activity.ViewCourier;
@@ -46,6 +46,7 @@ import com.apppubs.d20.util.BitmapUtils;
 import com.apppubs.d20.util.LocationManager;
 import com.apppubs.d20.util.LogM;
 import com.apppubs.d20.util.SystemUtils;
+import com.apppubs.d20.util.Utils;
 import com.apppubs.d20.widget.HorizontalScrollLabels;
 import com.apppubs.d20.widget.ProgressHUD;
 import com.apppubs.d20.widget.ProgressWebView;
@@ -58,6 +59,9 @@ import com.apppubs.jsbridge.BridgeWebView;
 import com.apppubs.jsbridge.CallBackFunction;
 import com.apppubs.jsbridge.DefaultHandler;
 import com.apppubs.multi_image_selector.MultiImageSelectorActivity;
+import com.jelly.mango.ImageSelectListener;
+import com.jelly.mango.Mango;
+import com.jelly.mango.MultiplexImage;
 import com.tencent.mm.opensdk.modelpay.PayReq;
 import com.tencent.mm.opensdk.openapi.IWXAPI;
 import com.tencent.mm.opensdk.openapi.WXAPIFactory;
@@ -92,6 +96,7 @@ public class WebAppFragment extends BaseFragment implements OnClickListener, IWe
     public static final String ARGUMENT_STRING_MORE_MENUS = "more_menus";
 
     public static final int REQUEST_CODE_PICTURES = 100;
+    public static final int REQUEST_CODE_QRCODE = 101;//二维码扫描接过
 
     private final String JS_MENU_ITEM_REFRESH = "menu_item_refresh";
 
@@ -322,15 +327,7 @@ public class WebAppFragment extends BaseFragment implements OnClickListener, IWe
             }
 
         });
-        //扫描二维码
-        mWebView.registerHandler("scanQRCode", new BridgeHandler() {
 
-            @Override
-            public void handler(String data, CallBackFunction function) {
-                ViewCourier.getInstance(mHostActivity).execute(mHostActivity, "apppubs://qrcode");
-            }
-
-        });
         //切换app
         mWebView.registerHandler("changeApp", new BridgeHandler() {
             @Override
@@ -539,11 +536,11 @@ public class WebAppFragment extends BaseFragment implements OnClickListener, IWe
                 titleBar.addRightBtnWithImageResourceIdAndClickListener(R.drawable.title_more,
                         new OnClickListener() {
 
-                    @Override
-                    public void onClick(View arg0) {
-                        openMenu();
-                    }
-                });
+                            @Override
+                            public void onClick(View arg0) {
+                                openMenu();
+                            }
+                        });
             } else if (mMoreMenusStr != null && !mMoreMenusStr.equals("") && mMoreMenusStr.split
                     (",").length == 1) {
                 if (mMoreMenusStr.equals(MenuItem.WEB_APP_MENU_REFRESH + "")) {
@@ -727,12 +724,12 @@ public class WebAppFragment extends BaseFragment implements OnClickListener, IWe
         mTitleBar.addLeftBtnWithImageResourceIdAndClickListener(R.drawable.close_circle, new
                 OnClickListener() {
 
-            @Override
-            public void onClick(View arg0) {
-                mHostActivity.finish();
+                    @Override
+                    public void onClick(View arg0) {
+                        mHostActivity.finish();
 
-            }
-        });
+                    }
+                });
     }
 
     public void refresh() {
@@ -821,6 +818,9 @@ public class WebAppFragment extends BaseFragment implements OnClickListener, IWe
             sb.append("]");
             mTmpHandelCallbackFunction.onCallBack(sb.toString());
             mProgressHUD.hide();
+        } else if (requestCode == REQUEST_CODE_QRCODE && resultCode == Activity.RESULT_OK) {
+            String result = data.getStringExtra(CaptureActivity.EXTRA_NAME_STRING_RESULT);
+            mPresenter.onQRCodeDone(result);
         }
     }
 
@@ -855,7 +855,7 @@ public class WebAppFragment extends BaseFragment implements OnClickListener, IWe
         hsl.setListener(new HorizontalScrollLabels.HorizontalScrollLabelsListener() {
             @Override
             public void onClick(String text) {
-                mSignatureET.setText(mSignatureET.getText()+text);
+                mSignatureET.setText(mSignatureET.getText() + text);
             }
         });
         mSignatureSegmentedGroup.setOnCheckedChangeListener(new RadioGroup
@@ -922,8 +922,8 @@ public class WebAppFragment extends BaseFragment implements OnClickListener, IWe
         });
         mSignaturePopWin = new PopupWindow(contentView,
                 ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-        mSignaturePopWin.setFocusable(true);
         mSignaturePopWin.setOutsideTouchable(true);
+        mSignaturePopWin.setFocusable(true);
         mSignaturePopWin.setAnimationStyle(R.style.popwin_channel_anim_style);
         mSignaturePopWin.setOnDismissListener(new PopupWindow.OnDismissListener() {
 
@@ -941,16 +941,37 @@ public class WebAppFragment extends BaseFragment implements OnClickListener, IWe
         mSignaturePopWin.dismiss();
     }
 
+    @Override
+    public void showImages(List<MultiplexImage> images) {
+
+        Mango.setImages(images);
+        Mango.setPosition(0);
+        Mango.setImageSelectListener(new ImageSelectListener() {
+            @Override
+            public void select(int index) {
+                Log.d("Mango", "select: " + index);
+            }
+        });
+        try {
+            Mango.open(mContext);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Override
+    public void showScanQRCode(boolean needSelfResolve) {
+        Intent intent = new Intent(mContext, CaptureActivity.class);
+        intent.putExtra(CaptureActivity.EXTRA_NAME_BOOLEAN_NEED_SELF_RESOLVE,needSelfResolve);
+        startActivityForResult(intent, REQUEST_CODE_QRCODE);
+    }
+
     private void dim() {
-        WindowManager.LayoutParams params = getActivity().getWindow().getAttributes();
-        params.alpha = 0.7f;
-        getActivity().getWindow().setAttributes(params);
+        Utils.setBackgroundAlpha(getActivity(), 0.7f);
     }
 
     private void light() {
-        WindowManager.LayoutParams params = getActivity().getWindow().getAttributes();
-        params.alpha = 1f;
-        getActivity().getWindow().setAttributes(params);
+        Utils.setBackgroundAlpha(getActivity(), 1f);
     }
 
     private Bitmap getCacheBitmapFromView(View view) {
@@ -979,8 +1000,8 @@ public class WebAppFragment extends BaseFragment implements OnClickListener, IWe
     @NonNull
     private String[] getCommonWords(JSONObject jsonObject) throws JSONException {
         JSONArray ja = jsonObject.getJSONArray("commonWords");
-        String[] labels  = new String[ja.length()];
-        for (int i=-1;++i<ja.length();){
+        String[] labels = new String[ja.length()];
+        for (int i = -1; ++i < ja.length(); ) {
             labels[i] = ja.getString(i);
         }
         return labels;

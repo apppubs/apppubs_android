@@ -24,6 +24,7 @@ import android.util.DisplayMetrics;
 import android.view.WindowManager;
 
 import com.apppubs.d20.AppContext;
+import com.apppubs.d20.AppManager;
 import com.apppubs.d20.R;
 import com.apppubs.d20.bean.App;
 import com.apppubs.d20.bean.AppConfig;
@@ -346,8 +347,9 @@ public class SystemBussiness extends BaseBussiness {
 		screenDimenFlag = dm.widthPixels+"X"+dm.heightPixels;
 		//如果是新版本第一次启动
 		System.out.println("当前版本，"+Utils.getVersionCode(mContext)+"上一次启动的版本："+localApp.getPreWorkingVersion());
-		if(Utils.getVersionCode(mContext)>localApp.getPreWorkingVersion()){
+		if(AppManager.getInstant(mContext).isFirstStartupOfNewVersion()){
 			System.out.println("新版本第一次启动");
+			AppContext.getInstance(mContext).resetBaseUrlAndAppCode();
 			switch (localApp.getPreWorkingVersion()){
 				case 200001:
 					UserBussiness userBussiness = UserBussiness.getInstance(mContext);
@@ -378,7 +380,6 @@ public class SystemBussiness extends BaseBussiness {
 			LogM.log(this.getClass(),"删除用户信息"+localApp.getInitTimes());
 		}
 		localApp.setAllModifyUserInfo(remoteApp.getAllModifyUserInfo());
-		localApp.setAllowChat(remoteApp.getAllowChat());
 		localApp.setAllowRegister(remoteApp.getAllowRegister());
 		localApp.setBaiduPushApiKey(remoteApp.getBaiduPushApiKey());
 		localApp.setBgPicURL(remoteApp.getBgPicURL());
@@ -743,9 +744,7 @@ public class SystemBussiness extends BaseBussiness {
 			app.setAddressbookNeedPermission(Integer.parseInt(resultMap.get("adbookauth")));
 			app.setDocumentReaderPageUrl(resultMap.get("document_reader_url"));
 			app.setAddressbookVersion(Integer.parseInt(resultMap.get("adbookversion")));
-			if (resultMap.containsKey("chat_flag")) {
-				app.setAllowChat(Integer.parseInt(resultMap.get("chat_flag")));
-			}
+
 			AppConfig appconfig = (AppConfig) jsonResult.getResultObject(AppConfig.class);
 			app.setAppConfig(appconfig);
 

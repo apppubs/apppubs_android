@@ -1,4 +1,4 @@
-include ':ShareSDK', ':IMLib', ':IMKit'
+include ':ShareSDK', ':IMLib', ':IMKit', ':mango'
 include ':sugar_orm'
 include ':mportal'
 

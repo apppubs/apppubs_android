@@ -120,10 +120,7 @@ public class App implements Serializable{
 	private Date menuGroupLocalUpdateTime;
 	
 	private boolean isDownloadApp;//下载App
-	
-	@SerializedName("chatflag")
-	private int allowChat;//是否允许聊天
-	
+
 	@SerializedName("mduserinfoflag")
 	private int allModifyUserInfo;//是否允许客户端修改个人信息
 	
@@ -351,13 +348,10 @@ public class App implements Serializable{
 		this.baiduPushUserId = baiduPushUserId;
 	}
 
-	public int getAllowChat() {
-		return allowChat;
+	public boolean isAllowChat() {
+		return "1".equals(appConfig.getChatFlag());
 	}
 
-	public void setAllowChat(int allowChat) {
-		this.allowChat = allowChat;
-	}
 
 	public int getAllModifyUserInfo() {
 		return allModifyUserInfo;
@@ -559,7 +553,6 @@ public class App implements Serializable{
 				", menuGroupUpdateTime=" + menuGroupUpdateTime +
 				", menuGroupLocalUpdateTime=" + menuGroupLocalUpdateTime +
 				", isDownloadApp=" + isDownloadApp +
-				", allowChat=" + allowChat +
 				", allModifyUserInfo=" + allModifyUserInfo +
 				", needForceUploadAddressbook=" + needForceUploadAddressbook +
 				", addressbookVersion=" + addressbookVersion +

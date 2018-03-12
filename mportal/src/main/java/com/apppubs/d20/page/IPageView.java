@@ -12,6 +12,10 @@ public interface IPageView {
 
 	void showContentView(PageContentModel model);
 
+	void showLoadingView();
+
+	void hideLoadingView();
+
 	void showErrorView();
 
 	String getPageId();

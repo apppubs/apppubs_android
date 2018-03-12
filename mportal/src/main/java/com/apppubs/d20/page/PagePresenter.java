@@ -1,10 +1,10 @@
 package com.apppubs.d20.page;
 
 import android.content.Context;
-import android.os.Handler;
 import android.text.TextUtils;
 
 import com.apppubs.d20.AppManager;
+import com.apppubs.d20.activity.MainHandler;
 import com.apppubs.d20.model.APResultCallback;
 import com.apppubs.d20.util.LogM;
 
@@ -17,7 +17,6 @@ public class PagePresenter {
     private Context mContext;
     private IPageBiz mPageBiz;
     private IPageView mPageView;
-    private Handler mHandler = new Handler();
     private PageModel mPageModel;
 
     public PagePresenter(Context context, IPageView view) {
@@ -32,7 +31,7 @@ public class PagePresenter {
     }
 
     public void onCreateView() {
-        loadPage();
+//        loadPage();
     }
 
     public void onAddressSelected(AddressModel model) {
@@ -42,23 +41,26 @@ public class PagePresenter {
 
     //private
     private void loadPage() {
+        mPageView.showLoadingView();
         String pageId = mPageView.getPageId();
         mPageBiz.loadPage(pageId, new APResultCallback<PageModel>() {
             @Override
             public void onDone(final PageModel model) {
-                if (mPageModel != null && mPageModel.equals(model)) {
-                    //不需要更新
-                    LogM.log(PagePresenter.class, "is equal");
-                } else {
-                    onDataUpdated(model);
-                }
+//                if (mPageModel != null && mPageModel.equals(model)) {
+//                    //不需要更新
+//                    LogM.log(PagePresenter.class, "is equal");
+//                } else {
+//                    onDataUpdated(model);
+//                }
+                onDataUpdated(model);
             }
 
             @Override
             public void onException(int excepCode) {
-                mHandler.post(new Runnable() {
+                MainHandler.getInstance().post(new Runnable() {
                     @Override
                     public void run() {
+                        mPageView.hideLoadingView();
                         mPageView.showErrorView();
                     }
                 });
@@ -70,12 +72,12 @@ public class PagePresenter {
     private void onDataUpdated(final PageModel model) {
         mPageModel = model;
         saveCurAddressIfEmpty(model);
-        mHandler.post(new Runnable() {
+        MainHandler.getInstance().post(new Runnable() {
             @Override
             public void run() {
                 mPageView.showTitleBar(model.getTitleBarModel());
                 mPageView.showContentView(model.getContent());
-
+                mPageView.hideLoadingView();
                 //显示地址
                 if (isAddressTitleBar(model)) {
                     AppManager manager = AppManager.getInstant(mContext);

@@ -99,8 +99,6 @@ public abstract class HomeBaseActivity extends BaseActivity {
 		if (mAppContext.getAppConfig().getChatFlag().equals("1")) {
 			mMsgBussiness.loginRC();
 		}
-		initWeather();
-		requestWeather();
 
 		initBroadcastReceiver();
 
@@ -143,19 +141,6 @@ public abstract class HomeBaseActivity extends BaseActivity {
 
 	}
 
-	/**
-	 * 初始化天气信息
-	 */
-	private void initWeather() {
-
-		Object o = FileUtils.readObj(this, "weathers.cfg");
-		if (o == null) {
-			mWeathers = new ArrayList<Weather>();
-		} else {
-			mWeathers = (ArrayList<Weather>) o;
-		}
-
-	}
 
 	private void initBroadcastReceiver() {
 		mLogoutBR = new BroadcastReceiver() {
@@ -174,28 +159,6 @@ public abstract class HomeBaseActivity extends BaseActivity {
 	public static void refreshWether(Context context, ArrayList<Weather> weathers) {
 		mWeathers = weathers;
 		FileUtils.writeObj(context, weathers, "weathers.cfg");
-	}
-
-	public void requestWeather() {
-		// 能否联网
-		boolean bo = SystemUtils.canConnectNet(getApplication());
-		if (bo) {
-			new Thread() {
-				@Override
-				public void run() {
-					String cityName = mWeathers != null && mWeathers.size() != 0 ? mWeathers.get(0).getCityName()
-							: "北京";
-					mWeathers = Tools.getWeatherList(HomeBaseActivity.this, cityName);
-					Intent intent = new Intent();
-					intent.setAction(Actions.REFRESH_WEATHER);
-					sendBroadcast(intent);
-				}
-			}.start();
-
-		} else {
-			Toast.makeText(getApplication(), getResources().getString(R.string.network_faile), Toast.LENGTH_LONG)
-					.show();
-		}
 	}
 
 	protected abstract void changeContent(BaseFragment fragment);

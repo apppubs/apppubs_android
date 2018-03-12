@@ -23,6 +23,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
+import java.util.List;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
@@ -48,7 +49,7 @@ public class PageBiz implements IPageBiz {
     @Override
     public void loadPage(String pageId, final APResultCallback<PageModel> callback) {
         String url = getUrl(pageId);
-        url = "http://result.eolinker.com/gN1zjDlc87a75d671a2d954f809ebcdd19e7698dc2478fa?uri=page";
+//        url = "http://result.eolinker.com/gN1zjDlc87a75d671a2d954f809ebcdd19e7698dc2478fa?uri=page";
         mHttpClient.GET(url, null, new WMHRequestListener() {
             @Override
             public void onDone(JSONResult jsonResult, @Nullable WMHHttpErrorCode errorCode) {
@@ -85,10 +86,11 @@ public class PageBiz implements IPageBiz {
     private PageNormalContentModel handleNormalPageContent(PageNormalContentModel normalContent)
             throws JSONException, IOException {
         if (normalContent != null) {
-            JSONArray components = normalContent.getComponents();
-            for (int i = -1; ++i < components.length(); ) {
-                JSONObject jo = components.getJSONObject(i);
-                handleComponent(jo);
+            List<PageComponent> components = normalContent.getComponents();
+            for (int i = -1; ++i < components.size(); ) {
+                PageComponent component = components.get(i);
+                component = handleComponent(component);
+                components.set(i,component);
             }
         }
         return normalContent;
@@ -97,18 +99,18 @@ public class PageBiz implements IPageBiz {
     /**
      * 获取component中的badgeText
      *
-     * @param jo
+     * @param component
      * @return 如果有则返回值如果没有则返回null
      * @throws JSONException
      * @throws IOException
      */
-    private JSONObject handleComponent(JSONObject jo) throws JSONException, IOException {
-        String comtype = jo.getString("comtype");
+    private PageComponent handleComponent(PageComponent component) throws JSONException, IOException {
+        String comtype = component.getCode();
         if (TextUtils.isEmpty(comtype)) {
-            return jo;
+            return component;
         }
         if (comtype.equals(Constants.PAGE_COMPONENT_ICON_LIST)) {
-            JSONArray items = jo.getJSONArray("items");
+            JSONArray items = component.getJSONObject().getJSONArray("items");
             for (int i = -1; ++i < items.length(); ) {
                 JSONObject item = items.getJSONObject(i);
                 AppContext appContext = AppContext.getInstance(mContext);
@@ -125,7 +127,7 @@ public class PageBiz implements IPageBiz {
                 }
             }
         } else if (comtype.equals(Constants.PAGE_COMPONENT_HOT_AREA_DEFAULT)) {
-            JSONArray items = jo.getJSONArray("items");
+            JSONArray items = component.getJSONObject().getJSONArray("items");
             for (int i = -1; ++i < items.length(); ) {
                 JSONObject item = items.getJSONObject(i);
                 if (item.has("texturl") && !TextUtils.isEmpty(item.getString("texturl"))) {
@@ -146,8 +148,13 @@ public class PageBiz implements IPageBiz {
                 }
             }
 
+        }else if(comtype.equals(Constants.PAGE_COMPONENT_DEFAULT_USER_INFO)){
+            DefaultUserinfoComponent userinfoComponent = (DefaultUserinfoComponent) component;
+            UserInfo userInfo = AppContext.getInstance(mContext).getCurrentUser();
+            userinfoComponent.setUsername(userInfo.getUsername());
+            userinfoComponent.setAvatarURL(userInfo.getAvatarUrl());
         }
-        return jo;
+        return component;
     }
 
     private PageNormalContentModel getPageNormalContentIfExit(PageModel model) {

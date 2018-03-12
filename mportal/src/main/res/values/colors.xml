@@ -77,6 +77,7 @@
     <drawable name="summent_text_h">#ABABAB</drawable>
     <drawable name="transparent">#00000000</drawable>
 	<drawable name="stance_gray">#F0F0F0</drawable>
+    <drawable name="white">#FFFFFF</drawable>
     <color name="radio_button_selected_color">#fff</color>
     <color name="radio_button_unselected_color">@android:color/transparent</color>
 

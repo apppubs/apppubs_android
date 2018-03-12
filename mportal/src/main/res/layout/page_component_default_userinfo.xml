@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.apppubs.d20.widget.RatioLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <LinearLayout
+        android:id="@+id/default_userinfo_ll"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:orientation="vertical"
+        >
+
+        <com.apppubs.d20.widget.RoundImageView
+            android:id="@+id/default_userinfo_ri"
+            android:layout_width="70dp"
+            android:layout_height="70dp"
+            android:layout_gravity="center"
+            />
+        <TextView
+            android:id="@+id/default_userinfo_tv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="10dp"
+            android:text="用户名"
+            android:textColor="@android:color/white"
+            android:textSize="@dimen/item_text_size_small"
+            />
+
+    </LinearLayout>
+</com.apppubs.d20.widget.RatioLayout>

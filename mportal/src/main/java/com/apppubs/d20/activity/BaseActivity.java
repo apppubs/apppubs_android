@@ -6,7 +6,9 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.pm.ActivityInfo;
 import android.content.res.TypedArray;
+import android.graphics.Bitmap;
 import android.graphics.Color;
+import android.net.ConnectivityManager;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
@@ -43,7 +45,6 @@ import com.apppubs.d20.model.NewsBussiness;
 import com.apppubs.d20.model.PaperBussiness;
 import com.apppubs.d20.model.SystemBussiness;
 import com.apppubs.d20.model.VersionInfo;
-import com.apppubs.d20.service.DownloadAppService;
 import com.apppubs.d20.start.StartUpActivity;
 import com.apppubs.d20.util.JSONResult;
 import com.apppubs.d20.util.LogM;
@@ -51,6 +52,7 @@ import com.apppubs.d20.util.Utils;
 import com.apppubs.d20.widget.AlertDialog;
 import com.apppubs.d20.widget.ConfirmDialog;
 import com.apppubs.d20.widget.TitleBar;
+import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
 
 import org.greenrobot.eventbus.EventBus;
@@ -158,7 +160,7 @@ public abstract class BaseActivity extends FragmentActivity implements OnClickLi
 		TypedArray ta = obtainStyledAttributes(new int[] { R.attr.appDefaultColor });
 		mDefaultColor = ta.getColor(0, 0xffffff);
 		ta.recycle();
-
+		getDefaultImageLoaderOption();
 		mImageLoader = ImageLoader.getInstance();
 		mApp = (MportalApplication) getApplication();
 
@@ -180,6 +182,22 @@ public abstract class BaseActivity extends FragmentActivity implements OnClickLi
 
 		mRequestQueue = Volley.newRequestQueue(this);
 
+	}
+
+	public DisplayImageOptions getDefaultImageLoaderOption() {
+		DisplayImageOptions options = new DisplayImageOptions.Builder()
+				.showImageOnLoading(R.drawable.white)
+				.showImageOnFail(R.drawable.white)
+				.showImageForEmptyUri(R.drawable.white)
+				.cacheInMemory(true)
+				.cacheOnDisk(true)
+				.considerExifParams(true)
+				.bitmapConfig(Bitmap.Config.ARGB_8888)
+				.denyNetworkDownload(MportalApplication.systemState.getNetworkState() !=
+						ConnectivityManager.TYPE_WIFI && !mAppContext.getSettings()
+						.isAllowDowPicUse2G())
+				.build();
+		return options;
 	}
 
 	public RequestQueue getRequestQueue() {
@@ -256,7 +274,7 @@ public abstract class BaseActivity extends FragmentActivity implements OnClickLi
 		super.onResume();
 
 		mActiveActivityNum++;
-		
+
 		if (mActiveActivityNum == 1) {
 			onAppActive();
 		}
@@ -418,7 +436,7 @@ public abstract class BaseActivity extends FragmentActivity implements OnClickLi
 
 	/**
 	 * 设置标题文字
-	 * 
+	 *
 	 * @param title
 	 */
 	protected void setTitle(String title) {
@@ -440,7 +458,7 @@ public abstract class BaseActivity extends FragmentActivity implements OnClickLi
 
 	/**
 	 * 设置此activity是否需要titlebar 必须在setconview之前进行设置
-	 * 
+	 *
 	 * @param need
 	 */
 	protected void setNeedTitleBar(boolean need) {
@@ -480,7 +498,7 @@ public abstract class BaseActivity extends FragmentActivity implements OnClickLi
 
 	/**
 	 * 填充某View下的某TextView
-	 * 
+	 *
 	 * @param resId
 	 *            TextView 的id
 	 * @param content

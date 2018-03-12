@@ -1,9 +1,6 @@
 package com.apppubs.d20.webapp;
 
 import android.content.Context;
-import android.content.Intent;
-import android.graphics.Color;
-import android.graphics.drawable.BitmapDrawable;
 import android.support.annotation.NonNull;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -19,11 +16,13 @@ import com.apppubs.d20.webapp.model.UserPickerVO;
 import com.apppubs.d20.webapp.model.UserVO;
 import com.apppubs.jsbridge.BridgeHandler;
 import com.apppubs.jsbridge.CallBackFunction;
+import com.jelly.mango.MultiplexImage;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -47,6 +46,24 @@ public class WebAppPresenter {
     }
 
     private void resisterHandler() {
+
+        //扫描二维码
+        mView.getBridgeWebView().registerHandler("scanQRCode", new BridgeHandler() {
+
+            @Override
+            public void handler(String data, CallBackFunction function) {
+                mPaddingCallbackFunction = function;
+                try {
+                    JSONObject jo = new JSONObject(data);
+                    boolean selfResovle = jo.getBoolean("selfResolve");
+                    mView.showScanQRCode(selfResovle);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    mView.showScanQRCode(true);
+                }
+            }
+        });
+
         //选择图片
         mView.getBridgeWebView().registerHandler("userpicker", new BridgeHandler() {
             @Override
@@ -63,7 +80,8 @@ public class WebAppPresenter {
                     e.printStackTrace();
                 }
                 System.out.println(data);
-                WebUserPickerActivity.startActivity(mContext, vo, new WebUserPickerActivity.UserPickerListener() {
+                WebUserPickerActivity.startActivity(mContext, vo, new WebUserPickerActivity
+                        .UserPickerListener() {
 
                     @Override
                     public void onPickDone(List<UserVO> users) {
@@ -109,19 +127,40 @@ public class WebAppPresenter {
         });
 
         mView.getBridgeWebView().registerHandler("getaddress", new BridgeHandler() {
-
             @Override
             public void handler(String data, CallBackFunction function) {
                 try {
                     String code = AppManager.getInstant(mContext).getCurrentAddressCode();
                     String name = AppManager.getInstant(mContext).getCurrentAddressName();
                     JSONObject result = new JSONObject();
-                    result.put("name",name);
-                    result.put("code",code);
+                    result.put("name", name);
+                    result.put("code", code);
                     JSONObject jo = new JSONObject();
-                    jo.put("success",true);
-                    jo.put("result",result);
+                    jo.put("success", true);
+                    jo.put("result", result);
                     function.onCallBack(jo.toString());
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+        });
+
+        mView.getBridgeWebView().registerHandler("displayImg", new BridgeHandler() {
+
+            @Override
+            public void handler(String data, CallBackFunction function) {
+                try {
+                    JSONObject jo = new JSONObject(data);
+                    JSONArray ja = jo.getJSONArray("imgs");
+                    String[] imgs = new String[ja.length()];
+                    List<MultiplexImage> images = new ArrayList<>();
+                    for (int i = -1; ++i < ja.length(); ) {
+                        imgs[i] = ja.getString(i);
+                        images.add(new MultiplexImage(ja.getString(i), ja
+                                .getString(i),
+                                MultiplexImage.ImageType.NORMAL));
+                    }
+                    mView.showImages(images);
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
@@ -134,6 +173,25 @@ public class WebAppPresenter {
         System.out.println(result);
         mPaddingCallbackFunction.onCallBack(result);
         mView.hideSignaturePanel();
+    }
+
+    public void onQRCodeDone(String result) {
+        System.out.println("onQRCodeDone:" + result);
+        String json = getQRCodeResultJsonString(result);
+        mPaddingCallbackFunction.onCallBack(json);
+    }
+
+    private String getQRCodeResultJsonString(String result) {
+        JSONObject jo = new JSONObject();
+        try {
+            jo.put("success", true);
+            JSONObject resultJO = new JSONObject();
+            resultJO.put("msg", result);
+            jo.put("result", resultJO);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        return jo.toString();
     }
 
 

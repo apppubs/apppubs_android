@@ -1,8 +1,10 @@
 package com.apppubs.d20.page;
 
 import android.content.Context;
+import android.graphics.pdf.PdfDocument;
 
 import com.apppubs.d20.AppContext;
+import com.apppubs.d20.constant.Constants;
 import com.apppubs.d20.util.StringUtils;
 import com.apppubs.d20.util.Utils;
 
@@ -72,6 +74,10 @@ public class PageModel {
             return false;
         }
         PageModel des = (PageModel) o;
+        System.out.println("比较pagemodel pageId相同？" + Utils.compare(this.pageId, des.getPageId()));
+        System.out.println("比较pagemodel content？" + Utils.compare(this.content, des.getContent()));
+        System.out.println("比较pagemodel titleBarModel相同？" + Utils.compare(this.titleBarModel, des
+                .getTitleBarModel()));
         if (!Utils.compare(this.pageId, des.getPageId())
                 || !Utils.compare(this.content, des.getContent())
                 || !Utils.compare(this.titleBarModel, des.getTitleBarModel())) {
@@ -89,21 +95,31 @@ interface PageContentModel {
 
 class PageNormalContentModel implements PageContentModel {
 
-    private JSONArray components;
+    private List<PageComponent> components;
 
-    public PageNormalContentModel(String jsonArr) {
+    public PageNormalContentModel(String jsonArrStr) {
         try {
-            components = new JSONArray(jsonArr);
+            JSONArray jsonArr = null;
+            jsonArr = new JSONArray(jsonArrStr);
+            if (jsonArr != null) {
+                components = new ArrayList<PageComponent>();
+                for (int i = -1; ++i < jsonArr.length(); ) {
+                    PageComponent p = PageComponentFactory.getPageComponent(jsonArr.getJSONObject
+                            (i));
+                    components.add(p);
+                }
+            }
         } catch (JSONException e) {
             e.printStackTrace();
         }
+
     }
 
-    public JSONArray getComponents() {
+    public List<PageComponent> getComponents() {
         return components;
     }
 
-    public void setComponents(JSONArray components) {
+    public void setComponents(List<PageComponent> components) {
         this.components = components;
     }
 
@@ -113,13 +129,20 @@ class PageNormalContentModel implements PageContentModel {
             return false;
         }
         PageNormalContentModel des = (PageNormalContentModel) o;
-        if ((this.components == null && des.getComponents() != null)
-                || (this.components != null && des.getComponents() == null)) {
+        if (this.components == null && des.getComponents() != null) {
+            return false;
+        }
+        if (this.components != null && des.getComponents() == null) {
             return false;
         }
         if ((this.components != null && des.getComponents() != null)) {
-            if (!StringUtils.equals(this.components.toString(), des.getComponents().toString())) {
+            if (this.components.size() != des.getComponents().size()) {
                 return false;
+            }
+            for (int i = -1; ++i < this.components.size(); ) {
+                if (!this.components.get(i).equals(des.getComponents().get(i))) {
+                    return false;
+                }
             }
         }
         return true;
@@ -295,6 +318,26 @@ class TitleBarModel {
     }
 }
 
+
+class PageComponentFactory {
+    public static PageComponent getPageComponent(JSONObject component) {
+        String componentCode = null;
+        try {
+            componentCode = component.getString("comtype");
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        if (component == null || componentCode == null) {
+            return null;
+        }
+        if (Constants.PAGE_COMPONENT_DEFAULT_USER_INFO.equals(componentCode)) {
+            return new DefaultUserinfoComponent(component.toString());
+        } else {
+            return new PageComponent(component.toString());
+        }
+    }
+}
+
 class TitleBarNomalModel extends TitleBarModel {
 
     private String leftImgUrl;
@@ -328,7 +371,6 @@ class TitleBarNomalModel extends TitleBarModel {
     public void setLeftAction(String leftAction) {
         this.leftAction = leftAction;
     }
-
 }
 
 class TitleBarAddressModel extends TitleBarModel {
@@ -391,6 +433,99 @@ class TitleBarAddressModel extends TitleBarModel {
 
     public void setRightBtnAction(String rightBtnAction) {
         this.rightBtnAction = rightBtnAction;
+
+    }
+}
+
+class PageComponent {
+    private String jsonStr;
+    private String code;
+    private JSONObject jo;
+
+    public PageComponent(String json) {
+        jsonStr = json;
+        try {
+            jo = new JSONObject(json);
+            code = jo.getString("comtype");
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public String getJson() {
+        return jsonStr;
+    }
+
+    public void setJson(String jsonStr) {
+        this.jsonStr = jsonStr;
+    }
+
+    public String getCode() {
+        return code;
+    }
+
+    public void setCode(String code) {
+        this.code = code;
+    }
+
+    public JSONObject getJSONObject() {
+        return jo;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (!(o instanceof PageComponent)) {
+            return false;
+        }
+        PageComponent des = (PageComponent) o;
+        if (!Utils.compare(jsonStr, des.getJson())) {
+            return false;
+        }
+        return true;
+    }
+}
+
+class DefaultUserinfoComponent extends PageComponent {
+
+    private String username;
+    private String avatarURL;
+
+    public DefaultUserinfoComponent(String json) {
+        super(json);
+    }
+
+    public String getUsername() {
+        return username;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
+    }
+
+    public String getAvatarURL() {
+        return avatarURL;
+    }
+
+    public void setAvatarURL(String avatarURL) {
+        this.avatarURL = avatarURL;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (!super.equals(o)) {
+            return false;
+        }
+        if (!(o instanceof DefaultUserinfoComponent)) {
+            return false;
+        }
+        DefaultUserinfoComponent des = (DefaultUserinfoComponent) o;
+        if (!Utils.compare(username, des.getUsername())) {
+            return false;
+        }
+        if (!Utils.compare(avatarURL, des.getAvatarURL())) {
+            return false;
+        }
+        return true;
     }
 }
 
@@ -455,13 +590,15 @@ class GridViewModel {
     }
 
     public int getTotalPage() {
-        return items.size() % (maxRow * column) == 0 ? items.size() / (maxRow * column) : items
+        return items.size() % (maxRow * column) == 0 ? items.size() / (maxRow *
+                column) : items
                 .size() / (maxRow * column) + 1;
     }
 
     public int getRealMaxRow() {
         if (items.size() <= maxRow * column) {
-            return items.size() % column == 0 ? items.size() / column : items.size() / column + 1;
+            return items.size() % column == 0 ? items.size() / column : items.size() / column
+                    + 1;
         } else {
             return maxRow;
         }

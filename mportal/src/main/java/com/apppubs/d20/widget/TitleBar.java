@@ -74,6 +74,7 @@ public class TitleBar extends RelativeLayout {
     private OnClickListener mLeft2ndClickListener;
     private OnClickListener mRight2ndClickListener;
     private OnClickListener mTitleClickListener;
+    private OnClickListener mAddressClickListener;
 
     private LayoutParams mLeftLp, mLeft2ndLp, mRight2ndLp, mRightLp, mTitleLp;
 
@@ -413,6 +414,15 @@ public class TitleBar extends RelativeLayout {
         if (mAddressLabel == null) {
             mAddressLabel = new AddressTitleBarLabel(mContext);
             LayoutParams lp = new LayoutParams(LayoutParams.WRAP_CONTENT,LayoutParams.MATCH_PARENT);
+            mAddressLabel.setBackgroundColor(Color.RED);
+            mAddressLabel.setOnClickListener(new OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if (mAddressClickListener!=null){
+                        mAddressClickListener.onClick(v);
+                    }
+                }
+            });
             addView(mAddressLabel,lp);
         }
 
@@ -421,7 +431,8 @@ public class TitleBar extends RelativeLayout {
     }
 
     public void setAddressListener(OnClickListener listener){
-        mAddressLabel.setOnClickListener(listener);
+        mAddressClickListener  = listener;
+
     }
 
     public void setOnTitleClickListener(OnClickListener listener) {
