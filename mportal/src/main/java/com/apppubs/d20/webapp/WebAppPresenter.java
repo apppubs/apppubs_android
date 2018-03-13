@@ -2,12 +2,12 @@ package com.apppubs.d20.webapp;
 
 import android.content.Context;
 import android.support.annotation.NonNull;
-import android.text.TextUtils;
 
+import com.apppubs.d20.AppContext;
 import com.apppubs.d20.AppManager;
+import com.apppubs.d20.bean.UserInfo;
 import com.apppubs.d20.model.SystemBussiness;
 import com.apppubs.d20.model.VersionInfo;
-import com.apppubs.d20.util.Utils;
 import com.apppubs.d20.webapp.model.UserPickerVO;
 import com.apppubs.d20.webapp.model.UserVO;
 import com.apppubs.jsbridge.BridgeHandler;
@@ -164,11 +164,21 @@ public class WebAppPresenter {
             }
         });
 
+        //版本检查
         mView.getBridgeWebView().registerHandler("checkVersion", new BridgeHandler() {
 
             @Override
             public void handler(String data, CallBackFunction function) {
                 checkUpdate();
+            }
+        });
+
+        //用户信息获取
+        mView.getBridgeWebView().registerHandler("getUserInfo", new BridgeHandler() {
+            @Override
+            public void handler(String data, CallBackFunction function) {
+                JSONObject jo = getUserInfoJson();
+                function.onCallBack(jo.toString());
             }
         });
     }
@@ -210,6 +220,24 @@ public class WebAppPresenter {
                 mView.showVersionInfo(vi);
             }
         });
+    }
+
+    @NonNull
+    private JSONObject getUserInfoJson() {
+        UserInfo userInfo = AppContext.getInstance(mContext).getCurrentUser();
+        JSONObject jo = new JSONObject();
+        try {
+            jo.put("success",true);
+            JSONObject resultJo = new JSONObject();
+            resultJo.put("userId",userInfo.getUserId());
+            resultJo.put("username",userInfo.getUsername());
+            resultJo.put("avatarUrl",userInfo.getAvatarUrl());
+            resultJo.put("truename",userInfo.getTrueName());
+            jo.put("result",resultJo);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        return jo;
     }
 
 }
