@@ -6,8 +6,6 @@ import android.support.annotation.NonNull;
 import com.apppubs.d20.AppContext;
 import com.apppubs.d20.AppManager;
 import com.apppubs.d20.bean.UserInfo;
-import com.apppubs.d20.model.SystemBussiness;
-import com.apppubs.d20.model.VersionInfo;
 import com.apppubs.d20.webapp.model.UserPickerVO;
 import com.apppubs.d20.webapp.model.UserVO;
 import com.apppubs.jsbridge.BridgeHandler;
@@ -169,7 +167,7 @@ public class WebAppPresenter {
 
             @Override
             public void handler(String data, CallBackFunction function) {
-                checkUpdate();
+                mView.getVersionPresenter().checkUpdate();
             }
         });
 
@@ -195,10 +193,6 @@ public class WebAppPresenter {
         mPaddingCallbackFunction.onCallBack(json);
     }
 
-    public void startDownloadApp(String updateUrl) {
-        AppManager.getInstant(mContext).downloadApp(updateUrl);
-    }
-
     private String getQRCodeResultJsonString(String result) {
         JSONObject jo = new JSONObject();
         try {
@@ -212,15 +206,6 @@ public class WebAppPresenter {
         return jo.toString();
     }
 
-    private void checkUpdate() {
-        SystemBussiness.getInstance(mContext).checkUpdate(mContext, new SystemBussiness.CheckUpdateListener() {
-
-            @Override
-            public void onDone(VersionInfo vi) {
-                mView.showVersionInfo(vi);
-            }
-        });
-    }
 
     @NonNull
     private JSONObject getUserInfoJson() {

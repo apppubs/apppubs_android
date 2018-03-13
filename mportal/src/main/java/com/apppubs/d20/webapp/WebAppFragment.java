@@ -43,14 +43,14 @@ import com.apppubs.d20.bean.MenuItem;
 import com.apppubs.d20.fragment.BaseFragment;
 import com.apppubs.d20.model.VersionInfo;
 import com.apppubs.d20.myfile.FilePreviewFragment;
-import com.apppubs.d20.start.StartUpActivity;
+import com.apppubs.d20.presenter.VersionPresenter;
 import com.apppubs.d20.util.Base64;
 import com.apppubs.d20.util.BitmapUtils;
 import com.apppubs.d20.util.LocationManager;
 import com.apppubs.d20.util.LogM;
 import com.apppubs.d20.util.SystemUtils;
 import com.apppubs.d20.util.Utils;
-import com.apppubs.d20.widget.AlertDialog;
+import com.apppubs.d20.view.IVersionView;
 import com.apppubs.d20.widget.ConfirmDialog;
 import com.apppubs.d20.widget.HorizontalScrollLabels;
 import com.apppubs.d20.widget.ProgressHUD;
@@ -94,7 +94,8 @@ import cn.sharesdk.tencent.qq.QQ;
 import cn.sharesdk.wechat.friends.Wechat;
 import cn.sharesdk.wechat.moments.WechatMoments;
 
-public class WebAppFragment extends BaseFragment implements OnClickListener, IWebAppView {
+public class WebAppFragment extends BaseFragment implements OnClickListener, IWebAppView,
+        IVersionView {
 
     public static final String ARGUMENT_INT_MENUBARTYPE = "menu_bar_type";
     public static final String ARGUMENT_STRING_URL = "url";
@@ -123,6 +124,7 @@ public class WebAppFragment extends BaseFragment implements OnClickListener, IWe
     private String mOnloadingText = "载入中 ···";
 
     private WebAppPresenter mPresenter;
+    private VersionPresenter mVersionPresenter;
 
     //pop signature
     private PopupWindow mSignaturePopWin;
@@ -223,6 +225,7 @@ public class WebAppFragment extends BaseFragment implements OnClickListener, IWe
 
     private void initPresenter() {
         mPresenter = new WebAppPresenter(getContext(), this);
+        mVersionPresenter = new VersionPresenter(getContext(),this);
     }
 
     @SuppressLint({"NewApi", "SetJavaScriptEnabled"})
@@ -967,17 +970,23 @@ public class WebAppFragment extends BaseFragment implements OnClickListener, IWe
     @Override
     public void showScanQRCode(boolean needSelfResolve) {
         Intent intent = new Intent(mContext, CaptureActivity.class);
-        intent.putExtra(CaptureActivity.EXTRA_NAME_BOOLEAN_NEED_SELF_RESOLVE,needSelfResolve);
+        intent.putExtra(CaptureActivity.EXTRA_NAME_BOOLEAN_NEED_SELF_RESOLVE, needSelfResolve);
         startActivityForResult(intent, REQUEST_CODE_QRCODE);
     }
 
     @Override
+    public VersionPresenter getVersionPresenter() {
+        return mVersionPresenter;
+    }
+
+    @Override
     public void showVersionInfo(final VersionInfo vi) {
-        if (!vi.isNeedUpdate()){
+        if (!vi.isNeedUpdate()) {
             Toast.makeText(mHostActivity, "当前已是最新版本", Toast.LENGTH_SHORT).show();
             return;
         }
-        String title = String.format("检查到有新版 %s", TextUtils.isEmpty(vi.getVersion()) ? "" : "V" + vi.getVersion());
+        String title = String.format("检查到有新版 %s", TextUtils.isEmpty(vi.getVersion()) ? "" : "V" +
+                vi.getVersion());
         ConfirmDialog dialog = new ConfirmDialog(getContext(), new ConfirmDialog.ConfirmListener() {
 
             @Override
@@ -986,7 +995,7 @@ public class WebAppFragment extends BaseFragment implements OnClickListener, IWe
 
             @Override
             public void onOkClick() {
-                mPresenter.startDownloadApp(vi.getUpdateUrl());
+                mVersionPresenter.startDownloadApp(vi.getUpdateUrl());
                 Toast.makeText(mContext, "正在下载中，请稍候", Toast.LENGTH_SHORT).show();
             }
         }, title, vi.getUpdateDescribe(), "下次", "更新");

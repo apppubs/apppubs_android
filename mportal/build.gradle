@@ -21,12 +21,12 @@ android {
                 JPUSH_PKGNAME        : applicationId,
                 JPUSH_APPKEY         : "85358a757b2da7055f45f83c", //JPush上注册的包名对应的appkey.
                 JPUSH_CHANNEL        : "developer-default", //暂时填写默认值即可.
-                APPCODE              : "U1510767574895",
-                BASE_URL             : "http://123.57.13.138:8088/",
+                APPCODE              : "U1521681745888",
+                BASE_URL             : "http://39.107.13.225/",
                 DISPLAY_ORIENTATION  : "1",
                 ENABLE_SPLASH_SKIP   : false,
                 NEED_START_UP_VERSION: true,
-                SERVER_CONTEXT       : "wmh360"
+                SERVER_CONTEXT       : "meap"
         ]
 
 

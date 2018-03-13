@@ -46,13 +46,12 @@ public class PagePresenter {
         mPageBiz.loadPage(pageId, new APResultCallback<PageModel>() {
             @Override
             public void onDone(final PageModel model) {
-//                if (mPageModel != null && mPageModel.equals(model)) {
-//                    //不需要更新
-//                    LogM.log(PagePresenter.class, "is equal");
-//                } else {
-//                    onDataUpdated(model);
-//                }
-                onDataUpdated(model);
+                if (mPageModel != null && mPageModel.equals(model)) {
+                    //不需要更新
+                    LogM.log(PagePresenter.class, "is equal");
+                } else {
+                    onDataUpdated(model);
+                }
             }
 
             @Override

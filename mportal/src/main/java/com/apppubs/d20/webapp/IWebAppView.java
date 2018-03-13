@@ -2,6 +2,7 @@ package com.apppubs.d20.webapp;
 
 import com.apppubs.d20.model.VersionInfo;
 import com.apppubs.d20.model.WMHErrorCode;
+import com.apppubs.d20.presenter.VersionPresenter;
 import com.apppubs.jsbridge.BridgeWebView;
 import com.jelly.mango.MultiplexImage;
 
@@ -25,6 +26,5 @@ public interface IWebAppView {
 
     void showScanQRCode(boolean needSelfResolve);
 
-    void showVersionInfo(VersionInfo vi);
-
+    VersionPresenter getVersionPresenter();
 }

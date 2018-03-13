@@ -46,13 +46,17 @@ import com.apppubs.d20.fragment.BaseFragment;
 import com.apppubs.d20.fragment.ChannelFragment;
 import com.apppubs.d20.fragment.ChannelFragmentFactory;
 import com.apppubs.d20.fragment.TitleMenuFragment;
+import com.apppubs.d20.model.VersionInfo;
+import com.apppubs.d20.presenter.VersionPresenter;
 import com.apppubs.d20.util.FileUtils;
 import com.apppubs.d20.util.JSONResult;
 import com.apppubs.d20.util.LogM;
 import com.apppubs.d20.util.StringUtils;
 import com.apppubs.d20.util.Utils;
+import com.apppubs.d20.view.IVersionView;
 import com.apppubs.d20.webapp.WebAppFragment;
 import com.apppubs.d20.widget.CheckableFlowLayout;
+import com.apppubs.d20.widget.ConfirmDialog;
 import com.apppubs.d20.widget.DraggableGridView;
 import com.apppubs.d20.widget.DraggableGridView.OnRearrangeListener;
 import com.apppubs.d20.widget.EditTextDialog;
@@ -78,7 +82,8 @@ import java.util.UUID;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public class PageFragment extends TitleMenuFragment implements OnClickListener, IPageView {
+public class PageFragment extends TitleMenuFragment implements OnClickListener, IPageView,
+        IVersionView {
 
     public static final String EXTRA_STRING_NAME_PAGE_ID = "page_id";
     public static final String CUSTOM_WEB_APP_URL_SERIALIZED_FILE_NAME = "custom_web_app_url_map";
@@ -103,12 +108,13 @@ public class PageFragment extends TitleMenuFragment implements OnClickListener, 
     private List<String> mUnselectedTabs;
 
     private PagePresenter mPresenter;
+    private VersionPresenter mVersionPrsenter;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         mAnchorPointerViewList = new ArrayList<View>();
-        mPresenter = new PagePresenter(mContext, this);
+        initPresenter();
     }
 
     @Override
@@ -151,7 +157,8 @@ public class PageFragment extends TitleMenuFragment implements OnClickListener, 
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == AddressPickerActivity.REQUEST_CODE && resultCode ==
                 AddressPickerActivity.RESULT_SUCCESS) {
-            AddressModel address = (AddressModel) data.getSerializableExtra(AddressPickerActivity.RESULT_EXTRA_KEY_ADDRESS);
+            AddressModel address = (AddressModel) data.getSerializableExtra(AddressPickerActivity
+                    .RESULT_EXTRA_KEY_ADDRESS);
             mPresenter.onAddressSelected(address);
         }
     }
@@ -234,6 +241,30 @@ public class PageFragment extends TitleMenuFragment implements OnClickListener, 
         return mPageId;
     }
 
+    @Override
+    public void showVersionInfo(final VersionInfo vi) {
+        if (!vi.isNeedUpdate()) {
+            Toast.makeText(mHostActivity, "当前已是最新版本", Toast.LENGTH_SHORT).show();
+            return;
+        }
+        String title = String.format("检查到有新版 %s", TextUtils.isEmpty(vi.getVersion()) ? "" : "V" +
+                vi.getVersion());
+        ConfirmDialog dialog = new ConfirmDialog(getContext(), new ConfirmDialog.ConfirmListener() {
+
+            @Override
+            public void onCancelClick() {
+            }
+
+            @Override
+            public void onOkClick() {
+                mVersionPrsenter.startDownloadApp(vi.getUpdateUrl());
+                Toast.makeText(mContext, "正在下载中，请稍候", Toast.LENGTH_SHORT).show();
+            }
+        }, title, vi.getUpdateDescribe(), "下次", "更新");
+        dialog.show();
+        dialog.setCanceledOnTouchOutside(false);
+    }
+
     //pragma private
     private void replaceTitleBar(TitleBar titlebar) {
         if (titlebar == null) {
@@ -258,6 +289,12 @@ public class PageFragment extends TitleMenuFragment implements OnClickListener, 
     /**
      * 初始化rootview
      */
+
+    private void initPresenter() {
+        mPresenter = new PagePresenter(mContext, this);
+        mVersionPrsenter = new VersionPresenter(mContext, this);
+    }
+
     private void initView() {
         LinearLayout rootLl = new LinearLayout(mContext);
         rootLl.setOrientation(LinearLayout.VERTICAL);
@@ -725,7 +762,8 @@ public class PageFragment extends TitleMenuFragment implements OnClickListener, 
             }
             rl.setTag(item.getString("url"));
             rl.setOnClickListener(this);
-            LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(LayoutParams.MATCH_PARENT, Utils.dip2px(mContext,
+            LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(LayoutParams
+                    .MATCH_PARENT, Utils.dip2px(mContext,
                     50));
             mContainerLl.addView(rl, lp);
 
@@ -852,13 +890,12 @@ public class PageFragment extends TitleMenuFragment implements OnClickListener, 
 
             @Override
             public void onItemClick(int index, HotArea hotArea) {
-
+                System.out.println("PageFragment 点击热区 index:"+index);
                 if (!TextUtils.isEmpty(getUrlReplacement(hotArea.getUrl()))) {
                     resolveUrl(convertUri(hotArea.getUrl()));
                 } else {
                     resolveUrl(hotArea.getUrl());
                 }
-
             }
 
             @Override
@@ -1264,7 +1301,7 @@ public class PageFragment extends TitleMenuFragment implements OnClickListener, 
         }
         TitleBar titlebar = null;
         if (model.getType().equals("0")) {
-            TitleBarNomalModel normalMordel  = (TitleBarNomalModel) model;
+            TitleBarNomalModel normalMordel = (TitleBarNomalModel) model;
             titlebar = new TitleBar(mContext);
             String title = normalMordel.getTitle();
             titlebar.setTitle(title);
@@ -1291,12 +1328,14 @@ public class PageFragment extends TitleMenuFragment implements OnClickListener, 
             }
             //显示左边按钮
             if (!TextUtils.isEmpty(normalMordel.getLeftImgUrl())) {
-                titlebar.addLeftBtnWithImageUrlAndClickListener(normalMordel.getLeftImgUrl(), normalMordel
+                titlebar.addLeftBtnWithImageUrlAndClickListener(normalMordel.getLeftImgUrl(),
+                        normalMordel
                         .getLeftAction(), PageFragment.this);
             }
             //显示右边按钮
             if (!TextUtils.isEmpty(normalMordel.getRightImgUrl())) {
-                titlebar.addRightBtnWithImageUrlAndClickListener(normalMordel.getRightImgUrl(), normalMordel
+                titlebar.addRightBtnWithImageUrlAndClickListener(normalMordel.getRightImgUrl(),
+                        normalMordel
                         .getRightAction(), PageFragment.this);
             }
             titlebar.setUnderlineColor(normalMordel.getUnderlineColor());
@@ -1340,7 +1379,7 @@ public class PageFragment extends TitleMenuFragment implements OnClickListener, 
             if (!TextUtils.isEmpty(addressModel.getRightImgUrl())) {
                 titlebar.addRightBtnWithImageUrlAndClickListener(addressModel.getRightImgUrl(),
                         addressModel
-                        .getRightAction(), PageFragment.this);
+                                .getRightAction(), PageFragment.this);
             }
             titlebar.setUnderlineColor(addressModel.getUnderlineColor());
         }
@@ -1384,7 +1423,10 @@ public class PageFragment extends TitleMenuFragment implements OnClickListener, 
 
     //解析url
     private void resolveUrl(String url) {
-        if (null != url && (url.startsWith("apppubs://") && url.contains("anchorpointer"))) {
+        if (TextUtils.isEmpty(url)) {
+            return;
+        }
+        if ((url.startsWith("apppubs://") && url.contains("anchorpointer"))) {
             mScrollView.scrollTo(0, 100);
             for (int i = -1; ++i < mAnchorPointerViewList.size(); ) {
                 View view = mAnchorPointerViewList.get(i);
@@ -1394,6 +1436,8 @@ public class PageFragment extends TitleMenuFragment implements OnClickListener, 
                     mScrollView.smoothScrollTo(0, view.getTop());
                 }
             }
+        } else if (url.startsWith("apppubs://checkversion")) {
+            mVersionPrsenter.checkUpdate();
         } else {
             ViewCourier.getInstance(mHostActivity).execute(mHostActivity, url);
         }
