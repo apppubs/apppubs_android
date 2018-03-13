@@ -105,7 +105,7 @@ public class SystemBussiness extends BaseBussiness {
 
 	private Context mContext;
 	private AppContext mAppContext;
-	private static SystemBussiness mSystemBussiness;
+	private volatile  static SystemBussiness mSystemBussiness;
 
 	private SystemBussiness(Context context) {
 		mContext = context;

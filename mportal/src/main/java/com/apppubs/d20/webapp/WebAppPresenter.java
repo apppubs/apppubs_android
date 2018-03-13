@@ -2,16 +2,12 @@ package com.apppubs.d20.webapp;
 
 import android.content.Context;
 import android.support.annotation.NonNull;
-import android.view.Gravity;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-import android.view.WindowManager;
-import android.widget.PopupWindow;
+import android.text.TextUtils;
 
 import com.apppubs.d20.AppManager;
-import com.apppubs.d20.R;
-import com.apppubs.d20.activity.BaseActivity;
+import com.apppubs.d20.model.SystemBussiness;
+import com.apppubs.d20.model.VersionInfo;
+import com.apppubs.d20.util.Utils;
 import com.apppubs.d20.webapp.model.UserPickerVO;
 import com.apppubs.d20.webapp.model.UserVO;
 import com.apppubs.jsbridge.BridgeHandler;
@@ -167,6 +163,14 @@ public class WebAppPresenter {
 
             }
         });
+
+        mView.getBridgeWebView().registerHandler("checkVersion", new BridgeHandler() {
+
+            @Override
+            public void handler(String data, CallBackFunction function) {
+                checkUpdate();
+            }
+        });
     }
 
     public void onSignatureDone(String result) {
@@ -179,6 +183,10 @@ public class WebAppPresenter {
         System.out.println("onQRCodeDone:" + result);
         String json = getQRCodeResultJsonString(result);
         mPaddingCallbackFunction.onCallBack(json);
+    }
+
+    public void startDownloadApp(String updateUrl) {
+        AppManager.getInstant(mContext).downloadApp(updateUrl);
     }
 
     private String getQRCodeResultJsonString(String result) {
@@ -194,5 +202,14 @@ public class WebAppPresenter {
         return jo.toString();
     }
 
+    private void checkUpdate() {
+        SystemBussiness.getInstance(mContext).checkUpdate(mContext, new SystemBussiness.CheckUpdateListener() {
+
+            @Override
+            public void onDone(VersionInfo vi) {
+                mView.showVersionInfo(vi);
+            }
+        });
+    }
 
 }

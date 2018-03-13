@@ -138,7 +138,7 @@ public class AppManager {
         Uri uri = Uri.parse(url);
         DownloadManager.Request request = new DownloadManager.Request(uri);
         // 设置下载路径和文件名
-        request.setDestinationInExternalPublicDir("download", "sdic.apk");
+        request.setDestinationInExternalPublicDir("download", "apppubs.apk");
         request.setDescription(mAppContext.getApp().getName());
         request.setNotificationVisibility(DownloadManager.Request
                 .VISIBILITY_VISIBLE_NOTIFY_COMPLETED);

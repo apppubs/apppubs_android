@@ -27,6 +27,7 @@ import android.widget.EditText;
 import android.widget.PopupWindow;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
+import android.widget.Toast;
 
 import com.alipay.sdk.app.PayTask;
 import com.amap.api.location.AMapLocation;
@@ -40,13 +41,17 @@ import com.apppubs.d20.activity.HomeBaseActivity;
 import com.apppubs.d20.activity.ViewCourier;
 import com.apppubs.d20.bean.MenuItem;
 import com.apppubs.d20.fragment.BaseFragment;
+import com.apppubs.d20.model.VersionInfo;
 import com.apppubs.d20.myfile.FilePreviewFragment;
+import com.apppubs.d20.start.StartUpActivity;
 import com.apppubs.d20.util.Base64;
 import com.apppubs.d20.util.BitmapUtils;
 import com.apppubs.d20.util.LocationManager;
 import com.apppubs.d20.util.LogM;
 import com.apppubs.d20.util.SystemUtils;
 import com.apppubs.d20.util.Utils;
+import com.apppubs.d20.widget.AlertDialog;
+import com.apppubs.d20.widget.ConfirmDialog;
 import com.apppubs.d20.widget.HorizontalScrollLabels;
 import com.apppubs.d20.widget.ProgressHUD;
 import com.apppubs.d20.widget.ProgressWebView;
@@ -964,6 +969,29 @@ public class WebAppFragment extends BaseFragment implements OnClickListener, IWe
         Intent intent = new Intent(mContext, CaptureActivity.class);
         intent.putExtra(CaptureActivity.EXTRA_NAME_BOOLEAN_NEED_SELF_RESOLVE,needSelfResolve);
         startActivityForResult(intent, REQUEST_CODE_QRCODE);
+    }
+
+    @Override
+    public void showVersionInfo(final VersionInfo vi) {
+        if (!vi.isNeedUpdate()){
+            Toast.makeText(mHostActivity, "当前已是最新版本", Toast.LENGTH_SHORT).show();
+            return;
+        }
+        String title = String.format("检查到有新版 %s", TextUtils.isEmpty(vi.getVersion()) ? "" : "V" + vi.getVersion());
+        ConfirmDialog dialog = new ConfirmDialog(getContext(), new ConfirmDialog.ConfirmListener() {
+
+            @Override
+            public void onCancelClick() {
+            }
+
+            @Override
+            public void onOkClick() {
+                mPresenter.startDownloadApp(vi.getUpdateUrl());
+                Toast.makeText(mContext, "正在下载中，请稍候", Toast.LENGTH_SHORT).show();
+            }
+        }, title, vi.getUpdateDescribe(), "下次", "更新");
+        dialog.show();
+        dialog.setCanceledOnTouchOutside(false);
     }
 
     private void dim() {
