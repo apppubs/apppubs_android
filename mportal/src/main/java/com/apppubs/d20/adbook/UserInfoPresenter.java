@@ -265,9 +265,8 @@ public class UserInfoPresenter implements IUserInfoViewListener {
                 if (TextUtils.isEmpty(user.getEmail())) {
                     Toast.makeText(mContext, "邮箱不存在!", Toast.LENGTH_SHORT).show();
                 } else {
-                    // 系统邮件系统的动作为android.content.Intent.ACTION_SEND
-                    Intent email = new Intent(android.content.Intent.ACTION_SEND);
-                    email.setType("plain/text");
+                    Intent email = new Intent(android.content.Intent.ACTION_SENDTO);
+                    email.setData(Uri.parse("mailto:"+user.getEmail()));
                     // 设置邮件默认地址
                     email.putExtra(android.content.Intent.EXTRA_EMAIL, user.getEmail());
                     // // 设置邮件默认标题
