@@ -212,13 +212,13 @@ public class WebAppPresenter {
         UserInfo userInfo = AppContext.getInstance(mContext).getCurrentUser();
         JSONObject jo = new JSONObject();
         try {
-            jo.put("success",true);
+            jo.put("success", true);
             JSONObject resultJo = new JSONObject();
-            resultJo.put("userId",userInfo.getUserId());
-            resultJo.put("username",userInfo.getUsername());
-            resultJo.put("avatarUrl",userInfo.getAvatarUrl());
-            resultJo.put("truename",userInfo.getTrueName());
-            jo.put("result",resultJo);
+            resultJo.put("userId", userInfo.getUserId());
+            resultJo.put("username", userInfo.getUsername());
+            resultJo.put("avatarUrl", userInfo.getAvatarUrl());
+            resultJo.put("truename", userInfo.getTrueName());
+            jo.put("result", resultJo);
         } catch (JSONException e) {
             e.printStackTrace();
         }
