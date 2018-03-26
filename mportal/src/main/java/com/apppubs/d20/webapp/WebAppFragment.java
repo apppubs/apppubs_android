@@ -272,16 +272,6 @@ public class WebAppFragment extends BaseFragment implements OnClickListener, IWe
             }
         });
 
-
-        mWebView.registerHandler("getUserInfo", new BridgeHandler() {
-            @Override
-            public void handler(String data, CallBackFunction function) {
-                LogM.log(WebAppFragment.class, "getUserInfo");
-
-                function.onCallBack(AppContext.getInstance(mContext).getCurrentUser().getUserId());
-            }
-        });
-
         mWebView.registerHandler("hideMenuItems", new BridgeHandler() {
             @Override
             public void handler(String data, CallBackFunction function) {
