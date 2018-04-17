@@ -4,6 +4,24 @@ import android.content.Context;
 import android.net.Uri;
 import android.util.Log;
 
+import com.apppubs.AppContext;
+import com.apppubs.bean.Msg;
+import com.apppubs.bean.MsgRecord;
+import com.apppubs.bean.ServiceNOInfo;
+import com.apppubs.bean.ServiceNo;
+import com.apppubs.bean.User;
+import com.apppubs.constant.URLs;
+import com.apppubs.model.APResultCallback;
+import com.apppubs.model.BaseBussiness;
+import com.apppubs.ui.message.MyFilePlugin;
+import com.apppubs.util.JSONResult;
+import com.apppubs.util.LogM;
+import com.apppubs.util.WebUtils;
+import com.google.gson.reflect.TypeToken;
+import com.orm.SugarRecord;
+
+import org.json.JSONException;
+
 import java.io.File;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
@@ -16,27 +34,6 @@ import java.util.Date;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.Future;
-
-import org.json.JSONException;
-
-import com.apppubs.bean.Msg;
-import com.apppubs.bean.ServiceNOInfo;
-import com.apppubs.bean.ServiceNo;
-import com.apppubs.bean.User;
-import com.apppubs.constant.URLs;
-import com.apppubs.AppContext;
-import com.apppubs.bean.MsgRecord;
-import com.apppubs.ui.message.MyFilePlugin;
-import com.apppubs.model.APResultCallback;
-import com.apppubs.model.BaseBussiness;
-import com.apppubs.util.LogM;
-import com.apppubs.net.finalhttp.AjaxCallBack;
-import com.apppubs.util.WebUtils;
-import com.apppubs.net.finalhttp.FinalHttp;
-import com.google.gson.reflect.TypeToken;
-import com.apppubs.util.JSONResult;
-import com.apppubs.net.finalhttp.AjaxParams;
-import com.orm.SugarRecord;
 
 import io.rong.imkit.DefaultExtensionModule;
 import io.rong.imkit.IExtensionModule;
@@ -379,41 +376,6 @@ public class MsgBussiness extends BaseBussiness {
 			@Override
 			public void run() {
 				
-				try {
-					String uploadURL = URLs.baseURL+URLs.URL_UPLOAD;
-//					String picURL = WebUtils.uploadFile(new File(src), "zipfile", uploadURL);
-					
-					  AjaxParams params = new AjaxParams();
-					  params.put("zipfile", new File(src)); // 上传文件
-
-					  FinalHttp fh = new FinalHttp();
-					  fh.post(uploadURL, params, new AjaxCallBack<String>() {
-						  public void onSuccess(String t) {
-							  FinalHttp fh = new FinalHttp();
-
-								try {
-//									url = URLs.URL_CHAT_SEND + "&receiver=" + receiverUsername + "&sender=" + senderUsername
-//											+ "&content=" + "&contentType=" + Msg.TYPE_CONTENT_VIDEO + "&fileName=" + URLEncoder.encode(t, "utf-8") + "";
-									String url = String.format(URLs.URL_CHAT_SEND_MSG,URLs.baseURL,URLs.appCode,"",senderUsername,receiverUsername,URLEncoder.encode("[视频]","utf-8"),Msg.TYPE_CONTENT_VIDEO+"",URLEncoder.encode(t.trim(), "utf-8"),"");
-									fh.get(url, new AjaxCallBack<String>(){
-										public void onSuccess(String t) {
-											sHandler.post(new OnDoneRun<Object>(callback, null));
-										};
-									});
-								} catch (UnsupportedEncodingException e) {
-									e.printStackTrace();
-								}
-							  
-								
-						  };
-					});
-//					LogM.log(this.getClass(), "上传成功结果是：" + picURL);
-					
-		
-				} catch (IOException e) {
-					e.printStackTrace();
-					sHandler.post(new OnExceptionRun<Object>(callback));
-				}
 			}
 			
 		});
@@ -425,42 +387,6 @@ public class MsgBussiness extends BaseBussiness {
 			
 			@Override
 			public void run() {
-				
-				try {
-					String uploadURL = URLs.baseURL+URLs.URL_UPLOAD;
-//					String picURL = WebUtils.uploadFile(new File(src), "zipfile", uploadURL);
-					
-					AjaxParams params = new AjaxParams();
-					params.put("zipfile", new File(src)); // 上传文件
-					
-					FinalHttp fh = new FinalHttp();
-					fh.post(uploadURL, params, new AjaxCallBack<String>() {
-						public void onSuccess(String t) {
-							FinalHttp fh = new FinalHttp();
-							
-							try {
-//									url = URLs.URL_CHAT_SEND + "&receiver=" + receiverUsername + "&sender=" + senderUsername
-//											+ "&content=" + "&contentType=" + Msg.TYPE_CONTENT_VIDEO + "&fileName=" + URLEncoder.encode(t, "utf-8") + "";
-								String url = String.format(URLs.URL_CHAT_SEND_MSG,URLs.baseURL,URLs.appCode,groupid,senderUsername,"",URLEncoder.encode("[视频]","utf-8"),Msg.TYPE_CONTENT_VIDEO+"",URLEncoder.encode(t.trim(), "utf-8"),"");
-								fh.get(url, new AjaxCallBack<String>(){
-									public void onSuccess(String t) {
-										sHandler.post(new OnDoneRun<Object>(callback, null));
-									};
-								});
-							} catch (UnsupportedEncodingException e) {
-								e.printStackTrace();
-							}
-							
-							
-						};
-					});
-//					LogM.log(this.getClass(), "上传成功结果是：" + picURL);
-					
-					
-				} catch (IOException e) {
-					e.printStackTrace();
-					sHandler.post(new OnExceptionRun<Object>(callback));
-				}
 			}
 			
 		});
