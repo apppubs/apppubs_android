@@ -10,7 +10,7 @@
     android:paddingRight="@dimen/list_item_padding_right"
     android:paddingTop="@dimen/list_item_padding_top" -->
     
-    <com.apppubs.d20.widget.CircularImage
+    <com.apppubs.ui.widget.CircularImage
         android:id="@+id/channel_add_iv"
         android:layout_width="50dp"
         android:layout_height="50dp"

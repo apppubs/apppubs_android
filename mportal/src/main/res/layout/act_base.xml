@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     android:orientation="vertical" >
 
-    <com.apppubs.d20.widget.TitleBar
+    <com.apppubs.ui.widget.TitleBar
         android:id="@+id/base_tb"
         android:layout_width="match_parent"
         android:layout_height="@dimen/title_height"
@@ -15,6 +15,6 @@
         mportal:titleSize="@dimen/title_text_size"
         mportal:rightTextSize="@dimen/title_text_left_right"
          >
-    </com.apppubs.d20.widget.TitleBar>
+    </com.apppubs.ui.widget.TitleBar>
 
 </LinearLayout>

@@ -47,7 +47,7 @@
             android:textSize="14dp" />
     </RelativeLayout>
 
-    <com.apppubs.d20.widget.ImageButton
+    <com.apppubs.ui.widget.ImageButton
         android:id="@+id/left_back_splash"
         android:layout_width="30dip"
         android:layout_height="30dip"

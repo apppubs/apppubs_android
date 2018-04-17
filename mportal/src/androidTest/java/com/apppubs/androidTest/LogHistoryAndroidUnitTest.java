@@ -10,14 +10,9 @@ import android.support.test.filters.SmallTest;
 import android.support.test.runner.AndroidJUnit4;
 import android.test.InstrumentationTestCase;
 
-import com.apppubs.d20.myfile.FileCacheManager;
-import com.artifex.mupdfdemo.SearchTaskResult;
-
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-
-import java.io.File;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 

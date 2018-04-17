@@ -5,7 +5,7 @@
     android:layout_height="match_parent"
     android:background="#fff" >
 
-    <com.apppubs.d20.widget.TitleBar
+    <com.apppubs.ui.widget.TitleBar
         android:id="@+id/fogword_tb"
         android:layout_width="match_parent"
         android:layout_height="@dimen/title_height"
@@ -13,7 +13,7 @@
         mportal:leftImgSrc="@drawable/top_back_btn"
         mportal:mTitle="找回密码"
         mportal:titleSize="@dimen/title_text_size" >
-    </com.apppubs.d20.widget.TitleBar>
+    </com.apppubs.ui.widget.TitleBar>
 
     <LinearLayout
         android:id="@+id/fogre_layi"

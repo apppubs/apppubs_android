@@ -56,7 +56,7 @@
                 android:padding="4dip"
                 android:src="@drawable/icon_pic" />
 
-            <com.apppubs.d20.widget.RatioLayout
+            <com.apppubs.ui.widget.RatioLayout
                 android:id="@+id/baoliao_pic_con_ratio_layout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -67,7 +67,7 @@
                     android:id="@+id/baoliao_pic_con_iv"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent" />
-            </com.apppubs.d20.widget.RatioLayout>
+            </com.apppubs.ui.widget.RatioLayout>
 
             <LinearLayout
                 android:id="@+id/baoliao_apppic_lin"
@@ -87,12 +87,12 @@
                     android:src="@drawable/up_img"
                     android:visibility="gone" />
 
-                <com.apppubs.d20.widget.FlowLayout
+                <com.apppubs.ui.widget.FlowLayout
                     android:id="@+id/chicepicss"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_margin="6dip" >
-                </com.apppubs.d20.widget.FlowLayout>
+                </com.apppubs.ui.widget.FlowLayout>
             </LinearLayout>
 
             <LinearLayout

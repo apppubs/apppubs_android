@@ -6,7 +6,7 @@
     android:background="@drawable/sel_common_item"
     android:orientation="vertical" >
 
-    <com.apppubs.d20.widget.RatioLayout
+    <com.apppubs.ui.widget.RatioLayout
         android:id="@+id/right_gv_item"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -18,7 +18,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:scaleType="centerCrop" />
-    </com.apppubs.d20.widget.RatioLayout>
+    </com.apppubs.ui.widget.RatioLayout>
 
     <RelativeLayout
         android:layout_width="match_parent"

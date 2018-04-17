@@ -27,11 +27,11 @@
         android:layout_below="@id/collect_hsv"
         android:background="?attr/appDefaultTextColor" />
  
-    <com.apppubs.d20.widget.NoScollViewparge
+    <com.apppubs.ui.widget.NoScollViewparge
         android:id="@+id/collection_viewparge"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_below="@id/collection_line" >
-    </com.apppubs.d20.widget.NoScollViewparge>
+    </com.apppubs.ui.widget.NoScollViewparge>
 
 </RelativeLayout>

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<com.apppubs.d20.widget.RatioLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<com.apppubs.ui.widget.RatioLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
@@ -11,7 +11,7 @@
         android:orientation="vertical"
         >
 
-        <com.apppubs.d20.widget.RoundImageView
+        <com.apppubs.ui.widget.RoundImageView
             android:id="@+id/default_userinfo_ri"
             android:layout_width="70dp"
             android:layout_height="70dp"
@@ -29,4 +29,4 @@
             />
 
     </LinearLayout>
-</com.apppubs.d20.widget.RatioLayout>
+</com.apppubs.ui.widget.RatioLayout>

@@ -14,7 +14,7 @@
         android:orientation="horizontal"
         android:padding="@dimen/app_padding_left" >
 
-        <com.apppubs.d20.widget.EditTextWithDel
+        <com.apppubs.ui.widget.EditTextWithDel
             android:id="@+id/search_et_keyword"
             android:layout_width="0dp"
             android:layout_height="40dp"
@@ -36,7 +36,7 @@
             android:src="@drawable/sel_search_bg" />
     </LinearLayout>
 
-    <com.apppubs.d20.widget.commonlist.CommonListView
+    <com.apppubs.ui.widget.commonlist.CommonListView
         android:layout_below="@id/search_et_ll"
         android:id="@+id/search_lv_values"
         android:layout_width="match_parent"
@@ -45,7 +45,7 @@
         android:dividerHeight="1dip"
         mportal:list_sel="@drawable/sel_common_item"
         android:visibility="gone" >
-    </com.apppubs.d20.widget.commonlist.CommonListView>
+    </com.apppubs.ui.widget.commonlist.CommonListView>
 
     <LinearLayout
         android:id="@+id/search_progress_ll"

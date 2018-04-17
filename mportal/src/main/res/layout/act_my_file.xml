@@ -15,12 +15,12 @@
         android:focusable="false"
         ></android.support.v7.widget.SearchView>
 
-    <com.apppubs.d20.widget.commonlist.CommonListView
+    <com.apppubs.ui.widget.commonlist.CommonListView
         android:id="@+id/my_file_lv"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_below="@id/my_file_sv"
         android:background="@color/app_common_bg"
-        ></com.apppubs.d20.widget.commonlist.CommonListView>
+        ></com.apppubs.ui.widget.commonlist.CommonListView>
 
 </RelativeLayout>

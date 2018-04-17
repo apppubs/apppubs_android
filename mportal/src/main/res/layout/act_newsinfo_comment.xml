@@ -4,13 +4,13 @@
     android:layout_height="match_parent"
     android:background="@android:color/white" >
 
-    <com.apppubs.d20.widget.commonlist.CommonListView
+    <com.apppubs.ui.widget.commonlist.CommonListView
         xmlns:mportal="http://schemas.android.com/apk/res-auto"
         android:id="@+id/commment_xlv"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         mportal:list_sel="@android:color/transparent" >
-    </com.apppubs.d20.widget.commonlist.CommonListView>
+    </com.apppubs.ui.widget.commonlist.CommonListView>
 
     <LinearLayout
         android:id="@+id/comment_progress_ll"

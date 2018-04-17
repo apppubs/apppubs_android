@@ -10,7 +10,7 @@
     android:paddingTop="@dimen/item_padding_top"
     
      >
-    <com.apppubs.d20.widget.ImageButton
+    <com.apppubs.ui.widget.ImageButton
        
         android:id="@+id/collection_item_delete_iv"
         android:layout_width="wrap_content"

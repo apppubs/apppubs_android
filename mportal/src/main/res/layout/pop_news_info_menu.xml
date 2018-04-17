@@ -19,7 +19,7 @@
         android:onClick="onClick"
          >
 
-        <com.apppubs.d20.widget.ImageButton
+        <com.apppubs.ui.widget.ImageButton
             android:id="@+id/pop_news_info_collect_ib"
             android:layout_width="35dp"
             android:layout_height="35dp"
@@ -57,7 +57,7 @@
         android:onClick="onClick"
          >
 
-        <com.apppubs.d20.widget.ImageButton
+        <com.apppubs.ui.widget.ImageButton
             android:layout_width="35dp"
             android:layout_height="35dp"
             android:layout_gravity="center_vertical"
@@ -88,7 +88,7 @@
         android:onClick="onClick"
         >
 
-        <com.apppubs.d20.widget.ImageButton
+        <com.apppubs.ui.widget.ImageButton
             android:layout_width="35dp"
             android:layout_height="35dp"
             android:layout_gravity="center_vertical"

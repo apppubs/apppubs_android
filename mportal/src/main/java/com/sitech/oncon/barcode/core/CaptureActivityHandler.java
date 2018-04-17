@@ -29,7 +29,7 @@ import android.util.Log;
 import com.google.zxing.BarcodeFormat;
 import com.google.zxing.Result;
 import com.apppubs.d20.R;
-import com.apppubs.d20.activity.CaptureActivity;
+import com.apppubs.ui.activity.CaptureActivity;
 import com.sitech.oncon.barcode.camera.CameraManager;
 
 /**

@@ -5,7 +5,7 @@
     android:background="@color/window_color"
     android:orientation="vertical">
 
-    <com.apppubs.d20.widget.MyScrollView
+    <com.apppubs.ui.widget.MyScrollView
         android:id="@+id/userinfosc"
         android:layout_width="match_parent"
         android:layout_height="0dp"
@@ -39,7 +39,7 @@
                     android:textSize="@dimen/item_text_size_big"
                     android:textStyle="bold" />
 
-                <com.apppubs.d20.widget.CircleTextImageView
+                <com.apppubs.ui.widget.CircleTextImageView
                     android:id="@+id/userinfo_icon_iv"
                     android:layout_width="65dp"
                     android:layout_height="65dp"
@@ -366,7 +366,7 @@
                     android:background="@color/common_divider" />
             </LinearLayout>
         </LinearLayout>
-    </com.apppubs.d20.widget.MyScrollView>
+    </com.apppubs.ui.widget.MyScrollView>
 
     <View
         android:id="@+id/line"

@@ -10,7 +10,7 @@
         android:layout_height="wrap_content"
         android:layout_centerInParent="true">
 
-        <com.apppubs.d20.widget.UserIconImageView
+        <com.apppubs.ui.widget.UserIconImageView
             android:id="@+id/iv_avatar"
             android:layout_width="56dp"
             android:layout_height="56dp"

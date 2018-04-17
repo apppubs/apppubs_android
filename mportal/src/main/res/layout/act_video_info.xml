@@ -9,7 +9,7 @@
         android:layout_height="match_parent"
         android:orientation="vertical" >
 
-        <com.apppubs.d20.widget.RatioLayout
+        <com.apppubs.ui.widget.RatioLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:background="#000"
@@ -30,7 +30,7 @@
                 android:layout_centerInParent="true"
                 android:layout_gravity="center"
                 android:src="@drawable/video_layer" />
-        </com.apppubs.d20.widget.RatioLayout>
+        </com.apppubs.ui.widget.RatioLayout>
 
         <ScrollView
             android:layout_width="match_parent"

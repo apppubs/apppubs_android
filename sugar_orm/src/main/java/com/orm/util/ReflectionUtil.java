@@ -206,24 +206,24 @@ public class ReflectionUtil {
     public static List<Class> getDomainClasses(Context context) {
         List<Class> domainClasses = new ArrayList<Class>();
 
-		String[] classNameArr = new String[]{"com.apppubs.d20.bean.City","com.apppubs.d20.bean.Collection",
-				"com.apppubs.d20.bean.Department","com.apppubs.d20.bean.HeadPic","com.apppubs.d20.bean.LocalFile",
-				"com.apppubs.d20.bean.MenuGroup","com.apppubs.d20.bean.MenuItem","com.apppubs.d20.bean.Msg",
-				"com.apppubs.d20.bean.MsgRecord","com.apppubs.d20.bean.NewsChannel","com.apppubs.d20.bean.NewsInfo",
-				"com.apppubs.d20.bean.Paper","com.apppubs.d20.bean.PaperCatalog",
-				"com.apppubs.d20.bean.PaperDownloadInfo","com.apppubs.d20.bean.PaperInfo","com.apppubs.d20.bean.PaperInfoPic",
-				"com.apppubs.d20.bean.PaperIssue",
-				"com.apppubs.d20.bean.PaperOrder","com.apppubs.d20.bean.ServiceNo","com.apppubs.d20.bean.ServiceNOInfo",
-				"com.apppubs.d20.bean.StartUpPic","com.apppubs.d20.bean.TitleMenu","com.apppubs.d20.bean.User",
-				"com.apppubs.d20.bean.UserDeptLink"
+		String[] classNameArr = new String[]{"com.apppubs.bean.City","com.apppubs.bean.Collection",
+				"com.apppubs.bean.Department","com.apppubs.bean.HeadPic","com.apppubs.bean.LocalFile",
+				"com.apppubs.bean.MenuGroup","com.apppubs.bean.MenuItem","com.apppubs.bean.Msg",
+				"com.apppubs.bean.MsgRecord","com.apppubs.bean.NewsChannel","com.apppubs.bean.NewsInfo",
+				"com.apppubs.bean.Paper","com.apppubs.bean.PaperCatalog",
+				"com.apppubs.bean.PaperDownloadInfo","com.apppubs.bean.PaperInfo","com.apppubs.bean.PaperInfoPic",
+				"com.apppubs.bean.PaperIssue",
+				"com.apppubs.bean.PaperOrder","com.apppubs.bean.ServiceNo","com.apppubs.bean.ServiceNOInfo",
+				"com.apppubs.bean.StartUpPic","com.apppubs.bean.TitleMenu","com.apppubs.bean.User",
+				"com.apppubs.bean.UserDeptLink"
 		};
 //            for (String className : getAllClasses(context)) {
 		for (String className : classNameArr) {
 			System.out.println("运行时类名："+className+"getDomainPackageName:"+ManifestHelper.getDomainPackageName(context));
 
-			if (className.startsWith(ManifestHelper.getDomainPackageName(context))) {
-				Class domainClass = getDomainClass(className, context);
-				if (domainClass != null) domainClasses.add(domainClass);
+            Class domainClass = getDomainClass(className, context);
+            if (domainClass != null) domainClasses.add(domainClass);
+            if (className.startsWith(ManifestHelper.getDomainPackageName(context))) {
 			}
 		}
 //        try {

@@ -28,7 +28,7 @@ import android.os.Looper;
 import com.google.zxing.BarcodeFormat;
 import com.google.zxing.DecodeHintType;
 import com.google.zxing.ResultPointCallback;
-import com.apppubs.d20.activity.CaptureActivity;
+import com.apppubs.ui.activity.CaptureActivity;
 
 /**
  * This thread does all the heavy lifting of decoding the images.

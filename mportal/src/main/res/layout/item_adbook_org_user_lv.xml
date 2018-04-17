@@ -7,7 +7,7 @@
     android:paddingLeft="@dimen/item_padding_left"
     android:paddingTop="@dimen/item_padding_top_narrow">
 
-    <com.apppubs.d20.widget.CircleTextImageView
+    <com.apppubs.ui.widget.CircleTextImageView
         android:id="@+id/item_user_picker_user_iv"
         android:layout_width="40dp"
         android:layout_height="40dp"

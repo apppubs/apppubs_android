@@ -7,7 +7,7 @@
     android:layout_marginTop="@dimen/app_pic_gv_padding"
      >
 
-    <com.apppubs.d20.widget.RatioLayout
+    <com.apppubs.ui.widget.RatioLayout
         
         android:id="@+id/item_frg_specials_lay"
         android:layout_width="match_parent"
@@ -21,7 +21,7 @@
             android:layout_centerInParent="true"
             android:scaleType="centerCrop" />
 
-    </com.apppubs.d20.widget.RatioLayout>
+    </com.apppubs.ui.widget.RatioLayout>
 
     <TextView
         android:id="@+id/item_frg_specials_title"

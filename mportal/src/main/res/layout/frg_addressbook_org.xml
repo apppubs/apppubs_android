@@ -2,12 +2,12 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical" android:layout_width="match_parent"
     android:layout_height="match_parent">
-    <com.apppubs.d20.message.widget.Breadcrumb
+    <com.apppubs.ui.widget.widget.Breadcrumb
         android:id="@+id/user_picker_bc"
         android:layout_width="match_parent"
         android:layout_height="45dp"
         android:background="@android:color/white"
-        ></com.apppubs.d20.message.widget.Breadcrumb>
+        ></com.apppubs.ui.widget.widget.Breadcrumb>
     <View
         android:layout_width="match_parent"
         android:layout_height="1px"

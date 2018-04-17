@@ -6,7 +6,7 @@
     android:background="@color/app_common_bg"
     android:orientation="vertical" >
 
-    <com.apppubs.d20.widget.TitleBar
+    <com.apppubs.ui.widget.TitleBar
         android:id="@+id/survey_tb"
         android:layout_width="match_parent"
         android:layout_height="@dimen/title_height"
@@ -15,7 +15,7 @@
         mportal:mTitle="调查"
         mportal:titleSize="@dimen/title_text_size" />
 
-    <com.apppubs.d20.widget.commonlist.CommonListView
+    <com.apppubs.ui.widget.commonlist.CommonListView
         android:id="@+id/survey_xlv"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

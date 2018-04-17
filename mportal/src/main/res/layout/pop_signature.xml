@@ -10,7 +10,7 @@
         android:layout_height="wrap_content"
         android:background="@android:color/white">
 
-        <com.apppubs.d20.widget.SegmentedGroup
+        <com.apppubs.ui.widget.SegmentedGroup
             android:id="@+id/pop_signature_segment_sg"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -36,7 +36,7 @@
                 android:layout_height="wrap_content"
                 android:text="手写"
                 android:textSize="@dimen/item_text_size" />
-        </com.apppubs.d20.widget.SegmentedGroup>
+        </com.apppubs.ui.widget.SegmentedGroup>
 
         <Button
             android:id="@+id/pop_signature_clear_btn"
@@ -66,10 +66,10 @@
             android:layout_height="match_parent"
             android:orientation="vertical">
 
-            <com.apppubs.d20.widget.HorizontalScrollLabels
+            <com.apppubs.ui.widget.HorizontalScrollLabels
                 android:id="@+id/pop_signature_hsl"
                 android:layout_width="match_parent"
-                android:layout_height="50dp"></com.apppubs.d20.widget.HorizontalScrollLabels>
+                android:layout_height="50dp"></com.apppubs.ui.widget.HorizontalScrollLabels>
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="1px"
@@ -87,7 +87,7 @@
                 android:textSize="@dimen/item_text_size"></EditText>
         </LinearLayout>
 
-        <com.apppubs.d20.widget.SignatureView
+        <com.apppubs.ui.widget.SignatureView
             android:id="@+id/pop_signature_sv"
             android:layout_width="match_parent"
             android:layout_height="match_parent"

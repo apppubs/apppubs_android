@@ -6,7 +6,7 @@
               android:layout_width="match_parent"
               android:layout_height="match_parent"
               android:orientation="vertical"
-              tools:context="com.apppubs.d20.message.activity.UserPickerActivity"
+              tools:context="com.apppubs.d20.com.apppubs.message.activity.UserPickerActivity"
     >
 
     <android.support.v7.widget.SearchView
@@ -29,10 +29,10 @@
             android:orientation="vertical"
             >
 
-            <com.apppubs.d20.message.widget.Breadcrumb
+            <com.apppubs.ui.widget.widget.Breadcrumb
                 android:id="@+id/web_user_picker_bc"
                 android:layout_width="match_parent"
-                android:layout_height="45dp"></com.apppubs.d20.message.widget.Breadcrumb>
+                android:layout_height="45dp"></com.apppubs.ui.widget.widget.Breadcrumb>
 
             <FrameLayout
                 android:layout_width="match_parent"
@@ -61,10 +61,10 @@
                 android:layout_height="1px"
                 android:background="@color/common_divider"/>
 
-            <com.apppubs.d20.message.widget.UserSelectionBar
+            <com.apppubs.ui.widget.widget.UserSelectionBar
                 android:id="@+id/user_picker_user_selection_bar"
                 android:layout_width="match_parent"
-                android:layout_height="50dp"></com.apppubs.d20.message.widget.UserSelectionBar>
+                android:layout_height="50dp"></com.apppubs.ui.widget.widget.UserSelectionBar>
 
         </LinearLayout>
 

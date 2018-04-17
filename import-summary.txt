@@ -156,7 +156,7 @@ In Mportal:
 * src/.DS_Store => mportal/src/main/resources/.DS_Store
 * src/com/.DS_Store => mportal/src/main/resources/com/.DS_Store
 * src/com/mportal/.DS_Store => mportal/src/main/resources/com/mportal/.DS_Store
-* src/com.apppubs.d20/.DS_Store => mportal/src/main/resources/com.apppubs.d20/.DS_Store
+* src/com.apppubs.u30001/.DS_Store => mportal/src/main/resources/com.apppubs.u30001/.DS_Store
 * file_preview_excel.PNG => file_preview_excel.png
 * file_preview_pdf.PNG => file_preview_pdf.png
 * file_preview_txt.PNG => file_preview_txt.png

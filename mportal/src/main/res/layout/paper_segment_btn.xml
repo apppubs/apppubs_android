@@ -2,12 +2,12 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:gravity="center" >
 
-    <com.apppubs.d20.widget.SegmentedGroup
+    <com.apppubs.ui.widget.SegmentedGroup
         android:id="@+id/segmented_paper"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_margin="10dp"
         android:orientation="horizontal" >
-    </com.apppubs.d20.widget.SegmentedGroup>
+    </com.apppubs.ui.widget.SegmentedGroup>
 
 </RelativeLayout>

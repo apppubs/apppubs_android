@@ -5,13 +5,13 @@
     android:layout_height="match_parent"
     android:background="@color/app_common_bg" >
 
-    <com.apppubs.d20.widget.commonlist.CommonListView
+    <com.apppubs.ui.widget.commonlist.CommonListView
         android:id="@+id/history_xlv"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:divider="@null"
         mportal:list_sel="@drawable/sel_common_item" >
-    </com.apppubs.d20.widget.commonlist.CommonListView>
+    </com.apppubs.ui.widget.commonlist.CommonListView>
 
 
     <TextView 

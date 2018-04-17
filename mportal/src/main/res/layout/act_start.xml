@@ -11,7 +11,7 @@
         android:scaleType="fitXY"
         android:src="@drawable/splash_default"
         />
-    <com.apppubs.d20.start.ProgressSkipView
+    <com.apppubs.ui.start.ProgressSkipView
         android:id="@+id/act_start_skip_view"
         android:layout_width="40dp"
         android:layout_height="40dp"

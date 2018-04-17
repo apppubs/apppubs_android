@@ -12,11 +12,11 @@
         android:layout_weight="1"
         ></FrameLayout>
 
-    <com.apppubs.d20.message.widget.FileSelectionBar
+    <com.apppubs.ui.widget.widget.FileSelectionBar
         android:id="@+id/picker_myfile_selectionbar"
         android:layout_width="match_parent"
         android:layout_height="50dp"
         >
 
-    </com.apppubs.d20.message.widget.FileSelectionBar>
+    </com.apppubs.ui.widget.widget.FileSelectionBar>
 </LinearLayout>

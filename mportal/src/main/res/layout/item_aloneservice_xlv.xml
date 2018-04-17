@@ -54,7 +54,7 @@
             android:textColor="@color/item_bg"
             android:textSize="12sp" />
 
-        <com.apppubs.d20.widget.RatioLayout
+        <com.apppubs.ui.widget.RatioLayout
             android:id="@+id/aloneservice_history_img_rl"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
@@ -65,7 +65,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:scaleType="fitXY" />
-        </com.apppubs.d20.widget.RatioLayout>
+        </com.apppubs.ui.widget.RatioLayout>
 
         <TextView
             android:id="@+id/aloneservice_history_desp"

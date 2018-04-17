@@ -8,7 +8,7 @@
 
     <fragment
         android:id="@+id/paper_issue_frg"
-        android:name="com.apppubs.d20.fragment.BlankFragment"
+        android:name="com.apppubs.ui.fragment.BlankFragment"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
        />
