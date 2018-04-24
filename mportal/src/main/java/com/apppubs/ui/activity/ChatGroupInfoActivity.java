@@ -186,7 +186,7 @@ public class ChatGroupInfoActivity extends BaseActivity{
 			@Override
 			public void onResponse(String response) {
 				JSONResult jr = JSONResult.compile(response);
-				if(jr.resultCode==JSONResult.RESULT_CODE_SUCCESS){
+				if(jr.code ==JSONResult.RESULT_CODE_SUCCESS){
 					finish();
 					Intent closeChatActivityIntent = new Intent(ChatActivity.ACTION_CLOSE_CHAT_ACTIVITY);
 					sendBroadcast(closeChatActivityIntent);

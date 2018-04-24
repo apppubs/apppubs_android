@@ -96,7 +96,7 @@ public class MsgBussiness extends BaseBussiness {
 					
 					String responseString = WebUtils.requestWithGet(url);
 					JSONResult jr = JSONResult.compile(responseString);
-					if(jr.resultCode==JSONResult.RESULT_CODE_SUCCESS){
+					if(jr.code ==JSONResult.RESULT_CODE_SUCCESS){
 						
 						Type msgListType = new TypeToken<List<Msg>>() {}.getType();
 						List<Msg> list = WebUtils.gson.fromJson(jr.result, msgListType);
@@ -144,7 +144,7 @@ public class MsgBussiness extends BaseBussiness {
 					
 					String responseString = WebUtils.requestWithGet(url);
 					JSONResult jr = JSONResult.compile(responseString);
-					if(jr.resultCode==JSONResult.RESULT_CODE_SUCCESS){
+					if(jr.code ==JSONResult.RESULT_CODE_SUCCESS){
 						
 						Type msgListType = new TypeToken<List<Msg>>() {}.getType();
 						List<Msg> list = WebUtils.gson.fromJson(jr.result, msgListType);
@@ -198,7 +198,7 @@ public class MsgBussiness extends BaseBussiness {
 					String url = String.format(URLs.URL_CHAT_SEND_MSG,URLs.baseURL,URLs.appCode,groupId,senderUsername,receiverUsername,encodeContent,Msg.TYPE_CONTENT_TEXT+"","","");
 					String result = WebUtils.requestWithGet(url);
 					JSONResult jr = JSONResult.compile(result);
-					if(jr.resultCode==JSONResult.RESULT_CODE_SUCCESS){
+					if(jr.code ==JSONResult.RESULT_CODE_SUCCESS){
 						sHandler.post(new OnDoneRun<Object>(callback, null));
 					}else{
 					}

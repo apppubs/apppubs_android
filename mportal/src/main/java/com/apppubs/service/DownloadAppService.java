@@ -16,7 +16,7 @@ import com.apppubs.d20.R;
 import com.apppubs.ui.activity.HomeSlideMenuActivity;
 import com.apppubs.exception.APUnavailableException;
 import com.apppubs.model.CallbackResult;
-import com.apppubs.model.SystemBussiness;
+import com.apppubs.model.SystemBiz;
 import com.apppubs.ui.start.StartUpActivity;
 import com.apppubs.constant.Constants;
 import com.apppubs.util.FileUtils;
@@ -43,7 +43,7 @@ public class DownloadAppService extends Service {
 	public static String downAppFinish = "downappfinish";
 	private CallbackResult callback;
 	private String apkurl;
-	protected SystemBussiness mSystemBussiness;
+	protected SystemBiz mSystemBiz;
 	private int backActivity;// 返回acticity的标志
 	private Class<?> cls[] = { StartUpActivity.class, HomeSlideMenuActivity.class };// 具体返回的
 	//
@@ -182,7 +182,7 @@ public class DownloadAppService extends Service {
 		if (!isDownloading){
 			isDownloading = true;
 
-			mSystemBussiness = SystemBussiness.getInstance(this);
+			mSystemBiz = SystemBiz.getInstance(this);
 			try {
 				savePath = FileUtils.getAppExternalStorageDictory(this).getAbsolutePath() + "/" + Constants.APK_FILE_NAME;
 

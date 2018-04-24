@@ -93,7 +93,7 @@ public abstract class HomeBaseActivity extends BaseActivity {
 		mApp = (MportalApplication) this.getApplication();
 		mViewCourier = ViewCourier.getInstance(this);
 
-		mSystemBussiness.makeStartUpRequest();
+		mSystemBiz.makeStartUpRequest();
 		if (mAppContext.getAppConfig().getChatFlag().equals("1")) {
 			mMsgBussiness.loginRC();
 		}

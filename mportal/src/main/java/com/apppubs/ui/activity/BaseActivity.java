@@ -37,12 +37,12 @@ import com.apppubs.bean.AppConfig;
 import com.apppubs.bean.Settings;
 import com.apppubs.bean.UserInfo;
 import com.apppubs.constant.Actions;
+import com.apppubs.model.SystemBiz;
 import com.apppubs.model.message.MsgBussiness;
 import com.apppubs.model.message.UserBussiness;
 import com.apppubs.model.APResultCallback;
 import com.apppubs.model.NewsBussiness;
 import com.apppubs.model.PaperBussiness;
-import com.apppubs.model.SystemBussiness;
 import com.apppubs.model.VersionInfo;
 import com.apppubs.ui.start.StartUpActivity;
 import com.apppubs.util.JSONResult;
@@ -76,7 +76,7 @@ public abstract class BaseActivity extends FragmentActivity implements OnClickLi
 	protected AppContext mAppContext;
 
 	protected NewsBussiness mNewsBussiness;
-	protected SystemBussiness mSystemBussiness;
+	protected SystemBiz mSystemBiz;
 	protected PaperBussiness mPaperBussiness;
 	protected UserBussiness mUserBussiness;
 	protected MsgBussiness mMsgBussiness;
@@ -164,7 +164,7 @@ public abstract class BaseActivity extends FragmentActivity implements OnClickLi
 		mApp = (MportalApplication) getApplication();
 
 		mNewsBussiness = NewsBussiness.getInstance(mContext);
-		mSystemBussiness = SystemBussiness.getInstance(this);
+		mSystemBiz = SystemBiz.getInstance(this);
 		mPaperBussiness = PaperBussiness.getInstance();
 		mUserBussiness = UserBussiness.getInstance(this);
 		mMsgBussiness = MsgBussiness.getInstance(this);
@@ -310,7 +310,7 @@ public abstract class BaseActivity extends FragmentActivity implements OnClickLi
 	}
 
 	private void preCheckUpdate(){
-		mSystemBussiness.aSyncAppConfig(this, new APResultCallback<AppConfig>() {
+		mSystemBiz.aSyncAppConfig(this, new APResultCallback<AppConfig>() {
 			@Override
 			public void onDone(AppConfig obj) {
 				System.out.print("同步appconfig成功");
@@ -327,7 +327,7 @@ public abstract class BaseActivity extends FragmentActivity implements OnClickLi
 		});
 	}
 	protected void checkUpdate() {
-		mSystemBussiness.checkUpdate(BaseActivity.this,new SystemBussiness.CheckUpdateListener(){
+		mSystemBiz.checkUpdate(BaseActivity.this,new SystemBiz.CheckUpdateListener(){
 
 			@Override
 			public void onDone(final VersionInfo vi) {

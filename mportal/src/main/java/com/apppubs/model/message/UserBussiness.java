@@ -21,7 +21,7 @@ import com.apppubs.constant.URLs;
 import com.apppubs.model.AbstractBussinessCallback;
 import com.apppubs.model.BaseBussiness;
 import com.apppubs.model.APResultCallback;
-import com.apppubs.model.SystemBussiness;
+import com.apppubs.model.SystemBiz;
 import com.apppubs.util.ACache;
 import com.apppubs.util.Des3;
 import com.apppubs.util.JSONResult;
@@ -342,7 +342,7 @@ public class UserBussiness extends BaseBussiness {
 				try {
 					String response = WebUtils.requestWithGet(url);
 					JSONResult jo = JSONResult.compile(response);
-					if (jo.resultCode==1){
+					if (jo.code ==1){
 						List<UserBasicInfo> list = jo.getResultList(UserBasicInfo.class);
 						Log.i("userbussiness","解析结果："+list+"list长度："+list.size());
 						ACache cache =  ACache.get(mContext,CACHE_NAME);
@@ -794,7 +794,7 @@ public class UserBussiness extends BaseBussiness {
 
 				String token = mAppContext.getApp().getPushVendorType() == App.PUSH_VENDOR_TYPE_BAIDU ? mAppContext.getApp()
 						.getBaiduPushUserId() : JPushInterface.getRegistrationID(mContext);// 百度硬件设备号
-				String deviceId = SystemBussiness.getInstance(mContext).getMachineId();
+				String deviceId = SystemBiz.getInstance(mContext).getMachineId();
 				String systemVresion = Utils.getAndroidSDKVersion();// 操作系统号
 				String currentVersionCode = Utils.getVersionName(mContext);// app版本号
 				try {
@@ -803,13 +803,13 @@ public class UserBussiness extends BaseBussiness {
 							mAppContext.getApp().getCode());
 					String result = WebUtils.requestWithGet(url);
 					JSONResult jr = JSONResult.compile(result);
-					if (jr.resultCode == 1) {
+					if (jr.code == 1) {
 //						JSONObject jo = new JSONObject(jr.result);
 //						String username = jo.getString("username");
 //						MportalApplication.user.setUsername(username);
 //						MportalApplication.saveAndRefreshUser(mContext, MportalApplication.user);
 					} else {
-						LogM.log(this.getClass(), "注册设备失败" + jr.reason);
+						LogM.log(this.getClass(), "注册设备失败" + jr.msg);
 					}
 				} catch (IOException e) {
 					e.printStackTrace();
@@ -894,7 +894,7 @@ public class UserBussiness extends BaseBussiness {
 					String osVersion = Utils.getAndroidSDKVersion();// 操作系统号
 					String currentVersionName = Utils.getVersionName(context);// app版本号
 					int appCode = Utils.getVersionCode(context);
-					String machineId = SystemBussiness.getInstance(context).getMachineId();
+					String machineId = SystemBiz.getInstance(context).getMachineId();
 					String url = null;
 					try {
 						// /wmh360/json/login/usersmslogin.jsp?username=%s&deviceid=%s&token=%s&os=%s&dev=%s&app=%s&fr=4&appcode="+appCode;
@@ -969,7 +969,7 @@ public class UserBussiness extends BaseBussiness {
 						UserInfo currentUser = mAppContext.getCurrentUser();
 						requestParamsMap.put("username", currentUser.getUsername());
 						requestParamsMap.put("password", currentUser.getPassword());
-						requestParamsMap.put("deviceid",  SystemBussiness.getInstance(mContext).getMachineId());
+						requestParamsMap.put("deviceid",  SystemBiz.getInstance(mContext).getMachineId());
 						requestParamsMap.put("token",  token);
 						requestParamsMap.put("dev", URLEncoder.encode(Build.MODEL, "utf-8"));
 						requestParamsMap.put("os", osVersion);

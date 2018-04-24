@@ -56,7 +56,7 @@ public class MultiImageSelectorActivity extends BaseActivity implements MultiIma
     /**
      * 开始选取照片，并在onActivityResult方法中返回ArrayList<String> resultList:
      * if(requestCode == REQUEST_IMAGE){
-     * if(resultCode == RESULT_OK){
+     * if(code == RESULT_OK){
      * resultList = data.getStringArrayListExtra(MultiImageSelectorActivity.EXTRA_RESULT);
      * }
      * }

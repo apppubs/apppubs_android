@@ -206,7 +206,7 @@ public class HomeSlideMenuActivity extends HomeBaseActivity implements OnItemCli
 				public void onClick(View arg0) {
 					// 更新服务正在运行
 
-					mSystemBussiness.update(new APResultCallback<String[]>() {
+					mSystemBiz.update(new APResultCallback<String[]>() {
 
 						@Override
 						public void onException(int excepCode) {

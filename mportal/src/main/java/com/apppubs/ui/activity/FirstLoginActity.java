@@ -270,7 +270,7 @@ public class FirstLoginActity extends BaseActivity implements ErrorListener, Asy
 
 		ProgressHUD.show(this);
 
-		String url = String.format(URLs.URL_LOGIN_WITH_PHONE, URLs.baseURL, URLs.appCode, phone, mSystemBussiness.getMachineId());
+		String url = String.format(URLs.URL_LOGIN_WITH_PHONE, URLs.baseURL, URLs.appCode, phone, mSystemBiz.getMachineId());
 		LogM.log(this.getClass(), "请求url:" + url);
 		mRequestQueue.add(new StringRequest(url, new Listener<String>() {
 
@@ -298,7 +298,7 @@ public class FirstLoginActity extends BaseActivity implements ErrorListener, Asy
 		String url = null;
 		try {
 			// /wmh360/json/login/usersmslogin.jsp?username=%s&deviceid=%s&token=%s&os=%s&dev=%s&app=%s&fr=4&appcode="+appCode;
-			url = String.format(URLs.URL_LOGIN_WITH_USERNAME, URLs.baseURL, URLs.appCode, username, mSystemBussiness.getMachineId(),
+			url = String.format(URLs.URL_LOGIN_WITH_USERNAME, URLs.baseURL, URLs.appCode, username, mSystemBiz.getMachineId(),
 					mAppContext.getApp().getPushToken(), osVersion, URLEncoder.encode(Build.MODEL, "utf-8"),
 					currentVersionName, versionCode);
 		} catch (UnsupportedEncodingException e) {
@@ -389,7 +389,7 @@ public class FirstLoginActity extends BaseActivity implements ErrorListener, Asy
 		String url = null;
 		try {
 			// wmh360/json/login/usercroplogin.jsp?username=%s&password=%s&cropid=%s&deviceid=%s&os=%s&token=%sdev=%s&app=%s&fr=4&appcode="+appCode+"";
-			url = String.format(URLs.URL_LOGIN_WITH_ORG, URLs.baseURL, URLs.appCode, username, password, orgCode, mSystemBussiness.getMachineId(),
+			url = String.format(URLs.URL_LOGIN_WITH_ORG, URLs.baseURL, URLs.appCode, username, password, orgCode, mSystemBiz.getMachineId(),
 					osVersion, mAppContext.getApp().getPushToken(), URLEncoder.encode(Build.MODEL, "utf-8"),
 					currentVersionName);
 		} catch (UnsupportedEncodingException e) {
@@ -408,7 +408,7 @@ public class FirstLoginActity extends BaseActivity implements ErrorListener, Asy
 	private void onLoginWithUsernamePasswordAndOrgIdDone(String response, String orgCode) {
 		JSONResult jr = JSONResult.compile(response);
 
-		if (jr.resultCode == 1) {
+		if (jr.code == 1) {
 			UserInfo user = new UserInfo();
 			user.setUsername((String) jr.getResultMap().get("username"));
 			user.setUserId((String) jr.getResultMap().get("userid"));
@@ -491,7 +491,7 @@ public class FirstLoginActity extends BaseActivity implements ErrorListener, Asy
 				Map<String, Object> requestParamsMap = new HashMap<String, Object>();
 				requestParamsMap.put("username", params[0]);
 				requestParamsMap.put("password", params[1]);
-				requestParamsMap.put("deviceid", mSystemBussiness.getMachineId());
+				requestParamsMap.put("deviceid", mSystemBiz.getMachineId());
 				requestParamsMap.put("token", token);
 				requestParamsMap.put("dev", URLEncoder.encode(Build.MODEL, "utf-8"));
 				requestParamsMap.put("os", osVersion);

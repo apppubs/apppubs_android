@@ -295,7 +295,7 @@ public class NewsPictureInfoActivity extends BaseActivity implements OnPageChang
 	}
 
 	public Comment initCommentCount() {
-		mSystemBussiness.getCommentSizeZanCai(mInfoId, new APResultCallback<Comment>() {
+		mSystemBiz.getCommentSizeZanCai(mInfoId, new APResultCallback<Comment>() {
 			@Override
 			public void onException(int excepCode) {
 				// TODO Auto-generated method stub

@@ -353,7 +353,7 @@ public class FileCacheManagerImpl implements FileCacheManager {
 								result = sb1.toString();
 								LogM.log(WebUtils.class, "result : " + result);
 								JSONResult jr = JSONResult.compile(result);
-								if (jr.resultCode==1){
+								if (jr.code ==1){
 									String str = (String) jr.getResultMap().get("photourl");
 									mHandler.post(getOnDoneRunnable(str));
 								}else{

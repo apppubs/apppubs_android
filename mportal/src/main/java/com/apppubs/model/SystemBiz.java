@@ -29,6 +29,7 @@ import com.apppubs.bean.NewsChannel;
 import com.apppubs.bean.UserInfo;
 import com.apppubs.AppContext;
 import com.apppubs.AppManager;
+import com.apppubs.bean.http.AppInfo;
 import com.apppubs.d20.R;
 import com.apppubs.bean.App;
 import com.apppubs.bean.AppConfig;
@@ -98,7 +99,7 @@ import java.util.concurrent.Future;
  *
  *
  */
-public class SystemBussiness extends BaseBussiness {
+public class SystemBiz extends BaseBussiness {
 
 	private final float PIC_RATIO = 0.56f;
 
@@ -106,22 +107,22 @@ public class SystemBussiness extends BaseBussiness {
 
 	private Context mContext;
 	private AppContext mAppContext;
-	private volatile  static SystemBussiness mSystemBussiness;
+	private volatile  static SystemBiz mSystemBiz;
 
-	private SystemBussiness(Context context) {
+	private SystemBiz(Context context) {
 		mContext = context;
 		mAppContext = AppContext.getInstance(context);
 	}
 
-	public static SystemBussiness getInstance(Context context) {
-		if (mSystemBussiness == null) {
-			synchronized (SystemBussiness.class) {
-				if (mSystemBussiness == null) {
-					mSystemBussiness = new SystemBussiness(context);
+	public static SystemBiz getInstance(Context context) {
+		if (mSystemBiz == null) {
+			synchronized (SystemBiz.class) {
+				if (mSystemBiz == null) {
+					mSystemBiz = new SystemBiz(context);
 				}
 			}
 		}
-		return mSystemBussiness;
+		return mSystemBiz;
 
 	}
 
@@ -362,47 +363,50 @@ public class SystemBussiness extends BaseBussiness {
 					break;
 			}
 		}
-		String url = String.format(URLs.URL_APPINFO, URLs.baseURL,URLs.appCode,AppContext.getInstance(mContext).getCurrentUser().getOrgCode(),orientationFlag,deviceFlag,screenDimenFlag);
-		App remoteApp = WebUtils.request(url, App.class, "app");
 
-		LogM.log(this.getClass(),"当前启动次数"+localApp.getInitTimes());
-		if (localApp.getInitTimes() == 0) {
-			localApp.setLayoutLocalScheme(remoteApp.getLayoutScheme());
-			mAppContext.getSettings().setTheme(remoteApp.getDefaultTheme());
-			mAppContext.setSettings(mAppContext.getSettings());
-			LogM.log(this.getClass(), "初始化颜色 appRemote.getDefaultTheme" + remoteApp.getDefaultTheme());
-			generateStanceDrawable(remoteApp.getName());
-			generateMediumStance();
-			// 清除通讯录
-			SugarRecord.deleteAll(User.class);
-			SugarRecord.deleteAll(UserDeptLink.class);
-			SugarRecord.deleteAll(Department.class);
-			SugarRecord.deleteAll(MsgRecord.class);
-			LogM.log(this.getClass(),"删除用户信息"+localApp.getInitTimes());
-		}
-		localApp.setAllModifyUserInfo(remoteApp.getAllModifyUserInfo());
-		localApp.setAllowRegister(remoteApp.getAllowRegister());
-		localApp.setBaiduPushApiKey(remoteApp.getBaiduPushApiKey());
-		localApp.setBgPicURL(remoteApp.getBgPicURL());
-		localApp.setChannelupdatetime(remoteApp.getChannelUpdateTime());
-		localApp.setCode(remoteApp.getCode());
-		localApp.setContent(remoteApp.getContent());
-		localApp.setLatestVersion(remoteApp.getLatestVersion());
-		localApp.setLayoutScheme(remoteApp.getLayoutScheme());
-		localApp.setLoginFlag(remoteApp.getLoginFlag());
-		localApp.setLoginPicUrl(remoteApp.getLoginPicUrl());
-		localApp.setMenuGroupUpdateTime(remoteApp.getMenuGroupUpdateTime());
-		localApp.setMenuUpdateTime(remoteApp.getMenuUpdateTime());
-		localApp.setName(remoteApp.getName());
-		localApp.setStartUpPic(remoteApp.getStartUpPic());
-		localApp.setWebAppCode(remoteApp.getWebAppCode());
-		localApp.setNeedForceUploadAddressbook(remoteApp.getNeedForceUploadAddressbook());
-		localApp.setAddressbookVersion(remoteApp.getAddressbookVersion());
-		localApp.setWeatherDisplayFlag(remoteApp.getWeatherDisplayFlag());
-		localApp.setPushVendorType(remoteApp.getPushVendorType());
-		localApp.setDefaultServiceNoId(remoteApp.getDefaultServiceNoId());
-		localApp.setWebLoginUrl(remoteApp.getWebLoginUrl());
-		localApp.setCustomThemeColor(remoteApp.getCustomThemeColor());
+		AppInfo info = syncPOST("http://result.eolinker.com/gN1zjDlc87a75d671a2d954f809ebcdd19e7698dc2478fa?uri=app_info",null, AppInfo.class);
+//		String url = String.format(URLs.URL_APPINFO, URLs.baseURL,URLs.appCode,AppContext.getInstance(mContext).getCurrentUser().getOrgCode(),orientationFlag,deviceFlag,screenDimenFlag);
+//		App remoteApp = WebUtils.request(url, App.class, "app");
+
+		mAppContext.getApp().updateWithAppInfo(info);
+//		LogM.log(this.getClass(),"当前启动次数"+localApp.getInitTimes());
+//		if (localApp.getInitTimes() == 0) {
+//			localApp.setLayoutLocalScheme(remoteApp.getLayoutScheme());
+//			mAppContext.getSettings().setTheme(remoteApp.getDefaultTheme());
+//			mAppContext.setSettings(mAppContext.getSettings());
+//			LogM.log(this.getClass(), "初始化颜色 appRemote.getDefaultTheme" + remoteApp.getDefaultTheme());
+//			generateStanceDrawable(remoteApp.getName());
+//			generateMediumStance();
+//			// 清除通讯录
+//			SugarRecord.deleteAll(User.class);
+//			SugarRecord.deleteAll(UserDeptLink.class);
+//			SugarRecord.deleteAll(Department.class);
+//			SugarRecord.deleteAll(MsgRecord.class);
+//			LogM.log(this.getClass(),"删除用户信息"+localApp.getInitTimes());
+//		}
+//		localApp.setAllModifyUserInfo(remoteApp.getAllModifyUserInfo());
+//		localApp.setAllowRegister(remoteApp.getAllowRegister());
+//		localApp.setBaiduPushApiKey(remoteApp.getBaiduPushApiKey());
+//		localApp.setBgPicURL(remoteApp.getBgPicURL());
+//		localApp.setChannelupdatetime(remoteApp.getChannelUpdateTime());
+//		localApp.setCode(remoteApp.getCode());
+//		localApp.setContent(remoteApp.getContent());
+//		localApp.setLatestVersion(remoteApp.getLatestVersion());
+//		localApp.setLayoutScheme(remoteApp.getLayoutScheme());
+//		localApp.setLoginFlag(remoteApp.getLoginFlag());
+//		localApp.setLoginPicUrl(remoteApp.getLoginPicUrl());
+//		localApp.setMenuGroupUpdateTime(remoteApp.getMenuGroupUpdateTime());
+//		localApp.setMenuUpdateTime(remoteApp.getMenuUpdateTime());
+//		localApp.setName(remoteApp.getName());
+//		localApp.setStartUpPic(remoteApp.getStartUpPic());
+//		localApp.setWebAppCode(remoteApp.getWebAppCode());
+//		localApp.setNeedForceUploadAddressbook(remoteApp.getNeedForceUploadAddressbook());
+//		localApp.setAddressbookVersion(remoteApp.getAddressbookVersion());
+//		localApp.setWeatherDisplayFlag(remoteApp.getWeatherDisplayFlag());
+//		localApp.setPushVendorType(remoteApp.getPushVendorType());
+//		localApp.setDefaultServiceNoId(remoteApp.getDefaultServiceNoId());
+//		localApp.setWebLoginUrl(remoteApp.getWebLoginUrl());
+//		localApp.setCustomThemeColor(remoteApp.getCustomThemeColor());
 
 		boolean haveNewspaperMenu = false;// 是否有报纸菜单
 		// 如果菜单更新了则全部初始化
@@ -732,7 +736,7 @@ public class SystemBussiness extends BaseBussiness {
 
 		String result = WebUtils.requestWithGet(String.format(URLs.URL_APP_CONFIG,URLs.baseURL,URLs.appCode,""));
 		JSONResult jsonResult = JSONResult.compile(result);
-		if (jsonResult.resultCode != 1) {
+		if (jsonResult.code != 1) {
 			LogM.log(this.getClass(), "获取appconfig错误");
 		} else {
 			Map<String, String> resultMap = jsonResult.getResultMap();
@@ -754,7 +758,7 @@ public class SystemBussiness extends BaseBussiness {
 				String url = String.format(URLs.URL_ADDRESS_PERMISSION,URLs.baseURL,URLs.appCode, AppContext.getInstance(mContext).getCurrentUser().getUserId());
 				String permissionResult = WebUtils.requestWithGet(url);
 				JSONResult jr = JSONResult.compile(permissionResult);
-				if (jr.resultCode==1){
+				if (jr.code ==1){
 					UserInfo userInfo = AppContext.getInstance(mContext).getCurrentUser();
 					userInfo.setAddressbookPermissionString(jr.result);
 					AppContext.getInstance(mContext).setCurrentUser(userInfo);
@@ -765,7 +769,7 @@ public class SystemBussiness extends BaseBussiness {
 				String url = String.format(URLs.URL_USER_PERMISSION,URLs.baseURL,URLs.appCode, AppContext.getInstance(mContext).getCurrentUser().getUserId());
 				String permissionResult = WebUtils.requestWithGet(url);
 				JSONResult jr = JSONResult.compile(permissionResult);
-				if (jr.resultCode==1){
+				if (jr.code ==1){
 					UserInfo userInfo = AppContext.getInstance(mContext).getCurrentUser();
 					userInfo.setChatPermissionString(jr.result);
 					AppContext.getInstance(mContext).setCurrentUser(userInfo);
@@ -1170,7 +1174,7 @@ public class SystemBussiness extends BaseBussiness {
 				try {
 					String response = WebUtils.requestWithGet(url);
 					JSONResult jr = JSONResult.compile(response);
-					if (jr.resultCode==1){
+					if (jr.code ==1){
 						onDone(callback,null);
 					}else{
 						onException(callback);

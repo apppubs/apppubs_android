@@ -20,11 +20,11 @@ public class JSONResult<T> {
 	public static final int RESULT_CODE_SUCCESS = 1;
 	public static final int RESULT_CODE_FAIL = -1;
 
-	public int resultCode;
-	public String reason;
+	public int code;
+	public String msg;
 	public String result;
 	public Date responseTime;
-	
+
 	private static SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 	
 	public static JSONResult compile(String jsonStr){
@@ -32,8 +32,8 @@ public class JSONResult<T> {
 		JSONObject jo = null;
 		try {
 			jo = new JSONObject(jsonStr);
-			jsonResult.resultCode = jo.getInt("resultcode");
-			jsonResult.reason = jo.getString("resultreason");
+			jsonResult.code = jo.getInt("resultcode");
+			jsonResult.msg = jo.getString("resultreason");
 			jsonResult.result = jo.getString("resultinfo");
 			
 			if(jo.has("responsetime")&&!TextUtils.isEmpty(jo.getString("responsetime"))){

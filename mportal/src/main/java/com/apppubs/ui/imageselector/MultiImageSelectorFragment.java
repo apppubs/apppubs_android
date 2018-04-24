@@ -426,7 +426,7 @@ public class MultiImageSelectorFragment extends Fragment {
         }
 
         Log.i("requestCode", requestCode + "");
-        Log.i("resultCode", resultCode + "");
+        Log.i("code", resultCode + "");
         if (requestCode == REQUEST_SINGLE) {
             if (resultCode == Activity.RESULT_OK) {
                 Log.i("data", data.getStringArrayListExtra("pics").get(0));

@@ -198,7 +198,7 @@ public class AppContext {
 			@Override
 			public void onDone(JSONResult jsonResult, @Nullable WMHHttpErrorCode errorCode) {
 				if (errorCode==null){
-					if (jsonResult.resultCode==1){
+					if (jsonResult.code ==1){
 						String infoListJson = "";
 						try {
 							JSONObject jo = new JSONObject(jsonResult.result);
@@ -216,7 +216,7 @@ public class AppContext {
 							e.printStackTrace();
 						}
 					}else{
-//						Log.e("HomeBaseActivity",jsonResult.reason);
+//						Log.e("HomeBaseActivity",jsonResult.msg);
 					}
 				}else{
 					Log.e("HomeBaseActivity",errorCode.getMessage());

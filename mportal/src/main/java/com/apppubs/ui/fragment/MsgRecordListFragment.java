@@ -210,7 +210,7 @@ public class MsgRecordListFragment extends BaseFragment implements OnClickListen
 			public void onResponse(String response) {
 				JSONResult jr = JSONResult.compile(response);
 				mCurResponseTime = jr.responseTime;
-				if(jr.resultCode==1){
+				if(jr.code ==1){
 					SugarRecord.deleteAll(MsgRecord.class);
 					String deletedIdsStr = SharedPreferenceUtils.getInstance(mContext).getString(Constants.DEFAULT_SHARED_PREFERENCE_NAME, Constants.SHAREDPREFERENCE_KEY_DElETED_CHAT_IDS, "");
 					List<String> deletedIdsList = StringUtils.str2ArrayList(deletedIdsStr, ",");
@@ -302,7 +302,7 @@ public class MsgRecordListFragment extends BaseFragment implements OnClickListen
 							@Override
 							public void onResponse(String response) {
 								JSONResult jr = JSONResult.compile(response);
-								if(jr.resultCode==JSONResult.RESULT_CODE_SUCCESS){
+								if(jr.code ==JSONResult.RESULT_CODE_SUCCESS){
 									String groupType = (String)jr.getResultMap().get("group_type");
 									if(groupType.equals("1")){
                                         ChatActivity.startActivity(mHostActivity, "",mr.getSourceUsernameOrId(),ChatActivity.CHAT_TYPE_SINGLE,mr.getTitle());

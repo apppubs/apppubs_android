@@ -55,7 +55,7 @@ public class AboutActivity extends BaseActivity {
 
 	private void fillText() {
 		mAppNameTV.setText(mAppContext.getApp().getName());
-		mVersionTV.setText(mSystemBussiness.getVersionString());
+		mVersionTV.setText(mSystemBiz.getVersionString());
 		setTextForTestView(mSupportCompany, R.id.about_supportcompany_tv);
 		setTextForTestView(mOfficialWebsite, R.id.about_officialwebsite_tv);
 		setTextForTestView(mContact, R.id.about_contact_tv);

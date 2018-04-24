@@ -377,7 +377,7 @@ public class ChatActivity extends BaseActivity implements OnClickListener {
 								Toast.makeText(ChatActivity.this, "时间过短", Toast.LENGTH_SHORT).show();
 							} else {
 								/*
-								 * mSystemBussiness.getStandardDataTime(new
+								 * mSystemBiz.getStandardDataTime(new
 								 * APResultCallback<Date>() {
 								 * 
 								 * @Override public void onException(int
@@ -552,7 +552,7 @@ public class ChatActivity extends BaseActivity implements OnClickListener {
 		case R.id.chat_content_send:
 			final String count = mChatEt.getText().toString();
 			if (!TextUtils.isEmpty(count)) {
-				mSystemBussiness.getStandardDataTime(new APResultCallback<Date>() {
+				mSystemBiz.getStandardDataTime(new APResultCallback<Date>() {
 
 					@Override
 					public void onException(int excepCode) {
@@ -959,7 +959,7 @@ public class ChatActivity extends BaseActivity implements OnClickListener {
 	}
 
 	private void putBackpic(final Bitmap bitmap) {
-		mSystemBussiness.getStandardDataTime(new APResultCallback<Date>() {
+		mSystemBiz.getStandardDataTime(new APResultCallback<Date>() {
 
 			@Override
 			public void onException(int excepCode) {

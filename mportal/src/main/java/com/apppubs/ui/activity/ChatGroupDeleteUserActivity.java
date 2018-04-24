@@ -169,7 +169,7 @@ public class ChatGroupDeleteUserActivity extends BaseActivity {
 			@Override
 			public void onResponse(String response) {
 				JSONResult jr = JSONResult.compile(response);
-				if(jr.resultCode==JSONResult.RESULT_CODE_SUCCESS){
+				if(jr.code ==JSONResult.RESULT_CODE_SUCCESS){
 					Toast.makeText(ChatGroupDeleteUserActivity.this, "删除成功", Toast.LENGTH_SHORT).show();
 					finish();
 				}else{

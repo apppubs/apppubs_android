@@ -308,7 +308,7 @@ public class ChatNewGroupChatOrAddUserActivity extends BaseActivity {
 			public void onResponse(String response) {
 				ProgressHUD.dismissProgressHUDInThisContext(ChatNewGroupChatOrAddUserActivity.this);
 				JSONResult jr = JSONResult.compile(response);
-				if(jr.resultCode==JSONResult.RESULT_CODE_SUCCESS){
+				if(jr.code ==JSONResult.RESULT_CODE_SUCCESS){
 					finish();
 					Intent closeChatInfoActivityIntent = new Intent(ChatGroupInfoActivity.ACTION_CLOSE);
 					sendBroadcast(closeChatInfoActivityIntent);
@@ -343,7 +343,7 @@ public class ChatNewGroupChatOrAddUserActivity extends BaseActivity {
 			public void onResponse(String response) {
 				ProgressHUD.dismissProgressHUDInThisContext(ChatNewGroupChatOrAddUserActivity.this);
 				JSONResult jr = JSONResult.compile(response);
-				if(jr.resultCode==JSONResult.RESULT_CODE_SUCCESS){
+				if(jr.code ==JSONResult.RESULT_CODE_SUCCESS){
 					String groupId = (String)jr.getResultMap().get("groupid");
 					ChatActivity.startActivity(ChatNewGroupChatOrAddUserActivity.this, "",groupId,ChatActivity.CHAT_TYPE_GROUP);
 					finish();

@@ -29,7 +29,7 @@ import com.apppubs.MportalApplication;
  * 2015年1月13日 by zhangwen create
  *
  */
-public abstract class BaseBussiness {
+public abstract class BaseBussiness extends BaseBiz{
 
     private static final String LOG_TAG = "BaseBussiness";
 

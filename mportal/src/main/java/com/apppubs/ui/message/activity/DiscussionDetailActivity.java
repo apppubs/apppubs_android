@@ -354,7 +354,7 @@ public class DiscussionDetailActivity extends BaseActivity implements CompoundBu
 				idList.add(ubi.getUserId());
 			}
 		}
-		mSystemBussiness.inviteUsers(idList, new APResultCallback() {
+		mSystemBiz.inviteUsers(idList, new APResultCallback() {
 			@Override
 			public void onDone(Object obj) {
 				ProgressHUD.dismissProgressHUDInThisContext(mContext);

@@ -120,7 +120,7 @@ public class ServiceNoInfoListFragement extends BaseFragment {
 	}
 	private void getPage(final int i) {
 		if (SystemUtils.canConnectNet(mContext)) {
-			mSystemBussiness.getStandardDataTime(new APResultCallback<Date>() {
+			mSystemBiz.getStandardDataTime(new APResultCallback<Date>() {
 
 				@Override
 				public void onException(int excepCode) {

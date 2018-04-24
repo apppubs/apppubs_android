@@ -14,13 +14,13 @@ import android.widget.Toast;
 import com.apppubs.bean.User;
 import com.apppubs.bean.UserInfo;
 import com.apppubs.AppContext;
+import com.apppubs.model.SystemBiz;
 import com.apppubs.ui.activity.ImageViewActivity;
 import com.apppubs.ui.adbook.IUserInfoView;
 import com.apppubs.ui.adbook.IUserInfoViewListener;
 import com.apppubs.model.UserBiz;
 import com.apppubs.model.message.UserBussiness;
 import com.apppubs.model.APResultCallback;
-import com.apppubs.model.SystemBussiness;
 import com.apppubs.model.WMHErrorCode;
 import com.apppubs.ui.widget.ConfirmDialog;
 import com.apppubs.ui.widget.ProgressHUD;
@@ -163,7 +163,7 @@ public class UserInfoPresenter implements IUserInfoViewListener {
     private void sendInviteSms() {
         ProgressHUD.show(mContext);
         String[] userIdArr = new String[]{mView.getUserId()};
-        SystemBussiness sysBiz = SystemBussiness.getInstance(mContext);
+        SystemBiz sysBiz = SystemBiz.getInstance(mContext);
         sysBiz.inviteUsers(Arrays.asList(userIdArr), new APResultCallback() {
             @Override
             public void onDone(Object obj) {

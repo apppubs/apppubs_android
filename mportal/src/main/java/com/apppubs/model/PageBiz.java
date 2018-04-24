@@ -4,6 +4,8 @@ import android.content.Context;
 import android.support.annotation.Nullable;
 import android.text.TextUtils;
 
+import com.apppubs.bean.http.ArticleInfo;
+import com.apppubs.bean.http.JsonResult;
 import com.apppubs.bean.page.DefaultUserinfoComponent;
 import com.apppubs.bean.page.PageComponent;
 import com.apppubs.bean.page.PageContentModel;
@@ -11,6 +13,7 @@ import com.apppubs.bean.page.PageModel;
 import com.apppubs.bean.UserInfo;
 import com.apppubs.AppContext;
 import com.apppubs.bean.page.PageNormalContentModel;
+import com.apppubs.constant.APError;
 import com.apppubs.constant.Constants;
 import com.apppubs.constant.URLs;
 import com.apppubs.net.WMHHttpClient;
@@ -25,7 +28,9 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
 import okhttp3.Call;
@@ -37,7 +42,7 @@ import okhttp3.Response;
  * Created by zhangwen on 2017/9/27.
  */
 
-public class PageBiz implements IPageBiz {
+public class PageBiz extends BaseBiz implements IPageBiz  {
 
     private Context mContext;
     private WMHHttpClient mHttpClient;
@@ -49,13 +54,20 @@ public class PageBiz implements IPageBiz {
 
     @Override
     public void loadPage(String pageId, final APResultCallback<PageModel> callback) {
+        asyncPOST("", new HashMap<String, String>(), ArticleInfo.class, new IRQListener<ArticleInfo>() {
+
+            @Override
+            public void onResponse(ArticleInfo jr, APError error) {
+                System.out.println("结果id："+jr.getInfoId());
+            }
+        });
         String url = getUrl(pageId);
 //        url = "http://result.eolinker.com/gN1zjDlc87a75d671a2d954f809ebcdd19e7698dc2478fa?uri=page";
         mHttpClient.GET(url, null, new WMHRequestListener() {
             @Override
             public void onDone(JSONResult jsonResult, @Nullable WMHHttpErrorCode errorCode) {
                 if (errorCode == null) {
-                    if (jsonResult.resultCode == 1) {
+                    if (jsonResult.code == 1) {
                         PageModel model = new PageModel(mContext, jsonResult.result);
                         PageNormalContentModel normalContent = getPageNormalContentIfExit(model);
                         try {
@@ -67,7 +79,7 @@ public class PageBiz implements IPageBiz {
                         }
                         callback.onDone(model);
                     } else {
-                        callback.onException(jsonResult.resultCode);
+                        callback.onException(jsonResult.code);
                     }
                 } else {
                     callback.onException(errorCode.getValue());
@@ -181,4 +193,5 @@ public class PageBiz implements IPageBiz {
 
 
     }
+
 }

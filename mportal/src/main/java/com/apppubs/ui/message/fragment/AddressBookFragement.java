@@ -295,7 +295,7 @@ public class AddressBookFragement extends BaseFragment {
 	 */
 	private void sync() {
 		mProgressHUD = ProgressHUD.show(mHostActivity, "同步中", true, false, null);
-		mSystemBussiness.aSyncAppConfig(mHostActivity, new APResultCallback<AppConfig>() {
+		mSystemBiz.aSyncAppConfig(mHostActivity, new APResultCallback<AppConfig>() {
 
 			@Override
 			public void onDone(AppConfig obj) {

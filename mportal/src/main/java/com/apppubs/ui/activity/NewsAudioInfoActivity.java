@@ -378,7 +378,7 @@ public class NewsAudioInfoActivity extends BaseActivity {
 	}
 
 	public void refreshCommet() {
-		mSystemBussiness.getCommentSizeZanCai(mInfoId, new APResultCallback<Comment>() {
+		mSystemBiz.getCommentSizeZanCai(mInfoId, new APResultCallback<Comment>() {
 			@Override
 			public void onException(int excepCode) {
 				mCommment = null;

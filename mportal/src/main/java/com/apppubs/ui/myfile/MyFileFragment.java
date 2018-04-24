@@ -185,7 +185,7 @@ public class MyFileFragment extends BaseFragment implements OnClickListener {
                         }
                     });
 
-                    if (jr.resultCode == 1) {
+                    if (jr.code == 1) {
                         List<MyFileModel> result = parseJsonResult(jr);
                         if (result == null || result.size() < 1) {
                             mRootView.post(new Runnable() {

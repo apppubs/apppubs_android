@@ -41,7 +41,7 @@ public class AddressPickerBiz {
         httpClient.POST(url, params.toString(), new WMHRequestListener() {
             @Override
             public void onDone(JSONResult jsonResult, @Nullable WMHHttpErrorCode errorCode) {
-                if(errorCode==null&&jsonResult.resultCode == 0){
+                if(errorCode==null&&jsonResult.code == 0){
                     try {
                         JSONArray ja = new JSONArray(jsonResult.getResultJSONObject().getString("items"));
                         List<AddressModel> list = new ArrayList<AddressModel>();

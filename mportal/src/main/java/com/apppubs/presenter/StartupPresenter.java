@@ -7,7 +7,7 @@ import com.apppubs.AppContext;
 import com.apppubs.AppManager;
 import com.apppubs.bean.App;
 import com.apppubs.model.APResultCallback;
-import com.apppubs.model.SystemBussiness;
+import com.apppubs.model.SystemBiz;
 import com.apppubs.model.VersionInfo;
 import com.apppubs.ui.start.IStartUpView;
 import com.apppubs.util.SharedPreferenceUtils;
@@ -26,14 +26,14 @@ public class StartupPresenter {
 	public static final String SHARED_PREFERENCE_NAME_WELCOME_LOAD_HISTORY = "welcome_load_history";
 
 	private final long SKIP_MILLIS = 5*1000;
-	private SystemBussiness mSystemBussiness;
+	private SystemBiz mSystemBiz;
 	private IStartUpView mView;
 	private Context mContext;
 	private boolean isStartCanceled;
 
 	public StartupPresenter(Context context, IStartUpView view) {
 		mContext = context;
-		mSystemBussiness = SystemBussiness.getInstance(context);
+		mSystemBiz = SystemBiz.getInstance(context);
 		mView = view;
 	}
 
@@ -49,13 +49,13 @@ public class StartupPresenter {
 			init();
 		}
 		if (Utils.getBooleanMetaValue(mContext,"NEED_START_UP_VERSION")){
-			String versionStr = SystemBussiness.getInstance(mContext).getVersionString();
+			String versionStr = SystemBiz.getInstance(mContext).getVersionString();
 			mView.showVersion(versionStr);
 		}
 	}
 
 	public void init(){
-		mSystemBussiness.initSystem(new APResultCallback<App>() {
+		mSystemBiz.initSystem(new APResultCallback<App>() {
 			@Override
 			public void onDone(App obj) {
 				showBgPic(obj.getStartUpPic());
@@ -94,7 +94,7 @@ public class StartupPresenter {
 	}
 
 	private void checkUpdate() {
-		mSystemBussiness.checkUpdate(mContext, new SystemBussiness.CheckUpdateListener() {
+		mSystemBiz.checkUpdate(mContext, new SystemBiz.CheckUpdateListener() {
 
 			@Override
 			public void onDone(VersionInfo vi) {

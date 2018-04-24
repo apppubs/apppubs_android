@@ -63,8 +63,8 @@ public class ChangePasswordActivity extends BaseActivity implements OnClickListe
 					public void onResponse(String response) {
 						ProgressHUD.dismissProgressHUDInThisContext(ChangePasswordActivity.this);
 						JSONResult jr = JSONResult.compile(response);
-						Toast.makeText(ChangePasswordActivity.this, jr.reason, Toast.LENGTH_SHORT).show();
-						if (jr.resultCode == 1) {
+						Toast.makeText(ChangePasswordActivity.this, jr.msg, Toast.LENGTH_SHORT).show();
+						if (jr.code == 1) {
 							mOriginalEt.setText("");
 							mNewEt.setText("");
 							mNewRepeatEt.setText("");

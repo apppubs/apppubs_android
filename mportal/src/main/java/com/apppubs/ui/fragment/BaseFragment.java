@@ -16,10 +16,10 @@ import android.widget.TextView;
 import com.android.volley.RequestQueue;
 import com.apppubs.AppContext;
 import com.apppubs.d20.R;
+import com.apppubs.model.SystemBiz;
 import com.apppubs.ui.activity.BaseActivity;
 import com.apppubs.model.message.MsgBussiness;
 import com.apppubs.model.message.UserBussiness;
-import com.apppubs.model.SystemBussiness;
 import com.apppubs.ui.widget.TitleBar;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
@@ -42,7 +42,7 @@ public class BaseFragment extends Fragment implements KeyEvent.Callback {
 
     protected UserBussiness mUserBussiness;
     protected MsgBussiness mMsgBussiness;
-    protected SystemBussiness mSystemBussiness;
+    protected SystemBiz mSystemBiz;
     protected RequestQueue mRequestQueue;
     protected AppContext mAppContext;
 
@@ -51,7 +51,7 @@ public class BaseFragment extends Fragment implements KeyEvent.Callback {
         super.onAttach(activity);
         mContext = activity;
         mHostActivity = (BaseActivity) activity;
-        mSystemBussiness = SystemBussiness.getInstance(activity);
+        mSystemBiz = SystemBiz.getInstance(activity);
         mMsgBussiness = MsgBussiness.getInstance(activity);
         mUserBussiness = UserBussiness.getInstance(activity);
         mRequestQueue = mHostActivity.getRequestQueue();

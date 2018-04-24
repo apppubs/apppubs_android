@@ -24,7 +24,7 @@ import android.widget.ProgressBar;
 import com.apppubs.bean.WeiboInfo;
 import com.apppubs.util.LogM;
 import com.apppubs.util.SystemUtils;
-import com.apppubs.model.SystemBussiness;
+import com.apppubs.model.SystemBiz;
 import com.apppubs.ui.widget.ProgressWebView;
 import com.apppubs.ui.widget.Tabs;
 import com.apppubs.d20.R;
@@ -43,7 +43,7 @@ public class WeiBoFragment extends BaseFragment implements OnPageChangeListener 
 
 	private List<ProgressWebView> mWebViewLists;
 	private int mCurPos;
-	private SystemBussiness mSystemBussiness;
+	private SystemBiz mSystemBiz;
 	private Tabs mSt;
 	
 	@Override
@@ -63,7 +63,7 @@ public class WeiBoFragment extends BaseFragment implements OnPageChangeListener 
 	}
 
 	private void init() {
-		mSystemBussiness = SystemBussiness.getInstance(mHostActivity);
+		mSystemBiz = SystemBiz.getInstance(mHostActivity);
 		mprogress = (ProgressBar) mRootView.findViewById(R.id.weibo_progress);
 		viewparge = (ViewPager) mRootView.findViewById(R.id.weibo_viewparger);
 		
@@ -83,7 +83,7 @@ public class WeiBoFragment extends BaseFragment implements OnPageChangeListener 
 		mSt = (Tabs) mRootView.findViewById(R.id.weibo_st);
 	}
 	private void fill(){
-		mSystemBussiness.getWeiBoInfo(new APResultCallback<List<WeiboInfo>>() {
+		mSystemBiz.getWeiBoInfo(new APResultCallback<List<WeiboInfo>>() {
 			
 			@Override
 			public void onException(int excepCode) {

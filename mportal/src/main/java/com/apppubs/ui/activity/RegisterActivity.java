@@ -127,7 +127,7 @@ public class RegisterActivity extends BaseActivity {
 										.getText().toString().trim(), mNicname
 										.getText().toString().trim());
 				 */
-				mSystemBussiness.postZhuce(mName.getText().toString().trim(), mEmail.getText().toString().trim(),
+				mSystemBiz.postZhuce(mName.getText().toString().trim(), mEmail.getText().toString().trim(),
 						mPassword.getText().toString().trim(), mPhone
 						.getText().toString().trim(), mNicname
 						.getText().toString().trim(),new APResultCallback<String>() {

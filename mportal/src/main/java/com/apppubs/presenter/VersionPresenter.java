@@ -3,7 +3,7 @@ package com.apppubs.presenter;
 import android.content.Context;
 
 import com.apppubs.AppManager;
-import com.apppubs.model.SystemBussiness;
+import com.apppubs.model.SystemBiz;
 import com.apppubs.model.VersionInfo;
 import com.apppubs.ui.IVersionView;
 
@@ -18,7 +18,7 @@ public class VersionPresenter extends AbsPresenter<IVersionView> {
     }
 
     public void checkUpdate() {
-        SystemBussiness.getInstance(mContext).checkUpdate(mContext, new SystemBussiness
+        SystemBiz.getInstance(mContext).checkUpdate(mContext, new SystemBiz
                 .CheckUpdateListener() {
 
             @Override

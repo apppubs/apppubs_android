@@ -81,13 +81,13 @@ public class VerificationCodeActivity extends BaseActivity implements ErrorListe
         };
         timer.start();
 
-        String url = String.format(URLs.URL_SEND_SMS, URLs.baseURL, URLs.appCode, mUsername, mPhone, mSystemBussiness.getMachineId());
+        String url = String.format(URLs.URL_SEND_SMS, URLs.baseURL, URLs.appCode, mUsername, mPhone, mSystemBiz.getMachineId());
         StringRequest request = new StringRequest(url, new Listener<String>() {
             @Override
             public void onResponse(String response) {
                 JSONResult jr = JSONResult.compile(response);
-                if (jr.resultCode == URLs.RESULT_CODE_SEND_SMS_ERROR) {
-                    Toast.makeText(VerificationCodeActivity.this, jr.reason, Toast.LENGTH_SHORT).show();
+                if (jr.code == URLs.RESULT_CODE_SEND_SMS_ERROR) {
+                    Toast.makeText(VerificationCodeActivity.this, jr.msg, Toast.LENGTH_SHORT).show();
                     timer.cancel();
                     mResendBtn.setEnabled(true);
                     fillTextView(R.id.verification_resend_btn, "重新获取");
@@ -155,7 +155,7 @@ public class VerificationCodeActivity extends BaseActivity implements ErrorListe
 
             String token = mAppContext.getApp().getPushVendorType() == App.PUSH_VENDOR_TYPE_BAIDU ? mAppContext.getApp().getBaiduPushUserId() : JPushInterface.getRegistrationID(this);
             url = String.format(URLs.URL_CONFIRM_VERIFICATION_CODE, URLs.baseURL,mPhone,
-                    mSystemBussiness.getMachineId(), verificationCode,
+                    mSystemBiz.getMachineId(), verificationCode,
                     URLEncoder.encode(mUsername, "utf-8"), token, osVersion, URLEncoder.encode(Build.MODEL, "utf-8"), currentVersionName, buildId,URLs.appCode);
         } catch (UnsupportedEncodingException e) {
             e.printStackTrace();
@@ -168,8 +168,8 @@ public class VerificationCodeActivity extends BaseActivity implements ErrorListe
                 ProgressHUD.dismissProgressHUDInThisContext(VerificationCodeActivity.this);
 
                 JSONResult jr = JSONResult.compile(response);
-                if (jr.resultCode == URLs.RESULT_CODE_CONFIRM_VERIFICATION_CODE_ERROR) {
-                    Toast.makeText(VerificationCodeActivity.this, jr.reason, Toast.LENGTH_SHORT).show();
+                if (jr.code == URLs.RESULT_CODE_CONFIRM_VERIFICATION_CODE_ERROR) {
+                    Toast.makeText(VerificationCodeActivity.this, jr.msg, Toast.LENGTH_SHORT).show();
                 } else {
                     setResult(RESULT_OK);
                     finish();

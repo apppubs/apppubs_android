@@ -255,7 +255,7 @@ public class CommentActivity extends BaseActivity {
 
 	private void getPage(final int page) {
 
-		mSystemBussiness.getStandardDataTime(new APResultCallback<Date>() {
+		mSystemBiz.getStandardDataTime(new APResultCallback<Date>() {
 
 			@Override
 			public void onException(int excepCode) {
@@ -266,7 +266,7 @@ public class CommentActivity extends BaseActivity {
 				
 				mStandardDateTime = obj;
 				LogM.log(this.getClass(), "当前服务器时间：" + mStandardDateTime.toString());
-				mSystemBussiness.getCommentList(mInfoId, mCurPage, 10, URLs.CLIENTKEY, new APResultCallback<List<Comment>>() {
+				mSystemBiz.getCommentList(mInfoId, mCurPage, 10, URLs.CLIENTKEY, new APResultCallback<List<Comment>>() {
 
 					@Override
 					public void onException(int excepCode) {

@@ -31,10 +31,10 @@ import com.android.volley.RequestQueue;
 import com.android.volley.toolbox.Volley;
 import com.apppubs.bean.MenuItem;
 import com.apppubs.AppManager;
+import com.apppubs.model.SystemBiz;
 import com.apppubs.ui.activity.AboutActivity;
 import com.apppubs.ui.activity.FeedbackActivity;
 import com.apppubs.model.VersionInfo;
-import com.apppubs.model.SystemBussiness;
 import com.apppubs.ui.start.StartUpActivity;
 import com.apppubs.model.APResultCallback;
 import com.apppubs.ui.widget.ConfirmDialog;
@@ -81,7 +81,7 @@ public class SettingFragment extends TitleMenuFragment implements OnClickListene
 		mApp = (MportalApplication) mHostActivity.getApplication();
 	}
 	private void initState1() {
-		mSystemBussiness.checkUpdate(mHostActivity, new SystemBussiness.CheckUpdateListener() {
+		mSystemBiz.checkUpdate(mHostActivity, new SystemBiz.CheckUpdateListener() {
 			@Override
 			public void onDone(VersionInfo info) {
 				if (info.isNeedUpdate()) {
@@ -214,7 +214,7 @@ public class SettingFragment extends TitleMenuFragment implements OnClickListene
 		}
 	}
 	private void refreshCacheSize() {
-		mCacheTv.setText(FileUtils.formetFileSize(mSystemBussiness.getCacheSize()));
+		mCacheTv.setText(FileUtils.formetFileSize(mSystemBiz.getCacheSize()));
 	}
 
 	@Override
@@ -255,7 +255,7 @@ public class SettingFragment extends TitleMenuFragment implements OnClickListene
 
 					@Override
 					public void onOkClick() {
-						mSystemBussiness.clearCache(new APResultCallback<Boolean>() {
+						mSystemBiz.clearCache(new APResultCallback<Boolean>() {
 
 							@Override
 							public void onException(int excepCode) {
@@ -402,7 +402,7 @@ public class SettingFragment extends TitleMenuFragment implements OnClickListene
 
 	private void checkVersion() {
 
-		mSystemBussiness.checkUpdate(mHostActivity, new SystemBussiness.CheckUpdateListener() {
+		mSystemBiz.checkUpdate(mHostActivity, new SystemBiz.CheckUpdateListener() {
 			@Override
 			public void onDone(final VersionInfo vi) {
 

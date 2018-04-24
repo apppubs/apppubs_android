@@ -56,7 +56,7 @@ public class HistoryFragment extends BaseFragment {
 		
 		if (SystemUtils.canConnectNet(mContext)) {
 
-			mSystemBussiness.getStandardDataTime(new APResultCallback<Date>() {
+			mSystemBiz.getStandardDataTime(new APResultCallback<Date>() {
 
 				@Override
 				public void onException(int excepCode) {
