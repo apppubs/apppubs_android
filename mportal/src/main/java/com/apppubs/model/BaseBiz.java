@@ -1,5 +1,7 @@
 package com.apppubs.model;
 
+import java.util.HashMap;
+import java.util.Locale;
 import java.util.Map;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.Executor;
@@ -14,15 +16,19 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 import android.content.Context;
 import android.os.AsyncTask;
+import android.os.Build;
 import android.os.Handler;
 import android.os.Looper;
 import android.os.Message;
+import android.support.annotation.NonNull;
+import android.telephony.TelephonyManager;
 import android.util.DisplayMetrics;
 import android.view.WindowManager;
 
 import com.alibaba.fastjson.JSONObject;
 import com.apppubs.AppContext;
 import com.apppubs.MportalApplication;
+import com.apppubs.bean.Client;
 import com.apppubs.bean.http.IJsonResult;
 import com.apppubs.constant.APError;
 import com.apppubs.constant.APErrorCode;
@@ -33,15 +39,13 @@ import com.apppubs.net.IRequestListener;
 import com.apppubs.util.Utils;
 
 /**
- * 
  * 提供基础的线程相关功能
  * Copyright (c) heaven Inc.
- *
+ * <p>
  * Original Author: zhangwen
- *
+ * <p>
  * ChangeLog:
  * 2015年1月13日 by zhangwen create
- *
  */
 public abstract class BaseBiz {
 
@@ -55,7 +59,7 @@ public abstract class BaseBiz {
     private static final int CORE_POOL_SIZE = CPU_COUNT + 1;
     private static final int MAXIMUM_POOL_SIZE = CPU_COUNT * 2 + 1;
     private static final int KEEP_ALIVE = 1;
-    
+
     private static final ThreadFactory sThreadFactory = new ThreadFactory() {
         private final AtomicInteger mCount = new AtomicInteger(1);
 
@@ -63,15 +67,15 @@ public abstract class BaseBiz {
             return new Thread(r, "BaseBussiness #" + mCount.getAndIncrement());
         }
     };
-    
+
     private static final BlockingQueue<Runnable> sPoolWorkQueue =
             new LinkedBlockingQueue<Runnable>(128);
     //线程池类
     public static final Executor THREAD_POOL_EXECUTOR
-    = new ThreadPoolExecutor(CORE_POOL_SIZE, MAXIMUM_POOL_SIZE, KEEP_ALIVE,
+            = new ThreadPoolExecutor(CORE_POOL_SIZE, MAXIMUM_POOL_SIZE, KEEP_ALIVE,
             TimeUnit.SECONDS, sPoolWorkQueue, sThreadFactory);
 
-    public static final ExecutorService SERIAL_EXECUTOR =  Executors.newCachedThreadPool();
+    public static final ExecutorService SERIAL_EXECUTOR = Executors.newCachedThreadPool();
     public static final InternalHandler sHandler = new InternalHandler();
     public static volatile ExecutorService sDefaultExecutor = SERIAL_EXECUTOR;
 
@@ -96,71 +100,97 @@ public abstract class BaseBiz {
          */
         FINISHED,
     }
-    
+
 
     protected static class InternalHandler extends Handler {
-    	//创建handler绑定主线程looper
-    	public InternalHandler() {
-    		super(Looper.getMainLooper());
-		}
+        //创建handler绑定主线程looper
+        public InternalHandler() {
+            super(Looper.getMainLooper());
+        }
+
         @SuppressWarnings({"unchecked", "RawUseOfParameterizedType"})
         @Override
         public void handleMessage(Message msg) {
         }
     }
-    
-    
-	protected class OnExceptionRun<T> implements Runnable {
-		private APResultCallback<T> mCallback;
-		public  OnExceptionRun(APResultCallback<T> callback){
-			mCallback = callback;
-		}
-		public void run() {
-			mCallback.onException(0);
-		}
-	}
-	
-	protected class OnDoneRun<T> implements Runnable{
-		private APResultCallback<T> mCallback;
-		private T mResult;
-		public OnDoneRun(APResultCallback<T> callback, T obj){
-			mCallback = callback;
-			mResult = obj;
-		}
-		@Override
-		public void run() {
-			mCallback.onDone(mResult);
-		}
-		
-	}
 
-    public Future<?> post(Runnable runnable){
+
+    protected class OnExceptionRun<T> implements Runnable {
+        private APResultCallback<T> mCallback;
+
+        public OnExceptionRun(APResultCallback<T> callback) {
+            mCallback = callback;
+        }
+
+        public void run() {
+            mCallback.onException(0);
+        }
+    }
+
+    protected class OnDoneRun<T> implements Runnable {
+        private APResultCallback<T> mCallback;
+        private T mResult;
+
+        public OnDoneRun(APResultCallback<T> callback, T obj) {
+            mCallback = callback;
+            mResult = obj;
+        }
+
+        @Override
+        public void run() {
+            mCallback.onDone(mResult);
+        }
+
+    }
+
+    public Future<?> post(Runnable runnable) {
         return sDefaultExecutor.submit(runnable);
     }
 
-    protected <T> void onDone(APResultCallback<T> callback, T obj){
-        sHandler.post(new OnDoneRun<T>(callback,obj));
+    protected <T> void onDone(APResultCallback<T> callback, T obj) {
+        sHandler.post(new OnDoneRun<T>(callback, obj));
     }
 
-    protected <T> void onException(APResultCallback<T> callback){
+    protected <T> void onException(APResultCallback<T> callback) {
         sHandler.post(new OnExceptionRun<T>(callback));
     }
 
     private Map<String, String> getCommonHeader() {
-        String orientationFlag = Utils.isScreenHorizontal(mContext) ? "1" : "0";
-        String deviceFlag = Utils.isPad(mContext) ? "4" : "3";
-        String screenDimenFlag = null;
+
+        String screenDimenFlag = getScreenStr();
+
+        Map<String, String> headers = new HashMap<String, String>();
+        headers.put("version",mAppContext.getVersionName());
+        headers.put("versionCode",mAppContext.getVersionCode()+"");
+        headers.put("os",Build.VERSION.RELEASE);
+        headers.put("from","android");
+        headers.put("screen",screenDimenFlag);
+        headers.put("model",Build.DEVICE);
+        headers.put("channel","default");
+        headers.put("net","unknow");
+        headers.put("deviceid",SystemBiz.getInstance(mContext).getMachineId());
+        headers.put("nonce","");
+        headers.put("timestamp","");
+        headers.put("sign","");
+        headers.put("appId",mAppContext.getApp().getCode());
+        headers.put("orgCode",mAppContext.getApp().getOrgCode());
+        headers.put("apiVersion","1.0.0");
+
+        return headers;
+    }
+
+    @NonNull
+    private String getScreenStr() {
         WindowManager wm = (WindowManager) mContext.getSystemService(Context.WINDOW_SERVICE);
         DisplayMetrics dm = new DisplayMetrics();
         wm.getDefaultDisplay().getMetrics(dm);
-        screenDimenFlag = dm.widthPixels + "X" + dm.heightPixels;
-        return null;
+        return dm.widthPixels + "*" + dm.heightPixels;
     }
 
     public <T extends IJsonResult> void asyncPOST(final String url, final Map<String, String>
             params, final Class<T>
                                                           clazz, final IRQListener listener) {
-        mHttpClient.asyncPOST(url, params, new IRequestListener() {
+        mHttpClient.asyncPOST(url, getCommonHeader(), params, new IRequestListener() {
 
             @Override
             public void onResponse(String json, APError e) {
@@ -185,7 +215,7 @@ public abstract class BaseBiz {
 
     public <T extends IJsonResult> T syncPOST(String url, Map<String, String> params,
                                               Class<T> clazz) throws APNetException {
-        String json = mHttpClient.syncPOST(url, params);
+        String json = mHttpClient.syncPOST(url, getCommonHeader(), params);
         JSONObject jo = JSONObject.parseObject(json);
         Integer code = jo.getInteger("code");
         String msg = jo.getString("msg");
@@ -197,7 +227,6 @@ public abstract class BaseBiz {
             throw new APNetException(error);
         }
     }
-   
 }
 
 interface IRQListener<T extends IJsonResult> {
