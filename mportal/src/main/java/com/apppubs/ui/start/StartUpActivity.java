@@ -51,7 +51,15 @@ public class StartUpActivity extends BaseActivity implements IStartUpView {
 		super.onCreate(savedInstanceState);
 		setNeedTitleBar(false);
 		setContentView(R.layout.act_start);
+		initImageLoderOptions();
 		mPresenter = new StartupPresenter(this,this);
+	}
+
+	private void initImageLoderOptions() {
+		mImageLoaderOptions = new DisplayImageOptions.Builder()
+				.showImageForEmptyUri(R.drawable.transparent).showImageOnFail(R.drawable.transparent)
+				.cacheInMemory(false).cacheOnDisk(true).considerExifParams(true).bitmapConfig(Bitmap.Config.RGB_565)
+				.build();
 	}
 
 	@Override
@@ -118,11 +126,6 @@ public class StartUpActivity extends BaseActivity implements IStartUpView {
 
 	@Override
 	public void showBgImage(String url) {
-		mImageLoaderOptions = new DisplayImageOptions.Builder().showImageOnLoading(R.drawable.transparent)
-				.showImageForEmptyUri(R.drawable.transparent).showImageOnFail(R.drawable.transparent)
-				.cacheInMemory(true).cacheOnDisk(true).considerExifParams(true).bitmapConfig(Bitmap.Config.RGB_565)
-				.build();
-
 		mStartupIv = (ImageView) findViewById(R.id.startup_iv);
 		mImageLoader.displayImage(url,mStartupIv,mImageLoaderOptions);
 	}

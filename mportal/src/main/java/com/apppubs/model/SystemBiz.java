@@ -51,6 +51,7 @@ import com.apppubs.constant.Constants;
 import com.apppubs.constant.URLs;
 import com.apppubs.d20.R;
 import com.apppubs.model.message.UserBussiness;
+import com.apppubs.ui.activity.MainHandler;
 import com.apppubs.util.FileUtils;
 import com.apppubs.util.JSONResult;
 import com.apppubs.util.LogM;
@@ -163,13 +164,13 @@ public class SystemBiz extends BaseBiz {
                     db.beginTransaction();
                     App app = init();
                     db.setTransactionSuccessful();
-                    sHandler.post(new OnDoneRun<App>(callback, app));
+                    MainHandler.getInstance().post(new OnDoneRun<App>(callback, app));
                 } catch (Exception e) {
+                    e.printStackTrace();
                     if (isFirstInit()){
                         clearDataBase();
                     }
-                    sHandler.post(new OnExceptionRun<App>(callback));
-                    e.printStackTrace();
+                    MainHandler.getInstance().post(new OnExceptionRun<App>(callback));
                 }  finally {
                     db.endTransaction();
                 }
@@ -338,41 +339,6 @@ public class SystemBiz extends BaseBiz {
                     e.printStackTrace();
                 }
         }
-    }
-
-    // 构造启动日志请求url
-    private String makeLogRequestStr(Context context) {
-        Client mClientInfo = null;
-        TelephonyManager tm = (TelephonyManager) context.getSystemService(Context
-				.TELEPHONY_SERVICE);
-        mClientInfo = new Client();
-        mClientInfo.setmOs(Build.VERSION.RELEASE);
-        mClientInfo.setmDev(Build.DEVICE);
-        mClientInfo.setmLang(Locale.getDefault().getLanguage());
-        mClientInfo.setmNation(Locale.getDefault().getCountry());
-        mClientInfo.setmImei(tm.getDeviceId());
-
-        mClientInfo.setmAppVersion(Utils.getVersionName(mContext));
-        // mClientInfo.setmClientKey(Util.md5("CmsClient"));
-        mClientInfo.setmClientKey(URLs.CLIENTKEY);
-        mClientInfo.setmSms("");
-        mClientInfo.setmFrom(URLs.appCode);
-        mClientInfo.setmSerialNumber(getMachineId());
-
-        StringBuilder sb = new StringBuilder(URLs.baseURL);
-        sb.append("wmh360/json/getclientinfo.jsp?imei=").append(mClientInfo.getmSerialNumber());
-        sb.append("&os=").append(mClientInfo.getmOs());
-        sb.append("&dev=").append(mClientInfo.getmDev());
-        sb.append("&lang=").append(mClientInfo.getmLang());
-        sb.append("&nation=").append(mClientInfo.getmNation());
-        sb.append("&sms=").append(mClientInfo.getmSms());
-        sb.append("&appversion=").append(mClientInfo.getmAppVersion());
-        sb.append("&clientkey=").append(mClientInfo.getmClientKey());
-        sb.append("&fr=").append(mClientInfo.getmFrom());
-        sb.append("&username=").append(mAppContext.getCurrentUser() != null ? mAppContext
-				.getCurrentUser().getUsername() : "");
-        return sb.toString();
-
     }
 
     /**

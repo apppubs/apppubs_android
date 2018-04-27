@@ -509,6 +509,9 @@ public class App implements Serializable {
     }
 
     public String getOrgCode() {
+        if (orgCode==null){
+            return "";
+        }
         return orgCode;
     }
 

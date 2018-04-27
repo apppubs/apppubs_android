@@ -286,26 +286,6 @@ public abstract class BaseActivity extends FragmentActivity implements OnClickLi
 	}
 
 	protected void onAppActive() {
-		if (!(this instanceof FirstLoginActity)||(this instanceof StartUpActivity)){
-			mUserBussiness.updateUserInfo(this, new APResultCallback<UserInfo>() {
-				@Override
-				public void onDone(UserInfo obj) {
-					if (obj==null||TextUtils.isEmpty(obj.getUserId())){
-						Intent closeI = new Intent(Actions.CLOSE_ALL_ACTIVITY);
-						sendBroadcast(closeI);
-						startActivity(FirstLoginActity.class);
-					}
-				}
-
-				@Override
-				public void onException(int excepCode) {
-
-				}
-			});
-
-//			this.preCheckUpdate();
-
-		}
 
 	}
 

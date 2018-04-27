@@ -51,7 +51,7 @@ public class APHttpClient implements IHttpClient {
 
         if (headers != null) {
             for (String key : headers.keySet()) {
-                String val = params.get(key);
+                String val = headers.get(key);
                 requestBuilder.addHeader(key, val);
             }
         }
@@ -111,7 +111,7 @@ public class APHttpClient implements IHttpClient {
 
         if (headers != null) {
             for (String key : headers.keySet()) {
-                String val = params.get(key);
+                String val = headers.get(key);
                 requestBuilder.addHeader(key, val);
             }
         }

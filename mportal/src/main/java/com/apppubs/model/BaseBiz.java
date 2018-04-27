@@ -168,7 +168,7 @@ public abstract class BaseBiz {
         headers.put("model",Build.DEVICE);
         headers.put("channel","default");
         headers.put("net","unknow");
-        headers.put("deviceid",SystemBiz.getInstance(mContext).getMachineId());
+        headers.put("deviceId",SystemBiz.getInstance(mContext).getMachineId());
         headers.put("nonce","");
         headers.put("timestamp","");
         headers.put("sign","");
