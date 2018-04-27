@@ -22,12 +22,12 @@ import android.widget.PopupWindow;
 import android.widget.PopupWindow.OnDismissListener;
 import android.widget.TextView;
 
+import com.apppubs.bean.TNewsChannel;
 import com.apppubs.model.NewsBiz;
 import com.apppubs.ui.activity.AddChannelActivity;
 import com.apppubs.ui.activity.ContainerActivity;
 import com.apppubs.ui.activity.SortChannelBActivity;
-import com.apppubs.bean.HeadPic;
-import com.apppubs.bean.NewsChannel;
+import com.apppubs.bean.THeadPic;
 import com.apppubs.util.LogM;
 import com.apppubs.ui.widget.SlidePicView;
 import com.apppubs.d20.R;
@@ -55,7 +55,7 @@ public class ChannelsSquareFragment extends ChannelsFragment implements OnClickL
 	private HeaderGridView mChannelsGv;
 	private SlidePicView mSlidePicView;
 	private MyAdapter mAdapter;
-	private List<HeadPic> mPicList;//推广图
+	private List<THeadPic> mPicList;//推广图
 	private PopupWindow mEditPopupWindow;
 	private View mEditLl,mDelLl;
 	private NewsBiz mNewsBiz;
@@ -72,7 +72,7 @@ public class ChannelsSquareFragment extends ChannelsFragment implements OnClickL
 	private void init(LayoutInflater inflater){
 		
 		mChannelsGv = (HeaderGridView) mRootView.findViewById(R.id.channels_hgl);
-		mPicList = SugarRecord.find(HeadPic.class, "CHANNEL_TYPE_ID = ?" ,new String[]{mChannelTypeId+""},null,null,null);
+		mPicList = SugarRecord.find(THeadPic.class, "CHANNEL_TYPE_ID = ?" ,new String[]{mChannelTypeId+""},null,null,null);
 		mNewsBiz = NewsBiz.getInstance(mContext);
 		
 	}
@@ -101,7 +101,7 @@ public class ChannelsSquareFragment extends ChannelsFragment implements OnClickL
 			mSlidePicView = new SlidePicView(mHostActivity);
 			mSlidePicView.setBackgroundColor(0xffffffff);
 			final List<SlidePicView.SlidePicItem> list = new ArrayList<SlidePicView.SlidePicItem>();
-			for(HeadPic hp:mPicList){
+			for(THeadPic hp:mPicList){
 				SlidePicView.SlidePicItem sp = new SlidePicView.SlidePicItem();
 				sp.picURL = hp.getPicURL();
 				sp.title = hp.getTopic();
@@ -132,7 +132,7 @@ public class ChannelsSquareFragment extends ChannelsFragment implements OnClickL
 			@Override
 			public void onItemClick(AdapterView<?> parent, View view,
 					int position, long id) {
-				NewsChannel nc = (NewsChannel)mChannelsGv.getAdapter().getItem(position);
+				TNewsChannel nc = (TNewsChannel)mChannelsGv.getAdapter().getItem(position);
 				if(nc==null){
 					Intent i = new Intent(mHostActivity,AddChannelActivity.class);
 					i.putExtra(AddChannelActivity.EXTRA_STRING_NAME_CHANNELTYPE, mChannelTypeId+"");
@@ -213,7 +213,7 @@ public class ChannelsSquareFragment extends ChannelsFragment implements OnClickL
 				tv.setText("添加");
 				return convertView;
 			}
-			NewsChannel nc = mChannelSelectedList.get(position);
+			TNewsChannel nc = mChannelSelectedList.get(position);
 			tv.setText(nc.getName());
 			LogM.log(this.getClass(), "加载频道:"+nc.getPic());
 			mImageLoader.displayImage(nc.getPic(), iv);
@@ -271,7 +271,7 @@ public class ChannelsSquareFragment extends ChannelsFragment implements OnClickL
 	}
 
 	private void delChannel() {
-		NewsChannel nc = mChannelSelectedList.get(curLongClickedPos);
+		TNewsChannel nc = mChannelSelectedList.get(curLongClickedPos);
 		mChannelSelectedList.remove(curLongClickedPos);
 		mAdapter.notifyDataSetChanged();
 		mEditPopupWindow.dismiss();

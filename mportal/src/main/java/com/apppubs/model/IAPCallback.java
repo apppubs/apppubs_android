@@ -9,7 +9,7 @@ import com.apppubs.constant.APError;
  *
  * @param <T>
  */
-public interface APCallback<T>{
+public interface IAPCallback<T>{
 	/**
 	 * 正常返回
 	 * @param obj 返回的实体对象

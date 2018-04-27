@@ -4,7 +4,7 @@ import java.util.Date;
 
 import android.content.Context;
 
-import com.apppubs.bean.Collection;
+import com.apppubs.bean.TCollection;
 import com.orm.SugarRecord;
 
 public class CollectionBiz extends BaseBiz {
@@ -37,7 +37,7 @@ public class CollectionBiz extends BaseBiz {
 		 * 收藏开关 
 		 */
 		if (!isCollected) {
-			Collection c = new Collection();
+			TCollection c = new TCollection();
 			c.setAddTime(new Date());
 			c.setInfoId(mInfoId);
 			c.setTitle(title);
@@ -45,7 +45,7 @@ public class CollectionBiz extends BaseBiz {
 			c.setType(type);
 			c.save();
 		} else {
-			SugarRecord.deleteAll(Collection.class, "INFO_ID=?", mInfoId);
+			SugarRecord.deleteAll(TCollection.class, "INFO_ID=?", mInfoId);
 		}
 	}
 	

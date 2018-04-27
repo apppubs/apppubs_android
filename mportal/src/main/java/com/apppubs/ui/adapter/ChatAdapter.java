@@ -24,7 +24,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.apppubs.asytask.AsyTaskExecutor;
-import com.apppubs.bean.Msg;
+import com.apppubs.bean.TMsg;
 import com.apppubs.bean.UserInfo;
 import com.apppubs.AppContext;
 import com.apppubs.ui.activity.ChatVideoInfoActivity;
@@ -70,7 +70,7 @@ public class ChatAdapter extends BaseAdapter implements OnClickListener ,AsyTask
 	private final int ASY_TASK_TAG_PLAY = 1;
 	
 	private Context mContext;
-	private List<Msg> mList;
+	private List<TMsg> mList;
 	private LayoutInflater mInflater;
 	private UserInfo mCurUser;//当前登录的用户
 	private ImageLoader mImageLoader;
@@ -81,7 +81,7 @@ public class ChatAdapter extends BaseAdapter implements OnClickListener ,AsyTask
 	
 	public ChatAdapter(Context context) {
 		mContext = context;
-		mList = new ArrayList<Msg>();
+		mList = new ArrayList<TMsg>();
 		mInflater = LayoutInflater.from(context);
 		mCurUser = AppContext.getInstance(mContext).getCurrentUser();//
 		mImageLoader = ImageLoader.getInstance();
@@ -97,7 +97,7 @@ public class ChatAdapter extends BaseAdapter implements OnClickListener ,AsyTask
 		.build();
 	}
 
-	public void setDate(List<Msg> list) {
+	public void setDate(List<TMsg> list) {
 		mList = list;
 	}
 
@@ -118,7 +118,7 @@ public class ChatAdapter extends BaseAdapter implements OnClickListener ,AsyTask
 		System.out.println("聊天adapter  getItemId");
 		return 0;
 	}
-	public void addItem(Msg msg){
+	public void addItem(TMsg msg){
 		mList.add(msg);
 	}
 	class ViewHolder {
@@ -246,7 +246,7 @@ public class ChatAdapter extends BaseAdapter implements OnClickListener ,AsyTask
 		return convertView;
 	}
 	
-	private void fillView(ViewHolder holder,Msg msg,Msg lastMsg,int itemType,int position){
+	private void fillView(ViewHolder holder, TMsg msg, TMsg lastMsg, int itemType, int position){
 		
 		switch (itemType) {
 		case TYPE_MESSAGE_LEFT_TEXT:
@@ -331,7 +331,7 @@ public class ChatAdapter extends BaseAdapter implements OnClickListener ,AsyTask
 		}
 		return sb.toString();
 	}
-	private int getMessageType(Msg msg,String curUserName){
+	private int getMessageType(TMsg msg, String curUserName){
 		
 		int messageType = 0;
 		
@@ -343,16 +343,16 @@ public class ChatAdapter extends BaseAdapter implements OnClickListener ,AsyTask
 		}
 		int contentType = msg.getContentType();
 		switch (contentType) {
-		case Msg.TYPE_CONTENT_TEXT:
+		case TMsg.TYPE_CONTENT_TEXT:
 			messageType += TYPE_CONTENT_TEXT;
 			break;
-		case Msg.TYPE_CONTENT_IMAGE:
+		case TMsg.TYPE_CONTENT_IMAGE:
 			messageType += TYPE_CONTENT_IMAGE;
 			break;
-		case Msg.TYPE_CONTENT_SOUND:
+		case TMsg.TYPE_CONTENT_SOUND:
 			messageType +=TYPE_CONTENT_SOUND;
 			break;
-		case Msg.TYPE_CONTENT_VIDEO:
+		case TMsg.TYPE_CONTENT_VIDEO:
 			messageType += TYPE_CONTENT_VIDEO;
 		default:
 			break;
@@ -361,8 +361,8 @@ public class ChatAdapter extends BaseAdapter implements OnClickListener ,AsyTask
 	}
 	@Override
 	public View getView(final int position, View convertView, ViewGroup arg2) {
-		Msg msg = mList.get(position);
-		Msg lastMsg = mList.get(position>1?position-1:position);
+		TMsg msg = mList.get(position);
+		TMsg lastMsg = mList.get(position>1?position-1:position);
 		LogM.log(this.getClass(), "getView-->当前内容："+msg.getContent()+"当前位置："+position);
 		int messageType = getMessageType(msg, mCurUser.getUsername());
 		if(convertView==null){
@@ -381,7 +381,7 @@ public class ChatAdapter extends BaseAdapter implements OnClickListener ,AsyTask
 	@Override
 	public void onClick(View v) {
 		int id = v.getId();
-		Msg msg = (Msg) v.getTag();
+		TMsg msg = (TMsg) v.getTag();
 		switch (id) {
 		case R.id.chat_voice_left_ll:
 			LogM.log(this.getClass(), "空");

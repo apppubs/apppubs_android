@@ -1,9 +1,5 @@
 package com.apppubs.ui.activity;
 
-import java.io.UnsupportedEncodingException;
-import java.net.URLEncoder;
-
-import android.os.Build;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.text.TextUtils;
@@ -13,22 +9,16 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
-import com.android.volley.DefaultRetryPolicy;
-import com.android.volley.Response.ErrorListener;
-import com.android.volley.Response.Listener;
-import com.android.volley.VolleyError;
-import com.android.volley.toolbox.StringRequest;
-import com.apppubs.ui.widget.ConfirmDialog;
+import com.apppubs.bean.http.DefaultResult;
+import com.apppubs.bean.http.LoginResult;
+import com.apppubs.constant.APError;
 import com.apppubs.d20.R;
-import com.apppubs.bean.App;
-import com.apppubs.constant.URLs;
-import com.apppubs.util.JSONResult;
-import com.apppubs.util.Utils;
+import com.apppubs.model.IAPCallback;
+import com.apppubs.model.UserBiz;
+import com.apppubs.ui.widget.ConfirmDialog;
 import com.apppubs.ui.widget.ProgressHUD;
 
-import cn.jpush.android.api.JPushInterface;
-
-public class VerificationCodeActivity extends BaseActivity implements ErrorListener {
+public class VerificationCodeActivity extends BaseActivity {
 
     public static final String EXTRA_STRING_PHONE = "phone";
     public static final String EXTRA_STRING_USERNAME = "username";
@@ -80,24 +70,20 @@ public class VerificationCodeActivity extends BaseActivity implements ErrorListe
 
         };
         timer.start();
-
-        String url = String.format(URLs.URL_SEND_SMS, URLs.baseURL, URLs.appCode, mUsername, mPhone, mSystemBiz.getMachineId());
-        StringRequest request = new StringRequest(url, new Listener<String>() {
+        UserBiz.getInstance(mContext).requestVerifyCode(mUsername, new IAPCallback<DefaultResult>() {
             @Override
-            public void onResponse(String response) {
-                JSONResult jr = JSONResult.compile(response);
-                if (jr.code == URLs.RESULT_CODE_SEND_SMS_ERROR) {
-                    Toast.makeText(VerificationCodeActivity.this, jr.msg, Toast.LENGTH_SHORT).show();
-                    timer.cancel();
-                    mResendBtn.setEnabled(true);
-                    fillTextView(R.id.verification_resend_btn, "重新获取");
-                }
+            public void onDone(DefaultResult obj) {
+                Toast.makeText(mContext,"验证码已发送！",Toast.LENGTH_LONG).show();
             }
-        }, this);
-        request.setRetryPolicy(new DefaultRetryPolicy(50 * 1000, 1, 1.0f));
-        mRequestQueue.add(request);
 
-
+            @Override
+            public void onException(APError error) {
+                mErrorHandler.onError(error);
+                timer.cancel();
+                mResendBtn.setEnabled(true);
+                fillTextView(R.id.verification_resend_btn, "重新获取");
+            }
+        });
     }
 
 
@@ -123,6 +109,7 @@ public class VerificationCodeActivity extends BaseActivity implements ErrorListe
 
             @Override
             public void onOkClick() {
+                setResult(RESULT_CANCELED);
                 finish();
             }
 
@@ -147,51 +134,21 @@ public class VerificationCodeActivity extends BaseActivity implements ErrorListe
         }
         ProgressHUD.show(this, "请稍候", true, false, null);
 
-        String osVersion = Utils.getAndroidSDKVersion();// 操作系统号
-        String currentVersionName = mAppContext.getVersionName();// app版本号
-        int buildId = Utils.getVersionCode(VerificationCodeActivity.this);
-        String url = null;
-        try {
-
-            String token = mAppContext.getApp().getPushVendorType() == App.PUSH_VENDOR_TYPE_BAIDU ? mAppContext.getApp().getBaiduPushUserId() : JPushInterface.getRegistrationID(this);
-            url = String.format(URLs.URL_CONFIRM_VERIFICATION_CODE, URLs.baseURL,mPhone,
-                    mSystemBiz.getMachineId(), verificationCode,
-                    URLEncoder.encode(mUsername, "utf-8"), token, osVersion, URLEncoder.encode(Build.MODEL, "utf-8"), currentVersionName, buildId,URLs.appCode);
-        } catch (UnsupportedEncodingException e) {
-            e.printStackTrace();
-        }
-
-        StringRequest request = new StringRequest(url, new Listener<String>() {
-            @Override
-            public void onResponse(String response) {
-
-                ProgressHUD.dismissProgressHUDInThisContext(VerificationCodeActivity.this);
-
-                JSONResult jr = JSONResult.compile(response);
-                if (jr.code == URLs.RESULT_CODE_CONFIRM_VERIFICATION_CODE_ERROR) {
-                    Toast.makeText(VerificationCodeActivity.this, jr.msg, Toast.LENGTH_SHORT).show();
-                } else {
-                    setResult(RESULT_OK);
-                    finish();
-                }
-
-            }
-        }, new ErrorListener() {
+        UserBiz.getInstance(mContext).confirmVerifyCode(mUsername, verificationCode, new IAPCallback<LoginResult>() {
 
             @Override
-            public void onErrorResponse(VolleyError arg0) {
-                Toast.makeText(VerificationCodeActivity.this, "网络故障", Toast.LENGTH_SHORT).show();
+            public void onDone(LoginResult obj) {
                 ProgressHUD.dismissProgressHUDInThisContext(VerificationCodeActivity.this);
+                setResult(RESULT_OK);
+                finish();
             }
 
+            @Override
+            public void onException(APError error) {
+                ProgressHUD.dismissProgressHUDInThisContext(VerificationCodeActivity.this);
+                mErrorHandler.onError(error);
+            }
         });
-        request.setRetryPolicy(new DefaultRetryPolicy(20 * 1000, 1, 1.0f));
-        mRequestQueue.add(request);
-    }
-
-    @Override
-    public void onErrorResponse(VolleyError err) {
-        Toast.makeText(this, "网络故障", Toast.LENGTH_SHORT).show();
     }
 
     @Override

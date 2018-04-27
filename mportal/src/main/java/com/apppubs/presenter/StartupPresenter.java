@@ -7,7 +7,7 @@ import com.apppubs.AppContext;
 import com.apppubs.AppManager;
 import com.apppubs.bean.App;
 import com.apppubs.constant.APError;
-import com.apppubs.model.APCallback;
+import com.apppubs.model.IAPCallback;
 import com.apppubs.model.SystemBiz;
 import com.apppubs.model.VersionInfo;
 import com.apppubs.ui.start.IStartUpView;
@@ -56,7 +56,7 @@ public class StartupPresenter {
 	}
 
 	public void init(){
-		mSystemBiz.initSystem(new APCallback<App>() {
+		mSystemBiz.initSystem(new IAPCallback<App>() {
 			@Override
 			public void onDone(App obj) {
 				showBgPic(obj.getStartUpPic());

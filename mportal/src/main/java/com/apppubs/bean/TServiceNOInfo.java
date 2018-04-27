@@ -5,7 +5,7 @@ import java.util.Date;
 import com.google.gson.annotations.SerializedName;
 import com.orm.SugarRecord;
 
-public class ServiceNOInfo extends SugarRecord {
+public class TServiceNOInfo extends SugarRecord {
 	
 	public static final int TYPE_NORMAL = 1;//图文
 	public static final int TYPE_LINK = 2;//链接

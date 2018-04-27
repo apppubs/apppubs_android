@@ -15,10 +15,10 @@ import android.widget.Toast;
 
 import com.apppubs.AppContext;
 import com.apppubs.bean.TMenuItem;
+import com.apppubs.bean.TNewsChannel;
 import com.apppubs.ui.myfile.MyFileFragment;
 import com.apppubs.d20.R;
 import com.apppubs.bean.App;
-import com.apppubs.bean.NewsChannel;
 import com.apppubs.ui.fragment.BaseFragment;
 import com.apppubs.ui.fragment.ChannelFragment;
 import com.apppubs.ui.fragment.ChannelFragmentFactory;
@@ -358,12 +358,12 @@ public class ViewCourier {
         } else if (uri.equals(TMenuItem.MENU_URL_NEWS)) {// 新闻
             String channelTypeId = item.getChannelTypeId();
             //如果此资讯类型菜单只有一个频道则直接显示这个频道列表不显示多频道标签
-            List<NewsChannel> channelList = SugarRecord.find(NewsChannel.class, "TYPE_ID=?", new String[]{channelTypeId + ""}, null, "DISPLAY_ORDER", null);
+            List<TNewsChannel> channelList = SugarRecord.find(TNewsChannel.class, "TYPE_ID=?", new String[]{channelTypeId + ""}, null, "DISPLAY_ORDER", null);
 
             Bundle args = new Bundle();
             args.putString(ChannelsFragment.ARGS_MENU_ID, item.getId());
             if (channelList != null && channelList.size() == 1) {
-                NewsChannel nc = channelList.get(0);
+                TNewsChannel nc = channelList.get(0);
                 frg = ChannelFragmentFactory.getChannelFragment(nc.getShowType());
                 args.putString(ChannelFragment.ARG_KEY, nc.getCode());
                 ;

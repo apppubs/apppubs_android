@@ -18,10 +18,10 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.apppubs.bean.TCollection;
 import com.apppubs.ui.fragment.CollectionFragment1;
 import com.apppubs.d20.R;
 import com.apppubs.ui.adapter.MyFragementAdapter;
-import com.apppubs.bean.Collection;
 
 /**
  * 收藏
@@ -81,10 +81,10 @@ public class CollectionActivity extends BaseActivity implements OnClickListener,
 		// paperFg = new CollectionFragment();
 		// videoFg = new CollectionFragment();
 
-		newsFg.setType(Collection.TYPE_NORMAL);
-		picFg.setType(Collection.TYPE_PIC);
-		// paperFg.setType(Collection.TYPE_PAPER);
-		// videoFg.setType(Collection.TYPE_VEDIO);
+		newsFg.setType(TCollection.TYPE_NORMAL);
+		picFg.setType(TCollection.TYPE_PIC);
+		// paperFg.setType(TCollection.TYPE_PAPER);
+		// videoFg.setType(TCollection.TYPE_VEDIO);
 
 		mFragmentList.add(newsFg);
 		mFragmentList.add(picFg);

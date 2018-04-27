@@ -6,7 +6,7 @@ import com.orm.SugarRecord;
  * 城市属性实体类
  *
  */
-public class City extends SugarRecord{
+public class TCity extends SugarRecord{
 	private String name; //城市名字
 	private String nameFirstInitial; //城市名第一个字拼音首字母
 	private String nameInitial;//拼音首字母
@@ -15,11 +15,11 @@ public class City extends SugarRecord{
 		return name;
 	}
     
-	public City() {
+	public TCity() {
 		super();
 	}
 
-	public City(String name, String nameFirstInitial, String nameInitial) {
+	public TCity(String name, String nameFirstInitial, String nameInitial) {
 		super();
 		this.name = name;
 		this.nameFirstInitial = nameFirstInitial;

@@ -32,12 +32,10 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.apppubs.bean.Collection;
-import com.apppubs.bean.NewsInfo;
+import com.apppubs.bean.TCollection;
+import com.apppubs.bean.TNewsInfo;
 import com.apppubs.d20.R;
 import com.orm.SugarRecord;
-
-import org.w3c.dom.Text;
 
 public class Utils {
 
@@ -292,9 +290,9 @@ public class Utils {
         if (isCollected) {
             Log.v("NEWSINFO", "收藏");
             Utils.showToast(context, "收藏成功", 1000);
-            SugarRecord.updateById(NewsInfo.class, mInfoId, "IS_COLLECTED", NewsInfo.COLLECTED +
+            SugarRecord.updateById(TNewsInfo.class, mInfoId, "IS_COLLECTED", TNewsInfo.COLLECTED +
                     "");
-            Collection c = new Collection();
+            TCollection c = new TCollection();
             c.setAddTime(new Date());
             c.setInfoId(mInfoId);
             c.setTitle(title);
@@ -304,9 +302,9 @@ public class Utils {
             mSaveImagview.setImageResource(R.drawable.menubar_favorite_h);
         } else {
             Utils.showToast(context, "取消收藏", 1000);
-            SugarRecord.updateById(NewsInfo.class, mInfoId, "IS_COLLECTED", NewsInfo.UNCOLLECTED
+            SugarRecord.updateById(TNewsInfo.class, mInfoId, "IS_COLLECTED", TNewsInfo.UNCOLLECTED
                     + "");
-            Collection c = new Collection();
+            TCollection c = new TCollection();
             c.setAddTime(new Date());
             c.setInfoId(mInfoId);
             c.setTitle(title);
@@ -314,7 +312,7 @@ public class Utils {
             c.setType(type);
             c.save();
             mSaveImagview.setImageResource(R.drawable.menubar_favorite);
-            SugarRecord.deleteAll(Collection.class, "INFO_ID=?", mInfoId);
+            SugarRecord.deleteAll(TCollection.class, "INFO_ID=?", mInfoId);
         }
     }
 

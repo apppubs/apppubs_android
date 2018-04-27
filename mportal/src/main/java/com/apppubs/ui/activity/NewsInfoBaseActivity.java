@@ -4,7 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 
-import com.apppubs.bean.NewsInfo;
+import com.apppubs.bean.TNewsInfo;
 import com.apppubs.ui.myfile.FilePreviewFragment;
 import com.apppubs.ui.webapp.WebAppFragment;
 
@@ -24,34 +24,34 @@ public abstract class  NewsInfoBaseActivity extends BaseActivity{
 	 * 如果是专题，则传入专题的url，如果是url类型则传入url地址。
 	 */
 	public static void startInfoActivity(Context context,String type,String... params){
-		if(type.equals(NewsInfo.NEWS_TYPE_NORAML)){
+		if(type.equals(TNewsInfo.NEWS_TYPE_NORAML)){
 			Intent i = new Intent(context,NewsInfoActivity.class);
 			i.putExtra(NewsInfoActivity.EXTRA_STRING_NAME_CHANNELCODE,  params[0]);
 			i.putExtra(NewsInfoActivity.EXTRA_STRING_NAME_ID,params[1]);
 			context.startActivity(i);
-		}else if(type.equals(NewsInfo.NEWS_TYPE_PICTURE)){
+		}else if(type.equals(TNewsInfo.NEWS_TYPE_PICTURE)){
 			Intent intent = new Intent(context,NewsPictureInfoActivity.class);
 			intent.putExtra(NewsPictureInfoActivity.EXTRA_STRING_NAME_ID,params[1]);
 			context.startActivity(intent);
-		}else if(type.equals(NewsInfo.NEWS_TYPE_VIDEO)){
+		}else if(type.equals(TNewsInfo.NEWS_TYPE_VIDEO)){
 			Intent intent = new Intent(context,NewsVideoInfoActivity.class);
 			intent.putExtra(NewsVideoInfoActivity.EXTRA_STRING_NAME_ID,params[1]);
 			intent.putExtra(NewsVideoInfoActivity.EXTRA_STRING_NAME_CHANNELCODE,  params[0]);
 			context.startActivity(intent);
-		}else if(type.equals(NewsInfo.NEWS_TYPE_AUDIO)){
+		}else if(type.equals(TNewsInfo.NEWS_TYPE_AUDIO)){
 			Intent intent = new Intent(context,NewsAudioInfoActivity.class);
 			intent.putExtra(NewsAudioInfoActivity.EXTRA_STRING_NAME_ID,params[1]);
 			intent.putExtra(NewsAudioInfoActivity.EXTRA_STRING_NAME_CHANNELCODE,  params[0]);
 			context.startActivity(intent);
-		}else if(type.equals(NewsInfo.NEWS_TYPE_SPECIALS)){
+		}else if(type.equals(TNewsInfo.NEWS_TYPE_SPECIALS)){
 			Bundle bundle = new Bundle();
 			bundle.putString(WebAppFragment.ARGUMENT_STRING_URL,params[0]);
 			ContainerActivity.startActivity(context, WebAppFragment.class,bundle);
-		}else if(type.equals(NewsInfo.NEWS_TYPE_URL)){
+		}else if(type.equals(TNewsInfo.NEWS_TYPE_URL)){
 			Bundle extras = new Bundle();
 			extras.putString(WebAppFragment.ARGUMENT_STRING_URL, params[0]);
 			ContainerActivity.startActivity(context, WebAppFragment.class,extras);
-		}else if(type.equals(NewsInfo.NEWS_TYPE_FILE)){
+		}else if(type.equals(TNewsInfo.NEWS_TYPE_FILE)){
 			Bundle args = new Bundle();
 			args.putString(FilePreviewFragment.ARGS_STRING_URL, params[0]);
 			ContainerActivity.startActivity(context, FilePreviewFragment.class, args, "文件预览");

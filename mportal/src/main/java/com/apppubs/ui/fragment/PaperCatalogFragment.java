@@ -19,17 +19,17 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 
-import com.apppubs.bean.PaperInfo;
+import com.apppubs.bean.TPaperInfo;
 import com.apppubs.constant.APError;
-import com.apppubs.model.APCallback;
+import com.apppubs.model.IAPCallback;
 import com.apppubs.model.PaperBiz;
 import com.apppubs.util.LogM;
 import com.artifex.mupdfdemo.MuPDFCore;
 import com.apppubs.d20.R;
 import com.apppubs.ui.activity.HomeBaseActivity;
 import com.apppubs.ui.activity.PaperInfoActivity;
-import com.apppubs.bean.Paper;
-import com.apppubs.bean.PaperCatalog;
+import com.apppubs.bean.TPaper;
+import com.apppubs.bean.TPaperCatalog;
 import com.apppubs.ui.widget.PdfViewWithHotArea;
 import com.apppubs.ui.widget.PdfViewWithHotArea.PdfViewWithHotAreaListener;
 import com.orm.SugarRecord;
@@ -48,9 +48,9 @@ public class PaperCatalogFragment extends BaseFragment implements OnClickListene
 	public static String ARG_NAME_CATALOG_ID = "catalog_id";
 	protected  final String TAG = this.getClass().getSimpleName();
 	private HomeBaseActivity mContext;
-	private PaperCatalog mPaperCatalog;
+	private TPaperCatalog mPaperCatalog;
 	private View mRootView;
-//	private PaperIssue mIssue;
+//	private TPaperIssue mIssue;
 	private int mIndex;
 	private Thread mGetCatalogHtmlT;
 	private PaperBiz mPaperBiz;
@@ -59,7 +59,7 @@ public class PaperCatalogFragment extends BaseFragment implements OnClickListene
 	private ImageView mReloadIv;
 	
 	private String mCatalogId;
-	private PaperCatalog mCatalog;
+	private TPaperCatalog mCatalog;
 	
 	private MuPDFCore mCore;
 	private ImageView mWindow;
@@ -101,7 +101,7 @@ public class PaperCatalogFragment extends BaseFragment implements OnClickListene
 	private void fill(){
 		
 		mWaitLl.setVisibility(View.VISIBLE);
-		mPaperBiz.getCatalog(mCatalogId, new APCallback<PaperCatalog>() {
+		mPaperBiz.getCatalog(mCatalogId, new IAPCallback<TPaperCatalog>() {
 			
 			@Override
 			public void onException(APError excepCode) {
@@ -110,7 +110,7 @@ public class PaperCatalogFragment extends BaseFragment implements OnClickListene
 			}
 			
 			@Override
-			public void onDone(PaperCatalog obj) {
+			public void onDone(TPaperCatalog obj) {
 				mWaitLl.setVisibility(View.GONE);
 				LogM.log(this.getClass(), "完成取回catalog");
 				mPaperCatalog = obj;
@@ -122,17 +122,17 @@ public class PaperCatalogFragment extends BaseFragment implements OnClickListene
 		});
 	}
 	
-	private void initPdf(PaperCatalog paperCatalog) {
+	private void initPdf(TPaperCatalog paperCatalog) {
 		
 		String sql = "select * from PAPER t1 join PAPER_ISSUE t2 on t1.paper_code = t2.paper_code where t2.id = ?";
-		List<Paper> paperList = SugarRecord.findWithQuery(Paper.class, sql, paperCatalog.getIssueId());
+		List<TPaper> paperList = SugarRecord.findWithQuery(TPaper.class, sql, paperCatalog.getIssueId());
 		mPdfViewWithHotArea.setHotAreaBaseWidth(paperList.get(0).getHotAreaBaseWidth());
 		mPdfViewWithHotArea.setHotAreaBaseHeight(paperList.get(0).getHotAreaBaseHeight());
 		mPdfViewWithHotArea.setPdfPath(paperCatalog.getPdfPath());
-		final List<PaperInfo> infoList = SugarRecord.find(PaperInfo.class, "CATALOG_id = ?",paperCatalog.getId() );
+		final List<TPaperInfo> infoList = SugarRecord.find(TPaperInfo.class, "CATALOG_id = ?",paperCatalog.getId() );
 		Rect[] hotAreas = new Rect[infoList.size()];
 		for(int i=-1;++i<hotAreas.length;){
-			PaperInfo pi = infoList.get(i);
+			TPaperInfo pi = infoList.get(i);
 			hotAreas[i] = new Rect(pi.getPosX(), pi.getPosY(), pi.getPosX()+pi.getPosW(), pi.getPosY()+pi.getPosH());
 		}
 		mPdfViewWithHotArea.setHotAreas(hotAreas);

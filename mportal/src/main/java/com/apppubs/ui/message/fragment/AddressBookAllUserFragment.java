@@ -17,12 +17,12 @@ import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import com.apppubs.bean.TUser;
 import com.apppubs.bean.UserInfo;
 import com.apppubs.AppContext;
 import com.apppubs.ui.widget.LetterListView;
 import com.apppubs.d20.R;
 import com.apppubs.ui.adbook.UserInfoActivity;
-import com.apppubs.bean.User;
 import com.apppubs.ui.fragment.BaseFragment;
 
 public class AddressBookAllUserFragment extends BaseFragment {
@@ -36,7 +36,7 @@ public class AddressBookAllUserFragment extends BaseFragment {
 	private OverlayThread overlayThread;
 	private EditText mEditText;
 	private MyAdapter adapter;
-	private List<User> mUsers;
+	private List<TUser> mUsers;
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -122,9 +122,9 @@ public class AddressBookAllUserFragment extends BaseFragment {
 
 	private class MyAdapter extends BaseAdapter {
 		private LayoutInflater inflater;
-		private List<User> list;
+		private List<TUser> list;
 
-		public MyAdapter(List<User> list) {
+		public MyAdapter(List<TUser> list) {
 
 			this.inflater = LayoutInflater.from(getActivity());
 			alphaIndexer = new HashMap<String, Integer>();
@@ -152,7 +152,7 @@ public class AddressBookAllUserFragment extends BaseFragment {
 
 		}
 
-		public void setData(List<User> list) {
+		public void setData(List<TUser> list) {
 			this.list = list;
 		}
 

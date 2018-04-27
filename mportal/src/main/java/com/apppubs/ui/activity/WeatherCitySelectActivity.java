@@ -29,7 +29,7 @@ import com.amap.api.location.AMapLocation;
 import com.amap.api.location.AMapLocationListener;
 import com.apppubs.ui.widget.LetterListView;
 import com.apppubs.d20.R;
-import com.apppubs.bean.City;
+import com.apppubs.bean.TCity;
 import com.orm.SugarRecord;
 
 /**
@@ -47,7 +47,7 @@ public class WeatherCitySelectActivity extends BaseActivity implements AMapLocat
 	private String[] sections;// 存放存在的汉语拼音首字母
 	private Handler handler;
 	private OverlayThread overlayThread;
-	private List<City> mCityList;
+	private List<TCity> mCityList;
 	private ImageView mSearchBtn;
 	private EditText et;
 	private AMapLocation aMapLocation;// 用于判断定位超时
@@ -88,7 +88,7 @@ public class WeatherCitySelectActivity extends BaseActivity implements AMapLocat
 
 		mCityLv = (ListView) findViewById(R.id.city_list);
 		letterListView = (LetterListView) findViewById(R.id.cityLetterListView);
-		mCityList  = SugarRecord.listAll(City.class);
+		mCityList  = SugarRecord.listAll(TCity.class);
 		letterListView.setOnTouchingLetterChangedListener(new LetterListViewListener());
 		alphaIndexer = new HashMap<String, Integer>();
 		handler = new Handler();
@@ -98,14 +98,14 @@ public class WeatherCitySelectActivity extends BaseActivity implements AMapLocat
 		mCityLv.setAdapter(mAdapter);
 	}
 
-	private List<City> getSelectCityNames(String con) {
+	private List<TCity> getSelectCityNames(String con) {
 		// 判断查询的内容是不是汉字
 		Pattern p_str = Pattern.compile("[\\u4e00-\\u9fa5]+");
 		Matcher m = p_str.matcher(con);
 		if (m.find() && m.group(0).equals(con)) {
-			mCityList = SugarRecord.find(City.class, "NAME like ?", new String[]{con+"%"},null,"NAME",null);
+			mCityList = SugarRecord.find(TCity.class, "NAME like ?", new String[]{con+"%"},null,"NAME",null);
 		} else {
-			mCityList = SugarRecord.find(City.class, "NAME_INITIAL like ?", new String[]{con+"%"},null,"NAME",null);
+			mCityList = SugarRecord.find(TCity.class, "NAME_INITIAL like ?", new String[]{con+"%"},null,"NAME",null);
 		}
 		return mCityList;
 	}
@@ -145,9 +145,9 @@ public class WeatherCitySelectActivity extends BaseActivity implements AMapLocat
 
 	private class MyAdapter extends BaseAdapter {
 		private LayoutInflater inflater;
-		private List<City> list;
+		private List<TCity> list;
 
-		public MyAdapter(Context context, List<City> list) {
+		public MyAdapter(Context context, List<TCity> list) {
 
 			this.inflater = LayoutInflater.from(context);
 			this.list = list;
@@ -169,7 +169,7 @@ public class WeatherCitySelectActivity extends BaseActivity implements AMapLocat
 
 		}
 
-		public void setData(List<City> list){
+		public void setData(List<TCity> list){
 			this.list = list;
 		}
 		@Override
@@ -210,7 +210,7 @@ public class WeatherCitySelectActivity extends BaseActivity implements AMapLocat
 				@Override
 				public void onClick(View arg0) {
 					// TODO Auto-generated method stub
-					City cityModel = (City) mCityLv.getAdapter().getItem(position);
+					TCity cityModel = (TCity) mCityLv.getAdapter().getItem(position);
 					String cityName = cityModel.getName();
 					mTitleBar.setTitle(cityName);
 					// 保存用户配置信息（这里为用户选择的城市代号信息）

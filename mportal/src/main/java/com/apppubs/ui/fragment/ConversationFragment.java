@@ -29,7 +29,7 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.apppubs.AppContext;
 import com.apppubs.ui.activity.ChatActivity;
-import com.apppubs.bean.MsgRecord;
+import com.apppubs.bean.TMsgRecord;
 import com.apppubs.model.MsgController;
 import com.apppubs.constant.Actions;
 import com.apppubs.util.JSONResult;
@@ -74,7 +74,7 @@ public class ConversationFragment extends BaseFragment implements OnClickListene
 	private ListView mLv;
 	private TextView mEmptyTv;
 	private MyAdapter mAdapter;
-	private List<MsgRecord> mMsgRecordL;
+	private List<TMsgRecord> mMsgRecordL;
 	private PopupWindow mMenuPW;
 	private DisplayImageOptions mDisplayImageOptions;
 	private SimpleDateFormat mSimpleDateFormat;
@@ -207,7 +207,7 @@ public class ConversationFragment extends BaseFragment implements OnClickListene
 				JSONResult jr = JSONResult.compile(response);
 				mCurResponseTime = jr.responseTime;
 				if(jr.code ==1){
-					SugarRecord.deleteAll(MsgRecord.class);
+					SugarRecord.deleteAll(TMsgRecord.class);
 					String deletedIdsStr = SharedPreferenceUtils.getInstance(mContext).getString(Constants.DEFAULT_SHARED_PREFERENCE_NAME, Constants.SHAREDPREFERENCE_KEY_DElETED_CHAT_IDS, "");
 					List<String> deletedIdsList = StringUtils.str2ArrayList(deletedIdsStr, ",");
 					try {
@@ -224,7 +224,7 @@ public class ConversationFragment extends BaseFragment implements OnClickListene
 							}
 
 
-							MsgRecord msgRecord = new MsgRecord();
+							TMsgRecord msgRecord = new TMsgRecord();
 							msgRecord.setSourceUsernameOrId(serviceNO.getString("service_id"));
 							msgRecord.setTitle(serviceNO.getString("service_name"));
 							msgRecord.setIcon(serviceNO.getString("service_picurl"));
@@ -237,9 +237,9 @@ public class ConversationFragment extends BaseFragment implements OnClickListene
 							}
 							msgRecord.setUnreadNum(serviceNO.getInt("newpush_unreadnum"));
 							if(serviceNO.getInt("service_flag")==4){
-								msgRecord.setType(MsgRecord.TYPE_CHAT);
+								msgRecord.setType(TMsgRecord.TYPE_CHAT);
 							}else{
-								msgRecord.setType(MsgRecord.TYPE_SERVICE);
+								msgRecord.setType(TMsgRecord.TYPE_SERVICE);
 							}
 							msgRecord.save();
 						}
@@ -287,11 +287,11 @@ public class ConversationFragment extends BaseFragment implements OnClickListene
 
 				@Override
 				public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-					final MsgRecord mr = mMsgRecordL.get(position);
-					if (mr.getType() == MsgRecord.TYPE_CHAT) {
+					final TMsgRecord mr = mMsgRecordL.get(position);
+					if (mr.getType() == TMsgRecord.TYPE_CHAT) {
 
-//					User otherU = mUserBussiness.getUserByUsername(mr.getSourceUsernameOrId());
-//					User otherU = mUserBussiness.getUserByUserId(mr.getSourceUsernameOrId());
+//					TUser otherU = mUserBussiness.getUserByUsername(mr.getSourceUsernameOrId());
+//					TUser otherU = mUserBussiness.getUserByUserId(mr.getSourceUsernameOrId());
 						String url = String.format(URLs.URL_CHAT_GROUD_INFO,URLs.baseURL,URLs.appCode, mr.getSourceUsernameOrId(), AppContext.getInstance(mContext).getCurrentUser().getUsername());
 						mRequestQueue.add(new StringRequest(url, new Listener<String>() {
 
@@ -318,7 +318,7 @@ public class ConversationFragment extends BaseFragment implements OnClickListene
 
 
 
-					} else if (mr.getType() == MsgRecord.TYPE_SERVICE) {
+					} else if (mr.getType() == TMsgRecord.TYPE_SERVICE) {
 						Bundle b = new Bundle();
 						b.putString(ServiceNoInfoFragment.ARGS_STRING_SERVICE_NO_ID, mr.getSourceUsernameOrId());
 						ContainerActivity.startActivity(mHostActivity, ServiceNoInfoListFragement.class, b, mr.getTitle());
@@ -368,13 +368,13 @@ public class ConversationFragment extends BaseFragment implements OnClickListene
 
 		@Override
 		public void fillValues(final int pos, View convertView) {
-			MsgRecord record = mMsgRecordL.get(pos);
+			TMsgRecord record = mMsgRecordL.get(pos);
 			TextView titleTv = null;
 			TextView subTitleTv = null;
 			ImageView iconIv = null;
 			TextView updateTimeTv = null;
 			TextView unreadTv = null;
-			if (record.getType() == MsgRecord.TYPE_SERVICE) {
+			if (record.getType() == TMsgRecord.TYPE_SERVICE) {
 				titleTv = (TextView) convertView.findViewById(R.id.message_item_title_tv1);
 				subTitleTv = (TextView) convertView.findViewById(R.id.message_item_des_tv1);
 				iconIv = (ImageView) convertView.findViewById(R.id.message_item_iv1);
@@ -425,7 +425,7 @@ public class ConversationFragment extends BaseFragment implements OnClickListene
 							}
 						}));
 						
-						SugarRecord.deleteAll(MsgRecord.class, "id = ? ", mMsgRecordL.get(pos).getId());
+						SugarRecord.deleteAll(TMsgRecord.class, "id = ? ", mMsgRecordL.get(pos).getId());
 						mMsgRecordL = mMsgBussiness.listMsgRecord();
 						mAdapter.notifyDataSetChanged();
 						if(mMsgRecordL==null||mMsgRecordL.size()==0){

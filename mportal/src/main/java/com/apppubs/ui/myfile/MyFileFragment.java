@@ -17,8 +17,8 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.apppubs.ui.adapter.CommonAdapter;
 import com.apppubs.bean.UserInfo;
+import com.apppubs.ui.adapter.CommonAdapter;
 import com.apppubs.constant.URLs;
 import com.apppubs.AppContext;
 import com.apppubs.model.MyFileModel;

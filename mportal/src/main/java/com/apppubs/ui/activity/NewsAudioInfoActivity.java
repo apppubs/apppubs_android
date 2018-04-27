@@ -30,11 +30,11 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.apppubs.bean.Collection;
+import com.apppubs.bean.TCollection;
 import com.apppubs.bean.Comment;
-import com.apppubs.bean.NewsInfo;
+import com.apppubs.bean.TNewsInfo;
 import com.apppubs.constant.APError;
-import com.apppubs.model.APCallback;
+import com.apppubs.model.IAPCallback;
 import com.apppubs.model.CollectionBiz;
 import com.apppubs.model.NewsBiz;
 import com.apppubs.util.LogM;
@@ -56,7 +56,7 @@ public class NewsAudioInfoActivity extends BaseActivity {
 	// private ImageView back, mSaveImagview, share;
 	// private View mCommontTv;
 	private LinearLayout progress;
-	private NewsInfo mNewsInfo;
+	private TNewsInfo mNewsInfo;
 	private String mInfoId;
 	private String mChannelCode;
 	private Comment mCommment;// 评论数，赞，踩
@@ -75,9 +75,9 @@ public class NewsAudioInfoActivity extends BaseActivity {
 		
 		setContentView(R.layout.act_newsinfo);
 		init();
-		mNewsInfo = SugarRecord.findById(NewsInfo.class, mInfoId);
+		mNewsInfo = SugarRecord.findById(TNewsInfo.class, mInfoId);
 		if (mNewsInfo == null) {
-			mNewsInfo = new NewsInfo();
+			mNewsInfo = new TNewsInfo();
 			mNewsInfo.setId(mInfoId);
 			mNewsInfo.setChannelCode(mChannelCode);
 		}else{
@@ -85,7 +85,7 @@ public class NewsAudioInfoActivity extends BaseActivity {
 		}
 		mNewsBiz = NewsBiz.getInstance(mContext);
 		mFuture = mNewsBiz.getNewsInfo(mNewsInfo.getId(), mNewsInfo.getChannelCode(),
-				new APCallback<NewsInfo>() {
+				new IAPCallback<TNewsInfo>() {
 
 					@Override
 					public void onException(APError excepCode) {
@@ -95,7 +95,7 @@ public class NewsAudioInfoActivity extends BaseActivity {
 					}
 
 					@Override
-					public void onDone(NewsInfo obj) {
+					public void onDone(TNewsInfo obj) {
 
 						mNewsInfo = obj;
 						Log.v("newsInfoActivity", "getNewsInfo完成" + obj.getContent());
@@ -173,7 +173,7 @@ public class NewsAudioInfoActivity extends BaseActivity {
 //				if (FilePreviewFragment.isAbleToRead(url)) {
 //					Bundle args = new Bundle();
 //					args.putString(FilePreviewFragment.ARGS_STRING_URL, url);
-//					LocalFile localFile = SugarRecord.findByProperty(LocalFile.class, "source_path", url);
+//					TLocalFile localFile = SugarRecord.findByProperty(TLocalFile.class, "source_path", url);
 //					if(localFile!=null){
 //						args.putString(FilePreviewFragment.ARGS_STRING_FILE_LOCAL_PATH, localFile.getSourcePath());
 //					}
@@ -216,7 +216,7 @@ public class NewsAudioInfoActivity extends BaseActivity {
 				if (mNewsInfo.getCollectFlag() == 0) {
 					setVisibilityOfViewByResId(menuPop, R.id.pop_news_info_collect, View.GONE);
 				}else{
-					isCollected = null!=SugarRecord.findByProperty(Collection.class,"info_id", mInfoId+","+mChannelCode)?true:false;
+					isCollected = null!=SugarRecord.findByProperty(TCollection.class,"info_id", mInfoId+","+mChannelCode)?true:false;
 					if (isCollected) {
 						ImageView iv = (ImageView) menuPop.findViewById(R.id.pop_news_info_collect_ib);
 						iv.setImageResource(R.drawable.menubar_favorite_h);
@@ -271,7 +271,7 @@ public class NewsAudioInfoActivity extends BaseActivity {
 
 	private void initState() {
 
-		if (mNewsInfo.getIsCollected() == NewsInfo.COLLECTED) {
+		if (mNewsInfo.getIsCollected() == TNewsInfo.COLLECTED) {
 			// mSaveImagview.setImageResource(R.drawable.menubar_favorite_h);
 		}
 	}
@@ -286,7 +286,7 @@ public class NewsAudioInfoActivity extends BaseActivity {
 			String title = mNewsInfo.getTitle();
 			String summy = mNewsInfo.getSummary();
 			ImageView iv = (ImageView) mMenuPW.getContentView().findViewById(R.id.pop_news_info_collect_ib);
-			CollectionBiz.toggleCollect(Collection.TYPE_NORMAL, this, isCollected, mInfoId+","+mChannelCode, title, summy);
+			CollectionBiz.toggleCollect(TCollection.TYPE_NORMAL, this, isCollected, mInfoId+","+mChannelCode, title, summy);
 			isCollected = !isCollected;
 			Toast.makeText(this, isCollected?"已收藏":"取消收藏", Toast.LENGTH_SHORT).show();
 			iv.setImageResource(isCollected?R.drawable.menubar_favorite_h:R.drawable.menubar_favorite);
@@ -379,7 +379,7 @@ public class NewsAudioInfoActivity extends BaseActivity {
 	}
 
 	public void refreshCommet() {
-		mSystemBiz.getCommentSizeZanCai(mInfoId, new APCallback<Comment>() {
+		mSystemBiz.getCommentSizeZanCai(mInfoId, new IAPCallback<Comment>() {
 			@Override
 			public void onException(APError excepCode) {
 				mCommment = null;
@@ -393,7 +393,7 @@ public class NewsAudioInfoActivity extends BaseActivity {
 				}
 
 				// 更新数据库中的评论数
-				SugarRecord.updateById(NewsInfo.class, mInfoId, "COMMENT_NUM", mCommment.getCommentnum());
+				SugarRecord.updateById(TNewsInfo.class, mInfoId, "COMMENT_NUM", mCommment.getCommentnum());
 			}
 		});
 	}

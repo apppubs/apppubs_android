@@ -11,13 +11,13 @@ import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 
-import com.apppubs.bean.Department;
+import com.apppubs.bean.TDepartment;
 import com.apppubs.AppContext;
+import com.apppubs.bean.TUser;
 import com.apppubs.constant.APError;
 import com.apppubs.ui.activity.BaseActivity;
 import com.apppubs.ui.adapter.ViewHolder;
-import com.apppubs.bean.User;
-import com.apppubs.model.APCallback;
+import com.apppubs.model.IAPCallback;
 import com.apppubs.model.message.UserBasicInfo;
 import com.apppubs.model.message.UserPickerHelper;
 import com.apppubs.ui.widget.widget.Breadcrumb;
@@ -36,17 +36,17 @@ public class UserPickerActivity extends BaseActivity implements UserSelectionBar
     public static final String ARG_STRING_SUPER_ID = "super_id";
     private String mSuperId;
     private ListView mListView;
-    private CommonAdapter<Department> mDeptAdapter;
-    private CommonAdapter<User> mUserAdapter;
-    private List<Department> mDepartmentList;
-    private List<User> mUserList;
+    private CommonAdapter<TDepartment> mDeptAdapter;
+    private CommonAdapter<TUser> mUserAdapter;
+    private List<TDepartment> mDepartmentList;
+    private List<TUser> mUserList;
     private Breadcrumb mBreadcrumb;
     private UserSelectionBar mUserSelectBar;
     private Map<String,Integer> mListViewOffsetMap;
     private UserPickerHelper mUserPickerHelper;
 	private SearchView mSearchView;
 	private ListView mSearchResultLV;
-	private List<User> mSearchResultList;
+	private List<TUser> mSearchResultList;
 	private CommonAdapter mSearchResultAdapter;
 
 
@@ -62,10 +62,10 @@ public class UserPickerActivity extends BaseActivity implements UserSelectionBar
     private void initAdapter() {
         final int totalRow = mDepartmentList.size();
         final String showCountFlag = AppContext.getInstance(this).getAppConfig().getAdbookOrgCountFlag();
-        mDeptAdapter = new CommonAdapter<Department>(this,mDepartmentList, R.layout.item_organization_lv) {
+        mDeptAdapter = new CommonAdapter<TDepartment>(this,mDepartmentList, R.layout.item_organization_lv) {
 
             @Override
-            protected void fillValues(ViewHolder holder, Department bean, int position) {
+            protected void fillValues(ViewHolder holder, TDepartment bean, int position) {
 
                 ((TextView)holder.getView(R.id.org_item_name_tv)).setText(bean.getName());
                 TextView detailTv = ((TextView) holder.getView(R.id.org_item_count_tv));
@@ -88,9 +88,9 @@ public class UserPickerActivity extends BaseActivity implements UserSelectionBar
             }
         };
 
-        mUserAdapter = new CommonAdapter<User>(this,mUserList,R.layout.item_user_picker_user_lv) {
+        mUserAdapter = new CommonAdapter<TUser>(this,mUserList,R.layout.item_user_picker_user_lv) {
             @Override
-            protected void fillValues(ViewHolder holder, User user, int position) {
+            protected void fillValues(ViewHolder holder, TUser user, int position) {
                 TextView titleTv = holder.getView(R.id.item_user_picker_user_title_tv);
                 titleTv.setText(user.getTrueName());
                 TextView desTv = holder.getView(R.id.item_user_picker_user_des_tv);
@@ -126,7 +126,7 @@ public class UserPickerActivity extends BaseActivity implements UserSelectionBar
                     if (checkBtnIv.isEnabled()){
                         checkCheckBtn(checkBtnIv,!checkBtnIv.isSelected(),false);
 
-                        User user = mUserList.get(position);
+                        TUser user = mUserList.get(position);
                         String userId = user.getUserId();
                         if (checkBtnIv.isSelected()){
 							checkUser(user, userId);
@@ -138,7 +138,7 @@ public class UserPickerActivity extends BaseActivity implements UserSelectionBar
 						}
                     }
                 }else{
-                    Department dep = mDepartmentList.get(position);
+                    TDepartment dep = mDepartmentList.get(position);
                     String id = dep.getDeptId();
                     mBreadcrumb.push(dep.getName(),id);
                     displayBySuperId(id,false);
@@ -153,7 +153,7 @@ public class UserPickerActivity extends BaseActivity implements UserSelectionBar
 		mUserSelectBar.removeUser(userId);
 	}
 
-	private void checkUser(User user, String userId) {
+	private void checkUser(TUser user, String userId) {
 		mUserPickerHelper.selectUser(userId);
 		UserBasicInfo ui = mUserBussiness.getCachedUserBasicInfo(userId);
 		if (ui==null){
@@ -239,11 +239,11 @@ public class UserPickerActivity extends BaseActivity implements UserSelectionBar
 				return false;
 			}
 		});
-		mSearchResultList = new ArrayList<User>();
-		mSearchResultAdapter = new CommonAdapter<User>(mContext,mSearchResultList,R.layout.item_user_picker_user_lv) {
+		mSearchResultList = new ArrayList<TUser>();
+		mSearchResultAdapter = new CommonAdapter<TUser>(mContext,mSearchResultList,R.layout.item_user_picker_user_lv) {
 
 			@Override
-			protected void fillValues(ViewHolder holder, User user, int position) {
+			protected void fillValues(ViewHolder holder, TUser user, int position) {
 
 				TextView titleTv = holder.getView(R.id.item_user_picker_user_title_tv);
 				titleTv.setText(user.getTrueName());
@@ -279,7 +279,7 @@ public class UserPickerActivity extends BaseActivity implements UserSelectionBar
 				if (checkBtnIv.isEnabled()){
 					checkCheckBtn(checkBtnIv,!checkBtnIv.isSelected(),false);
 
-					User user = mSearchResultList.get(position);
+					TUser user = mSearchResultList.get(position);
 					String userId = user.getUserId();
 					if (checkBtnIv.isSelected()){
 						checkUser(user, userId);
@@ -331,10 +331,10 @@ public class UserPickerActivity extends BaseActivity implements UserSelectionBar
             mUserAdapter.setData(mUserList);
             mListView.setAdapter(mUserAdapter);
             List<String> userIds = new ArrayList<String>();
-            for (User user : mUserList){
+            for (TUser user : mUserList){
                 userIds.add(user.getUserId());
             }
-            mUserBussiness.cacheUserBasicInfoList(userIds, new APCallback<List<UserBasicInfo>>() {
+            mUserBussiness.cacheUserBasicInfoList(userIds, new IAPCallback<List<UserBasicInfo>>() {
                 @Override
                 public void onDone(List<UserBasicInfo> obj) {
 
@@ -366,7 +366,7 @@ public class UserPickerActivity extends BaseActivity implements UserSelectionBar
                 public void onClick(View v) {
                     TextView tv = (TextView) v;
                     if (tv.getText().equals("全选")){
-                        for (User user: mUserList){
+                        for (TUser user: mUserList){
                             boolean success = mUserPickerHelper.selectUser(user.getUserId());
                             if (success){
                                 UserBasicInfo userBasicInfo = mUserBussiness.getCachedUserBasicInfo(user.getUserId());
@@ -384,7 +384,7 @@ public class UserPickerActivity extends BaseActivity implements UserSelectionBar
                     }else{
 
                         List<String> userIds = new ArrayList<String>();
-                        for (User user: mUserList){
+                        for (TUser user: mUserList){
                             userIds.add(user.getUserId());
                         }
                         mUserPickerHelper.removeUsers(userIds);

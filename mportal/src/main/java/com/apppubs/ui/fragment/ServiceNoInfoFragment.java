@@ -20,13 +20,13 @@ import com.android.volley.Response.ErrorListener;
 import com.android.volley.Response.Listener;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
-import com.apppubs.bean.ServiceNo;
+import com.apppubs.bean.TServiceNo;
 import com.apppubs.AppContext;
 import com.apppubs.constant.APError;
+import com.apppubs.model.IAPCallback;
 import com.apppubs.util.DateUtils;
 import com.apppubs.d20.R;
 import com.apppubs.ui.activity.ContainerActivity;
-import com.apppubs.model.APCallback;
 import com.apppubs.constant.URLs;
 import com.apppubs.util.JSONResult;
 
@@ -45,7 +45,7 @@ public class ServiceNoInfoFragment extends BaseFragment {
 	public static final String ARGS_STRING_SERVICE_NO_ID = "service_no_id";
 
 	private String mServiceNoId;
-	private ServiceNo mServiceNo;
+	private TServiceNo mServiceNo;
 	private Button attentionBt;
 	private LinearLayout progressBar;
 	private boolean isSubscribed;
@@ -73,7 +73,7 @@ public class ServiceNoInfoFragment extends BaseFragment {
 			@Override
 			public void onResponse(String response) {
 				JSONResult jr = JSONResult.compile(response);
-				mServiceNo = new ServiceNo();
+				mServiceNo = new TServiceNo();
 				Map<String, String> resultMap = null;
 				try {
 					resultMap = jr.getResultMap();
@@ -128,7 +128,7 @@ public class ServiceNoInfoFragment extends BaseFragment {
 				progressBar.setVisibility(View.VISIBLE);
 				if (attentionBt.getText().equals("关注")) {
 					mMsgBussiness.getServiceAttention(mServiceNoId, AppContext.getInstance(mContext).getCurrentUser().getUsername(),
-							new APCallback<String>() {
+							new IAPCallback<String>() {
 
 								@Override
 								public void onException(APError excepCode) {
@@ -153,7 +153,7 @@ public class ServiceNoInfoFragment extends BaseFragment {
 							});
 				} else {// 取消关注
 					mMsgBussiness.getServiceUnAttention(mServiceNoId, AppContext.getInstance(mContext).getCurrentUser().getUsername(),
-							new APCallback<String>() {
+							new IAPCallback<String>() {
 
 								@Override
 								public void onException(APError excepCode) {

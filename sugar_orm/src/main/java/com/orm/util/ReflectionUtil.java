@@ -206,16 +206,16 @@ public class ReflectionUtil {
     public static List<Class> getDomainClasses(Context context) {
         List<Class> domainClasses = new ArrayList<Class>();
 
-		String[] classNameArr = new String[]{"com.apppubs.bean.City","com.apppubs.bean.Collection",
-				"com.apppubs.bean.Department","com.apppubs.bean.HeadPic","com.apppubs.bean.LocalFile",
-				"com.apppubs.bean.MenuGroup","com.apppubs.bean.TMenuItem","com.apppubs.bean.Msg",
-				"com.apppubs.bean.MsgRecord","com.apppubs.bean.NewsChannel","com.apppubs.bean.NewsInfo",
-				"com.apppubs.bean.Paper","com.apppubs.bean.PaperCatalog",
-				"com.apppubs.bean.PaperDownloadInfo","com.apppubs.bean.PaperInfo","com.apppubs.bean.PaperInfoPic",
-				"com.apppubs.bean.PaperIssue",
-				"com.apppubs.bean.PaperOrder","com.apppubs.bean.ServiceNo","com.apppubs.bean.ServiceNOInfo",
-				"com.apppubs.bean.StartUpPic","com.apppubs.bean.TitleMenu","com.apppubs.bean.User",
-				"com.apppubs.bean.UserDeptLink"
+		String[] classNameArr = new String[]{"com.apppubs.bean.TCity","com.apppubs.bean.TCollection",
+				"com.apppubs.bean.TDepartment","com.apppubs.bean.THeadPic","com.apppubs.bean.TLocalFile",
+				"com.apppubs.bean.TMenuGroup","com.apppubs.bean.TMenuItem","com.apppubs.bean.TMsg",
+				"com.apppubs.bean.TMsgRecord","com.apppubs.bean.TNewsChannel","com.apppubs.bean.TNewsInfo",
+				"com.apppubs.bean.TPaper","com.apppubs.bean.TPaperCatalog",
+				"com.apppubs.bean.TPaperDownloadInfo","com.apppubs.bean.TPaperInfo","com.apppubs.bean.TPaperInfoPic",
+				"com.apppubs.bean.TPaperIssue",
+				"com.apppubs.bean.TPaperOrder","com.apppubs.bean.TServiceNo","com.apppubs.bean.TServiceNOInfo",
+				"com.apppubs.bean.TStartUpPic","com.apppubs.bean.TTitleMenu","com.apppubs.bean.TUser",
+				"com.apppubs.bean.TUserDeptLink"
 		};
 //            for (String className : getAllClasses(context)) {
 		for (String className : classNameArr) {

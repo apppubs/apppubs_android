@@ -20,7 +20,7 @@ import android.widget.RadioGroup.OnCheckedChangeListener;
 
 import com.apppubs.model.PaperBiz;
 import com.apppubs.ui.activity.BaseActivity;
-import com.apppubs.bean.Paper;
+import com.apppubs.bean.TPaper;
 import com.apppubs.util.LogM;
 import com.apppubs.ui.widget.SegmentedGroup;
 import com.apppubs.ui.widget.TitleBar;
@@ -28,7 +28,7 @@ import com.apppubs.d20.R;
 
 public class PapersFragment extends TitleMenuFragment implements OnPageChangeListener {
 	// 报纸列表
-	private List<Paper> mPaperList;
+	private List<TPaper> mPaperList;
 	// fragment列表
 	private List<PaperIssueListFragment> mPaperFragmentList;
 	private PaperBiz mPaperBiz;
@@ -50,7 +50,7 @@ public class PapersFragment extends TitleMenuFragment implements OnPageChangeLis
 		mPaperBiz = PaperBiz.getInstance(getContext());
 		mPaperList = mPaperBiz.getPaperList();
 		mPaperFragmentList = new ArrayList<PaperIssueListFragment>();
-		for (Paper p : mPaperList) {
+		for (TPaper p : mPaperList) {
 			LogM.log(this.getClass(), "将：" + p.getPaperCode() + "增加fragment");
 			// mScrollTabs.addTab(p.getName());
 			PaperIssueListFragment paperFrg = new PaperIssueListFragment();

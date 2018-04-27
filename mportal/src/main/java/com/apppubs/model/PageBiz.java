@@ -4,12 +4,12 @@ import android.content.Context;
 import android.support.annotation.Nullable;
 import android.text.TextUtils;
 
+import com.apppubs.bean.UserInfo;
 import com.apppubs.bean.http.ArticleInfo;
 import com.apppubs.bean.page.DefaultUserinfoComponent;
 import com.apppubs.bean.page.PageComponent;
 import com.apppubs.bean.page.PageContentModel;
 import com.apppubs.bean.page.PageModel;
-import com.apppubs.bean.UserInfo;
 import com.apppubs.AppContext;
 import com.apppubs.bean.page.PageNormalContentModel;
 import com.apppubs.constant.APError;
@@ -53,7 +53,7 @@ public class PageBiz extends BaseBiz implements IPageBiz  {
     }
 
     @Override
-    public void loadPage(String pageId, final APCallback<PageModel> callback) {
+    public void loadPage(String pageId, final IAPCallback<PageModel> callback) {
         asyncPOST("", new HashMap<String, String>(), ArticleInfo.class, new IRQListener<ArticleInfo>() {
 
             @Override

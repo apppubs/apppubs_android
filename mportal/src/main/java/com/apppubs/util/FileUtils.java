@@ -40,7 +40,7 @@ import android.util.Log;
 import com.apppubs.constant.APError;
 import com.apppubs.constant.APErrorCode;
 import com.apppubs.exception.APUnavailableException;
-import com.apppubs.model.APCallback;
+import com.apppubs.model.IAPCallback;
 import com.apppubs.constant.Constants;
 
 /**
@@ -563,7 +563,7 @@ public class FileUtils {
 
 	}
 
-	public static void asyDownload(final String url, final String desPath, final APCallback<String> callback) {
+	public static void asyDownload(final String url, final String desPath, final IAPCallback<String> callback) {
 		new Thread("异步下载") {
 			@Override
 			public void run() {

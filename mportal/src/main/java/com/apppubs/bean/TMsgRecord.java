@@ -14,7 +14,7 @@ import com.orm.SugarRecord;
  * ChangeLog: 2015年3月18日 by zhangwen create
  * 
  */
-public class MsgRecord extends SugarRecord {
+public class TMsgRecord extends SugarRecord {
 
 	public static final int TYPE_CHAT = 1;
 	public static final int TYPE_SERVICE = 2;

@@ -16,7 +16,7 @@ import com.orm.SugarRecord;
  * 2015年3月10日 by zhangwen create
  * 2015-04-15 增加menuPower字段 by zhangwen
  */
-public class User extends SugarRecord implements Serializable{
+public class TUser extends SugarRecord implements Serializable{
 
 	private static final long serialVersionUID = 1L;
 	//result":"2","username":"zhangw","email":"zhangw@hingesoft.com.cn","cnname":"张稳","userid":"1429733645294","inoutset":"2","password":"","mobile":"18686030360"}
@@ -61,11 +61,11 @@ public class User extends SugarRecord implements Serializable{
 	private transient String avatarUrl;//20170113
 	private String orgCode;
 	
-	public User() {
+	public TUser() {
 	}
 
-	public User(String userid, String username, String cnname, String password, String user_email,
-			String user_phone) {
+	public TUser(String userid, String username, String cnname, String password, String user_email,
+				 String user_phone) {
 		this.userId = userid;
 		this.username = username;
 		this.trueName = cnname;
@@ -73,8 +73,8 @@ public class User extends SugarRecord implements Serializable{
 		this.email = user_email;
 		this.mobile = user_phone;
 	}
-	public User(String userid, String username, String cnname, String password, String user_email,
-			String user_phone,String menuPower) {
+	public TUser(String userid, String username, String cnname, String password, String user_email,
+				 String user_phone, String menuPower) {
 		this(userid,  username,  cnname,  password,  user_email,
 				 user_phone);
 		this.menuPower = menuPower;
@@ -237,7 +237,7 @@ public class User extends SugarRecord implements Serializable{
 
 	@Override
 	public String toString() {
-		return "User [id=" + id + ", userId=" + userId + ", username=" + username + ", trueName=" + trueName
+		return "TUser [id=" + id + ", userId=" + userId + ", username=" + username + ", trueName=" + trueName
 				+ ", nickName=" + nickName + ", loginResult= type=" + type + ", icon=" + icon
 				+ ", password=" + password + ", email=" + email + ", mobile=" + mobile + ", mobile2=" + mobile2
 				+ ", officeNO=" + officeNO + ", workTEL=" + workTEL + ", sex=" + sex + ", initials=" + initials + "]";

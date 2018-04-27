@@ -31,16 +31,16 @@ import com.android.volley.Response.ErrorListener;
 import com.android.volley.Response.Listener;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
-import com.apppubs.constant.APError;
-import com.apppubs.model.APCallback;
-import com.apppubs.ui.adapter.CommonAdapter;
+import com.apppubs.bean.TUser;
 import com.apppubs.bean.UserInfo;
+import com.apppubs.constant.APError;
+import com.apppubs.model.IAPCallback;
+import com.apppubs.ui.adapter.CommonAdapter;
 import com.apppubs.AppContext;
 import com.apppubs.ui.adbook.UserInfoActivity;
 import com.apppubs.ui.adapter.ViewHolder;
 import com.apppubs.bean.App;
 import com.apppubs.bean.AppConfig;
-import com.apppubs.bean.User;
 import com.apppubs.ui.fragment.BaseFragment;
 import com.apppubs.util.JSONResult;
 import com.apppubs.util.LogM;
@@ -63,9 +63,9 @@ public class AddressBookFragement extends BaseFragment {
 	private ProgressHUD mProgressHUD;
 	private SegmentedGroup mSg;
 	
-	private CommonAdapter<User> mSearchResultAdapter;
+	private CommonAdapter<TUser> mSearchResultAdapter;
 	
-	private List<User> mSearchResultList;
+	private List<TUser> mSearchResultList;
 	private Fragment[] mFrgArr;
 	private Fragment mCurFrg;
 	private int mCurCheckedRadioBtnResId;// 当前选中的radio btn 的id用于下次恢复状态
@@ -108,11 +108,11 @@ public class AddressBookFragement extends BaseFragment {
 				return false;
 			}
 		});
-		mSearchResultList = new ArrayList<User>();
-		mSearchResultAdapter = new CommonAdapter<User>(mHostActivity,mSearchResultList,R.layout.item_addressbook_search_result) {
+		mSearchResultList = new ArrayList<TUser>();
+		mSearchResultAdapter = new CommonAdapter<TUser>(mHostActivity,mSearchResultList,R.layout.item_addressbook_search_result) {
 			
 			@Override
-			protected void fillValues(ViewHolder holder, User bean, int position) {
+			protected void fillValues(ViewHolder holder, TUser bean, int position) {
 				TextView nameTv = holder.getView(R.id.name);
 				nameTv.setText(bean.getTrueName());
 			}
@@ -122,7 +122,7 @@ public class AddressBookFragement extends BaseFragment {
 
 			@Override
 			public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-				User user = mSearchResultList.get(position);
+				TUser user = mSearchResultList.get(position);
 				Intent intent = new Intent(getActivity(), UserInfoActivity.class);
 				intent.putExtra(UserInfoActivity.EXTRA_STRING_USER_ID, user.getUserId());
 				getActivity().startActivity(intent);
@@ -296,7 +296,7 @@ public class AddressBookFragement extends BaseFragment {
 	 */
 	private void sync() {
 		mProgressHUD = ProgressHUD.show(mHostActivity, "同步中", true, false, null);
-		mSystemBiz.aSyncAppConfig(mHostActivity, new APCallback<AppConfig>() {
+		mSystemBiz.aSyncAppConfig(mHostActivity, new IAPCallback<AppConfig>() {
 
 			@Override
 			public void onDone(AppConfig obj) {

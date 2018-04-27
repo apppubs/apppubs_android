@@ -8,7 +8,7 @@ import com.orm.SugarRecord;
  * 日报订单
  * 
  */
-public class PaperOrder extends SugarRecord implements Serializable{
+public class TPaperOrder extends SugarRecord implements Serializable{
 	
 	private String orderNum;//订单号
 	private String goodsName;
@@ -17,17 +17,17 @@ public class PaperOrder extends SugarRecord implements Serializable{
 	private String ligintime;
 	private String endtime;
 	private String state;
-	public PaperOrder(){}
-	public PaperOrder(String orderNum, String goodsName, String goodsDesc,
-			double price) {
+	public TPaperOrder(){}
+	public TPaperOrder(String orderNum, String goodsName, String goodsDesc,
+					   double price) {
 		this.orderNum = orderNum;
 		this.goodsName = goodsName;
 		this.goodsDesc = goodsDesc;
 		this.price = price;
 	}
 
-	public PaperOrder(String orderNum, String goodsName, double price,
-			String ligintime, String endtime, String state) {
+	public TPaperOrder(String orderNum, String goodsName, double price,
+					   String ligintime, String endtime, String state) {
 		super();
 		this.orderNum = orderNum;
 		this.goodsName = goodsName;
@@ -42,8 +42,8 @@ public class PaperOrder extends SugarRecord implements Serializable{
 	public String getState() {
 		return state;
 	}
-	public PaperOrder(String orderNum, String goodsName, String goodsDesc,
-			double price, String ligintime, String endtime) {
+	public TPaperOrder(String orderNum, String goodsName, String goodsDesc,
+					   double price, String ligintime, String endtime) {
 		super();
 		this.orderNum = orderNum;
 		this.goodsName = goodsName;

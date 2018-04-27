@@ -18,7 +18,7 @@ import com.orm.SugarRecord;
  * 2015年3月17日 by zhangwen create
  *
  */
-public class Msg extends SugarRecord implements Serializable{
+public class TMsg extends SugarRecord implements Serializable{
 
 	public static final int TYPE_CONTENT_TEXT = 1;
 	public static final int TYPE_CONTENT_IMAGE = 2;
@@ -181,7 +181,7 @@ public class Msg extends SugarRecord implements Serializable{
 
 	@Override
 	public String toString() {
-		return "Msg [id=" + id + ", senderUsername=" + senderId + ", receiverUsername=" + receiverUsername
+		return "TMsg [id=" + id + ", senderUsername=" + senderId + ", receiverUsername=" + receiverUsername
 				+ ", sendTime=" + sendTime + ", contentType=" + contentType + ", content=" + content + "]";
 	}
 

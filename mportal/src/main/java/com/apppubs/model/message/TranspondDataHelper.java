@@ -3,7 +3,7 @@ package com.apppubs.model.message;
 import android.content.Context;
 
 import com.apppubs.constant.APError;
-import com.apppubs.model.APCallback;
+import com.apppubs.model.IAPCallback;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -35,7 +35,7 @@ public class TranspondDataHelper {
 		return sHelper;
 	}
 
-	public void fetchData( final APCallback<List<ConversationModel>> callback){
+	public void fetchData( final IAPCallback<List<ConversationModel>> callback){
 
 		RongIM.getInstance().getConversationList(new RongIMClient.ResultCallback() {
 
@@ -45,7 +45,7 @@ public class TranspondDataHelper {
 				final List<Conversation> cons = (List<Conversation>) o;
 				List<String> ids = getPrivateTargetIds(cons);
 
-				UserBussiness.getInstance(mContext).cacheUserBasicInfoList(ids, new APCallback<List<UserBasicInfo>>() {
+				UserBussiness.getInstance(mContext).cacheUserBasicInfoList(ids, new IAPCallback<List<UserBasicInfo>>() {
 					@Override
 					public void onDone(List<UserBasicInfo> obj) {
 						List<ConversationModel> models = new ArrayList<ConversationModel>();

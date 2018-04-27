@@ -551,7 +551,7 @@ public class ArrayDeque<E> extends AbstractCollection<E>
         }
     }
 
-    // *** Collection Methods ***
+    // *** TCollection Methods ***
 
     /**
      * Returns the number of elements in this deque.

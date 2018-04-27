@@ -39,8 +39,8 @@ import android.widget.TextView;
 
 import com.android.volley.Response.Listener;
 import com.android.volley.toolbox.StringRequest;
-import com.apppubs.bean.HeadPic;
-import com.apppubs.bean.MenuGroup;
+import com.apppubs.bean.THeadPic;
+import com.apppubs.bean.TMenuGroup;
 import com.apppubs.bean.TMenuItem;
 import com.apppubs.constant.Actions;
 import com.apppubs.constant.URLs;
@@ -80,7 +80,7 @@ public class MenuGroupsFragment extends HomeFragment implements OnClickListener{
 	private String mSuperId;
 	private LinearLayout mContainerLl;
 	private Map<String, TMenuItem> mMenuMap;
-	private List<MenuGroup> mMenuGroupList;
+	private List<TMenuGroup> mMenuGroupList;
 	private int mDividerColor;//分割线颜色 
 	private Map<String,TextView> mBadgeMap;//menuiten.id-》徽章textview
 	private BroadcastReceiver mRefreshBadgeBR;//刷新徽章的广播接收器
@@ -223,10 +223,10 @@ public class MenuGroupsFragment extends HomeFragment implements OnClickListener{
 		int size = mMenuGroupList.size();
 		for (int i = -1; ++i < size;) {
 
-			MenuGroup mg = mMenuGroupList.get(i);
+			TMenuGroup mg = mMenuGroupList.get(i);
 			addBlank(mg.getMarginTop());
 			
-			if (mg.getDividerTopFlag()==MenuGroup.DIVIDER_TRUE) {
+			if (mg.getDividerTopFlag()== TMenuGroup.DIVIDER_TRUE) {
 				addDivider();
 			}
 			
@@ -242,7 +242,7 @@ public class MenuGroupsFragment extends HomeFragment implements OnClickListener{
 			
 			
 			
-			if (mg.getStyle() == MenuGroup.STYLE_LIST) {
+			if (mg.getStyle() == TMenuGroup.STYLE_LIST) {
 
 				
 				for (int j=-1;++j<menuGroupMenuList.size();) {
@@ -281,7 +281,7 @@ public class MenuGroupsFragment extends HomeFragment implements OnClickListener{
 					rl.setTag(mi.getId());
 					rl.setOnClickListener(this);
 					//此记录不是最后一条而且内部允许划线
-					if(mg.getDividerInternalFlag()==MenuGroup.DIVIDER_TRUE&&j!=menuGroupMenuList.size()-1){
+					if(mg.getDividerInternalFlag()== TMenuGroup.DIVIDER_TRUE&&j!=menuGroupMenuList.size()-1){
 						View line = new View(mHostActivity);
 						LayoutParams lp1 = new LayoutParams(Utils.dip2px(mContext, 20), 1);
 						line.setBackgroundColor(Color.parseColor("#FFFFFF"));
@@ -289,7 +289,7 @@ public class MenuGroupsFragment extends HomeFragment implements OnClickListener{
 					}
 					
 				}
-			} else if (mg.getStyle() == MenuGroup.STYLE_GRID && menuGroupMenuList.size() == 2) {
+			} else if (mg.getStyle() == TMenuGroup.STYLE_GRID && menuGroupMenuList.size() == 2) {
 
 				
 				// 如果是横排显示且此组菜单仅有两个时使用图片和名称同行显示的方式显示
@@ -318,7 +318,7 @@ public class MenuGroupsFragment extends HomeFragment implements OnClickListener{
 				ll2.setOnClickListener(this);
 
 				mContainerLl.addView(doubleMenuLl);
-			}else if (mg.getStyle() == MenuGroup.STYLE_GRID) {
+			}else if (mg.getStyle() == TMenuGroup.STYLE_GRID) {
 
 				
 				GridLayout gl = new GridLayout(mHostActivity);
@@ -337,7 +337,7 @@ public class MenuGroupsFragment extends HomeFragment implements OnClickListener{
 					glp.setGravity(Gravity.FILL);
 					RelativeLayout rl = (RelativeLayout) mInflater.inflate(R.layout.item_menu_gv, null);
 					View verticalLine = rl.findViewById(R.id.vertical_line);
-					verticalLine.setVisibility(mg.getDividerInternalFlag()==MenuGroup.DIVIDER_TRUE?View.VISIBLE:View.GONE);
+					verticalLine.setVisibility(mg.getDividerInternalFlag()== TMenuGroup.DIVIDER_TRUE?View.VISIBLE:View.GONE);
 					TextView tv = (TextView) rl.findViewById(R.id.menu_tv);
 					tv.setText(mi.getName());
 					ImageView iv = (ImageView) rl.findViewById(R.id.menu_iv);
@@ -352,7 +352,7 @@ public class MenuGroupsFragment extends HomeFragment implements OnClickListener{
 					}
 				}
 				mContainerLl.addView(gl, lp1);
-			} else if (mg.getStyle() == MenuGroup.STYLE_BIG_GRID_WITH_SLIDEPIC) {
+			} else if (mg.getStyle() == TMenuGroup.STYLE_BIG_GRID_WITH_SLIDEPIC) {
 
 
 				int itemNum = menuGroupMenuList.size();
@@ -371,9 +371,9 @@ public class MenuGroupsFragment extends HomeFragment implements OnClickListener{
 					if (j == 0 && mi.getUrl().contains("$slidingpic")) {
 
 						SlidePicView spv = new SlidePicView(mContext);
-						List<HeadPic> picList = SugarRecord.listAll(HeadPic.class);
+						List<THeadPic> picList = SugarRecord.listAll(THeadPic.class);
 						final List<SlidePicView.SlidePicItem> list = new ArrayList<SlidePicView.SlidePicItem>();
-						for (HeadPic hp : picList) {
+						for (THeadPic hp : picList) {
 							SlidePicView.SlidePicItem sp = new SlidePicView.SlidePicItem();
 							sp.picURL = hp.getPicURL();
 							sp.title = hp.getTopic();
@@ -389,7 +389,7 @@ public class MenuGroupsFragment extends HomeFragment implements OnClickListener{
 					}
 					View itemView = LayoutInflater.from(mHostActivity).inflate(R.layout.item_channels_b, null);
 					
-					if(mg.getDividerInternalFlag()==MenuGroup.DIVIDER_TRUE){
+					if(mg.getDividerInternalFlag()== TMenuGroup.DIVIDER_TRUE){
 						
 						int maxRow = itemNum%BIG_BLOCK_COLUMN==0? itemNum / BIG_BLOCK_COLUMN:itemNum/BIG_BLOCK_COLUMN+1;// 最大行
 						int curPos = haveSlidePic ? j - 1 : j;
@@ -431,7 +431,7 @@ public class MenuGroupsFragment extends HomeFragment implements OnClickListener{
 
 				mContainerLl.addView(gl, hgvLp);
 			}
-			if(mg.getDividerBottomFlag()==MenuGroup.DIVIDER_TRUE){
+			if(mg.getDividerBottomFlag()== TMenuGroup.DIVIDER_TRUE){
 				addDivider();
 			}
 			addBlank(mg.getMarginBottom());
@@ -645,13 +645,13 @@ public class MenuGroupsFragment extends HomeFragment implements OnClickListener{
 
 
 	private void parseMenuGroupData(String response) {
-		List<MenuGroup> mgList = new ArrayList<MenuGroup>();
+		List<TMenuGroup> mgList = new ArrayList<TMenuGroup>();
 		try {
 			JSONObject jo;
 			jo = new JSONObject(response);
 			JSONArray ja = jo.getJSONArray("appsubmenus");
 			for(int i=-1;++i<ja.length();){
-				MenuGroup mg = JSONUtils.getGson().fromJson(ja.getString(i),MenuGroup.class);
+				TMenuGroup mg = JSONUtils.getGson().fromJson(ja.getString(i),TMenuGroup.class);
 				mgList.add(mg);
 			}
 		} catch (JSONException e) {

@@ -13,11 +13,11 @@ import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.apppubs.bean.TNewsChannel;
 import com.apppubs.ui.fragment.ChannelFragment;
 import com.apppubs.util.LogM;
 import com.apppubs.ui.widget.DragSortListView;
 import com.apppubs.d20.R;
-import com.apppubs.bean.NewsChannel;
 import com.apppubs.ui.fragment.ChannelFragmentFactory;
 import com.orm.SugarRecord;
 
@@ -28,7 +28,7 @@ public class SortChannelBActivity extends BaseActivity {
 
 	private DragSortListView mLv;
 	private MyAdapter adapter;
-	private List<NewsChannel> mChannelSelectedList;
+	private List<TNewsChannel> mChannelSelectedList;
 	private String mChannelTypeId;
 	private boolean isSorted;// 是否
 
@@ -36,7 +36,7 @@ public class SortChannelBActivity extends BaseActivity {
 		@Override
 		public void drop(int from, int to) {
 			mNewsBiz.rerangeChannelIndex(mChannelTypeId, from, to);
-			mChannelSelectedList = SugarRecord.find(NewsChannel.class, "TYPE_ID=? and DISPLAY_ORDER != 0",
+			mChannelSelectedList = SugarRecord.find(TNewsChannel.class, "TYPE_ID=? and DISPLAY_ORDER != 0",
 					new String[] { mChannelTypeId + "" }, null, "DISPLAY_ORDER", null);
 			adapter.notifyDataSetChanged();
 			isSorted = true;
@@ -51,7 +51,7 @@ public class SortChannelBActivity extends BaseActivity {
 
 		overridePendingTransition(R.anim.slide_in_from_bottom, R.anim.slide_out_to_top);
 		mChannelTypeId = getIntent().getStringExtra(EXTRA_STRING_NAME_CHANNELTYPE);
-		mChannelSelectedList = SugarRecord.find(NewsChannel.class, "TYPE_ID=? and DISPLAY_ORDER != 0",
+		mChannelSelectedList = SugarRecord.find(TNewsChannel.class, "TYPE_ID=? and DISPLAY_ORDER != 0",
 				new String[] { mChannelTypeId + "" }, null, "DISPLAY_ORDER", null);
 		LogM.log(this.getClass(), "onCreate mChannelSelectedList size:" + mChannelSelectedList.size());
 		setContentView(R.layout.act_sort_channel_b);
@@ -65,7 +65,7 @@ public class SortChannelBActivity extends BaseActivity {
 			@Override
 			public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 
-				NewsChannel nc = (NewsChannel) parent.getAdapter().getItem(position);
+				TNewsChannel nc = (TNewsChannel) parent.getAdapter().getItem(position);
 				ChannelFragment cfrg = ChannelFragmentFactory.getChannelFragment(nc.getShowType());
 				Bundle args = new Bundle();
 				args.putString(ChannelFragment.ARG_KEY, nc.getCode());
@@ -116,7 +116,7 @@ public class SortChannelBActivity extends BaseActivity {
 				holder = (ViewHolder) convertView.getTag();
 			}
 
-			NewsChannel nc = mChannelSelectedList.get(position);
+			TNewsChannel nc = mChannelSelectedList.get(position);
 			holder.name.setText(nc.getName());
 			mImageLoader.displayImage(nc.getPic(), holder.iv);
 			return convertView;

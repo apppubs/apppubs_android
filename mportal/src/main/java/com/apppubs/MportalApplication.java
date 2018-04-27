@@ -3,6 +3,7 @@ package com.apppubs;
 import android.app.Activity;
 import android.app.ActivityManager;
 import android.content.Context;
+import android.content.pm.ApplicationInfo;
 import android.graphics.Bitmap;
 import android.graphics.drawable.Drawable;
 import android.net.ConnectivityManager;
@@ -369,6 +370,16 @@ public class MportalApplication extends MultiDexApplication {
 	protected void attachBaseContext(Context base) {
 		super.attachBaseContext(base);
 		MultiDex.install(this);
+	}
+
+	public boolean isDebugVersion() {
+		try {
+			ApplicationInfo info = getContext().getApplicationInfo();
+			return (info.flags & ApplicationInfo.FLAG_DEBUGGABLE) != 0;
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return false;
 	}
 
 }

@@ -21,7 +21,7 @@ import android.support.v4.app.NotificationCompat;
 import android.text.TextUtils;
 import android.util.SparseIntArray;
 
-import com.apppubs.bean.Msg;
+import com.apppubs.bean.TMsg;
 import com.apppubs.constant.Actions;
 import com.apppubs.constant.URLs;
 import com.apppubs.AppContext;
@@ -76,7 +76,7 @@ public class MsgController {
 	}
 
 	@SuppressLint("NewApi")
-	public void execute(final Msg msg) {
+	public void execute(final TMsg msg) {
 
 		//当前界面为聊天界面，且聊天人恰好是新消息发送者时不显示通知只进行声音提醒和消息刷新。
 		if (mCurTargetChatGroupId != null && mCurTargetChatGroupId.equals(msg.getSenderId())) {
@@ -137,11 +137,11 @@ public class MsgController {
 			mContext.sendBroadcast(i);
 		}
 		int type = msg.getType();
-		if (type == Msg.TYPE_CHAT) {
+		if (type == TMsg.TYPE_CHAT) {
 			
-		} else if (type == Msg.TYPE_SYSTEM || type == Msg.TYPE_THIRD_PARTY) {
-		} else if (type == Msg.TYPE_CMS) {
-		} else if (type == Msg.TYPE_THIRD_PARTY) {
+		} else if (type == TMsg.TYPE_SYSTEM || type == TMsg.TYPE_THIRD_PARTY) {
+		} else if (type == TMsg.TYPE_CMS) {
+		} else if (type == TMsg.TYPE_THIRD_PARTY) {
 
 		}
 
@@ -208,7 +208,7 @@ public class MsgController {
 		
 		LogM.log(this.getClass(), "makeIntentStack:" + msgInfo);
 		Intent[] intents = null;
-		if(messageType==Msg.TYPE_CMS){
+		if(messageType== TMsg.TYPE_CMS){
 			if (isRunningForeground(mContext)) {
 				intents = new Intent[1];
 				intents[0] = new Intent(context, NewsInfoActivity.class);
@@ -230,7 +230,7 @@ public class MsgController {
 				intents[1].putExtras(extras);
 
 			}
-		}else if(messageType==Msg.TYPE_SYSTEM){
+		}else if(messageType== TMsg.TYPE_SYSTEM){
 			if (isRunningForeground(mContext)) {
 				intents = new Intent[1];
 				intents[0] = new Intent(context, WebAppActivity.class);
@@ -254,7 +254,7 @@ public class MsgController {
 				intents[1].putExtras(extras);
 
 			}
-		}else if(messageType==Msg.TYPE_THIRD_PARTY){
+		}else if(messageType== TMsg.TYPE_THIRD_PARTY){
 			if (isRunningForeground(mContext)) {
 				intents = new Intent[1];
 				Intent intent = new Intent(context,ContainerActivity.class);
@@ -272,7 +272,7 @@ public class MsgController {
 				intents[1] = intent;
 
 			}
-		}else if(messageType==Msg.TYPE_CHAT){
+		}else if(messageType== TMsg.TYPE_CHAT){
 			if (SharedPreferenceUtils.getInstance(mContext).getBoolean(HomeBaseActivity.MPORTAL_PREFERENCE_NAME, HomeBaseActivity.MPORTAL_PREFERENCE_APP_RUNNING_KEY, false)) {
 				intents = new Intent[1];
 				Intent intent = new Intent(context,ChatActivity.class);

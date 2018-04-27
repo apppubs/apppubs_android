@@ -8,8 +8,8 @@ import android.text.TextUtils;
 import android.util.Log;
 
 import com.apppubs.AppContext;
+import com.apppubs.bean.TMsg;
 import com.apppubs.ui.activity.HomeBaseActivity;
-import com.apppubs.bean.Msg;
 import com.apppubs.model.MsgController;
 import com.apppubs.util.LogM;
 
@@ -106,7 +106,7 @@ public class MyReceiver extends BroadcastReceiver {
 			
 			JSONObject jsonO = new JSONObject(message);
 			
-			Msg msg = new Msg();
+			TMsg msg = new TMsg();
 			msg.setId(jsonO.getString("msgid"));
 			msg.setTitle(jsonO.getString("title"));
 			msg.setType(jsonO.getInt("type"));
@@ -130,7 +130,7 @@ public class MyReceiver extends BroadcastReceiver {
 			} catch (ParseException e) {
 				e.printStackTrace();
 			}
-			if(msg.getContentType()==Msg.TYPE_CONTENT_SOUND){
+			if(msg.getContentType()== TMsg.TYPE_CONTENT_SOUND){
 				msg.setLength(jsonO.getInt("length"));
 			}
 

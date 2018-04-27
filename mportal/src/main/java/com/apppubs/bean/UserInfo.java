@@ -1,7 +1,7 @@
 package com.apppubs.bean;
 
 import com.google.gson.annotations.SerializedName;
-import com.orm.SugarRecord;
+import com.orm.dsl.Table;
 
 import java.io.Serializable;
 import java.util.Date;
@@ -17,6 +17,7 @@ import java.util.Date;
  * 2015年3月10日 by zhangwen create
  * 2015-04-15 增加menuPower字段 by zhangwen
  */
+@Table(name="user_info")
 public class UserInfo implements Serializable{
 
 	private static final long serialVersionUID = 1L;
@@ -72,7 +73,7 @@ public class UserInfo implements Serializable{
 	}
 
 	public UserInfo(String userid, String username, String cnname, String password, String user_email,
-					String user_phone) {
+                    String user_phone) {
 		this.userId = userid;
 		this.username = username;
 		this.trueName = cnname;
@@ -82,7 +83,7 @@ public class UserInfo implements Serializable{
 		this.orgCode = "";
 	}
 	public UserInfo(String userid, String username, String cnname, String password, String user_email,
-					String user_phone, String menuPower) {
+                    String user_phone, String menuPower) {
 		this(userid,  username,  cnname,  password,  user_email,
 				 user_phone);
 		this.menuPower = menuPower;
@@ -245,7 +246,7 @@ public class UserInfo implements Serializable{
 
 	@Override
 	public String toString() {
-		return "User [id=" + id + ", userId=" + userId + ", username=" + username + ", trueName=" + trueName
+		return "TUser [id=" + id + ", userId=" + userId + ", username=" + username + ", trueName=" + trueName
 				+ ", nickName=" + nickName + ", loginResult= type=" + type + ", icon=" + icon
 				+ ", password=" + password + ", email=" + email + ", mobile=" + mobile + ", mobile2=" + mobile2
 				+ ", officeNO=" + officeNO + ", workTEL=" + workTEL + ", sex=" + sex + ", initials=" + initials + "]";

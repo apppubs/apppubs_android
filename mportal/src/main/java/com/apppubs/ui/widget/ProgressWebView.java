@@ -514,7 +514,7 @@ public class ProgressWebView extends BridgeWebView {
 
 		Bundle args = new Bundle();
 		args.putString(FilePreviewFragment.ARGS_STRING_URL, url);
-//		LocalFile localFile = SugarRecord.findByProperty(LocalFile.class, "source_path", url);
+//		TLocalFile localFile = SugarRecord.findByProperty(TLocalFile.class, "source_path", url);
 //		if(localFile!=null){
 //			args.putString(FilePreviewFragment.ARGS_STRING_FILE_LOCAL_PATH, localFile.getSourcePath());
 //		}

@@ -15,13 +15,13 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.apppubs.bean.TPaperIssue;
 import com.apppubs.constant.APError;
 import com.apppubs.d20.R;
-import com.apppubs.model.APCallback;
+import com.apppubs.model.IAPCallback;
 import com.apppubs.model.PaperBiz;
 import com.apppubs.ui.activity.PaperIssueActivity;
-import com.apppubs.bean.Paper;
-import com.apppubs.bean.PaperIssue;
+import com.apppubs.bean.TPaper;
 import com.apppubs.ui.widget.commonlist.CommonListView;
 import com.apppubs.ui.widget.commonlist.CommonListViewListener;
 import com.orm.SugarRecord;
@@ -32,7 +32,7 @@ public class PaperIssueListFragment extends BaseFragment {
 
 	private PaperBiz mPaperBiz;
 	private CommonListView xlv;
-	private List<PaperIssue> mIssuelist;
+	private List<TPaperIssue> mIssuelist;
 	private String mPaperCode;
 	private ViewHoder viewhoder;
 	private int mCurPos = 1;
@@ -70,14 +70,14 @@ public class PaperIssueListFragment extends BaseFragment {
 	}
 
 	private void load() {
-		mPaperBiz.getPaperIssueList(mPaperCode, mCurPos, new APCallback<List<PaperIssue>>() {
+		mPaperBiz.getPaperIssueList(mPaperCode, mCurPos, new IAPCallback<List<TPaperIssue>>() {
 
 			@Override
 			public void onException(APError excepCode) {
 			}
 
 			@Override
-			public void onDone(List<PaperIssue> obj) {
+			public void onDone(List<TPaperIssue> obj) {
 				progress.setVisibility(View.GONE);
 				mIssuelist = obj;
 				xlv.setAdapter(new ListView1Adapter());
@@ -119,7 +119,7 @@ public class PaperIssueListFragment extends BaseFragment {
 				viewhoder = (ViewHoder) convertView.getTag();
 			}
 			// 填充数据
-			PaperIssue pi = mIssuelist.get(pos);
+			TPaperIssue pi = mIssuelist.get(pos);
 			mImageLoader.displayImage(pi.getCover(), viewhoder.qiPic);
 			viewhoder.qiname.setText(pi.getName());
 			viewhoder.frg.setOnClickListener(new OnClickListener() {
@@ -127,8 +127,8 @@ public class PaperIssueListFragment extends BaseFragment {
 				@Override
 				public void onClick(View arg0) {
 					Intent i = new Intent(mHostActivity, PaperIssueActivity.class);
-					PaperIssue pi = mIssuelist.get(pos);
-					Paper paper = SugarRecord.findByProperty(Paper.class, "paper_code", pi.getPaperCode());
+					TPaperIssue pi = mIssuelist.get(pos);
+					TPaper paper = SugarRecord.findByProperty(TPaper.class, "paper_code", pi.getPaperCode());
 					i.putExtra(PaperIssueActivity.EXTRA_NAME_ISSUE_ID, pi.getId());
 					i.putExtra(PaperIssueActivity.EXTRA_STRING_TITLE, paper.getName() + " (" + pi.getName() + ")");
 					startActivity(i);

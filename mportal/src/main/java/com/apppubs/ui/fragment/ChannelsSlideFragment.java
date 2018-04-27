@@ -20,7 +20,7 @@ import android.widget.TextView;
 import com.apppubs.model.NewsBiz;
 import com.apppubs.ui.activity.HomeSlideMenuActivity;
 import com.apppubs.ui.adapter.NewsFragmentPagerAdapter;
-import com.apppubs.bean.NewsChannel;
+import com.apppubs.bean.TNewsChannel;
 import com.apppubs.util.LogM;
 import com.apppubs.ui.widget.AlternativeChannelLayout;
 import com.apppubs.ui.widget.NewsViewPager;
@@ -139,7 +139,7 @@ public class ChannelsSlideFragment extends ChannelsFragment implements OnPageCha
 		mChannelTabs.setIsAllowConfiguration(mAllowConfig);
 		//全部栏目
 		mFragmentList = new ArrayList<ChannelFragment>();
-		for(NewsChannel nc:mChannelList){
+		for(TNewsChannel nc:mChannelList){
 			
 			//初始化栏目
 			LayoutInflater li = LayoutInflater.from(mHostActivity);
@@ -231,7 +231,7 @@ public class ChannelsSlideFragment extends ChannelsFragment implements OnPageCha
 		mFragmentList.clear();
 		refreshChannelList();
 		refreshSelectedList();
-		for(NewsChannel nc: mChannelSelectedList){
+		for(TNewsChannel nc: mChannelSelectedList){
 			mChannelTabs.addTab(nc.getName());
 			
 			ChannelFragment f = ChannelFragmentFactory.getChannelFragment(nc.getShowType());

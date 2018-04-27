@@ -8,9 +8,10 @@ import android.os.Build;
 import android.text.TextUtils;
 import android.util.Log;
 
-import com.apppubs.bean.Department;
-import com.apppubs.bean.UserDeptLink;
+import com.apppubs.bean.TDepartment;
+import com.apppubs.bean.TUser;
 import com.apppubs.bean.UserInfo;
+import com.apppubs.bean.TUserDeptLink;
 import com.apppubs.constant.APError;
 import com.apppubs.constant.APErrorCode;
 import com.apppubs.constant.Actions;
@@ -18,11 +19,10 @@ import com.apppubs.AppContext;
 import com.apppubs.bean.App;
 import com.apppubs.bean.AppConfig;
 import com.apppubs.bean.Settings;
-import com.apppubs.bean.User;
 import com.apppubs.constant.URLs;
 import com.apppubs.model.AbstractBussinessCallback;
 import com.apppubs.model.BaseBiz;
-import com.apppubs.model.APCallback;
+import com.apppubs.model.IAPCallback;
 import com.apppubs.model.SystemBiz;
 import com.apppubs.util.ACache;
 import com.apppubs.util.Des3;
@@ -96,28 +96,28 @@ public class UserBussiness extends BaseBiz {
 	 * 
 	 * @return
 	 */
-	public List<User> listAllUser() {
+	public List<TUser> listAllUser() {
 		return listAllUser(null);
 	}
-	public List<User> listAllUser(String permissionString){
-		List<User> result = null;
+	public List<TUser> listAllUser(String permissionString){
+		List<TUser> result = null;
 		if(!TextUtils.isEmpty(permissionString)){
 			String permissionStr = resovePermissionString(permissionString);
 			String sql =  "select * from USER t1 join USER_DEPT_LINK t2 on t1.USER_ID  = t2.USER_ID where t2.DEPT_ID in("+permissionStr+")  order by t1.INITIALS ";
-			result = SugarRecord.findWithQuery(User.class, sql, new String[]{});
+			result = SugarRecord.findWithQuery(TUser.class, sql, new String[]{});
 		}else{
-			result = SugarRecord.listAll(User.class);
+			result = SugarRecord.listAll(TUser.class);
 		}
 		return result;
 	}
 
 
 	// 根据首字母和真实名称排序
-	private class SortByInitialsAndTruename implements Comparator<User> {
+	private class SortByInitialsAndTruename implements Comparator<TUser> {
 		Collator cmp = Collator.getInstance(java.util.Locale.CHINA);
 
 		@Override
-		public int compare(User o1, User o2) {
+		public int compare(TUser o1, TUser o2) {
 			if (cmp.compare(o1.getInitials(), o2.getInitials()) > 0) {
 				return 1;
 			} else if (cmp.compare(o1.getInitials(), o2.getInitials()) < 0) {
@@ -137,13 +137,13 @@ public class UserBussiness extends BaseBiz {
 	 * @return
 	 */
 	public long countAllUser() {
-		return SugarRecord.count(User.class);
+		return SugarRecord.count(TUser.class);
 	}
 
 	public long countUserOfCertainDepartment(String deptId){
 		int count = 0;
 
-		List<User> user = new ArrayList<User>();
+		List<TUser> user = new ArrayList<TUser>();
 		List<String> deptIds = new ArrayList<String>();
 		deptIds.add(deptId);
 		recurseGet(deptId,deptIds);
@@ -220,11 +220,11 @@ public class UserBussiness extends BaseBiz {
 	}
 
 	private void recurseGet(String deptId, List<String> deptIds) {
-		List<Department> depts = SugarRecord.find(Department.class,"super_id=?",deptId);
+		List<TDepartment> depts = SugarRecord.find(TDepartment.class,"super_id=?",deptId);
 		if (depts==null||depts.size()<1){
 			return;
 		}
-		for (Department dept:depts){
+		for (TDepartment dept:depts){
 			deptIds.add(dept.getDeptId());
 			recurseGet(dept.getDeptId(),deptIds);
 		}
@@ -236,7 +236,7 @@ public class UserBussiness extends BaseBiz {
 	 * @param departmentId
 	 * @return
 	 */
-	public List<User> listUser(String departmentId) {
+	public List<TUser> listUser(String departmentId) {
 		String sql = "";
 		if (this.mAppContext.getAppConfig().getAdbookAuthFlag() < 1 || (this.mAppContext.getAppConfig().getAdbookAuthFlag() > 0 && hasReadPermissionOfDept(departmentId))
 				) {
@@ -245,7 +245,7 @@ public class UserBussiness extends BaseBiz {
 			sql = "select t1.USER_ID,t1.TRUE_NAME from USER t1 join USER_DEPT_LINK t2 on t1.USER_ID = t2.USER_ID where t2.DEPT_ID = ? order by t2.sort_id";
 		}
 
-		return SugarRecord.findWithQuery(User.class, sql, departmentId);
+		return SugarRecord.findWithQuery(TUser.class, sql, departmentId);
 	}
 
 	/**
@@ -255,18 +255,18 @@ public class UserBussiness extends BaseBiz {
 	 *            部门的父id
 	 * @return0 superDepId 0
 	 */
-	public List<Department> listSubDepartment(String superDepId) {
+	public List<TDepartment> listSubDepartment(String superDepId) {
 		return listSubDepartment(superDepId,null);
 	}
 
-	public List<Department> listSubDepartment(String superDepId, String permissionString) {
-		List<Department> result = null;
+	public List<TDepartment> listSubDepartment(String superDepId, String permissionString) {
+		List<TDepartment> result = null;
 		if (permissionString != null) {
 			String sb = resovePermissionString(permissionString);
 			String sql = "select * from department where super_id = '"+superDepId+"' and dept_id in ("+sb+") order by sort_id";
-			result = SugarRecord.findWithQuery(Department.class, sql, new String[]{});
+			result = SugarRecord.findWithQuery(TDepartment.class, sql, new String[]{});
 		} else {
-			result = SugarRecord.find(Department.class, "super_id = ?", new String[] { superDepId }, null, "SORT_ID",
+			result = SugarRecord.find(TDepartment.class, "super_id = ?", new String[] { superDepId }, null, "SORT_ID",
 					null);
 		}
 		return result;
@@ -292,7 +292,7 @@ public class UserBussiness extends BaseBiz {
 	 */
 	public boolean isLeaf(String departmentId) {
 
-		long count = SugarRecord.count(Department.class, "SUPER_ID = ?", new String[] { departmentId });
+		long count = SugarRecord.count(TDepartment.class, "SUPER_ID = ?", new String[] { departmentId });
 		return count == 0;
 
 	}
@@ -305,7 +305,7 @@ public class UserBussiness extends BaseBiz {
 	 * 列出第一层组织
 	 * 
 	 */
-	public List<Department> listRootDepartment() {
+	public List<TDepartment> listRootDepartment() {
 		AppConfig appConfig = AppContext.getInstance(mContext).getAppConfig();
 		return listSubDepartment(appConfig.getAdbookRootId());
 	}
@@ -316,15 +316,15 @@ public class UserBussiness extends BaseBiz {
 	 * @param userId
 	 * @return
 	 */
-	public User getUserByUserId(String userId) {
-		return SugarRecord.findByProperty(User.class, "USER_ID", userId);
+	public TUser getUserByUserId(String userId) {
+		return SugarRecord.findByProperty(TUser.class, "USER_ID", userId);
 	}
 
-	public User getUserByUsername(String username) {
-		return SugarRecord.findByProperty(User.class, "username", username);
+	public TUser getUserByUsername(String username) {
+		return SugarRecord.findByProperty(TUser.class, "username", username);
 	}
 
-	public List<User> getUsersByUserIds(List<String> userIds){
+	public List<TUser> getUsersByUserIds(List<String> userIds){
 		StringBuilder sb = new StringBuilder();
 		for (String userId : userIds){
 			if (sb.length()>0){
@@ -333,10 +333,10 @@ public class UserBussiness extends BaseBiz {
 			sb.append("'"+userId+"'");
 		}
 		String sql = "select * from USER where USER_ID in ("+sb.toString()+")";
-		return SugarRecord.findWithQuery(User.class,sql);
+		return SugarRecord.findWithQuery(TUser.class,sql);
 	}
 
-	public Future cacheUserBasicInfoList(final List<String> userIds, final APCallback<List<UserBasicInfo>> callback){
+	public Future cacheUserBasicInfoList(final List<String> userIds, final IAPCallback<List<UserBasicInfo>> callback){
 		Future future = post(new Runnable() {
 			@Override
 			public void run() {
@@ -374,13 +374,13 @@ public class UserBussiness extends BaseBiz {
 		cache.put(userBasicInfo.getUserId(),userBasicInfo);
 	}
 
-	public List<Department> getDepartmentByUserId(String userId) {
+	public List<TDepartment> getDepartmentByUserId(String userId) {
 		String sql = "select * from DEPARTMENT t1 join USER_DEPT_LINK t2 on t1.DEPT_ID = t2.DEPT_ID where t2.USER_ID = ?";
-		return SugarRecord.findWithQuery(Department.class, sql, userId);
+		return SugarRecord.findWithQuery(TDepartment.class, sql, userId);
 	}
 
-	public Department getDepartmentById(String deptId){
-		List<Department> deptList = SugarRecord.find(Department.class,"dept_id=?",deptId);
+	public TDepartment getDepartmentById(String deptId){
+		List<TDepartment> deptList = SugarRecord.find(TDepartment.class,"dept_id=?",deptId);
 		if (deptList==null||deptList.size()<1){
 			return null;
 		}else{
@@ -389,9 +389,9 @@ public class UserBussiness extends BaseBiz {
 	}
 	
 	public List<String> getDepartmentStringListByUserId(String userId,String deptRootId){
-		List<Department> deptList = getDepartmentByUserId(userId);
+		List<TDepartment> deptList = getDepartmentByUserId(userId);
 		List<String> strList = new ArrayList<String>(deptList.size());
-		for(Department dept:deptList){
+		for(TDepartment dept:deptList){
 			StringBuilder sb = new StringBuilder();
 			getDepartmentStringByDeptId(dept.getDeptId(), deptRootId,sb);
 			strList.add(sb.toString());
@@ -406,7 +406,7 @@ public class UserBussiness extends BaseBiz {
 	 * @param resultSb
 	 */
 	private void getDepartmentStringByDeptId(String deptId,String deptRootId,StringBuilder resultSb){
-		Department dept = SugarRecord.findByProperty(Department.class, "dept_id", deptId);
+		TDepartment dept = SugarRecord.findByProperty(TDepartment.class, "dept_id", deptId);
 		if(!deptId.equals(deptRootId)){
 			if(TextUtils.isEmpty(resultSb.toString())){
 				resultSb.append(dept.getName());
@@ -414,7 +414,7 @@ public class UserBussiness extends BaseBiz {
 				resultSb.insert(0, dept.getName()+"-");
 			}
 			if (!TextUtils.isEmpty(dept.getSuperId())&&!dept.getSuperId().equals(deptRootId)){
-				Department superDept = SugarRecord.findByProperty(Department.class, "dept_id", dept.getSuperId());
+				TDepartment superDept = SugarRecord.findByProperty(TDepartment.class, "dept_id", dept.getSuperId());
 				resultSb.insert(0,superDept.getName()+"-");
 			}
 		}
@@ -426,11 +426,11 @@ public class UserBussiness extends BaseBiz {
 	 * @param str
 	 * @return
 	 */
-	public List<User> searchUser(String str) {
+	public List<TUser> searchUser(String str) {
 
 		String dimStr = "%"+str+"%";
 		return SugarRecord
-				.find(User.class, "TRUE_NAME like ? or mobile like ? or work_tel like ? or office_no like ? or email like ?", new String[] { dimStr,dimStr,dimStr,dimStr,dimStr }, null, "sort_id", null);
+				.find(TUser.class, "TRUE_NAME like ? or mobile like ? or work_tel like ? or office_no like ? or email like ?", new String[] { dimStr,dimStr,dimStr,dimStr,dimStr }, null, "sort_id", null);
 	}
 
 	/**
@@ -440,16 +440,16 @@ public class UserBussiness extends BaseBiz {
 	 */
 	public void recordUser(String userId) {
 
-		SugarRecord.update(User.class, "LAST_USED_TIME", new Date().getTime() + "", "USER_ID = ?",
+		SugarRecord.update(TUser.class, "LAST_USED_TIME", new Date().getTime() + "", "USER_ID = ?",
 				new String[] { userId });
 	}
 
 	/*
 	 * 列出常用用户
 	 */
-	public List<User> listRectent() {
+	public List<TUser> listRectent() {
 
-		return SugarRecord.find(User.class, "LAST_USED_TIME IS NOT NULL", null, null, "LAST_USED_TIME desc", "0,20");
+		return SugarRecord.find(TUser.class, "LAST_USED_TIME IS NOT NULL", null, null, "LAST_USED_TIME desc", "0,20");
 	}
 
 	/**
@@ -604,9 +604,9 @@ public class UserBussiness extends BaseBiz {
 
 			SQLiteDatabase db = SugarRecord.getDatabase();
 			db.beginTransaction();
-			SugarRecord.deleteAll(User.class);
-			SugarRecord.deleteAll(Department.class);
-			SugarRecord.deleteAll(UserDeptLink.class);
+			SugarRecord.deleteAll(TUser.class);
+			SugarRecord.deleteAll(TDepartment.class);
+			SugarRecord.deleteAll(TUserDeptLink.class);
 
 			GsonBuilder gb = new GsonBuilder();
 			gb.registerTypeAdapter(Integer.class, new JsonDeserializer<Integer>() {
@@ -633,10 +633,10 @@ public class UserBussiness extends BaseBiz {
 					mUserResponse = Des3.decode(mUserResponse);
 				}
 				JSONObject userJson = new JSONObject(mUserResponse);
-				List<User> userL = gson.fromJson(userJson.getString("users"), new TypeToken<List<User>>() {
+				List<TUser> userL = gson.fromJson(userJson.getString("users"), new TypeToken<List<TUser>>() {
 				}.getType());
 				mUserResponse = null;
-				for (User u : userL) {
+				for (TUser u : userL) {
 					u.save();
 				}
 				userL.clear();
@@ -646,11 +646,11 @@ public class UserBussiness extends BaseBiz {
 					mDeptResponse = Des3.decode(mDeptResponse);
 				}
 				JSONObject deptJson = new JSONObject(mDeptResponse);
-				List<Department> deptL = gson.fromJson(deptJson.getString("depts"),
-						new TypeToken<List<Department>>() {
+				List<TDepartment> deptL = gson.fromJson(deptJson.getString("depts"),
+						new TypeToken<List<TDepartment>>() {
 						}.getType());
 				mDeptResponse = null;
-				for (Department d : deptL) {
+				for (TDepartment d : deptL) {
 					d.save();
 				}
 				deptL.clear();
@@ -661,11 +661,11 @@ public class UserBussiness extends BaseBiz {
 					mUserDeptResponse = Des3.decode(mUserDeptResponse);
 				}
 				JSONObject linkJson = new JSONObject(mUserDeptResponse);
-				List<UserDeptLink> linkL = gson.fromJson(linkJson.getString("deptuser"),
-						new TypeToken<List<UserDeptLink>>() {
+				List<TUserDeptLink> linkL = gson.fromJson(linkJson.getString("deptuser"),
+						new TypeToken<List<TUserDeptLink>>() {
 						}.getType());
 				mUserDeptResponse = null;
-				for (UserDeptLink l : linkL) {
+				for (TUserDeptLink l : linkL) {
 					l.save();
 				}
 				linkL.clear();
@@ -748,10 +748,10 @@ public class UserBussiness extends BaseBiz {
 		// return f;
 		return result;
 	}
-	public User login1(final String username, final String password, final String deviceid, final String dev,
-			final String systemVresion, final String currentVersionName) {
+	public TUser login1(final String username, final String password, final String deviceid, final String dev,
+                        final String systemVresion, final String currentVersionName) {
 		
-		User result = null;
+		TUser result = null;
 		try {
 			Map<String, Object> requestParamsMap = new HashMap<String, Object>();
 			requestParamsMap.put("username", username);
@@ -770,7 +770,7 @@ public class UserBussiness extends BaseBiz {
 			 */
 			if(jo.getInt("result")==2){
 				
-				result = new User(jo.getString("userid"), jo.getString("username"), jo.getString("cnname"), password,
+				result = new TUser(jo.getString("userid"), jo.getString("username"), jo.getString("cnname"), password,
 						jo.getString("email"), jo.getString("mobile"));
 				result.setMenuPower(jo.getString("menupower"));
 			}
@@ -789,7 +789,7 @@ public class UserBussiness extends BaseBiz {
 	/**
 	 * 客户端不需要登陆时，需要将设备的信息注册到服务端
 	 */
-	public void registerDevice(final APCallback<Integer> callback) {
+	public void registerDevice(final IAPCallback<Integer> callback) {
 		sDefaultExecutor.submit(new Runnable() {
 
 			@Override
@@ -836,8 +836,8 @@ public class UserBussiness extends BaseBiz {
 	 * @return
 	 */
 	public boolean hasReadPermissionOfUser(String userid){
-		List<Department> dl = getDepartmentByUserId(userid);
-		for (Department d: dl){
+		List<TDepartment> dl = getDepartmentByUserId(userid);
+		for (TDepartment d: dl){
 			if (hasReadPermissionOfDept(d.getDeptId())){
 				return true;
 			}
@@ -860,9 +860,9 @@ public class UserBussiness extends BaseBiz {
 	}
 
 	public boolean hasChatPermissionOfUser(String userId){
-		List<Department> dl = getDepartmentByUserId(userId);
+		List<TDepartment> dl = getDepartmentByUserId(userId);
 		String permissionStr = AppContext.getInstance(mContext).getCurrentUser().getChatPermissionString();
-		for (Department d: dl){
+		for (TDepartment d: dl){
 			if (!TextUtils.isEmpty(permissionStr)&&hasChatPermissionOfDept(d.getDeptId())){
 				return true;
 			}
@@ -886,7 +886,7 @@ public class UserBussiness extends BaseBiz {
 	}
 
 
-	public void updateUserInfo(final Context context, final APCallback<UserInfo> callback){
+	public void updateUserInfo(final Context context, final IAPCallback<UserInfo> callback){
 
 		sDefaultExecutor.submit(new Runnable() {
 

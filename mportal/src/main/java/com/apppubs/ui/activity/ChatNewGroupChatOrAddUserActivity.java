@@ -34,9 +34,9 @@ import com.android.volley.Response.Listener;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.apppubs.AppContext;
+import com.apppubs.bean.TUser;
 import com.apppubs.ui.adapter.CommonAdapter;
 import com.apppubs.ui.adapter.ViewHolder;
-import com.apppubs.bean.User;
 import com.apppubs.constant.URLs;
 import com.apppubs.util.JSONResult;
 import com.apppubs.util.Utils;
@@ -55,10 +55,10 @@ public class ChatNewGroupChatOrAddUserActivity extends BaseActivity {
 	public static final int MODE_ADD = 1;
 	
 	private ListView mListView;
-	private CommonAdapter<User> mListAdapter;
-	private List<User> mUserList;
-	private List<User> mFilteredUserList;
-	private List<User> mCheckedUserList;
+	private CommonAdapter<TUser> mListAdapter;
+	private List<TUser> mUserList;
+	private List<TUser> mFilteredUserList;
+	private List<TUser> mCheckedUserList;
 	
 	private String mPreSelectedUsernames;
 	private int mMode;
@@ -117,9 +117,9 @@ public class ChatNewGroupChatOrAddUserActivity extends BaseActivity {
 		});
 		
 	}
-	private List<User> searchUser(String queryString) {
-		List<User> filteredUserList = new ArrayList<User>();
-		for(User user:mUserList){
+	private List<TUser> searchUser(String queryString) {
+		List<TUser> filteredUserList = new ArrayList<TUser>();
+		for(TUser user:mUserList){
 			if(user.getTrueName().contains(queryString)){
 				filteredUserList.add(user);
 			}
@@ -128,16 +128,16 @@ public class ChatNewGroupChatOrAddUserActivity extends BaseActivity {
 	}
 	private void fillData() {
 		mUserList = mUserBussiness.listAllUser();
-		mFilteredUserList = new ArrayList<User>();
-		for(User user:mUserList){
+		mFilteredUserList = new ArrayList<TUser>();
+		for(TUser user:mUserList){
 			mFilteredUserList.add(user);
 		}
-		mListAdapter= new CommonAdapter<User>(this,mFilteredUserList,R.layout.item_chat_new_group_chat) {
+		mListAdapter= new CommonAdapter<TUser>(this,mFilteredUserList,R.layout.item_chat_new_group_chat) {
 			
 			@SuppressWarnings("deprecation")
 			@SuppressLint("NewApi") 
 			@Override
-			protected void fillValues(ViewHolder holder, User bean, int position) {
+			protected void fillValues(ViewHolder holder, TUser bean, int position) {
 				TextView nameTv = holder.getView(R.id.chat_new_group_chat_name_tv);
 				nameTv.setText(bean.getTrueName());
 				ImageView checkedIv = holder.getView(R.id.chat_new_group_chat_checkbox_checked_iv);
@@ -176,9 +176,9 @@ public class ChatNewGroupChatOrAddUserActivity extends BaseActivity {
 			@Override
 			public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 				if(mCheckedUserList==null){
-					mCheckedUserList = new ArrayList<User>();
+					mCheckedUserList = new ArrayList<TUser>();
 				}
-				User selectedUser = mFilteredUserList.get(position);
+				TUser selectedUser = mFilteredUserList.get(position);
 				if(mPreSelectedUsernames!=null&&mPreSelectedUsernames.contains(selectedUser.getUsername())){
 					
 				}else if(mCheckedUserList.contains(selectedUser)){
@@ -195,14 +195,14 @@ public class ChatNewGroupChatOrAddUserActivity extends BaseActivity {
 
 			
 		});
-		mCheckedUserList = new ArrayList<User>();
+		mCheckedUserList = new ArrayList<TUser>();
 		mListView.setAdapter(mListAdapter);
 		
 		updateOkButton();
 	}
 	
 	private void uncheckedUserByUserId(String userid){
-		for(User user:mCheckedUserList){
+		for(TUser user:mCheckedUserList){
 			if(user.getUserId().equals(userid)){
 				mCheckedUserList.remove(user);
 				break;
@@ -222,7 +222,7 @@ public class ChatNewGroupChatOrAddUserActivity extends BaseActivity {
 	}
 	
 	
-	private void addUserIcon2Container(User selectedUser) {
+	private void addUserIcon2Container(TUser selectedUser) {
 		mCheckedUsersContainerHSV.setVisibility(View.VISIBLE);
 		
 		LinearLayout.LayoutParams ll = new LinearLayout.LayoutParams(Utils.dip2px(this, 30), Utils.dip2px(this, 30));

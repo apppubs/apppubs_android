@@ -4,8 +4,8 @@ import android.content.Context;
 import android.content.Intent;
 import android.text.TextUtils;
 
+import com.apppubs.bean.TUser;
 import com.apppubs.ui.activity.BaseActivity;
-import com.apppubs.bean.User;
 import com.apppubs.ui.message.activity.UserPickerActivity;
 
 import java.util.ArrayList;
@@ -94,7 +94,7 @@ public class UserPickerHelper {
         return false;
     }
 
-    public List<User> getSelectedUsers(){
+    public List<TUser> getSelectedUsers(){
         return UserBussiness.getInstance(mContext).getUsersByUserIds(mUserIds);
     }
 

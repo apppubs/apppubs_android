@@ -18,11 +18,11 @@ import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 
-import com.apppubs.bean.ServiceNo;
+import com.apppubs.bean.TServiceNo;
 import com.apppubs.AppContext;
 import com.apppubs.constant.APError;
 import com.apppubs.d20.R;
-import com.apppubs.model.APCallback;
+import com.apppubs.model.IAPCallback;
 import com.apppubs.ui.activity.ContainerActivity;
 import com.apppubs.ui.widget.CircularImage;
 import com.apppubs.ui.widget.TitleBar;
@@ -61,14 +61,14 @@ public class ServiceNoListOfMineFragment extends BaseFragment {
 		super.onResume();
 		attentionServiceMsg = getActivity().getSharedPreferences(USERATTECTIONSP, Context.MODE_PRIVATE);
 		mMsgBussiness.getUserServiceNoList(AppContext.getInstance(mContext).getCurrentUser().getUsername(),
-				new APCallback<List<ServiceNo>>() {
+				new IAPCallback<List<TServiceNo>>() {
 
 					public void onException(APError excepCode) {
 
 					}
 
 					@Override
-					public void onDone(final List<ServiceNo> obj) {
+					public void onDone(final List<TServiceNo> obj) {
 						// 获得给用户订阅的号；
 						progressBsr.setVisibility(View.GONE);
 						if(obj.isEmpty()){
@@ -79,7 +79,7 @@ public class ServiceNoListOfMineFragment extends BaseFragment {
 						fillListView(obj);
 					}
 
-					private void fillListView(final List<ServiceNo> obj) {
+					private void fillListView(final List<TServiceNo> obj) {
 						MyAdapter adapter = new MyAdapter(obj);
 						mLv.setAdapter(adapter);
 						mLv.setOnItemClickListener(new OnItemClickListener() {
@@ -114,9 +114,9 @@ public class ServiceNoListOfMineFragment extends BaseFragment {
 	}
 
 	private class MyAdapter extends BaseAdapter {
-		List<ServiceNo> services = new ArrayList<ServiceNo>();
+		List<TServiceNo> services = new ArrayList<TServiceNo>();
 
-		public MyAdapter(List<ServiceNo> services) {
+		public MyAdapter(List<TServiceNo> services) {
 			this.services = services;
 		}
 
@@ -148,7 +148,7 @@ public class ServiceNoListOfMineFragment extends BaseFragment {
 			} else {
 				holder = (ViewHolder) convertView.getTag();
 			}
-			ServiceNo service = services.get(position);
+			TServiceNo service = services.get(position);
 			holder.des.setText(service.getDesc());
 			holder.name.setText(service.getName());
 			String picurl = service.getPicURL();

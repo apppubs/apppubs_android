@@ -20,9 +20,9 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.apppubs.bean.TCollection;
+import com.apppubs.bean.TNewsInfo;
 import com.apppubs.ui.activity.NewsVideoInfoActivity;
-import com.apppubs.bean.Collection;
-import com.apppubs.bean.NewsInfo;
 import com.apppubs.util.LogM;
 import com.apppubs.d20.R;
 import com.apppubs.ui.activity.CollectionActivity;
@@ -43,7 +43,7 @@ public class CollectionFragment1 extends BaseFragment {
 	private List<ImageView> ivs = new ArrayList<ImageView>();
 	protected int mType;// 收藏类型
 	protected CollectionAdapter adapter;
-	protected List<Collection> mList;
+	protected List<TCollection> mList;
 	private boolean isDelete;
 	private CommonListView mXlv;
 	private LinearLayout mEmptyLl;
@@ -87,11 +87,11 @@ public class CollectionFragment1 extends BaseFragment {
 					doDeletd(posion - 1);
 				} else {
 					Class cls = null;
-					if (mList.get(posion - 1).getType() == Collection.TYPE_NORMAL) {
+					if (mList.get(posion - 1).getType() == TCollection.TYPE_NORMAL) {
 						cls = NewsInfoActivity.class;
-					} else if (mList.get(posion - 1).getType() == Collection.TYPE_PIC) {
+					} else if (mList.get(posion - 1).getType() == TCollection.TYPE_PIC) {
 						cls = NewsPictureInfoActivity.class;
-					} else if (mList.get(posion - 1).getType() == Collection.TYPE_PAPER) {
+					} else if (mList.get(posion - 1).getType() == TCollection.TYPE_PAPER) {
 						cls = PaperInfoActivity.class;
 					} else {
 						cls = NewsVideoInfoActivity.class;
@@ -123,8 +123,8 @@ public class CollectionFragment1 extends BaseFragment {
 		private List<ImageView> ivs = new ArrayList<ImageView>();
 
 		public CollectionAdapter() {
-			// mList = SugarRecord.find(Collection.class, "TYPE = ?", mType+"");
-			mList = SugarRecord.find(Collection.class, "TYPE = ?", new String[] { mType + "" }, null, null, null);
+			// mList = SugarRecord.find(TCollection.class, "TYPE = ?", mType+"");
+			mList = SugarRecord.find(TCollection.class, "TYPE = ?", new String[] { mType + "" }, null, null, null);
 			LogM.log(this.getClass(), "CollectionAdapter mList.size():" + mList.size());
 		}
 
@@ -194,7 +194,7 @@ public class CollectionFragment1 extends BaseFragment {
 				viewhoder = (ViewHoder) convertView.getTag();
 			}
 			// 填充数据
-			Collection curCollection = mList.get(pos);
+			TCollection curCollection = mList.get(pos);
 			viewhoder.name.setText(curCollection.getTitle());
 
 			if (curCollection.getContentAbs() == null || curCollection.getContentAbs().equals("")) {
@@ -220,17 +220,17 @@ public class CollectionFragment1 extends BaseFragment {
 
 			@Override
 			public void onOkClick() {
-				NewsInfo mNewsInfo = new NewsInfo();
+				TNewsInfo mNewsInfo = new TNewsInfo();
 				mNewsInfo.setIsCollected(0);
-				SugarRecord.updateById(NewsInfo.class, mList.get(i).getInfoId(), "IS_COLLECTED", NewsInfo.UNCOLLECTED + "");
-				Collection c = new Collection();
+				SugarRecord.updateById(TNewsInfo.class, mList.get(i).getInfoId(), "IS_COLLECTED", TNewsInfo.UNCOLLECTED + "");
+				TCollection c = new TCollection();
 				c.setAddTime(new Date());
 				c.setInfoId(mList.get(i).getInfoId());
 				c.setTitle(mList.get(i).getTitle());
 				c.setContentAbs(mList.get(i).getContentAbs());
 				c.setType(mType);
 				c.save();
-				SugarRecord.deleteAll(Collection.class, "INFO_ID=?", mList.get(i).getInfoId());
+				SugarRecord.deleteAll(TCollection.class, "INFO_ID=?", mList.get(i).getInfoId());
 				mList.remove(i);
 				adapter.notifyDataSetChanged();
 				if (mList.size() == 0) {

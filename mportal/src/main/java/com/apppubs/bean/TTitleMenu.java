@@ -3,7 +3,7 @@ package com.apppubs.bean;
 import com.google.gson.annotations.SerializedName;
 import com.orm.SugarRecord;
 
-public class TitleMenu extends SugarRecord{
+public class TTitleMenu extends SugarRecord{
 
 	public static final int TYPE_LEFT = 0;
 	public static final int TYPE_RIGHT = 1;

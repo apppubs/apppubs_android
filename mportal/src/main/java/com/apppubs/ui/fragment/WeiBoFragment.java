@@ -82,7 +82,7 @@ public class WeiBoFragment extends BaseFragment implements OnPageChangeListener 
 		mSt = (Tabs) mRootView.findViewById(R.id.weibo_st);
 	}
 	private void fill(){
-//		mSystemBiz.getWeiBoInfo(new APCallback<List<WeiboInfo>>() {
+//		mSystemBiz.getWeiBoInfo(new IAPCallback<List<WeiboInfo>>() {
 //
 //			@Override
 //			public void onException(int excepCode) {

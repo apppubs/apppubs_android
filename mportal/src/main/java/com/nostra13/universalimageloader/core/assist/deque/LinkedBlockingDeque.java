@@ -745,7 +745,7 @@ public class LinkedBlockingDeque<E>
         return removeFirst();
     }
 
-    // Collection methods
+    // TCollection methods
 
     /**
      * Removes the first occurrence of the specified element from this deque.
@@ -825,7 +825,7 @@ public class LinkedBlockingDeque<E>
 //      * @throws IllegalStateException         {@inheritDoc}
 //      * @see #add(Object)
 //      */
-//     public boolean addAll(Collection<? extends E> c) {
+//     public boolean addAll(TCollection<? extends E> c) {
 //         if (c == null)
 //             throw new NullPointerException();
 //         if (c == this)
@@ -938,7 +938,7 @@ public class LinkedBlockingDeque<E>
             sb.append('[');
             for (;;) {
                 E e = p.item;
-                sb.append(e == this ? "(this Collection)" : e);
+                sb.append(e == this ? "(this TCollection)" : e);
                 p = p.next;
                 if (p == null)
                     return sb.append(']').toString();

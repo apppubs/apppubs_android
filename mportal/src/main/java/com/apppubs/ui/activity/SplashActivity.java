@@ -15,7 +15,7 @@ import android.widget.ImageView;
 import android.widget.ImageView.ScaleType;
 
 import com.apppubs.d20.R;
-import com.apppubs.bean.StartUpPic;
+import com.apppubs.bean.TStartUpPic;
 import com.nostra13.universalimageloader.core.ImageLoader;
 
 /**
@@ -96,7 +96,7 @@ class SplashPagerAdapter extends PagerAdapter {
 	private List<ImageView> getViewLists() {
 		// TODO Auto-generated method stub
 		List<ImageView> viewLists = new ArrayList<ImageView>();
-		StartUpPic pic = StartUpPic.find(StartUpPic.class, null, null).get(0);
+		TStartUpPic pic = TStartUpPic.find(TStartUpPic.class, null, null).get(0);
 		ImageView iv = new ImageView(context);
 		iv.setScaleType(ScaleType.CENTER_CROP);
 		ImageLoader.getInstance().displayImage(pic.getPicURL(), iv);

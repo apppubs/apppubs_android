@@ -37,7 +37,7 @@ import com.apppubs.bean.Settings;
 import com.apppubs.constant.APError;
 import com.apppubs.constant.Actions;
 import com.apppubs.d20.R;
-import com.apppubs.model.APCallback;
+import com.apppubs.model.IAPCallback;
 import com.apppubs.model.NewsBiz;
 import com.apppubs.model.PaperBiz;
 import com.apppubs.model.SystemBiz;
@@ -294,7 +294,7 @@ public abstract class BaseActivity extends FragmentActivity implements OnClickLi
 	}
 
 	private void preCheckUpdate(){
-		mSystemBiz.aSyncAppConfig(this, new APCallback<AppConfig>() {
+		mSystemBiz.aSyncAppConfig(this, new IAPCallback<AppConfig>() {
 			@Override
 			public void onDone(AppConfig obj) {
 				System.out.print("同步appconfig成功");

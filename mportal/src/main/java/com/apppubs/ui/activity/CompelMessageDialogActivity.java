@@ -1,4 +1,4 @@
-package com.apppubs.bean;
+package com.apppubs.ui.activity;
 
 import android.app.Activity;
 import android.graphics.Color;

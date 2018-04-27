@@ -15,10 +15,10 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.ToggleButton;
 
+import com.apppubs.bean.TNewsChannel;
 import com.apppubs.ui.fragment.ChannelFragment;
 import com.apppubs.util.LogM;
 import com.apppubs.d20.R;
-import com.apppubs.bean.NewsChannel;
 import com.apppubs.ui.fragment.ChannelFragmentFactory;
 import com.apppubs.ui.widget.commonlist.CommonListView;
 import com.orm.SugarRecord;
@@ -38,7 +38,7 @@ public class AddChannelActivity extends BaseActivity {
 	public static final String EXTRA_STRING_NAME_CHANNELTYPE = "channel_type";
 	
 	private CommonListView mLv;
-	private List<NewsChannel> mList;
+	private List<TNewsChannel> mList;
 	private String mChannelTypeId;
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -46,7 +46,7 @@ public class AddChannelActivity extends BaseActivity {
 		setContentView(R.layout.act_add_channel_b);
 		mLv = (CommonListView) findViewById(R.id.add_channel_ll);
 		mChannelTypeId = getIntent().getStringExtra(EXTRA_STRING_NAME_CHANNELTYPE);
-		mList = SugarRecord.find(NewsChannel.class,  "TYPE_ID=?", new String[]{mChannelTypeId+""}, null, null, null);
+		mList = SugarRecord.find(TNewsChannel.class,  "TYPE_ID=?", new String[]{mChannelTypeId+""}, null, null, null);
 		LogM.log(this.getClass(), "onCreate: mList size:"+mList.size());
 		mLv.setAdapter(new MyAdapter());
 		mLv.setPullLoadEnable(false);
@@ -57,9 +57,9 @@ public class AddChannelActivity extends BaseActivity {
 			public void onItemClick(AdapterView<?> parent, View view,
 					int position, long id) {
 			/*	Intent i = new Intent(AddChannelActivity.this,ChannelActivity.class);
-				i.putExtra(ChannelActivity.ARGUMENT_SERIALIZABLE_NAME_CHANNEL, (NewsChannel)parent.getAdapter().getItem(position));
+				i.putExtra(ChannelActivity.ARGUMENT_SERIALIZABLE_NAME_CHANNEL, (TNewsChannel)parent.getAdapter().getItem(position));
 				startActivity(i);*/
-				NewsChannel nc = (NewsChannel)parent.getAdapter().getItem(position);
+				TNewsChannel nc = (TNewsChannel)parent.getAdapter().getItem(position);
 				ChannelFragment cfrg = ChannelFragmentFactory.getChannelFragment(nc.getShowType());
 				Bundle args = new Bundle();
 				args.putString(ChannelFragment.ARG_KEY, nc.getCode());;
@@ -104,7 +104,7 @@ public class AddChannelActivity extends BaseActivity {
 			else{
 				holder = (Holder) convertView.getTag();
 			}
-			NewsChannel nc = mList.get(position);
+			TNewsChannel nc = mList.get(position);
 			holder.tv.setText(nc.getName());
 			mImageLoader.displayImage(nc.getPic(), holder.iv);
 			if(nc.getDisplayOrder()!=0){
@@ -132,7 +132,7 @@ public class AddChannelActivity extends BaseActivity {
 		public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
 			int pos = Integer.parseInt(buttonView.getTag().toString());
 			LogM.log(this.getClass(), "onCheckedChanged :"+isChecked+" pos:"+pos);
-			NewsChannel nc =  mList.get(pos);
+			TNewsChannel nc =  mList.get(pos);
 			
 			if(isChecked){
 				mNewsBiz.addChannel(mChannelTypeId, nc.getCode());

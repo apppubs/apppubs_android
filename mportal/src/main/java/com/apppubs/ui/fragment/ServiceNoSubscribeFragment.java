@@ -17,12 +17,12 @@ import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 
-import com.apppubs.bean.ServiceNo;
+import com.apppubs.bean.TServiceNo;
 import com.apppubs.constant.APError;
 import com.apppubs.ui.widget.CircularImage;
 import com.apppubs.d20.R;
 import com.apppubs.ui.activity.ContainerActivity;
-import com.apppubs.model.APCallback;
+import com.apppubs.model.IAPCallback;
 
 /**
  * 添加服务号 Copyright (c) heaven Inc. Original Author: zhangwen ChangeLog:
@@ -34,7 +34,7 @@ public class ServiceNoSubscribeFragment extends BaseFragment {
 	private LinearLayout progressBsr;
 	private String usetAttention;
 	private SharedPreferences attentionServiceMsg;
-	private List<ServiceNo> mServiceNoList;
+	private List<TServiceNo> mServiceNoList;
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -45,8 +45,8 @@ public class ServiceNoSubscribeFragment extends BaseFragment {
 		// mRootView = mLv;
 		progressBsr = (LinearLayout) mRootView.findViewById(R.id.serviceno_progress_ll);
 
-		// mServiceNoList = SugarRecord.find(ServiceNo.class,
-		// "allow_subscribe = ?", ServiceNo.ALLOW_SUBSCRIBE_YES+"");
+		// mServiceNoList = SugarRecord.find(TServiceNo.class,
+		// "allow_subscribe = ?", TServiceNo.ALLOW_SUBSCRIBE_YES+"");
 		return mRootView;
 	}
 
@@ -72,14 +72,14 @@ public class ServiceNoSubscribeFragment extends BaseFragment {
 		// }
 		// });
 
-		mMsgBussiness.getSubcribableServiceNoList(new APCallback<List<ServiceNo>>() {
+		mMsgBussiness.getSubcribableServiceNoList(new IAPCallback<List<TServiceNo>>() {
 
 			@Override
 			public void onException(APError excepCode) {
 			}
 
 			@Override
-			public void onDone(final List<ServiceNo> obj) {
+			public void onDone(final List<TServiceNo> obj) {
 				progressBsr.setVisibility(View.GONE);
 				setVisibilityOfViewByResId(mRootView, R.id.serviceno_empty_tv, obj.isEmpty() ? View.VISIBLE : View.GONE);
 
@@ -108,9 +108,9 @@ public class ServiceNoSubscribeFragment extends BaseFragment {
 	}
 
 	private class MyAdapter extends BaseAdapter {
-		List<ServiceNo> services = new ArrayList<ServiceNo>();
+		List<TServiceNo> services = new ArrayList<TServiceNo>();
 
-		public MyAdapter(List<ServiceNo> services) {
+		public MyAdapter(List<TServiceNo> services) {
 			this.services = services;
 		}
 
@@ -143,7 +143,7 @@ public class ServiceNoSubscribeFragment extends BaseFragment {
 			} else {
 				holder = (ViewHolder) convertView.getTag();
 			}
-			ServiceNo service = services.get(position);
+			TServiceNo service = services.get(position);
 			holder.des.setText(service.getDesc());
 			holder.name.setText(service.getName());
 			String picurl = service.getPicURL();

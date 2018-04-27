@@ -485,7 +485,7 @@ public interface Deque<E> extends Queue<E> {
     E pop();
 
 
-    // *** Collection methods ***
+    // *** TCollection methods ***
 
     /**
      * Removes the first occurrence of the specified element from this deque.

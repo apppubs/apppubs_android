@@ -22,18 +22,18 @@ import com.apppubs.AppContext;
 import com.apppubs.AppManager;
 import com.apppubs.bean.App;
 import com.apppubs.bean.AppConfig;
-import com.apppubs.bean.City;
-import com.apppubs.bean.Collection;
+import com.apppubs.bean.TCity;
+import com.apppubs.bean.TCollection;
 import com.apppubs.bean.Comment;
-import com.apppubs.bean.Department;
-import com.apppubs.bean.MenuGroup;
-import com.apppubs.bean.MsgRecord;
-import com.apppubs.bean.NewsChannel;
-import com.apppubs.bean.NewsInfo;
+import com.apppubs.bean.TDepartment;
+import com.apppubs.bean.TMenuGroup;
+import com.apppubs.bean.TMsgRecord;
+import com.apppubs.bean.TNewsChannel;
+import com.apppubs.bean.TNewsInfo;
 import com.apppubs.bean.TMenuItem;
-import com.apppubs.bean.User;
-import com.apppubs.bean.UserDeptLink;
+import com.apppubs.bean.TUser;
 import com.apppubs.bean.UserInfo;
+import com.apppubs.bean.TUserDeptLink;
 import com.apppubs.bean.http.AppInfoResult;
 import com.apppubs.bean.http.MenusResult;
 import com.apppubs.constant.URLs;
@@ -105,7 +105,7 @@ public class SystemBiz extends BaseBiz {
 
     }
 
-    public Future<?> update(final APCallback<String[]> callback) {
+    public Future<?> update(final IAPCallback<String[]> callback) {
         Future<?> f = sDefaultExecutor.submit(new Runnable() {
 
             @Override
@@ -138,7 +138,7 @@ public class SystemBiz extends BaseBiz {
         return mAppContext.getApp().getInitTimes() == 0;
     }
 
-    public Future<?> initSystem(final APCallback<App> callback) {
+    public Future<?> initSystem(final IAPCallback<App> callback) {
         LogM.log(this.getClass(), "系统初始化");
 
         Runnable run = new Runnable() {
@@ -172,10 +172,10 @@ public class SystemBiz extends BaseBiz {
     private void clearDataBase() {
         LogM.log(this.getClass(), "清除数据库");
         SugarRecord.deleteAll(TMenuItem.class);
-        SugarRecord.deleteAll(NewsChannel.class);
-        SugarRecord.deleteAll(Collection.class);
-        SugarRecord.deleteAll(MenuGroup.class);
-        SugarRecord.deleteAll(City.class);
+        SugarRecord.deleteAll(TNewsChannel.class);
+        SugarRecord.deleteAll(TCollection.class);
+        SugarRecord.deleteAll(TMenuGroup.class);
+        SugarRecord.deleteAll(TCity.class);
 
     }
 
@@ -213,10 +213,10 @@ public class SystemBiz extends BaseBiz {
         if (mAppContext.getApp().getInitTimes() == 0) {
             generateStanceDrawable(info.getName());
             generateMediumStance();
-            SugarRecord.deleteAll(User.class);
-            SugarRecord.deleteAll(UserDeptLink.class);
-            SugarRecord.deleteAll(Department.class);
-            SugarRecord.deleteAll(MsgRecord.class);
+            SugarRecord.deleteAll(TUser.class);
+            SugarRecord.deleteAll(TUserDeptLink.class);
+            SugarRecord.deleteAll(TDepartment.class);
+            SugarRecord.deleteAll(TMsgRecord.class);
         }
 
         // 如果菜单更新了则全部初始化
@@ -402,7 +402,7 @@ public class SystemBiz extends BaseBiz {
     /**
      * 更新appconfig，将getappconfig中的数据同步到本地的APP对象中。
      */
-    public void aSyncAppConfig(final Context context, final APCallback<AppConfig> callback) {
+    public void aSyncAppConfig(final Context context, final IAPCallback<AppConfig> callback) {
         sDefaultExecutor.submit(new Runnable() {
 
             @Override
@@ -435,7 +435,7 @@ public class SystemBiz extends BaseBiz {
     public Future<?> postZhuce(final String usernamestr, final String emailstr, final String
             passwordstr,
                                final String mobilestr, final String nicknamestr, final
-                               APCallback<String> callback) {
+                               IAPCallback<String> callback) {
         Future<?> f = sDefaultExecutor.submit(new Runnable() {
 
             @Override
@@ -493,7 +493,7 @@ public class SystemBiz extends BaseBiz {
     public Future<?> postZhuce1(final String usernamestr, final String emailstr, final String
 			passwordstr,
                                 final String mobilestr, final String nicknamestr, final
-                                APCallback<String> callback) {
+                                IAPCallback<String> callback) {
         // TODO Auto-generated method stub
         Future<?> f = sDefaultExecutor.submit(new Runnable() {
 
@@ -521,7 +521,7 @@ public class SystemBiz extends BaseBiz {
 
     public Future<?> getCommentList(final String infoid, final int pno, final int pernum, final
 	String clientkey,
-                                    final APCallback<List<Comment>> callback) {
+                                    final IAPCallback<List<Comment>> callback) {
         // TODO Auto-generated method stub
         Future<?> f = sDefaultExecutor.submit(new Runnable() {
 
@@ -550,7 +550,7 @@ public class SystemBiz extends BaseBiz {
         return f;
     }
 
-    public Future<?> getCommentSizeZanCai(final String infoid, final APCallback<Comment> callback) {
+    public Future<?> getCommentSizeZanCai(final String infoid, final IAPCallback<Comment> callback) {
         // TODO Auto-generated method stub
         Future<?> f = sDefaultExecutor.submit(new Runnable() {
 
@@ -589,7 +589,7 @@ public class SystemBiz extends BaseBiz {
         return f;
     }
 
-    public Future<?> getStandardDataTime(final APCallback<Date> callback) {
+    public Future<?> getStandardDataTime(final IAPCallback<Date> callback) {
         Future<?> f = sDefaultExecutor.submit(new Runnable() {
             @Override
             public void run() {
@@ -617,7 +617,7 @@ public class SystemBiz extends BaseBiz {
     public int getCacheSize() {
         File diskCacheDir = ImageLoader.getInstance().getDiskCache().getDirectory();
         try {
-            int size = SugarRecord.sumColumn(NewsInfo.class, "SIZE");
+            int size = SugarRecord.sumColumn(TNewsInfo.class, "SIZE");
             size += (int) FileUtils.getFileSize(diskCacheDir);
             return size;
         } catch (FileNotFoundException e) {
@@ -626,7 +626,7 @@ public class SystemBiz extends BaseBiz {
         return 0;
     }
 
-    public void clearCache(final APCallback<Boolean> callback) {
+    public void clearCache(final IAPCallback<Boolean> callback) {
         Runnable r = new Runnable() {
             @Override
             public void run() {
@@ -634,8 +634,8 @@ public class SystemBiz extends BaseBiz {
                 File diskCacheDir = ImageLoader.getInstance().getDiskCache().getDirectory();
                 try {
                     FileUtils.delete(diskCacheDir);
-                    SugarRecord.deleteAll(NewsInfo.class);
-                    SugarRecord.update(NewsChannel.class, "LOCAL_LAST_UPDATE_TIME", "", null, null);
+                    SugarRecord.deleteAll(TNewsInfo.class);
+                    SugarRecord.update(TNewsChannel.class, "LOCAL_LAST_UPDATE_TIME", "", null, null);
                     sHandler.post(new OnDoneRun<Boolean>(callback, true));
                 } catch (FileNotFoundException e) {
 
@@ -648,7 +648,7 @@ public class SystemBiz extends BaseBiz {
 
     }
 
-    public void inviteUsers(@NonNull final List<String> userIds, @NonNull final APCallback callback) {
+    public void inviteUsers(@NonNull final List<String> userIds, @NonNull final IAPCallback callback) {
         post(new Runnable() {
             @Override
             public void run() {

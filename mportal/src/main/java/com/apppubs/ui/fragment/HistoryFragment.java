@@ -18,9 +18,9 @@ import android.widget.Toast;
 
 import com.apppubs.constant.APError;
 import com.apppubs.d20.R;
-import com.apppubs.model.APCallback;
+import com.apppubs.model.IAPCallback;
 import com.apppubs.ui.activity.NewsInfoActivity;
-import com.apppubs.bean.ServiceNOInfo;
+import com.apppubs.bean.TServiceNOInfo;
 import com.apppubs.util.StringUtils;
 import com.apppubs.util.SystemUtils;
 import com.apppubs.ui.widget.ProgressHUD;
@@ -33,7 +33,7 @@ public class HistoryFragment extends BaseFragment {
 	 */
 	private CommonListView mLv;
 	private HistoryAdapter adapter;
-	private List<ServiceNOInfo> mInfos;
+	private List<TServiceNOInfo> mInfos;
 	private TextView mEmptyText;
 	private Date mStandardDateTime;
 	private SimpleDateFormat mSimpleDateFormat;
@@ -57,7 +57,7 @@ public class HistoryFragment extends BaseFragment {
 		
 		if (SystemUtils.canConnectNet(mContext)) {
 
-			mSystemBiz.getStandardDataTime(new APCallback<Date>() {
+			mSystemBiz.getStandardDataTime(new IAPCallback<Date>() {
 
 				@Override
 				public void onException(APError excepCode) {
@@ -69,10 +69,10 @@ public class HistoryFragment extends BaseFragment {
 					mStandardDateTime = obj;
 
 					mMsgBussiness.getAloneServiceList(mAppContext.getApp().getDefaultServiceNoId(),
-							new APCallback<List<ServiceNOInfo>>() {
+							new IAPCallback<List<TServiceNOInfo>>() {
 
 								@Override
-								public void onDone(List<ServiceNOInfo> obj) {
+								public void onDone(List<TServiceNOInfo> obj) {
 
 									mInfos = obj;
 									adapter = new HistoryAdapter();
@@ -165,7 +165,7 @@ public class HistoryFragment extends BaseFragment {
 				holder = (ViewHoder) convertView.getTag();
 			}
 			// 填充数据
-			final ServiceNOInfo info = mInfos.get(position);
+			final TServiceNOInfo info = mInfos.get(position);
 			holder.name.setText(info.getTitle());
 			String dotime = StringUtils.getCommmentDate1(info.getCreateDate(), mStandardDateTime);
 			holder.comment.setText(dotime);

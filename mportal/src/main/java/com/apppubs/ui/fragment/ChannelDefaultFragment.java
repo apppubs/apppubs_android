@@ -28,11 +28,11 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.apppubs.bean.HeadPic;
-import com.apppubs.bean.NewsChannel;
+import com.apppubs.bean.THeadPic;
+import com.apppubs.bean.TNewsChannel;
 import com.apppubs.asytask.AsyTaskCallback;
 import com.apppubs.asytask.AsyTaskExecutor;
-import com.apppubs.bean.NewsInfo;
+import com.apppubs.bean.TNewsInfo;
 import com.apppubs.model.NewsBiz;
 import com.apppubs.constant.URLs;
 import com.apppubs.util.JSONResult;
@@ -133,7 +133,7 @@ public class ChannelDefaultFragment extends ChannelFragment  implements OnClickL
 			
 			@Override
 			public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-				NewsInfo ni  = (NewsInfo) parent.getAdapter().getItem(position);
+				TNewsInfo ni  = (TNewsInfo) parent.getAdapter().getItem(position);
 				startInfoActivity(ni);
 
 			}
@@ -142,7 +142,7 @@ public class ChannelDefaultFragment extends ChannelFragment  implements OnClickL
 		Date lastUpdateTime = mChannel.getLastUpdateTime();
 		final Date lastLocalUpdateTime = mChannel.getLocalLastupdateTime();
 		if(lastLocalUpdateTime==null||lastLocalUpdateTime.before(lastUpdateTime)){
-			mNewsInfoList = new ArrayList<NewsInfo>();
+			mNewsInfoList = new ArrayList<TNewsInfo>();
 			mAdapter = new MyListAdapter();
 			mCommonLv.setAdapter(mAdapter);
 			refresh();
@@ -155,8 +155,8 @@ public class ChannelDefaultFragment extends ChannelFragment  implements OnClickL
 
 	private void loadHeader() {
 		LogM.log(this.getClass(), "loadHeader");
-		final List<HeadPic> infoList = mNewsBiz.getNewsPopulation(mChannelCode);
-		if(mChannel.getShowType()!= NewsChannel.SHOWTYPE_HEADLINE||mChannel.getFocusPicNum()==0||infoList.size()==0){
+		final List<THeadPic> infoList = mNewsBiz.getNewsPopulation(mChannelCode);
+		if(mChannel.getShowType()!= TNewsChannel.SHOWTYPE_HEADLINE||mChannel.getFocusPicNum()==0||infoList.size()==0){
 			LogM.log(this.getClass(), "没有推广图");
 			if(mSlidePicView!=null){
 				
@@ -168,11 +168,11 @@ public class ChannelDefaultFragment extends ChannelFragment  implements OnClickL
 		
 		LogM.log(this.getClass(), "onDone 加载推广完成:"+infoList.size());
 		List<SlidePicView.SlidePicItem> list = new ArrayList<SlidePicView.SlidePicItem>();
-		for(HeadPic hp:infoList){
+		for(THeadPic hp:infoList){
 			SlidePicView.SlidePicItem sp = new SlidePicView.SlidePicItem();
 			sp.picURL = hp.getPicURL();
 			sp.title = hp.getTopic();
-			sp.linkType = NewsInfo.NEWS_TYPE_NORAML;
+			sp.linkType = TNewsInfo.NEWS_TYPE_NORAML;
 			list.add(sp);
 		}
 		if(mSlidePicView==null){
@@ -230,7 +230,7 @@ public class ChannelDefaultFragment extends ChannelFragment  implements OnClickL
 		@Override
 		public View getView(int position, View convertView, ViewGroup parent) {
 			
-			NewsInfo info = mNewsInfoList.get(position);
+			TNewsInfo info = mNewsInfoList.get(position);
 			ViewHolder holder = null; 
 			if(convertView==null){
 				holder = new ViewHolder();
@@ -319,33 +319,33 @@ public class ChannelDefaultFragment extends ChannelFragment  implements OnClickL
 			String url = String.format(URLs.URL_CHANNEL,URLs.baseURL,params[0]);
 			String result = WebUtils.requestWithGet(url);
 			JSONResult jr = JSONResult.compile(result);
-			obj = JSONUtils.getGson().fromJson(jr.result, NewsChannel.class);
+			obj = JSONUtils.getGson().fromJson(jr.result, TNewsChannel.class);
 		}else if(tag==TAST_CODE_REFRESH_NEWS){
 			// 如果page==0，刷新数据库信息
 			String url = String.format(URLs.URL_NEWS_LIST_OF_CHANNEL,URLs.baseURL) + "&channelcode=" + mChannelCode
 					+ "&pno=1&pernum=" + 10;
 
-			List<NewsInfo> infoList = WebUtils.requestList(url, NewsInfo.class, "info");
+			List<TNewsInfo> infoList = WebUtils.requestList(url, TNewsInfo.class, "info");
 
-			SugarRecord.deleteAll(NewsInfo.class, "CHANNEL_CODE=?", mChannelCode);
+			SugarRecord.deleteAll(TNewsInfo.class, "CHANNEL_CODE=?", mChannelCode);
 			Date curDate = new Date();
-			SugarRecord.update(NewsChannel.class, "LOCAL_LAST_UPDATE_TIME", curDate.getTime() + "",
+			SugarRecord.update(TNewsChannel.class, "LOCAL_LAST_UPDATE_TIME", curDate.getTime() + "",
 					"CODE = ?", new String[] { mChannelCode });
 			mNewsBiz.saveList(infoList, mChannelCode);
 			
 		}else if(tag==TAST_CODE_REFRESH__CHANNEL){
-			SugarRecord.deleteAll(NewsInfo.class, "CHANNEL_CODE=?", mChannelCode);
-			SugarRecord.deleteAll(HeadPic.class,"CHANNEL_CODE=?",mChannelCode);
+			SugarRecord.deleteAll(TNewsInfo.class, "CHANNEL_CODE=?", mChannelCode);
+			SugarRecord.deleteAll(THeadPic.class,"CHANNEL_CODE=?",mChannelCode);
 			// 刷新推广信息
-			NewsChannel newsChannel = SugarRecord.findByProperty(NewsChannel.class, "CODE", mChannelCode);
+			TNewsChannel newsChannel = SugarRecord.findByProperty(TNewsChannel.class, "CODE", mChannelCode);
 			int showType = newsChannel.getShowType();
-			if (showType == NewsChannel.SHOWTYPE_HEADLINE) {
+			if (showType == TNewsChannel.SHOWTYPE_HEADLINE) {
 
 				String url = String.format(URLs.URL_HEAD_PIC,URLs.baseURL)+"&channelcode=" + mChannelCode + "&webappcode="
 						+ mAppContext.getApp().getWebAppCode();
-				List<HeadPic> hList = WebUtils.requestList(url, HeadPic.class, "tgpic");
+				List<THeadPic> hList = WebUtils.requestList(url, THeadPic.class, "tgpic");
 
-				for (HeadPic hp : hList) {
+				for (THeadPic hp : hList) {
 					hp.setChannelCode(mChannelCode);
 					hp.save();
 				}
@@ -354,12 +354,12 @@ public class ChannelDefaultFragment extends ChannelFragment  implements OnClickL
 			String url = String.format(URLs.URL_NEWS_LIST_OF_CHANNEL,URLs.baseURL)+ "&channelcode=" + mChannelCode + "&pno=1&pernum="
 					+ URLs.PAGE_SIZE;
 
-			List<NewsInfo> infoList = WebUtils.requestList(url, NewsInfo.class, "info");
+			List<TNewsInfo> infoList = WebUtils.requestList(url, TNewsInfo.class, "info");
 
 			mNewsBiz.saveList(infoList, mChannelCode);
 			if (newsChannel.getLastUpdateTime() != null) {
 
-				SugarRecord.update(NewsChannel.class, "LOCAL_LAST_UPDATE_TIME", newsChannel.getLastUpdateTime()
+				SugarRecord.update(TNewsChannel.class, "LOCAL_LAST_UPDATE_TIME", newsChannel.getLastUpdateTime()
 						.getTime() + "", "CODE = ?", new String[] { mChannelCode });
 			}
 		}else if(tag==TAST_CODE_REFRESH__CHANNEL_TIME){
@@ -367,41 +367,41 @@ public class ChannelDefaultFragment extends ChannelFragment  implements OnClickL
 			JSONObject jo = new JSONObject(WebUtils.requestWithGet(url));
 			SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss",Locale.CHINA);
 			Date date = sdf.parse(jo.getString("lastupdatetime"));
-			SugarRecord.update(NewsChannel.class, "LAST_UPDATE_TIME", date.getTime() + "", "CODE = ?",
+			SugarRecord.update(TNewsChannel.class, "LAST_UPDATE_TIME", date.getTime() + "", "CODE = ?",
 					new String[] { mChannelCode });
 			obj = date;
 		}else if(tag==TAST_CODE_LOAD_DATA){
 			// 先从数据库获取数据
-			List<NewsInfo> infoList = null;
+			List<TNewsInfo> infoList = null;
 			if (mCurPage == 0) {
 
 					// 如果page==0，刷新数据库信息
 					String url = String.format(URLs.URL_NEWS_LIST_OF_CHANNEL,URLs.baseURL)+ "&channelcode=" + mChannelCode
 							+ "&pno=1&pernum=" + URLs.PAGE_SIZE;
 
-					infoList = WebUtils.requestList(url, NewsInfo.class, "info");
+					infoList = WebUtils.requestList(url, TNewsInfo.class, "info");
 					Date curDate = new Date();
-					SugarRecord.update(NewsChannel.class, "LOCAL_LAST_UPDATE_TIME", curDate.getTime() + "",
+					SugarRecord.update(TNewsChannel.class, "LOCAL_LAST_UPDATE_TIME", curDate.getTime() + "",
 							"CODE = ?", new String[] { mChannelCode });
 					if(infoList!=null&&infoList.size()>0){
 						
-						SugarRecord.deleteAll(NewsInfo.class, "CHANNEL_CODE=?", mChannelCode);
+						SugarRecord.deleteAll(TNewsInfo.class, "CHANNEL_CODE=?", mChannelCode);
 						mNewsBiz.saveList(infoList, mChannelCode);
 					}
 				
 			} else if (mCurPage == 1) {
-				infoList = SugarRecord.find(NewsInfo.class, "CHANNEL_CODE = ?", new String[] { mChannelCode },
+				infoList = SugarRecord.find(TNewsInfo.class, "CHANNEL_CODE = ?", new String[] { mChannelCode },
 						null, "PUB_TIME desc", (mCurPage - 1) * URLs.PAGE_SIZE + "," + URLs.PAGE_SIZE);
 				LogM.log(NewsBiz.class, "从数据库中查询出的数据条数："+infoList.size());
 			} else {
 
-				infoList = SugarRecord.find(NewsInfo.class, "CHANNEL_CODE = ? ", new String[] { mChannelCode },
+				infoList = SugarRecord.find(TNewsInfo.class, "CHANNEL_CODE = ? ", new String[] { mChannelCode },
 						null, "PUB_TIME desc", (mCurPage - 1) * URLs.PAGE_SIZE + "," + URLs.PAGE_SIZE);
 				if (infoList.size() != URLs.PAGE_SIZE) {
 
 					String url = String.format(URLs.URL_NEWS_LIST_OF_CHANNEL,URLs.baseURL)+ "&channelcode=" + mChannelCode + "&pno=" + mCurPage
 							+ "&pernum=" + URLs.PAGE_SIZE;
-					infoList = WebUtils.requestList(url, NewsInfo.class, "info");
+					infoList = WebUtils.requestList(url, TNewsInfo.class, "info");
 					mNewsBiz.saveList(infoList, mChannelCode);
 				} 
 			}
@@ -414,8 +414,8 @@ public class ChannelDefaultFragment extends ChannelFragment  implements OnClickL
 	@Override
 	public void onTaskSuccess(Integer tag, Object obj) {
 		if(tag==TAST_CODE_REQUEST_CHANNEL){
-			mChannel = (NewsChannel) obj;
-			SugarRecord.deleteAll(NewsInfo.class, "CHANNEL_CODE=?", mChannel.getCode());
+			mChannel = (TNewsChannel) obj;
+			SugarRecord.deleteAll(TNewsInfo.class, "CHANNEL_CODE=?", mChannel.getCode());
 			mChannel.save();
 			init();
 		}else if(tag==TAST_CODE_REFRESH_NEWS){
@@ -440,7 +440,7 @@ public class ChannelDefaultFragment extends ChannelFragment  implements OnClickL
 			}
 		}else if(tag==TAST_CODE_LOAD_DATA){
 			LogM.log(this.getClass(), "获得到数据：");
-			List<NewsInfo> list = (List<NewsInfo>) obj;
+			List<TNewsInfo> list = (List<TNewsInfo>) obj;
 //			if (!ChannelDefaultFragment.this.isVisible())
 //				return;
 			LogM.log(this.getClass(), "返回成功 size:" + list.size() + "mCurPage:" + mCurPage);

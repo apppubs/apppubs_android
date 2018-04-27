@@ -17,7 +17,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.apppubs.bean.User;
+import com.apppubs.bean.TUser;
 import com.apppubs.presenter.UserInfoPresenter;
 import com.apppubs.d20.R;
 import com.apppubs.ui.activity.BaseActivity;
@@ -33,7 +33,7 @@ public class UserInfoActivity extends BaseActivity implements OnClickListener,IU
 	private static int PERMISSION_TEL_CALL_REQUEST_CODE  = 2;
 
 	
-	private User mUser;
+	private TUser mUser;
 	private CircleTextImageView mIv;
 	private TextView mNameTv, mDeptTv;
 	private TextView mEmailTV, mTelTV, mMobileTV, mWorkAddressTV,mInviteTV;

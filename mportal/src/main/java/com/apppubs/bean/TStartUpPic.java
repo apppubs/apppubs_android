@@ -10,7 +10,7 @@ import com.orm.SugarRecord;
  * @author zhangwen 2014-12-30
  *
  */
-public class StartUpPic extends SugarRecord{
+public class TStartUpPic extends SugarRecord{
 
 	
 	@SerializedName("picurl")

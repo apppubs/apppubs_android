@@ -12,12 +12,12 @@ import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 
-import com.apppubs.constant.APError;
-import com.apppubs.model.APCallback;
-import com.apppubs.ui.adapter.CommonAdapter;
-import com.apppubs.bean.Department;
-import com.apppubs.bean.User;
+import com.apppubs.bean.TUser;
 import com.apppubs.bean.UserInfo;
+import com.apppubs.constant.APError;
+import com.apppubs.model.IAPCallback;
+import com.apppubs.ui.adapter.CommonAdapter;
+import com.apppubs.bean.TDepartment;
 import com.apppubs.AppContext;
 import com.apppubs.ui.activity.HomeBaseActivity;
 import com.apppubs.ui.adapter.ViewHolder;
@@ -43,10 +43,10 @@ public class AddressBookOrganizationFragement extends BaseFragment {
 
 	private String mSuperId;
 	private ListView mListView;
-	private CommonAdapter<Department> mDeptAdapter;
-	private CommonAdapter<User> mUserAdapter;
-	private List<Department> mDepartmentList;
-	private List<User> mUserList;
+	private CommonAdapter<TDepartment> mDeptAdapter;
+	private CommonAdapter<TUser> mUserAdapter;
+	private List<TDepartment> mDepartmentList;
+	private List<TUser> mUserList;
 	private Breadcrumb mBreadcrumb;
 	private TextView mHeaderNumberTV;//listview头部显示当前列表item数量的textview
 	private Map<String,Integer> mListViewOffsetMap;
@@ -67,10 +67,10 @@ public class AddressBookOrganizationFragement extends BaseFragment {
 	private void initAdapter() {
 		final int totalRow = mDepartmentList.size();
 		final String showCountFlag = AppContext.getInstance(mContext).getAppConfig().getAdbookOrgCountFlag();
-		mDeptAdapter = new CommonAdapter<Department>(mContext,mDepartmentList, R.layout.item_organization_lv) {
+		mDeptAdapter = new CommonAdapter<TDepartment>(mContext,mDepartmentList, R.layout.item_organization_lv) {
 
 			@Override
-			protected void fillValues(ViewHolder holder, Department bean, int position) {
+			protected void fillValues(ViewHolder holder, TDepartment bean, int position) {
 
 				((TextView)holder.getView(R.id.org_item_name_tv)).setText(bean.getName());
 				TextView detailTv = ((TextView) holder.getView(R.id.org_item_count_tv));
@@ -93,9 +93,9 @@ public class AddressBookOrganizationFragement extends BaseFragment {
 			}
 		};
 
-		mUserAdapter = new CommonAdapter<User>(mContext,mUserList,R.layout.item_adbook_org_user_lv) {
+		mUserAdapter = new CommonAdapter<TUser>(mContext,mUserList,R.layout.item_adbook_org_user_lv) {
 			@Override
-			protected void fillValues(ViewHolder holder, User user, int position) {
+			protected void fillValues(ViewHolder holder, TUser user, int position) {
 				TextView titleTv = holder.getView(R.id.item_user_picker_user_title_tv);
 				titleTv.setText(user.getTrueName());
 				TextView desTv = holder.getView(R.id.item_user_picker_user_des_tv);
@@ -136,12 +136,12 @@ public class AddressBookOrganizationFragement extends BaseFragment {
 				if (mAppContext.getAppConfig().getChatFlag().equals("1")&&position==0){
 					prepareForCreateDiscuss();
 				}else if (currentSuperIdIsLeaf()){
-					User user = (User) adapterView.getAdapter().getItem(position);
+					TUser user = (TUser) adapterView.getAdapter().getItem(position);
 					Intent intent = new Intent(getActivity(), UserInfoActivity.class);
 					intent.putExtra(UserInfoActivity.EXTRA_STRING_USER_ID, user.getUserId());
 					getActivity().startActivity(intent);
 				}else{
-					Department dep = (Department) adapterView.getAdapter().getItem(position);
+					TDepartment dep = (TDepartment) adapterView.getAdapter().getItem(position);
 					String id = dep.getDeptId();
 					mBreadcrumb.push(dep.getName(),id);
 					displayBySuperId(id,false);
@@ -151,7 +151,7 @@ public class AddressBookOrganizationFragement extends BaseFragment {
 	}
 
 	private void prepareForCreateDiscuss() {
-		Department department = mUserBussiness.getDepartmentById(mSuperId);
+		TDepartment department = mUserBussiness.getDepartmentById(mSuperId);
 		String deptName = department!=null?department.getName():"组织";
 		final List<String> userIdList = mUserBussiness.getUserIdsOfCertainDepartment(mSuperId,mAppContext.getAppConfig().getChatAuthFlag()==1?true:false);
 		if (userIdList==null||userIdList.size()<1){
@@ -243,10 +243,10 @@ public class AddressBookOrganizationFragement extends BaseFragment {
 			mUserAdapter.setData(mUserList);
 			mListView.setAdapter(mUserAdapter);
 			List<String> userIds = new ArrayList<String>();
-			for (User user : mUserList){
+			for (TUser user : mUserList){
 				userIds.add(user.getUserId());
 			}
-			mUserBussiness.cacheUserBasicInfoList(userIds, new APCallback<List<UserBasicInfo>>() {
+			mUserBussiness.cacheUserBasicInfoList(userIds, new IAPCallback<List<UserBasicInfo>>() {
 				@Override
 				public void onDone(List<UserBasicInfo> obj) {
 

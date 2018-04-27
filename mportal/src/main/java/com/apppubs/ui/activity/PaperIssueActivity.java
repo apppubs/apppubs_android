@@ -12,10 +12,10 @@ import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 
-import com.apppubs.bean.PaperCatalog;
-import com.apppubs.bean.PaperIssue;
+import com.apppubs.bean.TPaperCatalog;
+import com.apppubs.bean.TPaperIssue;
 import com.apppubs.constant.APError;
-import com.apppubs.model.APCallback;
+import com.apppubs.model.IAPCallback;
 import com.apppubs.ui.widget.TitleBar;
 import com.apppubs.d20.R;
 import com.apppubs.ui.fragment.PaperInfoListFragment;
@@ -35,7 +35,7 @@ public class PaperIssueActivity extends BaseActivity {
 
 	public static final String EXTRA_NAME_ISSUE_ID = "issue_id";
 	private String mIssueId;
-	private PaperIssue mPaperIssue;
+	private TPaperIssue mPaperIssue;
 	private LinearLayout mProgressLl;
 	private int mCurMode;// 当前显示模式 0==列表模式 1==预览模式
 	private Map<Integer,Fragment> mFragmentMap = new HashMap<Integer, Fragment>();
@@ -50,7 +50,7 @@ public class PaperIssueActivity extends BaseActivity {
 	}
 
 	private void fill() {
-		mGetPaperFuture = mPaperBiz.getPaperIssueInfo(mIssueId, new APCallback<PaperIssue>() {
+		mGetPaperFuture = mPaperBiz.getPaperIssueInfo(mIssueId, new IAPCallback<TPaperIssue>() {
 
 			@Override
 			public void onException(APError excepCode) {
@@ -59,7 +59,7 @@ public class PaperIssueActivity extends BaseActivity {
 			}
 
 			@Override
-			public void onDone(PaperIssue obj) {
+			public void onDone(TPaperIssue obj) {
 				mPaperIssue = obj;
 				displayIssue(mCurMode);
 				mProgressLl.setVisibility(View.GONE);
@@ -81,7 +81,7 @@ public class PaperIssueActivity extends BaseActivity {
 
 	}
 
-	public List<PaperCatalog> getCatalogList() {
+	public List<TPaperCatalog> getCatalogList() {
 
 		return mPaperIssue.getCatalogList();
 	}

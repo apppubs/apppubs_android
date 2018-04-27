@@ -10,7 +10,7 @@ import com.orm.SugarRecord;
  * @author zhangwen 2014-10-30
  * 
  */
-public class Paper extends SugarRecord{
+public class TPaper extends SugarRecord{
 
 	private String id;
 	private String parentId;
@@ -38,13 +38,13 @@ public class Paper extends SugarRecord{
 	private int hotAreaBaseHeight;
 
 
-	public Paper() {
+	public TPaper() {
 	}
 
-	public Paper(String parentId, String paperName, String paperCode,
-			int sortId, boolean isDefault, Date updateTime, Date insertTime,
-			String appCodeCMS, String baseURL, int sysType, String cover,
-			String describtion) {
+	public TPaper(String parentId, String paperName, String paperCode,
+				  int sortId, boolean isDefault, Date updateTime, Date insertTime,
+				  String appCodeCMS, String baseURL, int sysType, String cover,
+				  String describtion) {
 		super();
 		this.parentId = parentId;
 		this.name = paperName;

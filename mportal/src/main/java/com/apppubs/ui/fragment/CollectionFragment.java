@@ -17,7 +17,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.apppubs.bean.Collection;
+import com.apppubs.bean.TCollection;
 import com.apppubs.d20.R;
 import com.apppubs.ui.activity.NewsInfoActivity;
 import com.apppubs.ui.activity.NewsPictureInfoActivity;
@@ -33,7 +33,7 @@ import com.orm.SugarRecord;
 
 public class CollectionFragment extends BaseFragment implements OnItemClickListener {
 
-	protected List<Collection> mList;
+	protected List<TCollection> mList;
 	private boolean isEditMode;
 	private MyAdapter mAdapter;
 	private CommonListView mXlv;
@@ -65,23 +65,23 @@ public class CollectionFragment extends BaseFragment implements OnItemClickListe
 		} else {
 			Intent i = null;
 			Class<?> cls = null;
-			if (mList.get(posion - 1).getType() == Collection.TYPE_NORMAL) {
+			if (mList.get(posion - 1).getType() == TCollection.TYPE_NORMAL) {
 				cls = NewsInfoActivity.class;
 				i = new Intent(getActivity(), cls);
 				String[] infoIdAndChannelCode = mList.get(posion - 1).getInfoId().split(",");
 				i.putExtra(NewsInfoActivity.EXTRA_STRING_NAME_ID, infoIdAndChannelCode[0]);
 				i.putExtra(NewsInfoActivity.EXTRA_STRING_NAME_CHANNELCODE, infoIdAndChannelCode[1]);
-			} else if (mList.get(posion - 1).getType() == Collection.TYPE_PIC) {
+			} else if (mList.get(posion - 1).getType() == TCollection.TYPE_PIC) {
 				cls = NewsPictureInfoActivity.class;
 				i = new Intent(getActivity(), cls);
 				i.putExtra(NewsInfoActivity.EXTRA_STRING_NAME_ID, mList.get(posion - 1).getInfoId());
-			} else if (mList.get(posion - 1).getType() == Collection.TYPE_VEDIO) {
+			} else if (mList.get(posion - 1).getType() == TCollection.TYPE_VEDIO) {
 				cls = NewsVideoInfoActivity.class;
 				i = new Intent(getActivity(), cls);
 				String[] infoIdAndChannelCode = mList.get(posion - 1).getInfoId().split(",");
 				i.putExtra(NewsVideoInfoActivity.EXTRA_STRING_NAME_ID, infoIdAndChannelCode[0]);
 				i.putExtra(NewsInfoActivity.EXTRA_STRING_NAME_CHANNELCODE, infoIdAndChannelCode[1]);
-			}else if (mList.get(posion - 1).getType() == Collection.TYPE_PAPER) {
+			}else if (mList.get(posion - 1).getType() == TCollection.TYPE_PAPER) {
 				cls = PaperInfoActivity.class;
 				i = new Intent(getActivity(), cls);
 				i.putExtra(NewsInfoActivity.EXTRA_STRING_NAME_ID, mList.get(posion - 1).getInfoId());
@@ -117,20 +117,20 @@ public class CollectionFragment extends BaseFragment implements OnItemClickListe
 	@Override
 	public void onResume() {
 		super.onResume();
-		mList = SugarRecord.find(Collection.class, null, null, null, "ADD_TIME desc", null);
+		mList = SugarRecord.find(TCollection.class, null, null, null, "ADD_TIME desc", null);
 		mAdapter = new MyAdapter(mContext, mList, R.layout.item_collection);
 		mXlv.setAdapter(mAdapter);
 		mEmptyLl.setVisibility(mList.isEmpty() ? View.VISIBLE : View.GONE);
 	}
 
-	private class MyAdapter extends CommonAdapter<Collection> {
+	private class MyAdapter extends CommonAdapter<TCollection> {
 
-		public MyAdapter(Context context, List<Collection> datas, int resId) {
+		public MyAdapter(Context context, List<TCollection> datas, int resId) {
 			super(context, datas, resId);
 		}
 
 		@Override
-		protected void fillValues(ViewHolder holder, Collection bean, final int position) {
+		protected void fillValues(ViewHolder holder, TCollection bean, final int position) {
 
 			TextView titleTv = holder.getView(R.id.collection_item_title_tv);
 			TextView typeAndTimeTv = holder.getView(R.id.collection_item_type_time_tv);
@@ -159,19 +159,19 @@ public class CollectionFragment extends BaseFragment implements OnItemClickListe
 		private String getTypeString(int type) {
 			String typeStr;
 			switch (type) {
-			case Collection.TYPE_NORMAL:
+			case TCollection.TYPE_NORMAL:
 				typeStr = "资讯";
 				break;
-			case Collection.TYPE_PAPER:
+			case TCollection.TYPE_PAPER:
 				typeStr = "报纸";
 				break;
-			case Collection.TYPE_PIC:
+			case TCollection.TYPE_PIC:
 				typeStr = "图片";
 				break;
-			case Collection.TYPE_URL:
+			case TCollection.TYPE_URL:
 				typeStr = "链接";
 				break;
-			case Collection.TYPE_VEDIO:
+			case TCollection.TYPE_VEDIO:
 				typeStr = "视频";
 				break;
 			default:
@@ -188,7 +188,7 @@ public class CollectionFragment extends BaseFragment implements OnItemClickListe
 
 			@Override
 			public void onOkClick() {
-				SugarRecord.deleteAll(Collection.class, "INFO_ID=?", mList.get(i).getInfoId());
+				SugarRecord.deleteAll(TCollection.class, "INFO_ID=?", mList.get(i).getInfoId());
 				mList.remove(i);
 				mAdapter.notifyDataSetChanged();
 				if (mList.size() == 0) {

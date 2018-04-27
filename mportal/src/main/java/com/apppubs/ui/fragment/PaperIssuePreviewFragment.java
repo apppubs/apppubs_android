@@ -19,7 +19,7 @@ import android.widget.RelativeLayout.LayoutParams;
 import android.widget.TextView;
 
 import com.apppubs.ui.activity.PaperIssueActivity;
-import com.apppubs.bean.PaperCatalog;
+import com.apppubs.bean.TPaperCatalog;
 import com.apppubs.util.LogM;
 import com.apppubs.ui.widget.DragScheduleBar;
 import com.apppubs.d20.R;
@@ -40,7 +40,7 @@ public class PaperIssuePreviewFragment extends BaseFragment implements OnPageCha
 	private ViewPager mVp;
 	private PaperFragmentAdapter mAdapter;
 	private PaperIssueActivity mHostActivity;
-	private List<PaperCatalog> mCatalogList;
+	private List<TPaperCatalog> mCatalogList;
 	private DragScheduleBar mDragScheduleBar;
 	private LinearLayout mPreviewLl;
 	private ImageView mPreviewIv;
@@ -105,7 +105,7 @@ public class PaperIssuePreviewFragment extends BaseFragment implements OnPageCha
 		});
 		mAdapter = new PaperFragmentAdapter(getChildFragmentManager());
 		List<PaperCatalogFragment> list = new ArrayList<PaperCatalogFragment>();
-		for(PaperCatalog pc:mCatalogList){
+		for(TPaperCatalog pc:mCatalogList){
 			PaperCatalogFragment pcf = new PaperCatalogFragment();
 			Bundle args = new Bundle();
 			args.putString(PaperCatalogFragment.ARG_NAME_CATALOG_ID, pc.getId());

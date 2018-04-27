@@ -19,7 +19,7 @@ import android.widget.Toast;
 
 import com.apppubs.constant.APError;
 import com.apppubs.d20.R;
-import com.apppubs.model.APCallback;
+import com.apppubs.model.IAPCallback;
 import com.apppubs.ui.activity.BaseActivity;
 import com.apppubs.ui.adbook.UserInfoActivity;
 import com.apppubs.model.message.OperationRong;
@@ -164,7 +164,7 @@ public class DiscussionDetailActivity extends BaseActivity implements CompoundBu
         ids = mDiscussion.getMemberIdList();
         if (ids != null) {
 //            request(FIND_USER_INFO);
-            mUserBussiness.cacheUserBasicInfoList(ids, new APCallback<List<UserBasicInfo>>() {
+            mUserBussiness.cacheUserBasicInfoList(ids, new IAPCallback<List<UserBasicInfo>>() {
                 @Override
                 public void onDone(List<UserBasicInfo> infos) {
 					mCachedUserInfoList = infos;
@@ -355,7 +355,7 @@ public class DiscussionDetailActivity extends BaseActivity implements CompoundBu
 				idList.add(ubi.getUserId());
 			}
 		}
-		mSystemBiz.inviteUsers(idList, new APCallback() {
+		mSystemBiz.inviteUsers(idList, new IAPCallback() {
 			@Override
 			public void onDone(Object obj) {
 				ProgressHUD.dismissProgressHUDInThisContext(mContext);
@@ -514,7 +514,7 @@ public class DiscussionDetailActivity extends BaseActivity implements CompoundBu
         }
 
         private void onAddMemberFinish(List<String> userIds) {
-            mUserBussiness.cacheUserBasicInfoList(userIds, new APCallback<List<UserBasicInfo>>() {
+            mUserBussiness.cacheUserBasicInfoList(userIds, new IAPCallback<List<UserBasicInfo>>() {
                 @Override
                 public void onDone(List<UserBasicInfo> basicInfos) {
                     if (basicInfos != null && basicInfos.size() > 0) {

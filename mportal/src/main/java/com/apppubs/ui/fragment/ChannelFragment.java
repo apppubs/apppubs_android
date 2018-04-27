@@ -7,8 +7,8 @@ import android.os.Bundle;
 import android.text.TextUtils;
 import android.widget.BaseAdapter;
 
-import com.apppubs.bean.NewsChannel;
-import com.apppubs.bean.NewsInfo;
+import com.apppubs.bean.TNewsChannel;
+import com.apppubs.bean.TNewsInfo;
 import com.apppubs.model.NewsBiz;
 import com.apppubs.util.LogM;
 import com.apppubs.ui.activity.NewsInfoActivity;
@@ -30,9 +30,9 @@ public abstract class ChannelFragment extends BaseFragment{
 	public static final String ARG_KEY = "channel_code"; 
 	protected String mChannelCode;
 	protected int mCurPage = 1;
-	protected NewsChannel mChannel;
+	protected TNewsChannel mChannel;
 	protected NewsBiz mNewsBiz;
-	protected List<NewsInfo> mNewsInfoList;
+	protected List<TNewsInfo> mNewsInfoList;
 	protected BaseAdapter mAdapter;
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -40,7 +40,7 @@ public abstract class ChannelFragment extends BaseFragment{
 		if(args!=null){
 			
 			mChannelCode = args.getString(ARG_KEY);
-			mChannel = SugarRecord.findByProperty(NewsChannel.class, "CODE", mChannelCode);
+			mChannel = SugarRecord.findByProperty(TNewsChannel.class, "CODE", mChannelCode);
 		}
 		super.onCreate(savedInstanceState);
 		mNewsBiz = NewsBiz.getInstance(mContext);
@@ -53,15 +53,15 @@ public abstract class ChannelFragment extends BaseFragment{
 	 * 根据newsinfo的类型不同打开不同的正文activity
 	 * @param infoId
 	 */
-	protected void startInfoActivity(NewsInfo newsInfo){
+	protected void startInfoActivity(TNewsInfo newsInfo){
 		String type = newsInfo.getType();
 		if(TextUtils.isEmpty(type)){
 			LogM.log(this.getClass(), "newsinfo 的类型是空！！！");
 			return ;
 		}
-		if(type.equals(NewsInfo.NEWS_TYPE_NORAML)||type.equals(NewsInfo.NEWS_TYPE_VIDEO)||type.equals(NewsInfo.NEWS_TYPE_AUDIO)||type.equals(NewsInfo.NEWS_TYPE_PICTURE)){
+		if(type.equals(TNewsInfo.NEWS_TYPE_NORAML)||type.equals(TNewsInfo.NEWS_TYPE_VIDEO)||type.equals(TNewsInfo.NEWS_TYPE_AUDIO)||type.equals(TNewsInfo.NEWS_TYPE_PICTURE)){
 			NewsInfoBaseActivity.startInfoActivity(mContext, newsInfo.getType(), mChannelCode,newsInfo.getId());
-		}else if(type.equals(NewsInfo.NEWS_TYPE_SPECIALS)||type.equals(NewsInfo.NEWS_TYPE_URL)||type.equals(NewsInfo.NEWS_TYPE_FILE)){
+		}else if(type.equals(TNewsInfo.NEWS_TYPE_SPECIALS)||type.equals(TNewsInfo.NEWS_TYPE_URL)||type.equals(TNewsInfo.NEWS_TYPE_FILE)){
 			NewsInfoBaseActivity.startInfoActivity(mContext, newsInfo.getType(), newsInfo.getUrl());
 		}
 	}

@@ -5,13 +5,14 @@ import android.net.Uri;
 import android.util.Log;
 
 import com.apppubs.AppContext;
-import com.apppubs.bean.Msg;
-import com.apppubs.bean.MsgRecord;
-import com.apppubs.bean.ServiceNOInfo;
-import com.apppubs.bean.ServiceNo;
-import com.apppubs.bean.User;
+import com.apppubs.bean.TMsg;
+import com.apppubs.bean.TMsgRecord;
+import com.apppubs.bean.TServiceNOInfo;
+import com.apppubs.bean.TServiceNo;
+import com.apppubs.bean.TUser;
+import com.apppubs.bean.UserInfo;
 import com.apppubs.constant.URLs;
-import com.apppubs.model.APCallback;
+import com.apppubs.model.IAPCallback;
 import com.apppubs.model.BaseBiz;
 import com.apppubs.ui.message.MyFilePlugin;
 import com.apppubs.util.JSONResult;
@@ -45,7 +46,6 @@ import io.rong.imkit.widget.provider.FilePlugin;
 import io.rong.imkit.widget.provider.LocationPlugin;
 import io.rong.imlib.RongIMClient;
 import io.rong.imlib.model.Conversation;
-import io.rong.imlib.model.UserInfo;
 
 /**
  * 消息业务类
@@ -87,7 +87,7 @@ public class MsgBussiness extends BaseBiz {
 	 * @return
 	 */
 	public Future<?> getChatList(final String receiverUsername, final String senderUsername,
-			final APCallback<List<Msg>> callback) {
+			final IAPCallback<List<TMsg>> callback) {
 		Future<?> f = sDefaultExecutor.submit(new Runnable() {
 
 			@Override
@@ -99,21 +99,21 @@ public class MsgBussiness extends BaseBiz {
 					JSONResult jr = JSONResult.compile(responseString);
 					if(jr.code ==JSONResult.RESULT_CODE_SUCCESS){
 						
-						Type msgListType = new TypeToken<List<Msg>>() {}.getType();
-						List<Msg> list = WebUtils.gson.fromJson(jr.result, msgListType);
+						Type msgListType = new TypeToken<List<TMsg>>() {}.getType();
+						List<TMsg> list = WebUtils.gson.fromJson(jr.result, msgListType);
 						Comparator<Object> comparator = new Comparator<Object>() {
 
 							@Override
 							public int compare(Object lhs, Object rhs) {
-								Msg lMsg = (Msg) lhs;
-								Msg rMsg = (Msg) rhs;
+								TMsg lMsg = (TMsg) lhs;
+								TMsg rMsg = (TMsg) rhs;
 								return lMsg.getSendTime().compareTo(rMsg.getSendTime());
 							}
 						};
 						Collections.sort(list, comparator);
-						sHandler.post(new OnDoneRun<List<Msg>>(callback, list));
+						sHandler.post(new OnDoneRun<List<TMsg>>(callback, list));
 					}else{
-						sHandler.post(new OnExceptionRun<List<Msg>>(callback));
+						sHandler.post(new OnExceptionRun<List<TMsg>>(callback));
 					}
 				} catch (IOException e) {
 					e.printStackTrace();
@@ -127,7 +127,7 @@ public class MsgBussiness extends BaseBiz {
 		return f;
 	}
 	public Future<?> getChatGroupChatList(final String receiverUsername, final String groupid,final String startTimeStr,
-			final APCallback<List<Msg>> callback) {
+			final IAPCallback<List<TMsg>> callback) {
 		
 		Future<?> f = sDefaultExecutor.submit(new Runnable() {
 			
@@ -147,21 +147,21 @@ public class MsgBussiness extends BaseBiz {
 					JSONResult jr = JSONResult.compile(responseString);
 					if(jr.code ==JSONResult.RESULT_CODE_SUCCESS){
 						
-						Type msgListType = new TypeToken<List<Msg>>() {}.getType();
-						List<Msg> list = WebUtils.gson.fromJson(jr.result, msgListType);
+						Type msgListType = new TypeToken<List<TMsg>>() {}.getType();
+						List<TMsg> list = WebUtils.gson.fromJson(jr.result, msgListType);
 						Comparator<Object> comparator = new Comparator<Object>() {
 							
 							@Override
 							public int compare(Object lhs, Object rhs) {
-								Msg lMsg = (Msg) lhs;
-								Msg rMsg = (Msg) rhs;
+								TMsg lMsg = (TMsg) lhs;
+								TMsg rMsg = (TMsg) rhs;
 								return lMsg.getSendTime().compareTo(rMsg.getSendTime());
 							}
 						};
 						Collections.sort(list, comparator);
-						sHandler.post(new OnDoneRun<List<Msg>>(callback, list));
+						sHandler.post(new OnDoneRun<List<TMsg>>(callback, list));
 					}else{
-						sHandler.post(new OnExceptionRun<List<Msg>>(callback));
+						sHandler.post(new OnExceptionRun<List<TMsg>>(callback));
 					}
 				} catch (IOException e) {
 					e.printStackTrace();
@@ -189,14 +189,14 @@ public class MsgBussiness extends BaseBiz {
 	 * 
 	 */
 	public Future<?> sendTextMsg(final String senderUsername, final String receiverUsername, final String groupId,final String content,
-			final APCallback<Object> callback) {
+			final IAPCallback<Object> callback) {
 
 		Future<?> f = sDefaultExecutor.submit(new Runnable() {
 			@Override
 			public void run() {
 				try {
 					String encodeContent = URLEncoder.encode(content, "UTF-8");
-					String url = String.format(URLs.URL_CHAT_SEND_MSG,URLs.baseURL,URLs.appCode,groupId,senderUsername,receiverUsername,encodeContent,Msg.TYPE_CONTENT_TEXT+"","","");
+					String url = String.format(URLs.URL_CHAT_SEND_MSG,URLs.baseURL,URLs.appCode,groupId,senderUsername,receiverUsername,encodeContent, TMsg.TYPE_CONTENT_TEXT+"","","");
 					String result = WebUtils.requestWithGet(url);
 					JSONResult jr = JSONResult.compile(result);
 					if(jr.code ==JSONResult.RESULT_CODE_SUCCESS){
@@ -220,83 +220,83 @@ public class MsgBussiness extends BaseBiz {
 	}
 
 	public void makeRecord(int type, final String targetUsernameOrId, final String content, boolean addUnreadNum) {
-		if (type == MsgRecord.TYPE_CHAT) {
-			User receiver = SugarRecord.findByProperty(User.class, "USERNAME", targetUsernameOrId);
-			MsgRecord msgRecord = SugarRecord.findByProperty(MsgRecord.class, "SOURCE_USERNAME_OR_ID",
+		if (type == TMsgRecord.TYPE_CHAT) {
+			TUser receiver = SugarRecord.findByProperty(TUser.class, "USERNAME", targetUsernameOrId);
+			TMsgRecord msgRecord = SugarRecord.findByProperty(TMsgRecord.class, "SOURCE_USERNAME_OR_ID",
 					receiver.getUsername());
 			if (msgRecord == null) {
-				msgRecord = new MsgRecord();
+				msgRecord = new TMsgRecord();
 				msgRecord.setSourceUsernameOrId(targetUsernameOrId);
 				msgRecord.setTitle(receiver.getTrueName());
 				msgRecord.setSubTitle(content);
 				msgRecord.setUpdateTime(new Date());
 				msgRecord.setUnreadNum(addUnreadNum ? 1 : 0);
-				msgRecord.setType(MsgRecord.TYPE_CHAT);
+				msgRecord.setType(TMsgRecord.TYPE_CHAT);
 				msgRecord.save();
 			} else if (addUnreadNum) {
 
 				SugarRecord.updateById(
-						MsgRecord.class,
+						TMsgRecord.class,
 						msgRecord.getId(),
 						new String[] { "TITLE", "SUB_TITLE", "UPDATE_TIME", "UNREAD_NUM" },
 						new String[] { receiver.getTrueName(), content, new Date().getTime() + "",
 								(msgRecord.getUnreadNum() + 1) + "" });
 
 			} else {
-				SugarRecord.updateById(MsgRecord.class, msgRecord.getId(), new String[] { "TITLE", "SUB_TITLE",
+				SugarRecord.updateById(TMsgRecord.class, msgRecord.getId(), new String[] { "TITLE", "SUB_TITLE",
 						"UPDATE_TIME" }, new String[] { receiver.getTrueName(), content, new Date().getTime() + "" });
 			}
 
-		} else if (type == MsgRecord.TYPE_SERVICE) {
-			MsgRecord msgRecord = SugarRecord.findByProperty(MsgRecord.class, "SOURCE_USERNAME_OR_ID",
+		} else if (type == TMsgRecord.TYPE_SERVICE) {
+			TMsgRecord msgRecord = SugarRecord.findByProperty(TMsgRecord.class, "SOURCE_USERNAME_OR_ID",
 					targetUsernameOrId);
-			ServiceNo sn = SugarRecord.findById(ServiceNo.class, targetUsernameOrId);
+			TServiceNo sn = SugarRecord.findById(TServiceNo.class, targetUsernameOrId);
 
 			if (sn == null) {
 				LogM.log(this.getClass(), "makeRecord ServiceNo为空");
 				return;
 			}
 			if (msgRecord == null) {
-				msgRecord = new MsgRecord();
+				msgRecord = new TMsgRecord();
 				msgRecord.setSourceUsernameOrId(targetUsernameOrId);
 				msgRecord.setTitle(sn.getName());
 				msgRecord.setSubTitle(content);
 				msgRecord.setUpdateTime(new Date());
 				msgRecord.setIcon(sn.getPicURL());
 				msgRecord.setUnreadNum(addUnreadNum?1:0);
-				msgRecord.setType(MsgRecord.TYPE_SERVICE);
+				msgRecord.setType(TMsgRecord.TYPE_SERVICE);
 				msgRecord.save();
 			} else if (addUnreadNum) {
 
-				SugarRecord.updateById(MsgRecord.class, msgRecord.getId(), new String[] { "TITLE", "SUB_TITLE",
+				SugarRecord.updateById(TMsgRecord.class, msgRecord.getId(), new String[] { "TITLE", "SUB_TITLE",
 						"UPDATE_TIME", "UNREAD_NUM" }, new String[] { sn.getName(), content, new Date().getTime() + "",
 						(msgRecord.getUnreadNum() + 1) + "" });
 
 			} else {
-				SugarRecord.updateById(MsgRecord.class, msgRecord.getId(), new String[] { "TITLE", "SUB_TITLE",
+				SugarRecord.updateById(TMsgRecord.class, msgRecord.getId(), new String[] { "TITLE", "SUB_TITLE",
 						"UPDATE_TIME" }, new String[] { sn.getName(), content, new Date().getTime() + "" });
 			}
 		}
 	}
 
-	public void makeRecord(String targetUsername, Msg msg, boolean addUnreadNum) {
+	public void makeRecord(String targetUsername, TMsg msg, boolean addUnreadNum) {
 		int msgType = msg.getType();
-		if (msgType == Msg.TYPE_CHAT) {
+		if (msgType == TMsg.TYPE_CHAT) {
 
-			if (msg.getContentType() == Msg.TYPE_CONTENT_TEXT) {
+			if (msg.getContentType() == TMsg.TYPE_CONTENT_TEXT) {
 
-				makeRecord(MsgRecord.TYPE_CHAT, msg.getSenderId(), msg.getContent(), addUnreadNum);
-			} else if (msg.getContentType() == Msg.TYPE_CONTENT_IMAGE) {
-				makeRecord(MsgRecord.TYPE_CHAT, msg.getSenderId(), "[图片]", addUnreadNum);
-			} else if (msg.getContentType() == Msg.TYPE_CONTENT_SOUND) {
-				makeRecord(MsgRecord.TYPE_CHAT, msg.getSenderId(), "[语音]", addUnreadNum);
+				makeRecord(TMsgRecord.TYPE_CHAT, msg.getSenderId(), msg.getContent(), addUnreadNum);
+			} else if (msg.getContentType() == TMsg.TYPE_CONTENT_IMAGE) {
+				makeRecord(TMsgRecord.TYPE_CHAT, msg.getSenderId(), "[图片]", addUnreadNum);
+			} else if (msg.getContentType() == TMsg.TYPE_CONTENT_SOUND) {
+				makeRecord(TMsgRecord.TYPE_CHAT, msg.getSenderId(), "[语音]", addUnreadNum);
 			}
-		} else if (msgType == Msg.TYPE_SYSTEM||msgType == Msg.TYPE_THIRD_PARTY||msgType==Msg.TYPE_CMS) {
-			makeRecord(MsgRecord.TYPE_SERVICE, msg.getSenderId(), msg.getContent(), addUnreadNum);
+		} else if (msgType == TMsg.TYPE_SYSTEM||msgType == TMsg.TYPE_THIRD_PARTY||msgType== TMsg.TYPE_CMS) {
+			makeRecord(TMsgRecord.TYPE_SERVICE, msg.getSenderId(), msg.getContent(), addUnreadNum);
 		}
 	}
 
-	public void makeRecord(String targetUsername, Msg msg) {
+	public void makeRecord(String targetUsername, TMsg msg) {
 		makeRecord(targetUsername, msg, false);
 	}
 
@@ -304,12 +304,12 @@ public class MsgBussiness extends BaseBiz {
 	 * 清除某记录的未阅读数
 	 */
 	public void cleanUnread(String targetUsernameOrId) {
-		SugarRecord.update(MsgRecord.class, "UNREAD_NUM", "0", "SOURCE_USERNAME_OR_ID = ?",
+		SugarRecord.update(TMsgRecord.class, "UNREAD_NUM", "0", "SOURCE_USERNAME_OR_ID = ?",
 				new String[] { targetUsernameOrId });
 	}
 
 	public Future<?> sendPicMsg(final String senderUsername, final String receiverUsername, final String src) {
-		makeRecord(MsgRecord.TYPE_CHAT, receiverUsername, "[图片]");
+		makeRecord(TMsgRecord.TYPE_CHAT, receiverUsername, "[图片]");
 		Future<?> f = sDefaultExecutor.submit(new Runnable() {
 
 			@Override
@@ -322,8 +322,8 @@ public class MsgBussiness extends BaseBiz {
 				try {
 
 //					String url = URLs.URL_CHAT_SEND + "&receiver=" + receiverUsername + "&sender=" + senderUsername
-//							+ "&content=" + "&contentType=" + Msg.TYPE_CONTENT_IMAGE + "&fileName=" + picURL + "";
-					String url = String.format(URLs.URL_CHAT_SEND_MSG,URLs.baseURL,URLs.appCode,"",senderUsername,receiverUsername,URLEncoder.encode("图片", "utf-8"),Msg.TYPE_CONTENT_IMAGE+"",URLEncoder.encode(picURL.trim(),"UTF-8"),"");
+//							+ "&content=" + "&contentType=" + TMsg.TYPE_CONTENT_IMAGE + "&fileName=" + picURL + "";
+					String url = String.format(URLs.URL_CHAT_SEND_MSG,URLs.baseURL,URLs.appCode,"",senderUsername,receiverUsername,URLEncoder.encode("图片", "utf-8"), TMsg.TYPE_CONTENT_IMAGE+"",URLEncoder.encode(picURL.trim(),"UTF-8"),"");
 				
 					String result = WebUtils.requestWithGet(url);
 
@@ -353,8 +353,8 @@ public class MsgBussiness extends BaseBiz {
 				try {
 					
 //					String url = URLs.URL_CHAT_SEND + "&receiver=" + receiverUsername + "&sender=" + senderUsername
-//							+ "&content=" + "&contentType=" + Msg.TYPE_CONTENT_IMAGE + "&fileName=" + picURL + "";
-					String url = String.format(URLs.URL_CHAT_SEND_MSG,URLs.baseURL,URLs.appCode,groupid,senderUsername,"",URLEncoder.encode("图片", "utf-8"),Msg.TYPE_CONTENT_IMAGE+"",URLEncoder.encode(picURL.trim(),"UTF-8"),"");
+//							+ "&content=" + "&contentType=" + TMsg.TYPE_CONTENT_IMAGE + "&fileName=" + picURL + "";
+					String url = String.format(URLs.URL_CHAT_SEND_MSG,URLs.baseURL,URLs.appCode,groupid,senderUsername,"",URLEncoder.encode("图片", "utf-8"), TMsg.TYPE_CONTENT_IMAGE+"",URLEncoder.encode(picURL.trim(),"UTF-8"),"");
 					
 					String result = WebUtils.requestWithGet(url);
 					
@@ -371,7 +371,7 @@ public class MsgBussiness extends BaseBiz {
 		
 		return f;
 	}
-	public Future<?> sendVideoMsg(final String senderUsername, final String receiverUsername, final String src,final APCallback<Object> callback) {
+	public Future<?> sendVideoMsg(final String senderUsername, final String receiverUsername, final String src,final IAPCallback<Object> callback) {
 		Future<?> f = sDefaultExecutor.submit(new Runnable() {
 			
 			@Override
@@ -383,7 +383,7 @@ public class MsgBussiness extends BaseBiz {
 		
 		return f;
 	}
-	public Future<?> sendGroupVideoMsg(final String senderUsername, final String groupid, final String src,final APCallback<Object> callback) {
+	public Future<?> sendGroupVideoMsg(final String senderUsername, final String groupid, final String src,final IAPCallback<Object> callback) {
 		Future<?> f = sDefaultExecutor.submit(new Runnable() {
 			
 			@Override
@@ -409,9 +409,9 @@ public class MsgBussiness extends BaseBiz {
 				try {
 					
 //					String url = URLs.URL_CHAT_SEND + "&receiver=" + receiverUsername + "&sender=" + senderUsername
-//							+ "&content=" + "&contentType=" + Msg.TYPE_CONTENT_SOUND + "&length=" + length + ""
+//							+ "&content=" + "&contentType=" + TMsg.TYPE_CONTENT_SOUND + "&length=" + length + ""
 //							+ "&fileName=" + picURL;
-					String url = String.format(URLs.URL_CHAT_SEND_MSG,URLs.baseURL,URLs.appCode,groupId,senderUsername,"",URLEncoder.encode("[语音]", "utf-8"),Msg.TYPE_CONTENT_SOUND+"",URLEncoder.encode(picURL.trim(),"UTF-8"),""+length);
+					String url = String.format(URLs.URL_CHAT_SEND_MSG,URLs.baseURL,URLs.appCode,groupId,senderUsername,"",URLEncoder.encode("[语音]", "utf-8"), TMsg.TYPE_CONTENT_SOUND+"",URLEncoder.encode(picURL.trim(),"UTF-8"),""+length);
 					
 					String result = WebUtils.requestWithGet(url);
 					
@@ -429,15 +429,15 @@ public class MsgBussiness extends BaseBiz {
 		return f;
 	}
 
-	public List<MsgRecord> listMsgRecord() {
-		return SugarRecord.find(MsgRecord.class, null, null, null, "update_time desc", null);
+	public List<TMsgRecord> listMsgRecord() {
+		return SugarRecord.find(TMsgRecord.class, null, null, null, "update_time desc", null);
 	}
 
-	public ServiceNo getServiceNoById(String id) {
-		return SugarRecord.findById(ServiceNo.class, id);
+	public TServiceNo getServiceNoById(String id) {
+		return SugarRecord.findById(TServiceNo.class, id);
 	}
 
-	public Future<?> getAloneServiceList(final String serviceid, final APCallback<List<ServiceNOInfo>> callback) {
+	public Future<?> getAloneServiceList(final String serviceid, final IAPCallback<List<TServiceNOInfo>> callback) {
 		Future<?> f = sDefaultExecutor.submit(new Runnable() {
 
 			@Override
@@ -446,12 +446,12 @@ public class MsgBussiness extends BaseBiz {
 					// http://www.wmh360.com/wmh360/json/msg/getserviceinfolist.jsp?appcode=U1433417616429&service_id=1433580152045&username=ceshi6&userid=&curp=1&perp=10&clientkey=bb7c1386d85044ba7a7ae53f3362d634
 					String url = String.format(URLs.URL_SERVICE_MESSAGE_INFO_LIST,URLs.baseURL,URLs.appCode) + "&service_id="+serviceid+"&username="+ AppContext.getInstance(mContext).getCurrentUser().getUsername()+"&userid="+ AppContext.getInstance(mContext).getCurrentUser().getUserId()
 					+"&curp=1&perp=10";
-					List<ServiceNOInfo> snl = WebUtils.requestList(url, ServiceNOInfo.class);
-					sHandler.post(new OnDoneRun<List<ServiceNOInfo>>(callback, snl));
+					List<TServiceNOInfo> snl = WebUtils.requestList(url, TServiceNOInfo.class);
+					sHandler.post(new OnDoneRun<List<TServiceNOInfo>>(callback, snl));
 				} catch (Exception e) {
 
 					e.printStackTrace();
-					sHandler.post(new OnExceptionRun<List<ServiceNOInfo>>(callback));
+					sHandler.post(new OnExceptionRun<List<TServiceNOInfo>>(callback));
 				}
 			}
 
@@ -469,7 +469,7 @@ public class MsgBussiness extends BaseBiz {
 	 * @return
 	 */
 	public Future<?> getServiceAttention(final String serviceid, final String username,
-			final APCallback<String> callback) {
+			final IAPCallback<String> callback) {
 		Future<?> f = sDefaultExecutor.submit(new Runnable() {
 
 			@Override
@@ -500,7 +500,7 @@ public class MsgBussiness extends BaseBiz {
 	 * 取消关注订阅号
 	 */
 	public Future<?> getServiceUnAttention(final String serviceid, final String username,
-			final APCallback<String> callback) {
+			final IAPCallback<String> callback) {
 		Future<?> f = sDefaultExecutor.submit(new Runnable() {
 
 			@Override
@@ -533,15 +533,15 @@ public class MsgBussiness extends BaseBiz {
 	 * @param callback
 	 * @return
 	 */
-	public Future<?> getUserServiceNoList(final String username, final APCallback<List<ServiceNo>> callback) {
+	public Future<?> getUserServiceNoList(final String username, final IAPCallback<List<TServiceNo>> callback) {
 		Future<?> f = sDefaultExecutor.submit(new Runnable() {
 
 			@Override
 			public void run() {
 				try {
-					List<ServiceNo> snl = WebUtils.requestList(String.format(URLs.URL_USERSERVICELIST,URLs.baseURL,URLs.appCode) + "&username=" + username,
-							ServiceNo.class);
-					sHandler.post(new OnDoneRun<List<ServiceNo>>(callback, snl));
+					List<TServiceNo> snl = WebUtils.requestList(String.format(URLs.URL_USERSERVICELIST,URLs.baseURL,URLs.appCode) + "&username=" + username,
+							TServiceNo.class);
+					sHandler.post(new OnDoneRun<List<TServiceNo>>(callback, snl));
 				} catch (IOException e) {
 
 					e.printStackTrace();
@@ -564,14 +564,14 @@ public class MsgBussiness extends BaseBiz {
 	 * 获得可订阅的服务号列表
 	 * @return
 	 */
-	public Future<?> getSubcribableServiceNoList(final APCallback<List<ServiceNo>> callback){
+	public Future<?> getSubcribableServiceNoList(final IAPCallback<List<TServiceNo>> callback){
 		Future<?> f = sDefaultExecutor.submit(new Runnable() {
 
 			@Override
 			public void run() {
 				try {
-					List<ServiceNo> snl = WebUtils.requestList(String.format(URLs.URL_SERVICE_NO_SUBSCRIBEABLE, URLs.baseURL,URLs.appCode),ServiceNo.class);
-					sHandler.post(new OnDoneRun<List<ServiceNo>>(callback, snl));
+					List<TServiceNo> snl = WebUtils.requestList(String.format(URLs.URL_SERVICE_NO_SUBSCRIBEABLE, URLs.baseURL,URLs.appCode),TServiceNo.class);
+					sHandler.post(new OnDoneRun<List<TServiceNo>>(callback, snl));
 				} catch (IOException e) {
 
 					e.printStackTrace();
@@ -592,7 +592,7 @@ public class MsgBussiness extends BaseBiz {
 	/**
 	 * 把一个url的网络图片保存在本地
 	 */
-	public Future<?> writePicUrlSD(final String pinurl, final File file, final APCallback<String> callback) {
+	public Future<?> writePicUrlSD(final String pinurl, final File file, final IAPCallback<String> callback) {
 		Future<?> f = sDefaultExecutor.submit(new Runnable() {
 
 			@Override
@@ -614,12 +614,12 @@ public class MsgBussiness extends BaseBiz {
 	
 	
 	public void initializeMsgRecordList(){
-		List<ServiceNo> serviceNoList = SugarRecord.listAll(ServiceNo.class);
+		List<TServiceNo> serviceNoList = SugarRecord.listAll(TServiceNo.class);
 		
-		for(ServiceNo sn:serviceNoList){
+		for(TServiceNo sn:serviceNoList){
 			if(!sn.isAllowSubscribe()){
 				
-				makeRecord(MsgRecord.TYPE_SERVICE, sn.getId(), "",false);
+				makeRecord(TMsgRecord.TYPE_SERVICE, sn.getId(), "",false);
 			}
 		}
 	}
@@ -680,9 +680,9 @@ public class MsgBussiness extends BaseBiz {
 			public void onSuccess(String userid) {
 				Log.d("LoginActivity", "--onSuccess" + userid);
 				setMyExtensionModule();
-				com.apppubs.bean.UserInfo user = AppContext.getInstance(mContext).getCurrentUser();
+				UserInfo user = AppContext.getInstance(mContext).getCurrentUser();
 				if(user!=null){
-					UserInfo userinfo = new UserInfo(userid,user.getTrueName(), Uri.parse(user.getAvatarUrl()));
+					io.rong.imlib.model.UserInfo userinfo = new io.rong.imlib.model.UserInfo(userid,user.getTrueName(), Uri.parse(user.getAvatarUrl()));
 					RongIM.getInstance().setCurrentUserInfo(userinfo);
 					RongIM.getInstance().setMessageAttachedUserInfo(true);
 				}

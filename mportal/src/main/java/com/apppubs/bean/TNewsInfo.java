@@ -6,7 +6,7 @@ import java.util.Date;
 import com.google.gson.annotations.SerializedName;
 import com.orm.SugarRecord;
 
-public class NewsInfo extends SugarRecord implements Serializable{
+public class TNewsInfo extends SugarRecord implements Serializable{
 	
 	private static final long serialVersionUID = 1L;
 	

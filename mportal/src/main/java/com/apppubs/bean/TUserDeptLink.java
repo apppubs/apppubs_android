@@ -14,7 +14,7 @@ import com.orm.SugarRecord;
  * 2015年3月10日 by zhangwen create
  *
  */
-public class UserDeptLink extends SugarRecord{
+public class TUserDeptLink extends SugarRecord{
 
 	@SerializedName("userid")
 	private String userId;

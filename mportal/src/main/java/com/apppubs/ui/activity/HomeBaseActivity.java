@@ -14,13 +14,13 @@ import com.apppubs.AppContext;
 import com.apppubs.AppManager;
 import com.apppubs.MportalApplication;
 import com.apppubs.bean.TMenuItem;
+import com.apppubs.bean.UserInfo;
 import com.apppubs.constant.APError;
 import com.apppubs.d20.R;
 import com.apppubs.bean.App;
-import com.apppubs.bean.UserInfo;
 import com.apppubs.bean.Weather;
 import com.apppubs.constant.Actions;
-import com.apppubs.model.APCallback;
+import com.apppubs.model.IAPCallback;
 import com.apppubs.ui.fragment.BaseFragment;
 import com.apppubs.model.message.UserBasicInfo;
 import com.apppubs.service.DownloadAppService;
@@ -104,7 +104,7 @@ public abstract class HomeBaseActivity extends BaseActivity {
 
 
 
-		mUserBussiness.updateUserInfo(this, new APCallback<UserInfo>() {
+		mUserBussiness.updateUserInfo(this, new IAPCallback<UserInfo>() {
 			@Override
 			public void onDone(final UserInfo obj) {
 

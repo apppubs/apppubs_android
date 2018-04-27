@@ -111,9 +111,9 @@ public abstract class BaseBiz {
 
 
     protected class OnExceptionRun<T> implements Runnable {
-        private APCallback<T> mCallback;
+        private IAPCallback<T> mCallback;
 
-        public OnExceptionRun(APCallback<T> callback) {
+        public OnExceptionRun(IAPCallback<T> callback) {
             mCallback = callback;
         }
 
@@ -123,10 +123,10 @@ public abstract class BaseBiz {
     }
 
     protected class OnDoneRun<T> implements Runnable {
-        private APCallback<T> mCallback;
+        private IAPCallback<T> mCallback;
         private T mResult;
 
-        public OnDoneRun(APCallback<T> callback, T obj) {
+        public OnDoneRun(IAPCallback<T> callback, T obj) {
             mCallback = callback;
             mResult = obj;
         }
@@ -142,11 +142,11 @@ public abstract class BaseBiz {
         return sDefaultExecutor.submit(runnable);
     }
 
-    protected <T> void onDone(APCallback<T> callback, T obj) {
+    protected <T> void onDone(IAPCallback<T> callback, T obj) {
         sHandler.post(new OnDoneRun<T>(callback, obj));
     }
 
-    protected <T> void onException(APCallback<T> callback) {
+    protected <T> void onException(IAPCallback<T> callback) {
         sHandler.post(new OnExceptionRun<T>(callback));
     }
 
@@ -221,6 +221,7 @@ public abstract class BaseBiz {
             throw new APNetException(error);
         }
     }
+
 }
 
 interface IRQListener<T extends IJsonResult> {

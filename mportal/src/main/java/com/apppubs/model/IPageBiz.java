@@ -8,5 +8,5 @@ import com.apppubs.bean.page.PageModel;
 
 public interface IPageBiz {
 
-	void loadPage(String pageId, APCallback<PageModel> callback);
+	void loadPage(String pageId, IAPCallback<PageModel> callback);
 }

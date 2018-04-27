@@ -11,7 +11,7 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.Toast;
 
-import com.apppubs.bean.User;
+import com.apppubs.bean.TUser;
 import com.apppubs.bean.UserInfo;
 import com.apppubs.AppContext;
 import com.apppubs.constant.APError;
@@ -21,7 +21,7 @@ import com.apppubs.ui.adbook.IUserInfoView;
 import com.apppubs.ui.adbook.IUserInfoViewListener;
 import com.apppubs.model.UserBiz;
 import com.apppubs.model.message.UserBussiness;
-import com.apppubs.model.APCallback;
+import com.apppubs.model.IAPCallback;
 import com.apppubs.model.WMHErrorCode;
 import com.apppubs.ui.widget.ConfirmDialog;
 import com.apppubs.ui.widget.ProgressHUD;
@@ -165,7 +165,7 @@ public class UserInfoPresenter implements IUserInfoViewListener {
         ProgressHUD.show(mContext);
         String[] userIdArr = new String[]{mView.getUserId()};
         SystemBiz sysBiz = SystemBiz.getInstance(mContext);
-        sysBiz.inviteUsers(Arrays.asList(userIdArr), new APCallback() {
+        sysBiz.inviteUsers(Arrays.asList(userIdArr), new IAPCallback() {
             @Override
             public void onDone(Object obj) {
                 ProgressHUD.dismissProgressHUDInThisContext(mContext);
@@ -190,7 +190,7 @@ public class UserInfoPresenter implements IUserInfoViewListener {
         // it.setType("vnd.android.cursor.dir/contact");
         // it.setType("vnd.android.cursor.dir/raw_contact");
         // 联系人姓名
-        User user = UserBussiness.getInstance(mContext).getUserByUserId(mView.getUserId());
+        TUser user = UserBussiness.getInstance(mContext).getUserByUserId(mView.getUserId());
         it.putExtra(android.provider.ContactsContract.Intents.Insert.NAME, user.getTrueName());
         // 公司
         it.putExtra(android.provider.ContactsContract.Intents.Insert.COMPANY,
@@ -213,7 +213,7 @@ public class UserInfoPresenter implements IUserInfoViewListener {
 
     @Override
     public void onButtonClicked(int index) {
-        final User user = UserBussiness.getInstance(mContext).getUserByUserId(mView.getUserId());
+        final TUser user = UserBussiness.getInstance(mContext).getUserByUserId(mView.getUserId());
         switch (index) {
             case START_CHAT_BTN:
                 RongIM.getInstance().startConversation(mContext, Conversation.ConversationType

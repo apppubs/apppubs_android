@@ -16,8 +16,8 @@ import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import com.apppubs.bean.TUser;
 import com.apppubs.ui.adbook.UserInfoActivity;
-import com.apppubs.bean.User;
 import com.apppubs.ui.fragment.BaseFragment;
 import com.apppubs.d20.R;
 
@@ -26,7 +26,7 @@ public class AddressBookCommonlyUserListFragment extends BaseFragment {
 	private View mRootView;
 	private ListView mLv;
 
-	private List<User> mUserL;
+	private List<TUser> mUserL;
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -65,7 +65,7 @@ public class AddressBookCommonlyUserListFragment extends BaseFragment {
 		private List<String> tempL = new ArrayList<String>();
 
 		public UserListAdapter() {
-			for (User u : mUserL) {
+			for (TUser u : mUserL) {
 				tempL.add(u.getTrueName());
 			}
 		}

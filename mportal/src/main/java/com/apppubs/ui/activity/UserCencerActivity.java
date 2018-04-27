@@ -22,7 +22,7 @@ import com.apppubs.asytask.AsyTaskExecutor;
 import com.apppubs.bean.UserInfo;
 import com.apppubs.constant.URLs;
 import com.apppubs.model.message.UserBasicInfo;
-import com.apppubs.model.APCallback;
+import com.apppubs.model.IAPCallback;
 import com.apppubs.util.BitmapUtils;
 import com.apppubs.util.JSONResult;
 import com.apppubs.util.Utils;
@@ -212,7 +212,7 @@ public class UserCencerActivity extends BaseActivity {
 					mImageLoader.displayImage(AppContext.getInstance(mContext).getCurrentUser().getAvatarUrl(),mAvatarIV);
 					List<String> ids = new ArrayList<String>();
 					ids.add(mAppContext.getCurrentUser().getUserId());
-					mUserBussiness.cacheUserBasicInfoList(ids, new APCallback<List<UserBasicInfo>>() {
+					mUserBussiness.cacheUserBasicInfoList(ids, new IAPCallback<List<UserBasicInfo>>() {
 						@Override
 						public void onDone(List<UserBasicInfo> obj) {
 							if (obj!=null&&obj.size()>0){

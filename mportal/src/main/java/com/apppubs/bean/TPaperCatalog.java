@@ -9,7 +9,7 @@ import com.orm.SugarRecord;
  * 
  * @author zhangwen 2014-10-30 mulu
  */
-public class PaperCatalog extends SugarRecord {// 报纸版面目录
+public class TPaperCatalog extends SugarRecord {// 报纸版面目录
 	@SerializedName("id")
 	private String id;
 	@SerializedName("name")
@@ -22,7 +22,7 @@ public class PaperCatalog extends SugarRecord {// 报纸版面目录
 	private String appId;
 	@SerializedName("order")
 	private int sortId;
-	private transient List<PaperInfo> infoList;
+	private transient List<TPaperInfo> infoList;
 	/** 缓存图片地址 */
 	private String picPath;
 	/** 缓存pdf */
@@ -30,10 +30,10 @@ public class PaperCatalog extends SugarRecord {// 报纸版面目录
 	/** 是否为横版 */
 	private boolean isHorizontalVersion;
 
-	public PaperCatalog() {
+	public TPaperCatalog() {
 	}
 
-	public PaperCatalog(String id, String name, String pic, int sortId,String issueId,String pdf,boolean isHorizontalVersion) {
+	public TPaperCatalog(String id, String name, String pic, int sortId, String issueId, String pdf, boolean isHorizontalVersion) {
 		this.id = id;
 		this.name = name;
 		this.pic = pic;
@@ -82,11 +82,11 @@ public class PaperCatalog extends SugarRecord {// 报纸版面目录
 		this.sortId = sortId;
 	}
 
-	public List<PaperInfo> getInfoList() {
+	public List<TPaperInfo> getInfoList() {
 		return infoList;
 	}
 
-	public void setInfoList(List<PaperInfo> infoList) {
+	public void setInfoList(List<TPaperInfo> infoList) {
 		this.infoList = infoList;
 	}
 

@@ -13,7 +13,7 @@ import com.orm.SugarRecord;
  *	这一套注释（Gson）在“获取一条信息”时用到
  *
  */
-public class PaperInfo extends SugarRecord implements Serializable{
+public class TPaperInfo extends SugarRecord implements Serializable{
 	
 	@SerializedName("infoid")
 	private String id;
@@ -61,13 +61,13 @@ public class PaperInfo extends SugarRecord implements Serializable{
 	private transient String md5URL;
 	
 	
-	public PaperInfo() {
+	public TPaperInfo() {
 		
 	}
 	
 	
-	public PaperInfo(String id, String title, int posW, int posH, int posX,
-			int posY, String catalogId) {
+	public TPaperInfo(String id, String title, int posW, int posH, int posX,
+					  int posY, String catalogId) {
 		this.id = id;
 		this.title = title;
 		this.posW = posW;
@@ -77,8 +77,8 @@ public class PaperInfo extends SugarRecord implements Serializable{
 		this.catalogId = catalogId;
 	}
 	
-	public PaperInfo(String id, String title, int posW, int posH, int posX,
-			int posY, String catalogId,String issueId) {
+	public TPaperInfo(String id, String title, int posW, int posH, int posX,
+					  int posY, String catalogId, String issueId) {
 		this(id,title,posW,posH,posX,posY,catalogId);
 		this.issueId = issueId;
 	}
@@ -302,7 +302,7 @@ public class PaperInfo extends SugarRecord implements Serializable{
 
 	@Override
 	public String toString() {
-		return "PaperInfo [id=" + id + ", title=" + title + ", subTitle="
+		return "TPaperInfo [id=" + id + ", title=" + title + ", subTitle="
 				+ subTitle + ", content=" + content + ", contentAbs="
 				+ contentAbs + ", summary=" + summary + ", author=" + author
 				+ ", authorMail=" + authorMail + ", issId=" + issueId

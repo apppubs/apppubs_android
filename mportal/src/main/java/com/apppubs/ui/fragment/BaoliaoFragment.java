@@ -26,8 +26,8 @@ import android.widget.RelativeLayout;
 import android.widget.Toast;
 
 import com.apppubs.AppContext;
-import com.apppubs.ui.activity.BaseActivity;
 import com.apppubs.bean.UserInfo;
+import com.apppubs.ui.activity.BaseActivity;
 import com.apppubs.util.FileUtils;
 import com.apppubs.util.StringUtils;
 import com.apppubs.util.SystemUtils;

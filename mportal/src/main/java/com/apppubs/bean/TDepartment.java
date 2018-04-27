@@ -14,7 +14,7 @@ import com.orm.SugarRecord;
  * 2015年3月10日 by zhangwen create
  *
  */
-public class Department extends SugarRecord{
+public class TDepartment extends SugarRecord{
 
 	
 	private String id;

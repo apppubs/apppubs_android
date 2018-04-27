@@ -17,11 +17,11 @@ import org.json.JSONObject;
 import android.content.Context;
 import android.util.Log;
 
-import com.apppubs.bean.Collection;
-import com.apppubs.bean.NewsChannel;
+import com.apppubs.bean.TCollection;
+import com.apppubs.bean.TNewsChannel;
 import com.apppubs.AppContext;
-import com.apppubs.bean.HeadPic;
-import com.apppubs.bean.NewsInfo;
+import com.apppubs.bean.THeadPic;
+import com.apppubs.bean.TNewsInfo;
 import com.apppubs.util.LogM;
 import com.apppubs.util.WebUtils;
 import com.google.gson.JsonParseException;
@@ -53,7 +53,7 @@ public class NewsBiz extends BaseBiz {
 	 * 获取某个频道下的某一页信息列表，如果获取的是第一页，则刷新数据库,并给此频道的刷新时间赋值 如果取第0页说明是要刷新
 	 */
 	public Future<?> getNewsInfoPage(final String type, final String channelCode, final int page, final int pageSize,
-			final APCallback<List<NewsInfo>> callback) {
+			final IAPCallback<List<TNewsInfo>> callback) {
 
 		Future<?> f = sDefaultExecutor.submit(new Runnable() {
 
@@ -62,48 +62,48 @@ public class NewsBiz extends BaseBiz {
 
 				try {
 					// 先从数据库获取数据
-					List<NewsInfo> infoList = null;
+					List<TNewsInfo> infoList = null;
 					if (page == 0) {
-						if (type == NewsInfo.NEWS_TYPE_NORAML) {
+						if (type == TNewsInfo.NEWS_TYPE_NORAML) {
 
 							// 如果page==0，刷新数据库信息
 							String url = String.format(URLs.URL_NEWS_LIST_OF_CHANNEL,URLs.baseURL) + "&channelcode=" + channelCode
 									+ "&pno=1&pernum=" + pageSize;
 
-							infoList = WebUtils.requestList(url, NewsInfo.class, "info");
+							infoList = WebUtils.requestList(url, TNewsInfo.class, "info");
 
-							SugarRecord.deleteAll(NewsInfo.class, "CHANNEL_CODE=?", channelCode);
+							SugarRecord.deleteAll(TNewsInfo.class, "CHANNEL_CODE=?", channelCode);
 							Date curDate = new Date();
-							SugarRecord.update(NewsChannel.class, "LOCAL_LAST_UPDATE_TIME", curDate.getTime() + "",
+							SugarRecord.update(TNewsChannel.class, "LOCAL_LAST_UPDATE_TIME", curDate.getTime() + "",
 									"CODE = ?", new String[] { channelCode });
 							saveList(infoList, channelCode);
-						} else if (type == NewsInfo.NEWS_TYPE_PICTURE) {
+						} else if (type == TNewsInfo.NEWS_TYPE_PICTURE) {
 							// 如果page==0，刷新数据库信息
 							String url = String.format(URLs.URL_PIC_LIST,URLs.baseURL) + "&channelcode=" + channelCode + "&pno=1&pernum="
 									+ pageSize;
 							List<NewsPictureInfo> picList = WebUtils.requestList(url, NewsPictureInfo.class, "data");
 
-							SugarRecord.deleteAll(NewsInfo.class, "CHANNEL_CODE=?", channelCode);
+							SugarRecord.deleteAll(TNewsInfo.class, "CHANNEL_CODE=?", channelCode);
 							Date curDate = new Date();
-							SugarRecord.update(NewsChannel.class, "LOCAL_LAST_UPDATE_TIME", curDate.getTime() + "",
+							SugarRecord.update(TNewsChannel.class, "LOCAL_LAST_UPDATE_TIME", curDate.getTime() + "",
 									"CODE = ?", new String[] { channelCode });
 							infoList = savePicInfoList(picList);
 						}
 					} else if (page == 1) {
-						infoList = SugarRecord.find(NewsInfo.class, "CHANNEL_CODE = ?", new String[] { channelCode },
+						infoList = SugarRecord.find(TNewsInfo.class, "CHANNEL_CODE = ?", new String[] { channelCode },
 								null, "PUB_TIME desc", (page - 1) * pageSize + "," + pageSize);
 						LogM.log(NewsBiz.class, "从数据库中查询出的数据条数："+infoList.size());
 					} else {
 
-						infoList = SugarRecord.find(NewsInfo.class, "CHANNEL_CODE = ? ", new String[] { channelCode },
+						infoList = SugarRecord.find(TNewsInfo.class, "CHANNEL_CODE = ? ", new String[] { channelCode },
 								null, "PUB_TIME desc", (page - 1) * pageSize + "," + pageSize);
-						if (infoList.size() != pageSize && type == NewsInfo.NEWS_TYPE_NORAML) {
+						if (infoList.size() != pageSize && type == TNewsInfo.NEWS_TYPE_NORAML) {
 
 							String url = String.format(URLs.URL_NEWS_LIST_OF_CHANNEL,URLs.baseURL) + "&channelcode=" + channelCode + "&pno=" + page
 									+ "&pernum=" + pageSize;
-							infoList = WebUtils.requestList(url, NewsInfo.class, "info");
+							infoList = WebUtils.requestList(url, TNewsInfo.class, "info");
 							saveList(infoList, channelCode);
-						} else if (infoList.size() == 0 && type == NewsInfo.NEWS_TYPE_PICTURE) {
+						} else if (infoList.size() == 0 && type == TNewsInfo.NEWS_TYPE_PICTURE) {
 							String url = String.format(URLs.URL_PIC_LIST,URLs.baseURL) + "&channelcode=" + channelCode + "&pno=" + page
 									+ "&pernum=" + pageSize;
 							;
@@ -112,17 +112,17 @@ public class NewsBiz extends BaseBiz {
 						}
 					}
 					LogM.log(NewsBiz.class, "准备返回到界面："+infoList.size());
-					sHandler.post(new OnDoneRun<List<NewsInfo>>(callback, infoList));
+					sHandler.post(new OnDoneRun<List<TNewsInfo>>(callback, infoList));
 
 				} catch (IOException e) {
 					e.printStackTrace();
-					sHandler.post(new OnExceptionRun<List<NewsInfo>>(callback));
+					sHandler.post(new OnExceptionRun<List<TNewsInfo>>(callback));
 				} catch (InterruptedException e) {
 					e.printStackTrace();
-					sHandler.post(new OnExceptionRun<List<NewsInfo>>(callback));
+					sHandler.post(new OnExceptionRun<List<TNewsInfo>>(callback));
 				} catch (JSONException e) {
 					e.printStackTrace();
-					sHandler.post(new OnExceptionRun<List<NewsInfo>>(callback));
+					sHandler.post(new OnExceptionRun<List<TNewsInfo>>(callback));
 				}
 			}
 
@@ -132,11 +132,11 @@ public class NewsBiz extends BaseBiz {
 			 * @param picList
 			 * @return
 			 */
-			private List<NewsInfo> savePicInfoList(List<NewsPictureInfo> picList) {
-				List<NewsInfo> desList = new ArrayList<NewsInfo>();
+			private List<TNewsInfo> savePicInfoList(List<NewsPictureInfo> picList) {
+				List<TNewsInfo> desList = new ArrayList<TNewsInfo>();
 				for (NewsPictureInfo npi : picList) {
-					NewsInfo ni = new NewsInfo();
-					ni.setType(NewsInfo.NEWS_TYPE_PICTURE);
+					TNewsInfo ni = new TNewsInfo();
+					ni.setType(TNewsInfo.NEWS_TYPE_PICTURE);
 					ni.setTitle(npi.getTitle());
 					ni.setId(npi.getInfoId());
 					ni.setChannelCode(npi.getChannelCode());
@@ -153,7 +153,7 @@ public class NewsBiz extends BaseBiz {
 		return f;
 	}
 
-	public Future<?> getNewsChannelUpdateTime(final String channelCode, final APCallback<Date> callback) {
+	public Future<?> getNewsChannelUpdateTime(final String channelCode, final IAPCallback<Date> callback) {
 
 		Future<?> f = sDefaultExecutor.submit(new Runnable() {
 
@@ -184,7 +184,7 @@ public class NewsBiz extends BaseBiz {
 		return f;
 	}
 
-	public Future<?> refreshChannelUpdateTime(final String channelCode, final APCallback<Date> callback) {
+	public Future<?> refreshChannelUpdateTime(final String channelCode, final IAPCallback<Date> callback) {
 		Future<?> f = sDefaultExecutor.submit(new Runnable() {
 
 			@Override
@@ -194,7 +194,7 @@ public class NewsBiz extends BaseBiz {
 					String url = String.format(URLs.URL_CHANNEL_UPDATE_TIME, URLs.baseURL) + "&channelcode=" + channelCode;
 					JSONObject jo = new JSONObject(WebUtils.requestWithGet(url));
 					Date date = mSdf.parse(jo.getString("lastupdatetime"));
-					SugarRecord.update(NewsChannel.class, "LAST_UPDATE_TIME", date.getTime() + "", "CODE = ?",
+					SugarRecord.update(TNewsChannel.class, "LAST_UPDATE_TIME", date.getTime() + "", "CODE = ?",
 							new String[] { channelCode });
 					sHandler.post(new OnDoneRun<Date>(callback, date));
 				} catch (IOException e) {
@@ -219,25 +219,25 @@ public class NewsBiz extends BaseBiz {
 	/**
 	 * 更新某频道，如果有推广图，需要更新推广图
 	 */
-	public Future<?> refreshChannel(final String channelCode, final APCallback<List<NewsInfo>> callback) {
+	public Future<?> refreshChannel(final String channelCode, final IAPCallback<List<TNewsInfo>> callback) {
 
 		Future<?> f = sDefaultExecutor.submit(new Runnable() {
 
 			@Override
 			public void run() {
-				SugarRecord.deleteAll(NewsInfo.class, "CHANNEL_CODE=?", channelCode);
-				SugarRecord.deleteAll(HeadPic.class,"CHANNEL_CODE=?",channelCode);
+				SugarRecord.deleteAll(TNewsInfo.class, "CHANNEL_CODE=?", channelCode);
+				SugarRecord.deleteAll(THeadPic.class,"CHANNEL_CODE=?",channelCode);
 				// 刷新推广信息
-				NewsChannel newsChannel = SugarRecord.findByProperty(NewsChannel.class, "CODE", channelCode);
+				TNewsChannel newsChannel = SugarRecord.findByProperty(TNewsChannel.class, "CODE", channelCode);
 				int showType = newsChannel.getShowType();
 				try {
-					if (showType == NewsChannel.SHOWTYPE_HEADLINE) {
+					if (showType == TNewsChannel.SHOWTYPE_HEADLINE) {
 
 						String url = String.format(URLs.URL_HEAD_PIC,URLs.baseURL) + "&channelcode=" + channelCode + "&webappcode="
 								+ AppContext.getInstance(mContext).getApp().getWebAppCode();
-						List<HeadPic> hList = WebUtils.requestList(url, HeadPic.class, "tgpic");
+						List<THeadPic> hList = WebUtils.requestList(url, THeadPic.class, "tgpic");
 
-						for (HeadPic hp : hList) {
+						for (THeadPic hp : hList) {
 							hp.setChannelCode(channelCode);
 							hp.save();
 						}
@@ -246,19 +246,19 @@ public class NewsBiz extends BaseBiz {
 					String url = String.format(URLs.URL_NEWS_LIST_OF_CHANNEL,URLs.baseURL) + "&channelcode=" + channelCode + "&pno=1&pernum="
 							+ URLs.PAGE_SIZE;
 
-					List<NewsInfo> infoList = WebUtils.requestList(url, NewsInfo.class, "info");
+					List<TNewsInfo> infoList = WebUtils.requestList(url, TNewsInfo.class, "info");
 
 					saveList(infoList, channelCode);
 					if (newsChannel.getLastUpdateTime() != null) {
 
-						SugarRecord.update(NewsChannel.class, "LOCAL_LAST_UPDATE_TIME", newsChannel.getLastUpdateTime()
+						SugarRecord.update(TNewsChannel.class, "LOCAL_LAST_UPDATE_TIME", newsChannel.getLastUpdateTime()
 								.getTime() + "", "CODE = ?", new String[] { channelCode });
 					}
 
-					sHandler.post(new OnDoneRun<List<NewsInfo>>(callback, infoList));
+					sHandler.post(new OnDoneRun<List<TNewsInfo>>(callback, infoList));
 				} catch(Exception e){
 					e.printStackTrace();
-					sHandler.post(new OnExceptionRun<List<NewsInfo>>(callback));
+					sHandler.post(new OnExceptionRun<List<TNewsInfo>>(callback));
 				}
 
 			}
@@ -266,9 +266,9 @@ public class NewsBiz extends BaseBiz {
 		return f;
 	}
 
-	public void saveList(List<NewsInfo> list, String channelCode) {
+	public void saveList(List<TNewsInfo> list, String channelCode) {
 		// 避免重复保存已经是推广信息的信息
-		List<NewsInfo> populationList = SugarRecord.find(NewsInfo.class, "CHANNEL_CODE = ? and POPULATION_TYPE > 0",
+		List<TNewsInfo> populationList = SugarRecord.find(TNewsInfo.class, "CHANNEL_CODE = ? and POPULATION_TYPE > 0",
 				new String[] { channelCode }, null, null, null);
 
 		String[] ids = new String[populationList.size()];
@@ -277,13 +277,13 @@ public class NewsBiz extends BaseBiz {
 		}
 
 		// 将收藏信息还原
-		List<Collection> cList = SugarRecord.listAll(Collection.class);
+		List<TCollection> cList = SugarRecord.listAll(TCollection.class);
 		int csize = cList.size();
 		String[] cids = new String[csize];
 		for (int i = -1; ++i < csize;) {
 			cids[i] = cList.get(i).getInfoId();
 		}
-		for (NewsInfo ni : list) {
+		for (TNewsInfo ni : list) {
 
 			// 判断是否已经存在
 			boolean isExist = false;
@@ -304,41 +304,41 @@ public class NewsBiz extends BaseBiz {
 			}
 
 			if (isExist) {
-				SugarRecord.updateById(NewsInfo.class, ni.getId(), new String[] { "PIC_URL", "SUMMARY", "PUB_TIME" },
+				SugarRecord.updateById(TNewsInfo.class, ni.getId(), new String[] { "PIC_URL", "SUMMARY", "PUB_TIME" },
 						new String[] { ni.getPicURL(), ni.getSummary(), ni.getPubTime().getTime() + "" });
 			} else {
 
 				ni.setChannelCode(channelCode);
-				// ni.setType(NewsInfo.NEWS_TYPE_NORAML);
+				// ni.setType(TNewsInfo.NEWS_TYPE_NORAML);
 				ni.setCommontNum(ni.getCommentNum());
 
 				ni.save();
 			}
 
 			if (isCollected) {
-				SugarRecord.updateById(NewsInfo.class, ni.getId(), "IS_COLLECTED", NewsInfo.COLLECTED + "");
+				SugarRecord.updateById(TNewsInfo.class, ni.getId(), "IS_COLLECTED", TNewsInfo.COLLECTED + "");
 			}
 
 		}
 	}
 
 
-	public List<HeadPic> getNewsPopulation(String channelCode) {
+	public List<THeadPic> getNewsPopulation(String channelCode) {
 
-		return SugarRecord.find(HeadPic.class, "CHANNEL_CODE = ?", new String[] {
+		return SugarRecord.find(THeadPic.class, "CHANNEL_CODE = ?", new String[] {
 				channelCode, }, null, "sort_id", null);
 	}
 
 	/** 获取到服务器info json，解析，下载图片，生成html保存到对象并持久化，最后返回 */
 
-	public NewsInfo getNewInfo(String newsInfoId, String channelCode) throws IOException, InterruptedException,JsonParseException {
+	public TNewsInfo getNewInfo(String newsInfoId, String channelCode) throws IOException, InterruptedException,JsonParseException {
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd hh:mm",Locale.CHINA);
 		String url = String.format(URLs.URL_NEWS_INFO, URLs.baseURL,URLs.appCode) + "&infoid=" + newsInfoId + "&channelcode=" + channelCode;
 
-		NewsInfo newsInfo = null;
+		TNewsInfo newsInfo = null;
 
 		/*
-		 * try { newsInfo = WebUtils.request(url, NewsInfo.class);
+		 * try { newsInfo = WebUtils.request(url, TNewsInfo.class);
 		 * newsInfo.setContent
 		 * (newsInfo.getTitle()+"<br/>"+mSdf.format(newsInfo.getPubTime
 		 * ())+"\n"+newsInfo.getContent()); } catch (IOException e) {
@@ -347,7 +347,7 @@ public class NewsBiz extends BaseBiz {
 		 */
 
 		// 如果数据库中不存在此信息，例如推送，搜索，需要先将本期多有信息均缓存然后做其他操作
-		newsInfo = SugarRecord.findById(NewsInfo.class, newsInfoId);
+		newsInfo = SugarRecord.findById(TNewsInfo.class, newsInfoId);
 		// 如果数据库中已经有content则直接返回info对象
 		// if (newsInfo != null && newsInfo.getContent() != null
 		// &&
@@ -358,7 +358,7 @@ public class NewsBiz extends BaseBiz {
 
 		try{
 			
-			newsInfo = WebUtils.request(url, NewsInfo.class);
+			newsInfo = WebUtils.request(url, TNewsInfo.class);
 		}catch(JsonParseException e){
 			throw e;
 		}
@@ -466,7 +466,7 @@ public class NewsBiz extends BaseBiz {
 		newsInfo.setContent(htmlStr);
 
 		Log.v("NewsBiz", "html构造完毕 更新Info 数据库");
-		SugarRecord.updateById(NewsInfo.class, newsInfoId, new String[] { "CONTENT", "SIZE" }, new String[] { htmlStr,
+		SugarRecord.updateById(TNewsInfo.class, newsInfoId, new String[] { "CONTENT", "SIZE" }, new String[] { htmlStr,
 				htmlStr.length() + "" });
 
 		return newsInfo;
@@ -499,24 +499,24 @@ public class NewsBiz extends BaseBiz {
 	}
 
 	public Future<?> getNewsInfo(final String newsInfoId, final String channelCode,
-			final APCallback<NewsInfo> callback) {
+			final IAPCallback<TNewsInfo> callback) {
 		Future<?> f = sDefaultExecutor.submit(new Runnable() {
 
 			@Override
 			public void run() {
 
 				try {
-					NewsInfo newsInfo = getNewInfo(newsInfoId, channelCode);
-					sHandler.post(new OnDoneRun<NewsInfo>(callback, newsInfo));
+					TNewsInfo newsInfo = getNewInfo(newsInfoId, channelCode);
+					sHandler.post(new OnDoneRun<TNewsInfo>(callback, newsInfo));
 				} catch (IOException e) {
 					e.printStackTrace();
-					sHandler.post(new OnExceptionRun<NewsInfo>(callback));
+					sHandler.post(new OnExceptionRun<TNewsInfo>(callback));
 				} catch (InterruptedException e) {
 					e.printStackTrace();
-					sHandler.post(new OnExceptionRun<NewsInfo>(callback));
+					sHandler.post(new OnExceptionRun<TNewsInfo>(callback));
 				}catch(JsonParseException e){
 					e.printStackTrace();
-					sHandler.post(new OnExceptionRun<NewsInfo>(callback));
+					sHandler.post(new OnExceptionRun<TNewsInfo>(callback));
 				}
 			}
 		});
@@ -526,7 +526,7 @@ public class NewsBiz extends BaseBiz {
 	}
 
 	public Future<?> getPicInfoPage(final String infoId, final int page,
-			final APCallback<List<NewsPictureInfo>> callback) {
+			final IAPCallback<List<NewsPictureInfo>> callback) {
 		Future<?> f = sDefaultExecutor.submit(new Runnable() {
 
 			@Override
@@ -556,51 +556,51 @@ public class NewsBiz extends BaseBiz {
 
 	public void rerangeChannelIndex(String channelType, int oldIndex, int newIndex) {
 		LogM.log(this.getClass(), "排序 名称：之前index" + oldIndex + "当前index：" + newIndex);
-		List<NewsChannel> list = SugarRecord.find(NewsChannel.class, "TYPE_ID= ? and DISPLAY_ORDER !=0",
+		List<TNewsChannel> list = SugarRecord.find(TNewsChannel.class, "TYPE_ID= ? and DISPLAY_ORDER !=0",
 				new String[] { channelType }, null, "DISPLAY_ORDER", null);
 		/*
 		 * 如果是向后移动则需要先将oldIndex+1~newIndex处的元素整体向前移动一个单位
 		 * 如果是向前移动则需要先将newIndex~oldIndex-1出的元素向后移动一个单位
 		 */
-		NewsChannel dragged = list.get(oldIndex);
+		TNewsChannel dragged = list.get(oldIndex);
 		if (newIndex > oldIndex) {
 
 			for (int i = oldIndex; i++ < newIndex;) {
-				NewsChannel temp = list.get(i);
+				TNewsChannel temp = list.get(i);
 
 				LogM.log(this.getClass(), "名称：" + temp.getName() + "从：+" + temp.getDisplayOrder() + "移动到" + i);
-				SugarRecord.update(NewsChannel.class, "DISPLAY_ORDER", i + "", "CODE = ?",
+				SugarRecord.update(TNewsChannel.class, "DISPLAY_ORDER", i + "", "CODE = ?",
 						new String[] { temp.getCode() });
 			}
 		} else if (oldIndex > newIndex) {
 			for (int i = oldIndex; i-- > newIndex;) {
-				NewsChannel temp = list.get(i);
+				TNewsChannel temp = list.get(i);
 
 				LogM.log(this.getClass(), "名称：" + temp.getName() + "从：+" + temp.getDisplayOrder() + "移动到" + i);
-				SugarRecord.update(NewsChannel.class, "DISPLAY_ORDER", (i + 2) + "", "CODE = ?",
+				SugarRecord.update(TNewsChannel.class, "DISPLAY_ORDER", (i + 2) + "", "CODE = ?",
 						new String[] { temp.getCode() });
 			}
 		}
 		// 将拖动的栏目最后移动到目的地，
-		SugarRecord.update(NewsChannel.class, "DISPLAY_ORDER", newIndex + 1 + "", "CODE = ?",
+		SugarRecord.update(TNewsChannel.class, "DISPLAY_ORDER", newIndex + 1 + "", "CODE = ?",
 				new String[] { dragged.getCode() });
 	}
 
 	public void removeChannel(String channelType, String channelCode) {
 		// 数据库中display_order设为0标识从已选中剔除，将之后的元素向前移位1
-		List<NewsChannel> listSelected = SugarRecord.find(NewsChannel.class, "TYPE_ID= ? and DISPLAY_ORDER !=0",
+		List<TNewsChannel> listSelected = SugarRecord.find(TNewsChannel.class, "TYPE_ID= ? and DISPLAY_ORDER !=0",
 				new String[] { channelType }, null, "DISPLAY_ORDER", null);
-		List<NewsChannel> list = SugarRecord.find(NewsChannel.class, "TYPE_ID= ? and CODE = ?", new String[] {
+		List<TNewsChannel> list = SugarRecord.find(TNewsChannel.class, "TYPE_ID= ? and CODE = ?", new String[] {
 				channelType, channelCode }, null, "DISPLAY_ORDER", null);
-		NewsChannel nc = list.get(0);
+		TNewsChannel nc = list.get(0);
 		int order = nc.getDisplayOrder();
 		int size = listSelected.size();
 		// 将选择的排序数设置为0
-		SugarRecord.update(NewsChannel.class, "DISPLAY_ORDER", "0", "CODE = ?", new String[] { nc.getCode() });
+		SugarRecord.update(TNewsChannel.class, "DISPLAY_ORDER", "0", "CODE = ?", new String[] { nc.getCode() });
 		// 将当前节点后的所有所有节点前移
 		for (int i = order; i < size; i++) {
-			NewsChannel temp = listSelected.get(i);
-			SugarRecord.update(NewsChannel.class, "DISPLAY_ORDER", i + "", "CODE = ?", new String[] { temp.getCode() });
+			TNewsChannel temp = listSelected.get(i);
+			SugarRecord.update(TNewsChannel.class, "DISPLAY_ORDER", i + "", "CODE = ?", new String[] { temp.getCode() });
 		}
 		LogM.log(this.getClass(), "删除：" + nc.getName());
 		// 将拖动的栏目先移动到目的地，
@@ -608,18 +608,18 @@ public class NewsBiz extends BaseBiz {
 
 	public void addChannel(String channelType, String channelCode) {
 		// 直接将节点增加至末尾,即将其排序数变为当前已选择的栏目数+1
-		List<NewsChannel> list = SugarRecord.find(NewsChannel.class, "TYPE_ID= ? and CODE = ?", new String[] {
+		List<TNewsChannel> list = SugarRecord.find(TNewsChannel.class, "TYPE_ID= ? and CODE = ?", new String[] {
 				channelType, channelCode }, null, null, null);
-		long count = SugarRecord.count(NewsChannel.class, "TYPE_ID= ? and DISPLAY_ORDER != 0",
+		long count = SugarRecord.count(TNewsChannel.class, "TYPE_ID= ? and DISPLAY_ORDER != 0",
 				new String[] { channelType });
-		NewsChannel nc = list.get(0);
+		TNewsChannel nc = list.get(0);
 		LogM.log(this.getClass(), "增加：" + nc.getName() + "到以选择列表：" + (count + 1));
-		SugarRecord.update(NewsChannel.class, "DISPLAY_ORDER", (count + 1) + "", "CODE = ?",
+		SugarRecord.update(TNewsChannel.class, "DISPLAY_ORDER", (count + 1) + "", "CODE = ?",
 				new String[] { nc.getCode() });
 	}
 
 	public Future<?> refreshNewsInfoCommontNum(String newsInfoId, String channelCode,
-			APCallback<Integer> callback) {
+			IAPCallback<Integer> callback) {
 
 		return null;
 	}

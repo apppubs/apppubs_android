@@ -9,7 +9,7 @@ import android.view.View.OnClickListener;
 
 import com.apppubs.bean.TMenuItem;
 import com.apppubs.ui.activity.HomeBaseActivity;
-import com.apppubs.bean.TitleMenu;
+import com.apppubs.bean.TTitleMenu;
 import com.apppubs.util.LogM;
 import com.apppubs.ui.widget.TitleBar;
 import com.apppubs.ui.activity.ViewCourier;
@@ -46,8 +46,8 @@ public class TitleMenuFragment extends BaseFragment{
 		Bundle args = getArguments();
 		
 		if(args!=null&&(mMenuId=args.getString(ARGS_MENU_ID))!=null){
-			mTitleMenuLeftList = SugarRecord.findWithQuery(TMenuItem.class, "select t1.id,t1.name,t1.url,t1.iconpic from MENU_ITEM t1 join TITLE_MENU t2 on t1.id = t2.menu_id where t2.type = ? and t2.super_menu_id = ?", TitleMenu.TYPE_LEFT+"",mMenuId);
-			mTitleMenuRightList = SugarRecord.findWithQuery(TMenuItem.class, "select t1.id,t1.name,t1.url,t1.iconpic from MENU_ITEM t1 join TITLE_MENU t2 on t1.id = t2.menu_id where t2.type = ? and t2.super_menu_id = ?",TitleMenu.TYPE_RIGHT+"",mMenuId);
+			mTitleMenuLeftList = SugarRecord.findWithQuery(TMenuItem.class, "select t1.id,t1.name,t1.url,t1.iconpic from MENU_ITEM t1 join TITLE_MENU t2 on t1.id = t2.menu_id where t2.type = ? and t2.super_menu_id = ?", TTitleMenu.TYPE_LEFT+"",mMenuId);
+			mTitleMenuRightList = SugarRecord.findWithQuery(TMenuItem.class, "select t1.id,t1.name,t1.url,t1.iconpic from MENU_ITEM t1 join TITLE_MENU t2 on t1.id = t2.menu_id where t2.type = ? and t2.super_menu_id = ?", TTitleMenu.TYPE_RIGHT+"",mMenuId);
 		}
 		
 		if(mTitleMenuLeftList!=null&&mTitleMenuLeftList.size()>0){

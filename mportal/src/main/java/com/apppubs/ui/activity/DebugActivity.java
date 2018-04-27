@@ -4,9 +4,9 @@ import java.util.List;
 
 import android.os.Bundle;
 
-import com.apppubs.bean.Msg;
+import com.apppubs.bean.TMsg;
 import com.apppubs.constant.APError;
-import com.apppubs.model.APCallback;
+import com.apppubs.model.IAPCallback;
 
 /**
  * 测试的activity
@@ -27,7 +27,7 @@ public class DebugActivity extends BaseActivity{
 		
 		super.onCreate(arg0);
 //		
-//		mMsgBussiness.sendTextMsg("fanyi", "ly", "南哥", new APCallback<Object>() {
+//		mMsgBussiness.sendTextMsg("fanyi", "ly", "南哥", new IAPCallback<Object>() {
 //			
 //			@Override
 //			public void onException(int excepCode) {
@@ -38,16 +38,16 @@ public class DebugActivity extends BaseActivity{
 //			}
 //		});
 		
-		mMsgBussiness.getChatList("ly", "fanyi", new APCallback<List<Msg>>() {
+		mMsgBussiness.getChatList("ly", "fanyi", new IAPCallback<List<TMsg>>() {
 			
 			@Override
 			public void onException(APError excepCode) {
 			}
 			
 			@Override
-			public void onDone(List<Msg> obj) {
+			public void onDone(List<TMsg> obj) {
 				
-				for(Msg m:obj){
+				for(TMsg m:obj){
 					System.out.println("发送者："+m.getSenderId()+"接受者："+m.getReceiverUsername()+"发送时间"+m.getSendTime()+"发送内容："+m.getContent());
 				}
 			}

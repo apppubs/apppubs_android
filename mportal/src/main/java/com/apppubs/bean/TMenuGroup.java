@@ -14,7 +14,7 @@ import com.orm.SugarRecord;
  * 2015年3月5日 by zhangwen create
  *
  */
-public class MenuGroup extends SugarRecord{
+public class TMenuGroup extends SugarRecord{
 	
 	public static final int STYLE_LIST = 0;
 	public static final int STYLE_GRID = 1;

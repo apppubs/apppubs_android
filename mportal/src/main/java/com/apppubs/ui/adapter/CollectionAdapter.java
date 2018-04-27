@@ -9,18 +9,18 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.TextView;
 
-import com.apppubs.bean.Collection;
+import com.apppubs.bean.TCollection;
 import com.apppubs.util.StringUtils;
 import com.apppubs.d20.R;
 import com.orm.SugarRecord;
 
 public class CollectionAdapter extends BaseAdapter {
 	private Context context;
-	private List<Collection> mList;
+	private List<TCollection> mList;
 	public CollectionAdapter(Context context) {
 		this.context = context;
-		mList = SugarRecord.find(Collection.class, "TYPE = ?", Collection.TYPE_NORMAL+"");
-		for(Collection c: mList){
+		mList = SugarRecord.find(TCollection.class, "TYPE = ?", TCollection.TYPE_NORMAL+"");
+		for(TCollection c: mList){
 			System.out.println(c.getTitle());
 		}
 	}
@@ -77,7 +77,7 @@ public class CollectionAdapter extends BaseAdapter {
 	class ViewHoder {
 		private TextView name, desc, time;
 	}
-	public  List<Collection> backcollection(){
+	public  List<TCollection> backcollection(){
 		return mList;
 	}
 }

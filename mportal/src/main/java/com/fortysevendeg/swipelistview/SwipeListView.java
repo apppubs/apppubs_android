@@ -462,7 +462,7 @@ public class SwipeListView extends ListView {
     }
 
     /**
-     * User start choice items
+     * TUser start choice items
      */
     protected void onChoiceStarted() {
         if (swipeListViewListener != null) {
@@ -471,7 +471,7 @@ public class SwipeListView extends ListView {
     }
 
     /**
-     * User end choice items
+     * TUser end choice items
      */
     protected void onChoiceEnded() {
         if (swipeListViewListener != null) {
@@ -480,7 +480,7 @@ public class SwipeListView extends ListView {
     }
 
     /**
-     * User is in first item of list
+     * TUser is in first item of list
      */
     protected void onFirstListItem() {
         if (swipeListViewListener != null) {
@@ -489,7 +489,7 @@ public class SwipeListView extends ListView {
     }
 
     /**
-     * User is in last item of list
+     * TUser is in last item of list
      */
     protected void onLastListItem() {
         if (swipeListViewListener != null) {

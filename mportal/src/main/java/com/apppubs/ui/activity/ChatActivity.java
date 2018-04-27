@@ -51,10 +51,10 @@ import com.android.volley.Response.Listener;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.apppubs.AppContext;
-import com.apppubs.bean.Msg;
+import com.apppubs.bean.TMsg;
 import com.apppubs.bean.UserInfo;
 import com.apppubs.constant.APError;
-import com.apppubs.model.APCallback;
+import com.apppubs.model.IAPCallback;
 import com.apppubs.model.MsgController;
 import com.apppubs.constant.Actions;
 import com.apppubs.exception.APUnavailableException;
@@ -93,7 +93,7 @@ public class ChatActivity extends BaseActivity implements OnClickListener {
 	private TextView sendBtn;
 	private ImageView mVoiceIv;
 	private boolean mVoiceMode = true;
-	private List<Msg> infos = new ArrayList<Msg>();
+	private List<TMsg> infos = new ArrayList<TMsg>();
 	private boolean mMorePannelOpen;
 	private String mPicPath;
 	private String mLastDateS;// 聊天的记录时间；
@@ -102,7 +102,7 @@ public class ChatActivity extends BaseActivity implements OnClickListener {
 	private List<LinearLayout> linLays = new ArrayList<LinearLayout>();
 	private RelativeLayout mRECingLayRl;// 显示声音录制
 	private TextView mRECTv;// 录制声音按钮
-	// private User mOtherUser;
+	// private TUser mOtherUser;
 	private String TAG = "ChatAcitivty";
 	private ImageView mVoiceChangpic;// 录音时图片更换
 	private ImageView mClickedIv;// 播放时图片更换
@@ -243,7 +243,7 @@ public class ChatActivity extends BaseActivity implements OnClickListener {
 		}
 		UserInfo currentUser = AppContext.getInstance(mContext).getCurrentUser();
 		mMsgBussiness.getChatGroupChatList(currentUser.getUsername(), mChatGroupId,deleteDateStr,
-				new APCallback<List<Msg>>() {
+				new IAPCallback<List<TMsg>>() {
 
 					@Override
 					public void onException(APError excepCode) {
@@ -251,7 +251,7 @@ public class ChatActivity extends BaseActivity implements OnClickListener {
 					}
 
 					@Override
-					public void onDone(List<Msg> obj) {
+					public void onDone(List<TMsg> obj) {
 						infos = obj;
 						System.out.println("获得的聊天信息 。。。。" + infos.toString());
 						mChatAdapter.setDate(obj);
@@ -280,7 +280,7 @@ public class ChatActivity extends BaseActivity implements OnClickListener {
 
 			@Override
 			public void onReceive(Context context, Intent intent) {
-				Msg msg = (Msg) intent.getExtras().getSerializable(Actions.EXTRA_MSG);
+				TMsg msg = (TMsg) intent.getExtras().getSerializable(Actions.EXTRA_MSG);
 				mChatAdapter.addItem(msg);
 				mChatAdapter.notifyDataSetChanged();
 				mListView.setSelection(mChatAdapter.getCount() - 1);
@@ -379,7 +379,7 @@ public class ChatActivity extends BaseActivity implements OnClickListener {
 							} else {
 								/*
 								 * mSystemBiz.getStandardDataTime(new
-								 * APCallback<Date>() {
+								 * IAPCallback<Date>() {
 								 * 
 								 * @Override public void onException(int
 								 * excepCode) { //
@@ -388,10 +388,10 @@ public class ChatActivity extends BaseActivity implements OnClickListener {
 								 * @Override public void onDone(Date obj) { //
 								 * obj } });
 								 */
-								Msg info = new Msg();
+								TMsg info = new TMsg();
 								UserInfo currentUser = AppContext.getInstance(mContext).getCurrentUser();
 								info.setSenderId(currentUser.getUsername());
-								info.setContentType(Msg.TYPE_CONTENT_SOUND);
+								info.setContentType(TMsg.TYPE_CONTENT_SOUND);
 								info.setLength(mVoiceDuration);
 								info.setVoiceLocation(mSoundPath);
 								info.setSendTime(new Date());
@@ -553,7 +553,7 @@ public class ChatActivity extends BaseActivity implements OnClickListener {
 		case R.id.chat_content_send:
 			final String count = mChatEt.getText().toString();
 			if (!TextUtils.isEmpty(count)) {
-				mSystemBiz.getStandardDataTime(new APCallback<Date>() {
+				mSystemBiz.getStandardDataTime(new IAPCallback<Date>() {
 
 					@Override
 					public void onException(APError excepCode) {
@@ -561,9 +561,9 @@ public class ChatActivity extends BaseActivity implements OnClickListener {
 
 					@Override
 					public void onDone(Date obj) {
-						Msg info = new Msg();
+						TMsg info = new TMsg();
 						info.setContent(count);
-						info.setContentType(Msg.TYPE_CONTENT_TEXT);
+						info.setContentType(TMsg.TYPE_CONTENT_TEXT);
 						info.setSendTime(obj);
 						info.setSenderId(AppContext.getInstance(mContext).getCurrentUser().getUsername());
 						infos.add(info);
@@ -577,7 +577,7 @@ public class ChatActivity extends BaseActivity implements OnClickListener {
 						// String receiverUsername =
 						// mChatType==CHAT_TYPE_SINGLE?mOtherUser.getUsername():"";
 						mMsgBussiness.sendTextMsg(AppContext.getInstance(mContext).getCurrentUser().getUsername(), "", groupId,
-								info.getContent(), new APCallback<Object>() {
+								info.getContent(), new IAPCallback<Object>() {
 
 									@Override
 									public void onException(APError excepCode) {
@@ -748,9 +748,9 @@ public class ChatActivity extends BaseActivity implements OnClickListener {
 					}
 				}
 
-				Msg msg = new Msg();
+				TMsg msg = new TMsg();
 				msg.setPicLocation("file://" + smallImagePath);
-				msg.setContentType(Msg.TYPE_CONTENT_IMAGE);
+				msg.setContentType(TMsg.TYPE_CONTENT_IMAGE);
 				msg.setSenderId(AppContext.getInstance(mContext).getCurrentUser().getUsername());
 				msg.setSendTime(new Date());
 				// msg.setReceiverUsername(mOtherUser.getUsername());
@@ -791,9 +791,9 @@ public class ChatActivity extends BaseActivity implements OnClickListener {
 						}
 					}
 				}
-				Msg info = new Msg();
+				TMsg info = new TMsg();
 				info.setSenderId(AppContext.getInstance(mContext).getCurrentUser().getUsername());
-				info.setContentType(Msg.TYPE_CONTENT_IMAGE);
+				info.setContentType(TMsg.TYPE_CONTENT_IMAGE);
 				info.setPicLocation( pic);
 				info.setSendTime(new Date());
 				infos.add(info);
@@ -832,9 +832,9 @@ public class ChatActivity extends BaseActivity implements OnClickListener {
 				// // return
 				// putBackpic(bitmap);
 				// String picName = System.currentTimeMillis()+".p";
-				// Msg msg = new Msg();
+				// TMsg msg = new TMsg();
 				// msg.setPicLocation("file:///"+picturePath);
-				// msg.setContentType(Msg.TYPE_CONTENT_IMAGE);
+				// msg.setContentType(TMsg.TYPE_CONTENT_IMAGE);
 				// msg.setSenderUsername(MportalApplication.user.getUsername());
 				// msg.setReceiverUsername(mOtherUser.getUsername());
 				// infos.add(msg);
@@ -846,7 +846,7 @@ public class ChatActivity extends BaseActivity implements OnClickListener {
 				// if(mChatType==CHAT_TYPE_SINGLE){
 				//
 				// mMsgBussiness.sendVideoMsg(MportalApplication.user.getUsername(),mOtherUser.getUsername(),videoPath,new
-				// APCallback<Object>() {
+				// IAPCallback<Object>() {
 				//
 				// @Override
 				// public void onException(int excepCode) {
@@ -859,7 +859,7 @@ public class ChatActivity extends BaseActivity implements OnClickListener {
 				//
 				// mMsgBussiness.getChatList(mOtherUser.getUsername(),
 				// MportalApplication.user.getUsername(),
-				// new APCallback<List<Msg>>() {
+				// new IAPCallback<List<TMsg>>() {
 				//
 				// @Override
 				// public void onException(int excepCode) {
@@ -867,7 +867,7 @@ public class ChatActivity extends BaseActivity implements OnClickListener {
 				// }
 				//
 				// @Override
-				// public void onDone(List<Msg> obj) {
+				// public void onDone(List<TMsg> obj) {
 				// ProgressHUD.dismissProgressHUDInThisContext(ChatActivity.this);
 				// infos = obj;
 				// System.out.println("获得的聊天信息 。。。。" + infos.toString());
@@ -883,7 +883,7 @@ public class ChatActivity extends BaseActivity implements OnClickListener {
 				// }else{
 				// }
 				mMsgBussiness.sendGroupVideoMsg(AppContext.getInstance(mContext).getCurrentUser().getUsername(), mChatGroupId, videoPath,
-						new APCallback<Object>() {
+						new IAPCallback<Object>() {
 
 							@Override
 							public void onException(APError excepCode) {
@@ -898,7 +898,7 @@ public class ChatActivity extends BaseActivity implements OnClickListener {
 									deleteDateStr = map.get(mChatGroupId);
 								}
 								mMsgBussiness.getChatGroupChatList(AppContext.getInstance(mContext).getCurrentUser().getUsername(), mChatGroupId,deleteDateStr,
-										new APCallback<List<Msg>>() {
+										new IAPCallback<List<TMsg>>() {
 
 											@Override
 											public void onException(APError excepCode) {
@@ -906,7 +906,7 @@ public class ChatActivity extends BaseActivity implements OnClickListener {
 											}
 
 											@Override
-											public void onDone(List<Msg> obj) {
+											public void onDone(List<TMsg> obj) {
 												ProgressHUD.dismissProgressHUDInThisContext(ChatActivity.this);
 												infos = obj;
 												System.out.println("获得的聊天信息 。。。。" + infos.toString());
@@ -960,7 +960,7 @@ public class ChatActivity extends BaseActivity implements OnClickListener {
 	}
 
 	private void putBackpic(final Bitmap bitmap) {
-		mSystemBiz.getStandardDataTime(new APCallback<Date>() {
+		mSystemBiz.getStandardDataTime(new IAPCallback<Date>() {
 
 			@Override
 			public void onException(APError excepCode) {
@@ -970,7 +970,7 @@ public class ChatActivity extends BaseActivity implements OnClickListener {
 			@Override
 			public void onDone(Date obj) {
 				// obj
-				Msg info = new Msg();
+				TMsg info = new TMsg();
 				info.setSenderId(AppContext.getInstance(mContext).getCurrentUser().getUsername());
 				info.setContentType(2);// 图片
 				info.setSendTime(obj);

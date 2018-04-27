@@ -21,11 +21,11 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.apppubs.AppContext;
+import com.apppubs.bean.TNewsInfo;
 import com.apppubs.constant.APError;
-import com.apppubs.model.APCallback;
+import com.apppubs.model.IAPCallback;
 import com.apppubs.ui.adapter.ViewHolder;
 import com.apppubs.bean.Comment;
-import com.apppubs.bean.NewsInfo;
 import com.apppubs.util.LogM;
 import com.apppubs.util.Tools;
 import com.apppubs.ui.widget.commonlist.CommonListView;
@@ -75,9 +75,9 @@ public class CommentActivity extends BaseActivity {
 					Toast.makeText(getApplication(), "提交成功", Toast.LENGTH_SHORT).show();
 					switch (NEWSTYPE) {
 					case 0:
-						// SugarRecord.find(NewsInfo.class, "INFOID",
+						// SugarRecord.find(TNewsInfo.class, "INFOID",
 						// whereArgs);
-						SugarRecord.updateById(NewsInfo.class, mInfoId, "IS_COLLECTED", 1 + "");
+						SugarRecord.updateById(TNewsInfo.class, mInfoId, "IS_COLLECTED", 1 + "");
 						break;
 					}
 					mCurPage = 1;
@@ -256,7 +256,7 @@ public class CommentActivity extends BaseActivity {
 
 	private void getPage(final int page) {
 
-		mSystemBiz.getStandardDataTime(new APCallback<Date>() {
+		mSystemBiz.getStandardDataTime(new IAPCallback<Date>() {
 
 			@Override
 			public void onException(APError excepCode) {
@@ -267,7 +267,7 @@ public class CommentActivity extends BaseActivity {
 				
 				mStandardDateTime = obj;
 				LogM.log(this.getClass(), "当前服务器时间：" + mStandardDateTime.toString());
-				mSystemBiz.getCommentList(mInfoId, mCurPage, 10, URLs.CLIENTKEY, new APCallback<List<Comment>>() {
+				mSystemBiz.getCommentList(mInfoId, mCurPage, 10, URLs.CLIENTKEY, new IAPCallback<List<Comment>>() {
 
 					@Override
 					public void onException(APError excepCode) {

@@ -31,7 +31,7 @@ import com.apppubs.bean.UserInfo;
 import com.apppubs.constant.APError;
 import com.apppubs.constant.URLs;
 import com.apppubs.d20.R;
-import com.apppubs.model.APCallback;
+import com.apppubs.model.IAPCallback;
 import com.apppubs.model.UserBiz;
 import com.apppubs.ui.widget.ProgressHUD;
 import com.apppubs.util.JSONResult;
@@ -248,7 +248,7 @@ public class FirstLoginActity extends BaseActivity implements ErrorListener, Asy
 			Toast.makeText(getApplication(), "请输入密码", Toast.LENGTH_LONG).show();
 		} else {
 			mProgressHUD = ProgressHUD.show(this, "系统登录中", true, false, null);
-			UserBiz.getInstance(mContext).loginWithUsernameAndPwd(username,password,autoLogin,new APCallback<UserInfo>(){
+			UserBiz.getInstance(mContext).loginWithUsernameAndPwd(username,password,autoLogin,new IAPCallback<UserInfo>(){
 
 				@Override
 				public void onDone(UserInfo obj) {
@@ -263,30 +263,30 @@ public class FirstLoginActity extends BaseActivity implements ErrorListener, Asy
 				}
 			});
 		}
-
 	}
 
 	private void loginWithPhone(final String phone) {
-
 		ProgressHUD.show(this);
 
-		String url = String.format(URLs.URL_LOGIN_WITH_PHONE, URLs.baseURL, URLs.appCode, phone, mSystemBiz.getMachineId());
-		LogM.log(this.getClass(), "请求url:" + url);
-		mRequestQueue.add(new StringRequest(url, new Listener<String>() {
-
-			@Override
-			public void onResponse(String response) {
-				onLoginWithPhoneDone(phone, response);
-			}
-
-		}, new ErrorListener() {
-
-			@Override
-			public void onErrorResponse(VolleyError arg0) {
+		UserBiz.getInstance(this).loginWithPhone(phone, new IAPCallback<String>() {
+            @Override
+            public void onDone(String username) {
 				ProgressHUD.dismissProgressHUDInThisContext(FirstLoginActity.this);
-				Toast.makeText(FirstLoginActity.this, "网络错误", Toast.LENGTH_SHORT).show();
-			}
-		}));
+
+                Intent intent = new Intent(mContext, VerificationCodeActivity.class);
+                Bundle extras = new Bundle();
+                extras.putString(VerificationCodeActivity.EXTRA_STRING_PHONE, phone);
+                extras.putString(VerificationCodeActivity.EXTRA_STRING_USERNAME, username);
+                intent.putExtras(extras);
+                startActivityForResult(intent, REQUEST_CODE_VERIFICATION);
+            }
+
+            @Override
+            public void onException(APError error) {
+                ProgressHUD.dismissProgressHUDInThisContext(FirstLoginActity.this);
+                mErrorHandler.onError(error);
+            }
+        });
 	}
 
 	private void loginWithUsername(String username) {
@@ -322,33 +322,6 @@ public class FirstLoginActity extends BaseActivity implements ErrorListener, Asy
 				Toast.makeText(FirstLoginActity.this, "网络错误", Toast.LENGTH_SHORT).show();
 			}
 		}));
-	}
-
-	private void onLoginWithPhoneDone(final String phone, String response) {
-		ProgressHUD.dismissProgressHUDInThisContext(FirstLoginActity.this);
-
-		try {
-			JSONObject jo = new JSONObject(response);
-			int result = jo.getInt("result");
-			if (result == 2) {
-				enterHome();
-			} else if (result == 1) {
-				mLoginingUser = new UserInfo(jo.getString("userid"), jo.getString("username"), jo.getString("cnname"), "",
-						jo.getString("email"), jo.getString("mobile"));
-				Intent intent = new Intent(this, VerificationCodeActivity.class);
-				Bundle extras = new Bundle();
-				extras.putString(VerificationCodeActivity.EXTRA_STRING_PHONE, phone);
-				extras.putString(VerificationCodeActivity.EXTRA_STRING_USERNAME, mLoginingUser.getUsername());
-				intent.putExtras(extras);
-				startActivityForResult(intent, REQUEST_CODE_VERIFICATION);
-
-			} else {
-				Toast.makeText(this, jo.getString("resultreason"), Toast.LENGTH_SHORT).show();
-			}
-
-		} catch (JSONException e) {
-			e.printStackTrace();
-		}
 	}
 
 	private void onLoginWithUsernameDone(String response) {

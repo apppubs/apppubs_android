@@ -9,7 +9,7 @@ import com.orm.SugarRecord;
  * @author zhangwen 2014-12-28
  *
  */
-public class Collection extends SugarRecord{
+public class TCollection extends SugarRecord{
 	
 	/**
 	 * 普通收藏
@@ -49,8 +49,8 @@ public class Collection extends SugarRecord{
 	 * @param contentAbs
 	 * @param channelCode
 	 */
-	public Collection(String infoId, String title, Date addTime, int type,
-			String contentAbs, String channelCode) {
+	public TCollection(String infoId, String title, Date addTime, int type,
+					   String contentAbs, String channelCode) {
 		super();
 		this.infoId = infoId;
 		this.title = title;
@@ -60,7 +60,7 @@ public class Collection extends SugarRecord{
 		this.channelCode = channelCode;
 	}
 
-	public Collection(){
+	public TCollection(){
 		super();
 	}
 	public String getInfoId() {

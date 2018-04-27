@@ -16,10 +16,10 @@ import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import com.apppubs.bean.TUser;
 import com.apppubs.ui.fragment.BaseFragment;
 import com.apppubs.d20.R;
 import com.apppubs.ui.adbook.UserInfoActivity;
-import com.apppubs.bean.User;
 
 public class AddressBookUserListFragment extends BaseFragment implements OnClickListener{
 
@@ -29,7 +29,7 @@ public class AddressBookUserListFragment extends BaseFragment implements OnClick
 	private View mRootView;
 	private ListView mLv;
 
-	private List<User> mUserL;
+	private List<TUser> mUserL;
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -70,7 +70,7 @@ public class AddressBookUserListFragment extends BaseFragment implements OnClick
 				}else{
 					holder = (ViewHolder) convertView.getTag();
 				}
-				User user = mUserL.get(position);
+				TUser user = mUserL.get(position);
 				holder.tv.setText(user.getTrueName());
 //				holder.telTv.setText(user.getWorkTEL());
 				

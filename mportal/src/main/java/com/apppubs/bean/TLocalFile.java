@@ -9,7 +9,7 @@ import com.orm.SugarRecord;
  * @since 2015-05-28
  *
  */
-public class LocalFile extends SugarRecord{
+public class TLocalFile extends SugarRecord{
 
 	public static int TYPE_UNKNOW = 0;
 	public static int TYPE_PIC = 1;

@@ -13,7 +13,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.PopupWindow;
 
-import com.apppubs.bean.User;
+import com.apppubs.bean.TUser;
 import com.apppubs.AppContext;
 import com.apppubs.ui.fragment.BaseFragment;
 import com.apppubs.d20.R;
@@ -117,7 +117,7 @@ public class ConversationListFragment extends BaseFragment implements View.OnCli
                                 String title = getTitleName(userIds);
                                 RongIM.getInstance().createDiscussionChat(mContext,userIds,title);
                             }else {
-                                User user = mUserBussiness.getUserByUserId(userIds.get(0));
+                                TUser user = mUserBussiness.getUserByUserId(userIds.get(0));
                                 RongIM.getInstance().startConversation(mContext,Conversation.ConversationType.PRIVATE,userIds.get(0),user.getTrueName());
                             }
                         }
@@ -131,7 +131,7 @@ public class ConversationListFragment extends BaseFragment implements View.OnCli
                                 titleSb.append("...");
                                 break;
                             }
-                            User user = mUserBussiness.getUserByUserId(userIds.get(i));
+                            TUser user = mUserBussiness.getUserByUserId(userIds.get(i));
                             String trueName = user.getTrueName();
                             if (titleSb.length()>0){
                                 titleSb.append("、");

@@ -40,7 +40,7 @@ import com.apppubs.bean.App;
 import com.apppubs.bean.UserInfo;
 import com.apppubs.bean.Weather;
 import com.apppubs.ui.fragment.BaseFragment;
-import com.apppubs.model.APCallback;
+import com.apppubs.model.IAPCallback;
 import com.apppubs.service.DownloadAppService;
 import com.apppubs.util.LogM;
 import com.apppubs.util.ServiceUtils;
@@ -207,7 +207,7 @@ public class HomeSlideMenuActivity extends HomeBaseActivity implements OnItemCli
 				public void onClick(View arg0) {
 					// 更新服务正在运行
 
-					mSystemBiz.update(new APCallback<String[]>() {
+					mSystemBiz.update(new IAPCallback<String[]>() {
 
 						@Override
 						public void onException(APError excepCode) {

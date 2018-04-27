@@ -28,7 +28,7 @@ import com.apppubs.constant.APError;
 import com.apppubs.util.LogM;
 import com.apppubs.ui.widget.ZoomImageView;
 import com.apppubs.d20.R;
-import com.apppubs.model.APCallback;
+import com.apppubs.model.IAPCallback;
 
 public class ChatPicInfoActivity extends BaseActivity implements OnClickListener {
 	private ViewPager mViewPager;
@@ -92,7 +92,7 @@ public class ChatPicInfoActivity extends BaseActivity implements OnClickListener
 			MediaStore.Images.Media.insertImage(getContentResolver(), bit, "标题", "描述");
 		} else {
 
-			mMsgBussiness.writePicUrlSD(mPicPath, file, new APCallback<String>() {
+			mMsgBussiness.writePicUrlSD(mPicPath, file, new IAPCallback<String>() {
 
 				@Override
 				public void onException(APError excepCode) {

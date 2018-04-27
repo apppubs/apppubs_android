@@ -10,7 +10,7 @@ import com.orm.SugarRecord;
  * 频道(栏目)
  *
  */
-public class NewsChannel extends SugarRecord implements Serializable{
+public class TNewsChannel extends SugarRecord implements Serializable{
 	
 	
 	/**

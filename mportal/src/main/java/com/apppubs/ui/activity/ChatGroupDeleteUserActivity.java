@@ -25,8 +25,8 @@ import com.android.volley.Response.Listener;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.apppubs.AppContext;
+import com.apppubs.bean.TUser;
 import com.apppubs.ui.adapter.ViewHolder;
-import com.apppubs.bean.User;
 import com.apppubs.util.JSONResult;
 import com.apppubs.ui.widget.ConfirmDialog;
 import com.apppubs.d20.R;
@@ -43,8 +43,8 @@ public class ChatGroupDeleteUserActivity extends BaseActivity {
 	private String mGroupUsernames;
 	private String[] mIconColors = {"#F44336","#9C27B0","#3F51B5","#03A9F4","#009688","#009688","#FF9800"};
 	private ListView mListView;
-	private List<User> mCheckedUserList;
-	private List<User> mDeletableUserList;
+	private List<TUser> mCheckedUserList;
+	private List<TUser> mDeletableUserList;
 	
 	@Override
 	protected void onCreate(Bundle bundle) {
@@ -63,17 +63,17 @@ public class ChatGroupDeleteUserActivity extends BaseActivity {
 			sb.append("'");
 		}
 		
-		mDeletableUserList = SugarRecord.find(User.class, "username in ("+sb.toString()+")", null,null,null,null);
+		mDeletableUserList = SugarRecord.find(TUser.class, "username in ("+sb.toString()+")", null,null,null,null);
 		
 		setContentView(R.layout.act_chat_group_delete_user);
 		mListView = (ListView) findViewById(R.id.chat_group_delete_user_lv);
 		mListView.setEmptyView(findViewById(R.id.chat_group_delete_empty_tv));
-		mListView.setAdapter(new CommonAdapter<User>(ChatGroupDeleteUserActivity.this, mDeletableUserList, R.layout.item_chat_group_delete_user) {
+		mListView.setAdapter(new CommonAdapter<TUser>(ChatGroupDeleteUserActivity.this, mDeletableUserList, R.layout.item_chat_group_delete_user) {
 
 			@SuppressWarnings("deprecation")
 			@SuppressLint("NewApi") 
 			@Override
-			protected void fillValues(ViewHolder holder, User bean, int position) {
+			protected void fillValues(ViewHolder holder, TUser bean, int position) {
 				TextView nameTv = holder.getView(R.id.chat_group_delete_user_name_tv);
 				String truename = bean.getTrueName().trim();
 				nameTv.setText(truename);
@@ -105,9 +105,9 @@ public class ChatGroupDeleteUserActivity extends BaseActivity {
 			@Override
 			public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 				if(mCheckedUserList==null){
-					mCheckedUserList = new ArrayList<User>();
+					mCheckedUserList = new ArrayList<TUser>();
 				}
-				User selectedUser = mDeletableUserList.get(position);
+				TUser selectedUser = mDeletableUserList.get(position);
 				if(mCheckedUserList.contains(selectedUser)){
 					mCheckedUserList.remove(selectedUser);
 					view.findViewById(R.id.chat_group_delete_user_checkbox_checked_iv).setVisibility(View.GONE);

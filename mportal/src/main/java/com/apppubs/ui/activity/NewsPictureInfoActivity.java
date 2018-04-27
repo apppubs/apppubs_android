@@ -26,12 +26,12 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.apppubs.bean.Collection;
+import com.apppubs.bean.TCollection;
 import com.apppubs.bean.Comment;
-import com.apppubs.bean.NewsInfo;
+import com.apppubs.bean.TNewsInfo;
 import com.apppubs.bean.NewsPictureInfo;
 import com.apppubs.constant.APError;
-import com.apppubs.model.APCallback;
+import com.apppubs.model.IAPCallback;
 import com.apppubs.util.LogM;
 import com.apppubs.util.ShareTools;
 import com.apppubs.util.Utils;
@@ -64,7 +64,7 @@ public class NewsPictureInfoActivity extends BaseActivity implements OnPageChang
 	private List<ZoomImageView> mPicList;
 	private LinearLayout mBottomMenu;
 	private List<NewsPictureInfo> mNewsPicInfoList;
-	private NewsInfo mNewsInfo;
+	private TNewsInfo mNewsInfo;
 
 	private LinearLayout mBottomLay;// 底部显示
 	private boolean animFlag = true;// 动画标志位
@@ -102,7 +102,7 @@ public class NewsPictureInfoActivity extends BaseActivity implements OnPageChang
 		.build();
 		
 		mFuture = mNewsBiz.getPicInfoPage(mInfoId,
-				1, new APCallback<List<NewsPictureInfo>>() {
+				1, new IAPCallback<List<NewsPictureInfo>>() {
 
 					@Override
 					public void onException(APError excepCode) {
@@ -152,9 +152,9 @@ public class NewsPictureInfoActivity extends BaseActivity implements OnPageChang
 		mVp.setOnPageChangeListener(this);
 		mVp.setOnClickListener(this);
 		mCommentTv.setOnClickListener(this);
-		mNewsInfo = SugarRecord.findById(NewsInfo.class, mInfoId);
+		mNewsInfo = SugarRecord.findById(TNewsInfo.class, mInfoId);
 		if(mNewsInfo==null){
-			mNewsInfo = new NewsInfo();
+			mNewsInfo = new TNewsInfo();
 			mNewsInfo.setId(mInfoId);
 		}
 	}
@@ -195,13 +195,13 @@ public class NewsPictureInfoActivity extends BaseActivity implements OnPageChang
 		case R.id.bottom_info_bar_save:
 			String title = mNewsPicInfoList.get(0).getTitle();
 			String summy = mNewsPicInfoList.get(0).getDescription();
-			boolean isCollected = mNewsInfo.getIsCollected() == NewsInfo.UNCOLLECTED;
+			boolean isCollected = mNewsInfo.getIsCollected() == TNewsInfo.UNCOLLECTED;
 			if (isCollected) {
 				mNewsInfo.setIsCollected(1);
 			} else {
 				mNewsInfo.setIsCollected(0);
 			}
-			Utils.toggleCollect(Collection.TYPE_PIC, NewsPictureInfoActivity.this, isCollected, mInfoId, title, summy,
+			Utils.toggleCollect(TCollection.TYPE_PIC, NewsPictureInfoActivity.this, isCollected, mInfoId, title, summy,
 					mSaveImagview);
 			break;
 		case R.id.bottom_info_bar_share:
@@ -218,7 +218,7 @@ public class NewsPictureInfoActivity extends BaseActivity implements OnPageChang
 		case R.id.bottom_info_bar_comment_i:
 			Intent intent = new Intent(NewsPictureInfoActivity.this, CommentActivity.class);
 			intent.putExtra(CommentActivity.EXTRA_STRING_NAME_ID, mInfoId);
-			intent.putExtra(CommentActivity.NEWSTYPESTRING, NewsInfo.NEWS_TYPE_PICTURE);// 4图片
+			intent.putExtra(CommentActivity.NEWSTYPESTRING, TNewsInfo.NEWS_TYPE_PICTURE);// 4图片
 			startActivity(intent);
 			overridePendingTransition(android.R.anim.slide_in_left, android.R.anim.slide_out_right);
 			break;
@@ -296,7 +296,7 @@ public class NewsPictureInfoActivity extends BaseActivity implements OnPageChang
 	}
 
 	public Comment initCommentCount() {
-		mSystemBiz.getCommentSizeZanCai(mInfoId, new APCallback<Comment>() {
+		mSystemBiz.getCommentSizeZanCai(mInfoId, new IAPCallback<Comment>() {
 			@Override
 			public void onException(APError excepCode) {
 				// TODO Auto-generated method stub

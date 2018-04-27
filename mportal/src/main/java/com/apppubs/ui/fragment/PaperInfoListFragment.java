@@ -20,12 +20,12 @@ import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import com.apppubs.bean.TPaperInfo;
 import com.apppubs.ui.activity.PaperInfoActivity;
 import com.apppubs.ui.activity.PaperIssueActivity;
 import com.apppubs.ui.adapter.CommonAdapter;
-import com.apppubs.bean.PaperInfo;
 import com.apppubs.ui.adapter.ViewHolder;
-import com.apppubs.bean.PaperCatalog;
+import com.apppubs.bean.TPaperCatalog;
 import com.apppubs.util.LogM;
 import com.apppubs.MportalApplication;
 import com.apppubs.d20.R;
@@ -45,7 +45,7 @@ public class PaperInfoListFragment extends BaseFragment implements OnScrollListe
 
 	private DisplayImageOptions mImageLoaderOptions;
 	private PaperIssueActivity mHostActivity;
-	private List<PaperCatalog> mCatalogList;
+	private List<TPaperCatalog> mCatalogList;
 	private ListView lv;
 	private TextView mTextflag;
 
@@ -146,11 +146,11 @@ public class PaperInfoListFragment extends BaseFragment implements OnScrollListe
 				mBanbiaoti.setVisibility(View.VISIBLE);
 			}
 			mBanbiaoti.setText(mCatalogList.get(pos).getName());
-			mSecondLv.setAdapter(new CommonAdapter<PaperInfo>(mHostActivity, mCatalogList.get(pos).getInfoList(),
+			mSecondLv.setAdapter(new CommonAdapter<TPaperInfo>(mHostActivity, mCatalogList.get(pos).getInfoList(),
 					R.layout.item_frg_paperissuelist) {
 
 				@Override
-				protected void fillValues(ViewHolder holder, PaperInfo bean, int position) {
+				protected void fillValues(ViewHolder holder, TPaperInfo bean, int position) {
 					TextView titleTv = holder.getView(R.id.item_frg_paperissuelist_name);
 					ImageView iv = holder.getView(R.id.item_frg_paperissuelist_img_iv);
 					if (!TextUtils.isEmpty(bean.getPic1())) {
@@ -166,7 +166,7 @@ public class PaperInfoListFragment extends BaseFragment implements OnScrollListe
 
 				@Override
 				public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-					PaperInfo info = (PaperInfo) parent.getAdapter().getItem(position);
+					TPaperInfo info = (TPaperInfo) parent.getAdapter().getItem(position);
 					Intent intent = new Intent(getActivity(), PaperInfoActivity.class);
 					intent.putExtra(PaperInfoActivity.EXTRA_STRING_ID, info.getId());
 					getActivity().startActivity(intent);

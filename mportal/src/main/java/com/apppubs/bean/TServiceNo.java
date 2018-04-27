@@ -17,7 +17,7 @@ import com.orm.SugarRecord;
  * 2015-05-22 增加type类型
  *
  */
-public class ServiceNo extends SugarRecord{
+public class TServiceNo extends SugarRecord{
 
 	public static final int TYPE_SYSTEM = 0;
 	public static final int TYPE_THIRD_PARTY = 1;
@@ -122,7 +122,7 @@ public class ServiceNo extends SugarRecord{
 
 	@Override
 	public String toString() {
-		return "ServiceNo [id=" + id + ", name=" + name + ", picURL=" + picURL + ", desc=" + desc + ", createDate="
+		return "TServiceNo [id=" + id + ", name=" + name + ", picURL=" + picURL + ", desc=" + desc + ", createDate="
 				+ createDate + ", sortId=" + sortId + "]";
 	}
 

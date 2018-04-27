@@ -11,18 +11,18 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.apppubs.bean.TUser;
 import com.apppubs.constant.APError;
 import com.apppubs.ui.adapter.CommonAdapter;
 import com.apppubs.AppContext;
 import com.apppubs.d20.R;
 import com.apppubs.ui.activity.BaseActivity;
 import com.apppubs.ui.adapter.ViewHolder;
-import com.apppubs.bean.User;
 import com.apppubs.model.message.ConversationModel;
 import com.apppubs.model.message.TranspondDataHelper;
 import com.apppubs.model.message.UserBussiness;
 import com.apppubs.model.message.UserPickerHelper;
-import com.apppubs.model.APCallback;
+import com.apppubs.model.IAPCallback;
 import com.apppubs.model.myfile.CacheListener;
 import com.apppubs.model.myfile.FileCacheErrorCode;
 import com.apppubs.ui.widget.ConfirmDialog;
@@ -66,7 +66,7 @@ public class TranspondActivity extends BaseActivity {
 
 	private void loadData() {
 
-		TranspondDataHelper.getInstance(this).fetchData(new APCallback<List<ConversationModel>>() {
+		TranspondDataHelper.getInstance(this).fetchData(new IAPCallback<List<ConversationModel>>() {
 			@Override
 			public void onDone(List<ConversationModel> modelList) {
 
@@ -116,7 +116,7 @@ public class TranspondActivity extends BaseActivity {
 					@Override
 					public void onPickDone(List<String> userIds) {
 						if (userIds != null && userIds.size() > 0) {
-							User user = UserBussiness.getInstance(mContext).getUserByUserId(userIds.get(0));
+							TUser user = UserBussiness.getInstance(mContext).getUserByUserId(userIds.get(0));
 							ConversationModel model = new ConversationModel(userIds.get(0), Conversation.ConversationType.PRIVATE, user.getTrueName(), "");
 							showSendAlert(model);
 						}

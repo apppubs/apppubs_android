@@ -27,12 +27,12 @@ import com.android.volley.Response.Listener;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.apppubs.AppContext;
-import com.apppubs.bean.ServiceNOInfo;
+import com.apppubs.bean.TServiceNOInfo;
 import com.apppubs.constant.APError;
+import com.apppubs.model.IAPCallback;
 import com.apppubs.model.MsgController;
 import com.apppubs.d20.R;
 import com.apppubs.ui.activity.ContainerActivity;
-import com.apppubs.model.APCallback;
 import com.apppubs.constant.URLs;
 import com.apppubs.util.StringUtils;
 import com.apppubs.util.SystemUtils;
@@ -50,7 +50,7 @@ public class ServiceNoInfoListFragement extends BaseFragment {
 	private LinearLayout mprogress;
 	private CommonListView mLv;
 	private HistoryAdapter adapter;
-	private List<ServiceNOInfo> mInfos;
+	private List<TServiceNOInfo> mInfos;
 	private int mCurPage = 1;
 	private LinearLayout mEmptyLl;
 	private TextView mEmptyText;
@@ -121,7 +121,7 @@ public class ServiceNoInfoListFragement extends BaseFragment {
 	}
 	private void getPage(final int i) {
 		if (SystemUtils.canConnectNet(mContext)) {
-			mSystemBiz.getStandardDataTime(new APCallback<Date>() {
+			mSystemBiz.getStandardDataTime(new IAPCallback<Date>() {
 
 				@Override
 				public void onException(APError excepCode) {
@@ -168,14 +168,14 @@ public class ServiceNoInfoListFragement extends BaseFragment {
 	}
 
 	private void loadData(final int i) {
-		mMsgBussiness.getAloneServiceList(mServiceNoId, new APCallback<List<ServiceNOInfo>>() {
+		mMsgBussiness.getAloneServiceList(mServiceNoId, new IAPCallback<List<TServiceNOInfo>>() {
 
 			@Override
 			public void onException(APError excepCode) {
 			}
 
 			@Override
-			public void onDone(List<ServiceNOInfo> obj) {
+			public void onDone(List<TServiceNOInfo> obj) {
 				mprogress.setVisibility(View.GONE);
 				adapter = new HistoryAdapter();
 				if (mCurPage == 1) {
@@ -240,7 +240,7 @@ public class ServiceNoInfoListFragement extends BaseFragment {
 				holder = (ViewHoder) convertView.getTag();
 			}
 			// 填充数据
-			final ServiceNOInfo history = mInfos.get(position);
+			final TServiceNOInfo history = mInfos.get(position);
 			holder.name.setText(history.getTitle());
 			holder.desc.setText(history.getSummary());
 			String picurl = history.getPicurl();
@@ -253,7 +253,7 @@ public class ServiceNoInfoListFragement extends BaseFragment {
 			String dotime = StringUtils.getCommmentDate1(history.getCreateDate(), mStandardDateTime);
 			holder.comment.setText(dotime);
 			holder.sendTimeTv.setText(sdf.format(history.getCreateDate()));
-			if(history.getType()==ServiceNOInfo.TYPE_NONE_CONTENT){
+			if(history.getType()== TServiceNOInfo.TYPE_NONE_CONTENT){
 				holder.detailLl.setVisibility(View.GONE);
 			}else{
 				holder.detailLl.setVisibility(View.VISIBLE);
@@ -266,10 +266,10 @@ public class ServiceNoInfoListFragement extends BaseFragment {
 
 					// 需要根据不同类型进行不通动作
 					String url = null;
-					if (history.getType() == ServiceNOInfo.TYPE_NORMAL) {
+					if (history.getType() == TServiceNOInfo.TYPE_NORMAL) {
 						url = String.format(URLs.URL_SERVICEINFO,URLs.baseURL,URLs.appCode) + "&serviceinfo_id=" + history.getId() + "&service_id="
 								+ mServiceNoId;
-					} else if (history.getType() == ServiceNOInfo.TYPE_LINK) {
+					} else if (history.getType() == TServiceNOInfo.TYPE_LINK) {
 						url = history.getLink();
 					}
 					if (!TextUtils.isEmpty(url)) {
@@ -292,7 +292,7 @@ public class ServiceNoInfoListFragement extends BaseFragment {
 			private LinearLayout detailLl;
 		}
 
-		public List<ServiceNOInfo> backHistoryInfo() {
+		public List<TServiceNOInfo> backHistoryInfo() {
 			return mInfos;
 		}
 	}

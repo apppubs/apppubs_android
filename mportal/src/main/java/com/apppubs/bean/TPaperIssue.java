@@ -11,7 +11,7 @@ import com.orm.SugarRecord;
  * @author zhangwen 2014-10-30 the issue(qi) entity
  *  一期的内容
  */
-public class PaperIssue extends SugarRecord {
+public class TPaperIssue extends SugarRecord {
 
 	@SerializedName("id")
 	private String id;
@@ -20,7 +20,7 @@ public class PaperIssue extends SugarRecord {
 	private String paperCode;
 	@SerializedName("fengmian")
 	private String cover;// FENGMIAN,
-	private transient List<PaperCatalog> catalogList;// the catalogs of this
+	private transient List<TPaperCatalog> catalogList;// the catalogs of this
 														// Issue
 	private int isDownload;
 	private String firstCatalogPic;// 首版图片（本地地址，不是网络地址）
@@ -28,7 +28,7 @@ public class PaperIssue extends SugarRecord {
 	private Date downloadedTime;
 	private int size;
 
-	public PaperIssue() {
+	public TPaperIssue() {
 	}
 
 	public String getName() {
@@ -55,11 +55,11 @@ public class PaperIssue extends SugarRecord {
 		this.cover = cover;
 	}
 
-	public List<PaperCatalog> getCatalogList() {
+	public List<TPaperCatalog> getCatalogList() {
 		return catalogList;
 	}
 
-	public void setCatalogList(List<PaperCatalog> catalogList) {
+	public void setCatalogList(List<TPaperCatalog> catalogList) {
 		this.catalogList = catalogList;
 	}
 

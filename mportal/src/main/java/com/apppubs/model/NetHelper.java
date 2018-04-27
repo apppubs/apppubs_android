@@ -16,7 +16,7 @@ public class NetHelper<T> {
                 .getGenericSuperclass();
 
         /**
-         * 这里如果传递的是User.那么就是class com.example.bean.User
+         * 这里如果传递的是User.那么就是class com.example.bean.TUser
          * 如果传递的是Shop.       那么就是class com.example.bean.Shop
          * */
         Class<T> clazz = (Class<T>) tt.getActualTypeArguments()[0];

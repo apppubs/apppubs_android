@@ -7,7 +7,7 @@ import com.orm.SugarRecord;
  * @author zhangwen 2014-10-30
  *
  */
-public class PaperInfoPic extends SugarRecord {//新闻里面的图片
+public class TPaperInfoPic extends SugarRecord {//新闻里面的图片
 	
 	private String id;
 	private String infoId;

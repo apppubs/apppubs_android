@@ -13,7 +13,7 @@ import com.apppubs.bean.Settings;
 import com.apppubs.bean.UserInfo;
 import com.apppubs.bean.http.AppInfoResult;
 import com.apppubs.constant.URLs;
-import com.apppubs.bean.CompelMessageDialogActivity;
+import com.apppubs.ui.activity.CompelMessageDialogActivity;
 import com.apppubs.ui.home.CompelReadMessageModel;
 import com.apppubs.model.myfile.FileCacheManager;
 import com.apppubs.model.myfile.FileCacheManagerImpl;
@@ -308,4 +308,5 @@ public class AppContext {
         }
         return 0;
     }
+
 }

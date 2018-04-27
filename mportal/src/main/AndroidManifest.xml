@@ -453,7 +453,7 @@
             android:screenOrientation="portrait">
         </activity>
         <activity
-            android:name="com.apppubs.bean.CompelMessageDialogActivity"
+            android:name="com.apppubs.ui.activity.CompelMessageDialogActivity"
             android:theme="@style/CompelReadDialogStyle">
         </activity>
         <activity
@@ -520,7 +520,7 @@
             </intent-filter>
         </receiver>
 
-        <!-- User defined.  For test only  用户自定义的广播接收器 -->
+        <!-- TUser defined.  For test only  用户自定义的广播接收器 -->
         <receiver
             android:name="com.apppubs.receiver.receiver.MyReceiver"
             android:enabled="true"

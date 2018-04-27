@@ -17,10 +17,10 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.apppubs.bean.TNewsInfo;
 import com.apppubs.constant.APError;
-import com.apppubs.model.APCallback;
+import com.apppubs.model.IAPCallback;
 import com.apppubs.ui.activity.NewsPictureInfoActivity;
-import com.apppubs.bean.NewsInfo;
 import com.apppubs.constant.URLs;
 import com.apppubs.util.LogM;
 import com.apppubs.ui.widget.commonlist.CommonListView;
@@ -67,7 +67,7 @@ public class ChannelPictureFragment extends ChannelFragment {
 			@Override
 			public void onItemClick(AdapterView<?> parent, View view,
 					int position, long id) {
-				NewsInfo ni = (NewsInfo) parent.getAdapter().getItem(position);
+				TNewsInfo ni = (TNewsInfo) parent.getAdapter().getItem(position);
 				Intent intent = new Intent(mHostActivity,NewsPictureInfoActivity.class);
 				intent.putExtra(NewsPictureInfoActivity.EXTRA_STRING_NAME_ID, ni.getId());
 				startActivity(intent);
@@ -106,7 +106,7 @@ public class ChannelPictureFragment extends ChannelFragment {
 
 	private void load(){
 		
-		mNewsBiz.getNewsInfoPage(NewsInfo.NEWS_TYPE_PICTURE,mChannelCode, mCurPage, URLs.PAGE_PIC_SIZE, new APCallback<List<NewsInfo>>() {
+		mNewsBiz.getNewsInfoPage(TNewsInfo.NEWS_TYPE_PICTURE,mChannelCode, mCurPage, URLs.PAGE_PIC_SIZE, new IAPCallback<List<TNewsInfo>>() {
 			
 			@Override
 			public void onException(APError excepCode) {
@@ -115,7 +115,7 @@ public class ChannelPictureFragment extends ChannelFragment {
 			}
 			
 			@Override
-			public void onDone(List<NewsInfo> obj) {
+			public void onDone(List<TNewsInfo> obj) {
 				
 				mProgress.setVisibility(View.GONE);
 				
@@ -188,7 +188,7 @@ public class ChannelPictureFragment extends ChannelFragment {
 				holder = (ViewHolder) convertView.getTag();
 			}
 
-			NewsInfo ni = mNewsInfoList.get(position);
+			TNewsInfo ni = mNewsInfoList.get(position);
 			// 获得屏幕的宽高,屏幕宽度PX
 			mImageLoader.displayImage(ni.getPicURL(), holder.iv,mImageLoaderOptions);
 			holder.tv.setText(ni.getTitle());

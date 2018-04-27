@@ -7,7 +7,7 @@ import com.orm.SugarRecord;
  * 头条推广图图
  *
  */
-public class HeadPic extends SugarRecord{
+public class THeadPic extends SugarRecord{
 	
 	@SerializedName("infoid")
 	private String infoid;

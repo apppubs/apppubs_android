@@ -9,7 +9,7 @@ import com.orm.SugarRecord;
  * @author Administrator
  *
  */
-public class PaperDownloadInfo extends SugarRecord {
+public class TPaperDownloadInfo extends SugarRecord {
 	
 //	public static final int STATUS_REQUESTING = 0;
 //	public static final int STATUS_DOWNLOADING = 1;

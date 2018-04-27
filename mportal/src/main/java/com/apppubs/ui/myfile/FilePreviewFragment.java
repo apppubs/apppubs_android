@@ -22,7 +22,7 @@ import android.widget.Toast;
 
 import com.apppubs.AppContext;
 import com.apppubs.constant.APError;
-import com.apppubs.model.APCallback;
+import com.apppubs.model.IAPCallback;
 import com.apppubs.model.myfile.CacheListener;
 import com.apppubs.model.myfile.FileCacheErrorCode;
 import com.apppubs.model.myfile.FileCacheManager;
@@ -496,7 +496,7 @@ public class FilePreviewFragment extends BaseFragment {
 	//显示提示框之前首先获取服务端参数，如果已经配置好下载地址则允许用户点击下载按钮否则给出提示框即可
 	private void showInstallAppDialog(final String message) {
 
-		mSystemBiz.aSyncAppConfig(mContext, new APCallback<AppConfig>() {
+		mSystemBiz.aSyncAppConfig(mContext, new IAPCallback<AppConfig>() {
 
 			@Override
 			public void onException(APError excepCode) {
@@ -541,7 +541,7 @@ public class FilePreviewFragment extends BaseFragment {
 	}
 
 	private void skip2DownloadPage() {
-		mSystemBiz.aSyncAppConfig(mContext, new APCallback<AppConfig>() {
+		mSystemBiz.aSyncAppConfig(mContext, new IAPCallback<AppConfig>() {
 
 			@Override
 			public void onException(APError excepCode) {

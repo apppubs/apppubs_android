@@ -386,7 +386,7 @@ public class WebUtils {
 		try {
 			url = new URL(urlString);
 			HttpURLConnection conn = (HttpURLConnection) url.openConnection();
-			conn.setRequestProperty("User-Agent", "Mozilla/5.0 (Windows NT 6.1; WOW64; rv:26.0) Gecko/20100101 Firefox/26.0");
+			conn.setRequestProperty("TUser-Agent", "Mozilla/5.0 (Windows NT 6.1; WOW64; rv:26.0) Gecko/20100101 Firefox/26.0");
 			conn.setRequestMethod("POST");
 			conn.setRequestProperty("Content-Type", "plain/text; charset=UTF-8");
 

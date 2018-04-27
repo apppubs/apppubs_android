@@ -1404,7 +1404,7 @@ public class MuPDFActivity extends Activity implements FilePicker.FilePickerSupp
 //							String desPath = FileUtils.getAppExternalFilesStorageFile().getAbsolutePath()+"/document/"+new Date().getTime()+".pdf";
 //							String src = getIntent().getData().toString();
 //							FileUtils.copy(src,desPath );
-//							LocalFile localFile = new LocalFile();
+//							TLocalFile localFile = new TLocalFile();
 //							localFile.setName(src.substring(src.lastIndexOf("/")+1));
 //							localFile.setPath(desPath);
 //							localFile.setSize(new File(desPath).length());

@@ -15,7 +15,7 @@ import android.widget.Toast;
 
 import com.apppubs.constant.APError;
 import com.apppubs.d20.R;
-import com.apppubs.model.APCallback;
+import com.apppubs.model.IAPCallback;
 import com.apppubs.constant.URLs;
 import com.apppubs.util.SystemUtils;
 import com.apppubs.util.Utils;
@@ -131,7 +131,7 @@ public class RegisterActivity extends BaseActivity {
 				mSystemBiz.postZhuce(mName.getText().toString().trim(), mEmail.getText().toString().trim(),
 						mPassword.getText().toString().trim(), mPhone
 						.getText().toString().trim(), mNicname
-						.getText().toString().trim(),new APCallback<String>() {
+						.getText().toString().trim(),new IAPCallback<String>() {
 							
 							@Override
 							public void onException(APError excepCode) {
