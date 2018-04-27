@@ -13,9 +13,9 @@ import android.widget.Toast;
 import com.apppubs.AppContext;
 import com.apppubs.AppManager;
 import com.apppubs.MportalApplication;
+import com.apppubs.bean.TMenuItem;
 import com.apppubs.d20.R;
 import com.apppubs.bean.App;
-import com.apppubs.bean.MenuItem;
 import com.apppubs.bean.UserInfo;
 import com.apppubs.bean.Weather;
 import com.apppubs.constant.Actions;
@@ -43,12 +43,12 @@ public abstract class HomeBaseActivity extends BaseActivity {
 	/**
 	 * 应用主目录
 	 */
-	protected List<MenuItem> mPrimaryMenuList;
+	protected List<TMenuItem> mPrimaryMenuList;
 	/**
 	 * 应用次目录
 	 */
 	protected static ArrayList<Weather> mWeathers;
-	protected List<MenuItem> mSecondaryMenuList;
+	protected List<TMenuItem> mSecondaryMenuList;
 	protected ViewCourier mViewCourier;// 视图控制器
 	protected MportalApplication mApp;
 
@@ -80,20 +80,19 @@ public abstract class HomeBaseActivity extends BaseActivity {
 				}
 				sqlParam += "'" + menus[i] + "'";
 			}
-			mPrimaryMenuList = SugarRecord.find(MenuItem.class, "LOCATION=? and (PROTECTED_FLAG = 0 or ID in (" + sqlParam + "))",
-					new String[]{MenuItem.MENU_LOCATION_PRIMARY + ""}, null,
+			mPrimaryMenuList = SugarRecord.find(TMenuItem.class, "LOCATION=? and (PROTECTED_FLAG = 0 or ID in (" + sqlParam + "))",
+					new String[]{TMenuItem.MENU_LOCATION_PRIMARY + ""}, null,
 					"SORT_ID", null);
 		} else {
 
-			mPrimaryMenuList = SugarRecord.find(MenuItem.class, "LOCATION=? and PROTECTED_FLAG = 0",
-					new String[]{MenuItem.MENU_LOCATION_PRIMARY + ""}, null, "SORT_ID", null);
+			mPrimaryMenuList = SugarRecord.find(TMenuItem.class, "LOCATION=? and PROTECTED_FLAG = 0",
+					new String[]{TMenuItem.MENU_LOCATION_PRIMARY + ""}, null, "SORT_ID", null);
 		}
-		mSecondaryMenuList = SugarRecord.find(MenuItem.class, "LOCATION=?",
-				new String[]{MenuItem.MENU_LOCATION_SECONDARY + ""}, null, "SORT_ID", null);
+		mSecondaryMenuList = SugarRecord.find(TMenuItem.class, "LOCATION=?",
+				new String[]{TMenuItem.MENU_LOCATION_SECONDARY + ""}, null, "SORT_ID", null);
 		mApp = (MportalApplication) this.getApplication();
 		mViewCourier = ViewCourier.getInstance(this);
 
-		mSystemBiz.makeStartUpRequest();
 		if (mAppContext.getAppConfig().getChatFlag().equals("1")) {
 			mMsgBussiness.loginRC();
 		}
@@ -171,7 +170,7 @@ public abstract class HomeBaseActivity extends BaseActivity {
 		if (!TextUtils.isEmpty(paddingUrl)) {
 			mAppContext.getApp().setPaddingUrlOnHomeActivityStartUp(null);
 			if (paddingUrl.startsWith("apppubs://message")){
-				for (MenuItem mi:mPrimaryMenuList){
+				for (TMenuItem mi:mPrimaryMenuList){
 					if (mi.getUrl().startsWith("apppubs://message")){
 						mViewCourier.executeInHomeActivity(mi,HomeBaseActivity.this);
 
@@ -201,11 +200,11 @@ public abstract class HomeBaseActivity extends BaseActivity {
 
 	}
 
-	public List<MenuItem> getPrimaryMenuList() {
+	public List<TMenuItem> getPrimaryMenuList() {
 		return mPrimaryMenuList;
 	}
 
-	public List<MenuItem> getSecondaryMenuList() {
+	public List<TMenuItem> getSecondaryMenuList() {
 		return mSecondaryMenuList;
 	}
 
@@ -347,7 +346,7 @@ public abstract class HomeBaseActivity extends BaseActivity {
 
 	public void selectMessageFragment() {
 		for (int i = -1; ++i < mPrimaryMenuList.size(); ) {
-			MenuItem mi = mPrimaryMenuList.get(i);
+			TMenuItem mi = mPrimaryMenuList.get(i);
 			if (mi.getUrl().contains("apppubs://message")) {
 				selectTab(i);
 			}

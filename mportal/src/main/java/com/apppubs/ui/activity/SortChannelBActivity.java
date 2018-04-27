@@ -35,7 +35,7 @@ public class SortChannelBActivity extends BaseActivity {
 	private DragSortListView.DropListener onDrop = new DragSortListView.DropListener() {
 		@Override
 		public void drop(int from, int to) {
-			mNewsBussiness.rerangeChannelIndex(mChannelTypeId, from, to);
+			mNewsBiz.rerangeChannelIndex(mChannelTypeId, from, to);
 			mChannelSelectedList = SugarRecord.find(NewsChannel.class, "TYPE_ID=? and DISPLAY_ORDER != 0",
 					new String[] { mChannelTypeId + "" }, null, "DISPLAY_ORDER", null);
 			adapter.notifyDataSetChanged();

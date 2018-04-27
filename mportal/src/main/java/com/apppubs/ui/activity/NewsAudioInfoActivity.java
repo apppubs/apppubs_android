@@ -34,8 +34,8 @@ import com.apppubs.bean.Collection;
 import com.apppubs.bean.Comment;
 import com.apppubs.bean.NewsInfo;
 import com.apppubs.model.APResultCallback;
-import com.apppubs.model.CollectionBussiness;
-import com.apppubs.model.NewsBussiness;
+import com.apppubs.model.CollectionBiz;
+import com.apppubs.model.NewsBiz;
 import com.apppubs.util.LogM;
 import com.apppubs.util.ShareTools;
 import com.apppubs.util.Utils;
@@ -59,7 +59,7 @@ public class NewsAudioInfoActivity extends BaseActivity {
 	private String mInfoId;
 	private String mChannelCode;
 	private Comment mCommment;// 评论数，赞，踩
-	private NewsBussiness mNewsBussiness;
+	private NewsBiz mNewsBiz;
 	private Future<?> mFuture;
 	private TextView mCommentTv;
 	private PopupWindow mMenuPW;
@@ -82,8 +82,8 @@ public class NewsAudioInfoActivity extends BaseActivity {
 		}else{
 			mChannelCode = mNewsInfo.getChannelCode();
 		}
-		mNewsBussiness = NewsBussiness.getInstance(mContext);
-		mFuture = mNewsBussiness.getNewsInfo(mNewsInfo.getId(), mNewsInfo.getChannelCode(),
+		mNewsBiz = NewsBiz.getInstance(mContext);
+		mFuture = mNewsBiz.getNewsInfo(mNewsInfo.getId(), mNewsInfo.getChannelCode(),
 				new APResultCallback<NewsInfo>() {
 
 					@Override
@@ -285,7 +285,7 @@ public class NewsAudioInfoActivity extends BaseActivity {
 			String title = mNewsInfo.getTitle();
 			String summy = mNewsInfo.getSummary();
 			ImageView iv = (ImageView) mMenuPW.getContentView().findViewById(R.id.pop_news_info_collect_ib);
-			CollectionBussiness.toggleCollect(Collection.TYPE_NORMAL, this, isCollected, mInfoId+","+mChannelCode, title, summy);
+			CollectionBiz.toggleCollect(Collection.TYPE_NORMAL, this, isCollected, mInfoId+","+mChannelCode, title, summy);
 			isCollected = !isCollected;
 			Toast.makeText(this, isCollected?"已收藏":"取消收藏", Toast.LENGTH_SHORT).show();
 			iv.setImageResource(isCollected?R.drawable.menubar_favorite_h:R.drawable.menubar_favorite);

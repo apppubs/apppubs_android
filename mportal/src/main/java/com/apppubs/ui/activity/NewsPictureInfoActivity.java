@@ -100,7 +100,7 @@ public class NewsPictureInfoActivity extends BaseActivity implements OnPageChang
 		.denyNetworkDownload(MportalApplication.systemState.getNetworkState()!=ConnectivityManager.TYPE_WIFI&&!mAppContext.getSettings().isAllowDowPicUse2G())
 		.build();
 		
-		mFuture = mNewsBussiness.getPicInfoPage(mInfoId,
+		mFuture = mNewsBiz.getPicInfoPage(mInfoId,
 				1, new APResultCallback<List<NewsPictureInfo>>() {
 
 					@Override

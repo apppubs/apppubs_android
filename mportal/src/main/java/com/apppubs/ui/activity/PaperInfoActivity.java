@@ -14,7 +14,7 @@ import android.widget.Toast;
 import com.apppubs.bean.PaperInfo;
 import com.apppubs.d20.R;
 import com.apppubs.bean.Collection;
-import com.apppubs.model.CollectionBussiness;
+import com.apppubs.model.CollectionBiz;
 import com.apppubs.constant.URLs;
 import com.apppubs.util.ShareTools;
 import com.apppubs.ui.widget.ImageButton;
@@ -65,7 +65,7 @@ public class PaperInfoActivity extends BaseActivity implements OnClickListener {
 
 			private void toggleCollection() {
 				PaperInfo pi = SugarRecord.findById(PaperInfo.class, mInfoId);
-				CollectionBussiness.toggleCollect(Collection.TYPE_PAPER, PaperInfoActivity.this, isCollected, mInfoId, pi.getTitle(), null);
+				CollectionBiz.toggleCollect(Collection.TYPE_PAPER, PaperInfoActivity.this, isCollected, mInfoId, pi.getTitle(), null);
 				isCollected = !isCollected;
 				mTitleBar.setRightBtnImageResourceId(isCollected?R.drawable.menubar_favorite_h:R.drawable.menubar_favorite);
 				Toast.makeText(PaperInfoActivity.this, isCollected?"已收藏":"取消收藏", Toast.LENGTH_SHORT).show();

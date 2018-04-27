@@ -17,11 +17,11 @@ import android.widget.AdapterView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.apppubs.model.NewsBiz;
 import com.apppubs.ui.activity.HomeSlideMenuActivity;
 import com.apppubs.ui.adapter.NewsFragmentPagerAdapter;
 import com.apppubs.bean.NewsChannel;
 import com.apppubs.util.LogM;
-import com.apppubs.model.NewsBussiness;
 import com.apppubs.ui.widget.AlternativeChannelLayout;
 import com.apppubs.ui.widget.NewsViewPager;
 import com.jeremyfeinstein.slidingmenu.lib.SlidingMenu;
@@ -49,7 +49,7 @@ public class ChannelsSlideFragment extends ChannelsFragment implements OnPageCha
 	private AlternativeChannelLayout mAlterChannelL;
 	
 	private  SlidingMenu mSm;
-	private NewsBussiness mNb;
+	private NewsBiz mNb;
 	private NewsFragmentPagerAdapter mFragmentAdapter;
 	
 	@Override
@@ -96,7 +96,7 @@ public class ChannelsSlideFragment extends ChannelsFragment implements OnPageCha
 		
 		mChannelSelDg = (DraggableGridView) mRootView.findViewById(R.id.channels_dgv);
 		mAlterChannelL = (AlternativeChannelLayout) mRootView.findViewById(R.id.channels_alter_acl);
-		mNb = NewsBussiness.getInstance(mContext);
+		mNb = NewsBiz.getInstance(mContext);
 	}
 	
 	@Override

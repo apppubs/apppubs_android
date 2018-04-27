@@ -29,23 +29,23 @@ import com.apppubs.bean.NewsPictureInfo;
 import com.apppubs.constant.URLs;
 import com.orm.SugarRecord;
 
-public class NewsBussiness extends BaseBussiness {
+public class NewsBiz extends BaseBiz {
 
 	private SimpleDateFormat mSdf;
 
 
-	private static NewsBussiness mNewsBussinessImpl;
+	private static NewsBiz mNewsBizImpl;
 	private Context mContext;
 
-	private NewsBussiness(Context context){
-		mContext = context;
+	private NewsBiz(Context context){
+		super(context);
 		mSdf = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss",Locale.CHINA);
 	}
 
-	public static synchronized  NewsBussiness getInstance(Context context) {
-		if (mNewsBussinessImpl == null)
-			mNewsBussinessImpl = new NewsBussiness(context);
-		return mNewsBussinessImpl;
+	public static synchronized NewsBiz getInstance(Context context) {
+		if (mNewsBizImpl == null)
+			mNewsBizImpl = new NewsBiz(context);
+		return mNewsBizImpl;
 
 	}
 
@@ -92,7 +92,7 @@ public class NewsBussiness extends BaseBussiness {
 					} else if (page == 1) {
 						infoList = SugarRecord.find(NewsInfo.class, "CHANNEL_CODE = ?", new String[] { channelCode },
 								null, "PUB_TIME desc", (page - 1) * pageSize + "," + pageSize);
-						LogM.log(NewsBussiness.class, "从数据库中查询出的数据条数："+infoList.size());
+						LogM.log(NewsBiz.class, "从数据库中查询出的数据条数："+infoList.size());
 					} else {
 
 						infoList = SugarRecord.find(NewsInfo.class, "CHANNEL_CODE = ? ", new String[] { channelCode },
@@ -111,7 +111,7 @@ public class NewsBussiness extends BaseBussiness {
 							infoList = savePicInfoList(picList);
 						}
 					}
-					LogM.log(NewsBussiness.class, "准备返回到界面："+infoList.size());
+					LogM.log(NewsBiz.class, "准备返回到界面："+infoList.size());
 					sHandler.post(new OnDoneRun<List<NewsInfo>>(callback, infoList));
 
 				} catch (IOException e) {
@@ -363,7 +363,7 @@ public class NewsBussiness extends BaseBussiness {
 			throw e;
 		}
 
-		Log.v("NewsBussiness", "拼接html字符串");
+		Log.v("NewsBiz", "拼接html字符串");
 
 		String fontCssLink = "";
 		switch (newsInfo.getFontFamilyFlag()) {
@@ -465,7 +465,7 @@ public class NewsBussiness extends BaseBussiness {
 //		htmlStr = htmlStr.replaceAll("width=", "widthstyle=");
 		newsInfo.setContent(htmlStr);
 
-		Log.v("NewsBussiness", "html构造完毕 更新Info 数据库");
+		Log.v("NewsBiz", "html构造完毕 更新Info 数据库");
 		SugarRecord.updateById(NewsInfo.class, newsInfoId, new String[] { "CONTENT", "SIZE" }, new String[] { htmlStr,
 				htmlStr.length() + "" });
 

@@ -18,9 +18,9 @@ import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.RadioGroup.OnCheckedChangeListener;
 
+import com.apppubs.model.PaperBiz;
 import com.apppubs.ui.activity.BaseActivity;
 import com.apppubs.bean.Paper;
-import com.apppubs.model.PaperBussiness;
 import com.apppubs.util.LogM;
 import com.apppubs.ui.widget.SegmentedGroup;
 import com.apppubs.ui.widget.TitleBar;
@@ -31,7 +31,7 @@ public class PapersFragment extends TitleMenuFragment implements OnPageChangeLis
 	private List<Paper> mPaperList;
 	// fragment列表
 	private List<PaperIssueListFragment> mPaperFragmentList;
-	private PaperBussiness mPaperBussiness;
+	private PaperBiz mPaperBiz;
 	private SegmentedGroup mSg;
 	
 	private Fragment mCurFrg;
@@ -47,8 +47,8 @@ public class PapersFragment extends TitleMenuFragment implements OnPageChangeLis
 
 
 	private void init() {
-		mPaperBussiness = PaperBussiness.getInstance();
-		mPaperList = mPaperBussiness.getPaperList();
+		mPaperBiz = PaperBiz.getInstance(getContext());
+		mPaperList = mPaperBiz.getPaperList();
 		mPaperFragmentList = new ArrayList<PaperIssueListFragment>();
 		for (Paper p : mPaperList) {
 			LogM.log(this.getClass(), "将：" + p.getPaperCode() + "增加fragment");
@@ -65,8 +65,8 @@ public class PapersFragment extends TitleMenuFragment implements OnPageChangeLis
 	@Override
 	public void changeActivityTitleView(TitleBar titleBar) {
 		super.changeActivityTitleView(titleBar);
-		mPaperBussiness = PaperBussiness.getInstance();
-		mPaperList = mPaperBussiness.getPaperList();
+		mPaperBiz = PaperBiz.getInstance(getContext());
+		mPaperList = mPaperBiz.getPaperList();
 		int size = mPaperList.size();// 报纸的份数
 		if (size == 1) {
 			titleBar.setTitle(mPaperList.get(0).getName());

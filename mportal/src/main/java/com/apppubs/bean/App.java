@@ -1,13 +1,11 @@
 package com.apppubs.bean;
 
-import com.apppubs.bean.http.AppInfo;
+import com.apppubs.bean.http.AppInfoResult;
 import com.apppubs.util.LogM;
 import com.google.gson.annotations.SerializedName;
 
 import java.io.Serializable;
 import java.util.Date;
-import java.util.List;
-import java.util.Map;
 
 /**
  * 本地持久化对象
@@ -230,14 +228,8 @@ public class App implements Serializable {
         return initTimes;
     }
 
-    public void setStartupTimes(int startupTimes) {
-        LogM.log(App.class, "设置启动数字" + startupTimes);
-        this.initTimes = startupTimes;
-    }
-
-    public void addStartupTime() {
-        this.initTimes++;
-        LogM.log(App.class, "启动次数增加" + initTimes);
+    public void setInitTimes(int initTimes){
+        this.initTimes = initTimes;
     }
 
     public String getLoginPicUrl() {
@@ -607,21 +599,8 @@ public class App implements Serializable {
     }
 
     public void init() {
-        this.setStartupTimes(0);
+        initTimes = 0;
         appConfig = new AppConfig();
     }
 
-    public void updateWithAppInfo(AppInfo info) {
-        setCode(info.getAppId());
-        setName(info.getName());
-        setLoginFlag(info.getLoginFlag());
-        setWebLoginUrl(info.getWebLoginURL());
-        setAllowRegister(info.getUserRegFlag());
-        setLayoutScheme(info.getLayoutSchema());
-        setDefaultTheme(info.getDefaultTheme());
-        setCustomThemeColor(info.getThemeColor());
-        setMenuUpdateTime(info.getMenuUpdateTime());
-        setStartUpPic(info.getStartupPicURL());
-        setLoginPicUrl(info.getLoginPicURL());
-    }
 }

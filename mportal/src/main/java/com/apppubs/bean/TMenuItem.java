@@ -1,5 +1,6 @@
 package com.apppubs.bean;
 
+import com.apppubs.bean.http.MenusResult;
 import com.google.gson.annotations.SerializedName;
 import com.orm.SugarRecord;
 
@@ -15,7 +16,7 @@ import com.orm.SugarRecord;
  * 2015-05-10 zhangwen 增加 webAppMenus
  * 
  */
-public class MenuItem extends SugarRecord {
+public class TMenuItem extends SugarRecord {
 
 	public static final int MENU_LOCATION_PRIMARY = 0;// 菜单位置，主菜单
 	public static final int MENU_LOCATION_SECONDARY = 1;// 菜单位置，次菜单
@@ -107,11 +108,11 @@ public class MenuItem extends SugarRecord {
 	@SerializedName("isallowcustomip")
 	private int isAllowCustomIp;//是否允许配置协议和ip
 	
-	public MenuItem() {
+	public TMenuItem() {
 
 	}
 
-	public MenuItem(String name, String iconpic, String url, int sortid, int location, int openType, int menuBartype) {
+	public TMenuItem(String name, String iconpic, String url, int sortid, int location, int openType, int menuBartype) {
 		this.name = name;
 		this.iconpic = iconpic;
 		this.sortId = sortid;
@@ -221,7 +222,7 @@ public class MenuItem extends SugarRecord {
 
 	@Override
 	public String toString() {
-		return "MenuItem [id=" + id + ", name=" + name + ", iconpic=" + iconpic + ", sortid=" + sortId + ", location=" + location
+		return "TMenuItem [id=" + id + ", name=" + name + ", iconpic=" + iconpic + ", sortid=" + sortId + ", location=" + location
 				+ ", openType=" + openType + ", url=" + url + ", channelTypeId=" + channelTypeId + ", isEnable=" + isEnable
 				+ ", menuBarType=" + menuBarType + ", channelLayout=" + channelLayout + ", allowConfigFlag=" + allowConfigFlag
 				+ "]";
@@ -285,6 +286,25 @@ public class MenuItem extends SugarRecord {
 		this.titleBarShowFlag = titleBarShowFlag;
 	}
 
-	
+	public static TMenuItem createFrom(MenusResult.MenuItem menuItem){
+		TMenuItem item = new TMenuItem();
+		item.setId(menuItem.getId());
+		item.setSuperId(menuItem.getSuperId());
+		item.setUrl(menuItem.getAppURL());
+		item.setIconpic(menuItem.getIconPic());
+		item.setSortId(menuItem.getSortId());
+		item.setLocation(menuItem.getAppType());
+		item.setChannelTypeId(menuItem.getChannelTypeId());
+		item.setChannelLayout(menuItem.getChannelLayout());
+		item.setOpenType(menuItem.getOpenType());
+		item.setMenuBarType(menuItem.getWebViewStyle());
+		item.setAllowConfigFlag(menuItem.getChannelConfigFlag());
+		item.setProtectedFlag(menuItem.getLoginPowerFlag());
+		item.setBadgeURL(menuItem.getBadgeURL());
+		item.setWebAppMenus(menuItem.getWebViewMenus());
+		item.setAllowCustomIp(menuItem.getIsAllowCustomIp()?1:0);
+		item.setTitleBarShowFlag(menuItem.getNeedTitleBar()?1:0);
+		return item;
+	}
 	
 }

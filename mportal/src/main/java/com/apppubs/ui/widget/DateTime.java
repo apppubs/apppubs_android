@@ -493,7 +493,7 @@ public class DateTime extends ScrollView {
 	 * 获得下载过的列表 2014/09/25
 	 */
 //	public String getDownlodenames(String paptercode) {
-//		PaperBussiness biness = PaperBussinessImpl.getInstance(mContext);
+//		PaperBiz biness = PaperBussinessImpl.getInstance(mContext);
 //		String[] names = biness.getCacheedIssueName(paptercode);
 //		String downloadqilist = "";
 //		if (names.length != 0) {

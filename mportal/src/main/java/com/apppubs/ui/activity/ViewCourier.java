@@ -14,10 +14,10 @@ import android.view.View.OnClickListener;
 import android.widget.Toast;
 
 import com.apppubs.AppContext;
+import com.apppubs.bean.TMenuItem;
 import com.apppubs.ui.myfile.MyFileFragment;
 import com.apppubs.d20.R;
 import com.apppubs.bean.App;
-import com.apppubs.bean.MenuItem;
 import com.apppubs.bean.NewsChannel;
 import com.apppubs.ui.fragment.BaseFragment;
 import com.apppubs.ui.fragment.ChannelFragment;
@@ -74,7 +74,7 @@ public class ViewCourier {
     private TitleBar mHomeTitleBar;// 主界面titlebar
     private App mApp;
 
-    private Map<MenuItem, Fragment> mFragmentsMap;
+    private Map<TMenuItem, Fragment> mFragmentsMap;
     private boolean isWeatherRcvRegistered;
     private BroadcastReceiver mWeatherRcv = new BroadcastReceiver() {
 
@@ -87,13 +87,13 @@ public class ViewCourier {
     /**
      * 当前的菜单
      */
-    private MenuItem mCurMenuItem;
+    private TMenuItem mCurMenuItem;
     private static ViewCourier mHomeviewController;
 
     private ViewCourier(Context context) {
         mContext = context;
         mApp = AppContext.getInstance(context).getApp();
-        mFragmentsMap = new HashMap<MenuItem, Fragment>();
+        mFragmentsMap = new HashMap<TMenuItem, Fragment>();
 
     }
 
@@ -267,7 +267,7 @@ public class ViewCourier {
 			}catch (Exception e){
 				Toast.makeText(context,"启动E-Link失败",Toast.LENGTH_LONG).show();
 			}
-		}else if(url.equals(MenuItem.MENU_URL_EMAIL)||url.startsWith("apppubs://email")){
+		}else if(url.equals(TMenuItem.MENU_URL_EMAIL)||url.startsWith("apppubs://email")){
 			openEmailApp();
 		}else{
             Toast.makeText(context, "请求地址(" + url + ")错误", Toast.LENGTH_SHORT).show();
@@ -276,7 +276,7 @@ public class ViewCourier {
     }
 
     public void executeInHomeActivity(String menuId, HomeBaseActivity homeBaseActivity) {
-        executeInHomeActivity(SugarRecord.findById(MenuItem.class, menuId), homeBaseActivity);
+        executeInHomeActivity(SugarRecord.findById(TMenuItem.class, menuId), homeBaseActivity);
     }
 
 
@@ -291,7 +291,7 @@ public class ViewCourier {
         return false;
     }
 
-    public void executeInHomeActivity(MenuItem item, final HomeBaseActivity mHomeActivity) {
+    public void executeInHomeActivity(TMenuItem item, final HomeBaseActivity mHomeActivity) {
 
         LogM.log(this.getClass(), "item.getOpenType()" + item.getOpenType());
 
@@ -299,7 +299,7 @@ public class ViewCourier {
 
         int type = item.getLocation();
         // 重复点击直接返回
-        if (mCurMenuItem != null && mCurMenuItem.getId() == item.getId() && type == MenuItem.MENU_LOCATION_PRIMARY) {
+        if (mCurMenuItem != null && mCurMenuItem.getId() == item.getId() && type == TMenuItem.MENU_LOCATION_PRIMARY) {
             return;
         }
 
@@ -309,7 +309,7 @@ public class ViewCourier {
         //配置顶部菜单条是否显示
         //当url的titlebar参数和menu的参数都为true时才可以显示标题
         String needTitleBarFlag = StringUtils.getQueryParameter(uri, "titlebar");
-        if (!(!TextUtils.isEmpty(needTitleBarFlag) && needTitleBarFlag.equals("0")) && item.getTitleBarShowFlag() == MenuItem.TITLEBAR_SHOW_FLAG_TRUE) {
+        if (!(!TextUtils.isEmpty(needTitleBarFlag) && needTitleBarFlag.equals("0")) && item.getTitleBarShowFlag() == TMenuItem.TITLEBAR_SHOW_FLAG_TRUE) {
             mHomeActivity.setNeedTitleBar(true);
         } else {
             mHomeActivity.setNeedTitleBar(false);
@@ -320,7 +320,7 @@ public class ViewCourier {
             frg = (BaseFragment) mFragmentsMap.get(item);
             LogM.log(this.getClass(), "此fragment已经存在了");
             mHomeActivity.changeContent(frg);
-        } else if ((uri.startsWith("http://") || uri.startsWith("https://")) && type == MenuItem.MENU_LOCATION_PRIMARY) {// webview方式打开
+        } else if ((uri.startsWith("http://") || uri.startsWith("https://")) && type == TMenuItem.MENU_LOCATION_PRIMARY) {// webview方式打开
 
             String tempUri = convertUri(item, uri);
 
@@ -346,16 +346,16 @@ public class ViewCourier {
             args.putString(WebAppFragment.ARGUMENT_STRING_MORE_MENUS, item.getWebAppMenus());
             args.putString(ChannelsFragment.ARGS_MENU_ID, item.getId());
             ContainerActivity.startActivity(mHomeActivity, WebAppFragment.class, args);
-        } else if (uri.equals(MenuItem.MENU_URL_WEIBO) && type == MenuItem.MENU_LOCATION_PRIMARY) {// 微博界面
+        } else if (uri.equals(TMenuItem.MENU_URL_WEIBO) && type == TMenuItem.MENU_LOCATION_PRIMARY) {// 微博界面
             frg = CommonFragmentFactory.getFragment(CommonFragmentFactory.TYPE_WEIBO);
             mFragmentsMap.put(item, frg);
             mHomeActivity.changeContent(frg);
-        } else if (uri.equals(MenuItem.MENU_URL_WEIBO)) {
+        } else if (uri.equals(TMenuItem.MENU_URL_WEIBO)) {
             ContainerActivity.startActivity(mHomeActivity, WeiBoFragment.class, null, item.getName());
         } else if (uri.contains("$qrcode") || uri.startsWith("apppubs://qrcode")) {// 二维码
             intent = new Intent(mHomeActivity, CaptureActivity.class);
             mHomeActivity.startActivity(intent);
-        } else if (uri.equals(MenuItem.MENU_URL_NEWS)) {// 新闻
+        } else if (uri.equals(TMenuItem.MENU_URL_NEWS)) {// 新闻
             String channelTypeId = item.getChannelTypeId();
             //如果此资讯类型菜单只有一个频道则直接显示这个频道列表不显示多频道标签
             List<NewsChannel> channelList = SugarRecord.find(NewsChannel.class, "TYPE_ID=?", new String[]{channelTypeId + ""}, null, "DISPLAY_ORDER", null);
@@ -369,23 +369,23 @@ public class ViewCourier {
                 ;
                 frg.setArguments(args);
             } else {
-                if (item.getChannelLayout() == MenuItem.CHANNEL_LAYOUT_SLIDE) {
+                if (item.getChannelLayout() == TMenuItem.CHANNEL_LAYOUT_SLIDE) {
                     frg = new ChannelsSlideFragment();
-                } else if (item.getChannelLayout() == MenuItem.CHANNEL_LAYOUT_ZAKER) {
+                } else if (item.getChannelLayout() == TMenuItem.CHANNEL_LAYOUT_ZAKER) {
                     frg = new ChannelsSquareFragment();
                 }
 
                 args.putString(ChannelsFragment.ARGUMENT_NAME_CHANNELTYPEID, channelTypeId);
                 frg.setArguments(args);
             }
-            if (type == MenuItem.MENU_LOCATION_PRIMARY) {
+            if (type == TMenuItem.MENU_LOCATION_PRIMARY) {
                 mFragmentsMap.put(item, frg);
                 mHomeActivity.changeContent(frg);
             } else {
                 ContainerActivity.startActivity(mHomeActivity, frg.getClass(), args, item.getName());
             }
 
-        } else if (uri.equals(MenuItem.MENU_URL_NEWSPAPER)) {// 报纸
+        } else if (uri.equals(TMenuItem.MENU_URL_NEWSPAPER)) {// 报纸
             frg = new PapersFragment();
             Bundle b = new Bundle();
             b.putString(PapersFragment.ARGS_MENU_ID, item.getId());
@@ -395,28 +395,28 @@ public class ViewCourier {
             // mActivity.changeContent(new PaperFragment());
             // intent = new Intent(mActivity,PapperActivity.class);
             // mActivity.startActivity(intent);
-        } else if (uri.equals(MenuItem.MENU_URL_HISTORY_MESSAGE) && type == MenuItem.MENU_LOCATION_PRIMARY) {// 推送消息
+        } else if (uri.equals(TMenuItem.MENU_URL_HISTORY_MESSAGE) && type == TMenuItem.MENU_LOCATION_PRIMARY) {// 推送消息
             frg = new HistoryFragment();
             mFragmentsMap.put(item, frg);
             mHomeActivity.changeContent(frg);
-        } else if (uri.equals(MenuItem.MENU_URL_HISTORY_MESSAGE)) {
+        } else if (uri.equals(TMenuItem.MENU_URL_HISTORY_MESSAGE)) {
             ContainerActivity.startActivity(mHomeActivity, HistoryFragment.class, null, "历史消息");
-        } else if ((uri.equals(MenuItem.MENU_URL_MESSAGE) || uri.startsWith("apppubs://message")) && type == MenuItem.MENU_LOCATION_PRIMARY) {
+        } else if ((uri.equals(TMenuItem.MENU_URL_MESSAGE) || uri.startsWith("apppubs://message")) && type == TMenuItem.MENU_LOCATION_PRIMARY) {
 //            frg = new ConversationFragment();
             frg = new ConversationListFragment();
             mFragmentsMap.put(item, frg);
             mHomeActivity.changeContent(frg);
 
-        } else if (uri.equals(MenuItem.MENU_URL_MESSAGE) || uri.startsWith("apppubs://message")) {
+        } else if (uri.equals(TMenuItem.MENU_URL_MESSAGE) || uri.startsWith("apppubs://message")) {
             ContainerActivity.startActivity(mHomeActivity, ConversationFragment.class, null, item.getName());
-        } else if (uri.equals(MenuItem.MENU_URL_PIC)) {// 图片
+        } else if (uri.equals(TMenuItem.MENU_URL_PIC)) {// 图片
             frg = new ChannelPictureFragment();
             Bundle b = new Bundle();
             b.putString(ChannelPictureFragment.ARG_KEY, mApp.getWebAppCode());
             frg.setArguments(b);
             mFragmentsMap.put(item, frg);
             mHomeActivity.changeContent(frg);
-        } else if (uri.equals(MenuItem.MENU_URL_VIDEO)) {// 视频
+        } else if (uri.equals(TMenuItem.MENU_URL_VIDEO)) {// 视频
             frg = new ChannelVideoFragment();
             Bundle b = new Bundle();
             b.putString(ChannelFragment.ARG_KEY, mApp.getWebAppCode());
@@ -425,7 +425,7 @@ public class ViewCourier {
             mHomeActivity.changeContent(frg);
         } else if (uri.equals("app:{$jfshop}")) {// 商城
 
-        } else if (uri.equals(MenuItem.MENU_URL_BAOLIAO)) {// 爆料
+        } else if (uri.equals(TMenuItem.MENU_URL_BAOLIAO)) {// 爆料
             intent = new Intent(mHomeActivity, BaoliaoActivity.class);
             mHomeActivity.startActivity(intent);
         } else if (uri.equals("app:{$search}")) {// 搜索
@@ -434,10 +434,10 @@ public class ViewCourier {
         } else if (uri.equals("app:{$weather}")) {// 天气
             intent = new Intent(mHomeActivity, WeatherActivity.class);
             mHomeActivity.startActivity(intent);
-        } else if (uri.equals(MenuItem.MENU_URL_FAVORITE) && type == MenuItem.MENU_LOCATION_PRIMARY) {// 收藏
+        } else if (uri.equals(TMenuItem.MENU_URL_FAVORITE) && type == TMenuItem.MENU_LOCATION_PRIMARY) {// 收藏
             frg = new CollectionFragment();
             mHomeActivity.changeContent(frg);
-        } else if (uri.equals(MenuItem.MENU_URL_FAVORITE)) {// 收藏
+        } else if (uri.equals(TMenuItem.MENU_URL_FAVORITE)) {// 收藏
             frg = new CollectionFragment();
             ContainerActivity.startActivity(mHomeActivity, frg.getClass(), null, item.getName());
         } else if (uri.equals("app:{$vote}")) {// 投票
@@ -450,7 +450,7 @@ public class ViewCourier {
             frg = new MoreFragment();
             frg.setArguments(args);
             mHomeActivity.changeContent(frg);
-        } else if (uri.equals(MenuItem.MENU_URL_MENU) || uri.startsWith("apppubs://menugroups")) {// 逻辑菜单
+        } else if (uri.equals(TMenuItem.MENU_URL_MENU) || uri.startsWith("apppubs://menugroups")) {// 逻辑菜单
             if (ViewCourier.openLoginViewIfNeeded(uri, mHomeActivity)) {
                 return;
             }
@@ -461,28 +461,28 @@ public class ViewCourier {
             frg.setArguments(args);
             mFragmentsMap.put(item, frg);
             mHomeActivity.changeContent(frg);
-        } else if (uri.equals(MenuItem.MENU_URL_ADDRESSBOOK) && type == MenuItem.MENU_LOCATION_PRIMARY) {
+        } else if (uri.equals(TMenuItem.MENU_URL_ADDRESSBOOK) && type == TMenuItem.MENU_LOCATION_PRIMARY) {
             Bundle args = new Bundle();
             args.putString(AddressBookFragement.ARGS_ROOT_DEPARTMENT_SUPER_ID, item.getChannelTypeId());
             frg = new AddressBookFragement();
             frg.setArguments(args);
             mFragmentsMap.put(item, frg);
             mHomeActivity.changeContent(frg);
-        } else if (uri.equals(MenuItem.MENU_URL_ADDRESSBOOK)) {
+        } else if (uri.equals(TMenuItem.MENU_URL_ADDRESSBOOK)) {
             Bundle args = new Bundle();
             args.putString(AddressBookFragement.ARGS_ROOT_DEPARTMENT_SUPER_ID, item.getChannelTypeId());
             ContainerActivity.startActivity(mHomeActivity, AddressBookFragement.class, args);
 
-        } else if (uri.equals(MenuItem.MENU_URL_SETTING) && type == MenuItem.MENU_LOCATION_PRIMARY) {
+        } else if (uri.equals(TMenuItem.MENU_URL_SETTING) && type == TMenuItem.MENU_LOCATION_PRIMARY) {
             frg = new SettingFragment();
             Bundle args = new Bundle();
             args.putString(TitleMenuFragment.ARGS_MENU_ID, item.getId());
             frg.setArguments(args);
             mFragmentsMap.put(item, frg);
             mHomeActivity.changeContent(frg);
-        } else if (uri.equals(MenuItem.MENU_URL_SETTING)) {
+        } else if (uri.equals(TMenuItem.MENU_URL_SETTING)) {
             startSettingView(mContext, item.getId());
-        } else if (uri.equals(MenuItem.MENU_URL_EMAIL)) {
+        } else if (uri.equals(TMenuItem.MENU_URL_EMAIL)) {
 
 			openEmailApp();
         } else if (uri.equals("app:{$menu_extra}")) {
@@ -493,7 +493,7 @@ public class ViewCourier {
             frg.setArguments(args);
             mFragmentsMap.put(item, frg);
             mHomeActivity.changeContent(frg);
-        } else if (uri.equals(MenuItem.MENU_URL_MY_FILE)) {
+        } else if (uri.equals(TMenuItem.MENU_URL_MY_FILE)) {
             intent = new Intent(mHomeActivity, MyFileFragment.class);
             intent.putExtra(BaseActivity.EXTRA_STRING_TITLE, item.getName());
             mHomeActivity.startActivity(intent);
@@ -516,9 +516,9 @@ public class ViewCourier {
                 }
             }, "确定拨号?", "电话：" + str[1], "放弃", "拨号").show();
 
-        } else if (uri.equals(MenuItem.MENU_URL_USER_ACCOUNT)) {
+        } else if (uri.equals(TMenuItem.MENU_URL_USER_ACCOUNT)) {
             execute(ACTION_USER_CENTER);
-        } else if (uri.startsWith("apppubs://page") && type == MenuItem.MENU_LOCATION_PRIMARY) {
+        } else if (uri.startsWith("apppubs://page") && type == TMenuItem.MENU_LOCATION_PRIMARY) {
             frg = new PageFragment();
             Bundle args = new Bundle();
             String[] params = StringUtils.getPathParams(uri);
@@ -555,7 +555,7 @@ public class ViewCourier {
 			frg.setArguments(args);
 			mHomeActivity.changeContent(frg);
 		}else {
-            if (type == MenuItem.MENU_LOCATION_PRIMARY) {
+            if (type == TMenuItem.MENU_LOCATION_PRIMARY) {
                 frg = new ExceptionFragment();
                 mHomeActivity.changeContent(frg);
             } else {
@@ -568,7 +568,7 @@ public class ViewCourier {
 
         //注意！每次请求菜单时均要通过这里，但上面一大段的可能被跳过,
         // 如果请求的是主菜单则需要更改标题
-        if (type == MenuItem.MENU_LOCATION_PRIMARY) {
+        if (type == TMenuItem.MENU_LOCATION_PRIMARY) {
 
             if (mApp.getLayoutScheme() == App.LAYOUT_BOTTOM_MENU) {
 
@@ -620,7 +620,7 @@ public class ViewCourier {
 		}
 	}
 
-	private String convertUri(MenuItem item, final String uri) {
+	private String convertUri(TMenuItem item, final String uri) {
         String tempUri = uri;
         Map<String, String> customIpMap = (Map<String, String>) FileUtils.readObj(mContext, CustomWebAppUrlProtocolAndIpActivity.CUSTOM_WEB_APP_URL_SERIALIZED_FILE_NAME);
         if (customIpMap != null) {

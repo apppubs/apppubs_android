@@ -105,7 +105,7 @@ public class ChannelPictureFragment extends ChannelFragment {
 
 	private void load(){
 		
-		mNewsBussiness.getNewsInfoPage(NewsInfo.NEWS_TYPE_PICTURE,mChannelCode, mCurPage, URLs.PAGE_PIC_SIZE, new APResultCallback<List<NewsInfo>>() {
+		mNewsBiz.getNewsInfoPage(NewsInfo.NEWS_TYPE_PICTURE,mChannelCode, mCurPage, URLs.PAGE_PIC_SIZE, new APResultCallback<List<NewsInfo>>() {
 			
 			@Override
 			public void onException(int excepCode) {

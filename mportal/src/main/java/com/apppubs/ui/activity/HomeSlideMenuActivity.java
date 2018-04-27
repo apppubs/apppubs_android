@@ -33,9 +33,9 @@ import com.amap.api.location.AMapLocation;
 import com.amap.api.location.AMapLocationListener;
 import com.apppubs.AppContext;
 import com.apppubs.AppManager;
+import com.apppubs.bean.TMenuItem;
 import com.apppubs.d20.R;
 import com.apppubs.bean.App;
-import com.apppubs.bean.MenuItem;
 import com.apppubs.bean.UserInfo;
 import com.apppubs.bean.Weather;
 import com.apppubs.ui.fragment.BaseFragment;
@@ -154,7 +154,7 @@ public class HomeSlideMenuActivity extends HomeBaseActivity implements OnItemCli
 	 */
 	public void initState() {
 		// 将第一个界面填充
-		mViewCourier.executeInHomeActivity((MenuItem) mLeftMenuA.getItem(0),this);
+		mViewCourier.executeInHomeActivity((TMenuItem) mLeftMenuA.getItem(0),this);
 		// mTitleBar.setTitle(App.listAll(App.class).get(0).getName());
 		mTitleBar.setLeftBtnClickListener(this);
 //		mTitleBar.setRightBtnClickListener(this);
@@ -579,12 +579,12 @@ public class HomeSlideMenuActivity extends HomeBaseActivity implements OnItemCli
 
 				@Override
 				public void run() {
-					mViewCourier.executeInHomeActivity((MenuItem) view.getTag(),HomeSlideMenuActivity.this);
+					mViewCourier.executeInHomeActivity((TMenuItem) view.getTag(),HomeSlideMenuActivity.this);
 				}
 			}, 300);
 
 		} else {
-			mViewCourier.executeInHomeActivity((MenuItem) view.getTag(),this);
+			mViewCourier.executeInHomeActivity((TMenuItem) view.getTag(),this);
 		}
 
 	}
@@ -630,7 +630,7 @@ public class HomeSlideMenuActivity extends HomeBaseActivity implements OnItemCli
 			mItemHeight = context.getResources().getDimensionPixelSize(R.dimen.menu_left_item_height);
 			Log.v("MenuLeftAdapter", "MenuLeftAdapter初始化");
 			int lenTemp = 0;
-			for(MenuItem mi:mPrimaryMenuList){
+			for(TMenuItem mi:mPrimaryMenuList){
 				if(lenTemp==0){
 					lenTemp = mi.getName().length();
 				}else if(lenTemp!=mi.getName().length()){
@@ -659,7 +659,7 @@ public class HomeSlideMenuActivity extends HomeBaseActivity implements OnItemCli
 		@Override
 		public View getView(int pos, View convertView, ViewGroup container) {
 			Log.v("MenuLeftAdapter", "MenuLeftAdapter getView pos:" + pos);
-			MenuItem mi = mPrimaryMenuList.get(pos);
+			TMenuItem mi = mPrimaryMenuList.get(pos);
 			LayoutInflater inflater = (LayoutInflater) context.getSystemService(LAYOUT_INFLATER_SERVICE);
 			convertView = inflater.inflate(needCenterLayout?R.layout.item_menu_left_align_center:R.layout.item_menu_left, null);
 			
@@ -721,7 +721,7 @@ public class HomeSlideMenuActivity extends HomeBaseActivity implements OnItemCli
 		public View getView(int position, View convertView, ViewGroup container) {
 
 			LayoutInflater inflater = (LayoutInflater) context.getSystemService(LAYOUT_INFLATER_SERVICE);
-			MenuItem mi = mSecondaryMenuList.get(position);
+			TMenuItem mi = mSecondaryMenuList.get(position);
 			convertView = inflater.inflate(R.layout.item_menu_right_gv, null);
 			convertView.setTag(mi);// 在操作此item时可已取出利用
 			AbsListView.LayoutParams param = new AbsListView.LayoutParams(mItemWidth, mItemHeight);

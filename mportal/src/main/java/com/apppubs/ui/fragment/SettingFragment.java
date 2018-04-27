@@ -29,7 +29,7 @@ import android.widget.ToggleButton;
 
 import com.android.volley.RequestQueue;
 import com.android.volley.toolbox.Volley;
-import com.apppubs.bean.MenuItem;
+import com.apppubs.bean.TMenuItem;
 import com.apppubs.AppManager;
 import com.apppubs.model.SystemBiz;
 import com.apppubs.ui.activity.AboutActivity;
@@ -161,7 +161,7 @@ public class SettingFragment extends TitleMenuFragment implements OnClickListene
 		mClickNum = 0;
 		initTitleClickListener();
 		
-		List<MenuItem> list = SugarRecord.find(MenuItem.class, "is_allow_custom_ip = ?", MenuItem.YES+"");
+		List<TMenuItem> list = SugarRecord.find(TMenuItem.class, "is_allow_custom_ip = ?", TMenuItem.YES+"");
 		if(list.size()>0){
 			setVisibilityOfViewByResId(mRootView, R.id.setting_segment3, View.VISIBLE);
 		}

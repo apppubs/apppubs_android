@@ -1,5 +1,6 @@
 package com.apppubs.model;
 
+import android.content.Context;
 import android.text.TextUtils;
 
 import com.apppubs.bean.PaperInfo;
@@ -29,20 +30,20 @@ import java.util.concurrent.Future;
  * @author zhangwen 2014-10-30
  * The service about the paper
  */
-public class PaperBussiness extends BaseBussiness{
+public class PaperBiz extends BaseBiz {
 	
-	private static PaperBussiness sPaperBussiness;
+	private static PaperBiz sPaperBiz;
 
-	private PaperBussiness() {
-		
+	private PaperBiz(Context context) {
+		super(context);
 	};
 
-	public static PaperBussiness getInstance() {
+	public static PaperBiz getInstance(Context context) {
 
-		if (sPaperBussiness == null)
-			sPaperBussiness = new PaperBussiness();
+		if (sPaperBiz == null)
+			sPaperBiz = new PaperBiz(context);
 
-		return sPaperBussiness;
+		return sPaperBiz;
 	}
 
 	public List<Paper> getPaperList() {

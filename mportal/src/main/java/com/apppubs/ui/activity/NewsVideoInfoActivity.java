@@ -32,7 +32,7 @@ import com.apppubs.bean.Comment;
 import com.apppubs.bean.NewsInfo;
 import com.apppubs.bean.NewsVideoInfo;
 import com.apppubs.model.APResultCallback;
-import com.apppubs.model.CollectionBussiness;
+import com.apppubs.model.CollectionBiz;
 import com.apppubs.constant.URLs;
 import com.apppubs.util.ShareTools;
 import com.apppubs.util.Utils;
@@ -206,7 +206,7 @@ public class NewsVideoInfoActivity extends BaseActivity implements AsyTaskCallba
 			String title = mNewsVideo.getTitle();
 			String summy = mNewsVideo.getDescription();
 			ImageView iv = (ImageView) mMenuPW.getContentView().findViewById(R.id.pop_news_info_collect_ib);
-			CollectionBussiness.toggleCollect(Collection.TYPE_VEDIO, this, isCollected, mInfoId+","+mChannelCode, title, summy);
+			CollectionBiz.toggleCollect(Collection.TYPE_VEDIO, this, isCollected, mInfoId+","+mChannelCode, title, summy);
 			isCollected = !isCollected;
 			Toast.makeText(this, isCollected?"已收藏":"取消收藏", Toast.LENGTH_SHORT).show();
 			iv.setImageResource(isCollected?R.drawable.menubar_favorite_h:R.drawable.menubar_favorite);

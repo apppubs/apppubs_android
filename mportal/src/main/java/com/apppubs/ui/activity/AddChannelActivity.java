@@ -135,10 +135,10 @@ public class AddChannelActivity extends BaseActivity {
 			NewsChannel nc =  mList.get(pos);
 			
 			if(isChecked){
-				mNewsBussiness.addChannel(mChannelTypeId, nc.getCode());
+				mNewsBiz.addChannel(mChannelTypeId, nc.getCode());
 				nc.setDisplayOrder(1);
 			}else{
-				mNewsBussiness.removeChannel(mChannelTypeId, nc.getCode());
+				mNewsBiz.removeChannel(mChannelTypeId, nc.getCode());
 				nc.setDisplayOrder(0);
 			}
 		}

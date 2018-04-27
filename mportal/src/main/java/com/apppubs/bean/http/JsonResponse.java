@@ -4,7 +4,7 @@ package com.apppubs.bean.http;
  * Created by siger on 2018/4/17.
  */
 
-public class JsonResult<T> {
+public class JsonResponse<T extends IJsonResult> {
     private Integer code;
     private String msg;
     private T result;

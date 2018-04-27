@@ -8,7 +8,7 @@ import java.util.Map;
  * Created by siger on 2018/4/20.
  */
 
-public class AppInfo {
+public class AppInfoResult implements IJsonResult{
 
     private String appId;
     private String name;

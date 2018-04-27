@@ -1,6 +1,5 @@
 package com.apppubs.net;
 
-import com.apppubs.bean.http.JsonResult;
 import com.apppubs.constant.APError;
 
 /**

@@ -16,11 +16,11 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.apppubs.d20.R;
+import com.apppubs.model.PaperBiz;
 import com.apppubs.ui.activity.PaperIssueActivity;
 import com.apppubs.bean.Paper;
 import com.apppubs.bean.PaperIssue;
 import com.apppubs.model.APResultCallback;
-import com.apppubs.model.PaperBussiness;
 import com.apppubs.ui.widget.commonlist.CommonListView;
 import com.apppubs.ui.widget.commonlist.CommonListViewListener;
 import com.orm.SugarRecord;
@@ -29,7 +29,7 @@ public class PaperIssueListFragment extends BaseFragment {
 
 	public static final String ARG_PAPERCODE = "paper_code";
 
-	private PaperBussiness mPaperBussiness;
+	private PaperBiz mPaperBiz;
 	private CommonListView xlv;
 	private List<PaperIssue> mIssuelist;
 	private String mPaperCode;
@@ -65,11 +65,11 @@ public class PaperIssueListFragment extends BaseFragment {
 	private void init() {
 		progress = (LinearLayout) mRootView.findViewById(R.id.frg_peter_progress_ll);
 		mPaperCode = getArguments().getString(ARG_PAPERCODE);
-		mPaperBussiness = PaperBussiness.getInstance();
+		mPaperBiz = PaperBiz.getInstance(getContext());
 	}
 
 	private void load() {
-		mPaperBussiness.getPaperIssueList(mPaperCode, mCurPos, new APResultCallback<List<PaperIssue>>() {
+		mPaperBiz.getPaperIssueList(mPaperCode, mCurPos, new APResultCallback<List<PaperIssue>>() {
 
 			@Override
 			public void onException(int excepCode) {

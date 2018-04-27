@@ -2,6 +2,8 @@ package com.apppubs;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager;
 import android.support.annotation.Nullable;
 import android.util.Log;
 
@@ -9,6 +11,7 @@ import com.apppubs.bean.App;
 import com.apppubs.bean.AppConfig;
 import com.apppubs.bean.Settings;
 import com.apppubs.bean.UserInfo;
+import com.apppubs.bean.http.AppInfoResult;
 import com.apppubs.constant.URLs;
 import com.apppubs.bean.CompelMessageDialogActivity;
 import com.apppubs.ui.home.CompelReadMessageModel;
@@ -27,6 +30,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -80,7 +84,6 @@ public class AppContext {
 	}
 
 	public void setApp(App mApp) {
-
 		this.mApp = mApp;
 		serializeApp();
 	}
@@ -88,6 +91,37 @@ public class AppContext {
 	public synchronized void serializeApp(){
 		MportalApplication.writeObj(mContext, mApp, APP_FILE_NAME);
 		LogM.log(AppContext.class,"保存app:"+mApp.toString());
+	}
+
+	public void increaseInitTimes(){
+		mApp.setInitTimes(mApp.getInitTimes()+1);
+		this.serializeApp();
+	}
+
+	public void setMenuUpdateTime(Date date){
+		mApp.setMenuLocalUpdateTime(date);
+		this.serializeApp();
+	}
+
+	public void updateWithAppInfo(AppInfoResult info) {
+		mApp.setCode(info.getAppId());
+		mApp.setName(info.getName());
+		mApp.setLoginFlag(info.getLoginFlag());
+		mApp.setWebLoginUrl(info.getWebLoginURL());
+		mApp.setAllowRegister(info.getUserRegFlag());
+		mApp.setLayoutScheme(info.getLayoutSchema());
+		mApp.setDefaultTheme(info.getDefaultTheme());
+		mApp.setCustomThemeColor(info.getThemeColor());
+		mApp.setMenuUpdateTime(info.getMenuUpdateTime());
+		mApp.setStartUpPic(info.getStartupPicURL());
+		mApp.setLoginPicUrl(info.getLoginPicURL());
+
+		if (mApp.getInitTimes()==0){
+		    mApp.setLayoutLocalScheme(info.getLayoutSchema());
+            mSettings.setTheme(info.getDefaultTheme());
+
+        }
+		this.serializeApp();
 	}
 
 	public AppConfig getAppConfig() {
@@ -223,5 +257,19 @@ public class AppContext {
 				}
 			}
 		});
+	}
+
+	public String getVersionString() {
+		PackageInfo pInfo = null;
+		try {
+			pInfo = mContext.getPackageManager().getPackageInfo(mContext.getPackageName(), 0);
+		} catch (PackageManager.NameNotFoundException e) {
+			e.printStackTrace();
+		}
+		if (pInfo != null) {
+			return "V" + pInfo.versionName + " (" + Utils.getVersionCode(mContext) + ")";
+		} else {
+			return null;
+		}
 	}
 }

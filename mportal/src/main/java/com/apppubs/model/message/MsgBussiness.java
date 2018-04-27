@@ -12,7 +12,7 @@ import com.apppubs.bean.ServiceNo;
 import com.apppubs.bean.User;
 import com.apppubs.constant.URLs;
 import com.apppubs.model.APResultCallback;
-import com.apppubs.model.BaseBussiness;
+import com.apppubs.model.BaseBiz;
 import com.apppubs.ui.message.MyFilePlugin;
 import com.apppubs.util.JSONResult;
 import com.apppubs.util.LogM;
@@ -57,11 +57,12 @@ import io.rong.imlib.model.UserInfo;
  * ChangeLog: 2015年3月16日 by zhangwen create
  * 
  */
-public class MsgBussiness extends BaseBussiness {
+public class MsgBussiness extends BaseBiz {
 
 	private static MsgBussiness sMessageBussiness;
 	private Context mContext;
 	private MsgBussiness(Context context) {
+		super(context);
 		mContext = context;
 	}
 

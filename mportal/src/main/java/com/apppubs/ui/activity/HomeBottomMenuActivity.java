@@ -14,8 +14,8 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.apppubs.bean.TMenuItem;
 import com.apppubs.d20.R;
-import com.apppubs.bean.MenuItem;
 import com.apppubs.constant.Actions;
 import com.apppubs.ui.fragment.BaseFragment;
 import com.apppubs.util.LogM;
@@ -44,7 +44,7 @@ public class HomeBottomMenuActivity extends HomeBaseActivity {
 	 * 底部菜单数量最大值
 	 */
 	private final int MAX_MENU_NUM = 5;
-	//	private MenuItem[] miArr;
+	//	private TMenuItem[] miArr;
 	private int mCurPos;
 	private int mIntentCurPos;
 	private int mMenuBarBtnDefaultColor;
@@ -104,7 +104,7 @@ public class HomeBottomMenuActivity extends HomeBaseActivity {
 
 	private void setMessageUnreadNum() {
 		String messageMenuId = null;
-		for (MenuItem mi : mPrimaryMenuList) {
+		for (TMenuItem mi : mPrimaryMenuList) {
 			if (mi.getUrl() != null && mi.getUrl().startsWith("apppubs://message")) {
 				messageMenuId = mi.getId();
 				break;
@@ -122,12 +122,12 @@ public class HomeBottomMenuActivity extends HomeBaseActivity {
 
 		if (size == 1) {
 			mMenuBar.setVisibility(View.GONE);
-//			miArr = new MenuItem[1];
+//			miArr = new TMenuItem[1];
 //			miArr[0] = mPrimaryMenuList.get(0);
 		} else {
 
 //			int loopTimes = size > MAX_MENU_NUM ? MAX_MENU_NUM : size;
-//			miArr = new MenuItem[loopTimes];
+//			miArr = new TMenuItem[loopTimes];
 //			for (int i = -1; ++i < loopTimes;) {
 //				miArr[i] = mPrimaryMenuList.get(i);
 //				LogM.log(this.getClass(), "增加菜单：" + miArr[i].getName());
@@ -163,11 +163,11 @@ public class HomeBottomMenuActivity extends HomeBaseActivity {
 	 */
 	private void selectMenu(int position) {
 		mIntentCurPos = position;
-		MenuItem mi = mPrimaryMenuList.get(position);
+		TMenuItem mi = mPrimaryMenuList.get(position);
 		if (ViewCourier.openLoginViewIfNeeded(mi.getUrl(), this)) {
 			return;
 		}
-//		MenuItem mi = miArr[position];
+//		TMenuItem mi = miArr[position];
 		mViewCourier.executeInHomeActivity(mi, this);
 
 		ImageView ivC = (ImageView) mMenuBar.getChildAt(mCurPos).findViewById(R.id.menu_buttom_iv);

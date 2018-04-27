@@ -33,7 +33,7 @@ import com.apppubs.bean.NewsChannel;
 import com.apppubs.asytask.AsyTaskCallback;
 import com.apppubs.asytask.AsyTaskExecutor;
 import com.apppubs.bean.NewsInfo;
-import com.apppubs.model.NewsBussiness;
+import com.apppubs.model.NewsBiz;
 import com.apppubs.constant.URLs;
 import com.apppubs.util.JSONResult;
 import com.apppubs.util.JSONUtils;
@@ -155,7 +155,7 @@ public class ChannelDefaultFragment extends ChannelFragment  implements OnClickL
 
 	private void loadHeader() {
 		LogM.log(this.getClass(), "loadHeader");
-		final List<HeadPic> infoList = mNewsBussiness.getNewsPopulation(mChannelCode);
+		final List<HeadPic> infoList = mNewsBiz.getNewsPopulation(mChannelCode);
 		if(mChannel.getShowType()!= NewsChannel.SHOWTYPE_HEADLINE||mChannel.getFocusPicNum()==0||infoList.size()==0){
 			LogM.log(this.getClass(), "没有推广图");
 			if(mSlidePicView!=null){
@@ -331,7 +331,7 @@ public class ChannelDefaultFragment extends ChannelFragment  implements OnClickL
 			Date curDate = new Date();
 			SugarRecord.update(NewsChannel.class, "LOCAL_LAST_UPDATE_TIME", curDate.getTime() + "",
 					"CODE = ?", new String[] { mChannelCode });
-			mNewsBussiness.saveList(infoList, mChannelCode);
+			mNewsBiz.saveList(infoList, mChannelCode);
 			
 		}else if(tag==TAST_CODE_REFRESH__CHANNEL){
 			SugarRecord.deleteAll(NewsInfo.class, "CHANNEL_CODE=?", mChannelCode);
@@ -356,7 +356,7 @@ public class ChannelDefaultFragment extends ChannelFragment  implements OnClickL
 
 			List<NewsInfo> infoList = WebUtils.requestList(url, NewsInfo.class, "info");
 
-			mNewsBussiness.saveList(infoList, mChannelCode);
+			mNewsBiz.saveList(infoList, mChannelCode);
 			if (newsChannel.getLastUpdateTime() != null) {
 
 				SugarRecord.update(NewsChannel.class, "LOCAL_LAST_UPDATE_TIME", newsChannel.getLastUpdateTime()
@@ -386,13 +386,13 @@ public class ChannelDefaultFragment extends ChannelFragment  implements OnClickL
 					if(infoList!=null&&infoList.size()>0){
 						
 						SugarRecord.deleteAll(NewsInfo.class, "CHANNEL_CODE=?", mChannelCode);
-						mNewsBussiness.saveList(infoList, mChannelCode);
+						mNewsBiz.saveList(infoList, mChannelCode);
 					}
 				
 			} else if (mCurPage == 1) {
 				infoList = SugarRecord.find(NewsInfo.class, "CHANNEL_CODE = ?", new String[] { mChannelCode },
 						null, "PUB_TIME desc", (mCurPage - 1) * URLs.PAGE_SIZE + "," + URLs.PAGE_SIZE);
-				LogM.log(NewsBussiness.class, "从数据库中查询出的数据条数："+infoList.size());
+				LogM.log(NewsBiz.class, "从数据库中查询出的数据条数："+infoList.size());
 			} else {
 
 				infoList = SugarRecord.find(NewsInfo.class, "CHANNEL_CODE = ? ", new String[] { mChannelCode },
@@ -402,10 +402,10 @@ public class ChannelDefaultFragment extends ChannelFragment  implements OnClickL
 					String url = String.format(URLs.URL_NEWS_LIST_OF_CHANNEL,URLs.baseURL)+ "&channelcode=" + mChannelCode + "&pno=" + mCurPage
 							+ "&pernum=" + URLs.PAGE_SIZE;
 					infoList = WebUtils.requestList(url, NewsInfo.class, "info");
-					mNewsBussiness.saveList(infoList, mChannelCode);
+					mNewsBiz.saveList(infoList, mChannelCode);
 				} 
 			}
-			LogM.log(NewsBussiness.class, "准备返回到界面："+infoList.size());
+			LogM.log(NewsBiz.class, "准备返回到界面："+infoList.size());
 			obj = infoList;
 		}
 		return obj;

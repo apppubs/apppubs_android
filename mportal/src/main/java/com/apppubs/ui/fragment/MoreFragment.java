@@ -12,7 +12,7 @@ import android.widget.LinearLayout;
 import android.widget.LinearLayout.LayoutParams;
 import android.widget.TextView;
 
-import com.apppubs.bean.MenuItem;
+import com.apppubs.bean.TMenuItem;
 import com.apppubs.d20.R;
 import com.apppubs.util.Utils;
 
@@ -28,7 +28,7 @@ import com.apppubs.util.Utils;
  */
 public class MoreFragment extends HomeFragment implements OnClickListener{
 
-	private List<MenuItem> mSquareMenuList;
+	private List<TMenuItem> mSquareMenuList;
 	private LinearLayout mContainerLl;
 	private int mDividerColor;
 	@Override
@@ -48,7 +48,7 @@ public class MoreFragment extends HomeFragment implements OnClickListener{
 		addDivider();
 		int size = mSquareMenuList.size();
 		for(int i=-1;++i<size;){
-			MenuItem mi = mSquareMenuList.get(i);
+			TMenuItem mi = mSquareMenuList.get(i);
 			View v = LayoutInflater.from(mHostActivity).inflate(R.layout.item_more_lv, null);
 			TextView tv = (TextView) v.findViewById(R.id.item_more_tv);
 			ImageView iv = (ImageView) v.findViewById(R.id.item_more_iv);
@@ -92,8 +92,8 @@ public class MoreFragment extends HomeFragment implements OnClickListener{
 
 	@Override
 	public void onClick(View v) {
-		MenuItem mi = null;
-		if((mi=(MenuItem) v.getTag())==null){
+		TMenuItem mi = null;
+		if((mi=(TMenuItem) v.getTag())==null){
 			mViewController.startSettingView(mHostActivity,mi.getId());
 		}else{
 			mViewController.executeInHomeActivity(mi,mHostActivity);

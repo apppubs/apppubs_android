@@ -4,7 +4,7 @@ package com.apppubs.bean.http;
  * Created by siger on 2018/4/20.
  */
 
-public class ArticleInfo {
+public class ArticleInfo implements IJsonResult{
     private String infoId;
 
     public String getInfoId() {

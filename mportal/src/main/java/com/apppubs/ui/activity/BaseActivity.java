@@ -37,12 +37,12 @@ import com.apppubs.bean.AppConfig;
 import com.apppubs.bean.Settings;
 import com.apppubs.bean.UserInfo;
 import com.apppubs.constant.Actions;
+import com.apppubs.model.NewsBiz;
+import com.apppubs.model.PaperBiz;
 import com.apppubs.model.SystemBiz;
 import com.apppubs.model.message.MsgBussiness;
 import com.apppubs.model.message.UserBussiness;
 import com.apppubs.model.APResultCallback;
-import com.apppubs.model.NewsBussiness;
-import com.apppubs.model.PaperBussiness;
 import com.apppubs.model.VersionInfo;
 import com.apppubs.ui.start.StartUpActivity;
 import com.apppubs.util.JSONResult;
@@ -75,9 +75,9 @@ public abstract class BaseActivity extends FragmentActivity implements OnClickLi
 	protected MportalApplication mApp;
 	protected AppContext mAppContext;
 
-	protected NewsBussiness mNewsBussiness;
+	protected NewsBiz mNewsBiz;
 	protected SystemBiz mSystemBiz;
-	protected PaperBussiness mPaperBussiness;
+	protected PaperBiz mPaperBiz;
 	protected UserBussiness mUserBussiness;
 	protected MsgBussiness mMsgBussiness;
 
@@ -163,9 +163,9 @@ public abstract class BaseActivity extends FragmentActivity implements OnClickLi
 		mImageLoader = ImageLoader.getInstance();
 		mApp = (MportalApplication) getApplication();
 
-		mNewsBussiness = NewsBussiness.getInstance(mContext);
+		mNewsBiz = NewsBiz.getInstance(mContext);
 		mSystemBiz = SystemBiz.getInstance(this);
-		mPaperBussiness = PaperBussiness.getInstance();
+		mPaperBiz = PaperBiz.getInstance(this);
 		mUserBussiness = UserBussiness.getInstance(this);
 		mMsgBussiness = MsgBussiness.getInstance(this);
 

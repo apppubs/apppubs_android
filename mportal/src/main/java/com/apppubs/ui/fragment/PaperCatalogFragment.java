@@ -21,6 +21,7 @@ import android.widget.Toast;
 
 import com.apppubs.bean.PaperInfo;
 import com.apppubs.model.APResultCallback;
+import com.apppubs.model.PaperBiz;
 import com.apppubs.util.LogM;
 import com.artifex.mupdfdemo.MuPDFCore;
 import com.apppubs.d20.R;
@@ -28,7 +29,6 @@ import com.apppubs.ui.activity.HomeBaseActivity;
 import com.apppubs.ui.activity.PaperInfoActivity;
 import com.apppubs.bean.Paper;
 import com.apppubs.bean.PaperCatalog;
-import com.apppubs.model.PaperBussiness;
 import com.apppubs.ui.widget.PdfViewWithHotArea;
 import com.apppubs.ui.widget.PdfViewWithHotArea.PdfViewWithHotAreaListener;
 import com.orm.SugarRecord;
@@ -52,7 +52,7 @@ public class PaperCatalogFragment extends BaseFragment implements OnClickListene
 //	private PaperIssue mIssue;
 	private int mIndex;
 	private Thread mGetCatalogHtmlT;
-	private PaperBussiness mPaperBussiness;
+	private PaperBiz mPaperBiz;
 	private LinearLayout mWaitLl;
 	private LinearLayout mErrLl;
 	private ImageView mReloadIv;
@@ -87,7 +87,7 @@ public class PaperCatalogFragment extends BaseFragment implements OnClickListene
 	}
 	private void init(){
 		
-		mPaperBussiness = PaperBussiness.getInstance();
+		mPaperBiz = PaperBiz.getInstance(getContext());
 		
 		mWaitLl = (LinearLayout) mRootView.findViewById(R.id.catalog_wait_ll);
 	}
@@ -100,7 +100,7 @@ public class PaperCatalogFragment extends BaseFragment implements OnClickListene
 	private void fill(){
 		
 		mWaitLl.setVisibility(View.VISIBLE);
-		mPaperBussiness.getCatalog(mCatalogId, new APResultCallback<PaperCatalog>() {
+		mPaperBiz.getCatalog(mCatalogId, new APResultCallback<PaperCatalog>() {
 			
 			@Override
 			public void onException(int excepCode) {

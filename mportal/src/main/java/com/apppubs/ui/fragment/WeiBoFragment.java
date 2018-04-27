@@ -83,39 +83,39 @@ public class WeiBoFragment extends BaseFragment implements OnPageChangeListener 
 		mSt = (Tabs) mRootView.findViewById(R.id.weibo_st);
 	}
 	private void fill(){
-		mSystemBiz.getWeiBoInfo(new APResultCallback<List<WeiboInfo>>() {
-			
-			@Override
-			public void onException(int excepCode) {
-			}
-			
-			@Override
-			public void onDone(List<WeiboInfo> obj) {
-				mprogress.setVisibility(View.GONE);
-				if(obj.size()<1)
-					return;
-				LogM.log(this.getClass(), "微博fragment");
-				minfos = obj;
-				adapter = new WeiboPargeAdapter();
-				viewparge.setAdapter(adapter);
-				if(mWebViewLists!=null&&mWebViewLists.size()>0)
-					mCurWebView = mWebViewLists.get(0);
-				
-				String[] names = new String[minfos.size()];
-				
-				for(int i=-1;++i<names.length;){
-					names[i] = minfos.get(i).getName();
-				}
-				mSt.setTabs(names);
-				mSt.setOnItemClickListener(new Tabs.OnItemClickListener() {
-					
-					@Override
-					public void onItemClick(int pos) {
-						viewparge.setCurrentItem(pos);
-					}
-				});
-			}
-		});
+//		mSystemBiz.getWeiBoInfo(new APResultCallback<List<WeiboInfo>>() {
+//
+//			@Override
+//			public void onException(int excepCode) {
+//			}
+//
+//			@Override
+//			public void onDone(List<WeiboInfo> obj) {
+//				mprogress.setVisibility(View.GONE);
+//				if(obj.size()<1)
+//					return;
+//				LogM.log(this.getClass(), "微博fragment");
+//				minfos = obj;
+//				adapter = new WeiboPargeAdapter();
+//				viewparge.setAdapter(adapter);
+//				if(mWebViewLists!=null&&mWebViewLists.size()>0)
+//					mCurWebView = mWebViewLists.get(0);
+//
+//				String[] names = new String[minfos.size()];
+//
+//				for(int i=-1;++i<names.length;){
+//					names[i] = minfos.get(i).getName();
+//				}
+//				mSt.setTabs(names);
+//				mSt.setOnItemClickListener(new Tabs.OnItemClickListener() {
+//
+//					@Override
+//					public void onItemClick(int pos) {
+//						viewparge.setCurrentItem(pos);
+//					}
+//				});
+//			}
+//		});
 		
 	}
 	

@@ -37,7 +37,7 @@ import com.apppubs.bean.LocalFile;
 import com.apppubs.bean.NewsInfo;
 import com.apppubs.bean.Settings;
 import com.apppubs.model.APResultCallback;
-import com.apppubs.model.CollectionBussiness;
+import com.apppubs.model.CollectionBiz;
 import com.apppubs.ui.myfile.FilePreviewFragment;
 import com.apppubs.ui.webapp.WebAppFragment;
 import com.apppubs.util.LogM;
@@ -264,7 +264,7 @@ public class NewsInfoActivity extends BaseActivity implements AsyTaskCallback {
 			String title = mNewsInfo.getTitle();
 			String summy = mNewsInfo.getSummary();
 			ImageView iv = (ImageView) mMenuPW.getContentView().findViewById(R.id.pop_news_info_collect_ib);
-			CollectionBussiness.toggleCollect(Collection.TYPE_NORMAL, this, isCollected, mInfoId+","+mChannelCode, title, summy);
+			CollectionBiz.toggleCollect(Collection.TYPE_NORMAL, this, isCollected, mInfoId+","+mChannelCode, title, summy);
 			isCollected = !isCollected;
 			Toast.makeText(this, isCollected?"已收藏":"取消收藏", Toast.LENGTH_SHORT).show();
 			iv.setImageResource(isCollected?R.drawable.menubar_favorite_h:R.drawable.menubar_favorite);
@@ -368,7 +368,7 @@ public class NewsInfoActivity extends BaseActivity implements AsyTaskCallback {
 	public Object onExecute(Integer tag, String[] params) throws Exception {
 		Object obj = null;
 		if(tag==REQUEST_TAG){
-			obj = mNewsBussiness.getNewInfo(params[0], params[1]);
+			obj = mNewsBiz.getNewInfo(params[0], params[1]);
 		}else if(tag==REQUEST_HTML_TAG){
 			obj = WebUtils.requestWithGet(params[0]);
 		}

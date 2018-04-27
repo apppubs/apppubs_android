@@ -9,10 +9,10 @@ import android.widget.BaseAdapter;
 
 import com.apppubs.bean.NewsChannel;
 import com.apppubs.bean.NewsInfo;
+import com.apppubs.model.NewsBiz;
 import com.apppubs.util.LogM;
 import com.apppubs.ui.activity.NewsInfoActivity;
 import com.apppubs.ui.activity.NewsInfoBaseActivity;
-import com.apppubs.model.NewsBussiness;
 import com.orm.SugarRecord;
 /**
  * 频道fragment，展示频道信息列表
@@ -31,7 +31,7 @@ public abstract class ChannelFragment extends BaseFragment{
 	protected String mChannelCode;
 	protected int mCurPage = 1;
 	protected NewsChannel mChannel;
-	protected NewsBussiness mNewsBussiness;
+	protected NewsBiz mNewsBiz;
 	protected List<NewsInfo> mNewsInfoList;
 	protected BaseAdapter mAdapter;
 	@Override
@@ -43,7 +43,7 @@ public abstract class ChannelFragment extends BaseFragment{
 			mChannel = SugarRecord.findByProperty(NewsChannel.class, "CODE", mChannelCode);
 		}
 		super.onCreate(savedInstanceState);
-		mNewsBussiness = NewsBussiness.getInstance(mContext);
+		mNewsBiz = NewsBiz.getInstance(mContext);
 	}
 	
 	public abstract void refresh();

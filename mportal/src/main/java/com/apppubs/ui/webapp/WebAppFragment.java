@@ -31,7 +31,7 @@ import android.widget.Toast;
 
 import com.alipay.sdk.app.PayTask;
 import com.amap.api.location.AMapLocation;
-import com.apppubs.bean.MenuItem;
+import com.apppubs.bean.TMenuItem;
 import com.apppubs.AppContext;
 import com.apppubs.AppManager;
 import com.apppubs.MportalApplication;
@@ -542,7 +542,7 @@ public class WebAppFragment extends BaseFragment implements OnClickListener, IWe
                         });
             } else if (mMoreMenusStr != null && !mMoreMenusStr.equals("") && mMoreMenusStr.split
                     (",").length == 1) {
-                if (mMoreMenusStr.equals(MenuItem.WEB_APP_MENU_REFRESH + "")) {
+                if (mMoreMenusStr.equals(TMenuItem.WEB_APP_MENU_REFRESH + "")) {
                     titleBar.addRightBtnWithImageResourceIdAndClickListener(R.drawable
                             .titlebar_refresh, new OnClickListener() {
 
@@ -551,14 +551,14 @@ public class WebAppFragment extends BaseFragment implements OnClickListener, IWe
                             refresh();
                         }
                     });
-                } else if (mMoreMenusStr.equals(MenuItem.WEB_APP_MENU_SHARE + "")) {
+                } else if (mMoreMenusStr.equals(TMenuItem.WEB_APP_MENU_SHARE + "")) {
                     titleBar.addRightBtnWithTextAndClickListener("分享", new OnClickListener() {
 
                         @Override
                         public void onClick(View v) {
                         }
                     });
-                } else if (mMoreMenusStr.equals(MenuItem.WEB_APP_MENU_OPEN_WITH_BROWSER + "")) {
+                } else if (mMoreMenusStr.equals(TMenuItem.WEB_APP_MENU_OPEN_WITH_BROWSER + "")) {
                     titleBar.addRightBtnWithTextAndClickListener("浏览器打开", new OnClickListener() {
 
                         @Override
@@ -587,13 +587,13 @@ public class WebAppFragment extends BaseFragment implements OnClickListener, IWe
 
             int menuIntValue = Integer.parseInt(s);
             switch (menuIntValue) {
-                case MenuItem.WEB_APP_MENU_REFRESH:
+                case TMenuItem.WEB_APP_MENU_REFRESH:
                     setVisibilityOfViewByResId(menuPop, R.id.pop_ref_ll, View.VISIBLE);
                     break;
-                case MenuItem.WEB_APP_MENU_OPEN_WITH_BROWSER:
+                case TMenuItem.WEB_APP_MENU_OPEN_WITH_BROWSER:
                     setVisibilityOfViewByResId(menuPop, R.id.pop_browser_ll, View.VISIBLE);
                     break;
-                case MenuItem.WEB_APP_MENU_SHARE:
+                case TMenuItem.WEB_APP_MENU_SHARE:
                     setVisibilityOfViewByResId(menuPop, R.id.pop_share_ll, View.VISIBLE);
                     break;
                 default:

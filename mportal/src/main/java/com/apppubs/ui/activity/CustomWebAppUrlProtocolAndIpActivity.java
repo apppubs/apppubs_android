@@ -14,8 +14,8 @@ import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.apppubs.bean.TMenuItem;
 import com.apppubs.d20.R;
-import com.apppubs.bean.MenuItem;
 import com.apppubs.util.FileUtils;
 import com.orm.SugarRecord;
 
@@ -39,8 +39,8 @@ public class CustomWebAppUrlProtocolAndIpActivity extends BaseActivity implement
 			mCustomIpMap = new HashMap<String, String>();
 		}
 		setTitle("服务地址配置");
-		List<MenuItem> list = SugarRecord.find(MenuItem.class, "is_allow_custom_ip = ?", MenuItem.YES+"");
-		for(MenuItem mi: list){
+		List<TMenuItem> list = SugarRecord.find(TMenuItem.class, "is_allow_custom_ip = ?", TMenuItem.YES+"");
+		for(TMenuItem mi: list){
 			View item = getLayoutInflater().inflate(R.layout.item_custom_webapp_url_ip_listview, null);
 			TextView menuNameItem = (TextView) item.findViewById(R.id.item_menu_name_tv);
 			menuNameItem.setText(mi.getName());

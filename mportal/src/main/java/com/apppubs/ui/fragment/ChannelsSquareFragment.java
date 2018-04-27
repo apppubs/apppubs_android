@@ -22,12 +22,12 @@ import android.widget.PopupWindow;
 import android.widget.PopupWindow.OnDismissListener;
 import android.widget.TextView;
 
+import com.apppubs.model.NewsBiz;
 import com.apppubs.ui.activity.AddChannelActivity;
 import com.apppubs.ui.activity.ContainerActivity;
 import com.apppubs.ui.activity.SortChannelBActivity;
 import com.apppubs.bean.HeadPic;
 import com.apppubs.bean.NewsChannel;
-import com.apppubs.model.NewsBussiness;
 import com.apppubs.util.LogM;
 import com.apppubs.ui.widget.SlidePicView;
 import com.apppubs.d20.R;
@@ -58,7 +58,7 @@ public class ChannelsSquareFragment extends ChannelsFragment implements OnClickL
 	private List<HeadPic> mPicList;//推广图
 	private PopupWindow mEditPopupWindow;
 	private View mEditLl,mDelLl;
-	private NewsBussiness mNewsBussiness;
+	private NewsBiz mNewsBiz;
 	
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -73,7 +73,7 @@ public class ChannelsSquareFragment extends ChannelsFragment implements OnClickL
 		
 		mChannelsGv = (HeaderGridView) mRootView.findViewById(R.id.channels_hgl);
 		mPicList = SugarRecord.find(HeadPic.class, "CHANNEL_TYPE_ID = ?" ,new String[]{mChannelTypeId+""},null,null,null);
-		mNewsBussiness = NewsBussiness.getInstance(mContext);
+		mNewsBiz = NewsBiz.getInstance(mContext);
 		
 	}
 	@Override
@@ -275,7 +275,7 @@ public class ChannelsSquareFragment extends ChannelsFragment implements OnClickL
 		mChannelSelectedList.remove(curLongClickedPos);
 		mAdapter.notifyDataSetChanged();
 		mEditPopupWindow.dismiss();
-		mNewsBussiness.removeChannel(mChannelTypeId+"", nc.getCode());
+		mNewsBiz.removeChannel(mChannelTypeId+"", nc.getCode());
 	}
 	@Override
 	public void onActivityResult(int requestCode, int resultCode, Intent data) {

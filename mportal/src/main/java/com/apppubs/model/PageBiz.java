@@ -5,7 +5,6 @@ import android.support.annotation.Nullable;
 import android.text.TextUtils;
 
 import com.apppubs.bean.http.ArticleInfo;
-import com.apppubs.bean.http.JsonResult;
 import com.apppubs.bean.page.DefaultUserinfoComponent;
 import com.apppubs.bean.page.PageComponent;
 import com.apppubs.bean.page.PageContentModel;
@@ -30,7 +29,6 @@ import org.json.JSONObject;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
 import okhttp3.Call;
@@ -48,6 +46,7 @@ public class PageBiz extends BaseBiz implements IPageBiz  {
     private WMHHttpClient mHttpClient;
 
     public PageBiz(Context context) {
+        super(context);
         mContext = context;
         mHttpClient = AppContext.getInstance(mContext).getHttpClient();
     }

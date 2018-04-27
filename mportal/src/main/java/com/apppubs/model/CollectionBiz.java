@@ -7,26 +7,26 @@ import android.content.Context;
 import com.apppubs.bean.Collection;
 import com.orm.SugarRecord;
 
-public class CollectionBussiness extends BaseBussiness{
+public class CollectionBiz extends BaseBiz {
 
-	private static CollectionBussiness sCollectionBussiness;
+	private static CollectionBiz sCollectionBiz;
 
-	private CollectionBussiness() {
-
+	public CollectionBiz(Context context) {
+		super(context);
 	}
 
-	public static CollectionBussiness getInstance() {
+	public static CollectionBiz getInstance(Context context) {
 
-		if (sCollectionBussiness == null) {
-			synchronized (CollectionBussiness.class) {
-				if(sCollectionBussiness==null){
-					sCollectionBussiness = new CollectionBussiness();
+		if (sCollectionBiz == null) {
+			synchronized (CollectionBiz.class) {
+				if(sCollectionBiz ==null){
+					sCollectionBiz = new CollectionBiz(context);
 				}
 			}
 			
 		}
 
-		return sCollectionBussiness;
+		return sCollectionBiz;
 	}
 	
 	

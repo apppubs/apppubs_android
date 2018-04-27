@@ -37,6 +37,8 @@ import com.apppubs.bean.NewsInfo;
 import com.apppubs.d20.R;
 import com.orm.SugarRecord;
 
+import org.w3c.dom.Text;
+
 public class Utils {
 
     public static int parseColor(String colorStr) {
@@ -381,10 +383,29 @@ public class Utils {
         WindowManager.LayoutParams lp = activity.getWindow().getAttributes();
         lp.alpha = bgAlpha;
         if (bgAlpha == 1) {
-            activity.getWindow().clearFlags(WindowManager.LayoutParams.FLAG_DIM_BEHIND);//不移除该Flag的话,在有视频的页面上的视频会出现黑屏的bug
+            activity.getWindow().clearFlags(WindowManager.LayoutParams.FLAG_DIM_BEHIND);
+            //不移除该Flag的话,在有视频的页面上的视频会出现黑屏的bug
         } else {
-            activity.getWindow().addFlags(WindowManager.LayoutParams.FLAG_DIM_BEHIND);//此行代码主要是解决在华为手机上半透明效果无效的bug
+            activity.getWindow().addFlags(WindowManager.LayoutParams.FLAG_DIM_BEHIND);
+            //此行代码主要是解决在华为手机上半透明效果无效的bug
         }
         activity.getWindow().setAttributes(lp);
+    }
+
+    /**
+     * 根据对象类型不同判断是否为空
+     * @param obj
+     * @return
+     */
+    public static boolean isEmpty(Object obj) {
+        if (obj == null) {
+            return true;
+        } else if (obj instanceof java.util.Collection) {
+            return ((java.util.Collection) obj).isEmpty();
+        } else if (obj instanceof String) {
+            return TextUtils.isEmpty((String)obj);
+        }else{
+            return false;
+        }
     }
 }

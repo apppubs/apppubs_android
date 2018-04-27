@@ -19,7 +19,7 @@ import com.apppubs.bean.Settings;
 import com.apppubs.bean.User;
 import com.apppubs.constant.URLs;
 import com.apppubs.model.AbstractBussinessCallback;
-import com.apppubs.model.BaseBussiness;
+import com.apppubs.model.BaseBiz;
 import com.apppubs.model.APResultCallback;
 import com.apppubs.model.SystemBiz;
 import com.apppubs.util.ACache;
@@ -67,7 +67,7 @@ import io.rong.imkit.RongIM;
  * ChangeLog: 2015年3月10日 by zhangwen create
  * 
  */
-public class UserBussiness extends BaseBussiness {
+public class UserBussiness extends BaseBiz {
 
 	private static UserBussiness sUserBussiness;
 	private static final String CACHE_NAME = "com.client.message.model.UserBussiness";
@@ -76,6 +76,7 @@ public class UserBussiness extends BaseBussiness {
 	private boolean isSynchronizingAdbook;
 
 	private UserBussiness(Context context) {
+		super(context);
 		mContext = context;
 		mAppContext = AppContext.getInstance(context);
 	}

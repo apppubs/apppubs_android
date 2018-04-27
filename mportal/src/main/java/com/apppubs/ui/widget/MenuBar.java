@@ -14,8 +14,8 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.apppubs.bean.TMenuItem;
 import com.apppubs.d20.R;
-import com.apppubs.bean.MenuItem;
 import com.nostra13.universalimageloader.core.ImageLoader;
 
 /**
@@ -46,7 +46,7 @@ public class MenuBar extends LinearLayout implements OnClickListener{
 		mMenuViewMap = new HashMap<String, View>();
 	}
 	
-	public void addMenuItem(MenuItem item){
+	public void addMenuItem(TMenuItem item){
 		
 		FrameLayout itemFrameLayout = (FrameLayout) LayoutInflater.from(mContext).inflate(R.layout.item_menu_bottom, null);
 		itemFrameLayout.setTag(mMenuNum);

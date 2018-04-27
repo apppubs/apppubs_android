@@ -4,9 +4,9 @@ import java.util.List;
 
 import android.os.Bundle;
 
-import com.apppubs.bean.MenuItem;
+import com.apppubs.bean.TMenuItem;
 import com.apppubs.bean.NewsChannel;
-import com.apppubs.model.NewsBussiness;
+import com.apppubs.model.NewsBiz;
 import com.orm.SugarRecord;
 /**
  * 资讯列表容器,需要传入频道所属的类别
@@ -27,7 +27,7 @@ public class ChannelsFragment extends TitleMenuFragment{
 	 */
 	protected List<NewsChannel> mChannelSelectedList;
 	
-	protected NewsBussiness mNb;
+	protected NewsBiz mNb;
 	
 	//是否允许更改频道
 	protected boolean mAllowConfig = false;
@@ -38,10 +38,10 @@ public class ChannelsFragment extends TitleMenuFragment{
 		
 		Bundle args = getArguments();
 		mChannelTypeId = args.getString(ARGUMENT_NAME_CHANNELTYPEID);
-		mNb = NewsBussiness.getInstance(mContext);
+		mNb = NewsBiz.getInstance(mContext);
 		mChannelList = SugarRecord.find(NewsChannel.class,  "TYPE_ID=?", new String[]{mChannelTypeId+""}, null, "DISPLAY_ORDER", null);
 		mChannelSelectedList = SugarRecord.find(NewsChannel.class,  "TYPE_ID=? and DISPLAY_ORDER != 0", new String[]{mChannelTypeId+""}, null, "DISPLAY_ORDER", null);
-		mAllowConfig = SugarRecord.findByProperty(MenuItem.class, "CHANNEL_TYPE_ID", mChannelTypeId+"").getAllowConfigFlag()==0?false:true;
+		mAllowConfig = SugarRecord.findByProperty(TMenuItem.class, "CHANNEL_TYPE_ID", mChannelTypeId+"").getAllowConfigFlag()==0?false:true;
 	}
 	
 	protected void refreshSelectedList() {

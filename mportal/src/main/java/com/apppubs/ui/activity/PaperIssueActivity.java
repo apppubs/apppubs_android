@@ -49,7 +49,7 @@ public class PaperIssueActivity extends BaseActivity {
 	}
 
 	private void fill() {
-		mGetPaperFuture = mPaperBussiness.getPaperIssueInfo(mIssueId, new APResultCallback<PaperIssue>() {
+		mGetPaperFuture = mPaperBiz.getPaperIssueInfo(mIssueId, new APResultCallback<PaperIssue>() {
 
 			@Override
 			public void onException(int excepCode) {

@@ -41,7 +41,7 @@ import com.android.volley.Response.Listener;
 import com.android.volley.toolbox.StringRequest;
 import com.apppubs.bean.HeadPic;
 import com.apppubs.bean.MenuGroup;
-import com.apppubs.bean.MenuItem;
+import com.apppubs.bean.TMenuItem;
 import com.apppubs.constant.Actions;
 import com.apppubs.constant.URLs;
 import com.apppubs.AppContext;
@@ -79,7 +79,7 @@ public class MenuGroupsFragment extends HomeFragment implements OnClickListener{
 	 */
 	private String mSuperId;
 	private LinearLayout mContainerLl;
-	private Map<String, MenuItem> mMenuMap;
+	private Map<String, TMenuItem> mMenuMap;
 	private List<MenuGroup> mMenuGroupList;
 	private int mDividerColor;//分割线颜色 
 	private Map<String,TextView> mBadgeMap;//menuiten.id-》徽章textview
@@ -230,10 +230,10 @@ public class MenuGroupsFragment extends HomeFragment implements OnClickListener{
 				addDivider();
 			}
 			
-			List<MenuItem> menuGroupMenuList = new ArrayList<MenuItem>();
+			List<TMenuItem> menuGroupMenuList = new ArrayList<TMenuItem>();
 			String[] ids = mg.getMenuIds().split(",");
 			for(int j=-1;++j<ids.length;){
-				MenuItem mi = null;
+				TMenuItem mi = null;
 				if((mi=mMenuMap.get(ids[j]))!=null){
 					menuGroupMenuList.add(mi);
 				}
@@ -247,7 +247,7 @@ public class MenuGroupsFragment extends HomeFragment implements OnClickListener{
 				
 				for (int j=-1;++j<menuGroupMenuList.size();) {
 					
-					MenuItem mi = menuGroupMenuList.get(j);
+					TMenuItem mi = menuGroupMenuList.get(j);
 					if(mi.getUrl().contains("app:{$widget_webapp}")){
 						addWiget(mi);
 						continue;//跳过此次循环
@@ -295,8 +295,8 @@ public class MenuGroupsFragment extends HomeFragment implements OnClickListener{
 				// 如果是横排显示且此组菜单仅有两个时使用图片和名称同行显示的方式显示
 				
 				LinearLayout doubleMenuLl = (LinearLayout) mInflater.inflate(R.layout.item_menu_double_lv, null);
-				MenuItem mi1 = menuGroupMenuList.get(0);
-				MenuItem mi2 = menuGroupMenuList.get(1);
+				TMenuItem mi1 = menuGroupMenuList.get(0);
+				TMenuItem mi2 = menuGroupMenuList.get(1);
 
 				LinearLayout ll1 = (LinearLayout) doubleMenuLl.findViewById(R.id.menu_ll1);
 				LinearLayout ll2 = (LinearLayout) doubleMenuLl.findViewById(R.id.menu_ll2);
@@ -331,7 +331,7 @@ public class MenuGroupsFragment extends HomeFragment implements OnClickListener{
 				
 				for (int j = -1; ++j < menuGroupMenuList.size();) {
 
-					MenuItem mi = menuGroupMenuList.get(j);
+					TMenuItem mi = menuGroupMenuList.get(j);
 					GridLayout.LayoutParams glp = new GridLayout.LayoutParams();
 					glp.width = width / gl.getColumnCount();
 					glp.setGravity(Gravity.FILL);
@@ -366,7 +366,7 @@ public class MenuGroupsFragment extends HomeFragment implements OnClickListener{
 
 				for (int j = -1; ++j < menuGroupMenuList.size();) {
 
-					MenuItem mi = menuGroupMenuList.get(j);
+					TMenuItem mi = menuGroupMenuList.get(j);
 					// 第一个菜单如果是滚动图类型的话先加上一个滚动图
 					if (j == 0 && mi.getUrl().contains("$slidingpic")) {
 
@@ -512,7 +512,7 @@ public class MenuGroupsFragment extends HomeFragment implements OnClickListener{
 	 * 增加webview插件
 	 * @param mi
 	 */
-	private void addWiget(MenuItem mi) {
+	private void addWiget(TMenuItem mi) {
 		final WebView wb = new WebView(mContext);
 		
 		mContainerLl.addView(wb,new LayoutParams(LayoutParams.MATCH_PARENT, Utils.dip2px(mContext, 130)));
@@ -589,7 +589,7 @@ public class MenuGroupsFragment extends HomeFragment implements OnClickListener{
 	 */
 	private void refreshBadge(){
 		for(String s:mBadgeMap.keySet()){
-			MenuItem mi = mMenuMap.get(s);
+			TMenuItem mi = mMenuMap.get(s);
 			String url = AppContext.getInstance(mContext).convertUrl(mi.getBadgeURL());
 			setViewVisibilityByRemoteBadgeURL(mBadgeMap.get(s), url);
 		}
@@ -661,19 +661,19 @@ public class MenuGroupsFragment extends HomeFragment implements OnClickListener{
 	}
 
 	private void parseMenuResponse(String response) {
-		List<MenuItem> menuList = new ArrayList<MenuItem>();
+		List<TMenuItem> menuList = new ArrayList<TMenuItem>();
 		try {
 			JSONObject jo = new JSONObject(response);
 			JSONArray ja = jo.getJSONArray("apps");
 			for(int i=-1;++i<ja.length();){
-				MenuItem mi = JSONUtils.getGson().fromJson( ja.getString(i), MenuItem.class) ;
+				TMenuItem mi = JSONUtils.getGson().fromJson( ja.getString(i), TMenuItem.class) ;
 				menuList.add(mi);
 			}
 		} catch (JSONException e) {
 			e.printStackTrace();
 		}
-		mMenuMap = new HashMap<String, MenuItem>();
-		for(MenuItem mi:menuList){
+		mMenuMap = new HashMap<String, TMenuItem>();
+		for(TMenuItem mi:menuList){
 			String menuPower = AppContext.getInstance(mContext).getCurrentUser().getMenuPower();
 			if(mi.getProtectedFlag()==0||(!TextUtils.isEmpty(menuPower)&&menuPower.indexOf(mi.getId())!=-1)){
 				mMenuMap.put(mi.getId(), mi);
