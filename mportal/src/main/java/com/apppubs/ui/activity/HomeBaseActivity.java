@@ -101,42 +101,6 @@ public abstract class HomeBaseActivity extends BaseActivity {
 		initBroadcastReceiver();
 
 		SharedPreferenceUtils.getInstance(this).putBoolean(MPORTAL_PREFERENCE_NAME, MPORTAL_PREFERENCE_APP_RUNNING_KEY, true);
-
-
-
-		mUserBussiness.updateUserInfo(this, new IAPCallback<UserInfo>() {
-			@Override
-			public void onDone(final UserInfo obj) {
-
-				RongIM.setUserInfoProvider(new RongIM.UserInfoProvider() {
-
-					@Override
-					public io.rong.imlib.model.UserInfo getUserInfo(String userId) {
-						UserBasicInfo ubi = mUserBussiness.getCachedUserBasicInfo(userId);
-						io.rong.imlib.model.UserInfo ui = new io.rong.imlib.model.UserInfo(ubi.getUserId(),ubi.getTrueName(),Uri.parse(ubi.getAtatarUrl()));
-						return ui;//根据 userId 去你的用户系统里查询对应的用户信息返回给融云 SDK。
-					}
-
-				}, true);
-				RongIM.setOnReceiveMessageListener(new RongIMClient.OnReceiveMessageListener() {
-					@Override
-					public boolean onReceived(Message message, int i) {
-						return false;
-					}
-				});
-				if (obj==null||TextUtils.isEmpty(obj.getUserId())){
-					Intent closeI = new Intent(Actions.CLOSE_ALL_ACTIVITY);
-					sendBroadcast(closeI);
-					startActivity(FirstLoginActity.class);
-				}
-			}
-
-			@Override
-			public void onException(APError excepCode) {
-
-			}
-		});
-
 	}
 
 

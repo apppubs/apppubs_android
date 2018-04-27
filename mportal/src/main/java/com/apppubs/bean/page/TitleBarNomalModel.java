@@ -18,8 +18,8 @@ public class TitleBarNomalModel extends TitleBarModel {
         JSONObject jo = null;
         try {
             jo = new JSONObject(json);
-            leftAction = jo.getString("leftbtnurl");
-            leftImgUrl = jo.getString("leftbtnimgurl");
+            leftAction = jo.getString("leftBtnURL");
+            leftImgUrl = jo.getString("leftBtnImgURL");
         } catch (JSONException e) {
             e.printStackTrace();
         }

@@ -30,14 +30,14 @@ public class TitleBarModel {
         mJson = json;
         try {
             JSONObject jo = new JSONObject(json);
-            type = jo.getString("titletype");
+            type = jo.getString("titleType");
             title = jo.getString("title").replaceAll("\\$truename", AppContext.getInstance
                     (context).getCurrentUser().getTrueName());
-            bgColor = Utils.parseColor(jo.getString("bgcolor"));
-            titleImgUrl = jo.getString("titleimgurl");
-            rightImgUrl = jo.getString("rightbtnimgurl");
-            rightAction = jo.getString("rightbtnurl");
-            int underColor = Utils.parseColor(jo.getString("underlinecolor"));
+            bgColor = Utils.parseColor(jo.getString("bgColor"));
+            titleImgUrl = jo.getString("titleImgURL");
+            rightImgUrl = jo.getString("rightBtnImgURL");
+            rightAction = jo.getString("rightBtnURL");
+            int underColor = Utils.parseColor(jo.getString("underlineColor"));
             if (underColor > -1) {
                 underlineColor = underColor;
             }
@@ -50,7 +50,7 @@ public class TitleBarModel {
         JSONObject jo = null;
         try {
             jo = new JSONObject(json);
-            String type = jo.getString("titletype");
+            String type = jo.getString("titleType");
             if (TYPE_NORMAL.equals(type)) {
                 return new TitleBarNomalModel(context, json);
             } else {

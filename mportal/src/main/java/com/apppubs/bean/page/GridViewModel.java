@@ -19,7 +19,7 @@ public class GridViewModel {
         try {
             JSONObject jo = new JSONObject(jsonStr);
             this.column = jo.getInt("column");
-            this.maxRow = jo.getInt("maxrow");
+            this.maxRow = jo.getInt("maxRow");
             JSONArray items = jo.getJSONArray("items");
             List<GridViewItem> list = new ArrayList<GridViewItem>();
             for (int i = -1; ++i < items.length(); ) {

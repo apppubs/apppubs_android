@@ -20,11 +20,11 @@ public class TitleBarAddressModel extends TitleBarModel {
         super(context, json);
         try {
             JSONObject jo = new JSONObject(json);
-            rootCode = jo.getString("rootcode");
-            defaultAddress = jo.getString("defaultaddress");
-            defaultAddressCode = jo.getString("defaultaddresscode");
-            rightBtnImgURL = jo.getString("rightbtnimgurl");
-            rightBtnAction = jo.getString("rightbtnurl");
+            rootCode = jo.getString("rootCode");
+            defaultAddress = jo.getString("defaultAddress");
+            defaultAddressCode = jo.getString("defaultAddressCode");
+            rightBtnImgURL = jo.getString("rightBtnImgURL");
+            rightBtnAction = jo.getString("rightBtnURL");
         } catch (JSONException e) {
             e.printStackTrace();
         }

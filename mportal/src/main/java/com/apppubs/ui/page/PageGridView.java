@@ -162,12 +162,10 @@ public class PageGridView extends RelativeLayout implements View.OnClickListener
             ImageLoader.getInstance().displayImage(item.getPicUrl(), iv);
 
             TextView badgeTV = (TextView) rl.findViewById(R.id.menu_reddot);
-            String badgeText = item.getBadgeTxt();
-            System.out.println(StringUtils.isDigist(badgeText));
-            if (!TextUtils.isEmpty(badgeText)
-                    && StringUtils.isDigist(badgeText)
-                    && Integer.parseInt(badgeText) > 0) {
-                badgeTV.setText(badgeText);
+            Integer badgeNum = item.getBadgeNum();
+            if (!Utils.isEmpty(badgeNum)
+                    && badgeNum > 0) {
+                badgeTV.setText(badgeNum+"");
                 badgeTV.setVisibility(View.VISIBLE);
             } else {
                 badgeTV.setVisibility(View.GONE);

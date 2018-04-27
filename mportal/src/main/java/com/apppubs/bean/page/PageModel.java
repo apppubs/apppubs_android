@@ -26,11 +26,11 @@ public class PageModel {
     public PageModel(Context context, String json) {
         try {
             JSONObject pageObject = new JSONObject(json);
-            if (pageObject.has("titlebar")) {
+            if (pageObject.has("titleBar")) {
                 titleBarModel = TitleBarModel.buildTitleBarModel(context,
-                        pageObject.getString("titlebar"));
+                        pageObject.getString("titleBar"));
             }
-            if (pageObject.has("navbar")) {
+            if (pageObject.has("navBar")) {
                 content = new PageNavContentModel(json);
             } else {
                 content = new PageNormalContentModel(pageObject.getString("components"));

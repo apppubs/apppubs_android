@@ -84,7 +84,9 @@ public class MportalApplication extends MultiDexApplication {
 	}
 
 	private void initAppForMainProcess() {
-		initDefaultExceptionHandler();
+//		if (!isDebugVersion()){
+//			initDefaultExceptionHandler();
+//		}
 		// 初始化设置
 		initSystemState();
 		initImageLoader();
@@ -230,15 +232,6 @@ public class MportalApplication extends MultiDexApplication {
 		NetworkInfo activeNetInfo = connectivityManager.getActiveNetworkInfo();
 		if (activeNetInfo != null)
 			MportalApplication.systemState.setNetworkState(activeNetInfo.getType());
-	}
-
-	/**
-	 * 机器唯一标识
-	 */
-	public static String getMachineId() {
-		return MathUtils.MD5("sdk=" + Build.VERSION.SDK_INT + "|" + "model=" + Build.MODEL + "|" + Build.SERIAL + "|"
-				+ Build.DEVICE);
-
 	}
 
 	/**

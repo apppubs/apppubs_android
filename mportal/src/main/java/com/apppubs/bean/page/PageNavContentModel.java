@@ -17,7 +17,7 @@ public class PageNavContentModel implements PageContentModel {
 
     public PageNavContentModel(String json) {
         try {
-            navBar = new JSONObject(json).getJSONObject("navbar");
+            navBar = new JSONObject(json).getJSONObject("navBar");
             navItems = navBar.getJSONArray("items");
         } catch (JSONException e) {
             e.printStackTrace();

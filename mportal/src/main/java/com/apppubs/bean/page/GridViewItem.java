@@ -10,17 +10,15 @@ public class GridViewItem {
     private String title;
     private String picUrl;
     private String action;
-    private String badgeURL;
-    private String badgeTxt;
+    private Integer badgeNum;
 
     public GridViewItem(String jsonStr) {
         try {
             JSONObject jo = new JSONObject(jsonStr);
             this.title = jo.getString("title");
-            this.picUrl = jo.getString("picurl");
-            this.action = jo.getString("url");
-            this.badgeURL = jo.getString("badgeurl");
-            this.badgeTxt = jo.has("badgetext") ? jo.getString("badgetext") : null;
+            this.picUrl = jo.getString("picURL");
+            this.action = jo.getString("URL");
+            this.badgeNum = jo.has("badgeNum") ? jo.getInt("badgeNum") : null;
         } catch (JSONException e) {
             e.printStackTrace();
         }
@@ -50,19 +48,11 @@ public class GridViewItem {
         this.action = action;
     }
 
-    public String getBadgeURL() {
-        return badgeURL;
+    public Integer getBadgeNum() {
+        return badgeNum;
     }
 
-    public void setBadgeURL(String badgeURL) {
-        this.badgeURL = badgeURL;
-    }
-
-    public String getBadgeTxt() {
-        return badgeTxt;
-    }
-
-    public void setBadgeTxt(String badgeTxt) {
-        this.badgeTxt = badgeTxt;
+    public void setBadgeNum(Integer badgeNum) {
+        this.badgeNum = badgeNum;
     }
 }

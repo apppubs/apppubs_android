@@ -114,7 +114,7 @@ public class UserBiz extends BaseBiz {
 
     @NonNull
     private UserInfo updateLocalUserInfo(LoginResult jr, boolean autoLogin) {
-        final UserInfo user = new UserInfo(jr.getUserId(), jr.getUsername(), jr
+        UserInfo user = new UserInfo(jr.getUserId(), jr.getUsername(), jr
                 .getCNName(),
                 null, jr.getEmail(), jr.getMobile());
 //                    user.setMenuPower(jo.getString("menupower"));
@@ -160,6 +160,65 @@ public class UserBiz extends BaseBiz {
         });
     }
 
+    public void loginWithUsername(String username, final IAPCallback<String> callback) {
+        String url = "http://result.eolinker" +
+                ".com/gN1zjDlc87a75d671a2d954f809ebcdd19e7698dc2478fa?uri=login_with_username";
+        Map<String, String> params = new HashMap<String, String>();
+        params.put("username", username);
+        asyncPOST(url, params, DefaultResult.class, new IRQListener<DefaultResult>() {
+            @Override
+            public void onResponse(final DefaultResult jr, final APError error) {
+                if (error == null) {
+                    MainHandler.getInstance().post(new Runnable() {
+                        @Override
+                        public void run() {
+                            callback.onDone((String) jr.get("phone"));
+                        }
+                    });
+                } else {
+                    MainHandler.getInstance().post(new Runnable() {
+                        @Override
+                        public void run() {
+                            callback.onException(error);
+                        }
+                    });
+
+                }
+            }
+        });
+    }
+
+    public void loginWithUsernamePwdAndOrgCode(String username, String pwd, String orgCode, final
+            IAPCallback<LoginResult>callback) {
+        String url = "http://result.eolinker.com/gN1zjDlc87a75d671a2d954f809ebcdd19e7698dc2478fa?uri=login_with_org";
+        Map<String, String> params = new HashMap<String, String>();
+        params.put("username", username);
+        params.put("pwd",pwd);
+        params.put("orgCode",orgCode);
+
+        asyncPOST(url, params, LoginResult.class, new IRQListener<LoginResult>() {
+            @Override
+            public void onResponse(final LoginResult jr, final APError error) {
+                if (error == null) {
+                    MainHandler.getInstance().post(new Runnable() {
+                        @Override
+                        public void run() {
+                            callback.onDone(jr);
+                        }
+                    });
+                } else {
+                    MainHandler.getInstance().post(new Runnable() {
+                        @Override
+                        public void run() {
+                            callback.onException(error);
+                        }
+                    });
+
+                }
+            }
+        });
+    }
+
     public void requestVerifyCode(String username, final IAPCallback<DefaultResult> callback) {
         String url = "http://result.eolinker" +
                 ".com/gN1zjDlc87a75d671a2d954f809ebcdd19e7698dc2478fa?uri=request_send_verify_code";
@@ -188,23 +247,25 @@ public class UserBiz extends BaseBiz {
         });
     }
 
-    public void confirmVerifyCode(String username, String verifyCode, final IAPCallback<LoginResult> callback) {
-        String url = "http://result.eolinker.com/gN1zjDlc87a75d671a2d954f809ebcdd19e7698dc2478fa?uri=confirm_verify_code";
-        Map<String,String> params = new HashMap<String,String>();
-        params.put("username",username);
-        params.put("verifyCode",verifyCode);
+    public void confirmVerifyCode(String username, String verifyCode, final
+    IAPCallback<LoginResult> callback) {
+        String url = "http://result.eolinker" +
+                ".com/gN1zjDlc87a75d671a2d954f809ebcdd19e7698dc2478fa?uri=confirm_verify_code";
+        Map<String, String> params = new HashMap<String, String>();
+        params.put("username", username);
+        params.put("verifyCode", verifyCode);
         asyncPOST(url, params, LoginResult.class, new IRQListener<LoginResult>() {
             @Override
             public void onResponse(final LoginResult jr, final APError error) {
-                if (error==null){
+                if (error == null) {
+                    updateLocalUserInfo(jr, true);
                     MainHandler.getInstance().post(new Runnable() {
                         @Override
                         public void run() {
-                            updateLocalUserInfo(jr, true);
                             callback.onDone(jr);
                         }
                     });
-                }else{
+                } else {
                     MainHandler.getInstance().post(new Runnable() {
                         @Override
                         public void run() {

@@ -1177,15 +1177,15 @@ public class PageFragment extends TitleMenuFragment implements OnClickListener, 
             TextView tv = (TextView) view.findViewById(R.id.pic_text_title_tv);
             TextView pubTv = (TextView) view.findViewById(R.id.pic_text_pubtime_tv);
             JSONObject item = items.getJSONObject(j);
-            if (TextUtils.isEmpty(item.getString("picurl"))) {
+            if (TextUtils.isEmpty(item.getString("picURL"))) {
                 iv.setVisibility(View.GONE);
             } else {
-                mImageLoader.displayImage(item.getString("picurl"), iv);
+                mImageLoader.displayImage(item.getString("picURL"), iv);
             }
             tv.setText(item.getString("title"));
-            pubTv.setText(item.getString("pubtime"));
+            pubTv.setText(item.getString("pubTime"));
             view.setOnClickListener(this);
-            view.setTag(item.get("url"));
+            view.setTag(item.get("URL"));
             mContainerLl.addView(view);
         }
     }
@@ -1224,16 +1224,16 @@ public class PageFragment extends TitleMenuFragment implements OnClickListener, 
 
     private void addSimplePicComponent(PageComponent pc) throws JSONException {
         JSONObject component = pc.getJSONObject();
-        double ratio = component.getDouble("picheightwidthratio");
+        double ratio = component.getDouble("picHeightWidthRatio");
         RatioLayout rl = new RatioLayout(mContext, (float) ratio);
         ImageView iv = new ImageView(mContext);
         iv.setScaleType(ScaleType.CENTER_CROP);
         RelativeLayout.LayoutParams picLp = new RelativeLayout.LayoutParams(LayoutParams
                 .MATCH_PARENT, LayoutParams.MATCH_PARENT);
         rl.addView(iv, picLp);
-        mImageLoader.displayImage(component.getString("picurl"), iv);
+        mImageLoader.displayImage(component.getString("picURL"), iv);
         mContainerLl.addView(rl);
-        rl.setTag(component.getString("url"));
+        rl.setTag(component.getString("URL"));
         rl.setOnClickListener(this);
     }
 
@@ -1244,9 +1244,9 @@ public class PageFragment extends TitleMenuFragment implements OnClickListener, 
         ImageView iv = (ImageView) view.findViewById(R.id.single_pic_iv);
         TextView tv = (TextView) view.findViewById(R.id.single_pic_title_tv);
         tv.setText(jo.getString("title"));
-        mImageLoader.displayImage(jo.getString("picurl"), iv);
+        mImageLoader.displayImage(jo.getString("picURL"), iv);
         mContainerLl.addView(view);
-        view.setTag(jo.getString("url"));
+        view.setTag(jo.getString("URL"));
         view.setOnClickListener(this);
     }
 
@@ -1269,35 +1269,35 @@ public class PageFragment extends TitleMenuFragment implements OnClickListener, 
             if (item.has("coords")) {
                 ha.setCoords(item.getString("coords"));
             }
-            if (item.has("textcolor") && !TextUtils.isEmpty(item.getString("textcolor"))) {
+            if (item.has("textColor") && !TextUtils.isEmpty(item.getString("textColor"))) {
                 try {
-                    ha.setTextColor(Color.parseColor(item.getString("textcolor")));
+                    ha.setTextColor(Color.parseColor(item.getString("textColor")));
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
             }
-            if (item.has("textsize") && !TextUtils.isEmpty(item.getString("textsize"))) {
-                ha.setTextSize(item.getInt("textsize"));
+            if (item.has("textsize") && !TextUtils.isEmpty(item.getString("textSize"))) {
+                ha.setTextSize(item.getInt("textSize"));
             }
 
-            if (item.has("textalign")) {
-                ha.setTextAlign(item.getString("textalign"));
+            if (item.has("textAlign")) {
+                ha.setTextAlign(item.getString("textAlign"));
             }
 
-            if (item.has("bgcolor") && !TextUtils.isEmpty(item.getString("bgcolor"))) {
+            if (item.has("bgColor") && !TextUtils.isEmpty(item.getString("bgColor"))) {
                 try {
-                    ha.setBgColor(Color.parseColor(item.getString("bgcolor")));
+                    ha.setBgColor(Color.parseColor(item.getString("bgColor")));
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
             }
 
-            if (item.has("imageurl")) {
-                if ("apppubs://macro/text/useravatarurl".equals(item.getString("imageurl"))) {
+            if (item.has("imageURL")) {
+                if ("apppubs://macro/text/useravatarurl".equals(item.getString("imageURL"))) {
                     ha.setImage(mImageLoader.loadImageSync(AppContext.getInstance(mContext)
                             .getCurrentUser().getAvatarUrl()));
                 } else {
-                    ha.setImage(mImageLoader.loadImageSync(item.getString("imageurl")));
+                    ha.setImage(mImageLoader.loadImageSync(item.getString("imageURL")));
                 }
             }
             ha.setText(item.has("text") ? item.getString("text") : "");

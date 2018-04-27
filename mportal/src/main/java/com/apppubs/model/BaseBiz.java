@@ -182,7 +182,7 @@ public abstract class BaseBiz {
         return dm.widthPixels + "*" + dm.heightPixels;
     }
 
-    public <T extends IJsonResult> void asyncPOST(final String url, final Map<String, String>
+    protected  <T extends IJsonResult> void asyncPOST(final String url, final Map<String, String>
             params, final Class<T> clazz, final IRQListener listener) {
         mHttpClient.asyncPOST(url, getCommonHeader(), params, new IRequestListener() {
 
@@ -207,7 +207,30 @@ public abstract class BaseBiz {
         });
     }
 
-    public <T extends IJsonResult> T syncPOST(String url, Map<String, String> params,
+    protected void asyncPOST(String url, final Map<String,String> params, final IRQStringListener listener){
+        mHttpClient.asyncPOST(url, getCommonHeader(), params, new IRequestListener() {
+
+            @Override
+            public void onResponse(String json, APError e) {
+                if (e != null) {
+                    listener.onResponse(null, e);
+                    return;
+                }
+                JSONObject jo = JSONObject.parseObject(json);
+                Integer code = jo.getInteger("code");
+                String msg = jo.getString("msg");
+                if (code == APErrorCode.SUCCESS.getCode()) {
+                    String resultStr = jo.getString("result");
+                    listener.onResponse(resultStr, null);
+                } else {
+                    APError err = new APError(code, msg);
+                    listener.onResponse(null, err);
+                }
+            }
+        });
+    }
+
+    protected  <T extends IJsonResult> T syncPOST(String url, Map<String, String> params,
                                               Class<T> clazz) throws APNetException {
         String json = mHttpClient.syncPOST(url, getCommonHeader(), params);
         JSONObject jo = JSONObject.parseObject(json);
@@ -226,4 +249,8 @@ public abstract class BaseBiz {
 
 interface IRQListener<T extends IJsonResult> {
     void onResponse(T jr, APError error);
+}
+
+interface IRQStringListener{
+    void onResponse(String result,APError error);
 }

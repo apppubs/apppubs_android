@@ -102,7 +102,7 @@ public class TMenuItem extends SugarRecord {
 
 	@SerializedName("superid")
 	private String superId;
-	@SerializedName("badgeurl")
+	@SerializedName("badgeURL")
 	private String badgeURL;
 	
 	private transient int badgeNum;//徽章数字
@@ -291,6 +291,7 @@ public class TMenuItem extends SugarRecord {
 	public static TMenuItem createFrom(MenusResult.MenuItem menuItem){
 		TMenuItem item = new TMenuItem();
 		item.setId(menuItem.getId());
+		item.setName(menuItem.getName());
 		item.setSuperId(menuItem.getSuperId());
 		item.setUrl(menuItem.getAppURL());
 		item.setIconpic(menuItem.getIconPic());

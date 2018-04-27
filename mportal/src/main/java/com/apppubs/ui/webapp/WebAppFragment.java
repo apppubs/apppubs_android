@@ -322,7 +322,7 @@ public class WebAppFragment extends BaseFragment implements OnClickListener, IWe
 
             @Override
             public void handler(String data, CallBackFunction function) {
-                function.onCallBack(MportalApplication.getMachineId());
+                function.onCallBack(mSystemBiz.getMachineId());
             }
 
         });

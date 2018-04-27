@@ -17,7 +17,7 @@ public class PageComponent {
         jsonStr = json;
         try {
             jo = new JSONObject(json);
-            code = jo.getString("comtype");
+            code = jo.getString("comType");
         } catch (JSONException e) {
             e.printStackTrace();
         }

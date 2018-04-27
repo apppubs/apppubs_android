@@ -12,7 +12,7 @@ class PageComponentFactory {
     public static PageComponent getPageComponent(JSONObject component) {
         String componentCode = null;
         try {
-            componentCode = component.getString("comtype");
+            componentCode = component.getString("comType");
         } catch (JSONException e) {
             e.printStackTrace();
         }
