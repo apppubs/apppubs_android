@@ -3,6 +3,7 @@ package com.apppubs.bean;
 import com.apppubs.bean.http.MenusResult;
 import com.google.gson.annotations.SerializedName;
 import com.orm.SugarRecord;
+import com.orm.dsl.Table;
 
 /**
  * 菜单
@@ -16,6 +17,7 @@ import com.orm.SugarRecord;
  * 2015-05-10 zhangwen 增加 webAppMenus
  * 
  */
+@Table(name = "menu_item")
 public class TMenuItem extends SugarRecord {
 
 	public static final int MENU_LOCATION_PRIMARY = 0;// 菜单位置，主菜单

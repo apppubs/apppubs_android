@@ -208,7 +208,7 @@ public class ReflectionUtil {
 
 		String[] classNameArr = new String[]{"com.apppubs.bean.City","com.apppubs.bean.Collection",
 				"com.apppubs.bean.Department","com.apppubs.bean.HeadPic","com.apppubs.bean.LocalFile",
-				"com.apppubs.bean.MenuGroup","com.apppubs.bean.MenuItem","com.apppubs.bean.Msg",
+				"com.apppubs.bean.MenuGroup","com.apppubs.bean.TMenuItem","com.apppubs.bean.Msg",
 				"com.apppubs.bean.MsgRecord","com.apppubs.bean.NewsChannel","com.apppubs.bean.NewsInfo",
 				"com.apppubs.bean.Paper","com.apppubs.bean.PaperCatalog",
 				"com.apppubs.bean.PaperDownloadInfo","com.apppubs.bean.PaperInfo","com.apppubs.bean.PaperInfoPic",

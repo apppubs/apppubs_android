@@ -253,11 +253,13 @@ public class FirstLoginActity extends BaseActivity implements ErrorListener, Asy
 				@Override
 				public void onDone(UserInfo obj) {
 					enterHome();
+					ProgressHUD.dismissProgressHUDInThisContext(FirstLoginActity.this);
 				}
 
 				@Override
 				public void onException(APError error) {
-
+                    ProgressHUD.dismissProgressHUDInThisContext(FirstLoginActity.this);
+					mErrorHandler.onError(error);
 				}
 			});
 		}

@@ -1,7 +1,5 @@
 package com.apppubs.constant;
 
-import com.apppubs.net.WMHHttpErrorCode;
-
 /**
  * Created by siger on 2018/4/18.
  */

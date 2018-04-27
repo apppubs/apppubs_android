@@ -63,7 +63,7 @@ public class APHttpClient implements IHttpClient {
             @Override
             public void onFailure(Call call, IOException e) {
                 e.printStackTrace();
-                listener.onResponse(null, new APError(APErrorCode.NETWORK_ERROR,e.getMessage()));
+                listener.onResponse(null, new APError(APErrorCode.NETWORK_ERROR,"网络异常！请检查网络是否通畅！"));
             }
 
             @Override

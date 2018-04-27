@@ -32,25 +32,26 @@ import com.android.volley.toolbox.Volley;
 import com.apppubs.AppContext;
 import com.apppubs.AppManager;
 import com.apppubs.MportalApplication;
-import com.apppubs.constant.APError;
-import com.apppubs.d20.R;
 import com.apppubs.bean.AppConfig;
 import com.apppubs.bean.Settings;
+import com.apppubs.constant.APError;
 import com.apppubs.constant.Actions;
+import com.apppubs.d20.R;
 import com.apppubs.model.APCallback;
 import com.apppubs.model.NewsBiz;
 import com.apppubs.model.PaperBiz;
 import com.apppubs.model.SystemBiz;
+import com.apppubs.model.VersionInfo;
 import com.apppubs.model.message.MsgBussiness;
 import com.apppubs.model.message.UserBussiness;
-import com.apppubs.model.VersionInfo;
+import com.apppubs.ui.APErrorHandler;
 import com.apppubs.ui.start.StartUpActivity;
-import com.apppubs.util.JSONResult;
-import com.apppubs.util.LogM;
-import com.apppubs.util.Utils;
 import com.apppubs.ui.widget.AlertDialog;
 import com.apppubs.ui.widget.ConfirmDialog;
 import com.apppubs.ui.widget.TitleBar;
+import com.apppubs.util.JSONResult;
+import com.apppubs.util.LogM;
+import com.apppubs.util.Utils;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
 
@@ -98,6 +99,8 @@ public abstract class BaseActivity extends FragmentActivity implements OnClickLi
 	}
 
 	private Handler mHandler;
+
+	protected APErrorHandler mErrorHandler;
 
 	@Override
 	protected void onCreate(Bundle arg0) {
@@ -181,6 +184,7 @@ public abstract class BaseActivity extends FragmentActivity implements OnClickLi
 
 		mRequestQueue = Volley.newRequestQueue(this);
 
+        mErrorHandler = new APErrorHandler(this);
 	}
 
 	public DisplayImageOptions getDefaultImageLoaderOption() {

@@ -16,6 +16,7 @@ import android.util.Log;
 import android.view.View;
 import android.view.WindowManager;
 
+import com.apppubs.exception.UnCeHandler;
 import com.apppubs.ui.activity.ContainerActivity;
 import com.apppubs.d20.R;
 import com.apppubs.ui.adbook.UserInfoActivity;
@@ -311,10 +312,9 @@ public class MportalApplication extends MultiDexApplication {
 
 	ArrayList<Activity> list = new ArrayList<Activity>();
 
-	public void initDefaultExceptionHandler() {
-		// 设置该CrashHandler为程序的默认处理器
-//		UnCeHandler catchExcep = new UnsetDefaultUncaughtExceptionHandlerCeHandler(this);
-//		Thread.(catchExcep);
+	private void initDefaultExceptionHandler() {
+		UnCeHandler catchExcep = new UnCeHandler(this);
+		Thread.setDefaultUncaughtExceptionHandler(catchExcep);
 	}
 
 	/**

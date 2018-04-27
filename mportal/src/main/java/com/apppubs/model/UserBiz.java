@@ -18,6 +18,7 @@ import com.apppubs.net.WMHHttpClient;
 import com.apppubs.net.WMHHttpErrorCode;
 import com.apppubs.net.WMHRequestListener;
 import com.apppubs.ui.activity.FirstLoginActity;
+import com.apppubs.ui.activity.MainHandler;
 import com.apppubs.util.JSONResult;
 import com.apppubs.util.JSONUtils;
 import com.apppubs.util.Utils;
@@ -96,9 +97,9 @@ public class UserBiz extends BaseBiz {
                 "=login_with_username_and_pwd";
         asyncPOST(url, null, LoginResult.class, new IRQListener<LoginResult>() {
             @Override
-            public void onResponse(LoginResult jr, APError error) {
+            public void onResponse(LoginResult jr, final APError error) {
                 if (error == null) {
-                    UserInfo user = new UserInfo(jr.getUserId(), jr.getUsername(), jr.getCNName(),
+                    final UserInfo user = new UserInfo(jr.getUserId(), jr.getUsername(), jr.getCNName(),
                             null, jr.getEmail(), jr.getMobile());
 //                    user.setMenuPower(jo.getString("menupower"));
                     mAppContext.setCurrentUser(user);
@@ -106,9 +107,21 @@ public class UserBiz extends BaseBiz {
                     Settings settings = mAppContext.getSettings();
                     settings.setIsAllowAutoLogin(autoLogin);
                     mAppContext.setSettings(settings);
-                    callback.onDone(user);
+                    MainHandler.getInstance().post(new Runnable() {
+                        @Override
+                        public void run() {
+                            callback.onDone(user);
+                        }
+                    });
+
                 } else {
-                    callback.onException(error);
+                    MainHandler.getInstance().post(new Runnable() {
+                        @Override
+                        public void run() {
+                            callback.onException(error);
+                        }
+                    });
+
                 }
             }
         });

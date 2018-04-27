@@ -1,18 +1,5 @@
 package com.apppubs.model;
 
-import java.util.HashMap;
-import java.util.Map;
-import java.util.concurrent.BlockingQueue;
-import java.util.concurrent.Executor;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-import java.util.concurrent.Future;
-import java.util.concurrent.LinkedBlockingQueue;
-import java.util.concurrent.ThreadFactory;
-import java.util.concurrent.ThreadPoolExecutor;
-import java.util.concurrent.TimeUnit;
-import java.util.concurrent.atomic.AtomicInteger;
-
 import android.content.Context;
 import android.os.AsyncTask;
 import android.os.Build;
@@ -32,6 +19,19 @@ import com.apppubs.net.APHttpClient;
 import com.apppubs.net.APNetException;
 import com.apppubs.net.IHttpClient;
 import com.apppubs.net.IRequestListener;
+
+import java.util.HashMap;
+import java.util.Map;
+import java.util.concurrent.BlockingQueue;
+import java.util.concurrent.Executor;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
+import java.util.concurrent.LinkedBlockingQueue;
+import java.util.concurrent.ThreadFactory;
+import java.util.concurrent.ThreadPoolExecutor;
+import java.util.concurrent.TimeUnit;
+import java.util.concurrent.atomic.AtomicInteger;
 
 /**
  * 提供基础的线程相关功能
@@ -167,7 +167,7 @@ public abstract class BaseBiz {
         headers.put("nonce","");
         headers.put("timestamp","");
         headers.put("sign","");
-        headers.put("appId",mAppContext.getApp().getCode());
+        headers.put("appId",mAppContext.getSettings().getAppCode());
         headers.put("orgCode",mAppContext.getApp().getOrgCode());
         headers.put("apiVersion","1.0.0");
 
