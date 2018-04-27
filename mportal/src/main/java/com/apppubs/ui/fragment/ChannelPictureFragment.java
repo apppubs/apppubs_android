@@ -17,10 +17,11 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.apppubs.constant.APError;
+import com.apppubs.model.APCallback;
 import com.apppubs.ui.activity.NewsPictureInfoActivity;
 import com.apppubs.bean.NewsInfo;
 import com.apppubs.constant.URLs;
-import com.apppubs.model.APResultCallback;
 import com.apppubs.util.LogM;
 import com.apppubs.ui.widget.commonlist.CommonListView;
 import com.apppubs.ui.widget.commonlist.CommonListViewListener;
@@ -105,10 +106,10 @@ public class ChannelPictureFragment extends ChannelFragment {
 
 	private void load(){
 		
-		mNewsBiz.getNewsInfoPage(NewsInfo.NEWS_TYPE_PICTURE,mChannelCode, mCurPage, URLs.PAGE_PIC_SIZE, new APResultCallback<List<NewsInfo>>() {
+		mNewsBiz.getNewsInfoPage(NewsInfo.NEWS_TYPE_PICTURE,mChannelCode, mCurPage, URLs.PAGE_PIC_SIZE, new APCallback<List<NewsInfo>>() {
 			
 			@Override
-			public void onException(int excepCode) {
+			public void onException(APError excepCode) {
 				mLv.stopRefresh();
 				mLv.stopLoadMore();
 			}

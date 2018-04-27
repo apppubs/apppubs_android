@@ -53,7 +53,8 @@ import com.android.volley.toolbox.StringRequest;
 import com.apppubs.AppContext;
 import com.apppubs.bean.Msg;
 import com.apppubs.bean.UserInfo;
-import com.apppubs.model.APResultCallback;
+import com.apppubs.constant.APError;
+import com.apppubs.model.APCallback;
 import com.apppubs.model.MsgController;
 import com.apppubs.constant.Actions;
 import com.apppubs.exception.APUnavailableException;
@@ -242,10 +243,10 @@ public class ChatActivity extends BaseActivity implements OnClickListener {
 		}
 		UserInfo currentUser = AppContext.getInstance(mContext).getCurrentUser();
 		mMsgBussiness.getChatGroupChatList(currentUser.getUsername(), mChatGroupId,deleteDateStr,
-				new APResultCallback<List<Msg>>() {
+				new APCallback<List<Msg>>() {
 
 					@Override
-					public void onException(int excepCode) {
+					public void onException(APError excepCode) {
 
 					}
 
@@ -378,7 +379,7 @@ public class ChatActivity extends BaseActivity implements OnClickListener {
 							} else {
 								/*
 								 * mSystemBiz.getStandardDataTime(new
-								 * APResultCallback<Date>() {
+								 * APCallback<Date>() {
 								 * 
 								 * @Override public void onException(int
 								 * excepCode) { //
@@ -552,10 +553,10 @@ public class ChatActivity extends BaseActivity implements OnClickListener {
 		case R.id.chat_content_send:
 			final String count = mChatEt.getText().toString();
 			if (!TextUtils.isEmpty(count)) {
-				mSystemBiz.getStandardDataTime(new APResultCallback<Date>() {
+				mSystemBiz.getStandardDataTime(new APCallback<Date>() {
 
 					@Override
-					public void onException(int excepCode) {
+					public void onException(APError excepCode) {
 					}
 
 					@Override
@@ -576,10 +577,10 @@ public class ChatActivity extends BaseActivity implements OnClickListener {
 						// String receiverUsername =
 						// mChatType==CHAT_TYPE_SINGLE?mOtherUser.getUsername():"";
 						mMsgBussiness.sendTextMsg(AppContext.getInstance(mContext).getCurrentUser().getUsername(), "", groupId,
-								info.getContent(), new APResultCallback<Object>() {
+								info.getContent(), new APCallback<Object>() {
 
 									@Override
-									public void onException(int excepCode) {
+									public void onException(APError excepCode) {
 										mSendFail.setVisibility(View.VISIBLE);
 									}
 
@@ -845,7 +846,7 @@ public class ChatActivity extends BaseActivity implements OnClickListener {
 				// if(mChatType==CHAT_TYPE_SINGLE){
 				//
 				// mMsgBussiness.sendVideoMsg(MportalApplication.user.getUsername(),mOtherUser.getUsername(),videoPath,new
-				// APResultCallback<Object>() {
+				// APCallback<Object>() {
 				//
 				// @Override
 				// public void onException(int excepCode) {
@@ -858,7 +859,7 @@ public class ChatActivity extends BaseActivity implements OnClickListener {
 				//
 				// mMsgBussiness.getChatList(mOtherUser.getUsername(),
 				// MportalApplication.user.getUsername(),
-				// new APResultCallback<List<Msg>>() {
+				// new APCallback<List<Msg>>() {
 				//
 				// @Override
 				// public void onException(int excepCode) {
@@ -882,10 +883,10 @@ public class ChatActivity extends BaseActivity implements OnClickListener {
 				// }else{
 				// }
 				mMsgBussiness.sendGroupVideoMsg(AppContext.getInstance(mContext).getCurrentUser().getUsername(), mChatGroupId, videoPath,
-						new APResultCallback<Object>() {
+						new APCallback<Object>() {
 
 							@Override
-							public void onException(int excepCode) {
+							public void onException(APError excepCode) {
 
 							}
 
@@ -897,10 +898,10 @@ public class ChatActivity extends BaseActivity implements OnClickListener {
 									deleteDateStr = map.get(mChatGroupId);
 								}
 								mMsgBussiness.getChatGroupChatList(AppContext.getInstance(mContext).getCurrentUser().getUsername(), mChatGroupId,deleteDateStr,
-										new APResultCallback<List<Msg>>() {
+										new APCallback<List<Msg>>() {
 
 											@Override
-											public void onException(int excepCode) {
+											public void onException(APError excepCode) {
 
 											}
 
@@ -959,10 +960,10 @@ public class ChatActivity extends BaseActivity implements OnClickListener {
 	}
 
 	private void putBackpic(final Bitmap bitmap) {
-		mSystemBiz.getStandardDataTime(new APResultCallback<Date>() {
+		mSystemBiz.getStandardDataTime(new APCallback<Date>() {
 
 			@Override
-			public void onException(int excepCode) {
+			public void onException(APError excepCode) {
 				// infos.get(position).getSendTime()
 			}
 

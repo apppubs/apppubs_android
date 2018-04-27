@@ -14,13 +14,14 @@ import android.widget.Toast;
 import com.apppubs.bean.User;
 import com.apppubs.bean.UserInfo;
 import com.apppubs.AppContext;
+import com.apppubs.constant.APError;
 import com.apppubs.model.SystemBiz;
 import com.apppubs.ui.activity.ImageViewActivity;
 import com.apppubs.ui.adbook.IUserInfoView;
 import com.apppubs.ui.adbook.IUserInfoViewListener;
 import com.apppubs.model.UserBiz;
 import com.apppubs.model.message.UserBussiness;
-import com.apppubs.model.APResultCallback;
+import com.apppubs.model.APCallback;
 import com.apppubs.model.WMHErrorCode;
 import com.apppubs.ui.widget.ConfirmDialog;
 import com.apppubs.ui.widget.ProgressHUD;
@@ -164,7 +165,7 @@ public class UserInfoPresenter implements IUserInfoViewListener {
         ProgressHUD.show(mContext);
         String[] userIdArr = new String[]{mView.getUserId()};
         SystemBiz sysBiz = SystemBiz.getInstance(mContext);
-        sysBiz.inviteUsers(Arrays.asList(userIdArr), new APResultCallback() {
+        sysBiz.inviteUsers(Arrays.asList(userIdArr), new APCallback() {
             @Override
             public void onDone(Object obj) {
                 ProgressHUD.dismissProgressHUDInThisContext(mContext);
@@ -173,7 +174,7 @@ public class UserInfoPresenter implements IUserInfoViewListener {
             }
 
             @Override
-            public void onException(int excepCode) {
+            public void onException(APError excepCode) {
                 ProgressHUD.dismissProgressHUDInThisContext(mContext);
                 Toast.makeText(mContext, "发送邀请短信失败!", Toast.LENGTH_SHORT).show();
             }

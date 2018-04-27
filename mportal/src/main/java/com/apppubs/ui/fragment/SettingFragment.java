@@ -31,12 +31,13 @@ import com.android.volley.RequestQueue;
 import com.android.volley.toolbox.Volley;
 import com.apppubs.bean.TMenuItem;
 import com.apppubs.AppManager;
+import com.apppubs.constant.APError;
 import com.apppubs.model.SystemBiz;
 import com.apppubs.ui.activity.AboutActivity;
 import com.apppubs.ui.activity.FeedbackActivity;
 import com.apppubs.model.VersionInfo;
 import com.apppubs.ui.start.StartUpActivity;
-import com.apppubs.model.APResultCallback;
+import com.apppubs.model.APCallback;
 import com.apppubs.ui.widget.ConfirmDialog;
 import com.apppubs.MportalApplication;
 import com.apppubs.d20.R;
@@ -255,10 +256,10 @@ public class SettingFragment extends TitleMenuFragment implements OnClickListene
 
 					@Override
 					public void onOkClick() {
-						mSystemBiz.clearCache(new APResultCallback<Boolean>() {
+						mSystemBiz.clearCache(new APCallback<Boolean>() {
 
 							@Override
-							public void onException(int excepCode) {
+							public void onException(APError excepCode) {
 							}
 
 							@Override

@@ -12,6 +12,8 @@ import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import com.apppubs.constant.APError;
+import com.apppubs.model.APCallback;
 import com.apppubs.ui.adapter.CommonAdapter;
 import com.apppubs.bean.Department;
 import com.apppubs.bean.User;
@@ -27,7 +29,6 @@ import com.apppubs.model.message.UserPickerHelper;
 import com.apppubs.ui.widget.ConfirmDialog;
 import com.apppubs.d20.R;
 import com.apppubs.ui.adbook.UserInfoActivity;
-import com.apppubs.model.APResultCallback;
 import com.apppubs.ui.widget.AlertDialog;
 import com.apppubs.ui.widget.CircleTextImageView;
 
@@ -245,7 +246,7 @@ public class AddressBookOrganizationFragement extends BaseFragment {
 			for (User user : mUserList){
 				userIds.add(user.getUserId());
 			}
-			mUserBussiness.cacheUserBasicInfoList(userIds, new APResultCallback<List<UserBasicInfo>>() {
+			mUserBussiness.cacheUserBasicInfoList(userIds, new APCallback<List<UserBasicInfo>>() {
 				@Override
 				public void onDone(List<UserBasicInfo> obj) {
 
@@ -254,7 +255,7 @@ public class AddressBookOrganizationFragement extends BaseFragment {
 				}
 
 				@Override
-				public void onException(int excepCode) {
+				public void onException(APError excepCode) {
 
 				}
 			});

@@ -24,6 +24,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.apppubs.constant.APError;
 import com.apppubs.d20.R;
 import com.apppubs.asytask.AsyTaskCallback;
 import com.apppubs.asytask.AsyTaskExecutor;
@@ -31,7 +32,7 @@ import com.apppubs.bean.Collection;
 import com.apppubs.bean.Comment;
 import com.apppubs.bean.NewsInfo;
 import com.apppubs.bean.NewsVideoInfo;
-import com.apppubs.model.APResultCallback;
+import com.apppubs.model.APCallback;
 import com.apppubs.model.CollectionBiz;
 import com.apppubs.constant.URLs;
 import com.apppubs.util.ShareTools;
@@ -147,9 +148,9 @@ public class NewsVideoInfoActivity extends BaseActivity implements AsyTaskCallba
 	}
 	
 	public void refreshCommet() {
-		mSystemBiz.getCommentSizeZanCai(mInfoId, new APResultCallback<Comment>() {
+		mSystemBiz.getCommentSizeZanCai(mInfoId, new APCallback<Comment>() {
 			@Override
-			public void onException(int excepCode) {
+			public void onException(APError excepCode) {
 				mCommment = null;
 			}
 

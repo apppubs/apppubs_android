@@ -11,6 +11,8 @@ import android.util.Log;
 import com.apppubs.bean.Department;
 import com.apppubs.bean.UserDeptLink;
 import com.apppubs.bean.UserInfo;
+import com.apppubs.constant.APError;
+import com.apppubs.constant.APErrorCode;
 import com.apppubs.constant.Actions;
 import com.apppubs.AppContext;
 import com.apppubs.bean.App;
@@ -20,7 +22,7 @@ import com.apppubs.bean.User;
 import com.apppubs.constant.URLs;
 import com.apppubs.model.AbstractBussinessCallback;
 import com.apppubs.model.BaseBiz;
-import com.apppubs.model.APResultCallback;
+import com.apppubs.model.APCallback;
 import com.apppubs.model.SystemBiz;
 import com.apppubs.util.ACache;
 import com.apppubs.util.Des3;
@@ -334,7 +336,7 @@ public class UserBussiness extends BaseBiz {
 		return SugarRecord.findWithQuery(User.class,sql);
 	}
 
-	public Future cacheUserBasicInfoList(final List<String> userIds, final APResultCallback<List<UserBasicInfo>> callback){
+	public Future cacheUserBasicInfoList(final List<String> userIds, final APCallback<List<UserBasicInfo>> callback){
 		Future future = post(new Runnable() {
 			@Override
 			public void run() {
@@ -532,7 +534,7 @@ public class UserBussiness extends BaseBiz {
 						@Override
 						public void onExceptioin(Exception e) {
 							e.printStackTrace();
-							callback.onException(0);
+							callback.onException(new APError(APErrorCode.GENERAL_ERROR,"系统异常！"));
 							sHandler.post(new OnExceptionRun<Object>(callback));
 							isSynchronizingAdbook = false;
 						}
@@ -787,7 +789,7 @@ public class UserBussiness extends BaseBiz {
 	/**
 	 * 客户端不需要登陆时，需要将设备的信息注册到服务端
 	 */
-	public void registerDevice(final APResultCallback<Integer> callback) {
+	public void registerDevice(final APCallback<Integer> callback) {
 		sDefaultExecutor.submit(new Runnable() {
 
 			@Override
@@ -884,7 +886,7 @@ public class UserBussiness extends BaseBiz {
 	}
 
 
-	public void updateUserInfo(final Context context, final APResultCallback<UserInfo> callback){
+	public void updateUserInfo(final Context context, final APCallback<UserInfo> callback){
 
 		sDefaultExecutor.submit(new Runnable() {
 

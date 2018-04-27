@@ -32,17 +32,17 @@ import com.android.volley.toolbox.Volley;
 import com.apppubs.AppContext;
 import com.apppubs.AppManager;
 import com.apppubs.MportalApplication;
+import com.apppubs.constant.APError;
 import com.apppubs.d20.R;
 import com.apppubs.bean.AppConfig;
 import com.apppubs.bean.Settings;
-import com.apppubs.bean.UserInfo;
 import com.apppubs.constant.Actions;
+import com.apppubs.model.APCallback;
 import com.apppubs.model.NewsBiz;
 import com.apppubs.model.PaperBiz;
 import com.apppubs.model.SystemBiz;
 import com.apppubs.model.message.MsgBussiness;
 import com.apppubs.model.message.UserBussiness;
-import com.apppubs.model.APResultCallback;
 import com.apppubs.model.VersionInfo;
 import com.apppubs.ui.start.StartUpActivity;
 import com.apppubs.util.JSONResult;
@@ -290,7 +290,7 @@ public abstract class BaseActivity extends FragmentActivity implements OnClickLi
 	}
 
 	private void preCheckUpdate(){
-		mSystemBiz.aSyncAppConfig(this, new APResultCallback<AppConfig>() {
+		mSystemBiz.aSyncAppConfig(this, new APCallback<AppConfig>() {
 			@Override
 			public void onDone(AppConfig obj) {
 				System.out.print("同步appconfig成功");
@@ -301,7 +301,7 @@ public abstract class BaseActivity extends FragmentActivity implements OnClickLi
 			}
 
 			@Override
-			public void onException(int excepCode) {
+			public void onException(APError error) {
 				System.out.print("同步appconfig失败");
 			}
 		});

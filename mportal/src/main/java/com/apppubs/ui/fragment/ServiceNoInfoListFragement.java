@@ -28,10 +28,11 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.apppubs.AppContext;
 import com.apppubs.bean.ServiceNOInfo;
+import com.apppubs.constant.APError;
 import com.apppubs.model.MsgController;
 import com.apppubs.d20.R;
 import com.apppubs.ui.activity.ContainerActivity;
-import com.apppubs.model.APResultCallback;
+import com.apppubs.model.APCallback;
 import com.apppubs.constant.URLs;
 import com.apppubs.util.StringUtils;
 import com.apppubs.util.SystemUtils;
@@ -120,10 +121,10 @@ public class ServiceNoInfoListFragement extends BaseFragment {
 	}
 	private void getPage(final int i) {
 		if (SystemUtils.canConnectNet(mContext)) {
-			mSystemBiz.getStandardDataTime(new APResultCallback<Date>() {
+			mSystemBiz.getStandardDataTime(new APCallback<Date>() {
 
 				@Override
-				public void onException(int excepCode) {
+				public void onException(APError excepCode) {
 
 				}
 
@@ -167,10 +168,10 @@ public class ServiceNoInfoListFragement extends BaseFragment {
 	}
 
 	private void loadData(final int i) {
-		mMsgBussiness.getAloneServiceList(mServiceNoId, new APResultCallback<List<ServiceNOInfo>>() {
+		mMsgBussiness.getAloneServiceList(mServiceNoId, new APCallback<List<ServiceNOInfo>>() {
 
 			@Override
-			public void onException(int excepCode) {
+			public void onException(APError excepCode) {
 			}
 
 			@Override

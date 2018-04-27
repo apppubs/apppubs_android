@@ -20,7 +20,8 @@ import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import com.apppubs.bean.PaperInfo;
-import com.apppubs.model.APResultCallback;
+import com.apppubs.constant.APError;
+import com.apppubs.model.APCallback;
 import com.apppubs.model.PaperBiz;
 import com.apppubs.util.LogM;
 import com.artifex.mupdfdemo.MuPDFCore;
@@ -100,10 +101,10 @@ public class PaperCatalogFragment extends BaseFragment implements OnClickListene
 	private void fill(){
 		
 		mWaitLl.setVisibility(View.VISIBLE);
-		mPaperBiz.getCatalog(mCatalogId, new APResultCallback<PaperCatalog>() {
+		mPaperBiz.getCatalog(mCatalogId, new APCallback<PaperCatalog>() {
 			
 			@Override
-			public void onException(int excepCode) {
+			public void onException(APError excepCode) {
 				Toast.makeText(mHostActivity, "网络错误", Toast.LENGTH_SHORT).show();
 				mWaitLl.setVisibility(View.GONE);
 			}

@@ -36,7 +36,8 @@ import com.apppubs.bean.Comment;
 import com.apppubs.bean.LocalFile;
 import com.apppubs.bean.NewsInfo;
 import com.apppubs.bean.Settings;
-import com.apppubs.model.APResultCallback;
+import com.apppubs.constant.APError;
+import com.apppubs.model.APCallback;
 import com.apppubs.model.CollectionBiz;
 import com.apppubs.ui.myfile.FilePreviewFragment;
 import com.apppubs.ui.webapp.WebAppFragment;
@@ -345,11 +346,7 @@ public class NewsInfoActivity extends BaseActivity implements AsyTaskCallback {
 	}
 
 	public void refreshCommet() {
-		mSystemBiz.getCommentSizeZanCai(mInfoId, new APResultCallback<Comment>() {
-			@Override
-			public void onException(int excepCode) {
-				mCommment = null;
-			}
+		mSystemBiz.getCommentSizeZanCai(mInfoId, new APCallback<Comment>() {
 
 			@Override
 			public void onDone(Comment obj) {
@@ -360,6 +357,11 @@ public class NewsInfoActivity extends BaseActivity implements AsyTaskCallback {
 
 				// 更新数据库中的评论数
 				SugarRecord.updateById(NewsInfo.class, mInfoId, "COMMENT_NUM", mCommment.getCommentnum());
+			}
+
+			@Override
+			public void onException(APError error) {
+
 			}
 		});
 	}

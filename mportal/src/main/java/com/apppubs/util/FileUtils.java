@@ -37,8 +37,10 @@ import android.provider.DocumentsContract;
 import android.provider.MediaStore;
 import android.util.Log;
 
+import com.apppubs.constant.APError;
+import com.apppubs.constant.APErrorCode;
 import com.apppubs.exception.APUnavailableException;
-import com.apppubs.model.APResultCallback;
+import com.apppubs.model.APCallback;
 import com.apppubs.constant.Constants;
 
 /**
@@ -561,7 +563,7 @@ public class FileUtils {
 
 	}
 
-	public static void asyDownload(final String url, final String desPath, final APResultCallback<String> callback) {
+	public static void asyDownload(final String url, final String desPath, final APCallback<String> callback) {
 		new Thread("异步下载") {
 			@Override
 			public void run() {
@@ -595,7 +597,7 @@ public class FileUtils {
 						Log.v(TAG, "下载用时：" + (System.currentTimeMillis() - pre) + "ms" + "下载大小：" + tolLen + "bytes");
 						callback.onDone(desFile.getAbsolutePath());
 					}
-					callback.onException(APResultCallback.EXCEPTION_COMMON);
+					callback.onException(new APError(APErrorCode.GENERAL_ERROR,"系统异常！"));
 
 				} catch (MalformedURLException e) {
 					e.printStackTrace();

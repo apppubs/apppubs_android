@@ -20,9 +20,10 @@ import android.widget.TextView;
 
 import com.apppubs.bean.ServiceNo;
 import com.apppubs.AppContext;
+import com.apppubs.constant.APError;
 import com.apppubs.d20.R;
+import com.apppubs.model.APCallback;
 import com.apppubs.ui.activity.ContainerActivity;
-import com.apppubs.model.APResultCallback;
 import com.apppubs.ui.widget.CircularImage;
 import com.apppubs.ui.widget.TitleBar;
 
@@ -60,9 +61,9 @@ public class ServiceNoListOfMineFragment extends BaseFragment {
 		super.onResume();
 		attentionServiceMsg = getActivity().getSharedPreferences(USERATTECTIONSP, Context.MODE_PRIVATE);
 		mMsgBussiness.getUserServiceNoList(AppContext.getInstance(mContext).getCurrentUser().getUsername(),
-				new APResultCallback<List<ServiceNo>>() {
+				new APCallback<List<ServiceNo>>() {
 
-					public void onException(int excepCode) {
+					public void onException(APError excepCode) {
 
 					}
 

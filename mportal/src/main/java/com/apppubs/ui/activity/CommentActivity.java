@@ -21,6 +21,8 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.apppubs.AppContext;
+import com.apppubs.constant.APError;
+import com.apppubs.model.APCallback;
 import com.apppubs.ui.adapter.ViewHolder;
 import com.apppubs.bean.Comment;
 import com.apppubs.bean.NewsInfo;
@@ -29,7 +31,6 @@ import com.apppubs.util.Tools;
 import com.apppubs.ui.widget.commonlist.CommonListView;
 import com.apppubs.d20.R;
 import com.apppubs.ui.adapter.CommonAdapter;
-import com.apppubs.model.APResultCallback;
 import com.apppubs.constant.URLs;
 import com.apppubs.util.SystemUtils;
 import com.apppubs.ui.widget.commonlist.CommonListViewListener;
@@ -255,10 +256,10 @@ public class CommentActivity extends BaseActivity {
 
 	private void getPage(final int page) {
 
-		mSystemBiz.getStandardDataTime(new APResultCallback<Date>() {
+		mSystemBiz.getStandardDataTime(new APCallback<Date>() {
 
 			@Override
-			public void onException(int excepCode) {
+			public void onException(APError excepCode) {
 			}
 
 			@Override
@@ -266,10 +267,10 @@ public class CommentActivity extends BaseActivity {
 				
 				mStandardDateTime = obj;
 				LogM.log(this.getClass(), "当前服务器时间：" + mStandardDateTime.toString());
-				mSystemBiz.getCommentList(mInfoId, mCurPage, 10, URLs.CLIENTKEY, new APResultCallback<List<Comment>>() {
+				mSystemBiz.getCommentList(mInfoId, mCurPage, 10, URLs.CLIENTKEY, new APCallback<List<Comment>>() {
 
 					@Override
-					public void onException(int excepCode) {
+					public void onException(APError excepCode) {
 
 					}
 

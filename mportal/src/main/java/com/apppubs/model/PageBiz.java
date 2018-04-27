@@ -13,6 +13,7 @@ import com.apppubs.bean.UserInfo;
 import com.apppubs.AppContext;
 import com.apppubs.bean.page.PageNormalContentModel;
 import com.apppubs.constant.APError;
+import com.apppubs.constant.APErrorCode;
 import com.apppubs.constant.Constants;
 import com.apppubs.constant.URLs;
 import com.apppubs.net.WMHHttpClient;
@@ -52,7 +53,7 @@ public class PageBiz extends BaseBiz implements IPageBiz  {
     }
 
     @Override
-    public void loadPage(String pageId, final APResultCallback<PageModel> callback) {
+    public void loadPage(String pageId, final APCallback<PageModel> callback) {
         asyncPOST("", new HashMap<String, String>(), ArticleInfo.class, new IRQListener<ArticleInfo>() {
 
             @Override
@@ -78,10 +79,10 @@ public class PageBiz extends BaseBiz implements IPageBiz  {
                         }
                         callback.onDone(model);
                     } else {
-                        callback.onException(jsonResult.code);
+                        callback.onException(new APError(APErrorCode.GENERAL_ERROR,"系统异常！"));
                     }
                 } else {
-                    callback.onException(errorCode.getValue());
+                    callback.onException(new APError(APErrorCode.GENERAL_ERROR,"系统异常！"));
                 }
             }
         });

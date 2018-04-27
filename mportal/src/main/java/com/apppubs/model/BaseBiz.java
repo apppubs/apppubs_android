@@ -1,7 +1,6 @@
 package com.apppubs.model;
 
 import java.util.HashMap;
-import java.util.Locale;
 import java.util.Map;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.Executor;
@@ -21,14 +20,11 @@ import android.os.Handler;
 import android.os.Looper;
 import android.os.Message;
 import android.support.annotation.NonNull;
-import android.telephony.TelephonyManager;
 import android.util.DisplayMetrics;
 import android.view.WindowManager;
 
 import com.alibaba.fastjson.JSONObject;
 import com.apppubs.AppContext;
-import com.apppubs.MportalApplication;
-import com.apppubs.bean.Client;
 import com.apppubs.bean.http.IJsonResult;
 import com.apppubs.constant.APError;
 import com.apppubs.constant.APErrorCode;
@@ -36,7 +32,6 @@ import com.apppubs.net.APHttpClient;
 import com.apppubs.net.APNetException;
 import com.apppubs.net.IHttpClient;
 import com.apppubs.net.IRequestListener;
-import com.apppubs.util.Utils;
 
 /**
  * 提供基础的线程相关功能
@@ -116,22 +111,22 @@ public abstract class BaseBiz {
 
 
     protected class OnExceptionRun<T> implements Runnable {
-        private APResultCallback<T> mCallback;
+        private APCallback<T> mCallback;
 
-        public OnExceptionRun(APResultCallback<T> callback) {
+        public OnExceptionRun(APCallback<T> callback) {
             mCallback = callback;
         }
 
         public void run() {
-            mCallback.onException(0);
+            mCallback.onException(new APError(APErrorCode.GENERAL_ERROR,"系统异常！"));
         }
     }
 
     protected class OnDoneRun<T> implements Runnable {
-        private APResultCallback<T> mCallback;
+        private APCallback<T> mCallback;
         private T mResult;
 
-        public OnDoneRun(APResultCallback<T> callback, T obj) {
+        public OnDoneRun(APCallback<T> callback, T obj) {
             mCallback = callback;
             mResult = obj;
         }
@@ -147,11 +142,11 @@ public abstract class BaseBiz {
         return sDefaultExecutor.submit(runnable);
     }
 
-    protected <T> void onDone(APResultCallback<T> callback, T obj) {
+    protected <T> void onDone(APCallback<T> callback, T obj) {
         sHandler.post(new OnDoneRun<T>(callback, obj));
     }
 
-    protected <T> void onException(APResultCallback<T> callback) {
+    protected <T> void onException(APCallback<T> callback) {
         sHandler.post(new OnExceptionRun<T>(callback));
     }
 
@@ -188,8 +183,7 @@ public abstract class BaseBiz {
     }
 
     public <T extends IJsonResult> void asyncPOST(final String url, final Map<String, String>
-            params, final Class<T>
-                                                          clazz, final IRQListener listener) {
+            params, final Class<T> clazz, final IRQListener listener) {
         mHttpClient.asyncPOST(url, getCommonHeader(), params, new IRequestListener() {
 
             @Override

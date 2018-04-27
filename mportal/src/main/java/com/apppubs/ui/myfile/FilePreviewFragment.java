@@ -21,6 +21,8 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.apppubs.AppContext;
+import com.apppubs.constant.APError;
+import com.apppubs.model.APCallback;
 import com.apppubs.model.myfile.CacheListener;
 import com.apppubs.model.myfile.FileCacheErrorCode;
 import com.apppubs.model.myfile.FileCacheManager;
@@ -29,7 +31,6 @@ import com.apppubs.ui.activity.ContainerActivity;
 import com.apppubs.bean.AppConfig;
 import com.apppubs.ui.fragment.BaseFragment;
 import com.apppubs.ui.webapp.WebAppFragment;
-import com.apppubs.model.APResultCallback;
 import com.apppubs.util.LogM;
 import com.apppubs.ui.widget.AlertDialog;
 import com.apppubs.ui.widget.ConfirmDialog;
@@ -495,10 +496,10 @@ public class FilePreviewFragment extends BaseFragment {
 	//显示提示框之前首先获取服务端参数，如果已经配置好下载地址则允许用户点击下载按钮否则给出提示框即可
 	private void showInstallAppDialog(final String message) {
 
-		mSystemBiz.aSyncAppConfig(mContext, new APResultCallback<AppConfig>() {
+		mSystemBiz.aSyncAppConfig(mContext, new APCallback<AppConfig>() {
 
 			@Override
-			public void onException(int excepCode) {
+			public void onException(APError excepCode) {
 				showAlertDialog(message);
 			}
 
@@ -540,10 +541,10 @@ public class FilePreviewFragment extends BaseFragment {
 	}
 
 	private void skip2DownloadPage() {
-		mSystemBiz.aSyncAppConfig(mContext, new APResultCallback<AppConfig>() {
+		mSystemBiz.aSyncAppConfig(mContext, new APCallback<AppConfig>() {
 
 			@Override
-			public void onException(int excepCode) {
+			public void onException(APError excepCode) {
 				Toast.makeText(mContext, "网络错误", Toast.LENGTH_SHORT).show();
 			}
 

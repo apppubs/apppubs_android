@@ -15,12 +15,13 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.apppubs.constant.APError;
 import com.apppubs.d20.R;
+import com.apppubs.model.APCallback;
 import com.apppubs.model.PaperBiz;
 import com.apppubs.ui.activity.PaperIssueActivity;
 import com.apppubs.bean.Paper;
 import com.apppubs.bean.PaperIssue;
-import com.apppubs.model.APResultCallback;
 import com.apppubs.ui.widget.commonlist.CommonListView;
 import com.apppubs.ui.widget.commonlist.CommonListViewListener;
 import com.orm.SugarRecord;
@@ -69,10 +70,10 @@ public class PaperIssueListFragment extends BaseFragment {
 	}
 
 	private void load() {
-		mPaperBiz.getPaperIssueList(mPaperCode, mCurPos, new APResultCallback<List<PaperIssue>>() {
+		mPaperBiz.getPaperIssueList(mPaperCode, mCurPos, new APCallback<List<PaperIssue>>() {
 
 			@Override
-			public void onException(int excepCode) {
+			public void onException(APError excepCode) {
 			}
 
 			@Override

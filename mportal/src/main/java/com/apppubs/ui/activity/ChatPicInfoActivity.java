@@ -24,10 +24,11 @@ import android.widget.ImageView;
 import android.widget.ImageView.ScaleType;
 import android.widget.Toast;
 
+import com.apppubs.constant.APError;
 import com.apppubs.util.LogM;
 import com.apppubs.ui.widget.ZoomImageView;
 import com.apppubs.d20.R;
-import com.apppubs.model.APResultCallback;
+import com.apppubs.model.APCallback;
 
 public class ChatPicInfoActivity extends BaseActivity implements OnClickListener {
 	private ViewPager mViewPager;
@@ -91,10 +92,10 @@ public class ChatPicInfoActivity extends BaseActivity implements OnClickListener
 			MediaStore.Images.Media.insertImage(getContentResolver(), bit, "标题", "描述");
 		} else {
 
-			mMsgBussiness.writePicUrlSD(mPicPath, file, new APResultCallback<String>() {
+			mMsgBussiness.writePicUrlSD(mPicPath, file, new APCallback<String>() {
 
 				@Override
-				public void onException(int excepCode) {
+				public void onException(APError excepCode) {
 
 				}
 

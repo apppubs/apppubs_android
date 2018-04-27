@@ -11,7 +11,7 @@ import com.apppubs.bean.ServiceNOInfo;
 import com.apppubs.bean.ServiceNo;
 import com.apppubs.bean.User;
 import com.apppubs.constant.URLs;
-import com.apppubs.model.APResultCallback;
+import com.apppubs.model.APCallback;
 import com.apppubs.model.BaseBiz;
 import com.apppubs.ui.message.MyFilePlugin;
 import com.apppubs.util.JSONResult;
@@ -87,7 +87,7 @@ public class MsgBussiness extends BaseBiz {
 	 * @return
 	 */
 	public Future<?> getChatList(final String receiverUsername, final String senderUsername,
-			final APResultCallback<List<Msg>> callback) {
+			final APCallback<List<Msg>> callback) {
 		Future<?> f = sDefaultExecutor.submit(new Runnable() {
 
 			@Override
@@ -127,7 +127,7 @@ public class MsgBussiness extends BaseBiz {
 		return f;
 	}
 	public Future<?> getChatGroupChatList(final String receiverUsername, final String groupid,final String startTimeStr,
-			final APResultCallback<List<Msg>> callback) {
+			final APCallback<List<Msg>> callback) {
 		
 		Future<?> f = sDefaultExecutor.submit(new Runnable() {
 			
@@ -189,7 +189,7 @@ public class MsgBussiness extends BaseBiz {
 	 * 
 	 */
 	public Future<?> sendTextMsg(final String senderUsername, final String receiverUsername, final String groupId,final String content,
-			final APResultCallback<Object> callback) {
+			final APCallback<Object> callback) {
 
 		Future<?> f = sDefaultExecutor.submit(new Runnable() {
 			@Override
@@ -371,7 +371,7 @@ public class MsgBussiness extends BaseBiz {
 		
 		return f;
 	}
-	public Future<?> sendVideoMsg(final String senderUsername, final String receiverUsername, final String src,final APResultCallback<Object> callback) {
+	public Future<?> sendVideoMsg(final String senderUsername, final String receiverUsername, final String src,final APCallback<Object> callback) {
 		Future<?> f = sDefaultExecutor.submit(new Runnable() {
 			
 			@Override
@@ -383,7 +383,7 @@ public class MsgBussiness extends BaseBiz {
 		
 		return f;
 	}
-	public Future<?> sendGroupVideoMsg(final String senderUsername, final String groupid, final String src,final APResultCallback<Object> callback) {
+	public Future<?> sendGroupVideoMsg(final String senderUsername, final String groupid, final String src,final APCallback<Object> callback) {
 		Future<?> f = sDefaultExecutor.submit(new Runnable() {
 			
 			@Override
@@ -437,7 +437,7 @@ public class MsgBussiness extends BaseBiz {
 		return SugarRecord.findById(ServiceNo.class, id);
 	}
 
-	public Future<?> getAloneServiceList(final String serviceid, final APResultCallback<List<ServiceNOInfo>> callback) {
+	public Future<?> getAloneServiceList(final String serviceid, final APCallback<List<ServiceNOInfo>> callback) {
 		Future<?> f = sDefaultExecutor.submit(new Runnable() {
 
 			@Override
@@ -469,7 +469,7 @@ public class MsgBussiness extends BaseBiz {
 	 * @return
 	 */
 	public Future<?> getServiceAttention(final String serviceid, final String username,
-			final APResultCallback<String> callback) {
+			final APCallback<String> callback) {
 		Future<?> f = sDefaultExecutor.submit(new Runnable() {
 
 			@Override
@@ -500,7 +500,7 @@ public class MsgBussiness extends BaseBiz {
 	 * 取消关注订阅号
 	 */
 	public Future<?> getServiceUnAttention(final String serviceid, final String username,
-			final APResultCallback<String> callback) {
+			final APCallback<String> callback) {
 		Future<?> f = sDefaultExecutor.submit(new Runnable() {
 
 			@Override
@@ -533,7 +533,7 @@ public class MsgBussiness extends BaseBiz {
 	 * @param callback
 	 * @return
 	 */
-	public Future<?> getUserServiceNoList(final String username, final APResultCallback<List<ServiceNo>> callback) {
+	public Future<?> getUserServiceNoList(final String username, final APCallback<List<ServiceNo>> callback) {
 		Future<?> f = sDefaultExecutor.submit(new Runnable() {
 
 			@Override
@@ -564,7 +564,7 @@ public class MsgBussiness extends BaseBiz {
 	 * 获得可订阅的服务号列表
 	 * @return
 	 */
-	public Future<?> getSubcribableServiceNoList(final APResultCallback<List<ServiceNo>> callback){
+	public Future<?> getSubcribableServiceNoList(final APCallback<List<ServiceNo>> callback){
 		Future<?> f = sDefaultExecutor.submit(new Runnable() {
 
 			@Override
@@ -592,7 +592,7 @@ public class MsgBussiness extends BaseBiz {
 	/**
 	 * 把一个url的网络图片保存在本地
 	 */
-	public Future<?> writePicUrlSD(final String pinurl, final File file, final APResultCallback<String> callback) {
+	public Future<?> writePicUrlSD(final String pinurl, final File file, final APCallback<String> callback) {
 		Future<?> f = sDefaultExecutor.submit(new Runnable() {
 
 			@Override

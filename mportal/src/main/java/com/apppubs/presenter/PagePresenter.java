@@ -7,10 +7,11 @@ import com.apppubs.AppManager;
 import com.apppubs.bean.AddressModel;
 import com.apppubs.bean.page.PageModel;
 import com.apppubs.bean.page.TitleBarAddressModel;
+import com.apppubs.constant.APError;
+import com.apppubs.model.APCallback;
 import com.apppubs.model.IPageBiz;
 import com.apppubs.model.PageBiz;
 import com.apppubs.ui.activity.MainHandler;
-import com.apppubs.model.APResultCallback;
 import com.apppubs.ui.page.IPageView;
 import com.apppubs.util.LogM;
 
@@ -49,7 +50,7 @@ public class PagePresenter {
     private void loadPage() {
         mPageView.showLoadingView();
         String pageId = mPageView.getPageId();
-        mPageBiz.loadPage(pageId, new APResultCallback<PageModel>() {
+        mPageBiz.loadPage(pageId, new APCallback<PageModel>() {
             @Override
             public void onDone(final PageModel model) {
                 if (mPageModel != null && mPageModel.equals(model)) {
@@ -61,7 +62,7 @@ public class PagePresenter {
             }
 
             @Override
-            public void onException(int excepCode) {
+            public void onException(APError excepCode) {
                 MainHandler.getInstance().post(new Runnable() {
                     @Override
                     public void run() {

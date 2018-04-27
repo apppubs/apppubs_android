@@ -22,10 +22,11 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.apppubs.bean.ServiceNo;
 import com.apppubs.AppContext;
+import com.apppubs.constant.APError;
 import com.apppubs.util.DateUtils;
 import com.apppubs.d20.R;
 import com.apppubs.ui.activity.ContainerActivity;
-import com.apppubs.model.APResultCallback;
+import com.apppubs.model.APCallback;
 import com.apppubs.constant.URLs;
 import com.apppubs.util.JSONResult;
 
@@ -127,10 +128,10 @@ public class ServiceNoInfoFragment extends BaseFragment {
 				progressBar.setVisibility(View.VISIBLE);
 				if (attentionBt.getText().equals("关注")) {
 					mMsgBussiness.getServiceAttention(mServiceNoId, AppContext.getInstance(mContext).getCurrentUser().getUsername(),
-							new APResultCallback<String>() {
+							new APCallback<String>() {
 
 								@Override
-								public void onException(int excepCode) {
+								public void onException(APError excepCode) {
 								}
 
 								@Override
@@ -152,10 +153,10 @@ public class ServiceNoInfoFragment extends BaseFragment {
 							});
 				} else {// 取消关注
 					mMsgBussiness.getServiceUnAttention(mServiceNoId, AppContext.getInstance(mContext).getCurrentUser().getUsername(),
-							new APResultCallback<String>() {
+							new APCallback<String>() {
 
 								@Override
-								public void onException(int excepCode) {
+								public void onException(APError excepCode) {
 								}
 
 								@Override

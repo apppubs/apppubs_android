@@ -13,8 +13,9 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.apppubs.constant.APError;
 import com.apppubs.d20.R;
-import com.apppubs.model.APResultCallback;
+import com.apppubs.model.APCallback;
 import com.apppubs.constant.URLs;
 import com.apppubs.util.SystemUtils;
 import com.apppubs.util.Utils;
@@ -130,10 +131,10 @@ public class RegisterActivity extends BaseActivity {
 				mSystemBiz.postZhuce(mName.getText().toString().trim(), mEmail.getText().toString().trim(),
 						mPassword.getText().toString().trim(), mPhone
 						.getText().toString().trim(), mNicname
-						.getText().toString().trim(),new APResultCallback<String>() {
+						.getText().toString().trim(),new APCallback<String>() {
 							
 							@Override
-							public void onException(int excepCode) {
+							public void onException(APError excepCode) {
 								
 							}
 							

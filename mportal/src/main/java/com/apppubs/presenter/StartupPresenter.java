@@ -6,7 +6,8 @@ import android.text.TextUtils;
 import com.apppubs.AppContext;
 import com.apppubs.AppManager;
 import com.apppubs.bean.App;
-import com.apppubs.model.APResultCallback;
+import com.apppubs.constant.APError;
+import com.apppubs.model.APCallback;
 import com.apppubs.model.SystemBiz;
 import com.apppubs.model.VersionInfo;
 import com.apppubs.ui.start.IStartUpView;
@@ -55,7 +56,7 @@ public class StartupPresenter {
 	}
 
 	public void init(){
-		mSystemBiz.initSystem(new APResultCallback<App>() {
+		mSystemBiz.initSystem(new APCallback<App>() {
 			@Override
 			public void onDone(App obj) {
 				showBgPic(obj.getStartUpPic());
@@ -63,7 +64,7 @@ public class StartupPresenter {
 			}
 
 			@Override
-			public void onException(int excepCode) {
+			public void onException(APError excepCode) {
 				mView.showInitFailDialog();
 			}
 		});

@@ -16,10 +16,11 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.apppubs.constant.APError;
 import com.apppubs.d20.R;
+import com.apppubs.model.APCallback;
 import com.apppubs.ui.activity.NewsInfoActivity;
 import com.apppubs.bean.ServiceNOInfo;
-import com.apppubs.model.APResultCallback;
 import com.apppubs.util.StringUtils;
 import com.apppubs.util.SystemUtils;
 import com.apppubs.ui.widget.ProgressHUD;
@@ -56,10 +57,10 @@ public class HistoryFragment extends BaseFragment {
 		
 		if (SystemUtils.canConnectNet(mContext)) {
 
-			mSystemBiz.getStandardDataTime(new APResultCallback<Date>() {
+			mSystemBiz.getStandardDataTime(new APCallback<Date>() {
 
 				@Override
-				public void onException(int excepCode) {
+				public void onException(APError excepCode) {
 
 				}
 
@@ -68,7 +69,7 @@ public class HistoryFragment extends BaseFragment {
 					mStandardDateTime = obj;
 
 					mMsgBussiness.getAloneServiceList(mAppContext.getApp().getDefaultServiceNoId(),
-							new APResultCallback<List<ServiceNOInfo>>() {
+							new APCallback<List<ServiceNOInfo>>() {
 
 								@Override
 								public void onDone(List<ServiceNOInfo> obj) {
@@ -82,7 +83,7 @@ public class HistoryFragment extends BaseFragment {
 								}
 
 								@Override
-								public void onException(int excepCode) {
+								public void onException(APError excepCode) {
 									ProgressHUD.dismissProgressHUDInThisContext(mHostActivity);
 								}
 							});

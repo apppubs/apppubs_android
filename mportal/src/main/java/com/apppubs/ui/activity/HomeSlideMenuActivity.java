@@ -34,12 +34,13 @@ import com.amap.api.location.AMapLocationListener;
 import com.apppubs.AppContext;
 import com.apppubs.AppManager;
 import com.apppubs.bean.TMenuItem;
+import com.apppubs.constant.APError;
 import com.apppubs.d20.R;
 import com.apppubs.bean.App;
 import com.apppubs.bean.UserInfo;
 import com.apppubs.bean.Weather;
 import com.apppubs.ui.fragment.BaseFragment;
-import com.apppubs.model.APResultCallback;
+import com.apppubs.model.APCallback;
 import com.apppubs.service.DownloadAppService;
 import com.apppubs.util.LogM;
 import com.apppubs.util.ServiceUtils;
@@ -206,10 +207,10 @@ public class HomeSlideMenuActivity extends HomeBaseActivity implements OnItemCli
 				public void onClick(View arg0) {
 					// 更新服务正在运行
 
-					mSystemBiz.update(new APResultCallback<String[]>() {
+					mSystemBiz.update(new APCallback<String[]>() {
 
 						@Override
-						public void onException(int excepCode) {
+						public void onException(APError excepCode) {
 
 						}
 

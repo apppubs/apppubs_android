@@ -11,6 +11,7 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.apppubs.constant.APError;
 import com.apppubs.ui.adapter.CommonAdapter;
 import com.apppubs.AppContext;
 import com.apppubs.d20.R;
@@ -21,7 +22,7 @@ import com.apppubs.model.message.ConversationModel;
 import com.apppubs.model.message.TranspondDataHelper;
 import com.apppubs.model.message.UserBussiness;
 import com.apppubs.model.message.UserPickerHelper;
-import com.apppubs.model.APResultCallback;
+import com.apppubs.model.APCallback;
 import com.apppubs.model.myfile.CacheListener;
 import com.apppubs.model.myfile.FileCacheErrorCode;
 import com.apppubs.ui.widget.ConfirmDialog;
@@ -65,7 +66,7 @@ public class TranspondActivity extends BaseActivity {
 
 	private void loadData() {
 
-		TranspondDataHelper.getInstance(this).fetchData(new APResultCallback<List<ConversationModel>>() {
+		TranspondDataHelper.getInstance(this).fetchData(new APCallback<List<ConversationModel>>() {
 			@Override
 			public void onDone(List<ConversationModel> modelList) {
 
@@ -87,7 +88,7 @@ public class TranspondActivity extends BaseActivity {
 			}
 
 			@Override
-			public void onException(int excepCode) {
+			public void onException(APError excepCode) {
 
 			}
 		});

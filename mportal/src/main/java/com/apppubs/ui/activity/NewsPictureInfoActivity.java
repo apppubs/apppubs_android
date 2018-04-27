@@ -30,7 +30,8 @@ import com.apppubs.bean.Collection;
 import com.apppubs.bean.Comment;
 import com.apppubs.bean.NewsInfo;
 import com.apppubs.bean.NewsPictureInfo;
-import com.apppubs.model.APResultCallback;
+import com.apppubs.constant.APError;
+import com.apppubs.model.APCallback;
 import com.apppubs.util.LogM;
 import com.apppubs.util.ShareTools;
 import com.apppubs.util.Utils;
@@ -101,10 +102,10 @@ public class NewsPictureInfoActivity extends BaseActivity implements OnPageChang
 		.build();
 		
 		mFuture = mNewsBiz.getPicInfoPage(mInfoId,
-				1, new APResultCallback<List<NewsPictureInfo>>() {
+				1, new APCallback<List<NewsPictureInfo>>() {
 
 					@Override
-					public void onException(int excepCode) {
+					public void onException(APError excepCode) {
 						Log.v("newsInfoActivity", "getNewsInfo出现异常");
 					}
 
@@ -295,9 +296,9 @@ public class NewsPictureInfoActivity extends BaseActivity implements OnPageChang
 	}
 
 	public Comment initCommentCount() {
-		mSystemBiz.getCommentSizeZanCai(mInfoId, new APResultCallback<Comment>() {
+		mSystemBiz.getCommentSizeZanCai(mInfoId, new APCallback<Comment>() {
 			@Override
-			public void onException(int excepCode) {
+			public void onException(APError excepCode) {
 				// TODO Auto-generated method stub
 				mCommment = null;
 			}

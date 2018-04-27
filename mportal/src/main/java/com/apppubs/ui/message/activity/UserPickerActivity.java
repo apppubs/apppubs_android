@@ -13,10 +13,11 @@ import android.widget.TextView;
 
 import com.apppubs.bean.Department;
 import com.apppubs.AppContext;
+import com.apppubs.constant.APError;
 import com.apppubs.ui.activity.BaseActivity;
 import com.apppubs.ui.adapter.ViewHolder;
 import com.apppubs.bean.User;
-import com.apppubs.model.APResultCallback;
+import com.apppubs.model.APCallback;
 import com.apppubs.model.message.UserBasicInfo;
 import com.apppubs.model.message.UserPickerHelper;
 import com.apppubs.ui.widget.widget.Breadcrumb;
@@ -333,7 +334,7 @@ public class UserPickerActivity extends BaseActivity implements UserSelectionBar
             for (User user : mUserList){
                 userIds.add(user.getUserId());
             }
-            mUserBussiness.cacheUserBasicInfoList(userIds, new APResultCallback<List<UserBasicInfo>>() {
+            mUserBussiness.cacheUserBasicInfoList(userIds, new APCallback<List<UserBasicInfo>>() {
                 @Override
                 public void onDone(List<UserBasicInfo> obj) {
 
@@ -342,7 +343,7 @@ public class UserPickerActivity extends BaseActivity implements UserSelectionBar
                 }
 
                 @Override
-                public void onException(int excepCode) {
+                public void onException(APError excepCode) {
 
                 }
             });

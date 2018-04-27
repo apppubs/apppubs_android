@@ -18,10 +18,11 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import com.apppubs.bean.ServiceNo;
+import com.apppubs.constant.APError;
 import com.apppubs.ui.widget.CircularImage;
 import com.apppubs.d20.R;
 import com.apppubs.ui.activity.ContainerActivity;
-import com.apppubs.model.APResultCallback;
+import com.apppubs.model.APCallback;
 
 /**
  * 添加服务号 Copyright (c) heaven Inc. Original Author: zhangwen ChangeLog:
@@ -71,10 +72,10 @@ public class ServiceNoSubscribeFragment extends BaseFragment {
 		// }
 		// });
 
-		mMsgBussiness.getSubcribableServiceNoList(new APResultCallback<List<ServiceNo>>() {
+		mMsgBussiness.getSubcribableServiceNoList(new APCallback<List<ServiceNo>>() {
 
 			@Override
-			public void onException(int excepCode) {
+			public void onException(APError excepCode) {
 			}
 
 			@Override

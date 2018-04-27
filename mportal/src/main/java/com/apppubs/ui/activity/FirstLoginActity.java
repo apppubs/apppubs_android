@@ -24,19 +24,19 @@ import com.android.volley.Response.Listener;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.apppubs.AppContext;
-import com.apppubs.d20.R;
 import com.apppubs.asytask.AsyTaskCallback;
 import com.apppubs.asytask.AsyTaskExecutor;
 import com.apppubs.bean.App;
 import com.apppubs.bean.Settings;
 import com.apppubs.bean.UserInfo;
 import com.apppubs.constant.URLs;
+import com.apppubs.d20.R;
+import com.apppubs.ui.widget.ProgressHUD;
 import com.apppubs.util.JSONResult;
 import com.apppubs.util.LogM;
 import com.apppubs.util.SystemUtils;
 import com.apppubs.util.Utils;
 import com.apppubs.util.WebUtils;
-import com.apppubs.ui.widget.ProgressHUD;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -305,6 +305,8 @@ public class FirstLoginActity extends BaseActivity implements ErrorListener, Asy
 			e.printStackTrace();
 		}
 		LogM.log(this.getClass(), "请求url:" + url);
+
+
 		mRequestQueue.add(new StringRequest(url, new Listener<String>() {
 
 			@Override

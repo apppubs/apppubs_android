@@ -28,7 +28,6 @@ import com.apppubs.model.SystemBiz;
 import com.apppubs.ui.widget.ProgressWebView;
 import com.apppubs.ui.widget.Tabs;
 import com.apppubs.d20.R;
-import com.apppubs.model.APResultCallback;
 
 public class WeiBoFragment extends BaseFragment implements OnPageChangeListener ,OnClickListener{
 
@@ -83,7 +82,7 @@ public class WeiBoFragment extends BaseFragment implements OnPageChangeListener 
 		mSt = (Tabs) mRootView.findViewById(R.id.weibo_st);
 	}
 	private void fill(){
-//		mSystemBiz.getWeiBoInfo(new APResultCallback<List<WeiboInfo>>() {
+//		mSystemBiz.getWeiBoInfo(new APCallback<List<WeiboInfo>>() {
 //
 //			@Override
 //			public void onException(int excepCode) {

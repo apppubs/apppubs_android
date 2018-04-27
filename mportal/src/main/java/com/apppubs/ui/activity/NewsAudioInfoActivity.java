@@ -33,7 +33,8 @@ import android.widget.Toast;
 import com.apppubs.bean.Collection;
 import com.apppubs.bean.Comment;
 import com.apppubs.bean.NewsInfo;
-import com.apppubs.model.APResultCallback;
+import com.apppubs.constant.APError;
+import com.apppubs.model.APCallback;
 import com.apppubs.model.CollectionBiz;
 import com.apppubs.model.NewsBiz;
 import com.apppubs.util.LogM;
@@ -84,10 +85,10 @@ public class NewsAudioInfoActivity extends BaseActivity {
 		}
 		mNewsBiz = NewsBiz.getInstance(mContext);
 		mFuture = mNewsBiz.getNewsInfo(mNewsInfo.getId(), mNewsInfo.getChannelCode(),
-				new APResultCallback<NewsInfo>() {
+				new APCallback<NewsInfo>() {
 
 					@Override
-					public void onException(int excepCode) {
+					public void onException(APError excepCode) {
 						Log.v("newsInfoActivity", "getNewsInfo出现异常");
 						Toast.makeText(NewsAudioInfoActivity.this, "获取正文出错", Toast.LENGTH_SHORT).show();
 						progress.setVisibility(View.GONE);
@@ -378,9 +379,9 @@ public class NewsAudioInfoActivity extends BaseActivity {
 	}
 
 	public void refreshCommet() {
-		mSystemBiz.getCommentSizeZanCai(mInfoId, new APResultCallback<Comment>() {
+		mSystemBiz.getCommentSizeZanCai(mInfoId, new APCallback<Comment>() {
 			@Override
-			public void onException(int excepCode) {
+			public void onException(APError excepCode) {
 				mCommment = null;
 			}
 

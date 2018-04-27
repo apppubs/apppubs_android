@@ -31,6 +31,8 @@ import com.android.volley.Response.ErrorListener;
 import com.android.volley.Response.Listener;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
+import com.apppubs.constant.APError;
+import com.apppubs.model.APCallback;
 import com.apppubs.ui.adapter.CommonAdapter;
 import com.apppubs.bean.UserInfo;
 import com.apppubs.AppContext;
@@ -48,7 +50,6 @@ import com.apppubs.ui.widget.ProgressHUD;
 import com.apppubs.ui.widget.SegmentedGroup;
 import com.apppubs.ui.widget.TitleBar;
 import com.apppubs.d20.R;
-import com.apppubs.model.APResultCallback;
 import com.apppubs.constant.URLs;
 
 public class AddressBookFragement extends BaseFragment {
@@ -295,7 +296,7 @@ public class AddressBookFragement extends BaseFragment {
 	 */
 	private void sync() {
 		mProgressHUD = ProgressHUD.show(mHostActivity, "同步中", true, false, null);
-		mSystemBiz.aSyncAppConfig(mHostActivity, new APResultCallback<AppConfig>() {
+		mSystemBiz.aSyncAppConfig(mHostActivity, new APCallback<AppConfig>() {
 
 			@Override
 			public void onDone(AppConfig obj) {
@@ -303,7 +304,7 @@ public class AddressBookFragement extends BaseFragment {
 			}
 
 			@Override
-			public void onException(int excepCode) {
+			public void onException(APError excepCode) {
 				Toast.makeText(mHostActivity, "同步失败", Toast.LENGTH_SHORT).show();
 				mProgressHUD.dismiss();
 			}
@@ -315,7 +316,7 @@ public class AddressBookFragement extends BaseFragment {
 		mUserBussiness.sycnAddressBook(new AbstractBussinessCallback<Object>() {
 
 			@Override
-			public void onException(int excepCode) {
+			public void onException(APError excepCode) {
 				Toast.makeText(mHostActivity, "同步失败", Toast.LENGTH_SHORT).show();
 				mProgressHUD.dismiss();
 			}

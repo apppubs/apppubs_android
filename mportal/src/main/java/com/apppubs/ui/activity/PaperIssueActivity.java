@@ -14,9 +14,10 @@ import android.widget.Toast;
 
 import com.apppubs.bean.PaperCatalog;
 import com.apppubs.bean.PaperIssue;
+import com.apppubs.constant.APError;
+import com.apppubs.model.APCallback;
 import com.apppubs.ui.widget.TitleBar;
 import com.apppubs.d20.R;
-import com.apppubs.model.APResultCallback;
 import com.apppubs.ui.fragment.PaperInfoListFragment;
 import com.apppubs.ui.fragment.PaperIssuePreviewFragment;
 
@@ -49,10 +50,10 @@ public class PaperIssueActivity extends BaseActivity {
 	}
 
 	private void fill() {
-		mGetPaperFuture = mPaperBiz.getPaperIssueInfo(mIssueId, new APResultCallback<PaperIssue>() {
+		mGetPaperFuture = mPaperBiz.getPaperIssueInfo(mIssueId, new APCallback<PaperIssue>() {
 
 			@Override
-			public void onException(int excepCode) {
+			public void onException(APError excepCode) {
 				Toast.makeText(PaperIssueActivity.this, "读取报纸信息错误", Toast.LENGTH_SHORT).show();
 				mProgressLl.setVisibility(View.GONE);
 			}

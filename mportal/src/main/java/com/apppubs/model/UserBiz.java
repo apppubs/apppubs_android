@@ -5,6 +5,9 @@ import android.support.annotation.Nullable;
 
 import com.apppubs.bean.UserInfo;
 import com.apppubs.AppContext;
+import com.apppubs.bean.http.IJsonResult;
+import com.apppubs.bean.http.LoginResult;
+import com.apppubs.constant.APError;
 import com.apppubs.constant.URLs;
 import com.apppubs.net.WMHHttpClient;
 import com.apppubs.net.WMHHttpErrorCode;
@@ -16,12 +19,13 @@ import com.apppubs.util.JSONUtils;
  * Created by zhangwen on 2017/10/24.
  */
 
-public class UserBiz {
+public class UserBiz extends BaseBiz{
 
 	private static UserBiz sUserBiz;
 	private Context mContext;
 
 	private UserBiz(Context context){
+		super(context);
 		mContext = context;
 	}
 
@@ -63,6 +67,15 @@ public class UserBiz {
 					callback.onException(e);
 
 				}
+			}
+		});
+	}
+
+	public void loginWithUsername(String username, final APCallback<LoginResult> callback){
+		asyncPOST("http://result.eolinker.com/gN1zjDlc87a75d671a2d954f809ebcdd19e7698dc2478fa?uri=login_with_username_and_pwd", null, LoginResult.class, new IRQListener() {
+			@Override
+			public void onResponse(IJsonResult jr, APError error) {
+
 			}
 		});
 	}

@@ -1,10 +1,7 @@
 package com.apppubs.model;
 
 import android.content.Context;
-import android.content.pm.PackageInfo;
-import android.content.pm.PackageManager;
 import android.content.res.Resources;
-import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Bitmap;
 import android.graphics.Bitmap.CompressFormat;
@@ -18,7 +15,6 @@ import android.graphics.Paint;
 import android.graphics.Rect;
 import android.os.Build;
 import android.support.annotation.NonNull;
-import android.telephony.TelephonyManager;
 import android.text.TextUtils;
 import android.util.DisplayMetrics;
 
@@ -27,27 +23,19 @@ import com.apppubs.AppManager;
 import com.apppubs.bean.App;
 import com.apppubs.bean.AppConfig;
 import com.apppubs.bean.City;
-import com.apppubs.bean.Client;
 import com.apppubs.bean.Collection;
 import com.apppubs.bean.Comment;
 import com.apppubs.bean.Department;
-import com.apppubs.bean.HeadPic;
-import com.apppubs.bean.History;
 import com.apppubs.bean.MenuGroup;
 import com.apppubs.bean.MsgRecord;
 import com.apppubs.bean.NewsChannel;
 import com.apppubs.bean.NewsInfo;
-import com.apppubs.bean.Paper;
-import com.apppubs.bean.ServiceNo;
 import com.apppubs.bean.TMenuItem;
-import com.apppubs.bean.TitleMenu;
 import com.apppubs.bean.User;
 import com.apppubs.bean.UserDeptLink;
 import com.apppubs.bean.UserInfo;
-import com.apppubs.bean.WeiboInfo;
 import com.apppubs.bean.http.AppInfoResult;
 import com.apppubs.bean.http.MenusResult;
-import com.apppubs.constant.Constants;
 import com.apppubs.constant.URLs;
 import com.apppubs.d20.R;
 import com.apppubs.model.message.UserBussiness;
@@ -79,7 +67,6 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.InputStream;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLConnection;
@@ -87,7 +74,6 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Locale;
 import java.util.Map;
 import java.util.concurrent.Future;
 
@@ -119,7 +105,7 @@ public class SystemBiz extends BaseBiz {
 
     }
 
-    public Future<?> update(final APResultCallback<String[]> callback) {
+    public Future<?> update(final APCallback<String[]> callback) {
         Future<?> f = sDefaultExecutor.submit(new Runnable() {
 
             @Override
@@ -152,7 +138,7 @@ public class SystemBiz extends BaseBiz {
         return mAppContext.getApp().getInitTimes() == 0;
     }
 
-    public Future<?> initSystem(final APResultCallback<App> callback) {
+    public Future<?> initSystem(final APCallback<App> callback) {
         LogM.log(this.getClass(), "系统初始化");
 
         Runnable run = new Runnable() {
@@ -416,7 +402,7 @@ public class SystemBiz extends BaseBiz {
     /**
      * 更新appconfig，将getappconfig中的数据同步到本地的APP对象中。
      */
-    public void aSyncAppConfig(final Context context, final APResultCallback<AppConfig> callback) {
+    public void aSyncAppConfig(final Context context, final APCallback<AppConfig> callback) {
         sDefaultExecutor.submit(new Runnable() {
 
             @Override
@@ -449,7 +435,7 @@ public class SystemBiz extends BaseBiz {
     public Future<?> postZhuce(final String usernamestr, final String emailstr, final String
             passwordstr,
                                final String mobilestr, final String nicknamestr, final
-							   APResultCallback<String> callback) {
+                               APCallback<String> callback) {
         Future<?> f = sDefaultExecutor.submit(new Runnable() {
 
             @Override
@@ -507,7 +493,7 @@ public class SystemBiz extends BaseBiz {
     public Future<?> postZhuce1(final String usernamestr, final String emailstr, final String
 			passwordstr,
                                 final String mobilestr, final String nicknamestr, final
-								APResultCallback<String> callback) {
+                                APCallback<String> callback) {
         // TODO Auto-generated method stub
         Future<?> f = sDefaultExecutor.submit(new Runnable() {
 
@@ -535,7 +521,7 @@ public class SystemBiz extends BaseBiz {
 
     public Future<?> getCommentList(final String infoid, final int pno, final int pernum, final
 	String clientkey,
-                                    final APResultCallback<List<Comment>> callback) {
+                                    final APCallback<List<Comment>> callback) {
         // TODO Auto-generated method stub
         Future<?> f = sDefaultExecutor.submit(new Runnable() {
 
@@ -564,7 +550,7 @@ public class SystemBiz extends BaseBiz {
         return f;
     }
 
-    public Future<?> getCommentSizeZanCai(final String infoid, final APResultCallback<Comment> callback) {
+    public Future<?> getCommentSizeZanCai(final String infoid, final APCallback<Comment> callback) {
         // TODO Auto-generated method stub
         Future<?> f = sDefaultExecutor.submit(new Runnable() {
 
@@ -603,7 +589,7 @@ public class SystemBiz extends BaseBiz {
         return f;
     }
 
-    public Future<?> getStandardDataTime(final APResultCallback<Date> callback) {
+    public Future<?> getStandardDataTime(final APCallback<Date> callback) {
         Future<?> f = sDefaultExecutor.submit(new Runnable() {
             @Override
             public void run() {
@@ -640,7 +626,7 @@ public class SystemBiz extends BaseBiz {
         return 0;
     }
 
-    public void clearCache(final APResultCallback<Boolean> callback) {
+    public void clearCache(final APCallback<Boolean> callback) {
         Runnable r = new Runnable() {
             @Override
             public void run() {
@@ -662,7 +648,7 @@ public class SystemBiz extends BaseBiz {
 
     }
 
-    public void inviteUsers(@NonNull final List<String> userIds, @NonNull final APResultCallback callback) {
+    public void inviteUsers(@NonNull final List<String> userIds, @NonNull final APCallback callback) {
         post(new Runnable() {
             @Override
             public void run() {

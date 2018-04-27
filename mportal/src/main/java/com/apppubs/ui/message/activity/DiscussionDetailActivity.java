@@ -17,10 +17,11 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.apppubs.constant.APError;
 import com.apppubs.d20.R;
+import com.apppubs.model.APCallback;
 import com.apppubs.ui.activity.BaseActivity;
 import com.apppubs.ui.adbook.UserInfoActivity;
-import com.apppubs.model.APResultCallback;
 import com.apppubs.model.message.OperationRong;
 import com.apppubs.model.message.UserBasicInfo;
 import com.apppubs.model.message.UserPickerHelper;
@@ -163,7 +164,7 @@ public class DiscussionDetailActivity extends BaseActivity implements CompoundBu
         ids = mDiscussion.getMemberIdList();
         if (ids != null) {
 //            request(FIND_USER_INFO);
-            mUserBussiness.cacheUserBasicInfoList(ids, new APResultCallback<List<UserBasicInfo>>() {
+            mUserBussiness.cacheUserBasicInfoList(ids, new APCallback<List<UserBasicInfo>>() {
                 @Override
                 public void onDone(List<UserBasicInfo> infos) {
 					mCachedUserInfoList = infos;
@@ -191,7 +192,7 @@ public class DiscussionDetailActivity extends BaseActivity implements CompoundBu
                 }
 
                 @Override
-                public void onException(int excepCode) {
+                public void onException(APError excepCode) {
 
                 }
             });
@@ -354,7 +355,7 @@ public class DiscussionDetailActivity extends BaseActivity implements CompoundBu
 				idList.add(ubi.getUserId());
 			}
 		}
-		mSystemBiz.inviteUsers(idList, new APResultCallback() {
+		mSystemBiz.inviteUsers(idList, new APCallback() {
 			@Override
 			public void onDone(Object obj) {
 				ProgressHUD.dismissProgressHUDInThisContext(mContext);
@@ -362,7 +363,7 @@ public class DiscussionDetailActivity extends BaseActivity implements CompoundBu
 			}
 
 			@Override
-			public void onException(int excepCode) {
+			public void onException(APError excepCode) {
 				ProgressHUD.dismissProgressHUDInThisContext(mContext);
 				Toast.makeText(getApplicationContext(),"发送邀请短信失败!",Toast.LENGTH_SHORT).show();
 			}
@@ -513,7 +514,7 @@ public class DiscussionDetailActivity extends BaseActivity implements CompoundBu
         }
 
         private void onAddMemberFinish(List<String> userIds) {
-            mUserBussiness.cacheUserBasicInfoList(userIds, new APResultCallback<List<UserBasicInfo>>() {
+            mUserBussiness.cacheUserBasicInfoList(userIds, new APCallback<List<UserBasicInfo>>() {
                 @Override
                 public void onDone(List<UserBasicInfo> basicInfos) {
                     if (basicInfos != null && basicInfos.size() > 0) {
@@ -527,7 +528,7 @@ public class DiscussionDetailActivity extends BaseActivity implements CompoundBu
                 }
 
                 @Override
-                public void onException(int excepCode) {
+                public void onException(APError excepCode) {
                     LoadDialog.dismiss(mContext);
                 }
             });
