@@ -799,7 +799,7 @@ public class UserBussiness extends BaseBiz {
 						.getBaiduPushUserId() : JPushInterface.getRegistrationID(mContext);// 百度硬件设备号
 				String deviceId = SystemBiz.getInstance(mContext).getMachineId();
 				String systemVresion = Utils.getAndroidSDKVersion();// 操作系统号
-				String currentVersionCode = Utils.getVersionName(mContext);// app版本号
+				String currentVersionCode =  mAppContext.getVersionName();// app版本号
 				try {
 					String url = String.format(URLs.URL_REGISTER_DEVICE, URLs.baseURL,URLs.appCode, token, deviceId, systemVresion,
 							URLEncoder.encode(Build.MODEL, "utf-8"), currentVersionCode,
@@ -895,7 +895,7 @@ public class UserBussiness extends BaseBiz {
 				if (mAppContext.getApp().getLoginFlag() == App.LOGIN_ONSTART_USE_USERNAME) {
 
 					String osVersion = Utils.getAndroidSDKVersion();// 操作系统号
-					String currentVersionName = Utils.getVersionName(context);// app版本号
+					String currentVersionName = mAppContext.getVersionName();// app版本号
 					int appCode = Utils.getVersionCode(context);
 					String machineId = SystemBiz.getInstance(context).getMachineId();
 					String url = null;
@@ -962,7 +962,7 @@ public class UserBussiness extends BaseBiz {
 				}else if(mAppContext.getApp().getLoginFlag() == App.LOGIN_ONSTART_USE_USERNAME_PASSWORD){
 					String token = JPushInterface.getRegistrationID(mContext);;
 					String osVersion = Utils.getAndroidSDKVersion();// 操作系统号
-					String currentVersionName = Utils.getVersionName(mContext);// app版本号
+					String currentVersionName = mAppContext.getVersionName();// app版本号
 
 
 					int result =0;

@@ -161,7 +161,7 @@ public class HomeSlideMenuActivity extends HomeBaseActivity implements OnItemCli
 //		mTitleBar.setRightBtnClickListener(this);
 
 		if (mAppContext.getApp().getLayoutLocalScheme() == App.STYLE_SLIDE_MENU) {
-			versionTV.setText("当前版本:" + "V" + Utils.getVersionName(HomeSlideMenuActivity.this));
+			versionTV.setText("当前版本:" + "V" +  mAppContext.getVersionName());
 		}
 		if(mAppContext.getApp().getWeatherDisplayFlag()==1){
 			// 天气信息

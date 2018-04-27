@@ -148,7 +148,7 @@ public class VerificationCodeActivity extends BaseActivity implements ErrorListe
         ProgressHUD.show(this, "请稍候", true, false, null);
 
         String osVersion = Utils.getAndroidSDKVersion();// 操作系统号
-        String currentVersionName = Utils.getVersionName(VerificationCodeActivity.this);// app版本号
+        String currentVersionName = mAppContext.getVersionName();// app版本号
         int buildId = Utils.getVersionCode(VerificationCodeActivity.this);
         String url = null;
         try {

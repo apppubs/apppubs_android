@@ -188,7 +188,7 @@ public abstract class BaseBiz {
 
             @Override
             public void onResponse(String json, APError e) {
-                if (e == null) {
+                if (e != null) {
                     listener.onResponse(null, e);
                     return;
                 }

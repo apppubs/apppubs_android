@@ -682,7 +682,7 @@ public class SystemBiz extends BaseBiz {
 
     public void checkUpdate(Context context, CheckUpdateListener listener) {
         AppConfig appConfig = AppContext.getInstance(mContext).getAppConfig();
-        if (appConfig != null && StringUtils.compareVersion(appConfig.getLatestVersion(), Utils.getVersionName(context)) > 0) {
+        if (appConfig != null && StringUtils.compareVersion(appConfig.getLatestVersion(), mAppContext.getVersionName()) > 0) {
             VersionInfo vi = new VersionInfo();
             vi.setNeedUpdate(true);
             if (appConfig.getMinSupportedVersionCode() > Utils.getVersionCode(context)) {

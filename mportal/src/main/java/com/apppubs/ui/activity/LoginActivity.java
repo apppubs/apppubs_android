@@ -102,7 +102,7 @@ public class LoginActivity extends BaseActivity implements AsyTaskCallback {
 					dialog.show();
 					String deviceid = mAppContext.getApp().getPushVendorType()==App.PUSH_VENDOR_TYPE_BAIDU?mAppContext.getApp().getBaiduPushUserId():JPushInterface.getRegistrationID(this);// 百度硬件设备号
 					String systemVresion = Utils.getAndroidSDKVersion();
-					String currentVersionCode = Utils.getVersionName(LoginActivity.this);// app版本号
+					String currentVersionCode =  mAppContext.getVersionName();// app版本号
 					String token = mAppContext.getApp().getPushVendorType() == App.PUSH_VENDOR_TYPE_BAIDU ? mAppContext.getApp()
 							.getBaiduPushUserId() : JPushInterface.getRegistrationID(this);// 百度硬件设备号
 					String[] params = new String[]{usernameT,passwordT,deviceid,token,Build.MODEL,systemVresion,currentVersionCode};

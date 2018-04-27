@@ -25,18 +25,18 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.apppubs.AppContext;
 import com.apppubs.asytask.AsyTaskCallback;
-import com.apppubs.asytask.AsyTaskExecutor;
 import com.apppubs.bean.App;
 import com.apppubs.bean.Settings;
 import com.apppubs.bean.UserInfo;
+import com.apppubs.constant.APError;
 import com.apppubs.constant.URLs;
 import com.apppubs.d20.R;
+import com.apppubs.model.APCallback;
+import com.apppubs.model.UserBiz;
 import com.apppubs.ui.widget.ProgressHUD;
 import com.apppubs.util.JSONResult;
 import com.apppubs.util.LogM;
-import com.apppubs.util.SystemUtils;
 import com.apppubs.util.Utils;
-import com.apppubs.util.WebUtils;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -44,12 +44,8 @@ import org.json.JSONObject;
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
 import java.net.URLEncoder;
-import java.util.HashMap;
-import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-
-import cn.jpush.android.api.JPushInterface;
 
 public class FirstLoginActity extends BaseActivity implements ErrorListener, AsyTaskCallback {
 
@@ -156,7 +152,7 @@ public class FirstLoginActity extends BaseActivity implements ErrorListener, Asy
 							String username = jo.getString("username");
 							String password = jo.getString("password");
 							int autoLoginFlag = jo.getInt("autologinflag");
-							loginWithUsernameAndPassword(username, password);
+							loginWithUsernameAndPassword(username, password,autoLoginFlag==1);
 						} catch (JSONException e) {
 							e.printStackTrace();
 						} catch (UnsupportedEncodingException e) {
@@ -223,7 +219,7 @@ public class FirstLoginActity extends BaseActivity implements ErrorListener, Asy
 
 			String usetnameT = mUsernameTv.getText().toString().trim();
 			String passwordT = mPasswordTv.getText().toString().trim();
-			loginWithUsernameAndPassword(usetnameT, passwordT);
+			loginWithUsernameAndPassword(usetnameT, passwordT,mCheckBox.isChecked());
 		} else if (mLoginType == App.LOGIN_ONSTART_USE_USERNAME) {
 			String username = mUsernameEt.getText().toString().trim();
 			if (username.isEmpty()) {
@@ -245,23 +241,25 @@ public class FirstLoginActity extends BaseActivity implements ErrorListener, Asy
 		return matcher.matches();
 	}
 
-	private void loginWithUsernameAndPassword(String username, String password) {
+	private void loginWithUsernameAndPassword(String username, String password, boolean autoLogin) {
 		if (username.isEmpty()) {
 			Toast.makeText(getApplication(), "请输入用户名", Toast.LENGTH_LONG).show();
 		} else if (password.isEmpty()) {
 			Toast.makeText(getApplication(), "请输入密码", Toast.LENGTH_LONG).show();
 		} else {
-
-			if (!SystemUtils.canConnectNet(getApplication())) {
-				Toast.makeText(getApplication(), getResources().getString(R.string.network_faile), Toast.LENGTH_SHORT)
-						.show();
-				return;// 直接返回
-
-			}
-
 			mProgressHUD = ProgressHUD.show(this, "系统登录中", true, false, null);
-			AsyTaskExecutor.getInstance().startTask(LOGIN_WITH_USERNAME_AND_PASSWORD_TASK, this, new String[]{username, password});
+			UserBiz.getInstance(mContext).loginWithUsernameAndPwd(username,password,autoLogin,new APCallback<UserInfo>(){
 
+				@Override
+				public void onDone(UserInfo obj) {
+					enterHome();
+				}
+
+				@Override
+				public void onException(APError error) {
+
+				}
+			});
 		}
 
 	}
@@ -293,7 +291,7 @@ public class FirstLoginActity extends BaseActivity implements ErrorListener, Asy
 		ProgressHUD.show(this);
 
 		String osVersion = Utils.getAndroidSDKVersion();// 操作系统号
-		String currentVersionName = Utils.getVersionName(FirstLoginActity.this);// app版本号
+		String currentVersionName = mAppContext.getVersionName();// app版本号
 		int versionCode = Utils.getVersionCode(FirstLoginActity.this);
 		String url = null;
 		try {
@@ -387,7 +385,7 @@ public class FirstLoginActity extends BaseActivity implements ErrorListener, Asy
 
 	private void loginWithUsernamePasswordAndOrgId(String username, String password, final String orgCode) {
 		String osVersion = Utils.getAndroidSDKVersion();// 操作系统号
-		String currentVersionName = Utils.getVersionName(FirstLoginActity.this);// app版本号
+		String currentVersionName = mAppContext.getVersionName();// app版本号
 		String url = null;
 		try {
 			// wmh360/json/login/usercroplogin.jsp?username=%s&password=%s&cropid=%s&deviceid=%s&os=%s&token=%sdev=%s&app=%s&fr=4&appcode="+appCode+"";
@@ -479,53 +477,6 @@ public class FirstLoginActity extends BaseActivity implements ErrorListener, Asy
 
 	@Override
 	public Object onExecute(Integer tag, String[] params) {
-
-		if (tag == LOGIN_WITH_USERNAME_AND_PASSWORD_TASK) {
-			String token = mAppContext.getApp().getPushVendorType() == App.PUSH_VENDOR_TYPE_BAIDU ? mAppContext.getApp()
-					.getBaiduPushUserId() : JPushInterface.getRegistrationID(this);// 百度硬件设备号
-			String osVersion = Utils.getAndroidSDKVersion();// 操作系统号
-			String currentVersionName = Utils.getVersionName(FirstLoginActity.this);// app版本号
-
-			CheckBox cb = (CheckBox) findViewById(R.id.firstlogin_ckb);
-
-			int result = 0;
-			try {
-				Map<String, Object> requestParamsMap = new HashMap<String, Object>();
-				requestParamsMap.put("username", params[0]);
-				requestParamsMap.put("password", params[1]);
-				requestParamsMap.put("deviceid", mSystemBiz.getMachineId());
-				requestParamsMap.put("token", token);
-				requestParamsMap.put("dev", URLEncoder.encode(Build.MODEL, "utf-8"));
-				requestParamsMap.put("os", osVersion);
-				requestParamsMap.put("app", currentVersionName);
-				requestParamsMap.put("appcodeversion", Utils.getVersionCode(mContext) + "");
-				requestParamsMap.put("fr", "4");
-
-				String data = WebUtils.requestWithPost(String.format(URLs.URL_LOGIN, URLs.baseURL, URLs.appCode), requestParamsMap);
-				JSONObject jo = new JSONObject(data);
-				/**
-				 * //0、用户名或密码错误 //1、还未注册 //2、已经注册并且信息一致
-				 * //3、已经注册但信息不一致，该帐户被其他人注册 //参数4 用户中文名字
-				 */
-				result = jo.getInt("result");
-
-				// 登录成功才会修改本地的用户信息
-
-				UserInfo user = new UserInfo(jo.getString("userid"), jo.getString("username"), jo.getString("cnname"),
-						params[1], jo.getString("email"), jo.getString("mobile"));
-				user.setMenuPower(jo.getString("menupower"));
-
-
-				AppContext.getInstance(this).setCurrentUser(user);
-				// 保存user对象，并保存是否自动登录的配置
-				Settings settings = mAppContext.getSettings();
-				settings.setIsAllowAutoLogin(cb.isChecked());
-				mAppContext.setSettings(settings);
-			} catch (Exception e) {
-				e.printStackTrace();
-			}
-			return result;
-		}
 
 		return null;
 

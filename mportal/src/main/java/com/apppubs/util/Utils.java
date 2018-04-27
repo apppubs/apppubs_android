@@ -138,23 +138,6 @@ public class Utils {
 
     }
 
-
-    /**
-     * 获得当前版本名字
-     *
-     * @param mContext
-     * @return
-     */
-    public static String getVersionName(Context mContext) {
-        PackageInfo pInfo = null;
-        try {
-            pInfo = mContext.getPackageManager().getPackageInfo(mContext.getPackageName(), 0);
-        } catch (NameNotFoundException e) {
-            e.printStackTrace();
-        }
-        return pInfo.versionName;
-    }
-
     /**
      * 关闭软键盘
      */
