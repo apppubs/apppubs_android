@@ -187,6 +187,7 @@ public class ViewCourier {
             String rootSuperId = StringUtils.getQueryParameter(url, "rootsuperid");
             Bundle args = new Bundle();
             args.putString(AddressBookFragement.ARGS_ROOT_DEPARTMENT_SUPER_ID, rootSuperId);
+            args.putBoolean(ContainerActivity.EXTRA_BOOLEAN_IS_FULLSCREEN,true);
             ContainerActivity.startActivity(context, AddressBookFragement.class, args);
         } else if (url.matches("apppubs:\\/\\/setting[\\S]*")) {
             String title = StringUtils.getQueryParameter(url, "title");

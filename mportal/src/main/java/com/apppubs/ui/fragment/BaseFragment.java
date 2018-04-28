@@ -26,7 +26,7 @@ import com.apppubs.util.Utils;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
 
-public class BaseFragment extends Fragment implements KeyEvent.Callback {
+public class BaseFragment extends Fragment implements KeyEvent.Callback, OnClickListener {
 
     protected static int mDefaultColor;
     /**
@@ -47,6 +47,8 @@ public class BaseFragment extends Fragment implements KeyEvent.Callback {
     protected SystemBiz mSystemBiz;
     protected RequestQueue mRequestQueue;
     protected AppContext mAppContext;
+
+    protected boolean needBack;
 
     @Override
     public void onAttach(Activity activity) {
@@ -199,4 +201,16 @@ public class BaseFragment extends Fragment implements KeyEvent.Callback {
         return mAppContext.getThemeColor();
     }
 
+    @Override
+    public void onClick(View v) {
+        mHostActivity.onClick(v);
+    }
+
+    public void setNeedBack(boolean need){
+        this.needBack = need;
+    }
+
+    public boolean getNeedBack(){
+        return this.needBack;
+    }
 }

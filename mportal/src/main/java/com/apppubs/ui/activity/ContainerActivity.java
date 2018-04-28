@@ -47,6 +47,7 @@ public class ContainerActivity<T> extends BaseActivity {
 			Class<?> fragmentC = Class.forName(className);
 			mFrg = (BaseFragment) fragmentC.newInstance();
 			mFrg.setArguments(bundle);
+			mFrg.setNeedBack(true);
 
 		} catch (ClassNotFoundException e) {
 
