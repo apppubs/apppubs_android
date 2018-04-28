@@ -63,20 +63,20 @@ public class SettingFragment extends TitleMenuFragment implements OnClickListene
 	private MportalApplication mApp;
 	private RequestQueue mRequestQueue;
 	
-	@Override
-	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-		 super.onCreateView(inflater, container, savedInstanceState);
-		 mRootView = inflater.inflate(R.layout.frg_setting, null);
+    @Override
+    protected View initLayout(LayoutInflater inflater, ViewGroup container, Bundle
+            savedInstanceState) {
+        mRootView = inflater.inflate(R.layout.frg_setting, null);
 //			//左右滑动的布局下从下打开，其他情况用默认打开方式
 //			if(mAppContext.getApp().getLayoutLocalScheme()==App.STYLE_SLIDE_MENU){
 //				mTitleBar.setLeftImageResource(R.drawable.close);
 //			}
-			init();
-			initState1();
-		return mRootView;
-	}
+        init();
+        initState1();
+        return mRootView;
+    }
 
-	@Override
+    @Override
 	public void onActivityCreated(Bundle savedInstanceState) {
 		super.onActivityCreated(savedInstanceState);
 		mApp = (MportalApplication) mHostActivity.getApplication();

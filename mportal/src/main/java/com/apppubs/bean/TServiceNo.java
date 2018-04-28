@@ -4,6 +4,7 @@ import java.util.Date;
 
 import com.google.gson.annotations.SerializedName;
 import com.orm.SugarRecord;
+import com.orm.dsl.Table;
 
 /**
  * 服务号
@@ -17,6 +18,7 @@ import com.orm.SugarRecord;
  * 2015-05-22 增加type类型
  *
  */
+@Table(name="service_no")
 public class TServiceNo extends SugarRecord{
 
 	public static final int TYPE_SYSTEM = 0;

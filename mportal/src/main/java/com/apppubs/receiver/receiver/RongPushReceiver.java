@@ -3,7 +3,7 @@ package com.apppubs.receiver.receiver;
 import android.content.Context;
 
 import com.apppubs.AppContext;
-import com.apppubs.ui.activity.HomeBaseActivity;
+import com.apppubs.ui.home.HomeBaseActivity;
 
 import io.rong.push.notification.PushMessageReceiver;
 import io.rong.push.notification.PushNotificationMessage;

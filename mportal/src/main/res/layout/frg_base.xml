@@ -4,9 +4,5 @@
               android:orientation="vertical"
               android:layout_width="match_parent"
               android:layout_height="match_parent">
-    <com.apppubs.ui.widget.TitleBar
-        android:layout_width="match_parent"
-        android:layout_height="50dp"
-        app:mTitle="标题"
-        ></com.apppubs.ui.widget.TitleBar>
+
 </LinearLayout>

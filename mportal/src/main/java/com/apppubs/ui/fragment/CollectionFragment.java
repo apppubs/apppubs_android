@@ -41,7 +41,7 @@ public class CollectionFragment extends BaseFragment implements OnItemClickListe
 	private SimpleDateFormat mSimpleDateFormat;
 
 	@Override
-	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+	protected View initLayout(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 		super.onCreateView(inflater, container, savedInstanceState);
 		mSimpleDateFormat = new SimpleDateFormat("yyyy/MM/dd", Locale.CHINA);
 		mRootView = inflater.inflate(R.layout.frg_collection, null);

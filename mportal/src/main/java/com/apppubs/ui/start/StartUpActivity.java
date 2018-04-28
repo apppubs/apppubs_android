@@ -15,7 +15,7 @@ import android.widget.Toast;
 import com.apppubs.presenter.StartupPresenter;
 import com.apppubs.d20.R;
 import com.apppubs.ui.activity.BaseActivity;
-import com.apppubs.ui.activity.HomeBaseActivity;
+import com.apppubs.ui.home.HomeBaseActivity;
 import com.apppubs.ui.fragment.WelcomeFragment;
 import com.apppubs.ui.widget.AlertDialog;
 import com.apppubs.ui.widget.AlertDialog.OnOkClickListener;

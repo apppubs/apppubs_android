@@ -37,14 +37,12 @@ public class PapersFragment extends TitleMenuFragment implements OnPageChangeLis
 	private Fragment mCurFrg;
 	
 	@Override
-	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-		super.onCreateView(inflater, container, savedInstanceState);
+	protected View initLayout(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 		mRootView = new FrameLayout(mContext);
 		mRootView.setId(R.id.fragment_container);
 		init();
 		return mRootView;
 	}
-
 
 	private void init() {
 		mPaperBiz = PaperBiz.getInstance(getContext());

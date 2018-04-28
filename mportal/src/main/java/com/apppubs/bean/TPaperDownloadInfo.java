@@ -3,12 +3,14 @@ package com.apppubs.bean;
 import java.util.Date;
 
 import com.orm.SugarRecord;
+import com.orm.dsl.Table;
 
 /**
  * 已下载的期信息
  * @author Administrator
  *
  */
+@Table(name="paper_download_info")
 public class TPaperDownloadInfo extends SugarRecord {
 	
 //	public static final int STATUS_REQUESTING = 0;

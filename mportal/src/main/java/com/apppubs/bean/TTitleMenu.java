@@ -2,7 +2,9 @@ package com.apppubs.bean;
 
 import com.google.gson.annotations.SerializedName;
 import com.orm.SugarRecord;
+import com.orm.dsl.Table;
 
+@Table(name="title_menu")
 public class TTitleMenu extends SugarRecord{
 
 	public static final int TYPE_LEFT = 0;

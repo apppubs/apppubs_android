@@ -12,15 +12,13 @@ public class PaperPageFragment extends BaseFragment{
 
 	
 	@Override
-	public View onCreateView(LayoutInflater inflater, ViewGroup container,
-			Bundle savedInstanceState) {
-		super.onCreateView(inflater, container, savedInstanceState);
+	protected View initLayout(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 		FrameLayout fl = new FrameLayout(mContext);
 		PdfViewWithHotArea pdfView = new PdfViewWithHotArea(mContext);
 		fl.addView(fl);
-		
+
 		mRootView = fl;
-		
+
 		return mRootView;
 	}
 }

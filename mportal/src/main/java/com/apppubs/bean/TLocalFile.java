@@ -3,12 +3,15 @@ package com.apppubs.bean;
 import java.util.Date;
 
 import com.orm.SugarRecord;
+import com.orm.dsl.Table;
+
 /**
  * 本地文件
  * @author zhangwen
  * @since 2015-05-28
  *
  */
+@Table(name="local_file")
 public class TLocalFile extends SugarRecord{
 
 	public static int TYPE_UNKNOW = 0;

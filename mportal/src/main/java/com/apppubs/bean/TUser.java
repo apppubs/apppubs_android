@@ -5,6 +5,8 @@ import java.util.Date;
 
 import com.google.gson.annotations.SerializedName;
 import com.orm.SugarRecord;
+import com.orm.dsl.Table;
+
 /**
  * 用户表
  * 
@@ -16,6 +18,7 @@ import com.orm.SugarRecord;
  * 2015年3月10日 by zhangwen create
  * 2015-04-15 增加menuPower字段 by zhangwen
  */
+@Table(name="user")
 public class TUser extends SugarRecord implements Serializable{
 
 	private static final long serialVersionUID = 1L;

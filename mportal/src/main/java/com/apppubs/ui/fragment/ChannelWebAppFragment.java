@@ -13,7 +13,7 @@ import android.webkit.WebView;
 import android.webkit.WebViewClient;
 
 import com.apppubs.AppContext;
-import com.apppubs.ui.activity.HomeBaseActivity;
+import com.apppubs.ui.home.HomeBaseActivity;
 import com.apppubs.util.LogM;
 import com.apppubs.d20.R;
 import com.apppubs.util.SystemUtils;
@@ -38,17 +38,13 @@ public class ChannelWebAppFragment extends ChannelFragment implements OnClickLis
 	private String mUrl;
 	private int mMenuBarType;
 
-	
-	
 	@Override
-	public View onCreateView(LayoutInflater inflater, ViewGroup container,
-			Bundle savedInstanceState) {
-		
+	protected View initLayout(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 		mRootView = inflater.inflate(R.layout.frg_webapp, null);
-		
+
 		initComponent(mRootView);
 		initStates();
-		
+
 		return mRootView;
 	}
 

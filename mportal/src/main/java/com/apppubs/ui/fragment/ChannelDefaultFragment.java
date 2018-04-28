@@ -70,16 +70,16 @@ public class ChannelDefaultFragment extends ChannelFragment  implements OnClickL
 	private Future<?> mCheckOutofDateFuture;
 	private SimpleDateFormat mDateFormat;
 	
-	public View onCreateView(LayoutInflater inflater, ViewGroup container,
-			Bundle savedInstanceState) {
-		
+	@Override
+	protected View initLayout(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+
 		mRootView = inflater.inflate(R.layout.frg_channel, null);
 		Log.d("newsfragment","onCreateView");
-		
+
 		mDateFormat = new SimpleDateFormat("yyyy-MM-dd",Locale.CHINA);
 		return mRootView;
 	}
-	
+
 	@Override
 	public void onActivityCreated(Bundle savedInstanceState) {
 		

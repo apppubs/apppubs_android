@@ -8,7 +8,7 @@ import android.view.View;
 import android.view.View.OnClickListener;
 
 import com.apppubs.bean.TMenuItem;
-import com.apppubs.ui.activity.HomeBaseActivity;
+import com.apppubs.ui.home.HomeBaseActivity;
 import com.apppubs.bean.TTitleMenu;
 import com.apppubs.util.LogM;
 import com.apppubs.ui.widget.TitleBar;

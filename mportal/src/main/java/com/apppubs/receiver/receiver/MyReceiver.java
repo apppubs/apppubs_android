@@ -9,7 +9,7 @@ import android.util.Log;
 
 import com.apppubs.AppContext;
 import com.apppubs.bean.TMsg;
-import com.apppubs.ui.activity.HomeBaseActivity;
+import com.apppubs.ui.home.HomeBaseActivity;
 import com.apppubs.model.MsgController;
 import com.apppubs.util.LogM;
 

@@ -1,10 +1,9 @@
-package com.apppubs.ui.activity;
+package com.apppubs.ui.home;
 
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.net.Uri;
 import android.text.TextUtils;
 import android.view.KeyEvent;
 import android.view.View;
@@ -15,14 +14,14 @@ import com.apppubs.AppManager;
 import com.apppubs.MportalApplication;
 import com.apppubs.bean.TMenuItem;
 import com.apppubs.bean.UserInfo;
-import com.apppubs.constant.APError;
 import com.apppubs.d20.R;
 import com.apppubs.bean.App;
 import com.apppubs.bean.Weather;
 import com.apppubs.constant.Actions;
-import com.apppubs.model.IAPCallback;
+import com.apppubs.ui.activity.BaseActivity;
+import com.apppubs.ui.activity.FirstLoginActity;
+import com.apppubs.ui.activity.ViewCourier;
 import com.apppubs.ui.fragment.BaseFragment;
-import com.apppubs.model.message.UserBasicInfo;
 import com.apppubs.service.DownloadAppService;
 import com.apppubs.util.FileUtils;
 import com.apppubs.util.LogM;
@@ -33,8 +32,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import io.rong.imkit.RongIM;
-import io.rong.imlib.RongIMClient;
-import io.rong.imlib.model.Message;
 
 public abstract class HomeBaseActivity extends BaseActivity {
 
@@ -57,6 +54,7 @@ public abstract class HomeBaseActivity extends BaseActivity {
 
 	protected void onCreate(android.os.Bundle arg0) {
 		super.onCreate(arg0);
+		setNeedTitleBar(false);//主页面activity没有titlebar，titlebar由其包含的fragment负责渲染
 		overridePendingTransition(R.anim.abc_fade_in, R.anim.abc_fade_out);
 		//检测是否需要登录而且是否登录
 		if(mAppContext.getApp().getLoginFlag()!=App.LOGIN_INAPP&&TextUtils.isEmpty(mAppContext.getCurrentUser().getUserId())){
@@ -82,8 +80,8 @@ public abstract class HomeBaseActivity extends BaseActivity {
 				sqlParam += "'" + menus[i] + "'";
 			}
 			mPrimaryMenuList = SugarRecord.find(TMenuItem.class, "LOCATION=? and (PROTECTED_FLAG = 0 or ID in (" + sqlParam + "))",
-					new String[]{TMenuItem.MENU_LOCATION_PRIMARY + ""}, null,
-					"SORT_ID", null);
+                    new String[]{TMenuItem.MENU_LOCATION_PRIMARY + ""}, null,
+                    "SORT_ID", null);
 		} else {
 
 			mPrimaryMenuList = SugarRecord.find(TMenuItem.class, "LOCATION=? and PROTECTED_FLAG = 0",
@@ -123,7 +121,7 @@ public abstract class HomeBaseActivity extends BaseActivity {
 		FileUtils.writeObj(context, weathers, "weathers.cfg");
 	}
 
-	protected abstract void changeContent(BaseFragment fragment);
+	public abstract void changeContent(BaseFragment fragment);
 
 	protected abstract void setUnreadNumForMenu(String menuId, int num);
 

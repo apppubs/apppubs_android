@@ -31,10 +31,9 @@ public class MoreFragment extends HomeFragment implements OnClickListener{
 	private List<TMenuItem> mSquareMenuList;
 	private LinearLayout mContainerLl;
 	private int mDividerColor;
+
 	@Override
-	public View onCreateView(LayoutInflater inflater, ViewGroup container,
-			Bundle savedInstanceState) {
-		super.onCreateView(inflater, container, savedInstanceState);
+	protected View initLayout(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 		mRootView = inflater.inflate(R.layout.frg_more, null);
 		mContainerLl = (LinearLayout) mRootView.findViewById(R.id.more_ll);
 		mDividerColor = getResources().getColor(R.color.common_divider);

@@ -2,11 +2,13 @@ package com.apppubs.bean;
 
 import com.google.gson.annotations.SerializedName;
 import com.orm.SugarRecord;
+import com.orm.dsl.Table;
 
 /**
  * 头条推广图图
  *
  */
+@Table(name="head_pic")
 public class THeadPic extends SugarRecord{
 	
 	@SerializedName("infoid")

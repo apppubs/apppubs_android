@@ -5,6 +5,7 @@ import java.util.Date;
 
 import com.google.gson.annotations.SerializedName;
 import com.orm.SugarRecord;
+import com.orm.dsl.Table;
 
 /**
  * 消息实体
@@ -18,6 +19,7 @@ import com.orm.SugarRecord;
  * 2015年3月17日 by zhangwen create
  *
  */
+@Table(name="msg")
 public class TMsg extends SugarRecord implements Serializable{
 
 	public static final int TYPE_CONTENT_TEXT = 1;

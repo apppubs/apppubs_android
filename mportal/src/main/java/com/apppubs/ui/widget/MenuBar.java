@@ -63,6 +63,13 @@ public class MenuBar extends LinearLayout implements OnClickListener{
 		mMenuViewMap.put(item.getId(), itemFrameLayout);
 		mMenuNum++;
 	}
+
+	public void removeAllMenu(){
+		for (String id: mMenuViewMap.keySet()){
+			removeView(mMenuViewMap.get(id));
+		}
+		mMenuNum = 0;
+	}
 	
 	public void setUnreadNumForMenu(String menuId,int num){
 		FrameLayout fl = (FrameLayout) mMenuViewMap.get(menuId);

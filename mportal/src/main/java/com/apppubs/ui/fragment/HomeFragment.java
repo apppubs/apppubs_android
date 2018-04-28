@@ -3,7 +3,7 @@ package com.apppubs.ui.fragment;
 import android.os.Bundle;
 import android.view.View;
 
-import com.apppubs.ui.activity.HomeBaseActivity;
+import com.apppubs.ui.home.HomeBaseActivity;
 import com.apppubs.ui.activity.ViewCourier;
 
 

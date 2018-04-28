@@ -46,13 +46,12 @@ public class WeiBoFragment extends BaseFragment implements OnPageChangeListener 
 	private Tabs mSt;
 	
 	@Override
-	public View onCreateView(LayoutInflater inflater, ViewGroup container,
-			Bundle savedInstanceState) {
+	protected View initLayout(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 		mRootView = inflater.inflate(R.layout.frg_weibo, null);
-		
+
 		return mRootView;
 	}
-	
+
 	@Override
 	public void onActivityCreated(Bundle savedInstanceState) {
 		

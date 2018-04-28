@@ -144,10 +144,7 @@ public class FilePreviewFragment extends BaseFragment {
 	}
 
 	@Override
-	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-
-		super.onCreateView(inflater, container, savedInstanceState);
-
+	protected View initLayout(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 		initView(inflater, container);
 		mPreViewBtn.setOnClickListener(new OnClickListener() {
 

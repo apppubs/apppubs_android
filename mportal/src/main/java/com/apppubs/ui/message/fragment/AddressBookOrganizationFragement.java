@@ -19,7 +19,7 @@ import com.apppubs.model.IAPCallback;
 import com.apppubs.ui.adapter.CommonAdapter;
 import com.apppubs.bean.TDepartment;
 import com.apppubs.AppContext;
-import com.apppubs.ui.activity.HomeBaseActivity;
+import com.apppubs.ui.home.HomeBaseActivity;
 import com.apppubs.ui.adapter.ViewHolder;
 import com.apppubs.ui.fragment.BaseFragment;
 import com.apppubs.ui.widget.widget.Breadcrumb;
@@ -52,9 +52,7 @@ public class AddressBookOrganizationFragement extends BaseFragment {
 	private Map<String,Integer> mListViewOffsetMap;
 
 	@Override
-	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-		super.onCreateView(inflater, container, savedInstanceState);
-
+	protected View initLayout(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 		initData();
 		mRootView = initView(inflater);
 		initAdapter();
@@ -62,7 +60,6 @@ public class AddressBookOrganizationFragement extends BaseFragment {
 
 		return mRootView;
 	}
-
 
 	private void initAdapter() {
 		final int totalRow = mDepartmentList.size();

@@ -32,6 +32,7 @@ import com.apppubs.ui.activity.ChatActivity;
 import com.apppubs.bean.TMsgRecord;
 import com.apppubs.model.MsgController;
 import com.apppubs.constant.Actions;
+import com.apppubs.util.FileUtils;
 import com.apppubs.util.JSONResult;
 import com.apppubs.util.SharedPreferenceUtils;
 import com.apppubs.util.StringUtils;
@@ -86,9 +87,9 @@ public class ConversationFragment extends BaseFragment implements OnClickListene
 		super.onCreate(savedInstanceState);
 		mSimpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss",Locale.CHINA);
 	}
+
 	@Override
-	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-		super.onCreateView(inflater, container, savedInstanceState);
+	protected View initLayout(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 		mDisplayImageOptions = new DisplayImageOptions.Builder().showImageOnLoading(R.drawable.user)
 				.showImageForEmptyUri(R.drawable.user).showImageOnFail(R.drawable.user).cacheInMemory(true)
 				.cacheOnDisk(true).considerExifParams(true).bitmapConfig(Bitmap.Config.RGB_565).build();
@@ -404,10 +405,10 @@ public class ConversationFragment extends BaseFragment implements OnClickListene
 						String ids = StringUtils.array2Str(arrList, ",");
 						SharedPreferenceUtils.getInstance(mContext).putString(Constants.DEFAULT_SHARED_PREFERENCE_NAME, Constants.SHAREDPREFERENCE_KEY_DElETED_CHAT_IDS, ids);
 						
-						Object obj =  MportalApplication.readObj(mContext, MportalApplication.MSG_DELETED_CHAT_GROUP_MAP);
+						Object obj =  FileUtils.readObj(mContext, MportalApplication.MSG_DELETED_CHAT_GROUP_MAP);
 						Map<String,String> map = (Map<String, String>) (obj!=null?obj:new HashMap<String,String>());
 						map.put(mMsgRecordL.get(pos).getSourceUsernameOrId(),mSimpleDateFormat.format(new Date()));
-						MportalApplication.writeObj(mContext, map, MportalApplication.MSG_DELETED_CHAT_GROUP_MAP);
+						FileUtils.writeObj(mContext, map, MportalApplication.MSG_DELETED_CHAT_GROUP_MAP);
 						
 						String url = String.format(URLs.URL_CLEAR_UNREAD_NUM_FOR_SERVICE_NO_AND_CHAT,URLs.baseURL,URLs.appCode, mMsgRecordL.get(pos).getSourceUsernameOrId(),
 								AppContext.getInstance(mContext).getCurrentUser().getUsername());

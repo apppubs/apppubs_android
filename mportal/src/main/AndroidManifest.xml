@@ -153,14 +153,14 @@
             </intent-filter>
         </activity>
         <activity
-            android:name="com.apppubs.ui.activity.HomeSlideMenuActivity"
+            android:name="com.apppubs.ui.home.HomeSlideMenuActivity"
             android:launchMode="singleTask"
             android:screenOrientation="portrait"/>
         <activity
             android:name="com.apppubs.ui.activity.LockActivity"
             android:screenOrientation="portrait"/>
         <activity
-            android:name="com.apppubs.ui.activity.HomeBottomMenuActivity"
+            android:name="com.apppubs.ui.home.HomeBottomMenuActivity"
             android:launchMode="singleTask"
             android:screenOrientation="portrait"/>
         <activity

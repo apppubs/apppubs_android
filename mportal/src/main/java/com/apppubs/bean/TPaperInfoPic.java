@@ -1,12 +1,14 @@
 package com.apppubs.bean;
 
 import com.orm.SugarRecord;
+import com.orm.dsl.Table;
 
 /**
  * 
  * @author zhangwen 2014-10-30
  *
  */
+@Table(name="paper_info_pic")
 public class TPaperInfoPic extends SugarRecord {//新闻里面的图片
 	
 	private String id;

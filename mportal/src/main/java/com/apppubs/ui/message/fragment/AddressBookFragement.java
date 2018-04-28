@@ -9,6 +9,7 @@ import android.app.Dialog;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.widget.SearchView;
@@ -75,16 +76,92 @@ public class AddressBookFragement extends BaseFragment {
 		super.onAttach(activity);
 	}
 
-	@Override
-	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-		super.onCreateView(inflater, container, savedInstanceState);
 
-		initRootView();
+    @Override
+    protected View initLayout(LayoutInflater inflater, ViewGroup container, Bundle
+            savedInstanceState) {
+        return initRootView();
+    }
 
-		return mRootView;
-	}
+    @Override
+    protected TitleBar initTitleBar() {
+        TitleBar titleBar = createTitleBar();
+        return titleBar;
+    }
 
-	private void initRootView() {
+    @NonNull
+    private TitleBar createTitleBar() {
+        TitleBar titleBar = new TitleBar(mContext);
+        titleBar.setBackgroundColor(getThemeColor());
+        View titleView = LayoutInflater.from(titleBar.getContext()).inflate(R.layout.segment_btn_address, null);
+        mSg = (SegmentedGroup) titleView.findViewById(R.id.segmented);
+
+        mSg.setTintColor(Color.WHITE, mDefaultColor);
+
+        mSg.setOnCheckedChangeListener(new OnCheckedChangeListener() {
+
+            @Override
+            public void onCheckedChanged(RadioGroup group, int checkedId) {
+                mCurCheckedRadioBtnResId = checkedId;
+                Fragment fg = null;
+                switch (checkedId) {
+                    case R.id.segmented_button1:
+                        fg = mFrgArr[0];
+                        if (fg == null) {
+                            fg = getRootFragment();
+                            mFrgArr[0] = fg;
+
+                        }
+                        break;
+                    case R.id.segmented_button2:
+                        fg = mFrgArr[1];
+                        if (fg == null) {
+
+                            fg = new AddressBookAllUserFragment();
+                            mFrgArr[1] = fg;
+                        }
+                        break;
+                    case R.id.segmented_button3:
+                        fg = mFrgArr[2];
+                        if (fg == null) {
+                            fg = new AddressBookCommonlyUserListFragment();
+                            mFrgArr[2] = fg;
+                        }
+                        break;
+                    default:
+                        break;
+                }
+                changeContent(fg);
+
+            }
+        });
+
+        // 初始化时不是第一个被选中时，则执行选中事件
+        if (mCurCheckedRadioBtnResId != R.id.segmented_button1 && mCurCheckedRadioBtnResId != 0) {
+            mSg.check(mCurCheckedRadioBtnResId);
+        }
+        titleBar.setTitleView(titleView);
+        titleBar.addRightBtnWithTextAndClickListener("同步", new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                new ConfirmDialog(mContext, new ConfirmDialog.ConfirmListener() {
+
+                    @Override
+                    public void onOkClick() {
+                        sync();
+                    }
+
+                    @Override
+                    public void onCancelClick() {
+
+                    }
+                }, "确定同步？","同步可能需要几秒到几分钟的时间！", "取消", "确定").show();
+            }
+        });
+        return titleBar;
+    }
+
+    private View initRootView() {
 		mRootView = mInflater.inflate(R.layout.frg_addressbook, null);
 		mSearchView = (SearchView) mRootView.findViewById(R.id.addressbook_sv);
 		mSearchResultLV = (ListView) mRootView.findViewById(R.id.addressbook_search_result_lv);
@@ -128,7 +205,7 @@ public class AddressBookFragement extends BaseFragment {
 				getActivity().startActivity(intent);
 			}
 		});
-
+		return mRootView;
 	}
 
 	@Override
@@ -217,78 +294,6 @@ public class AddressBookFragement extends BaseFragment {
 			dialog.show();
 
 		}
-	}
-
-	@Override
-	public void changeActivityTitleView(TitleBar titleBar) {
-
-		if (titleBar == null)
-			return;
-		View titleView = LayoutInflater.from(titleBar.getContext()).inflate(R.layout.segment_btn_address, null);
-		mSg = (SegmentedGroup) titleView.findViewById(R.id.segmented);
-
-		mSg.setTintColor(Color.WHITE, mDefaultColor);
-
-		mSg.setOnCheckedChangeListener(new OnCheckedChangeListener() {
-
-			@Override
-			public void onCheckedChanged(RadioGroup group, int checkedId) {
-				mCurCheckedRadioBtnResId = checkedId;
-				Fragment fg = null;
-				switch (checkedId) {
-				case R.id.segmented_button1:
-					fg = mFrgArr[0];
-					if (fg == null) {
-						fg = getRootFragment();
-						mFrgArr[0] = fg;
-
-					}
-					break;
-				case R.id.segmented_button2:
-					fg = mFrgArr[1];
-					if (fg == null) {
-
-						fg = new AddressBookAllUserFragment();
-						mFrgArr[1] = fg;
-					}
-					break;
-				case R.id.segmented_button3:
-					fg = mFrgArr[2];
-					if (fg == null) {
-						fg = new AddressBookCommonlyUserListFragment();
-						mFrgArr[2] = fg;
-					}
-					break;
-				default:
-					break;
-				}
-				changeContent(fg);
-
-			}
-		});
-
-		// 初始化时不是第一个被选中时，则执行选中事件
-		if (mCurCheckedRadioBtnResId != R.id.segmented_button1 && mCurCheckedRadioBtnResId != 0) {
-			mSg.check(mCurCheckedRadioBtnResId);
-		}
-		titleBar.setTitleView(titleView);
-		titleBar.addRightBtnWithTextAndClickListener("同步", new OnClickListener() {
-			@Override
-			public void onClick(View v) {
-				new ConfirmDialog(mContext, new ConfirmDialog.ConfirmListener() {
-
-					@Override
-					public void onOkClick() {
-						sync();
-					}
-
-					@Override
-					public void onCancelClick() {
-
-					}
-				}, "确定同步？","同步可能需要几秒到几分钟的时间！", "取消", "确定").show();
-			}
-		});
 	}
 
 	/**

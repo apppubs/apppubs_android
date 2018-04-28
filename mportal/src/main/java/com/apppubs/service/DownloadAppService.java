@@ -13,7 +13,7 @@ import android.widget.RemoteViews;
 
 import com.apppubs.AppContext;
 import com.apppubs.d20.R;
-import com.apppubs.ui.activity.HomeSlideMenuActivity;
+import com.apppubs.ui.home.HomeSlideMenuActivity;
 import com.apppubs.exception.APUnavailableException;
 import com.apppubs.model.CallbackResult;
 import com.apppubs.model.SystemBiz;

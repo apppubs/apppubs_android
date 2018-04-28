@@ -2,6 +2,7 @@ package com.apppubs.bean;
 
 import com.google.gson.annotations.SerializedName;
 import com.orm.SugarRecord;
+import com.orm.dsl.Table;
 
 /**
  * 菜单分组
@@ -14,6 +15,7 @@ import com.orm.SugarRecord;
  * 2015年3月5日 by zhangwen create
  *
  */
+@Table(name="menu_group")
 public class TMenuGroup extends SugarRecord{
 	
 	public static final int STYLE_LIST = 0;

@@ -70,7 +70,7 @@ public class MyFileFragment extends BaseFragment implements OnClickListener {
     private MyFilePickerHelper mHelper;
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+    protected View initLayout(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         initDatas();
         initViews(inflater);
 

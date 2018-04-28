@@ -39,8 +39,7 @@ public class ConversationListFragment extends BaseFragment implements View.OnCli
     private PopupWindow mMenuPW;
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-
+    protected View initLayout(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         mRootView = inflater.inflate(R.layout.frg_conversation_list, null);
 
         io.rong.imkit.fragment.ConversationListFragment fragment = new io.rong.imkit.fragment.ConversationListFragment();

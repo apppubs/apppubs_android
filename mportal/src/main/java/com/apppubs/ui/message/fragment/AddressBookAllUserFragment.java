@@ -39,8 +39,7 @@ public class AddressBookAllUserFragment extends BaseFragment {
 	private List<TUser> mUsers;
 
 	@Override
-	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-
+	protected View initLayout(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 		View view = inflater.inflate(R.layout.frg_addressbook_alluseruser, null);
 		mCityLv = (ListView) view.findViewById(R.id.frg_usernames_list);
 		overlay = (TextView) view.findViewById(R.id.frg_usernames_overlay);

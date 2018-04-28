@@ -41,15 +41,16 @@ public class ChannelPictureFragment extends ChannelFragment {
 		
 		
 	}
-	public View onCreateView(LayoutInflater inflater, ViewGroup container,
-			Bundle savedInstanceState) {
+
+	@Override
+	protected View initLayout(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 		View view = inflater.inflate(R.layout.frg_pic_list, null);
-		
+
 		initComponent(view);
-		
+
 		return view;
 	}
-	
+
 	@Override
 	public void onActivityCreated(Bundle savedInstanceState) {
 		

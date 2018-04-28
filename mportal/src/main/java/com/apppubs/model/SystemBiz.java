@@ -18,6 +18,7 @@ import android.support.annotation.NonNull;
 import android.text.TextUtils;
 import android.util.DisplayMetrics;
 
+import com.alibaba.fastjson.JSON;
 import com.apppubs.AppContext;
 import com.apppubs.AppManager;
 import com.apppubs.bean.App;
@@ -35,7 +36,9 @@ import com.apppubs.bean.TUser;
 import com.apppubs.bean.UserInfo;
 import com.apppubs.bean.TUserDeptLink;
 import com.apppubs.bean.http.AppInfoResult;
+import com.apppubs.bean.http.IJsonResult;
 import com.apppubs.bean.http.MenusResult;
+import com.apppubs.constant.APError;
 import com.apppubs.constant.URLs;
 import com.apppubs.d20.R;
 import com.apppubs.model.message.UserBussiness;
@@ -112,7 +115,7 @@ public class SystemBiz extends BaseBiz {
             public void run() {
 
                 String updateverurl = String.format(URLs.URL_UPDATE, URLs.baseURL) + "appcode=" +
-						URLs.appCode + "&type=android&clientkey="
+                        URLs.appCode + "&type=android&clientkey="
                         + URLs.CLIENTKEY;
                 System.out.println("更新链接 ，，，" + updateverurl);
                 try {
@@ -153,11 +156,13 @@ public class SystemBiz extends BaseBiz {
                     MainHandler.getInstance().post(new OnDoneRun<App>(callback, app));
                 } catch (Exception e) {
                     e.printStackTrace();
-                    if (isFirstInit()){
+                    if (isFirstInit()) {
                         clearDataBase();
+                        MainHandler.getInstance().post(new OnExceptionRun<App>(callback));
+                    }else{
+                        MainHandler.getInstance().post(new OnDoneRun<App>(callback, mAppContext.getApp()));
                     }
-                    MainHandler.getInstance().post(new OnExceptionRun<App>(callback));
-                }  finally {
+                } finally {
                     db.endTransaction();
                 }
             }
@@ -167,7 +172,6 @@ public class SystemBiz extends BaseBiz {
 
     /**
      * 清除数据库
-     *
      */
     private void clearDataBase() {
         LogM.log(this.getClass(), "清除数据库");
@@ -189,7 +193,7 @@ public class SystemBiz extends BaseBiz {
 
         //如果是新版本第一次启动
         System.out.println("当前版本，" + Utils.getVersionCode(mContext) + "上一次启动的版本：" + localApp
-				.getPreWorkingVersion());
+                .getPreWorkingVersion());
         if (AppManager.getInstant(mContext).isFirstStartupOfNewVersion()) {
             System.out.println("新版本第一次启动");
             AppContext.getInstance(mContext).resetBaseUrlAndAppCode();
@@ -206,8 +210,8 @@ public class SystemBiz extends BaseBiz {
         }
 
         AppInfoResult info = syncPOST("http://result.eolinker" +
-				".com/gN1zjDlc87a75d671a2d954f809ebcdd19e7698dc2478fa?uri=app_info", null,
-				AppInfoResult.class);
+                        ".com/gN1zjDlc87a75d671a2d954f809ebcdd19e7698dc2478fa?uri=app_info", null,
+                AppInfoResult.class);
 
         mAppContext.updateWithAppInfo(info);
         if (mAppContext.getApp().getInitTimes() == 0) {
@@ -217,27 +221,6 @@ public class SystemBiz extends BaseBiz {
             SugarRecord.deleteAll(TUserDeptLink.class);
             SugarRecord.deleteAll(TDepartment.class);
             SugarRecord.deleteAll(TMsgRecord.class);
-        }
-
-        // 如果菜单更新了则全部初始化
-        if (localApp.getMenuLocalUpdateTime() == null
-                || !localApp.getMenuLocalUpdateTime().equals(localApp.getMenuUpdateTime())) {
-
-            // 初始化菜单
-            MenusResult menus = syncPOST("http://result.eolinker" +
-					".com/gN1zjDlc87a75d671a2d954f809ebcdd19e7698dc2478fa?uri=menus", null,
-					MenusResult.class);
-
-            SugarRecord.deleteAll(TMenuItem.class);
-            if (!Utils.isEmpty(menus.getItems())) {
-                for (MenusResult.MenuItem mi : menus.getItems()) {
-                    TMenuItem menuItem = TMenuItem.createFrom(mi);
-                    menuItem.save();
-                }
-            }
-            LogM.log(this.getClass(), "保存菜单完成");
-            mAppContext.setMenuUpdateTime(localApp.getMenuUpdateTime());
-
         }
 
         mAppContext.increaseInitTimes();
@@ -307,7 +290,7 @@ public class SystemBiz extends BaseBiz {
         int paintX = (int) (width * 0.5 - bmpW * 0.5);
         int paintY = (int) (height * 0.5 - bmpH * 0.5);
         canvas.drawBitmap(bmp, new Rect(0, 0, bmpW, bmpH), new Rect(paintX, paintY, paintX +
-						bmpW, paintY + bmpH),
+                        bmpW, paintY + bmpH),
                 paint);
 
         FileOutputStream fos = null;
@@ -332,7 +315,7 @@ public class SystemBiz extends BaseBiz {
      */
     public String getMachineId() {
         return MathUtils.MD5("sdk=" + Build.VERSION.SDK_INT + "|" + "model=" + Build.MODEL + "|"
-				+ Build.SERIAL + "|"
+                + Build.SERIAL + "|"
                 + Build.DEVICE);
 
     }
@@ -341,21 +324,21 @@ public class SystemBiz extends BaseBiz {
     public AppConfig syncAppConfig() throws IOException, InterruptedException {
 
         String result = WebUtils.requestWithGet(String.format(URLs.URL_APP_CONFIG, URLs.baseURL,
-				URLs.appCode, ""));
+                URLs.appCode, ""));
         JSONResult jsonResult = JSONResult.compile(result);
         if (jsonResult.code != 1) {
             LogM.log(this.getClass(), "获取appconfig错误");
         } else {
             Map<String, String> resultMap = jsonResult.getResultMap();
             // service_id":"1428155175898","address_apiflag":"0","usersync_url":"",
-			// "adbookversion":"5","adbookauth":"1","deptsync_url":"",
-			// "address_depturl":"http://202.99.19.140:8080/wmh360/json/getaddressdata
-			// .jsp?appcode=D20&flag=dept","address_encflag":"1","chatflag":"0",
-			// "address_deptuserurl":"http://202.99.19.140:8080/wmh360/json/getaddressdata
-			// .jsp?appcode=D20&flag=deptuser","userauth_url":"","adbookupdateflag":"0",
-			// "address_userurl":"http://202.99.19.140:8080/wmh360/json/getaddressdata
-			// .jsp?appcode=D20&flag=user","autologout":"1","mduserinfoflag":"0",
-			// "userauth_flag":"0","userdeptsync_url":""
+            // "adbookversion":"5","adbookauth":"1","deptsync_url":"",
+            // "address_depturl":"http://202.99.19.140:8080/wmh360/json/getaddressdata
+            // .jsp?appcode=D20&flag=dept","address_encflag":"1","chatflag":"0",
+            // "address_deptuserurl":"http://202.99.19.140:8080/wmh360/json/getaddressdata
+            // .jsp?appcode=D20&flag=deptuser","userauth_url":"","adbookupdateflag":"0",
+            // "address_userurl":"http://202.99.19.140:8080/wmh360/json/getaddressdata
+            // .jsp?appcode=D20&flag=user","autologout":"1","mduserinfoflag":"0",
+            // "userauth_flag":"0","userdeptsync_url":""
             App app = AppContext.getInstance(mContext).getApp();
             app.setAddressbookUserUrl(resultMap.get("address_userurl"));
             app.setAddressbookDetpUrl(resultMap.get("address_depturl"));
@@ -371,7 +354,7 @@ public class SystemBiz extends BaseBiz {
             UserInfo ui = AppContext.getInstance(mContext).getCurrentUser();
             if (!TextUtils.isEmpty(ui.getUserId()) && appconfig.getAdbookAuthFlag() == 1) {
                 String url = String.format(URLs.URL_ADDRESS_PERMISSION, URLs.baseURL, URLs
-						.appCode, AppContext.getInstance(mContext).getCurrentUser().getUserId());
+                        .appCode, AppContext.getInstance(mContext).getCurrentUser().getUserId());
                 String permissionResult = WebUtils.requestWithGet(url);
                 JSONResult jr = JSONResult.compile(permissionResult);
                 if (jr.code == 1) {
@@ -383,7 +366,7 @@ public class SystemBiz extends BaseBiz {
 
             if (!TextUtils.isEmpty(ui.getUserId()) && appconfig.getChatAuthFlag() == 1) {
                 String url = String.format(URLs.URL_USER_PERMISSION, URLs.baseURL, URLs.appCode,
-						AppContext.getInstance(mContext).getCurrentUser().getUserId());
+                        AppContext.getInstance(mContext).getCurrentUser().getUserId());
                 String permissionResult = WebUtils.requestWithGet(url);
                 JSONResult jr = JSONResult.compile(permissionResult);
                 if (jr.code == 1) {
@@ -472,7 +455,7 @@ public class SystemBiz extends BaseBiz {
                     hp.setEntity(new UrlEncodedFormEntity(parameters, HTTP.UTF_8));
                     // 告知服务器端解码
                     hp.setHeader("Content-Type", "application/x-www-form-urlencoded; " +
-							"charset=utf-8");
+                            "charset=utf-8");
                     HttpResponse hr = hc.execute(hp);
                     String resurt = EntityUtils.toString(hr.getEntity(), "utf-8");
                     System.out.println("注册后的结果。。。。。。。。。。" + resurt);
@@ -491,7 +474,7 @@ public class SystemBiz extends BaseBiz {
     }
 
     public Future<?> postZhuce1(final String usernamestr, final String emailstr, final String
-			passwordstr,
+            passwordstr,
                                 final String mobilestr, final String nicknamestr, final
                                 IAPCallback<String> callback) {
         // TODO Auto-generated method stub
@@ -520,7 +503,7 @@ public class SystemBiz extends BaseBiz {
     }
 
     public Future<?> getCommentList(final String infoid, final int pno, final int pernum, final
-	String clientkey,
+    String clientkey,
                                     final IAPCallback<List<Comment>> callback) {
         // TODO Auto-generated method stub
         Future<?> f = sDefaultExecutor.submit(new Runnable() {
@@ -530,7 +513,7 @@ public class SystemBiz extends BaseBiz {
 
                 try {
                     String url = String.format(URLs.URL_COMMENTLIST, URLs.baseURL) + "?infoid=" +
-							infoid + "&pno=" + pno + "&pernum=" + pernum
+                            infoid + "&pno=" + pno + "&pernum=" + pernum
                             + "&clientkey=" + clientkey;
                     List<Comment> list = WebUtils.requestList(url, Comment.class, "comment");
                     sHandler.post(new OnDoneRun<List<Comment>>(callback, list));// 与主线程的通信
@@ -550,7 +533,8 @@ public class SystemBiz extends BaseBiz {
         return f;
     }
 
-    public Future<?> getCommentSizeZanCai(final String infoid, final IAPCallback<Comment> callback) {
+    public Future<?> getCommentSizeZanCai(final String infoid, final IAPCallback<Comment>
+            callback) {
         // TODO Auto-generated method stub
         Future<?> f = sDefaultExecutor.submit(new Runnable() {
 
@@ -558,7 +542,8 @@ public class SystemBiz extends BaseBiz {
             public void run() {
 
                 try {
-                    String url = String.format(URLs.URL_INFOIDCOMMENTSIZE, URLs.baseURL) + "?infoid=" + infoid + "&clientkey=" + URLs.CLIENTKEY;
+                    String url = String.format(URLs.URL_INFOIDCOMMENTSIZE, URLs.baseURL) +
+                            "?infoid=" + infoid + "&clientkey=" + URLs.CLIENTKEY;
                     String data = WebUtils.requestWithGet(url);
                     JSONObject jo = null;
                     try {
@@ -635,7 +620,8 @@ public class SystemBiz extends BaseBiz {
                 try {
                     FileUtils.delete(diskCacheDir);
                     SugarRecord.deleteAll(TNewsInfo.class);
-                    SugarRecord.update(TNewsChannel.class, "LOCAL_LAST_UPDATE_TIME", "", null, null);
+                    SugarRecord.update(TNewsChannel.class, "LOCAL_LAST_UPDATE_TIME", "", null,
+                            null);
                     sHandler.post(new OnDoneRun<Boolean>(callback, true));
                 } catch (FileNotFoundException e) {
 
@@ -648,7 +634,8 @@ public class SystemBiz extends BaseBiz {
 
     }
 
-    public void inviteUsers(@NonNull final List<String> userIds, @NonNull final IAPCallback callback) {
+    public void inviteUsers(@NonNull final List<String> userIds, @NonNull final IAPCallback
+            callback) {
         post(new Runnable() {
             @Override
             public void run() {
@@ -659,7 +646,8 @@ public class SystemBiz extends BaseBiz {
                     }
                     sb.append(userId);
                 }
-                String url = String.format(URLs.URL_SEND_INVITE_SMS, URLs.baseURL, URLs.appCode, sb.toString());
+                String url = String.format(URLs.URL_SEND_INVITE_SMS, URLs.baseURL, URLs.appCode,
+                        sb.toString());
                 try {
                     String response = WebUtils.requestWithGet(url);
                     JSONResult jr = JSONResult.compile(response);
@@ -682,7 +670,8 @@ public class SystemBiz extends BaseBiz {
 
     public void checkUpdate(Context context, CheckUpdateListener listener) {
         AppConfig appConfig = AppContext.getInstance(mContext).getAppConfig();
-        if (appConfig != null && StringUtils.compareVersion(appConfig.getLatestVersion(), mAppContext.getVersionName()) > 0) {
+        if (appConfig != null && StringUtils.compareVersion(appConfig.getLatestVersion(),
+                mAppContext.getVersionName()) > 0) {
             VersionInfo vi = new VersionInfo();
             vi.setNeedUpdate(true);
             if (appConfig.getMinSupportedVersionCode() > Utils.getVersionCode(context)) {
@@ -697,6 +686,84 @@ public class SystemBiz extends BaseBiz {
             listener.onDone(new VersionInfo());
 
         }
+    }
+
+    /**
+     * 存储/更新菜单列表到本地数据库
+     *
+     * @param menus
+     */
+    private void insertOrUpdateLocalMenus(List<TMenuItem> menus) {
+        SugarRecord.deleteAll(TMenuItem.class);
+        for (TMenuItem item : menus) {
+            item.save();
+        }
+    }
+
+    private List<TMenuItem> selectLocalMenus() {
+        return SugarRecord.find(TMenuItem.class, null, null, null, null, null);
+    }
+
+    /**
+     * 初始化菜单，每次初始化均会和本地菜单比对，若相同则不重新存储
+     *
+     * @param callback 返回是否已经更新
+     */
+    public void initMenus(final IAPCallback<Boolean> callback) {
+        // 初始化菜单
+        String url = "http://result.eolinker" +
+                ".com/gN1zjDlc87a75d671a2d954f809ebcdd19e7698dc2478fa?uri=menus";
+        asyncPOST(url, null, MenusResult.class, new IRQListener<MenusResult>() {
+                    @Override
+                    public void onResponse(MenusResult menus, final APError error) {
+                        if (error==null){
+                            final List<TMenuItem> list = convert2TMenuItems(menus);
+                            String netItems = JSON.toJSONString(list);
+                            String localItems = JSON.toJSONString(selectLocalMenus());
+                            boolean isUpdated = false;
+                            if (!TextUtils.equals(netItems,localItems)){
+                                insertOrUpdateLocalMenus(list);
+                                isUpdated = true;
+                            }else {
+                                isUpdated = false;
+                            }
+                            final boolean finalIsUpdated = isUpdated;
+                            MainHandler.getInstance().post(new Runnable() {
+                                @Override
+                                public void run() {
+                                    callback.onDone(finalIsUpdated);
+                                }
+                            });
+                        }else{
+                            MainHandler.getInstance().post(new Runnable() {
+                                @Override
+                                public void run() {
+                                    callback.onException(error);
+                                }
+                            });
+                        }
+                    }
+
+                    private List<TMenuItem> convert2TMenuItems(MenusResult menus) {
+                        List<TMenuItem> items = new ArrayList<>();
+                        if (!Utils.isEmpty(menus.getItems())) {
+                            for (MenusResult.MenuItem mi : menus.getItems()) {
+                                items.add(TMenuItem.createFrom(mi));
+                            }
+                        }
+                        return items;
+                    }
+                });
+    }
+
+    /**
+     * 获取本地存储的主菜单
+     *
+     * @return 主菜单列表
+     */
+    public List<TMenuItem> getLocalPrimaryMenus() {
+        return SugarRecord.find(TMenuItem.class, "LOCATION=? and PROTECTED_FLAG = 0",
+                new String[]{TMenuItem.MENU_LOCATION_PRIMARY + ""}, null, "SORT_ID", null);
     }
 
 }

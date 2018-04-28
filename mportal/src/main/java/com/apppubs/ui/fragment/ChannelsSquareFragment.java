@@ -61,14 +61,13 @@ public class ChannelsSquareFragment extends ChannelsFragment implements OnClickL
 	private NewsBiz mNewsBiz;
 	
 	@Override
-	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-		
+	protected View initLayout(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 		mRootView = inflater.inflate(R.layout.frg_channels_bottom, null);
-		
+
 		init(inflater);
 		return mRootView;
 	}
-	
+
 	private void init(LayoutInflater inflater){
 		
 		mChannelsGv = (HeaderGridView) mRootView.findViewById(R.id.channels_hgl);

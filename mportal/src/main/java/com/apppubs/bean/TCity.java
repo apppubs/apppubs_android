@@ -1,11 +1,13 @@
 package com.apppubs.bean;
 
 import com.orm.SugarRecord;
+import com.orm.dsl.Table;
 
 /**
  * 城市属性实体类
  *
  */
+@Table(name="city")
 public class TCity extends SugarRecord{
 	private String name; //城市名字
 	private String nameFirstInitial; //城市名第一个字拼音首字母

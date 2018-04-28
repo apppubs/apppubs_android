@@ -34,8 +34,7 @@ public class WelcomeFragment extends BaseFragment implements OnPageChangeListene
 	private View mRootView;
 
 	@Override
-	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-
+	protected View initLayout(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 		mRootView = inflater.inflate(R.layout.activity_main_vm, null);
 		try {
 			fileNames = mContext.getAssets().list("welcome");

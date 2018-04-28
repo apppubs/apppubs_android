@@ -51,7 +51,7 @@ public class CollectionFragment1 extends BaseFragment {
 	private ViewHoder viewhoder;
 
 	@Override
-	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+	protected View initLayout(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 		View v = inflater.inflate(R.layout.frg_collection, null);
 		mXlv = (CommonListView) v.findViewById(R.id.collection_xlv);
 		mEmptyLl = (LinearLayout) v.findViewById(R.id.collection_nullshow_ll);

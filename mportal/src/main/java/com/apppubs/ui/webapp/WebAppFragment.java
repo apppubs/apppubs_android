@@ -34,12 +34,11 @@ import com.amap.api.location.AMapLocation;
 import com.apppubs.bean.TMenuItem;
 import com.apppubs.AppContext;
 import com.apppubs.AppManager;
-import com.apppubs.MportalApplication;
 import com.apppubs.presenter.WebAppPresenter;
 import com.apppubs.d20.R;
 import com.apppubs.ui.activity.CaptureActivity;
 import com.apppubs.ui.activity.ContainerActivity;
-import com.apppubs.ui.activity.HomeBaseActivity;
+import com.apppubs.ui.home.HomeBaseActivity;
 import com.apppubs.ui.activity.ViewCourier;
 import com.apppubs.ui.fragment.BaseFragment;
 import com.apppubs.model.VersionInfo;
@@ -172,8 +171,7 @@ public class WebAppFragment extends BaseFragment implements OnClickListener, IWe
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle
-            savedInstanceState) {
+    protected View initLayout(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         mRootView = inflater.inflate(R.layout.frg_webapp, null);
         initComponent(mRootView);
         initStates();

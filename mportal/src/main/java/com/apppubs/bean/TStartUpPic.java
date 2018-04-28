@@ -4,12 +4,15 @@ import java.util.Date;
 
 import com.google.gson.annotations.SerializedName;
 import com.orm.SugarRecord;
+import com.orm.dsl.Table;
 
 /**
  * 闪屏图
  * @author zhangwen 2014-12-30
  *
  */
+
+@Table(name="start_up_pic")
 public class TStartUpPic extends SugarRecord{
 
 	

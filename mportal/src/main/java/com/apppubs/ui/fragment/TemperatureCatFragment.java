@@ -16,12 +16,17 @@ import com.apppubs.d20.R;
 public class TemperatureCatFragment extends HomeFragment {
 	private WebView mwebview;
 	private LinearLayout progress;
-	public View onCreateView(LayoutInflater inflater, ViewGroup container,
-			Bundle savedInstanceState) {
+
+	public void onActivityCreated(Bundle savedInstanceState) {
+		super.onActivityCreated(savedInstanceState);
+	}
+
+	@Override
+	protected View initLayout(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 		View view = inflater.inflate(R.layout.left_webdu, null);
 		mwebview=(WebView) view.findViewById(R.id.left_wendu);
 		progress=(LinearLayout) view.findViewById(R.id.left_wendu_progress);
-	    WebSettings webSettings = mwebview.getSettings();
+		WebSettings webSettings = mwebview.getSettings();
 		webSettings.setCacheMode(WebSettings.LOAD_NO_CACHE);
 		webSettings.setAppCacheEnabled(false);
 		webSettings.setLayoutAlgorithm(LayoutAlgorithm.NORMAL);
@@ -29,17 +34,14 @@ public class TemperatureCatFragment extends HomeFragment {
 		webSettings.setJavaScriptEnabled(true);
 		mwebview.setWebChromeClient(new MyWebChromeClient());
 		mwebview.setWebViewClient(new WebViewClient(){
-			
-			 @Override
+
+			@Override
 			public void onPageFinished(WebView view, String url) {
 				super.onPageFinished(view, url);
 				progress.setVisibility(View.GONE);
 			}
-		
+
 		});
 		return view;
-	}
-	public void onActivityCreated(Bundle savedInstanceState) {
-		super.onActivityCreated(savedInstanceState);
 	}
 }

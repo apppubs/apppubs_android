@@ -18,7 +18,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.apppubs.model.NewsBiz;
-import com.apppubs.ui.activity.HomeSlideMenuActivity;
+import com.apppubs.ui.home.HomeSlideMenuActivity;
 import com.apppubs.ui.adapter.NewsFragmentPagerAdapter;
 import com.apppubs.bean.TNewsChannel;
 import com.apppubs.util.LogM;
@@ -53,17 +53,15 @@ public class ChannelsSlideFragment extends ChannelsFragment implements OnPageCha
 	private NewsFragmentPagerAdapter mFragmentAdapter;
 	
 	@Override
-	public View onCreateView(LayoutInflater inflater, ViewGroup container,
-			Bundle savedInstanceState) {
-		LogM.log(this.getClass(), "onCreateView");
-		
+	protected View initLayout(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+
 		mRootView = inflater.inflate(R.layout.frg_channels_slide, null);
-		
+
 		initComponent();
-		
+
 		return mRootView;
-		
 	}
+
 	@Override
 	public void onActivityCreated(Bundle savedInstanceState) {
 		

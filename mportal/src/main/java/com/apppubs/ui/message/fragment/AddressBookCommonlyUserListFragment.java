@@ -29,7 +29,7 @@ public class AddressBookCommonlyUserListFragment extends BaseFragment {
 	private List<TUser> mUserL;
 
 	@Override
-	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+	protected View initLayout(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 		mRootView = inflater.inflate(R.layout.frg_addressbook_user, null);
 		mLv = (ListView) mRootView;
 		mLv.setSelector(R.drawable.sel_common_item);

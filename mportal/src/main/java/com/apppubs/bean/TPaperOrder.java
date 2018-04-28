@@ -3,11 +3,13 @@ package com.apppubs.bean;
 import java.io.Serializable;
 
 import com.orm.SugarRecord;
+import com.orm.dsl.Table;
 
 /**
  * 日报订单
  * 
  */
+@Table(name="paper_order")
 public class TPaperOrder extends SugarRecord implements Serializable{
 	
 	private String orderNum;//订单号

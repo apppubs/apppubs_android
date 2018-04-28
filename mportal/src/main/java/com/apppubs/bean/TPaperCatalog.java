@@ -4,11 +4,13 @@ import java.util.List;
 
 import com.google.gson.annotations.SerializedName;
 import com.orm.SugarRecord;
+import com.orm.dsl.Table;
 
 /**
  * 
  * @author zhangwen 2014-10-30 mulu
  */
+@Table(name="paper_catalog")
 public class TPaperCatalog extends SugarRecord {// 报纸版面目录
 	@SerializedName("id")
 	private String id;

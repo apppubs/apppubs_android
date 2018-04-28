@@ -38,8 +38,8 @@ public class PaperIssueListFragment extends BaseFragment {
 	private int mCurPos = 1;
 	private LinearLayout progress;
 
-	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-		super.onCreateView(inflater, container, savedInstanceState);
+	@Override
+	protected View initLayout(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 		mRootView = inflater.inflate(R.layout.frg_paper, null);
 		xlv = (CommonListView) mRootView.findViewById(R.id.frg_peter__xlv);
 		init();
@@ -61,7 +61,6 @@ public class PaperIssueListFragment extends BaseFragment {
 		xlv.setPullLoadEnable(false);
 		return mRootView;
 	}
-
 
 	private void init() {
 		progress = (LinearLayout) mRootView.findViewById(R.id.frg_peter_progress_ll);

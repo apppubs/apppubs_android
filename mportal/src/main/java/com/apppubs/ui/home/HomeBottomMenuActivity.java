@@ -1,4 +1,4 @@
-package com.apppubs.ui.activity;
+package com.apppubs.ui.home;
 
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -15,8 +15,12 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.apppubs.bean.TMenuItem;
+import com.apppubs.constant.APError;
 import com.apppubs.d20.R;
 import com.apppubs.constant.Actions;
+import com.apppubs.presenter.HomePresenter;
+import com.apppubs.ui.activity.LoginActivity;
+import com.apppubs.ui.activity.ViewCourier;
 import com.apppubs.ui.fragment.BaseFragment;
 import com.apppubs.util.LogM;
 import com.apppubs.ui.widget.MenuBar;
@@ -37,7 +41,7 @@ import io.rong.imlib.model.Conversation;
  * ChangeLog:
  * 2015年1月15日 by zhangwen create
  */
-public class HomeBottomMenuActivity extends HomeBaseActivity {
+public class HomeBottomMenuActivity extends HomeBaseActivity implements IHomeBottomMenuView{
 
 	private MenuBar mMenuBar;
 	/**
@@ -59,6 +63,8 @@ public class HomeBottomMenuActivity extends HomeBaseActivity {
 		}
 	};
 
+	private HomePresenter mPresenter;
+
 	@Override
 	protected void onCreate(Bundle arg0) {
 		LogM.log(this.getClass(), " HomeBottomMenuActivity onCreate");
@@ -67,7 +73,6 @@ public class HomeBottomMenuActivity extends HomeBaseActivity {
 		setContentView(R.layout.act_home_bottommenu);
 		initComponent();
 
-		initMenu();
 		mLogoutBr = new BroadcastReceiver() {
 
 			@Override
@@ -82,6 +87,9 @@ public class HomeBottomMenuActivity extends HomeBaseActivity {
 		registerReceiver(mLogoutBr, new IntentFilter(Actions.ACTION_LOGOUT));
 
 		RongIM.getInstance().addUnReadMessageCountChangedObserver(mMessageUnReadCountObserver, Conversation.ConversationType.DISCUSSION, Conversation.ConversationType.PRIVATE);
+
+		mPresenter = new HomePresenter(this,this);
+		mPresenter.onViewCreated();
 	}
 
 	@Override
@@ -137,24 +145,6 @@ public class HomeBottomMenuActivity extends HomeBaseActivity {
 
 	}
 
-	private void initMenu() {
-		int size = mPrimaryMenuList.size();
-		for (int i = -1; ++i < size; ) {
-			mMenuBar.addMenuItem(mPrimaryMenuList.get(i));
-		}
-		mMenuBar.setOnItemClickListener(new MenuBar.OnItemClickListener() {
-			@Override
-			public void onItemClick(int position) {
-				selectMenu(position);
-			}
-		});
-		if (mPrimaryMenuList != null && mPrimaryMenuList.size() > 0) {//判断是否有菜单如果没有提示用户配置菜单
-			selectMenu(mCurPos);
-		} else {
-			Toast.makeText(this, "请配置菜单", Toast.LENGTH_LONG).show();
-		}
-
-	}
 
 	/**
 	 * 选择某个菜单
@@ -186,7 +176,7 @@ public class HomeBottomMenuActivity extends HomeBaseActivity {
 	private Fragment mCurFrg;
 
 	@Override
-	protected void changeContent(BaseFragment fragment) {
+	public void changeContent(BaseFragment fragment) {
 
 		FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
 		List<Fragment> fragments = getSupportFragmentManager().getFragments();
@@ -200,7 +190,7 @@ public class HomeBottomMenuActivity extends HomeBaseActivity {
 		mCurFrg = fragment;
 		transaction.setTransition(FragmentTransaction.TRANSIT_NONE);
 		transaction.commitAllowingStateLoss();
-		mTitleBar.clearLeftAndRight();
+//		mTitleBar.clearLeftAndRight();
 	}
 
 
@@ -235,4 +225,39 @@ public class HomeBottomMenuActivity extends HomeBaseActivity {
 	}
 
 
+	@Override
+	public void setMenus(List<TMenuItem> menus) {
+		mPrimaryMenuList = menus;
+		int size = menus.size();
+		mMenuBar.removeAllMenu();
+		for (int i = -1; ++i < size; ) {
+			mMenuBar.addMenuItem(menus.get(i));
+		}
+		mMenuBar.setOnItemClickListener(new MenuBar.OnItemClickListener() {
+			@Override
+			public void onItemClick(int position) {
+				selectMenu(position);
+			}
+		});
+		if (menus != null && menus.size() > 0) {//判断是否有菜单如果没有提示用户配置菜单
+			selectMenu(mCurPos);
+		} else {
+			Toast.makeText(this, "请配置菜单", Toast.LENGTH_LONG).show();
+		}
+	}
+
+	@Override
+	public void showLoading() {
+
+	}
+
+	@Override
+	public void hideLoading() {
+
+	}
+
+	@Override
+	public void showError(APError error) {
+		mErrorHandler.onError(error);
+	}
 }

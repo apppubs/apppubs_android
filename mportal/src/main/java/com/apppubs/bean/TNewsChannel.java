@@ -5,11 +5,13 @@ import java.util.Date;
 
 import com.google.gson.annotations.SerializedName;
 import com.orm.SugarRecord;
+import com.orm.dsl.Table;
 
 /**
  * 频道(栏目)
  *
  */
+@Table(name="news_channel")
 public class TNewsChannel extends SugarRecord implements Serializable{
 	
 	

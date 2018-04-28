@@ -5,12 +5,14 @@ import java.util.List;
 
 import com.google.gson.annotations.SerializedName;
 import com.orm.SugarRecord;
+import com.orm.dsl.Table;
 
 /**
  * 
  * @author zhangwen 2014-10-30 the issue(qi) entity
  *  一期的内容
  */
+@Table(name="paper_issue")
 public class TPaperIssue extends SugarRecord {
 
 	@SerializedName("id")

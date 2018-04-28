@@ -37,7 +37,7 @@ import com.apppubs.d20.R;
 import com.apppubs.SkipActivity;
 import com.apppubs.ui.activity.BaseActivity;
 import com.apppubs.ui.activity.ContainerActivity;
-import com.apppubs.ui.activity.HomeBaseActivity;
+import com.apppubs.ui.home.HomeBaseActivity;
 import com.apppubs.ui.activity.ViewCourier;
 import com.apppubs.constant.Constants;
 import com.apppubs.ui.myfile.FilePreviewFragment;

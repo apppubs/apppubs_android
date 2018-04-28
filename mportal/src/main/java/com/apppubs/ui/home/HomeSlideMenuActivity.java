@@ -1,4 +1,4 @@
-package com.apppubs.ui.activity;
+package com.apppubs.ui.home;
 
 import android.content.Context;
 import android.content.Intent;
@@ -39,6 +39,9 @@ import com.apppubs.d20.R;
 import com.apppubs.bean.App;
 import com.apppubs.bean.UserInfo;
 import com.apppubs.bean.Weather;
+import com.apppubs.ui.activity.SplashActivity;
+import com.apppubs.ui.activity.ViewCourier;
+import com.apppubs.ui.activity.WeatherActivity;
 import com.apppubs.ui.fragment.BaseFragment;
 import com.apppubs.model.IAPCallback;
 import com.apppubs.service.DownloadAppService;

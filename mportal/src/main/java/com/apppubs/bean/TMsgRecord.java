@@ -3,6 +3,7 @@ package com.apppubs.bean;
 import java.util.Date;
 
 import com.orm.SugarRecord;
+import com.orm.dsl.Table;
 
 /**
  * 消息记录(列表)
@@ -14,6 +15,7 @@ import com.orm.SugarRecord;
  * ChangeLog: 2015年3月18日 by zhangwen create
  * 
  */
+@Table(name="msg_record")
 public class TMsgRecord extends SugarRecord {
 
 	public static final int TYPE_CHAT = 1;

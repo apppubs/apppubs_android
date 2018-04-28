@@ -58,8 +58,7 @@ public class ServiceNoInfoListFragement extends BaseFragment {
 	private String mServiceNoId;
 
 	@Override
-	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-		super.onCreateView(inflater, container, savedInstanceState);
+	protected View initLayout(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 		mRootView = inflater.inflate(R.layout.frg_service_history, null);
 		Bundle args = getArguments();
 		mServiceNoId = args.getString(ServiceNoInfoFragment.ARGS_STRING_SERVICE_NO_ID);

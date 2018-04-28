@@ -46,9 +46,9 @@ public class ServiceNoListOfMineFragment extends BaseFragment {
 	public static final String USERATTECTIONSPS = "userattectionliststring";
 	private SharedPreferences attentionServiceMsg;
 
+
 	@Override
-	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-		super.onCreateView(inflater, container, savedInstanceState);
+	protected View initLayout(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 		mRootView = mInflater.inflate(R.layout.frg_serviceno_of_mine, null);
 		mLv = (ListView) mRootView.findViewById(R.id.serviceno_lv);
 		progressBsr = (LinearLayout) mRootView.findViewById(R.id.serviceno_progress_ll);

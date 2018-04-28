@@ -26,7 +26,7 @@ import com.apppubs.model.PaperBiz;
 import com.apppubs.util.LogM;
 import com.artifex.mupdfdemo.MuPDFCore;
 import com.apppubs.d20.R;
-import com.apppubs.ui.activity.HomeBaseActivity;
+import com.apppubs.ui.home.HomeBaseActivity;
 import com.apppubs.ui.activity.PaperInfoActivity;
 import com.apppubs.bean.TPaper;
 import com.apppubs.bean.TPaperCatalog;
@@ -69,17 +69,17 @@ public class PaperCatalogFragment extends BaseFragment implements OnClickListene
 	private PdfViewWithHotArea mPdfViewWithHotArea;
 	
 	@Override
-	public View onCreateView(LayoutInflater inflater, ViewGroup container,
-			Bundle savedInstanceState) {
+	protected View initLayout(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 		Bundle args = getArguments();
 		mCatalogId = args.getString(ARG_NAME_CATALOG_ID);
 		mRootView = inflater.inflate(R.layout.frg_paper_catalog, null);
 		mPdfViewWithHotArea = (PdfViewWithHotArea) mRootView.findViewById(R.id.paper_issue_preview_pvwha);
-		
+
 		Log.v(TAG,"新建 onCreateView index: "+mIndex);
 		init();
 		return mRootView;
 	}
+
 	@Override
 	public void onStart() {
 		Log.v(TAG,"PaperFragment onStart index : "+mIndex);

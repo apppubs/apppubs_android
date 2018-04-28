@@ -4,7 +4,9 @@ import java.util.Date;
 
 import com.google.gson.annotations.SerializedName;
 import com.orm.SugarRecord;
+import com.orm.dsl.Table;
 
+@Table(name="service_no_info")
 public class TServiceNOInfo extends SugarRecord {
 	
 	public static final int TYPE_NORMAL = 1;//图文

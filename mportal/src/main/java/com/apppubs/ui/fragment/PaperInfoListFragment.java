@@ -52,7 +52,7 @@ public class PaperInfoListFragment extends BaseFragment implements OnScrollListe
 	private String mTitle;
 
 	@Override
-	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+	protected View initLayout(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 		super.onCreateView(inflater, container, savedInstanceState);
 		View v = inflater.inflate(R.layout.frg_paperissuelist, null);
 		mTextflag = (TextView) v.findViewById(R.id.frg_paperissuelist_flag);

@@ -4,6 +4,8 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
+import android.content.res.TypedArray;
+import android.graphics.Color;
 import android.support.annotation.Nullable;
 import android.util.Log;
 
@@ -13,6 +15,7 @@ import com.apppubs.bean.Settings;
 import com.apppubs.bean.UserInfo;
 import com.apppubs.bean.http.AppInfoResult;
 import com.apppubs.constant.URLs;
+import com.apppubs.d20.R;
 import com.apppubs.ui.activity.CompelMessageDialogActivity;
 import com.apppubs.ui.home.CompelReadMessageModel;
 import com.apppubs.model.myfile.FileCacheManager;
@@ -21,6 +24,7 @@ import com.apppubs.net.WMHHttpClient;
 import com.apppubs.net.WMHHttpClientDefaultImpl;
 import com.apppubs.net.WMHHttpErrorCode;
 import com.apppubs.net.WMHRequestListener;
+import com.apppubs.util.FileUtils;
 import com.apppubs.util.JSONResult;
 import com.apppubs.util.JSONUtils;
 import com.apppubs.util.LogM;
@@ -57,11 +61,11 @@ public class AppContext {
 
     private AppContext(Context context) {
         mContext = context;
-        mApp = (App) MportalApplication.readObj(mContext, APP_FILE_NAME);
+        mApp = (App) FileUtils.readObj(mContext, APP_FILE_NAME);
         if (mApp == null) {
             mApp = new App();
         }
-        mCurrentUser = (UserInfo) MportalApplication.readObj(mContext, USER_FILE_NAME);
+        mCurrentUser = (UserInfo) FileUtils.readObj(mContext, USER_FILE_NAME);
         if (mCurrentUser == null) {
             mCurrentUser = new UserInfo();
         }
@@ -89,7 +93,7 @@ public class AppContext {
     }
 
     public synchronized void serializeApp() {
-        MportalApplication.writeObj(mContext, mApp, APP_FILE_NAME);
+        FileUtils.writeObj(mContext, mApp, APP_FILE_NAME);
         LogM.log(AppContext.class, "保存app:" + mApp.toString());
     }
 
@@ -141,7 +145,7 @@ public class AppContext {
 
     public synchronized void setCurrentUser(UserInfo user) {
         mCurrentUser = user;
-        MportalApplication.writeObj(mContext, user, USER_FILE_NAME);
+        FileUtils.writeObj(mContext, user, USER_FILE_NAME);
     }
 
     public void clearCurrentUser() {
@@ -152,7 +156,7 @@ public class AppContext {
         if (mSettings == null) {
             synchronized (AppContext.class) {
                 if (mSettings == null) {
-                    mSettings = (Settings) MportalApplication.readObj(mContext,
+                    mSettings = (Settings) FileUtils.readObj(mContext,
                             SYSTEM_SETTING_FILE_NAME);
                 }
 
@@ -175,17 +179,17 @@ public class AppContext {
 
     public void setSettings(Settings mSettings) {
         this.mSettings = mSettings;
-        MportalApplication.writeObj(mContext, mSettings, SYSTEM_SETTING_FILE_NAME);
+        FileUtils.writeObj(mContext, mSettings, SYSTEM_SETTING_FILE_NAME);
     }
 
     /**
      * 各种url中的占位符
      */
-    public static final String PLACEHOLDER_USERNAME = "$username";//用户名
-    public static final String PLACEHOLDER_USERID = "$userid";//用户ID；
-    public static final String PLACEHOLDER_APPID = "$appid";//appid==appcode
-    public static final String PLACEHOLDER_COPER_CODE = "$corpcode";
-    public static final String PLACEHOLDER_PASSWORD = "$password";
+    private static final String PLACEHOLDER_USERNAME = "$username";//用户名
+    private static final String PLACEHOLDER_USERID = "$userid";//用户ID；
+    private static final String PLACEHOLDER_APPID = "$appid";//appid==appcode
+    private static final String PLACEHOLDER_COPER_CODE = "$corpcode";
+    private static final String PLACEHOLDER_PASSWORD = "$password";
 
     /**
      * 转换服务器传来的url
@@ -307,6 +311,20 @@ public class AppContext {
             return pi.versionCode;
         }
         return 0;
+    }
+
+    public int getThemeColor(){
+        int themeColor ;
+        int theme = getSettings().getTheme();
+        // app配色
+        if (theme < 4) {
+            TypedArray array = mContext.getTheme().obtainStyledAttributes(new int[] { R.attr.appDefaultColor });
+            themeColor = array.getColor(0, 0x000000);
+            array.recycle();
+        } else {
+            themeColor = Color.parseColor(getApp().getCustomThemeColor());
+        }
+        return themeColor;
     }
 
 }

@@ -3,12 +3,14 @@ package com.apppubs.bean;
 import java.util.Date;
 
 import com.orm.SugarRecord;
+import com.orm.dsl.Table;
 
 /**
  * 文章收藏
  * @author zhangwen 2014-12-28
  *
  */
+@Table(name="collection")
 public class TCollection extends SugarRecord{
 	
 	/**

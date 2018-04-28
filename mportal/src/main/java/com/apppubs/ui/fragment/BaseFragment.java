@@ -11,6 +11,7 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.android.volley.RequestQueue;
@@ -21,6 +22,7 @@ import com.apppubs.ui.activity.BaseActivity;
 import com.apppubs.model.message.MsgBussiness;
 import com.apppubs.model.message.UserBussiness;
 import com.apppubs.ui.widget.TitleBar;
+import com.apppubs.util.Utils;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
 
@@ -59,10 +61,29 @@ public class BaseFragment extends Fragment implements KeyEvent.Callback {
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle
+    public final View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle
             savedInstanceState) {
         mInflater = inflater;
         mDefaultColor = BaseActivity.mDefaultColor;
+        mTitleBar = initTitleBar();
+        if (mTitleBar!=null){
+            LinearLayout ll = new LinearLayout(mContext);
+            ll.setOrientation(LinearLayout.VERTICAL);
+            LinearLayout.LayoutParams titleBarLl = new LinearLayout.LayoutParams(LinearLayout
+                    .LayoutParams.MATCH_PARENT, Utils.dip2px(mContext,50));
+            ll.addView(mTitleBar,titleBarLl);
+            ll.addView(initLayout(inflater, container,savedInstanceState));
+            return ll;
+        }
+        return  initLayout(inflater, container,savedInstanceState);
+    }
+
+    protected View initLayout(LayoutInflater inflater, ViewGroup container, Bundle
+            savedInstanceState){
+        return null;
+    }
+
+    protected TitleBar initTitleBar(){
         return null;
     }
 
@@ -174,5 +195,8 @@ public class BaseFragment extends Fragment implements KeyEvent.Callback {
         return mHostActivity.getDefaultImageLoaderOption();
     }
 
+    protected int getThemeColor(){
+        return mAppContext.getThemeColor();
+    }
 
 }

@@ -51,7 +51,7 @@ public class ServiceNoInfoFragment extends BaseFragment {
 	private boolean isSubscribed;
 	
 	@Override
-	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+	protected View initLayout(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 		super.onCreateView(inflater, container, savedInstanceState);
 		mRootView = mInflater.inflate(R.layout.frg_serviceno_info, null);
 		Bundle args = getArguments();
@@ -62,7 +62,6 @@ public class ServiceNoInfoFragment extends BaseFragment {
 		registerClickListener();
 		return mRootView;
 	}
-
 
 	@Override
 	public void onResume() {

@@ -48,10 +48,9 @@ public class PaperIssuePreviewFragment extends BaseFragment implements OnPageCha
 	private TextView mCurPageTv;
 	private TextView mTotalPageTv;
 	private int mCurPage;
+
 	@Override
-	public View onCreateView(LayoutInflater inflater, ViewGroup container,
-			Bundle savedInstanceState) {
-		
+	protected View initLayout(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 		LogM.log(this.getClass(), "onCreateView");
 		View rootView = inflater.inflate(R.layout.frg_paper_issue_preview, null);
 		mVp = (ViewPager) rootView.findViewById(R.id.paper_issue_vp);
@@ -61,10 +60,10 @@ public class PaperIssuePreviewFragment extends BaseFragment implements OnPageCha
 		mPreviewTv = (TextView) rootView.findViewById(R.id.paper_issue_preview_tv);
 		mCurPageTv = (TextView) rootView.findViewById(R.id.paper_issue_preview_curpage_tv);
 		mTotalPageTv = (TextView) rootView.findViewById(R.id.paper_issue_preview_totalpage_tv);
-		
+
 		return rootView;
 	}
-	
+
 	@Override
 	public void onActivityCreated(Bundle savedInstanceState) {
 		LogM.log(this.getClass(), "onActivityCreated");

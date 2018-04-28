@@ -37,7 +37,8 @@ public class ChannelSpecialsFragment extends ChannelFragment implements AsyTaskC
 	public static String VEDIOINTENTINFOS = "vedioinfo";
 	private List<NewsSpecialsInfo> mSpecials;
 
-	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+	@Override
+	protected View initLayout(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 		View view = inflater.inflate(R.layout.frg_video, null);
 		init(view);
 

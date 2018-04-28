@@ -10,6 +10,7 @@ import android.widget.ImageView;
 import com.apppubs.constant.Actions;
 import com.apppubs.d20.R;
 import com.apppubs.bean.Settings;
+import com.apppubs.ui.home.HomeBaseActivity;
 
 public class ThemeSwitchActivity extends BaseActivity {
 

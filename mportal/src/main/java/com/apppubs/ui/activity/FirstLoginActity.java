@@ -18,7 +18,6 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.android.volley.VolleyError;
 import com.apppubs.AppContext;
 import com.apppubs.bean.App;
 import com.apppubs.bean.UserInfo;
@@ -27,6 +26,7 @@ import com.apppubs.constant.APError;
 import com.apppubs.d20.R;
 import com.apppubs.model.IAPCallback;
 import com.apppubs.model.UserBiz;
+import com.apppubs.ui.home.HomeBaseActivity;
 import com.apppubs.ui.widget.ProgressHUD;
 import com.apppubs.util.LogM;
 

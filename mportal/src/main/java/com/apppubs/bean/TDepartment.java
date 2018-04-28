@@ -2,6 +2,7 @@ package com.apppubs.bean;
 
 import com.google.gson.annotations.SerializedName;
 import com.orm.SugarRecord;
+import com.orm.dsl.Table;
 
 /**
  * 用户部门
@@ -14,6 +15,7 @@ import com.orm.SugarRecord;
  * 2015年3月10日 by zhangwen create
  *
  */
+@Table(name="department")
 public class TDepartment extends SugarRecord{
 
 	

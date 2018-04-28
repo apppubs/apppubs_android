@@ -31,15 +31,15 @@ public class AddressBookUserListFragment extends BaseFragment implements OnClick
 
 	private List<TUser> mUserL;
 
+
 	@Override
-	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-		super.onCreateView(inflater, container, savedInstanceState);
+	protected View initLayout(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 		Bundle args = getArguments();
 		mSuperId = args.getString(ARG_STRING_SUPER_ID);
 		initRootView();
 		return mRootView;
 	}
-	
+
 	private void initRootView() {
 		mLv = new ListView(mContext);
 		mLv.setSelector(R.drawable.sel_common_item);

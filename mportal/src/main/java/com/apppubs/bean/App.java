@@ -1,6 +1,5 @@
 package com.apppubs.bean;
 
-import com.apppubs.bean.http.AppInfoResult;
 import com.apppubs.util.LogM;
 import com.google.gson.annotations.SerializedName;
 

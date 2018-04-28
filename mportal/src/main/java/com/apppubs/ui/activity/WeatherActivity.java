@@ -22,6 +22,7 @@ import com.apppubs.d20.R;
 import com.apppubs.bean.Weather;
 import com.apppubs.constant.Actions;
 import com.apppubs.ui.fragment.BaseFragment;
+import com.apppubs.ui.home.HomeBaseActivity;
 import com.apppubs.util.StringUtils;
 import com.apppubs.util.SystemUtils;
 import com.apppubs.util.Tools;
@@ -181,7 +182,7 @@ public class WeatherActivity extends BaseActivity {
 		activity=new HomeBaseActivity() {
 			
 			@Override
-			protected void changeContent(BaseFragment fragment) {
+			public void changeContent(BaseFragment fragment) {
 			}
 
 			@Override

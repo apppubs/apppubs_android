@@ -37,9 +37,9 @@ public class HistoryFragment extends BaseFragment {
 	private TextView mEmptyText;
 	private Date mStandardDateTime;
 	private SimpleDateFormat mSimpleDateFormat;
+
 	@Override
-	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-		super.onCreateView(inflater, container, savedInstanceState);
+	protected View initLayout(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 		mSimpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm");
 		mRootView = inflater.inflate(R.layout.frg_history, null);
 		init();

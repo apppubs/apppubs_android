@@ -11,9 +11,9 @@ import android.widget.FrameLayout;
 import android.widget.TextView;
 
 public class ExceptionFragment extends BaseFragment {
+
 	@Override
-	public View onCreateView(LayoutInflater inflater, ViewGroup container,
-			Bundle savedInstanceState) {
+	protected View initLayout(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 		TextView tv = new TextView(container.getContext());
 		tv.setText("应用类型不支持或者应用配置错误");
 		tv.setTextSize(TypedValue.COMPLEX_UNIT_DIP,15);

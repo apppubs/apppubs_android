@@ -109,8 +109,7 @@ public class MenuGroupsFragment extends HomeFragment implements OnClickListener{
 	}
 
 	@Override
-	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-		super.onCreateView(inflater, container, savedInstanceState);
+	protected View initLayout(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 		initRootView();
 		return mRootView;
 	}

@@ -139,17 +139,8 @@ public abstract class BaseActivity extends FragmentActivity implements OnClickLi
 			setTheme(R.style.AppThemeBlue);
 		}
 
-		// app配色
-		if (theme < 4) {
 
-			TypedArray array = getTheme().obtainStyledAttributes(new int[] { R.attr.appDefaultColor });
-			mThemeColor = array.getColor(0, 0x000000);
-			array.recycle();
-
-		} else {
-			mThemeColor = Color.parseColor(mAppContext.getApp().getCustomThemeColor());
-		}
-
+		mThemeColor = mAppContext.getThemeColor();
 		// // 横竖屏 当方向标记为2,3时，平板为横屏，为3,4时手机为横屏
 		int orientationFlag = Utils.getIntegerMetaData(this, "DISPLAY_ORIENTATION");
 		if (!Utils.isPad(this) && orientationFlag >= 3

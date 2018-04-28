@@ -48,7 +48,7 @@ import com.apppubs.AppContext;
 import com.apppubs.MportalApplication;
 import com.apppubs.d20.R;
 import com.apppubs.ui.activity.BaseActivity;
-import com.apppubs.ui.activity.HomeBottomMenuActivity;
+import com.apppubs.ui.home.HomeBottomMenuActivity;
 import com.apppubs.ui.activity.ViewCourier;
 import com.apppubs.asytask.AsyTaskCallback;
 import com.apppubs.asytask.AsyTaskExecutor;
@@ -129,9 +129,7 @@ public class PageFragment extends TitleMenuFragment implements OnClickListener, 
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle
-            savedInstanceState) {
-
+    protected View initLayout(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         Bundle bundle = getArguments();
         if (bundle != null) {
             mPageId = bundle.getString(EXTRA_STRING_NAME_PAGE_ID);
@@ -188,7 +186,7 @@ public class PageFragment extends TitleMenuFragment implements OnClickListener, 
 
     @Override
     public void setTitleBarAddress(String text) {
-        mTitleBar.setAddressText(text);
+//        mTitleBar.setAddressText(text);
     }
 
     @Override

@@ -236,7 +236,7 @@ public class ChatActivity extends BaseActivity implements OnClickListener {
 		mChatAdapter = new ChatAdapter(this);
 		mListView.setAdapter(mChatAdapter);
 		MsgController.getInstance(this).setCurChatGroupId(mChatGroupId);
-		Map<String,String> map = (Map<String, String>) MportalApplication.readObj(this, MportalApplication.MSG_DELETED_CHAT_GROUP_MAP);
+		Map<String,String> map = (Map<String, String>) FileUtils.readObj(this, MportalApplication.MSG_DELETED_CHAT_GROUP_MAP);
 		String deleteDateStr = "";
 		if(map!=null&&map.get(mChatGroupId)!=null){
 			deleteDateStr = map.get(mChatGroupId);
@@ -892,7 +892,7 @@ public class ChatActivity extends BaseActivity implements OnClickListener {
 
 							@Override
 							public void onDone(Object obj) {
-								Map<String,String> map = (Map<String, String>) MportalApplication.readObj(ChatActivity.this, MportalApplication.MSG_DELETED_CHAT_GROUP_MAP);
+								Map<String,String> map = (Map<String, String>) FileUtils.readObj(ChatActivity.this, MportalApplication.MSG_DELETED_CHAT_GROUP_MAP);
 								String deleteDateStr = "";
 								if(map!=null){
 									deleteDateStr = map.get(mChatGroupId);

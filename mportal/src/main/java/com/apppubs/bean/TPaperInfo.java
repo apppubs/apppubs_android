@@ -5,6 +5,7 @@ import java.util.Date;
 
 import com.google.gson.annotations.SerializedName;
 import com.orm.SugarRecord;
+import com.orm.dsl.Table;
 
 /**
  * 
@@ -13,6 +14,7 @@ import com.orm.SugarRecord;
  *	这一套注释（Gson）在“获取一条信息”时用到
  *
  */
+@Table(name="paper_info")
 public class TPaperInfo extends SugarRecord implements Serializable{
 	
 	@SerializedName("infoid")

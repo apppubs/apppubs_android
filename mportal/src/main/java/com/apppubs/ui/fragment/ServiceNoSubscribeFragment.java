@@ -37,8 +37,7 @@ public class ServiceNoSubscribeFragment extends BaseFragment {
 	private List<TServiceNo> mServiceNoList;
 
 	@Override
-	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-		super.onCreateView(inflater, container, savedInstanceState);
+	protected View initLayout(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 		mRootView = mInflater.inflate(R.layout.frg_serviceno_subscribe, null);
 		mLv = (ListView) mRootView.findViewById(R.id.serviceno_lv);
 		// mLv = new ListView(mContext);

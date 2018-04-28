@@ -53,7 +53,8 @@ public class ChannelAudioFragment extends ChannelFragment implements AsyTaskCall
 	private String mPlayingAudioId;
 	private ImageButton mPlayingBtn;
 
-	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+	@Override
+	protected View initLayout(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 		View view = inflater.inflate(R.layout.frg_video, null);
 		init(view);
 
