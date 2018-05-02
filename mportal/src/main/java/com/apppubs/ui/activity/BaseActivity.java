@@ -58,6 +58,7 @@ import com.nostra13.universalimageloader.core.ImageLoader;
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
+import org.xml.sax.ErrorHandler;
 
 public abstract class BaseActivity extends FragmentActivity implements OnClickListener {
 
@@ -515,4 +516,7 @@ public abstract class BaseActivity extends FragmentActivity implements OnClickLi
 		super.onActivityResult(requestCode, resultCode, intent);
 	}
 
+	public APErrorHandler getErrorHandler(){
+		return mErrorHandler;
+	}
 }

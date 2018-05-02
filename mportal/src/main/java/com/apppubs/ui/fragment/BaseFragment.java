@@ -16,6 +16,7 @@ import android.widget.TextView;
 
 import com.android.volley.RequestQueue;
 import com.apppubs.AppContext;
+import com.apppubs.constant.APError;
 import com.apppubs.d20.R;
 import com.apppubs.model.SystemBiz;
 import com.apppubs.ui.activity.BaseActivity;
@@ -212,5 +213,9 @@ public class BaseFragment extends Fragment implements KeyEvent.Callback, OnClick
 
     public boolean getNeedBack(){
         return this.needBack;
+    }
+
+    public void onError(APError error){
+        mHostActivity.getErrorHandler().onError(error);
     }
 }

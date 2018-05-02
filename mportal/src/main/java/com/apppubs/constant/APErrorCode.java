@@ -26,7 +26,8 @@ public enum APErrorCode {
 
     /**本地错误*/
     NETWORK_ERROR(2000),//网络错误
-    JSON_PARSE_ERROR(2002)//json解析错误
+    JSON_PARSE_ERROR(2002),//json解析错误
+    HAVE_NO_ERROR(2003)//没有更多
     ;
 
 

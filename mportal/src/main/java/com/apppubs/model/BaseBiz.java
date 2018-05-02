@@ -245,12 +245,12 @@ public abstract class BaseBiz {
         }
     }
 
-}
+    public interface IRQListener<T extends IJsonResult> {
+        void onResponse(T jr, APError error);
+    }
 
-interface IRQListener<T extends IJsonResult> {
-    void onResponse(T jr, APError error);
-}
+    public interface IRQStringListener{
+        void onResponse(String result,APError error);
+    }
 
-interface IRQStringListener{
-    void onResponse(String result,APError error);
 }

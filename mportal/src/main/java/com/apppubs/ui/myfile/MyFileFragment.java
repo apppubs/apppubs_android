@@ -3,7 +3,6 @@ package com.apppubs.ui.myfile;
 import android.content.Intent;
 import android.graphics.PorterDuff;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
 import android.support.v7.widget.SearchView;
 import android.text.TextUtils;
 import android.util.Log;
@@ -17,42 +16,35 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.apppubs.bean.UserInfo;
-import com.apppubs.ui.adapter.CommonAdapter;
-import com.apppubs.constant.URLs;
-import com.apppubs.AppContext;
+import com.apppubs.constant.APError;
+import com.apppubs.constant.APErrorCode;
+import com.apppubs.d20.R;
+import com.apppubs.model.IAPCallback;
 import com.apppubs.model.MyFileModel;
+import com.apppubs.model.message.FilePickerModel;
+import com.apppubs.model.message.MyFilePickerHelper;
 import com.apppubs.model.myfile.CacheListener;
 import com.apppubs.model.myfile.FileCacheErrorCode;
-import com.apppubs.d20.R;
+import com.apppubs.presenter.MyFilePresenter;
 import com.apppubs.ui.activity.ContainerActivity;
+import com.apppubs.ui.adapter.CommonAdapter;
 import com.apppubs.ui.adapter.ViewHolder;
 import com.apppubs.ui.fragment.BaseFragment;
 import com.apppubs.ui.message.activity.TranspondActivity;
-import com.apppubs.model.message.FilePickerModel;
-import com.apppubs.model.message.MyFilePickerHelper;
-import com.apppubs.net.WMHHttpErrorCode;
-import com.apppubs.net.WMHRequestListener;
-import com.apppubs.util.FileUtils;
-import com.apppubs.util.JSONResult;
-import com.apppubs.util.JSONUtils;
-import com.apppubs.util.StringUtils;
 import com.apppubs.ui.widget.ConfirmDialog;
 import com.apppubs.ui.widget.ProgressHUD;
 import com.apppubs.ui.widget.commonlist.CommonListView;
 import com.apppubs.ui.widget.commonlist.CommonListViewListener;
 import com.apppubs.ui.widget.menudialog.MenuDialog;
-
-import org.json.JSONException;
-import org.json.JSONObject;
+import com.apppubs.util.FileUtils;
+import com.apppubs.util.StringUtils;
 
 import java.io.File;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
-import java.util.ArrayList;
 import java.util.List;
 
-public class MyFileFragment extends BaseFragment implements OnClickListener {
+public class MyFileFragment extends BaseFragment implements OnClickListener ,IMyFileView{
 
     public static final String EXTRA_NAME_DISPLAY_MODE = "mode";
     public static final int EXTRA_VALUE_DISPLAY_MODE_NORMAL = 0;
@@ -61,25 +53,22 @@ public class MyFileFragment extends BaseFragment implements OnClickListener {
     private SearchView mSearchView;
     private CommonListView mLv;
     private CommonAdapter<MyFileModel> mAdapter;
-    private int mCurPage;
     private List<MyFileModel> mDatas;
-    private List<MyFileModel> mSearchResults;
-    private boolean isSearchMode;
-    private String mQueryText;
     private int mMode;
-    private MyFilePickerHelper mHelper;
+
+    private MyFilePresenter mPresenter;
 
     @Override
     protected View initLayout(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        initDatas();
+        initProperties();
         initViews(inflater);
 
         return mRootView;
     }
 
-    private void initDatas() {
+    private void initProperties() {
         mMode = getArguments().getInt(EXTRA_NAME_DISPLAY_MODE, EXTRA_VALUE_DISPLAY_MODE_NORMAL);
-        mHelper = MyFilePickerHelper.getInstance(getContext());
+        mPresenter = new MyFilePresenter(mContext, this);
     }
 
     private void initViews(LayoutInflater inflater) {
@@ -92,19 +81,19 @@ public class MyFileFragment extends BaseFragment implements OnClickListener {
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 
                 Bundle args = new Bundle();
-                args.putString(FilePreviewFragment.ARGS_STRING_URL, isSearchMode ? mSearchResults.get((int) parent.getItemIdAtPosition(position)).getFileUrl() : mDatas.get((int) parent.getItemIdAtPosition(position)).getFileUrl());
+                args.putString(FilePreviewFragment.ARGS_STRING_URL, mDatas.get((int) parent.getItemIdAtPosition(position)).getFileUrl());
                 ContainerActivity.startActivity(mContext, FilePreviewFragment.class, args, "文件预览");
             }
         });
         mLv.setCommonListViewListener(new CommonListViewListener() {
             @Override
             public void onRefresh() {
-                loadPage(1);
+                mPresenter.onRefreshClicked();
             }
 
             @Override
             public void onLoadMore() {
-                loadPage(mCurPage + 1);
+                mPresenter.onLoadMoreClicked();
             }
         });
         mLv.setPullLoadEnable(true);
@@ -113,17 +102,20 @@ public class MyFileFragment extends BaseFragment implements OnClickListener {
         mSearchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String query) {
-                isSearchMode = true;
-                mQueryText = query;
-                loadPage(1);
+                try {
+                    String encodedQuery = URLEncoder.encode(query.trim(), "UTF-8");
+                    mPresenter.onSerchMoreClicked(encodedQuery);
+                } catch (UnsupportedEncodingException e) {
+                    e.printStackTrace();
+                    MyFileFragment.this.onError(new APError(APErrorCode.GENERAL_ERROR,"输入格式非法！"));
+                }
                 return false;
             }
 
             @Override
             public boolean onQueryTextChange(String newText) {
                 if (TextUtils.isEmpty(newText)) {
-                    isSearchMode = false;
-                    refreshListView();
+                    mPresenter.onStopSearch();
                 }
                 return false;
             }
@@ -133,110 +125,11 @@ public class MyFileFragment extends BaseFragment implements OnClickListener {
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        loadPage(1);
-    }
-
-    private void loadPage(final int page) {
-        String url = null;
-        Object[] params;
-        if (isSearchMode) {
-            url = URLs.URL_MY_FILE_SEARCH;
-            UserInfo user = AppContext.getInstance(mContext).getCurrentUser();
-            String encodedQuery = null;
-            try {
-                encodedQuery = URLEncoder.encode(mQueryText.trim(), "UTF-8");
-            } catch (UnsupportedEncodingException e) {
-                e.printStackTrace();
-            }
-            params = new Object[]{URLs.baseURL, URLs.appCode, encodedQuery, user.getUsername(), page};
-
-        } else {
-            url = URLs.URL_MY_FILE_PAGE;
-            UserInfo user = AppContext.getInstance(mContext).getCurrentUser();
-            params = new Object[]{URLs.baseURL, URLs.appCode, page, user.getUsername()};
-        }
-
-        mAppContext.getHttpClient().GET(url, params, new WMHRequestListener() {
-            @Override
-            public void onDone(JSONResult jr, WMHHttpErrorCode errorCode) {
-                Log.v("MyFileFragment", jr.result);
-                if (errorCode != null) {
-
-                    mRootView.post(new Runnable() {
-                        @Override
-                        public void run() {
-                            if (page == 1) {
-                                mLv.stopRefresh();
-                            } else {
-                                mLv.stopLoadMore();
-                            }
-                            Toast.makeText(mContext, "网络错误", Toast.LENGTH_LONG).show();
-                        }
-                    });
-                } else {
-                    mRootView.post(new Runnable() {
-                        @Override
-                        public void run() {
-                            if (page == 1) {
-                                mLv.stopRefresh();
-                            } else {
-                                mLv.stopLoadMore();
-                            }
-                        }
-                    });
-
-                    if (jr.code == 1) {
-                        List<MyFileModel> result = parseJsonResult(jr);
-                        if (result == null || result.size() < 1) {
-                            mRootView.post(new Runnable() {
-                                @Override
-                                public void run() {
-                                    mLv.haveLoadAll();
-                                }
-                            });
-                        }
-                        if (page == 1) {
-                            if (!isSearchMode) {
-                                mDatas = new ArrayList<MyFileModel>();
-                            } else {
-                                mSearchResults = new ArrayList<MyFileModel>();
-                            }
-                        }
-                        if (!isSearchMode) {
-                            mDatas.addAll(result);
-                        } else {
-                            mSearchResults.addAll(result);
-                        }
-                        mRootView.post(new Runnable() {
-                            @Override
-                            public void run() {
-                                refreshListView();
-                            }
-                        });
-
-                        mCurPage = page;
-                    } else {
-                        Toast.makeText(mContext, "获取数据错误", Toast.LENGTH_LONG).show();
-                    }
-                }
-            }
-        });
-
-    }
-
-    private List<MyFileModel> parseJsonResult(JSONResult jr) {
-        String listStr = null;
-        try {
-            JSONObject jo = JSONUtils.parseJSONObject(jr.result);
-            listStr = jo.getString("appfilelist");
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-        return JSONUtils.parseListFromJson(listStr, MyFileModel.class);
+        mLv.refresh();
     }
 
     private void refreshListView() {
-        List<MyFileModel> datas = isSearchMode ? mSearchResults : mDatas;
+        List<MyFileModel> datas =  mDatas;
         if (mAdapter == null) {
             mAdapter = new CommonAdapter<MyFileModel>(mHostActivity, datas, R.layout.item_my_file) {
 
@@ -311,11 +204,6 @@ public class MyFileFragment extends BaseFragment implements OnClickListener {
             checkBtnIv.setSelected(false);
             checkBtnIv.clearColorFilter();
         }
-    }
-
-    private String getPageUrl(int page) {
-        UserInfo user = AppContext.getInstance(mContext).getCurrentUser();
-        return String.format(URLs.URL_MY_FILE_PAGE, URLs.baseURL, URLs.appCode, page, user.getUsername());
     }
 
     @Override
@@ -412,34 +300,19 @@ public class MyFileFragment extends BaseFragment implements OnClickListener {
                 Log.v("MyFileFragment", "点击 " + index);
                 if (index == 0) {
                     ProgressHUD.show(mHostActivity, "请稍候...", true, false, null);
-                    String[] params = {URLs.baseURL, URLs.appCode, model.getFileId()};
-                    mAppContext.getHttpClient().GET(URLs.URL_MY_FILE_DELETE, params, new WMHRequestListener() {
+                    mPresenter.onDeleteRemoteClicked(model.getFileId(), new IAPCallback<String>() {
                         @Override
-                        public void onDone(JSONResult jsonResult, @NonNull WMHHttpErrorCode errorCode) {
+                        public void onDone(String obj) {
+                            ProgressHUD.dismissProgressHUDInThisContext(mHostActivity);
+                            removeFromListView(model);
+                            Toast.makeText(mHostActivity, "删除成功", Toast.LENGTH_SHORT).show();
+                        }
 
-                            if (errorCode == null) {
-                                mAppContext.getCacheManager().removeCache(model.getFileUrl());
-                                mRootView.post(new Runnable() {
-                                    @Override
-                                    public void run() {
-                                        ProgressHUD.dismissProgressHUDInThisContext(mHostActivity);
-                                        removeFromListView(model);
-                                        Toast.makeText(mHostActivity, "删除成功", Toast.LENGTH_SHORT).show();
-                                    }
-                                });
-                            } else {
-                                mRootView.post(new Runnable() {
-                                    @Override
-                                    public void run() {
-                                        ProgressHUD.dismissProgressHUDInThisContext(mHostActivity);
-                                        Toast.makeText(mHostActivity, "删除失败", Toast.LENGTH_SHORT).show();
-                                    }
-                                });
-                            }
+                        @Override
+                        public void onException(APError error) {
+                            onError(error);
                         }
                     });
-
-
                 } else if (index == 1) {
                     mAppContext.getCacheManager().removeCache(model.getFileUrl());
                     Toast.makeText(mContext, "删除成功", Toast.LENGTH_SHORT).show();
@@ -453,4 +326,30 @@ public class MyFileFragment extends BaseFragment implements OnClickListener {
         mAdapter.notifyDataSetChanged();
     }
 
+    @Override
+    public void stopRefresh() {
+        mLv.stopRefresh();
+    }
+
+    @Override
+    public void stopLoadMore() {
+        mLv.stopLoadMore();
+    }
+
+    @Override
+    public void setFileModels(List<MyFileModel> models) {
+        mDatas = models;
+        refreshListView();
+    }
+
+    @Override
+    public void setSearchFileModels(List<MyFileModel> models) {
+        mDatas = models;
+        mAdapter.notifyDataSetChanged();
+    }
+
+    @Override
+    public void onError(APError error) {
+        super.onError(error);
+    }
 }

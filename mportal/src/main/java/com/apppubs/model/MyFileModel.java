@@ -1,8 +1,11 @@
 package com.apppubs.model;
 
+import com.apppubs.bean.http.MyFilePageResult;
 import com.google.gson.annotations.SerializedName;
 
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 /**
  * Created by zhangwen on 2017/7/17.
@@ -77,5 +80,25 @@ public class MyFileModel {
 
 	public void setFileLocalPath(String fileLocalPath) {
 		this.fileLocalPath = fileLocalPath;
+	}
+
+	public static MyFileModel createFrom(MyFilePageResult.MyFilePageItem item){
+		MyFileModel model = new MyFileModel();
+		model.setAddTime(item.getCreateTime());
+		model.setBytes(item.getSize());
+		model.setFileId(item.getId());
+		model.setFileUrl(item.getURL());
+		model.setName(item.getName());
+		model.setTypeStr(item.getFileType());
+		return model;
+	}
+
+	public static List<MyFileModel> createFrom(List<MyFilePageResult.MyFilePageItem> items){
+		List<MyFileModel> models = new ArrayList<>();
+		for (MyFilePageResult.MyFilePageItem item: items){
+			MyFileModel model = createFrom(item);
+			models.add(model);
+		}
+		return models;
 	}
 }
