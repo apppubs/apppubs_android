@@ -36,6 +36,7 @@ import com.apppubs.bean.TUser;
 import com.apppubs.bean.UserInfo;
 import com.apppubs.bean.TUserDeptLink;
 import com.apppubs.bean.http.AppInfoResult;
+import com.apppubs.bean.http.CompelReadMessageResult;
 import com.apppubs.bean.http.IJsonResult;
 import com.apppubs.bean.http.MenusResult;
 import com.apppubs.constant.APError;
@@ -43,6 +44,7 @@ import com.apppubs.constant.URLs;
 import com.apppubs.d20.R;
 import com.apppubs.model.message.UserBussiness;
 import com.apppubs.ui.activity.MainHandler;
+import com.apppubs.ui.home.CompelReadMessageModel;
 import com.apppubs.util.FileUtils;
 import com.apppubs.util.JSONResult;
 import com.apppubs.util.LogM;
@@ -159,8 +161,9 @@ public class SystemBiz extends BaseBiz {
                     if (isFirstInit()) {
                         clearDataBase();
                         MainHandler.getInstance().post(new OnExceptionRun<App>(callback));
-                    }else{
-                        MainHandler.getInstance().post(new OnDoneRun<App>(callback, mAppContext.getApp()));
+                    } else {
+                        MainHandler.getInstance().post(new OnDoneRun<App>(callback, mAppContext
+                                .getApp()));
                     }
                 } finally {
                     db.endTransaction();
@@ -308,6 +311,61 @@ public class SystemBiz extends BaseBiz {
                     e.printStackTrace();
                 }
         }
+    }
+
+    public void loadCompelReadMessage(final IAPCallback<List<CompelReadMessageModel>> callback) {
+        String url = "http://result.eolinker" +
+                ".com/gN1zjDlc87a75d671a2d954f809ebcdd19e7698dc2478fa?uri=alert_messages";
+        Map<String, String> params = new HashMap<>();
+        asyncPOST(url, params, CompelReadMessageResult.class, new
+                IRQListener<CompelReadMessageResult>() {
+
+                    @Override
+                    public void onResponse(final CompelReadMessageResult jr, final APError error) {
+                        if (error == null) {
+                            final List<CompelReadMessageModel> models = CompelReadMessageModel
+                                    .createFrom(jr);
+                            MainHandler.getInstance().post(new Runnable() {
+                                @Override
+                                public void run() {
+                                    callback.onDone(models);
+                                }
+                            });
+                        } else {
+                            MainHandler.getInstance().post(new Runnable() {
+                                @Override
+                                public void run() {
+                                    callback.onException(error);
+                                }
+                            });
+                        }
+                    }
+                });
+    }
+
+    public void markCompelReadMessage(String serviceArticleId, final IAPCallback<Object> callback) {
+        String url = "http://result.eolinker" +
+                ".com/gN1zjDlc87a75d671a2d954f809ebcdd19e7698dc2478fa?uri=mark_alert_message";
+        asyncPOST(url, null, new IRQStringListener() {
+            @Override
+            public void onResponse(String result, final APError error) {
+                if (error == null) {
+                    MainHandler.getInstance().post(new Runnable() {
+                        @Override
+                        public void run() {
+                            callback.onDone(null);
+                        }
+                    });
+                } else {
+                    MainHandler.getInstance().post(new Runnable() {
+                        @Override
+                        public void run() {
+                            callback.onException(error);
+                        }
+                    });
+                }
+            }
+        });
     }
 
     /**
@@ -714,46 +772,46 @@ public class SystemBiz extends BaseBiz {
         String url = "http://result.eolinker" +
                 ".com/gN1zjDlc87a75d671a2d954f809ebcdd19e7698dc2478fa?uri=menus";
         asyncPOST(url, null, MenusResult.class, new IRQListener<MenusResult>() {
-                    @Override
-                    public void onResponse(MenusResult menus, final APError error) {
-                        if (error==null){
-                            final List<TMenuItem> list = convert2TMenuItems(menus);
-                            String netItems = JSON.toJSONString(list);
-                            String localItems = JSON.toJSONString(selectLocalMenus());
-                            boolean isUpdated = false;
-                            if (!TextUtils.equals(netItems,localItems)){
-                                insertOrUpdateLocalMenus(list);
-                                isUpdated = true;
-                            }else {
-                                isUpdated = false;
-                            }
-                            final boolean finalIsUpdated = isUpdated;
-                            MainHandler.getInstance().post(new Runnable() {
-                                @Override
-                                public void run() {
-                                    callback.onDone(finalIsUpdated);
-                                }
-                            });
-                        }else{
-                            MainHandler.getInstance().post(new Runnable() {
-                                @Override
-                                public void run() {
-                                    callback.onException(error);
-                                }
-                            });
-                        }
+            @Override
+            public void onResponse(MenusResult menus, final APError error) {
+                if (error == null) {
+                    final List<TMenuItem> list = convert2TMenuItems(menus);
+                    String netItems = JSON.toJSONString(list);
+                    String localItems = JSON.toJSONString(selectLocalMenus());
+                    boolean isUpdated = false;
+                    if (!TextUtils.equals(netItems, localItems)) {
+                        insertOrUpdateLocalMenus(list);
+                        isUpdated = true;
+                    } else {
+                        isUpdated = false;
                     }
+                    final boolean finalIsUpdated = isUpdated;
+                    MainHandler.getInstance().post(new Runnable() {
+                        @Override
+                        public void run() {
+                            callback.onDone(finalIsUpdated);
+                        }
+                    });
+                } else {
+                    MainHandler.getInstance().post(new Runnable() {
+                        @Override
+                        public void run() {
+                            callback.onException(error);
+                        }
+                    });
+                }
+            }
 
-                    private List<TMenuItem> convert2TMenuItems(MenusResult menus) {
-                        List<TMenuItem> items = new ArrayList<>();
-                        if (!Utils.isEmpty(menus.getItems())) {
-                            for (MenusResult.MenuItem mi : menus.getItems()) {
-                                items.add(TMenuItem.createFrom(mi));
-                            }
-                        }
-                        return items;
+            private List<TMenuItem> convert2TMenuItems(MenusResult menus) {
+                List<TMenuItem> items = new ArrayList<>();
+                if (!Utils.isEmpty(menus.getItems())) {
+                    for (MenusResult.MenuItem mi : menus.getItems()) {
+                        items.add(TMenuItem.createFrom(mi));
                     }
-                });
+                }
+                return items;
+            }
+        });
     }
 
     /**

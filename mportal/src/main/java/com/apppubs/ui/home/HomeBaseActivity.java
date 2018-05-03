@@ -4,7 +4,9 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.support.annotation.Nullable;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.widget.Toast;
@@ -14,19 +16,31 @@ import com.apppubs.AppManager;
 import com.apppubs.MportalApplication;
 import com.apppubs.bean.TMenuItem;
 import com.apppubs.bean.UserInfo;
+import com.apppubs.constant.APError;
+import com.apppubs.constant.URLs;
 import com.apppubs.d20.R;
 import com.apppubs.bean.App;
 import com.apppubs.bean.Weather;
 import com.apppubs.constant.Actions;
+import com.apppubs.model.IAPCallback;
+import com.apppubs.net.WMHHttpErrorCode;
+import com.apppubs.net.WMHRequestListener;
 import com.apppubs.ui.activity.BaseActivity;
+import com.apppubs.ui.activity.CompelMessageDialogActivity;
 import com.apppubs.ui.activity.FirstLoginActity;
 import com.apppubs.ui.activity.ViewCourier;
 import com.apppubs.ui.fragment.BaseFragment;
 import com.apppubs.service.DownloadAppService;
 import com.apppubs.util.FileUtils;
+import com.apppubs.util.JSONResult;
+import com.apppubs.util.JSONUtils;
 import com.apppubs.util.LogM;
 import com.apppubs.util.SharedPreferenceUtils;
+import com.apppubs.util.Utils;
 import com.orm.SugarRecord;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -145,8 +159,29 @@ public abstract class HomeBaseActivity extends BaseActivity {
 			}
 		}
 
-		mAppContext.showCompelMessageIfHave();
+		showCompelMessageIfHave();
 
+	}
+
+	public void showCompelMessageIfHave() {
+
+		mSystemBiz.loadCompelReadMessage(new IAPCallback<List<CompelReadMessageModel>>() {
+			@Override
+			public void onDone(List<CompelReadMessageModel> models) {
+				if (Utils.isEmpty(models)){
+					return;
+				}
+				ArrayList<CompelReadMessageModel> serializableList = new ArrayList<CompelReadMessageModel>(models);
+				Intent i = new Intent(mContext, CompelMessageDialogActivity.class);
+				i.putExtra(CompelMessageDialogActivity.EXTRA_DATAS, serializableList);
+				mContext.startActivity(i);
+			}
+
+			@Override
+			public void onException(APError error) {
+
+			}
+		});
 	}
 
 	@Override

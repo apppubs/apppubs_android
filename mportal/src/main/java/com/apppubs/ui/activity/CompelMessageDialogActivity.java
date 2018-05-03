@@ -15,8 +15,11 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
+import com.apppubs.constant.APError;
 import com.apppubs.d20.R;
 import com.apppubs.constant.URLs;
+import com.apppubs.model.IAPCallback;
+import com.apppubs.model.SystemBiz;
 import com.apppubs.ui.home.CompelReadMessageModel;
 import com.apppubs.util.JSONResult;
 
@@ -105,21 +108,13 @@ public class CompelMessageDialogActivity extends Activity implements View.OnClic
 		if (mDatas==null||index<0||index>=mDatas.size()){
 			return;
 		}
-		String url = String.format(URLs.URL_MARK_AS_READ_FOR_COMPEL_MESSAGE,URLs.baseURL,URLs.appCode,mDatas.get(index).getMessageId());
-
-		mRequestQueue.add(new StringRequest(url, new Response.Listener<String>() {
-
+		SystemBiz biz = SystemBiz.getInstance(this);
+		biz.markCompelReadMessage(mDatas.get(index).getMessageId(), new IAPCallback<Object>() {
 			@Override
-			public void onResponse(String response) {
-				JSONResult jr = JSONResult.compile(response);
-				System.out.print(jr.getResultMap());
-			}
-		}, new Response.ErrorListener() {
-
+			public void onDone(Object obj) {}
 			@Override
-			public void onErrorResponse(VolleyError error) {
-			}
-		}));
+			public void onException(APError error) {}
+		});
 	}
 
 	private void setWebViewContent(int index) {

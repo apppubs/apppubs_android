@@ -1,41 +1,26 @@
 package com.apppubs;
 
 import android.content.Context;
-import android.content.Intent;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.content.res.TypedArray;
 import android.graphics.Color;
-import android.support.annotation.Nullable;
-import android.util.Log;
 
 import com.apppubs.bean.App;
 import com.apppubs.bean.AppConfig;
 import com.apppubs.bean.Settings;
 import com.apppubs.bean.UserInfo;
 import com.apppubs.bean.http.AppInfoResult;
-import com.apppubs.constant.URLs;
 import com.apppubs.d20.R;
-import com.apppubs.ui.activity.CompelMessageDialogActivity;
-import com.apppubs.ui.home.CompelReadMessageModel;
 import com.apppubs.model.myfile.FileCacheManager;
 import com.apppubs.model.myfile.FileCacheManagerImpl;
 import com.apppubs.net.WMHHttpClient;
 import com.apppubs.net.WMHHttpClientDefaultImpl;
-import com.apppubs.net.WMHHttpErrorCode;
-import com.apppubs.net.WMHRequestListener;
 import com.apppubs.util.FileUtils;
-import com.apppubs.util.JSONResult;
-import com.apppubs.util.JSONUtils;
 import com.apppubs.util.LogM;
 import com.apppubs.util.Utils;
 
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import java.util.ArrayList;
 import java.util.Date;
-import java.util.List;
 
 /**
  * Created by zhangwen on 2017/2/22.
@@ -230,43 +215,6 @@ public class AppContext {
         return mHttpClient;
     }
 
-    public void showCompelMessageIfHave() {
-
-        getHttpClient().GET(URLs.URL_COMPEL_READ_LIST, new String[]{URLs.baseURL, URLs.appCode,
-                getCurrentUser().getUsername()}, new WMHRequestListener() {
-
-            @Override
-            public void onDone(JSONResult jsonResult, @Nullable WMHHttpErrorCode errorCode) {
-                if (errorCode == null) {
-                    if (jsonResult.code == 1) {
-                        String infoListJson = "";
-                        try {
-                            JSONObject jo = new JSONObject(jsonResult.result);
-                            infoListJson = jo.getString("infolist");
-                            Log.v("HomeBaseActivity", "infolist" + infoListJson);
-                            List<CompelReadMessageModel> l = JSONUtils.parseListFromJson
-                                    (infoListJson, CompelReadMessageModel.class);
-                            if (l.isEmpty()) {
-                                return;
-                            }
-                            ArrayList<CompelReadMessageModel> list = new
-                                    ArrayList<CompelReadMessageModel>(l);
-                            Intent i = new Intent(mContext, CompelMessageDialogActivity.class);
-                            i.putExtra(CompelMessageDialogActivity.EXTRA_DATAS, list);
-                            mContext.startActivity(i);
-                        } catch (JSONException e) {
-                            e.printStackTrace();
-                        }
-                    } else {
-//						Log.e("HomeBaseActivity",jsonResult.msg);
-                    }
-                } else {
-                    Log.e("HomeBaseActivity", errorCode.getMessage());
-                }
-            }
-        });
-    }
-
     public String getVersionString() {
         PackageInfo pInfo = null;
         try {
@@ -313,12 +261,13 @@ public class AppContext {
         return 0;
     }
 
-    public int getThemeColor(){
-        int themeColor ;
+    public int getThemeColor() {
+        int themeColor;
         int theme = getSettings().getTheme();
         // app配色
         if (theme < 4) {
-            TypedArray array = mContext.getTheme().obtainStyledAttributes(new int[] { R.attr.appDefaultColor });
+            TypedArray array = mContext.getTheme().obtainStyledAttributes(new int[]{R.attr
+                    .appDefaultColor});
             themeColor = array.getColor(0, 0x000000);
             array.recycle();
         } else {
