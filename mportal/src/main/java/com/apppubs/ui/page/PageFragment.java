@@ -104,7 +104,6 @@ public class PageFragment extends TitleMenuFragment implements OnClickListener, 
     private String mPageId;
 
     private FrameLayout mRootFL;//包含loading和RootLl
-    private AVLoadingIndicatorView mLoadingView;
     private LinearLayout mRootLl;//包含titlebar和contentRL
     private RelativeLayout mContentRL;//包含导航和滚动fragment或者ScrollView
     private ScrollTabs mScrollTabs;
@@ -231,21 +230,6 @@ public class PageFragment extends TitleMenuFragment implements OnClickListener, 
     }
 
     @Override
-    public void showLoadingView() {
-        mLoadingView.show();
-    }
-
-    @Override
-    public void hideLoadingView() {
-        mLoadingView.hide();
-    }
-
-    @Override
-    public void showErrorView() {
-        Toast.makeText(mContext, "加载失败！", Toast.LENGTH_SHORT).show();
-    }
-
-    @Override
     public String getPageId() {
         return mPageId;
     }
@@ -311,13 +295,6 @@ public class PageFragment extends TitleMenuFragment implements OnClickListener, 
 
         mRootFL = new FrameLayout(mContext);
         mRootFL.addView(mRootLl);
-        mLoadingView = new AVLoadingIndicatorView(mContext);
-        mLoadingView.setIndicator("BallBeatIndicator");
-        mLoadingView.setIndicatorColor(Color.parseColor("#C0C0C0"));
-        FrameLayout.LayoutParams loadingLP = new FrameLayout.LayoutParams(Utils.dip2px(mContext,
-                40), Utils.dip2px(mContext, 40));
-        loadingLP.gravity = Gravity.CENTER;
-        mRootFL.addView(mLoadingView, loadingLP);
     }
 
     private void parse(JSONObject info) throws JSONException {

@@ -48,11 +48,12 @@ public class PagePresenter {
 
     //private
     private void loadPage() {
-        mPageView.showLoadingView();
+        mPageView.showLoading();
         String pageId = mPageView.getPageId();
         mPageBiz.loadPage(pageId, new IAPCallback<PageModel>() {
             @Override
             public void onDone(final PageModel model) {
+                mPageView.hideLoading();
                 if (mPageModel != null && mPageModel.equals(model)) {
                     //不需要更新
                     LogM.log(PagePresenter.class, "is equal");
@@ -62,12 +63,12 @@ public class PagePresenter {
             }
 
             @Override
-            public void onException(APError excepCode) {
+            public void onException(final APError error) {
                 MainHandler.getInstance().post(new Runnable() {
                     @Override
                     public void run() {
-                        mPageView.hideLoadingView();
-                        mPageView.showErrorView();
+                        mPageView.hideLoading();
+                        mPageView.onError(error);
                     }
                 });
 
@@ -83,7 +84,7 @@ public class PagePresenter {
             public void run() {
                 mPageView.showTitleBar(model.getTitleBarModel());
                 mPageView.showContentView(model.getContent());
-                mPageView.hideLoadingView();
+                mPageView.hideLoading();
                 //显示地址
                 if (isAddressTitleBar(model)) {
                     AppManager manager = AppManager.getInstant(mContext);

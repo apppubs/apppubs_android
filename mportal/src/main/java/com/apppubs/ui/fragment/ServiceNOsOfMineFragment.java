@@ -100,7 +100,6 @@ public class ServiceNOsOfMineFragment extends BaseFragment implements OnClickLis
         mLv = new ListView(mContext);
         mLv.setDivider(null);
         mLv.setSelector(R.drawable.sel_common_item);
-        mLv.setBackgroundColor(getResources().getColor(R.color.window_color));
         rootView.addView(mLv);
         mRootView = rootView;
     }

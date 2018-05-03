@@ -11,6 +11,7 @@ import com.apppubs.constant.APError;
 import com.apppubs.constant.APErrorCode;
 import com.apppubs.constant.URLs;
 import com.apppubs.net.WMHHttpClient;
+import com.apppubs.ui.activity.MainHandler;
 import com.apppubs.util.LogM;
 
 import java.util.HashMap;
@@ -35,13 +36,25 @@ public class PageBiz extends BaseBiz implements IPageBiz  {
         asyncPOST(getUrl(pageId), new HashMap<String, String>(), new IRQStringListener() {
 
             @Override
-            public void onResponse(String result, APError error) {
+            public void onResponse(String result, final APError error) {
                 if (error == null) {
                     LogM.log(this.getClass(), "请求page json：" + result);
-                    PageModel model = new PageModel(mContext, result);
-                    callback.onDone(model);
+                    final PageModel model = new PageModel(mContext, result);
+
+                    MainHandler.getInstance().post(new Runnable() {
+                        @Override
+                        public void run() {
+                            callback.onDone(model);
+                        }
+                    });
                 } else {
-                    callback.onException(new APError(APErrorCode.GENERAL_ERROR, "系统异常！"));
+                    MainHandler.getInstance().post(new Runnable() {
+                        @Override
+                        public void run() {
+                            callback.onException(error);
+                        }
+                    });
+
                 }
             }
         });
