@@ -245,7 +245,7 @@ public class SettingFragment extends TitleMenuFragment implements OnClickListene
 		Intent intent = null;
 		switch (v.getId()) {
 		case R.id.themeSwitch_blue_rl:
-//			startActivity(new Intent(mApp, ChangTextSizeActivity.class));
+//			startContainerActivity(new Intent(mApp, ChangTextSizeActivity.class));
 			break;
 		case R.id.settings_cache:
 			if (mCacheTv.getText().equals("0.00B")) {
@@ -281,7 +281,7 @@ public class SettingFragment extends TitleMenuFragment implements OnClickListene
 		// intent.putExtra(WebAppActivity.EXTRA_NAME_TITLE, "应用推荐");
 		// intent.putExtra(WebAppActivity.EXTRA_NAME_URL,
 		// "http://www.baidu.com/");
-		// this.startActivity(intent);
+		// this.startContainerActivity(intent);
 		// overridePendingTransition(R.anim.slide_in_from_right,
 		// R.anim.slide_out_to_left);
 		// break;
@@ -369,7 +369,7 @@ public class SettingFragment extends TitleMenuFragment implements OnClickListene
 			pw.showAtLocation(mTitleBar, Gravity.CENTER, 0, 0);
 			break;
 		case R.id.settings_welcome:
-			ContainerActivity.startActivity(mHostActivity, WelcomeFragment.class,true);
+			ContainerActivity.startContainerActivity(mHostActivity, WelcomeFragment.class,true);
 			break;
 		case R.id.setting_custom_webapp_url_ip_rl:
 			startActivity(CustomWebAppUrlProtocolAndIpActivity.class);

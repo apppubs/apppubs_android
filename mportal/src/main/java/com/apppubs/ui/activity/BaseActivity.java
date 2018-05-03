@@ -459,16 +459,16 @@ public abstract class BaseActivity extends FragmentActivity implements OnClickLi
 
 	}
 
-	protected void startActivity(Class<?> clazz) {
-		startActivity(clazz, null);
+	public static void startActivity(Context context, Class<?> clazz) {
+		startActivity(context, clazz, null);
 	}
 
-	protected void startActivity(Class<?> clazz, Bundle extras) {
-		Intent i = new Intent(this, clazz);
+	public static void startActivity(Context context, Class<?> clazz, Bundle extras) {
+		Intent i = new Intent(context, clazz);
 		if (extras != null) {
 			i.putExtras(extras);
 		}
-		startActivity(i);
+		context.startActivity(i);
 	}
 
 	/**

@@ -99,8 +99,8 @@ public class ConversationListFragment extends BaseFragment implements View.OnCli
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.pop_msg_record_add_service_ll:
-                ContainerActivity.startActivity(mContext, ServiceNoSubscribeFragment.class, null, "添加服务号");
-//			ContainerActivity.startActivity(mContext, ServiceNoListOfMineFragment.class, null, "我关注的服务号");
+                ContainerActivity.startContainerActivity(mContext, ServiceNoSubscribeFragment.class, null, "添加服务号");
+//			ContainerActivity.startContainerActivity(mContext, ServiceNoListOfMineFragment.class, null, "我关注的服务号");
                 mMenuPW.dismiss();
                 break;
             case R.id.pop_msg_record_add_chat_ll:

@@ -83,11 +83,11 @@ public class LoginActivity extends BaseActivity implements AsyTaskCallback {
 		super.onClick(v);
 		switch (v.getId()) {
 		// case R.id.login_wangjipassword:
-		// startActivity(new Intent(LoginActivity.this,
+		// startContainerActivity(new Intent(LoginActivity.this,
 		// ForgetPasswordActivity.class));
 		// break;
 //		case R.id.login_register:
-//			startActivity(new Intent(LoginActivity.this, RegisterActivity.class));
+//			startContainerActivity(new Intent(LoginActivity.this, RegisterActivity.class));
 //			break;
 		case R.id.login_login:
 			usernameT = username.getText().toString().trim();
@@ -116,12 +116,12 @@ public class LoginActivity extends BaseActivity implements AsyTaskCallback {
 		case R.id.login_reg_tv:
 			Bundle bundle = new Bundle();
 			bundle.putString(WebAppFragment.ARGUMENT_STRING_URL, mRegurl);
-			ContainerActivity.startActivity(this, WebAppFragment.class, bundle, "注册");
+			ContainerActivity.startContainerActivity(this, WebAppFragment.class, bundle, "注册");
 			break;
 		case R.id.login_forget_pw_tv:
 			Bundle forgetBundle = new Bundle();
 			forgetBundle.putString(WebAppFragment.ARGUMENT_STRING_URL, mForgetPwdUrl);
-			ContainerActivity.startActivity(this, WebAppFragment.class, forgetBundle, "忘记密码");
+			ContainerActivity.startContainerActivity(this, WebAppFragment.class, forgetBundle, "忘记密码");
 			break;
 		default:
 			break;

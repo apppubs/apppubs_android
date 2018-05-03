@@ -1,10 +1,5 @@
 package com.apppubs.ui.fragment;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.Locale;
-import java.util.Map;
-
 import android.app.Activity;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -16,183 +11,152 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.Toast;
 
-import com.android.volley.Response.ErrorListener;
-import com.android.volley.Response.Listener;
-import com.android.volley.VolleyError;
-import com.android.volley.toolbox.StringRequest;
-import com.apppubs.bean.TServiceNo;
 import com.apppubs.AppContext;
+import com.apppubs.bean.http.ServiceNOInfoResult;
 import com.apppubs.constant.APError;
 import com.apppubs.model.IAPCallback;
+import com.apppubs.presenter.ServiceNOInfoPresenter;
+import com.apppubs.ui.ICommonDataView;
+import com.apppubs.ui.activity.ServiceNOArticlesActivity;
 import com.apppubs.util.DateUtils;
 import com.apppubs.d20.R;
 import com.apppubs.ui.activity.ContainerActivity;
-import com.apppubs.constant.URLs;
-import com.apppubs.util.JSONResult;
 
 /**
  * 服务号详情
- * 
+ * <p>
  * Copyright (c) heaven Inc.
- * 
+ * <p>
  * Original Author: zhangwen
- * 
+ * <p>
  * ChangeLog: 2015年4月1日 by zhangwen create
- * 
  */
-public class ServiceNoInfoFragment extends BaseFragment {
+public class ServiceNoInfoFragment extends BaseFragment implements
+		ICommonDataView<ServiceNOInfoResult> {
 
-	public static final String ARGS_STRING_SERVICE_NO_ID = "service_no_id";
+    public static final String ARGS_STRING_SERVICE_NO_ID = "service_no_id";
 
-	private String mServiceNoId;
-	private TServiceNo mServiceNo;
-	private Button attentionBt;
-	private LinearLayout progressBar;
-	private boolean isSubscribed;
-	
-	@Override
-	protected View initLayout(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-		super.onCreateView(inflater, container, savedInstanceState);
-		mRootView = mInflater.inflate(R.layout.frg_serviceno_info, null);
-		Bundle args = getArguments();
-		mServiceNoId = args.getString(ARGS_STRING_SERVICE_NO_ID);
-		progressBar = (LinearLayout) mRootView.findViewById(R.id.service_no_progress_ll);
-		attentionBt = (Button) mRootView.findViewById(R.id.service_no_attention);
+    private String mServiceNoId;
+    private ServiceNOInfoResult mData;
+    private Button attentionBt;
+    private LinearLayout progressBar;
+    private boolean isSubscribed;
+
+    private ServiceNOInfoPresenter mPresenter;
+
+    @Override
+    protected View initLayout(LayoutInflater inflater, ViewGroup container, Bundle
+			savedInstanceState) {
+        mRootView = mInflater.inflate(R.layout.frg_serviceno_info, null);
+        Bundle args = getArguments();
+        mServiceNoId = args.getString(ARGS_STRING_SERVICE_NO_ID);
+        progressBar = (LinearLayout) mRootView.findViewById(R.id.service_no_progress_ll);
+        attentionBt = (Button) mRootView.findViewById(R.id.service_no_attention);
 //		mServiceNo = mMsgBussiness.getServiceNoById(mServiceNoId);
-		registerClickListener();
-		return mRootView;
-	}
+        registerClickListener();
 
-	@Override
-	public void onResume() {
-		super.onResume();
-		String url = String.format(URLs.URL_SERVICE_NO,URLs.baseURL,URLs.appCode, mServiceNoId, AppContext.getInstance(mContext).getCurrentUser().getUsername());
-		mRequestQueue.add(new StringRequest(url, new Listener<String>() {
+        mPresenter = new ServiceNOInfoPresenter(mContext, this, mServiceNoId);
+        return mRootView;
+    }
 
-			@Override
-			public void onResponse(String response) {
-				JSONResult jr = JSONResult.compile(response);
-				mServiceNo = new TServiceNo();
-				Map<String, String> resultMap = null;
-				try {
-					resultMap = jr.getResultMap();
-					SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss",Locale.CHINA);
-					mServiceNo.setName(resultMap.get("service_name"));
-					mServiceNo.setPicURL(resultMap.get("service_picurl"));
-					mServiceNo.setDesc(resultMap.get("service_desc"));
-					mServiceNo.setCreateDate(sdf.parse(resultMap.get("service_thedate")));
-					mServiceNo.setType(Integer.parseInt(resultMap.get("service_flag")));
-					mServiceNo.setReceiverType(Integer.parseInt(resultMap.get("receive_flag")));
-					fillTextView();
-					if (mServiceNo.isAllowSubscribe()) {
-						setVisibilityOfViewByResId(mRootView, R.id.service_no_attention, View.VISIBLE);
-					}
-					
-					isSubscribed = resultMap.get("service_iforder").equals("1");
-					if (isSubscribed) {
-						attentionBt.setText("取消关注");
-					} else {
-						attentionBt.setText("关注");
-					}
-				} catch (ParseException e) {
-					e.printStackTrace();
-				}
-			}
-		}, new ErrorListener() {
-
-			@Override
-			public void onErrorResponse(VolleyError error) {
-				
-			}
-		}));
-	}
+    @Override
+    public void onResume() {
+        super.onResume();
+    }
 
 
-	private void registerClickListener() {
-		RelativeLayout seehistory = (RelativeLayout) mRootView.findViewById(R.id.service_no_history_rl);
-		seehistory.setOnClickListener(new OnClickListener() {
+    private void registerClickListener() {
+        RelativeLayout seehistory = (RelativeLayout) mRootView.findViewById(R.id
+				.service_no_history_rl);
+        seehistory.setOnClickListener(new OnClickListener() {
 
-			@Override
-			public void onClick(View arg0) {
-				Bundle b = new Bundle();
-				b.putString(ServiceNoInfoFragment.ARGS_STRING_SERVICE_NO_ID, mServiceNoId);
-				ContainerActivity.startActivity(mHostActivity, ServiceNoInfoListFragement.class, b, "服务号历史消息");
-			}
-		});
+            @Override
+            public void onClick(View arg0) {
+                Bundle b = new Bundle();
+                b.putString(ServiceNoInfoFragment.ARGS_STRING_SERVICE_NO_ID, mServiceNoId);
+                ServiceNOArticlesActivity.startActivity(mHostActivity, ServiceNOArticlesActivity.class, b);
+            }
+        });
 
-		attentionBt.setOnClickListener(new OnClickListener() {
+        attentionBt.setOnClickListener(new OnClickListener() {
 
-			@Override
-			public void onClick(View arg0) {
-				progressBar.setVisibility(View.VISIBLE);
-				if (attentionBt.getText().equals("关注")) {
-					mMsgBussiness.getServiceAttention(mServiceNoId, AppContext.getInstance(mContext).getCurrentUser().getUsername(),
-							new IAPCallback<String>() {
+            @Override
+            public void onClick(View arg0) {
+                progressBar.setVisibility(View.VISIBLE);
+                if (attentionBt.getText().equals("关注")) {
+                    mMsgBussiness.getServiceAttention(mServiceNoId, AppContext.getInstance
+									(mContext).getCurrentUser().getUsername(),
+                            new IAPCallback<String>() {
 
-								@Override
-								public void onException(APError excepCode) {
-								}
+                                @Override
+                                public void onException(APError excepCode) {
+                                }
 
-								@Override
-								public void onDone(String obj) {
-									progressBar.setVisibility(View.GONE);
-									/**
-									 * "result": "1"} rest:0失败，1成功，2已经关注
-									 */
-									System.out.println("关注过此公众。。。" + obj);
-									if (obj.equals("0")) {
-										Toast.makeText(getActivity(), "关注失败！", Toast.LENGTH_SHORT).show();
-									} else if (obj.equals("1")) {
-										attentionBt.setText("取消关注");
-									} else if (obj.equals("2")) {
-										attentionBt.setText("取消关注");
-										Toast.makeText(getActivity(), "您已经关注过此公众号！", Toast.LENGTH_SHORT).show();
-									}
-								}
-							});
-				} else {// 取消关注
-					mMsgBussiness.getServiceUnAttention(mServiceNoId, AppContext.getInstance(mContext).getCurrentUser().getUsername(),
-							new IAPCallback<String>() {
+                                @Override
+                                public void onDone(String obj) {
+                                    progressBar.setVisibility(View.GONE);
+                                    /**
+                                     * "result": "1"} rest:0失败，1成功，2已经关注
+                                     */
+                                    System.out.println("关注过此公众。。。" + obj);
+                                    if (obj.equals("0")) {
+                                        Toast.makeText(getActivity(), "关注失败！", Toast
+												.LENGTH_SHORT).show();
+                                    } else if (obj.equals("1")) {
+                                        attentionBt.setText("取消关注");
+                                    } else if (obj.equals("2")) {
+                                        attentionBt.setText("取消关注");
+                                        Toast.makeText(getActivity(), "您已经关注过此公众号！", Toast
+												.LENGTH_SHORT).show();
+                                    }
+                                }
+                            });
+                } else {// 取消关注
+                    mMsgBussiness.getServiceUnAttention(mServiceNoId, AppContext.getInstance
+									(mContext).getCurrentUser().getUsername(),
+                            new IAPCallback<String>() {
 
-								@Override
-								public void onException(APError excepCode) {
-								}
+                                @Override
+                                public void onException(APError excepCode) {
+                                }
 
-								@Override
-								public void onDone(String obj) {
-									progressBar.setVisibility(View.GONE);
-									/**
-									 * {"result": "1"} result:0失败，1成功
-									 */
-									if (obj.equals("0")) {
-										Toast.makeText(getActivity(), "取消关注失败！", Toast.LENGTH_SHORT).show();
-									} else if (obj.equals("1")) {
-										attentionBt.setText("关注");
-										Toast.makeText(getActivity(), "取消关注成功！", Toast.LENGTH_SHORT).show();
-										mHostActivity.setResult(Activity.RESULT_OK);
-										mHostActivity.finish();
-									}
-								}
-							});
+                                @Override
+                                public void onDone(String obj) {
+                                    progressBar.setVisibility(View.GONE);
+                                    /**
+                                     * {"result": "1"} result:0失败，1成功
+                                     */
+                                    if (obj.equals("0")) {
+                                        Toast.makeText(getActivity(), "取消关注失败！", Toast.LENGTH_SHORT).show();
+                                    } else if (obj.equals("1")) {
+                                        attentionBt.setText("关注");
+                                        Toast.makeText(getActivity(), "取消关注成功！", Toast.LENGTH_SHORT).show();
+                                        mHostActivity.setResult(Activity.RESULT_OK);
+                                        mHostActivity.finish();
+                                    }
+                                }
+                            });
 
-				}
+                }
 
-			}
-		});
-	}
+            }
+        });
+    }
 
-	@Override
-	public void onActivityCreated(Bundle savedInstanceState) {
+    @Override
+    public void onActivityCreated(Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+        mPresenter.onCreate();
+    }
 
-		super.onActivityCreated(savedInstanceState);
+    @Override
+    public void setData(ServiceNOInfoResult data) {
+        mData = data;
 
-	}
-
-	private void fillTextView() {
-		fillTextView(mRootView, R.id.service_no_name_tv, mServiceNo.getName());
-		fillTextView(mRootView, R.id.service_no_des_tv, mServiceNo.getDesc());
-		String time = DateUtils.dateToStrLong(mServiceNo.getCreateDate());
-		fillTextView(mRootView, R.id.service_no_createdate_tv, "创建时间："+time);
-		fillImageView(mRootView, R.id.service_no_icon_iv, mServiceNo.getPicURL());
-	}
+        fillTextView(mRootView, R.id.service_no_name_tv, data.getName());
+        fillTextView(mRootView, R.id.service_no_des_tv, data.getDesc());
+        String time = DateUtils.dateToStrLong(data.getCreateTime());
+        fillTextView(mRootView, R.id.service_no_createdate_tv, "创建时间：" + time);
+        fillImageView(mRootView, R.id.service_no_icon_iv, data.getPicURL());
+    }
 }

@@ -42,7 +42,7 @@ public class LogsListActivity extends BaseActivity{
 				Bundle args = new Bundle();
 				args.putString(FilePreviewFragment.ARGS_STRING_FILE_LOCAL_PATH,mFileList.get(position).getAbsolutePath());
 				args.putBoolean(FilePreviewFragment.ARGS_BOOLEAN_SHARE_2_QQ, true);
-				ContainerActivity.startActivity(LogsListActivity.this, FilePreviewFragment.class, args, "文件预览");
+				ContainerActivity.startContainerActivity(LogsListActivity.this, FilePreviewFragment.class, args, "文件预览");
 			}
 		});
 		File[] files = getExternalFilesDir("logs").listFiles();

@@ -46,15 +46,15 @@ public abstract class  NewsInfoBaseActivity extends BaseActivity{
 		}else if(type.equals(TNewsInfo.NEWS_TYPE_SPECIALS)){
 			Bundle bundle = new Bundle();
 			bundle.putString(WebAppFragment.ARGUMENT_STRING_URL,params[0]);
-			ContainerActivity.startActivity(context, WebAppFragment.class,bundle);
+			ContainerActivity.startContainerActivity(context, WebAppFragment.class,bundle);
 		}else if(type.equals(TNewsInfo.NEWS_TYPE_URL)){
 			Bundle extras = new Bundle();
 			extras.putString(WebAppFragment.ARGUMENT_STRING_URL, params[0]);
-			ContainerActivity.startActivity(context, WebAppFragment.class,extras);
+			ContainerActivity.startContainerActivity(context, WebAppFragment.class,extras);
 		}else if(type.equals(TNewsInfo.NEWS_TYPE_FILE)){
 			Bundle args = new Bundle();
 			args.putString(FilePreviewFragment.ARGS_STRING_URL, params[0]);
-			ContainerActivity.startActivity(context, FilePreviewFragment.class, args, "文件预览");
+			ContainerActivity.startContainerActivity(context, FilePreviewFragment.class, args, "文件预览");
 		}
 	}
 	

@@ -453,7 +453,7 @@ public class MenuGroupsFragment extends HomeFragment implements OnClickListener{
 				if(!TextUtils.isEmpty(item.linkType)&&item.linkType.equals("http")){
 					Bundle bundle = new Bundle();
 					bundle.putString(WebAppFragment.ARGUMENT_STRING_URL, item.linkValue);
-					ContainerActivity.startActivity(mContext, WebAppFragment.class,bundle,"正文");
+					ContainerActivity.startContainerActivity(mContext, WebAppFragment.class,bundle,"正文");
 				}else if(!TextUtils.isEmpty(item.linkType)&&item.linkType.equals("info")){
 					String[] linkValueArr = item.linkValue.split(",");
 					Intent i = new Intent(mHostActivity,NewsInfoActivity.class);

@@ -3,13 +3,18 @@ package com.apppubs.ui.fragment;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
+import android.util.TypedValue;
+import android.view.Gravity;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -22,10 +27,12 @@ import com.apppubs.model.SystemBiz;
 import com.apppubs.ui.activity.BaseActivity;
 import com.apppubs.model.message.MsgBussiness;
 import com.apppubs.model.message.UserBussiness;
+import com.apppubs.ui.activity.ContainerActivity;
 import com.apppubs.ui.widget.TitleBar;
 import com.apppubs.util.Utils;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
+import com.wang.avi.AVLoadingIndicatorView;
 
 public class BaseFragment extends Fragment implements KeyEvent.Callback, OnClickListener {
 
@@ -40,8 +47,19 @@ public class BaseFragment extends Fragment implements KeyEvent.Callback, OnClick
     protected LayoutInflater mInflater;
     protected BaseActivity mHostActivity;
     protected Context mContext;
+
     protected ImageLoader mImageLoader;
     protected TitleBar mTitleBar;
+
+    /**
+     * 等待
+     */
+    private AVLoadingIndicatorView mLoadingView;
+
+    /**
+     * 空内容占位视图
+     */
+    private View mEmptyView;
 
     protected UserBussiness mUserBussiness;
     protected MsgBussiness mMsgBussiness;
@@ -50,6 +68,8 @@ public class BaseFragment extends Fragment implements KeyEvent.Callback, OnClick
     protected AppContext mAppContext;
 
     protected boolean needBack;
+
+    private String mTitle;
 
     @Override
     public void onAttach(Activity activity) {
@@ -67,27 +87,103 @@ public class BaseFragment extends Fragment implements KeyEvent.Callback, OnClick
     public final View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle
             savedInstanceState) {
         mInflater = inflater;
+
         mDefaultColor = BaseActivity.mDefaultColor;
         mTitleBar = initTitleBar();
-        if (mTitleBar!=null){
+
+        FrameLayout contentFL = new FrameLayout(mContext);
+        contentFL.addView(initLayout(inflater, container, savedInstanceState));
+        //content中加入等待图标
+        mLoadingView = initLoadingView();
+        FrameLayout.LayoutParams loadingLP = getLoadingLayoutParams();
+        contentFL.addView(mLoadingView, loadingLP);
+
+        mEmptyView = initEmptyView();
+        FrameLayout.LayoutParams emptyLP = new FrameLayout.LayoutParams(FrameLayout.LayoutParams
+                .WRAP_CONTENT, FrameLayout.LayoutParams.WRAP_CONTENT);
+        emptyLP.gravity = Gravity.CENTER;
+        contentFL.addView(mEmptyView);
+
+        View rootView = null;
+        if (mTitleBar != null) {
             LinearLayout ll = new LinearLayout(mContext);
             ll.setOrientation(LinearLayout.VERTICAL);
             LinearLayout.LayoutParams titleBarLl = new LinearLayout.LayoutParams(LinearLayout
-                    .LayoutParams.MATCH_PARENT, Utils.dip2px(mContext,50));
-            ll.addView(mTitleBar,titleBarLl);
-            ll.addView(initLayout(inflater, container,savedInstanceState));
-            return ll;
+                    .LayoutParams.MATCH_PARENT, Utils.dip2px(mContext, 50));
+            ll.addView(mTitleBar, titleBarLl);
+
+            LinearLayout.LayoutParams contentLP = new LinearLayout.LayoutParams(ViewGroup
+                    .LayoutParams.MATCH_PARENT, 0);
+            contentLP.weight = 1;
+            ll.addView(contentFL, contentLP);
+            rootView = ll;
+        } else {
+            rootView = contentFL;
         }
-        return  initLayout(inflater, container,savedInstanceState);
+
+        return rootView;
+    }
+
+    protected View initEmptyView() {
+        TextView emptyView = new TextView(mContext);
+        emptyView.setText(R.string.have_no_content);
+        emptyView.setTextSize(TypedValue.COMPLEX_UNIT_PX, mContext.getResources().getDimension(R
+                .dimen.item_text_size));
+        emptyView.setTextColor(mContext.getResources().getColor(R.color.common_text_gray));
+        emptyView.setGravity(Gravity.CENTER);
+        emptyView.setVisibility(View.GONE);
+        return emptyView;
+    }
+
+    @NonNull
+    private FrameLayout.LayoutParams getLoadingLayoutParams() {
+        FrameLayout.LayoutParams loadingLP = new FrameLayout.LayoutParams(Utils.dip2px(mContext,
+                40), Utils.dip2px(mContext, 40));
+        loadingLP.gravity = Gravity.CENTER;
+        return loadingLP;
+    }
+
+    private AVLoadingIndicatorView initLoadingView() {
+        AVLoadingIndicatorView mLoadingView = new AVLoadingIndicatorView(mContext);
+        mLoadingView.setIndicator("BallBeatIndicator");
+        mLoadingView.setIndicatorColor(Color.parseColor("#C0C0C0"));
+        mLoadingView.setVisibility(View.GONE);
+        return mLoadingView;
     }
 
     protected View initLayout(LayoutInflater inflater, ViewGroup container, Bundle
-            savedInstanceState){
+            savedInstanceState) {
         return null;
     }
 
-    protected TitleBar initTitleBar(){
+    protected TitleBar initTitleBar() {
         return null;
+    }
+
+    protected TitleBar getDefaultTitleBar() {
+        TitleBar titleBar = new TitleBar(mContext);
+        titleBar.setBackgroundColor(getThemeColor());
+        Bundle args = getArguments();
+        if (args != null) {
+            args.getString(ContainerActivity.EXTRA_STRING_TITLE);
+        }
+        float titleSize = mContext.getResources().getDimension(R.dimen.title_text_size);
+        titleBar.setTitleTextSize(TypedValue.COMPLEX_UNIT_PX, titleSize);
+        titleBar.setTitle(mTitle);
+
+        if (needBack) {
+            titleBar.setLeftBtnClickListener(this);
+            titleBar.setLeftImageResource(R.drawable.top_back_btn);
+        }
+        return titleBar;
+    }
+
+    public void setTitle(String title) {
+        mTitle = title;
+    }
+
+    public String getTitle() {
+        return mTitle;
     }
 
     @Override
@@ -146,7 +242,7 @@ public class BaseFragment extends Fragment implements KeyEvent.Callback, OnClick
     public void startActivity(Intent intent) {
         super.startActivity(intent);
         getActivity().overridePendingTransition(R.anim.slide_in_from_right, R.anim
-				.slide_out_to_left);
+                .slide_out_to_left);
     }
 
     /**
@@ -194,11 +290,11 @@ public class BaseFragment extends Fragment implements KeyEvent.Callback, OnClick
         startActivity(intent);
     }
 
-    protected DisplayImageOptions getDefaultImageLoaderOptions(){
+    protected DisplayImageOptions getDefaultImageLoaderOptions() {
         return mHostActivity.getDefaultImageLoaderOption();
     }
 
-    protected int getThemeColor(){
+    protected int getThemeColor() {
         return mAppContext.getThemeColor();
     }
 
@@ -207,15 +303,31 @@ public class BaseFragment extends Fragment implements KeyEvent.Callback, OnClick
         mHostActivity.onClick(v);
     }
 
-    public void setNeedBack(boolean need){
+    public void setNeedBack(boolean need) {
         this.needBack = need;
     }
 
-    public boolean getNeedBack(){
+    public boolean getNeedBack() {
         return this.needBack;
     }
 
-    public void onError(APError error){
+    public void onError(APError error) {
         mHostActivity.getErrorHandler().onError(error);
+    }
+
+    public void showLoading() {
+        mLoadingView.setVisibility(View.VISIBLE);
+    }
+
+    public void hideLoading() {
+        mLoadingView.setVisibility(View.GONE);
+    }
+
+    public void showEmptyView(){
+        mEmptyView.setVisibility(View.VISIBLE);
+    }
+
+    public void hideEmptyView(){
+        mEmptyView.setVisibility(View.GONE);
     }
 }

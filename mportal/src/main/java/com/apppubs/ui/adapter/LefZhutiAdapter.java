@@ -90,7 +90,7 @@ public class LefZhutiAdapter extends BaseAdapter {
 //				@Override
 //				public void onClick(View arg0) {
 //					// TODO Auto-generated method stub
-//					context.startActivity(new Intent(context, BodyZhuanTi.class));
+//					context.startContainerActivity(new Intent(context, BodyZhuanTi.class));
 //				}
 //			});
 
@@ -151,7 +151,7 @@ public class LefZhutiAdapter extends BaseAdapter {
 //					@Override
 //					public void onClick(View arg0) {
 //						// TODO Auto-generated method stub
-//						context.startActivity(new Intent(context,
+//						context.startContainerActivity(new Intent(context,
 //								BodyZhuanTi.class));
 //					}
 //				});

@@ -31,7 +31,7 @@ public class CustomWebAppUrlProtocolAndIpActivity extends BaseActivity implement
 		super.onCreate(savedInstanceState);
 //		Uri u = Uri.parse("sdicoa://");
 //		Intent i = new Intent(Intent.ACTION_VIEW , u);
-//		startActivity(i);
+//		startContainerActivity(i);
 		setContentView(R.layout.act_custom_web_app_url_ip);
 		mLinearLayout = (LinearLayout) findViewById(R.id.item_container_ll);
 		mCustomIpMap = (Map<String, String>) FileUtils.readObj(mApp, CUSTOM_WEB_APP_URL_SERIALIZED_FILE_NAME);

@@ -27,7 +27,7 @@
                     android:layout_height="wrap_content"
                     android:layout_alignParentLeft="true"
                     android:gravity="center_vertical"
-                    android:text=""
+                    android:text="--"
                     android:textColor="@color/common_text"
                     android:textSize="@dimen/item_text_size_big"
                     android:textStyle="bold" />
@@ -41,7 +41,7 @@
                     android:layout_centerHorizontal="true"
                     android:layout_marginTop="10dp"
                     android:gravity="center_vertical"
-                    android:text="创建时间：2014-09-08"
+                    android:text="创建时间：--"
                     android:textColor="@color/common_text_gray"
                     android:textSize="@dimen/item_text_size_small" />
 
@@ -88,7 +88,7 @@
                     android:layout_marginLeft="10dp"
                     android:layout_toRightOf="@id/textView1"
                     android:gravity="center_vertical"
-                    android:text="描述"
+                    android:text="--"
                     android:textColor="@color/common_text_gray"
                     android:textSize="@dimen/item_text_size" />
             </RelativeLayout>

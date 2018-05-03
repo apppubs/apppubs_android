@@ -57,11 +57,11 @@ public class ChannelSpecialsFragment extends ChannelFragment implements AsyTaskC
 //				
 //				intent.putExtra(NewsVideoInfoActivity.EXTRA_STRING_NAME_ID, video.getInfoId());
 //				intent.putExtra(NewsVideoInfoActivity.EXTRA_STRING_NAME_CHANNELCODE, mChannelCode);
-//				getActivity().startActivity(intent);
+//				getActivity().startContainerActivity(intent);
 				NewsSpecialsInfo specials = mAdapter.getItem(position-1);
 				Bundle bundle = new Bundle();
 				bundle.putString(WebAppFragment.ARGUMENT_STRING_URL,specials.getUrl());
-				ContainerActivity.startActivity(mContext, WebAppFragment.class,bundle,null);
+				ContainerActivity.startContainerActivity(mContext, WebAppFragment.class,bundle,null);
 			}
 		});
 		mLv.setCommonListViewListener(new CommonListViewListener() {

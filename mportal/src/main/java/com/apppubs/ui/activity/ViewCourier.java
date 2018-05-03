@@ -28,7 +28,7 @@ import com.apppubs.ui.fragment.ChannelsSlideFragment;
 import com.apppubs.ui.fragment.ChannelsSquareFragment;
 import com.apppubs.ui.fragment.CollectionFragment;
 import com.apppubs.ui.fragment.CommonFragmentFactory;
-import com.apppubs.ui.fragment.ConversationFragment;
+import com.apppubs.ui.fragment.ServiceNOsOfMineFragment;
 import com.apppubs.ui.fragment.ExceptionFragment;
 import com.apppubs.ui.fragment.HistoryFragment;
 import com.apppubs.ui.fragment.MenuGroupsFragment;
@@ -109,7 +109,7 @@ public class ViewCourier {
     public void startSettingView(Context context, String menuId) {
         Bundle args = new Bundle();
         args.putString(TitleMenuFragment.ARGS_MENU_ID, menuId);
-        ContainerActivity.startActivity(context, SettingFragment.class, args, "设置");
+        ContainerActivity.startContainerActivity(context, SettingFragment.class, args, "设置");
     }
 
     public void execute(int action) {
@@ -146,7 +146,7 @@ public class ViewCourier {
             Bundle args = new Bundle();
             args.putString(WebAppFragment.ARGUMENT_STRING_URL, url);
             frg.setArguments(args);
-            ContainerActivity.startActivity(context, WebAppFragment.class, args);
+            ContainerActivity.startContainerActivity(context, WebAppFragment.class, args);
         } else if (url.matches("apppubs:\\/\\/newsinfo\\/[A-Z0-9]*\\/[A-Za-z0-9]*\\/[A-Za-z0-9" +
                 "]*")) {//新闻正文
             String[] arr = StringUtils.getPathParams(url);
@@ -158,7 +158,7 @@ public class ViewCourier {
                     (arr[1]));
             Bundle args = new Bundle();
             args.putString(ChannelFragment.ARG_KEY, arr[2]);
-            ContainerActivity.startActivity(context, cf.getClass(), args);
+            ContainerActivity.startContainerActivity(context, cf.getClass(), args);
         } else if (url.matches("apppubs://channelgroup/[0-9?&=a-zA-Z]*")) {//频道组
             String[] arr = StringUtils.getPathParams(url);
             String layout = StringUtils.getQueryParameter(url, "layout");
@@ -170,7 +170,7 @@ public class ViewCourier {
             }
             Bundle args = new Bundle();
             args.putString(ChannelsFragment.ARGUMENT_NAME_CHANNELTYPEID, arr[1]);
-            ContainerActivity.startActivity(context, frg.getClass(), args);
+            ContainerActivity.startContainerActivity(context, frg.getClass(), args);
         } else if (url.matches("apppubs:\\/\\/page\\/[\\S]*")) {
             PageFragment pageF = new PageFragment();
             String[] pathParams = StringUtils.getPathParams(url);
@@ -182,23 +182,23 @@ public class ViewCourier {
             }
             args.putString(PageFragment.EXTRA_STRING_NAME_PAGE_ID, pathParams[1]);
             args.putString(ContainerActivity.EXTRA_STRING_TITLE, title);
-            ContainerActivity.startActivity(context, pageF.getClass(), args);
+            ContainerActivity.startContainerActivity(context, pageF.getClass(), args);
         } else if (url.matches("apppubs:\\/\\/addressbook[\\S]*")) {
             String rootSuperId = StringUtils.getQueryParameter(url, "rootsuperid");
             Bundle args = new Bundle();
             args.putString(AddressBookFragement.ARGS_ROOT_DEPARTMENT_SUPER_ID, rootSuperId);
             args.putBoolean(ContainerActivity.EXTRA_BOOLEAN_IS_FULLSCREEN,true);
-            ContainerActivity.startActivity(context, AddressBookFragement.class, args);
+            ContainerActivity.startContainerActivity(context, AddressBookFragement.class, args);
         } else if (url.matches("apppubs:\\/\\/setting[\\S]*")) {
             String title = StringUtils.getQueryParameter(url, "title");
-            ContainerActivity.startActivity(context, SettingFragment.class, null, title);
+            ContainerActivity.startContainerActivity(context, SettingFragment.class, null, title);
         } else if (url.matches("apppubs:\\/\\/favorite[\\S]*")) {
             CollectionFragment frg = new CollectionFragment();
-            ContainerActivity.startActivity(context, frg.getClass());
+            ContainerActivity.startContainerActivity(context, frg.getClass());
         } else if (url.matches("apppubs:\\/\\/message[\\S]*")) {
-            ContainerActivity.startActivity(context, MsgRecordListFragment.class);
+            ContainerActivity.startContainerActivity(context, MsgRecordListFragment.class);
         } else if (url.matches("apppubs:\\/\\/history_message[\\S]*")) {
-            ContainerActivity.startActivity(context, HistoryFragment.class);
+            ContainerActivity.startContainerActivity(context, HistoryFragment.class);
         } else if (url.matches("apppubs:\\/\\/baol[\\S]*")) {
             Intent intent = new Intent(context, BaoliaoActivity.class);
             context.startActivity(intent);
@@ -220,7 +220,9 @@ public class ViewCourier {
             context.startActivity(intent);
         } else if (url.startsWith("apppubs://service_no")) {
             String title = StringUtils.getQueryParameter(url, "title");
-            ContainerActivity.startActivity(context, ConversationFragment.class, null, title);
+            Bundle args = new Bundle();
+            args.putBoolean(ContainerActivity.EXTRA_BOOLEAN_IS_FULLSCREEN,true);
+            ContainerActivity.startContainerActivity(context, ServiceNOsOfMineFragment.class, args, title);
 
         } else if (url.startsWith("tel:")) {
             String str[] = url.split(":");
@@ -249,7 +251,7 @@ public class ViewCourier {
             String title = StringUtils.getQueryParameter(url, "title");
             Bundle args = new Bundle();
             args.putString(ContainerActivity.EXTRA_STRING_TITLE, title);
-            ContainerActivity.startActivity(context, MyFileFragment.class, args);
+            ContainerActivity.startContainerActivity(context, MyFileFragment.class, args);
         } else if (url.startsWith("hxLink://")) {
             String username = AppContext.getInstance(context).getCurrentUser().getUsername();
             String password = AppContext.getInstance(context).getCurrentUser().getPassword();
@@ -345,14 +347,14 @@ public class ViewCourier {
             args.putString(ContainerActivity.EXTRA_STRING_TITLE, item.getName());
             args.putString(WebAppFragment.ARGUMENT_STRING_MORE_MENUS, item.getWebAppMenus());
             args.putString(ChannelsFragment.ARGS_MENU_ID, item.getId());
-            ContainerActivity.startActivity(mHomeActivity, WebAppFragment.class, args);
+            ContainerActivity.startContainerActivity(mHomeActivity, WebAppFragment.class, args);
         } else if (uri.equals(TMenuItem.MENU_URL_WEIBO) && type == TMenuItem
                 .MENU_LOCATION_PRIMARY) {// 微博界面
             frg = CommonFragmentFactory.getFragment(CommonFragmentFactory.TYPE_WEIBO);
             mFragmentsMap.put(item, frg);
             mHomeActivity.changeContent(frg);
         } else if (uri.equals(TMenuItem.MENU_URL_WEIBO)) {
-            ContainerActivity.startActivity(mHomeActivity, WeiBoFragment.class, null, item
+            ContainerActivity.startContainerActivity(mHomeActivity, WeiBoFragment.class, null, item
                     .getName());
         } else if (uri.contains("$qrcode") || uri.startsWith("apppubs://qrcode")) {// 二维码
             intent = new Intent(mHomeActivity, CaptureActivity.class);
@@ -385,7 +387,7 @@ public class ViewCourier {
                 mFragmentsMap.put(item, frg);
                 mHomeActivity.changeContent(frg);
             } else {
-                ContainerActivity.startActivity(mHomeActivity, frg.getClass(), args, item.getName
+                ContainerActivity.startContainerActivity(mHomeActivity, frg.getClass(), args, item.getName
                         ());
             }
 
@@ -398,23 +400,23 @@ public class ViewCourier {
             mHomeActivity.changeContent(frg);
             // mActivity.changeContent(new PaperFragment());
             // intent = new Intent(mActivity,PapperActivity.class);
-            // mActivity.startActivity(intent);
+            // mActivity.startContainerActivity(intent);
         } else if (uri.equals(TMenuItem.MENU_URL_HISTORY_MESSAGE) && type == TMenuItem
                 .MENU_LOCATION_PRIMARY) {// 推送消息
             frg = new HistoryFragment();
             mFragmentsMap.put(item, frg);
             mHomeActivity.changeContent(frg);
         } else if (uri.equals(TMenuItem.MENU_URL_HISTORY_MESSAGE)) {
-            ContainerActivity.startActivity(mHomeActivity, HistoryFragment.class, null, "历史消息");
+            ContainerActivity.startContainerActivity(mHomeActivity, HistoryFragment.class, null, "历史消息");
         } else if ((uri.equals(TMenuItem.MENU_URL_MESSAGE) || uri.startsWith("apppubs://message")
         ) && type == TMenuItem.MENU_LOCATION_PRIMARY) {
-//            frg = new ConversationFragment();
+//            frg = new ServiceNOsOfMineFragment();
             frg = new ConversationListFragment();
             mFragmentsMap.put(item, frg);
             mHomeActivity.changeContent(frg);
 
         } else if (uri.equals(TMenuItem.MENU_URL_MESSAGE) || uri.startsWith("apppubs://message")) {
-            ContainerActivity.startActivity(mHomeActivity, ConversationFragment.class, null, item
+            ContainerActivity.startContainerActivity(mHomeActivity, ServiceNOsOfMineFragment.class, null, item
                     .getName());
         } else if (uri.equals(TMenuItem.MENU_URL_PIC)) {// 图片
             frg = new ChannelPictureFragment();
@@ -447,7 +449,7 @@ public class ViewCourier {
             mHomeActivity.changeContent(frg);
         } else if (uri.equals(TMenuItem.MENU_URL_FAVORITE)) {// 收藏
             frg = new CollectionFragment();
-            ContainerActivity.startActivity(mHomeActivity, frg.getClass(), null, item.getName());
+            ContainerActivity.startContainerActivity(mHomeActivity, frg.getClass(), null, item.getName());
         } else if (uri.equals("app:{$vote}")) {// 投票
             intent = new Intent(mHomeActivity, VoteActivity.class);
             mHomeActivity.startActivity(intent);
@@ -538,10 +540,11 @@ public class ViewCourier {
         } else if (uri.startsWith("apppubs://service_no")) {
             String title = StringUtils.getQueryParameter(uri, "title");
 
-            frg = new ConversationFragment();
+            frg = new ServiceNOsOfMineFragment();
             Bundle args = new Bundle();
             String[] params = StringUtils.getPathParams(uri);
             frg.setArguments(args);
+            frg.setTitle(title);
             mFragmentsMap.put(item, frg);
             mHomeActivity.changeContent(frg);
 
@@ -655,7 +658,7 @@ public class ViewCourier {
 //			@Override
 //			public void onClick(View v) {
 //				Intent intent = new Intent(mContext, WeatherActivity.class);
-//				mContext.startActivity(intent);
+//				mContext.startContainerActivity(intent);
 //			}
 //		});
 //

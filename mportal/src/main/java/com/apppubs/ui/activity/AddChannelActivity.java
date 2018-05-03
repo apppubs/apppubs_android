@@ -58,12 +58,12 @@ public class AddChannelActivity extends BaseActivity {
 					int position, long id) {
 			/*	Intent i = new Intent(AddChannelActivity.this,ChannelActivity.class);
 				i.putExtra(ChannelActivity.ARGUMENT_SERIALIZABLE_NAME_CHANNEL, (TNewsChannel)parent.getAdapter().getItem(position));
-				startActivity(i);*/
+				startContainerActivity(i);*/
 				TNewsChannel nc = (TNewsChannel)parent.getAdapter().getItem(position);
 				ChannelFragment cfrg = ChannelFragmentFactory.getChannelFragment(nc.getShowType());
 				Bundle args = new Bundle();
 				args.putString(ChannelFragment.ARG_KEY, nc.getCode());;
-				ContainerActivity.startActivity(AddChannelActivity.this, cfrg.getClass(),args,nc.getName());
+				ContainerActivity.startContainerActivity(AddChannelActivity.this, cfrg.getClass(),args,nc.getName());
 			}
 		});
         

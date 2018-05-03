@@ -443,7 +443,7 @@ public class ProgressWebView extends BridgeWebView {
 				if(url.contains("titlebarflag=0")){
 					args.putBoolean(BaseActivity.EXTRA_BOOLEAN_NEED_TITLEBAR, false);
 				}
-				ContainerActivity.startActivity(mContext, WebAppFragment.class, args);
+				ContainerActivity.startContainerActivity(mContext, WebAppFragment.class, args);
 				mCounterDownTimer.cancel();
 				return true;
 			}else if(url.startsWith(Constants.CUSTOM_SCHEMA_APPPUBS_NEWS+"://")){
@@ -523,7 +523,7 @@ public class ProgressWebView extends BridgeWebView {
 		if (url.endsWith(".txt")) {
 			args.putInt(FilePreviewFragment.ARGS_TEXT_CHARSET, FilePreviewFragment.TEXT_CHARSET_CBK);
 		}
-		ContainerActivity.startActivity(mContext, FilePreviewFragment.class, args, "文件预览");
+		ContainerActivity.startContainerActivity(mContext, FilePreviewFragment.class, args, "文件预览");
 	}
 
 	private void showDialog(String message) {

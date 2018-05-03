@@ -141,7 +141,7 @@ public class ChannelsSquareFragment extends ChannelsFragment implements OnClickL
 					ChannelFragment cfrg = ChannelFragmentFactory.getChannelFragment(nc.getShowType());
 					Bundle args = new Bundle();
 					args.putString(ChannelFragment.ARG_KEY, nc.getCode());;
-					ContainerActivity.startActivity(mHostActivity, cfrg.getClass(),args,nc.getName());
+					ContainerActivity.startContainerActivity(mHostActivity, cfrg.getClass(),args,nc.getName());
 					
 				}
 			}

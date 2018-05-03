@@ -1,12 +1,16 @@
 package com.apppubs.net;
 
+import android.os.Environment;
+
 import com.apppubs.constant.APError;
 import com.apppubs.constant.APErrorCode;
 
 import java.io.File;
 import java.io.IOException;
 import java.util.Map;
+import java.util.concurrent.TimeUnit;
 
+import okhttp3.Cache;
 import okhttp3.Call;
 import okhttp3.Callback;
 import okhttp3.FormBody;
@@ -21,9 +25,18 @@ import okhttp3.Response;
 public class APHttpClient implements IHttpClient {
 
     private OkHttpClient mOkHttpClient;
-
+    private final long cacheSize = 1024 * 1024 * 20;// 缓存文件最大限制大小20M
+    private Cache cache;
+    private static String cacheDirectory = Environment.getExternalStorageDirectory() + "/okttpcaches";
     public APHttpClient() {
-        mOkHttpClient = new OkHttpClient();
+
+        cache = new Cache(new File(cacheDirectory), cacheSize);
+        OkHttpClient.Builder builder = new OkHttpClient.Builder();
+        builder.connectTimeout(6, TimeUnit.SECONDS);
+        builder.readTimeout(10, TimeUnit.SECONDS);
+        builder.retryOnConnectionFailure(false);
+        builder.cache(cache);
+        mOkHttpClient = builder.build();
     }
 
     @Override

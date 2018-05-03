@@ -88,7 +88,7 @@ public class ServiceNoListOfMineFragment extends BaseFragment {
 							public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 								Bundle b = new Bundle();
 								b.putString(ServiceNoInfoFragment.ARGS_STRING_SERVICE_NO_ID, obj.get(position).getId());
-								ContainerActivity.startActivity(mContext, ServiceNoInfoListFragement.class, b,
+								ContainerActivity.startContainerActivity(mContext, ServiceNOArticlesFragment.class, b,
 										"服务号历史消息");
 							}
 						});
@@ -175,7 +175,7 @@ public class ServiceNoListOfMineFragment extends BaseFragment {
 
 			@Override
 			public void onClick(View v) {
-				ContainerActivity.startActivity(mContext, ServiceNoSubscribeFragment.class, null, "服务号");
+				ContainerActivity.startContainerActivity(mContext, ServiceNoSubscribeFragment.class, null, "服务号");
 			}
 		});
 

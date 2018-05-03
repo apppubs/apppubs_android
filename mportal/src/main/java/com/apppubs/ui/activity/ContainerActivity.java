@@ -48,7 +48,7 @@ public class ContainerActivity<T> extends BaseActivity {
 			mFrg = (BaseFragment) fragmentC.newInstance();
 			mFrg.setArguments(bundle);
 			mFrg.setNeedBack(true);
-
+			mFrg.setTitle(title);
 		} catch (ClassNotFoundException e) {
 
 			e.printStackTrace();
@@ -90,17 +90,17 @@ public class ContainerActivity<T> extends BaseActivity {
 	 * @param frgClass
 	 */
 	
-	public static void startActivity(Context context, Class<? extends BaseFragment> frgClass,boolean isFullScreen) {
+	public static void startContainerActivity(Context context, Class<? extends BaseFragment> frgClass, boolean isFullScreen) {
 		Bundle args = new Bundle();
 		args.putBoolean(EXTRA_BOOLEAN_IS_FULLSCREEN, isFullScreen);
-		startActivity(context, frgClass, args, null);
+		startContainerActivity(context, frgClass, args, null);
 	}
-	public static void startActivity(Context context, Class<? extends BaseFragment> frgClass) {
-		startActivity(context, frgClass, null, null);
+	public static void startContainerActivity(Context context, Class<? extends BaseFragment> frgClass) {
+		startContainerActivity(context, frgClass, null, null);
 	}
 
-	public static void startActivity(Context context, Class<? extends BaseFragment> frgClass, Bundle extras) {
-		startActivity(context, frgClass, extras, null);
+	public static void startContainerActivity(Context context, Class<? extends BaseFragment> frgClass, Bundle extras) {
+		startContainerActivity(context, frgClass, extras, null);
 	}
 
 	/**
@@ -111,8 +111,8 @@ public class ContainerActivity<T> extends BaseActivity {
 	 * @param extras
 	 * @param title
 	 */
-	public static void startActivity(Context context, Class<? extends BaseFragment> frgClass, Bundle extras,
-			String title) {
+	public static void startContainerActivity(Context context, Class<? extends BaseFragment> frgClass, Bundle extras,
+                                              String title) {
 		Intent i = new Intent(context, ContainerActivity.class);
 		i.putExtra(EXTRA_FRAGMENT_CLASS_NAME, frgClass.getName());
 

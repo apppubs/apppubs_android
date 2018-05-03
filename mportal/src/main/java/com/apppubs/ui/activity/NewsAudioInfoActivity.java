@@ -177,12 +177,12 @@ public class NewsAudioInfoActivity extends BaseActivity {
 //					if(localFile!=null){
 //						args.putString(FilePreviewFragment.ARGS_STRING_FILE_LOCAL_PATH, localFile.getSourcePath());
 //					}
-//					ContainerActivity.startActivity(NewsAudioInfoActivity.this, FilePreviewFragment.class, args, "文件预览");
+//					ContainerActivity.startContainerActivity(NewsAudioInfoActivity.this, FilePreviewFragment.class, args, "文件预览");
 //					return true;
 //				} else {
 //					Bundle bundle = new Bundle();
 //					bundle.putString(WebAppFragment.ARGUMENT_STRING_URL, url);
-//					ContainerActivity.startActivity(NewsAudioInfoActivity.this, WebAppFragment.class, bundle, "详情");
+//					ContainerActivity.startContainerActivity(NewsAudioInfoActivity.this, WebAppFragment.class, bundle, "详情");
 //					return true;
 //				}
 				return super.shouldOverrideUrlLoading(view, url);

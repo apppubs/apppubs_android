@@ -156,12 +156,12 @@ public class NewsInfoActivity extends BaseActivity implements AsyTaskCallback {
 					if(localFile!=null){
 						args.putString(FilePreviewFragment.ARGS_STRING_FILE_LOCAL_PATH, localFile.getSourcePath());
 					}
-					ContainerActivity.startActivity(NewsInfoActivity.this, FilePreviewFragment.class, args, "文件预览");
+					ContainerActivity.startContainerActivity(NewsInfoActivity.this, FilePreviewFragment.class, args, "文件预览");
 					return true;
 				} else {
 					Bundle bundle = new Bundle();
 					bundle.putString(WebAppFragment.ARGUMENT_STRING_URL, url);
-					ContainerActivity.startActivity(NewsInfoActivity.this, WebAppFragment.class, bundle, "详情");
+					ContainerActivity.startContainerActivity(NewsInfoActivity.this, WebAppFragment.class, bundle, "详情");
 					return true;
 				}
 

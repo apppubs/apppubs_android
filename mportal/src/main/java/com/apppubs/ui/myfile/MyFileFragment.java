@@ -82,7 +82,7 @@ public class MyFileFragment extends BaseFragment implements OnClickListener ,IMy
 
                 Bundle args = new Bundle();
                 args.putString(FilePreviewFragment.ARGS_STRING_URL, mDatas.get((int) parent.getItemIdAtPosition(position)).getFileUrl());
-                ContainerActivity.startActivity(mContext, FilePreviewFragment.class, args, "文件预览");
+                ContainerActivity.startContainerActivity(mContext, FilePreviewFragment.class, args, "文件预览");
             }
         });
         mLv.setCommonListViewListener(new CommonListViewListener() {

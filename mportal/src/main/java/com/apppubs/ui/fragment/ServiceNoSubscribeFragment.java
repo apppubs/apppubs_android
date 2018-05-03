@@ -66,7 +66,7 @@ public class ServiceNoSubscribeFragment extends BaseFragment {
 		// Bundle b = new Bundle();
 		// b.putString(ServiceNoInfoFragment.ARGS_STRING_SERVICE_NO_ID,
 		// mServiceNoList.get(position).getId());
-		// ContainerActivity.startActivity(mContext,
+		// ContainerActivity.startContainerActivity(mContext,
 		// ServiceNoInfoFragment.class, b, "服务号");
 		// }
 		// });
@@ -90,7 +90,7 @@ public class ServiceNoSubscribeFragment extends BaseFragment {
 					public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 						Bundle b = new Bundle();
 						b.putString(ServiceNoInfoFragment.ARGS_STRING_SERVICE_NO_ID, obj.get(position).getId());
-						ContainerActivity.startActivity(mContext, ServiceNoInfoFragment.class, b, "服务号");
+						ContainerActivity.startContainerActivity(mContext, ServiceNoInfoFragment.class, b, "服务号");
 					}
 				});
 			}

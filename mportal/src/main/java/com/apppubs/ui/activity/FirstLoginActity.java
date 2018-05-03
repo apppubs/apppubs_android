@@ -190,7 +190,7 @@ public class FirstLoginActity extends BaseActivity {
 
         switch (v.getId()) {
             case R.id.frist_login_reg:
-                startActivity(RegisterActivity.class);
+                BaseActivity.startActivity(this, RegisterActivity.class);
                 break;
             case R.id.frist_login_login:
                 login();

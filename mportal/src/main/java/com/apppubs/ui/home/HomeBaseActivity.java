@@ -59,7 +59,7 @@ public abstract class HomeBaseActivity extends BaseActivity {
 		//检测是否需要登录而且是否登录
 		if(mAppContext.getApp().getLoginFlag()!=App.LOGIN_INAPP&&TextUtils.isEmpty(mAppContext.getCurrentUser().getUserId())){
 			//跳转到登录界面
-			startActivity(FirstLoginActity.class);
+			BaseActivity.startActivity(mContext, FirstLoginActity.class);
 			finish();
 		}
 

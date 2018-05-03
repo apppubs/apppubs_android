@@ -8,7 +8,6 @@ import android.graphics.Bitmap;
 import android.graphics.drawable.Drawable;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
-import android.os.Build;
 import android.os.Bundle;
 import android.support.multidex.MultiDex;
 import android.support.multidex.MultiDexApplication;
@@ -23,19 +22,12 @@ import com.apppubs.d20.R;
 import com.apppubs.ui.adbook.UserInfoActivity;
 import com.apppubs.constant.Constants;
 import com.apppubs.ui.myfile.FilePreviewFragment;
-import com.apppubs.util.MathUtils;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
 import com.orm.SugarContext;
 
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -142,7 +134,7 @@ public class MportalApplication extends MultiDexApplication {
 				}
 				args.putString(FilePreviewFragment.ARGS_STRING_URL, fileUrl);
 				args.putString(FilePreviewFragment.ARGS_STRING_FILE_LOCAL_PATH,localPath);
-				ContainerActivity.startActivity(context, FilePreviewFragment.class, args, "文件预览");
+				ContainerActivity.startContainerActivity(context, FilePreviewFragment.class, args, "文件预览");
 				return true;
 			}
 			return false;

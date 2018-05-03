@@ -549,7 +549,7 @@ public class FilePreviewFragment extends BaseFragment {
 			public void onDone(AppConfig obj) {
 				Bundle extra = new Bundle();
 				extra.putString(WebAppFragment.ARGUMENT_STRING_URL, mAppContext.getApp().getDocumentReaderPageUrl());
-				ContainerActivity.startActivity(mContext, WebAppFragment.class, extra);
+				ContainerActivity.startContainerActivity(mContext, WebAppFragment.class, extra);
 			}
 		});
 	}

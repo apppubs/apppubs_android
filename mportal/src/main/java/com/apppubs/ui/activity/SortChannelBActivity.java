@@ -69,7 +69,7 @@ public class SortChannelBActivity extends BaseActivity {
 				ChannelFragment cfrg = ChannelFragmentFactory.getChannelFragment(nc.getShowType());
 				Bundle args = new Bundle();
 				args.putString(ChannelFragment.ARG_KEY, nc.getCode());
-				ContainerActivity.startActivity(SortChannelBActivity.this, cfrg.getClass(), args, nc.getName());
+				ContainerActivity.startContainerActivity(SortChannelBActivity.this, cfrg.getClass(), args, nc.getName());
 			}
 		});
 		adapter = new MyAdapter();
