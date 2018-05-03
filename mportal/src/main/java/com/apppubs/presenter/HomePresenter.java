@@ -3,14 +3,10 @@ package com.apppubs.presenter;
 import android.content.Context;
 
 import com.apppubs.bean.TMenuItem;
-import com.apppubs.bean.http.MenusResult;
 import com.apppubs.constant.APError;
 import com.apppubs.model.IAPCallback;
 import com.apppubs.model.SystemBiz;
 import com.apppubs.ui.home.IHomeBottomMenuView;
-import com.apppubs.util.LogM;
-import com.apppubs.util.Utils;
-import com.orm.SugarRecord;
 
 import java.util.List;
 
@@ -45,5 +41,4 @@ public class HomePresenter extends AbsPresenter<IHomeBottomMenuView> {
         showMenus();
         loadMenus();
     }
-
 }

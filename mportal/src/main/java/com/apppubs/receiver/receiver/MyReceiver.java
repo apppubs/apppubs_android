@@ -9,8 +9,8 @@ import android.util.Log;
 
 import com.apppubs.AppContext;
 import com.apppubs.bean.TMsg;
-import com.apppubs.ui.home.HomeBaseActivity;
 import com.apppubs.model.MsgController;
+import com.apppubs.ui.home.HomeBaseActivity;
 import com.apppubs.util.LogM;
 
 import org.json.JSONException;
@@ -40,8 +40,6 @@ public class MyReceiver extends BroadcastReceiver {
         if (JPushInterface.ACTION_REGISTRATION_ID.equals(intent.getAction())) {
             String regId = bundle.getString(JPushInterface.EXTRA_REGISTRATION_ID);
             Log.d(TAG, "[MyReceiver] 接收Registration Id : " + regId);
-            //send the Registration Id to your server...
-                        
         } else if (JPushInterface.ACTION_MESSAGE_RECEIVED.equals(intent.getAction())) {
         	Log.d(TAG, "[MyReceiver] 接收到推送下来的自定义消息: " + bundle.getString(JPushInterface.EXTRA_MESSAGE));
         	processCustomMessage(context, bundle);

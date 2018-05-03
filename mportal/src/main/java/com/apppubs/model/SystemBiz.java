@@ -794,4 +794,33 @@ public class SystemBiz extends BaseBiz {
                 new String[]{TMenuItem.MENU_LOCATION_PRIMARY + ""}, null, "SORT_ID", null);
     }
 
+    public void commitPushRegisterId(final String registerId, final IAPCallback callback) {
+        String url = "http://result.eolinker" +
+                ".com/gN1zjDlc87a75d671a2d954f809ebcdd19e7698dc2478fa?uri=commit_push_register_id";
+        Map<String, String> params = new HashMap<>();
+        params.put("registerid", registerId);
+        asyncPOST(url, params, new IRQStringListener() {
+            @Override
+            public void onResponse(final String result, final APError error) {
+                if (error == null){
+                    MainHandler.getInstance().post(new Runnable() {
+                        @Override
+                        public void run() {
+                            callback.onDone(result);
+                        }
+                    });
+
+                }else {
+                    MainHandler.getInstance().post(new Runnable() {
+                        @Override
+                        public void run() {
+                            callback.onException(error);
+                        }
+                    });
+
+                }
+            }
+        });
+    }
+
 }

@@ -23,8 +23,10 @@ import com.apppubs.bean.App;
 import com.apppubs.bean.Weather;
 import com.apppubs.constant.Actions;
 import com.apppubs.model.IAPCallback;
+import com.apppubs.model.SystemBiz;
 import com.apppubs.net.WMHHttpErrorCode;
 import com.apppubs.net.WMHRequestListener;
+import com.apppubs.presenter.HomePresenter;
 import com.apppubs.ui.activity.BaseActivity;
 import com.apppubs.ui.activity.CompelMessageDialogActivity;
 import com.apppubs.ui.activity.FirstLoginActity;
@@ -45,6 +47,7 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.List;
 
+import cn.jpush.android.api.JPushInterface;
 import io.rong.imkit.RongIM;
 
 public abstract class HomeBaseActivity extends BaseActivity {
@@ -75,11 +78,6 @@ public abstract class HomeBaseActivity extends BaseActivity {
 			//跳转到登录界面
 			BaseActivity.startActivity(mContext, FirstLoginActity.class);
 			finish();
-		}
-
-		// 此时如果客户端是不需要登陆的则需要注册设备账号
-		if (mAppContext.getApp().getLoginFlag() == App.LOGIN_INAPP) {
-			mUserBussiness.registerDevice(null);
 		}
 
 		LogM.log(this.getClass(), " HomeActivity onCreate");
@@ -113,8 +111,29 @@ public abstract class HomeBaseActivity extends BaseActivity {
 		initBroadcastReceiver();
 
 		SharedPreferenceUtils.getInstance(this).putBoolean(MPORTAL_PREFERENCE_NAME, MPORTAL_PREFERENCE_APP_RUNNING_KEY, true);
+
+		commitRegisterId();
 	}
 
+	private void commitRegisterId(){
+		final String registerId = JPushInterface.getRegistrationID(mContext);
+		if (Utils.isEmpty(registerId)){
+			LogM.log(HomePresenter.class, "fail 极光注册提交失败id：注册id为空! ");
+			return;
+		}
+		SystemBiz biz = SystemBiz.getInstance(mContext);
+		biz.commitPushRegisterId(registerId, new IAPCallback() {
+			@Override
+			public void onDone(Object obj) {
+				LogM.log(HomePresenter.class, "success 成功提交极光注册register id： "+registerId);
+			}
+
+			@Override
+			public void onException(APError error) {
+				LogM.log(HomePresenter.class, "fail 极光注册提交失败id： "+registerId);
+			}
+		});
+	}
 
 	private void initBroadcastReceiver() {
 		mLogoutBR = new BroadcastReceiver() {
@@ -160,7 +179,6 @@ public abstract class HomeBaseActivity extends BaseActivity {
 		}
 
 		showCompelMessageIfHave();
-
 	}
 
 	public void showCompelMessageIfHave() {
@@ -214,33 +232,8 @@ public abstract class HomeBaseActivity extends BaseActivity {
 		Intent closeService = new Intent("com.apppubs.d20.stopdownload");
 		sendBroadcast(closeService);
 		stopService(new Intent(HomeBaseActivity.this, DownloadAppService.class));
-
-		// 记录此次运行的版本
-//
-//		App app = mAppContext.getApp();
-//		app.setPreWorkingVersion(Utils.getVersionCode(mContext));
-//		mAppContext.setApp(app);
 	}
 
-	// protected void exit() {
-	//
-	// new ConfirmDialog(this, new ConfirmListener() {
-	//
-	// @Override
-	// public void onOkClick() {
-	//
-	// overridePendingTransition(R.anim.abc_fade_in, R.anim.abc_fade_out);
-	// Intent closeI = new Intent(Actions.CLOSE_ALL_ACTIVITY);
-	// sendBroadcast(closeI);
-	//
-	// }
-	//
-	// @Override
-	// public void onCancelClick() {
-	//
-	// }
-	// }, "确定退出？", "取消", "退出").show();
-	// }
 
 	public static void startHomeActivity(Context fromActivy) {
 

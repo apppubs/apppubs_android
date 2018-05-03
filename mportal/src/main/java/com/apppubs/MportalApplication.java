@@ -103,7 +103,7 @@ public class MportalApplication extends MultiDexApplication {
 		windowHeight = dm.heightPixels;
 		sContext = getApplicationContext();
 
-		JPushInterface.setDebugMode(true);
+		JPushInterface.setDebugMode(isDebugVersion());
 		JPushInterface.init(this);
 	}
 

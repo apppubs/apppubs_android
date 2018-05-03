@@ -786,44 +786,6 @@ public class UserBussiness extends BaseBiz {
 		return result;
 	}
 
-	/**
-	 * 客户端不需要登陆时，需要将设备的信息注册到服务端
-	 */
-	public void registerDevice(final IAPCallback<Integer> callback) {
-		sDefaultExecutor.submit(new Runnable() {
-
-			@Override
-			public void run() {
-
-				String token = mAppContext.getApp().getPushVendorType() == App.PUSH_VENDOR_TYPE_BAIDU ? mAppContext.getApp()
-						.getBaiduPushUserId() : JPushInterface.getRegistrationID(mContext);// 百度硬件设备号
-				String deviceId = SystemBiz.getInstance(mContext).getMachineId();
-				String systemVresion = Utils.getAndroidSDKVersion();// 操作系统号
-				String currentVersionCode =  mAppContext.getVersionName();// app版本号
-				try {
-					String url = String.format(URLs.URL_REGISTER_DEVICE, URLs.baseURL,URLs.appCode, token, deviceId, systemVresion,
-							URLEncoder.encode(Build.MODEL, "utf-8"), currentVersionCode,
-							mAppContext.getApp().getCode());
-					String result = WebUtils.requestWithGet(url);
-					JSONResult jr = JSONResult.compile(result);
-					if (jr.code == 1) {
-//						JSONObject jo = new JSONObject(jr.result);
-//						String username = jo.getString("username");
-//						MportalApplication.user.setUsername(username);
-//						MportalApplication.saveAndRefreshUser(mContext, MportalApplication.user);
-					} else {
-						LogM.log(this.getClass(), "注册设备失败" + jr.msg);
-					}
-				} catch (IOException e) {
-					e.printStackTrace();
-				} catch (InterruptedException e) {
-					e.printStackTrace();
-				} 
-			}
-		});
-
-	}
-	
 	public void logout(Context context) {
 		AppContext.getInstance(mContext).clearCurrentUser();
 		RongIM.getInstance().logout();
