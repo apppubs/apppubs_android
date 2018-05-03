@@ -15,6 +15,7 @@ import com.apppubs.bean.TUser;
 import com.apppubs.bean.UserInfo;
 import com.apppubs.AppContext;
 import com.apppubs.constant.APError;
+import com.apppubs.d20.R;
 import com.apppubs.model.SystemBiz;
 import com.apppubs.ui.activity.ImageViewActivity;
 import com.apppubs.ui.adbook.IUserInfoView;
@@ -164,19 +165,19 @@ public class UserInfoPresenter implements IUserInfoViewListener {
     private void sendInviteSms() {
         ProgressHUD.show(mContext);
         String[] userIdArr = new String[]{mView.getUserId()};
-        SystemBiz sysBiz = SystemBiz.getInstance(mContext);
+        UserBiz sysBiz = UserBiz.getInstance(mContext);
         sysBiz.inviteUsers(Arrays.asList(userIdArr), new IAPCallback() {
             @Override
             public void onDone(Object obj) {
                 ProgressHUD.dismissProgressHUDInThisContext(mContext);
-                Toast.makeText(mContext, "发送成功", Toast.LENGTH_SHORT).show();
+                Toast.makeText(mContext, R.string.send_success, Toast.LENGTH_SHORT).show();
                 mView.disableInviteLabel();
             }
 
             @Override
             public void onException(APError excepCode) {
                 ProgressHUD.dismissProgressHUDInThisContext(mContext);
-                Toast.makeText(mContext, "发送邀请短信失败!", Toast.LENGTH_SHORT).show();
+                Toast.makeText(mContext, R.string.send_invite_failed, Toast.LENGTH_SHORT).show();
             }
         });
     }

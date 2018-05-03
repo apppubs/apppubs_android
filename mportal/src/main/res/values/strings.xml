@@ -180,5 +180,7 @@
     <string name="msg_no_camera">没有系统相机</string>
     <string name="msg_amount_limit">已经达到最高选择数量</string>
     <string name="modify_pwd_success">修改成功！</string>
+    <string name="send_success">发送成功!</string>
+    <string name="send_invite_failed">发送邀请短信失败!</string>
 
 </resources>

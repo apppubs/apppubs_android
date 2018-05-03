@@ -17,8 +17,10 @@ import com.apppubs.net.WMHRequestListener;
 import com.apppubs.ui.activity.MainHandler;
 import com.apppubs.util.JSONResult;
 import com.apppubs.util.JSONUtils;
+import com.apppubs.util.WebUtils;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -301,6 +303,46 @@ public class UserBiz extends BaseBiz {
                 }
             }
         });
+    }
+
+    public void inviteUsers(@NonNull final List<String> userIds, @NonNull final IAPCallback
+            callback) {
+        String url = "http://result.eolinker.com/gN1zjDlc87a75d671a2d954f809ebcdd19e7698dc2478fa?uri=request_send_invite_sms";
+
+        String idsStr = getUserIdsStr(userIds);
+        Map<String, String> params = new HashMap<>();
+        params.put("userIds", idsStr);
+        asyncPOST(url, params, new IRQStringListener() {
+            @Override
+            public void onResponse(final String result, final APError error) {
+                if (error == null) {
+                    MainHandler.getInstance().post(new Runnable() {
+                        @Override
+                        public void run() {
+                            callback.onDone(result);
+                        }
+                    });
+                }else {
+                    MainHandler.getInstance().post(new Runnable() {
+                        @Override
+                        public void run() {
+                           callback.onException(error);
+                        }
+                    });
+                }
+            }
+        });
+    }
+
+    private String getUserIdsStr(@NonNull List<String> userIds) {
+        StringBuilder sb = new StringBuilder();
+        for (String userId : userIds) {
+            if (sb.length() > 0) {
+                sb.append(",");
+            }
+            sb.append(userId);
+        }
+        return sb.toString();
     }
 
 }

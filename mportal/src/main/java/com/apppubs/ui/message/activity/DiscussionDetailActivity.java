@@ -20,6 +20,7 @@ import android.widget.Toast;
 import com.apppubs.constant.APError;
 import com.apppubs.d20.R;
 import com.apppubs.model.IAPCallback;
+import com.apppubs.model.UserBiz;
 import com.apppubs.ui.activity.BaseActivity;
 import com.apppubs.ui.adbook.UserInfoActivity;
 import com.apppubs.model.message.OperationRong;
@@ -355,7 +356,8 @@ public class DiscussionDetailActivity extends BaseActivity implements CompoundBu
 				idList.add(ubi.getUserId());
 			}
 		}
-		mSystemBiz.inviteUsers(idList, new IAPCallback() {
+        UserBiz userBiz = UserBiz.getInstance(mContext);
+        userBiz.inviteUsers(idList, new IAPCallback() {
 			@Override
 			public void onDone(Object obj) {
 				ProgressHUD.dismissProgressHUDInThisContext(mContext);

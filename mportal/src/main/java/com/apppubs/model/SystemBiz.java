@@ -692,36 +692,6 @@ public class SystemBiz extends BaseBiz {
 
     }
 
-    public void inviteUsers(@NonNull final List<String> userIds, @NonNull final IAPCallback
-            callback) {
-        post(new Runnable() {
-            @Override
-            public void run() {
-                StringBuilder sb = new StringBuilder();
-                for (String userId : userIds) {
-                    if (sb.length() > 0) {
-                        sb.append(",");
-                    }
-                    sb.append(userId);
-                }
-                String url = String.format(URLs.URL_SEND_INVITE_SMS, URLs.baseURL, URLs.appCode,
-                        sb.toString());
-                try {
-                    String response = WebUtils.requestWithGet(url);
-                    JSONResult jr = JSONResult.compile(response);
-                    if (jr.code == 1) {
-                        onDone(callback, null);
-                    } else {
-                        onException(callback);
-                    }
-                } catch (Exception e) {
-                    e.printStackTrace();
-                    onException(callback);
-                }
-            }
-        });
-    }
-
     public interface CheckUpdateListener {
         void onDone(VersionInfo info);
     }
