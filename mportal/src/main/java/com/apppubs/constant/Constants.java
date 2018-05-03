@@ -9,8 +9,14 @@ public class Constants {
 	public static final String APP_CONFIG_PARAM_ADBOOK_ROOT_ID = "adbook_rootid";
 	public static final String APP_CONFIG_PARAM_REG_URL = "reg_url";
 	public static final String APP_CONFIG_PARAM_FORGET_PWD_URL = "forget_password_url";
+	public static final String APP_CONFIG_PARAM_ADBOOK_USER_ICON_FLAGS = "adbook_user_icon_flags";
+	public static final String APP_CONFIG_PARAM_USER_ACCOUNT_PWD_FLAGS = "user_account_pwd_flags";
+	public static final String APP_CONFIG_PARAM_ADBOOK_ORG_COUNT_FLAG = "adbook_org_count_flag";
+	public static final String APP_CONFIG_PARAM_CHAT_FLAG = "chat_flag";
+	public static final String APP_CONFIG_ABOUT_PROPERTIES = "about_properties";
+	public static final String APP_CONFIG_PDF_DEFAULT_READ_MODE = "pdf_default_read_mode";
 
-	
+
 	public static final String CUSTOM_SCHEMA_APPPUBS_NEWS = "apppubsnews";
 	public static final String CUSTOM_SCHEMA_APPPUBS = "apppubs";
 	

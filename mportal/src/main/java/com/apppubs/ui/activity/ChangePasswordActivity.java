@@ -13,7 +13,10 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.apppubs.AppContext;
 import com.apppubs.bean.UserInfo;
+import com.apppubs.constant.APError;
 import com.apppubs.constant.URLs;
+import com.apppubs.model.IAPCallback;
+import com.apppubs.model.UserBiz;
 import com.apppubs.util.JSONResult;
 import com.apppubs.ui.widget.ProgressHUD;
 import com.apppubs.d20.R;
@@ -54,39 +57,28 @@ public class ChangePasswordActivity extends BaseActivity implements OnClickListe
 				Toast.makeText(this, "新旧密码相同", Toast.LENGTH_SHORT).show();
 			} else {
 				ProgressHUD.show(this);
-				UserInfo currentUser = AppContext.getInstance(mContext).getCurrentUser();
-				String url = String.format(URLs.baseURL,URLs.appCode,URLs.URL_MODIFY_PASSWORD, currentUser.getUserId(), mOriginalEt
-						.getText().toString().trim(), mNewEt.getText().toString().trim());
-				mRequestQueue.add(new StringRequest(url, new Listener<String>() {
+				UserBiz biz = UserBiz.getInstance(mContext);
+				biz.modifyPwd(mOriginalEt
+						.getText().toString().trim(), mNewEt.getText().toString().trim(), new IAPCallback() {
+
 
 					@Override
-					public void onResponse(String response) {
+					public void onDone(Object obj) {
 						ProgressHUD.dismissProgressHUDInThisContext(ChangePasswordActivity.this);
-						JSONResult jr = JSONResult.compile(response);
-						Toast.makeText(ChangePasswordActivity.this, jr.msg, Toast.LENGTH_SHORT).show();
-						if (jr.code == 1) {
-							mOriginalEt.setText("");
-							mNewEt.setText("");
-							mNewRepeatEt.setText("");
-						}
+						Toast.makeText(ChangePasswordActivity.this, R.string.modify_pwd_success, Toast.LENGTH_SHORT).show();
 					}
-
-				}, new ErrorListener() {
 
 					@Override
-					public void onErrorResponse(VolleyError arg0) {
-						ProgressHUD.dismissProgressHUDInThisContext(ChangePasswordActivity.this);
-						Toast.makeText(ChangePasswordActivity.this, "网络错误", Toast.LENGTH_SHORT).show();
+					public void onException(APError error) {
+						mErrorHandler.onError(error);
 					}
-				}));
+				});
 			}
 		}else if(v.getId()==R.id.titlebar_left_btn){
 			InputMethodManager imm = (InputMethodManager) getSystemService(INPUT_METHOD_SERVICE);
 			if (imm.isActive()) {
 //				imm.toggleSoftInput(InputMethodManager.SHOW_IMPLICIT, InputMethodManager.HIDE_NOT_ALWAYS);
 				imm.hideSoftInputFromWindow(mOriginalEt.getWindowToken(), 0);
-				
-				
 			}
 		}
 	}

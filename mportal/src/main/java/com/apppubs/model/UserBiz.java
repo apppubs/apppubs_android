@@ -189,12 +189,13 @@ public class UserBiz extends BaseBiz {
     }
 
     public void loginWithUsernamePwdAndOrgCode(String username, String pwd, String orgCode, final
-            IAPCallback<LoginResult>callback) {
-        String url = "http://result.eolinker.com/gN1zjDlc87a75d671a2d954f809ebcdd19e7698dc2478fa?uri=login_with_org";
+    IAPCallback<LoginResult> callback) {
+        String url = "http://result.eolinker" +
+                ".com/gN1zjDlc87a75d671a2d954f809ebcdd19e7698dc2478fa?uri=login_with_org";
         Map<String, String> params = new HashMap<String, String>();
         params.put("username", username);
-        params.put("pwd",pwd);
-        params.put("orgCode",orgCode);
+        params.put("pwd", pwd);
+        params.put("orgCode", orgCode);
 
         asyncPOST(url, params, LoginResult.class, new IRQListener<LoginResult>() {
             @Override
@@ -266,6 +267,31 @@ public class UserBiz extends BaseBiz {
                         }
                     });
                 } else {
+                    MainHandler.getInstance().post(new Runnable() {
+                        @Override
+                        public void run() {
+                            callback.onException(error);
+                        }
+                    });
+                }
+            }
+        });
+    }
+
+    public void modifyPwd(final String oldPwd, String newPwd, final IAPCallback callback){
+        String url = "http://result.eolinker.com/gN1zjDlc87a75d671a2d954f809ebcdd19e7698dc2478fa?uri=modify_pwd";
+        Map<String, String> params = new HashMap<>();
+        asyncPOST(url, params, new IRQStringListener() {
+            @Override
+            public void onResponse(final String result, final APError error) {
+                if (error == null){
+                    MainHandler.getInstance().post(new Runnable() {
+                        @Override
+                        public void run() {
+                            callback.onDone(result);
+                        }
+                    });
+                }else {
                     MainHandler.getInstance().post(new Runnable() {
                         @Override
                         public void run() {

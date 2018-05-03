@@ -108,8 +108,8 @@ public class AppContext {
         if (mApp.getInitTimes() == 0) {
             mApp.setLayoutLocalScheme(info.getLayoutSchema());
             mSettings.setTheme(info.getDefaultTheme());
-
         }
+        mApp.getAppConfig().update(info.getConfigs());
         this.serializeApp();
     }
 

@@ -1,8 +1,13 @@
 package com.apppubs.bean;
 
+import com.apppubs.bean.http.AppInfoResult;
+import com.apppubs.constant.Constants;
+import com.apppubs.util.StringUtils;
 import com.google.gson.annotations.SerializedName;
 
 import java.io.Serializable;
+import java.util.List;
+import java.util.Map;
 
 /**
  * Created by zhangwen on 2017/1/5.
@@ -194,5 +199,14 @@ public class AppConfig implements Serializable {
 
     public void setAboutProperties(String aboutProperties) {
         this.aboutProperties = aboutProperties;
+    }
+
+    public void update(List<AppInfoResult.ConfigItem> configs){
+        for (AppInfoResult.ConfigItem item : configs){
+            String key = item.getKey();
+            if (Constants.APP_CONFIG_PARAM_USER_ACCOUNT_PWD_FLAGS.equals(key)){
+                setAdbookAccountPWDFlags(item.getValue());
+            }
+        }
     }
 }

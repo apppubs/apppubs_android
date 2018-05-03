@@ -24,7 +24,7 @@ public class AppInfoResult implements IJsonResult{
     private String androidVersion;
     private String iosVersion;
     private int chatFlag;
-    private List<Map<String, String>> configs;
+    private List<ConfigItem> configs;
 
     public void setAppId(String appId) {
         this.appId = appId;
@@ -138,11 +138,32 @@ public class AppInfoResult implements IJsonResult{
         return chatFlag;
     }
 
-    public List<Map<String, String>> getConfigs() {
+    public List<ConfigItem> getConfigs() {
         return configs;
     }
 
-    public void setConfigs(List<Map<String, String>> configs) {
+    public void setConfigs(List<ConfigItem> configs) {
         this.configs = configs;
+    }
+
+    public class ConfigItem{
+        private String key;
+        private String value;
+
+        public String getKey() {
+            return key;
+        }
+
+        public void setKey(String key) {
+            this.key = key;
+        }
+
+        public String getValue() {
+            return value;
+        }
+
+        public void setValue(String value) {
+            this.value = value;
+        }
     }
 }
