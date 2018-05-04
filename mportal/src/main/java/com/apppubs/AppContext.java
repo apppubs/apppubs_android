@@ -20,8 +20,6 @@ import com.apppubs.util.FileUtils;
 import com.apppubs.util.LogM;
 import com.apppubs.util.Utils;
 
-import java.util.Date;
-
 /**
  * Created by zhangwen on 2017/2/22.
  */
@@ -87,11 +85,6 @@ public class AppContext {
         this.serializeApp();
     }
 
-    public void setMenuUpdateTime(Date date) {
-        mApp.setMenuLocalUpdateTime(date);
-        this.serializeApp();
-    }
-
     public void updateWithAppInfo(AppInfoResult info) {
         mApp.setCode(info.getAppId());
         mApp.setName(info.getName());
@@ -104,7 +97,7 @@ public class AppContext {
         mApp.setMenuUpdateTime(info.getMenuUpdateTime());
         mApp.setStartUpPic(info.getStartupPicURL());
         mApp.setLoginPicUrl(info.getLoginPicURL());
-
+        mApp.setWebAppCode(info.getCMSId());
         if (mApp.getInitTimes() == 0) {
             mApp.setLayoutLocalScheme(info.getLayoutSchema());
             mSettings.setTheme(info.getDefaultTheme());
@@ -179,8 +172,8 @@ public class AppContext {
     /**
      * 转换服务器传来的url
      *
-     * @param url
-     * @return
+     * @param url 转化之前url
+     * @return 转换之后的url
      */
     public String convertUrl(String url) {
         if (url.contains(PLACEHOLDER_USERNAME)) {
@@ -237,7 +230,6 @@ public class AppContext {
             pi = pm.getPackageInfo(mContext.getPackageName(),
                     PackageManager.GET_CONFIGURATIONS);
 
-            return pi;
         } catch (Exception e) {
             e.printStackTrace();
         }

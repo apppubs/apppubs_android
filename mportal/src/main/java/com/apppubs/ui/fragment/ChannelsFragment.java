@@ -41,7 +41,7 @@ public class ChannelsFragment extends TitleMenuFragment{
 		mNb = NewsBiz.getInstance(mContext);
 		mChannelList = SugarRecord.find(TNewsChannel.class,  "TYPE_ID=?", new String[]{mChannelTypeId+""}, null, "DISPLAY_ORDER", null);
 		mChannelSelectedList = SugarRecord.find(TNewsChannel.class,  "TYPE_ID=? and DISPLAY_ORDER != 0", new String[]{mChannelTypeId+""}, null, "DISPLAY_ORDER", null);
-		mAllowConfig = SugarRecord.findByProperty(TMenuItem.class, "CHANNEL_TYPE_ID", mChannelTypeId+"").getAllowConfigFlag()==0?false:true;
+//		mAllowConfig = SugarRecord.findByProperty(TMenuItem.class, "CHANNEL_TYPE_ID", mChannelTypeId+"").getAllowConfigFlag()==0?false:true;
 	}
 	
 	protected void refreshSelectedList() {

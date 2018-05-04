@@ -36,7 +36,7 @@ import com.apppubs.model.IAPCallback;
 import com.apppubs.model.SystemBiz;
 import com.apppubs.ui.activity.AboutActivity;
 import com.apppubs.ui.activity.FeedbackActivity;
-import com.apppubs.model.VersionInfo;
+import com.apppubs.bean.VersionInfo;
 import com.apppubs.ui.start.StartUpActivity;
 import com.apppubs.ui.widget.ConfirmDialog;
 import com.apppubs.MportalApplication;

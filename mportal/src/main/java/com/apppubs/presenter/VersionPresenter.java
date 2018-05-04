@@ -4,7 +4,7 @@ import android.content.Context;
 
 import com.apppubs.AppManager;
 import com.apppubs.model.SystemBiz;
-import com.apppubs.model.VersionInfo;
+import com.apppubs.bean.VersionInfo;
 import com.apppubs.ui.IVersionView;
 
 /**

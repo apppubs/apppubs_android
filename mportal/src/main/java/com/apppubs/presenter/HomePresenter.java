@@ -7,6 +7,7 @@ import com.apppubs.constant.APError;
 import com.apppubs.model.IAPCallback;
 import com.apppubs.model.SystemBiz;
 import com.apppubs.ui.home.IHomeBottomMenuView;
+import com.apppubs.util.Utils;
 
 import java.util.List;
 
@@ -38,7 +39,10 @@ public class HomePresenter extends AbsPresenter<IHomeBottomMenuView> {
     }
 
     public void onViewCreated(){
-        showMenus();
+        List<TMenuItem> menus = SystemBiz.getInstance(mContext).getLocalPrimaryMenus();
+        if (!Utils.isEmpty(menus)){
+            showMenus();
+        }
         loadMenus();
     }
 }

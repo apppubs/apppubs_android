@@ -24,15 +24,6 @@ public class App implements Serializable {
     public static final int LOGIN_ONSTART_USE_USERNAME_PASSWORD_ORGCODE = 4;
     public static final int LOGIN_ONSTART_WEB = 5;//使用web方式登录
 
-    public static final int ALLOW_CHAT_TRUE = 1;
-    public static final int ALLOW_CHAT_FALSE = 0;
-
-    public static final int ALLOW_MODIFY_USER_INFO_TRUE = 1;
-    public static final int ALLOW_MODIFY_USER_INFO_FALSE = 0;
-
-    public static final int GUIDE_FLAG_NEED = 0;
-    public static final int GUIDE_FLAG_NEEDLESS = 1;
-
     public static final int NEED_FORCE_UPDATE_ADDRESSBOOK_YES = 1;
     public static final int NEED_FORCE_UPDATE_ADDRESSBOOK_NO = 0;
 
@@ -52,31 +43,24 @@ public class App implements Serializable {
      * 启动次数,可以用来判断是否第一次启动，也可以用来记录使用频率，还可以用作当启动次数达到一定数量时做一些操作
      */
     private int initTimes;
-    @SerializedName("loginflag")
     private int loginFlag;//0==系统内登录 1==打开登录
-    @SerializedName("webappcode")
     private String webAppCode;
-    @SerializedName("loginpicurl")
     private String loginPicUrl;
-    @SerializedName("startpicurl")
     private String startUpPic;//启动图
     /**
      * 应用的样式主界面样式，可以是左右滑动菜单样式也可以是底部菜单样式等
      */
-    @SerializedName("layoutscheme")
     private int layoutScheme;
 
     private int layoutLocalScheme;
     /**
      * 滑动菜单布局模式下的滑动菜单背景
      */
-    @SerializedName("bgpicurl")
     private String bgPicURL;
 
     /**
      * 菜单更新时间(服务器)
      */
-    @SerializedName("menuupdatetime")
     private Date menuUpdateTime;
     /**
      * 菜单上次更新时间(本地)
@@ -86,14 +70,12 @@ public class App implements Serializable {
     /**
      * 频道更新时间
      */
-    @SerializedName("channelupdatetime")
     private Date channelUpdateTime;
     /**
      * 频道上次更新时间
      */
     private Date channelLocalUpdateTime;
 
-    @SerializedName("baidupushapikey")
     private String baiduPushApiKey;
 
     private String baiduPushUserId;
@@ -102,19 +84,15 @@ public class App implements Serializable {
     /**
      * 是否允许注册
      */
-    @SerializedName("userregflag")
     private int allowRegister;
 
-    @SerializedName("defauttheme")
     private int defaultTheme;
 
-    @SerializedName("customthemecolor")
     private String customThemeColor;//系统定义默认颜色
 
     /**
      * 服务器端菜单布局上次更新时间
      */
-    @SerializedName("menugroupupdatetime")
     private Date menuGroupUpdateTime;
 
     /**
@@ -124,16 +102,13 @@ public class App implements Serializable {
 
     private boolean isDownloadApp;//下载App
 
-    @SerializedName("mduserinfoflag")
     private int allModifyUserInfo;//是否允许客户端修改个人信息
 
 
     /**
      * 通讯录相关
      */
-    @SerializedName("adbookupdateflag")
     private int needForceUploadAddressbook;//是否需要强制更新addressbook 0：否 1：是
-    @SerializedName("adbookversion")
     private int addressbookVersion;//通讯录版本，默认0
     private int addressbookLocalVersion;//通讯录本地版本，
     private String addressbookUserUrl;//通讯录用户url
@@ -146,21 +121,16 @@ public class App implements Serializable {
     /**
      * 程序最新版本
      */
-    @SerializedName("appandroidversion")
     private int latestVersion;
     private int preWorkingVersion;//上一个工作的版本
-    @SerializedName("service_id")
     private String defaultServiceNoId;//默认的服务号id,通过此id来进行读取推送列表
 
-    @SerializedName("weathershowflag")
     private int weatherDisplayFlag;
 
-    @SerializedName("pushvendortype")
     private int pushVendorType;
 
     private String jpushRegistrationID;
     private String orgCode;
-    @SerializedName("webloginurl")
     private String webLoginUrl;
 
     private String paddingUrlOnHomeActivityStartUp;

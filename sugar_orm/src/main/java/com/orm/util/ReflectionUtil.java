@@ -215,7 +215,7 @@ public class ReflectionUtil {
 				"com.apppubs.bean.TPaperIssue",
 				"com.apppubs.bean.TPaperOrder","com.apppubs.bean.TServiceNo","com.apppubs.bean.TServiceNOInfo",
 				"com.apppubs.bean.TStartUpPic","com.apppubs.bean.TTitleMenu","com.apppubs.bean.TUser",
-				"com.apppubs.bean.TUserDeptLink"
+				"com.apppubs.bean.TUserDeptLink","com.apppubs.bean.TChannelOrder"
 		};
 //            for (String className : getAllClasses(context)) {
 		for (String className : classNameArr) {

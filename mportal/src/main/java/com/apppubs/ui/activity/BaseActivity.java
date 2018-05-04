@@ -7,7 +7,6 @@ import android.content.IntentFilter;
 import android.content.pm.ActivityInfo;
 import android.content.res.TypedArray;
 import android.graphics.Bitmap;
-import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
@@ -41,7 +40,7 @@ import com.apppubs.model.IAPCallback;
 import com.apppubs.model.NewsBiz;
 import com.apppubs.model.PaperBiz;
 import com.apppubs.model.SystemBiz;
-import com.apppubs.model.VersionInfo;
+import com.apppubs.bean.VersionInfo;
 import com.apppubs.model.message.MsgBussiness;
 import com.apppubs.model.message.UserBussiness;
 import com.apppubs.ui.APErrorHandler;
@@ -58,7 +57,6 @@ import com.nostra13.universalimageloader.core.ImageLoader;
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
-import org.xml.sax.ErrorHandler;
 
 public abstract class BaseActivity extends FragmentActivity implements OnClickListener {
 

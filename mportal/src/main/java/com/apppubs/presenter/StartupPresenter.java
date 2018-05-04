@@ -9,7 +9,7 @@ import com.apppubs.bean.App;
 import com.apppubs.constant.APError;
 import com.apppubs.model.IAPCallback;
 import com.apppubs.model.SystemBiz;
-import com.apppubs.model.VersionInfo;
+import com.apppubs.bean.VersionInfo;
 import com.apppubs.ui.start.IStartUpView;
 import com.apppubs.util.SharedPreferenceUtils;
 import com.apppubs.util.Utils;

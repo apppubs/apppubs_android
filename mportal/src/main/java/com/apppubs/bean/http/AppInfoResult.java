@@ -24,6 +24,7 @@ public class AppInfoResult implements IJsonResult{
     private String androidVersion;
     private String iosVersion;
     private int chatFlag;
+    private String CMSId;
     private List<ConfigItem> configs;
 
     public void setAppId(String appId) {
@@ -136,6 +137,14 @@ public class AppInfoResult implements IJsonResult{
 
     public int getChatFlag() {
         return chatFlag;
+    }
+
+    public String getCMSId() {
+        return CMSId;
+    }
+
+    public void setCMSId(String CMSId) {
+        this.CMSId = CMSId;
     }
 
     public List<ConfigItem> getConfigs() {

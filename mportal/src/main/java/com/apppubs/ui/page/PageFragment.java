@@ -57,7 +57,7 @@ import com.apppubs.ui.fragment.BaseFragment;
 import com.apppubs.ui.fragment.ChannelFragment;
 import com.apppubs.ui.fragment.ChannelFragmentFactory;
 import com.apppubs.ui.fragment.TitleMenuFragment;
-import com.apppubs.model.VersionInfo;
+import com.apppubs.bean.VersionInfo;
 import com.apppubs.presenter.VersionPresenter;
 import com.apppubs.util.FileUtils;
 import com.apppubs.util.JSONResult;
@@ -79,7 +79,6 @@ import com.apppubs.ui.widget.ScrollTabs;
 import com.apppubs.ui.widget.SlidePicView;
 import com.apppubs.ui.widget.TitleBar;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
-import com.wang.avi.AVLoadingIndicatorView;
 
 import org.json.JSONArray;
 import org.json.JSONException;

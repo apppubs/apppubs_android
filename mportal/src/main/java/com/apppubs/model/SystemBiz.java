@@ -14,7 +14,6 @@ import android.graphics.ColorMatrixColorFilter;
 import android.graphics.Paint;
 import android.graphics.Rect;
 import android.os.Build;
-import android.support.annotation.NonNull;
 import android.text.TextUtils;
 import android.util.DisplayMetrics;
 
@@ -35,9 +34,9 @@ import com.apppubs.bean.TMenuItem;
 import com.apppubs.bean.TUser;
 import com.apppubs.bean.UserInfo;
 import com.apppubs.bean.TUserDeptLink;
+import com.apppubs.bean.VersionInfo;
 import com.apppubs.bean.http.AppInfoResult;
 import com.apppubs.bean.http.CompelReadMessageResult;
-import com.apppubs.bean.http.IJsonResult;
 import com.apppubs.bean.http.MenusResult;
 import com.apppubs.constant.APError;
 import com.apppubs.constant.URLs;

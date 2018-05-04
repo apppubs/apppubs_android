@@ -41,7 +41,7 @@ import com.apppubs.ui.activity.ContainerActivity;
 import com.apppubs.ui.home.HomeBaseActivity;
 import com.apppubs.ui.activity.ViewCourier;
 import com.apppubs.ui.fragment.BaseFragment;
-import com.apppubs.model.VersionInfo;
+import com.apppubs.bean.VersionInfo;
 import com.apppubs.ui.myfile.FilePreviewFragment;
 import com.apppubs.presenter.VersionPresenter;
 import com.apppubs.util.Base64;
