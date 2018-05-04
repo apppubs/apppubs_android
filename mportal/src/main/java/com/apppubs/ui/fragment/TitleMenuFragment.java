@@ -57,7 +57,7 @@ public class TitleMenuFragment extends BaseFragment{
 				public void onClick(View v) {
 					LogM.log(this.getClass(), "点击左边菜单");
 //					MenuViewCourier.openMenu(v.getTag().toString(), mHostActivity);
-					ViewCourier.getInstance(mHostActivity).executeInHomeActivity(v.getTag().toString(), (HomeBaseActivity)mHostActivity);
+//					ViewCourier.getInstance(mHostActivity).executeInHomeActivity(v.getTag().toString(), (HomeBaseActivity)mHostActivity);
 				}
 			});
 		}
@@ -70,7 +70,7 @@ public class TitleMenuFragment extends BaseFragment{
 					
 					LogM.log(this.getClass(), "点击右边菜单");
 //					MenuViewCourier.openMenu(v.getTag().toString(), mHostActivity);
-					ViewCourier.getInstance(mHostActivity).executeInHomeActivity(v.getTag().toString(), (HomeBaseActivity)mHostActivity);
+//					ViewCourier.getInstance(mHostActivity).executeInHomeActivity(v.getTag().toString(), (HomeBaseActivity)mHostActivity);
 				}
 			});
 		}

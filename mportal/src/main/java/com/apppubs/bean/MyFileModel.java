@@ -1,4 +1,4 @@
-package com.apppubs.model;
+package com.apppubs.bean;
 
 import com.apppubs.bean.http.MyFilePageResult;
 import com.google.gson.annotations.SerializedName;

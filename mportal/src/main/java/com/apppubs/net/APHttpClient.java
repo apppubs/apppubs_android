@@ -4,6 +4,7 @@ import android.os.Environment;
 
 import com.apppubs.constant.APError;
 import com.apppubs.constant.APErrorCode;
+import com.apppubs.util.LogM;
 
 import java.io.File;
 import java.io.IOException;
@@ -82,6 +83,7 @@ public class APHttpClient implements IHttpClient {
             @Override
             public void onResponse(Call call, Response response) throws IOException {
                 String responseStr = response.body().string();
+                LogM.log(APHttpClient.class,"onResponse："+responseStr);
                 listener.onResponse(responseStr, null);
             }
         });
@@ -133,7 +135,9 @@ public class APHttpClient implements IHttpClient {
 
         Call call = mOkHttpClient.newCall(request);
         try {
-            return call.execute().body().string();
+            String responseStr = call.execute().body().string();
+            LogM.log(APHttpClient.class,"onResponse："+responseStr);
+            return responseStr;
         } catch (IOException e) {
             e.printStackTrace();
             throw new APNetException(new APError(APErrorCode.NETWORK_ERROR,"网络异常！请检查网络是否畅通！"));

@@ -58,7 +58,61 @@ public class Constants {
 	
 	public static final int MESSAGE_EVENT_INIT_APP = 0;
 
-	public static final boolean IS_DEBUG = false;
+	public static final boolean IS_DEBUG = true;
 
 	public static final String META_KEY_SERVER_CONTEXT = "SERVER_CONTEXT";
+
+	/**
+	 * 接口
+	 */
+	//其他
+	public static final String API_ENTRY = "meap/entry.jsp";
+	public static final String API_NAME_APP_INFO = "app_info";
+	public static final String API_NAME_MENUS = "menus";
+	public static final String API_NAME_PAGE = "page";
+	public static final String API_NAME_UPLOAD_FILE = "upload_file";
+	public static final String API_NAME_APP_VERSION = "app_version";
+
+	//文件管理
+	public static final String API_NAME_MYFILE_PAGE = "my_file_page";
+	public static final String API_NAME_DEL_MY_FILE = "del_my_file";
+	public static final String API_NAME_UPLOAD_MY_FILE = "upload_my_file";
+	public static final String API_NAME_SEARCH_MY_FILE = "search_my_file";
+
+	//服务号
+	public static final String API_NAME_MY_SERVICENOS = "my_servicenos";
+	public static final String API_NAME_SERVICENO = "serviceno";
+	public static final String API_NAME_SERVICENO_ARTICLE_PAGE = "serviceno_article_page";
+	public static final String API_NAME_ALERT_MESSAGES = "alert_messages";
+	public static final String API_NAME_MAKR_ALERT_MESSAGE = "mark_alert_message";
+
+	//用户
+	public static final String API_NAME_LOGIN_WITH_USERNAME_AND_PWD = "login_with_username_and_pwd";
+	public static final String API_NAME_LOGIN_WITH_PHONE = "login_with_phone";
+	public static final String API_NAME_LOGIN_WITH_USERNAME = "login_with_username";
+	public static final String API_NAME_LOGIN_WITH_ORG = "login_with_org";
+	public static final String API_NAME_REQUEST_SENT_VERIFY_CODE = "request_send_verify_code";
+	public static final String API_NAME_CONFIRM_VERIFY_CODE = "confirm_verfify_code";
+	public static final String API_NAME_MODIFY_PWD = "modify_pwd";
+	public static final String API_NAME_UPLOAD_AVATAR = "upload_avatar";
+	public static final String API_NAME_REQUTST_SENT_INVITE_SMS = "reqauest_sent_invite_sms";
+	public static final String API_NAME_COMMIT_PUSH_REGISTER_ID = "commit_push_register_id";
+
+	//cms
+	public static final String API_NAME_NEWS_CHANNELS = "channels";
+	public static final String API_NAME_NEWS_CHANNEL = "channel";
+	public static final String API_NAME_NEWS_ARTICLE_PAGE = "article_page";
+	public static final String API_NAME_NEWS_ARTICLE = "article";
+	public static final String API_NAME_NEWS_VIDEO_PAGE = "video_page";
+	public static final String API_NAME_NEWS_VIDEO = "video";
+	public static final String API_NAME_NEWS_AUDIO_PAGE = "audio_page";
+	public static final String API_NAME_NEWS_AUDIO = "audio";
+	public static final String API_NAME_NEWS_SPECIAL_ARTICLE_PAGE = "special_article_page";
+	public static final String API_NAME_NEWS_SPECIAL_ARTICLE = "special_article";
+	public static final String API_NAME_NEWS_MAKE_COMMENT = "make_comment";
+	public static final String API_NAME_NEWS_PIC_PAGE = "pic_page";
+	public static final String API_NAME_NEWS_PIC = "pic";
+	public static final String API_NAME_NEWS_COMMENT_PAGE = "comment_page";
+
+
 }

@@ -179,23 +179,6 @@ public class WeatherActivity extends BaseActivity {
 	}
 
 	private void init() {
-		activity=new HomeBaseActivity() {
-			
-			@Override
-			public void changeContent(BaseFragment fragment) {
-			}
-
-			@Override
-			protected void setUnreadNumForMenu(String menuId, int num) {
-				// TODO Auto-generated method stub
-				
-			}
-
-			@Override
-			protected void selectTab(int index) {
-
-			}
-		};
 		getShare = getSharedPreferences(WEATHRECITYNAMESF, MODE_PRIVATE);
 		progress = (LinearLayout) findViewById(R.id.weather_progress_ll);
 		mGifView = (ImageView) findViewById(R.id.weather_today_image);

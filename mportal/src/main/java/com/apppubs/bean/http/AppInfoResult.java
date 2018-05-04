@@ -8,7 +8,7 @@ import java.util.Map;
  * Created by siger on 2018/4/20.
  */
 
-public class AppInfoResult implements IJsonResult{
+public class AppInfoResult implements IJsonResult {
 
     private String appId;
     private String name;
@@ -155,7 +155,7 @@ public class AppInfoResult implements IJsonResult{
         this.configs = configs;
     }
 
-    public class ConfigItem{
+    public class ConfigItem {
         private String key;
         private String value;
 

@@ -6,6 +6,7 @@ import com.apppubs.bean.http.MyServiceNOsResult;
 import com.apppubs.bean.http.ServiceNOInfoPageResult;
 import com.apppubs.bean.http.ServiceNOInfoResult;
 import com.apppubs.constant.APError;
+import com.apppubs.constant.Constants;
 import com.apppubs.ui.activity.MainHandler;
 
 import java.util.HashMap;
@@ -17,8 +18,7 @@ public class ServiceNoBiz extends BaseBiz {
     }
 
     public void loadMyServiceNOs(final IAPCallback<MyServiceNOsResult> callback){
-        String url = "http://result.eolinker.com/gN1zjDlc87a75d671a2d954f809ebcdd19e7698dc2478fa?uri=my_servicenos";
-        asyncPOST(url, null, MyServiceNOsResult.class, new IRQListener<MyServiceNOsResult>() {
+        asyncPOST(Constants.API_NAME_MY_SERVICENOS, null, MyServiceNOsResult.class, new IRQListener<MyServiceNOsResult>() {
             @Override
             public void onResponse(final MyServiceNOsResult result, final APError error) {
                 if (error == null){
@@ -41,12 +41,11 @@ public class ServiceNoBiz extends BaseBiz {
     }
 
     public void loadInfoPage(String servicenoId, int pageNum, int pageSize, final IAPCallback<ServiceNOInfoPageResult> callback){
-        String url = "http://result.eolinker.com/gN1zjDlc87a75d671a2d954f809ebcdd19e7698dc2478fa?uri=serviceno_article_page";
         Map<String, String> params = new HashMap<>();
         params.put("pageNum", pageNum+"");
         params.put("pageSize", pageSize+"");
         params.put("servicenoId", servicenoId);
-        asyncPOST(url, params, ServiceNOInfoPageResult.class, new IRQListener<ServiceNOInfoPageResult>(){
+        asyncPOST(Constants.API_NAME_SERVICENO_ARTICLE_PAGE, params, ServiceNOInfoPageResult.class, new IRQListener<ServiceNOInfoPageResult>(){
 
             @Override
             public void onResponse(final ServiceNOInfoPageResult jr, final APError error) {
@@ -71,10 +70,9 @@ public class ServiceNoBiz extends BaseBiz {
     }
 
     public void loadServiceNOInfo(String id, final IAPCallback<ServiceNOInfoResult> callback){
-        String url = "http://result.eolinker.com/gN1zjDlc87a75d671a2d954f809ebcdd19e7698dc2478fa?uri=serviceno";
         Map<String, String> params = new HashMap<>();
         params.put("id", id);
-        asyncPOST(url, params, ServiceNOInfoResult.class, new IRQListener<ServiceNOInfoResult>(){
+        asyncPOST(Constants.API_NAME_SERVICENO, params, ServiceNOInfoResult.class, new IRQListener<ServiceNOInfoResult>(){
 
             @Override
             public void onResponse(final ServiceNOInfoResult jr, final APError error) {

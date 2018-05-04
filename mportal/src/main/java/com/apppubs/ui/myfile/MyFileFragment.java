@@ -20,7 +20,7 @@ import com.apppubs.constant.APError;
 import com.apppubs.constant.APErrorCode;
 import com.apppubs.d20.R;
 import com.apppubs.model.IAPCallback;
-import com.apppubs.model.MyFileModel;
+import com.apppubs.bean.MyFileModel;
 import com.apppubs.model.message.FilePickerModel;
 import com.apppubs.model.message.MyFilePickerHelper;
 import com.apppubs.model.myfile.CacheListener;

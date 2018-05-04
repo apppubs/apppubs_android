@@ -152,7 +152,7 @@ public class PaperIssuePreviewFragment extends BaseFragment implements OnPageCha
 		@Override
 		public void destroyItem(ViewGroup container, int position, Object object) {
 			super.destroyItem(container, position, object);
-			Log.v("PaperFragmentAdapter","fragment adapter destory item :"+position);
+			Log.v("PaperFragmentAdapter","fragment adapter destroy item :"+position);
 		}
 		public void setData(List<PaperCatalogFragment> list){
 			this.mList = list;

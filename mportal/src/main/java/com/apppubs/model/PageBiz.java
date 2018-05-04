@@ -9,18 +9,20 @@ import com.apppubs.bean.page.PageModel;
 import com.apppubs.bean.page.PageNormalContentModel;
 import com.apppubs.constant.APError;
 import com.apppubs.constant.APErrorCode;
+import com.apppubs.constant.Constants;
 import com.apppubs.constant.URLs;
 import com.apppubs.net.WMHHttpClient;
 import com.apppubs.ui.activity.MainHandler;
 import com.apppubs.util.LogM;
 
 import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Created by zhangwen on 2017/9/27.
  */
 
-public class PageBiz extends BaseBiz implements IPageBiz  {
+public class PageBiz extends BaseBiz implements IPageBiz {
 
     private Context mContext;
     private WMHHttpClient mHttpClient;
@@ -33,7 +35,9 @@ public class PageBiz extends BaseBiz implements IPageBiz  {
 
     @Override
     public void loadPage(String pageId, final IAPCallback<PageModel> callback) {
-        asyncPOST(getUrl(pageId), new HashMap<String, String>(), new IRQStringListener() {
+        Map<String, String> params = new HashMap<>();
+        params.put("pageId", pageId);
+        asyncPOST(Constants.API_NAME_PAGE, params, new IRQStringListener() {
 
             @Override
             public void onResponse(String result, final APError error) {
@@ -54,24 +58,10 @@ public class PageBiz extends BaseBiz implements IPageBiz  {
                             callback.onException(error);
                         }
                     });
-
                 }
             }
         });
     }
-
-    private String getUrl(String pageId) {
-        UserInfo ui = AppContext.getInstance(mContext).getCurrentUser();
-        String url = null;
-        if (ui != null) {
-            url = String.format(URLs.URL_PAGE, URLs.baseURL, URLs.appCode, pageId, ui.getUserId());
-        } else {
-            url = String.format(URLs.URL_PAGE, URLs.baseURL, URLs.appCode, pageId, "");
-        }
-        url = "http://result.eolinker.com/gN1zjDlc87a75d671a2d954f809ebcdd19e7698dc2478fa?uri=page";
-        return url;
-    }
-
 
     private PageNormalContentModel getPageNormalContentIfExit(PageModel model) {
         PageContentModel content = model.getContent();

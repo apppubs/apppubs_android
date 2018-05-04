@@ -18,6 +18,7 @@ import com.apppubs.bean.TMenuItem;
 import com.apppubs.constant.APError;
 import com.apppubs.d20.R;
 import com.apppubs.constant.Actions;
+import com.apppubs.presenter.HomeBottomPresenter;
 import com.apppubs.presenter.HomePresenter;
 import com.apppubs.ui.activity.LoginActivity;
 import com.apppubs.ui.activity.ViewCourier;
@@ -63,7 +64,7 @@ public class HomeBottomMenuActivity extends HomeBaseActivity implements IHomeBot
 		}
 	};
 
-	private HomePresenter mPresenter;
+	private HomeBottomPresenter mPresenter;
 
 	@Override
 	protected void onCreate(Bundle arg0) {
@@ -88,8 +89,13 @@ public class HomeBottomMenuActivity extends HomeBaseActivity implements IHomeBot
 
 		RongIM.getInstance().addUnReadMessageCountChangedObserver(mMessageUnReadCountObserver, Conversation.ConversationType.DISCUSSION, Conversation.ConversationType.PRIVATE);
 
-		mPresenter = new HomePresenter(this,this);
+		mPresenter = new HomeBottomPresenter(this,this);
 		mPresenter.onViewCreated();
+	}
+
+	@Override
+	protected HomePresenter getPresenter() {
+		return mPresenter;
 	}
 
 	@Override
@@ -158,7 +164,7 @@ public class HomeBottomMenuActivity extends HomeBaseActivity implements IHomeBot
 			return;
 		}
 //		TMenuItem mi = miArr[position];
-		mViewCourier.executeInHomeActivity(mi, this);
+		mPresenter.execute(mi.getUrl());
 
 		ImageView ivC = (ImageView) mMenuBar.getChildAt(mCurPos).findViewById(R.id.menu_buttom_iv);
 		ivC.setColorFilter(mMenuBarBtnDefaultColor, Mode.SRC_ATOP);
@@ -176,7 +182,7 @@ public class HomeBottomMenuActivity extends HomeBaseActivity implements IHomeBot
 	private Fragment mCurFrg;
 
 	@Override
-	public void changeContent(BaseFragment fragment) {
+	public void changeContent(Fragment fragment) {
 
 		FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
 		List<Fragment> fragments = getSupportFragmentManager().getFragments();
@@ -202,7 +208,6 @@ public class HomeBottomMenuActivity extends HomeBaseActivity implements IHomeBot
 	@Override
 	protected void onDestroy() {
 		super.onDestroy();
-		mViewCourier.destory();
 		if (mLogoutBr != null) {
 			unregisterReceiver(mLogoutBr);
 		}
@@ -246,18 +251,4 @@ public class HomeBottomMenuActivity extends HomeBaseActivity implements IHomeBot
 		}
 	}
 
-	@Override
-	public void showLoading() {
-
-	}
-
-	@Override
-	public void hideLoading() {
-
-	}
-
-	@Override
-	public void showError(APError error) {
-		mErrorHandler.onError(error);
-	}
 }

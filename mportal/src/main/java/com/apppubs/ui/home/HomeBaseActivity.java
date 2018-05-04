@@ -4,9 +4,8 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.support.annotation.Nullable;
+import android.support.v4.app.Fragment;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.widget.Toast;
@@ -14,35 +13,27 @@ import android.widget.Toast;
 import com.apppubs.AppContext;
 import com.apppubs.AppManager;
 import com.apppubs.MportalApplication;
+import com.apppubs.bean.App;
 import com.apppubs.bean.TMenuItem;
 import com.apppubs.bean.UserInfo;
-import com.apppubs.constant.APError;
-import com.apppubs.constant.URLs;
-import com.apppubs.d20.R;
-import com.apppubs.bean.App;
 import com.apppubs.bean.Weather;
+import com.apppubs.constant.APError;
 import com.apppubs.constant.Actions;
+import com.apppubs.d20.R;
 import com.apppubs.model.IAPCallback;
 import com.apppubs.model.SystemBiz;
-import com.apppubs.net.WMHHttpErrorCode;
-import com.apppubs.net.WMHRequestListener;
+import com.apppubs.presenter.HomeBottomPresenter;
 import com.apppubs.presenter.HomePresenter;
+import com.apppubs.service.DownloadAppService;
 import com.apppubs.ui.activity.BaseActivity;
 import com.apppubs.ui.activity.CompelMessageDialogActivity;
 import com.apppubs.ui.activity.FirstLoginActity;
 import com.apppubs.ui.activity.ViewCourier;
-import com.apppubs.ui.fragment.BaseFragment;
-import com.apppubs.service.DownloadAppService;
 import com.apppubs.util.FileUtils;
-import com.apppubs.util.JSONResult;
-import com.apppubs.util.JSONUtils;
 import com.apppubs.util.LogM;
 import com.apppubs.util.SharedPreferenceUtils;
 import com.apppubs.util.Utils;
 import com.orm.SugarRecord;
-
-import org.json.JSONException;
-import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -50,7 +41,7 @@ import java.util.List;
 import cn.jpush.android.api.JPushInterface;
 import io.rong.imkit.RongIM;
 
-public abstract class HomeBaseActivity extends BaseActivity {
+public abstract class HomeBaseActivity extends BaseActivity implements IHomeView{
 
 	public static String MPORTAL_PREFERENCE_NAME = "mportal_preference";
 	public static String MPORTAL_PREFERENCE_APP_RUNNING_KEY = "is_app_running";
@@ -118,19 +109,19 @@ public abstract class HomeBaseActivity extends BaseActivity {
 	private void commitRegisterId(){
 		final String registerId = JPushInterface.getRegistrationID(mContext);
 		if (Utils.isEmpty(registerId)){
-			LogM.log(HomePresenter.class, "fail 极光注册提交失败id：注册id为空! ");
+			LogM.log(HomeBottomPresenter.class, "fail 极光注册提交失败id：注册id为空! ");
 			return;
 		}
 		SystemBiz biz = SystemBiz.getInstance(mContext);
 		biz.commitPushRegisterId(registerId, new IAPCallback() {
 			@Override
 			public void onDone(Object obj) {
-				LogM.log(HomePresenter.class, "success 成功提交极光注册register id： "+registerId);
+				LogM.log(HomeBottomPresenter.class, "success 成功提交极光注册register id： "+registerId);
 			}
 
 			@Override
 			public void onException(APError error) {
-				LogM.log(HomePresenter.class, "fail 极光注册提交失败id： "+registerId);
+				LogM.log(HomeBottomPresenter.class, "fail 极光注册提交失败id： "+registerId);
 			}
 		});
 	}
@@ -146,6 +137,7 @@ public abstract class HomeBaseActivity extends BaseActivity {
 		registerReceiver(mLogoutBR, new IntentFilter(Actions.ACTION_LOGOUT));
 	}
 
+	protected abstract HomePresenter getPresenter();
 	/**
 	 * 天气信息(系统静态变量)
 	 */
@@ -153,8 +145,6 @@ public abstract class HomeBaseActivity extends BaseActivity {
 		mWeathers = weathers;
 		FileUtils.writeObj(context, weathers, "weathers.cfg");
 	}
-
-	public abstract void changeContent(BaseFragment fragment);
 
 	protected abstract void setUnreadNumForMenu(String menuId, int num);
 
@@ -168,8 +158,7 @@ public abstract class HomeBaseActivity extends BaseActivity {
 			if (paddingUrl.startsWith("apppubs://message")){
 				for (TMenuItem mi:mPrimaryMenuList){
 					if (mi.getUrl().startsWith("apppubs://message")){
-						mViewCourier.executeInHomeActivity(mi,HomeBaseActivity.this);
-
+						getPresenter().execute(mi.getUrl());
 						break;
 					}
 				}
@@ -275,10 +264,9 @@ public abstract class HomeBaseActivity extends BaseActivity {
 	@Override
 	protected void onDestroy() {
 		super.onDestroy();
-		mViewCourier.destory();
 		SharedPreferenceUtils.getInstance(this).putBoolean(MPORTAL_PREFERENCE_NAME, MPORTAL_PREFERENCE_APP_RUNNING_KEY, false);
 		unregisterReceiver(mLogoutBR);
-		AppManager.getInstant(this).destory();
+		AppManager.getInstant(this).destroy();
 
 		//如果是用户名密码登录，没有自动登录时候清空用户信息
 		if(mAppContext.getApp().getLoginFlag()==App.LOGIN_ONSTART_USE_USERNAME_PASSWORD&&!mAppContext.getSettings().isAllowAutoLogin()){
@@ -346,4 +334,36 @@ public abstract class HomeBaseActivity extends BaseActivity {
 
 	protected abstract void selectTab(int index);
 
+	@Override
+	public void changeContent(Fragment frg) {
+
+	}
+
+	@Override
+	public abstract void setMenus(List<TMenuItem> menus);
+
+	@Override
+	public void showLoading() {
+
+	}
+
+	@Override
+	public void hideLoading() {
+
+	}
+
+	@Override
+	public void onError(APError error) {
+		mErrorHandler.onError(error);
+	}
+
+	@Override
+	public void showEmptyView() {
+
+	}
+
+	@Override
+	public void hideEmptyView() {
+
+	}
 }

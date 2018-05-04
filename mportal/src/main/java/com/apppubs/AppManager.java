@@ -116,7 +116,7 @@ public class AppManager {
     }
 
 
-    public void destory() {
+    public void destroy() {
         App app = mAppContext.getApp();
         app.setPreWorkingVersion(Utils.getVersionCode(mContext));
         mAppContext.serializeApp();

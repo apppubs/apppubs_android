@@ -15,6 +15,7 @@ import com.apppubs.AppContext;
 import com.apppubs.bean.http.IJsonResult;
 import com.apppubs.constant.APError;
 import com.apppubs.constant.APErrorCode;
+import com.apppubs.constant.Constants;
 import com.apppubs.net.APHttpClient;
 import com.apppubs.net.APNetException;
 import com.apppubs.net.IHttpClient;
@@ -79,23 +80,6 @@ public abstract class BaseBiz {
         mAppContext = AppContext.getInstance(context);
         mHttpClient = new APHttpClient();
     }
-
-
-    public enum Status {
-        /**
-         * Indicates that the task has not been executed yet.
-         */
-        PENDING,
-        /**
-         * Indicates that the task is running.
-         */
-        RUNNING,
-        /**
-         * Indicates that {@link AsyncTask#onPostExecute} has finished.
-         */
-        FINISHED,
-    }
-
 
     protected static class InternalHandler extends Handler {
         //创建handler绑定主线程looper
@@ -167,7 +151,7 @@ public abstract class BaseBiz {
         headers.put("nonce","");
         headers.put("timestamp","");
         headers.put("sign","");
-        headers.put("appId",mAppContext.getSettings().getAppCode());
+        headers.put("appId",mAppContext.getLocalAppId());
         headers.put("orgCode",mAppContext.getApp().getOrgCode());
         headers.put("apiVersion","1.0.0");
 
@@ -182,9 +166,11 @@ public abstract class BaseBiz {
         return dm.widthPixels + "*" + dm.heightPixels;
     }
 
-    protected  <T extends IJsonResult> void asyncPOST(final String url, final Map<String, String>
+    protected  <T extends IJsonResult> void asyncPOST( String apiName, Map<String, String>
             params, final Class<T> clazz, final IRQListener listener) {
-        mHttpClient.asyncPOST(url, getCommonHeader(), params, new IRequestListener() {
+        String entryURL = getEntryURL();
+        params = getTrueParams(apiName, params);
+        mHttpClient.asyncPOST(entryURL, getCommonHeader(), params, new IRequestListener() {
 
             @Override
             public void onResponse(String json, APError e) {
@@ -207,8 +193,19 @@ public abstract class BaseBiz {
         });
     }
 
-    protected void asyncPOST(String url, final Map<String,String> params, final IRQStringListener listener){
-        mHttpClient.asyncPOST(url, getCommonHeader(), params, new IRequestListener() {
+    @NonNull
+    private Map<String, String> getTrueParams(String apiName, Map<String, String> params) {
+        if (null == params){
+            params = new HashMap<String, String>();
+        }
+        params.put("apiName",apiName);
+        return params;
+    }
+
+    protected void asyncPOST(String apiName, Map<String,String> params, @NonNull final IRQStringListener listener){
+        String entryURL = getEntryURL();
+        params = getTrueParams(apiName, params);
+        mHttpClient.asyncPOST(entryURL, getCommonHeader(), params, new IRequestListener() {
 
             @Override
             public void onResponse(String json, APError e) {
@@ -229,10 +226,15 @@ public abstract class BaseBiz {
             }
         });
     }
+    private String getEntryURL() {
+        return mAppContext.getLocalBaseURL()+ Constants.API_ENTRY;
+    }
 
-    protected  <T extends IJsonResult> T syncPOST(String url, Map<String, String> params,
+    protected  <T extends IJsonResult> T syncPOST(String apiName, @NonNull Map<String, String> params,
                                               Class<T> clazz) throws APNetException {
-        String json = mHttpClient.syncPOST(url, getCommonHeader(), params);
+        String entryURL = getEntryURL();
+        params = getTrueParams(apiName, params);
+        String json = mHttpClient.syncPOST(entryURL, getCommonHeader(), params);
         JSONObject jo = JSONObject.parseObject(json);
         Integer code = jo.getInteger("code");
         String msg = jo.getString("msg");

@@ -39,6 +39,8 @@ import com.apppubs.d20.R;
 import com.apppubs.bean.App;
 import com.apppubs.bean.UserInfo;
 import com.apppubs.bean.Weather;
+import com.apppubs.presenter.HomePresenter;
+import com.apppubs.presenter.HomeSlidePresenter;
 import com.apppubs.ui.activity.SplashActivity;
 import com.apppubs.ui.activity.ViewCourier;
 import com.apppubs.ui.activity.WeatherActivity;
@@ -67,7 +69,7 @@ import java.util.List;
  * 主界面
  * 
  */
-public class HomeSlideMenuActivity extends HomeBaseActivity implements OnItemClickListener, AMapLocationListener, Runnable {
+public class HomeSlideMenuActivity extends HomeBaseActivity implements OnItemClickListener, AMapLocationListener, Runnable, IHomeSlideMenuView {
 
 	private SlidingActivityHelper mHelper;
 	private SlidingMenu mSlidingMenu;
@@ -106,6 +108,7 @@ public class HomeSlideMenuActivity extends HomeBaseActivity implements OnItemCli
 		};
 	};
 
+	private HomeSlidePresenter mPresenter;
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -116,8 +119,13 @@ public class HomeSlideMenuActivity extends HomeBaseActivity implements OnItemCli
 		setContentView(R.layout.act_home_slidemenu);
 		init();
 		initState();
-		
+		mPresenter = new HomeSlidePresenter(this, this);
+		mPresenter.onViewCreated();
+	}
 
+	@Override
+	protected HomePresenter getPresenter() {
+		return mPresenter;
 	}
 
 	/** 初始化组建 */
@@ -158,7 +166,7 @@ public class HomeSlideMenuActivity extends HomeBaseActivity implements OnItemCli
 	 */
 	public void initState() {
 		// 将第一个界面填充
-		mViewCourier.executeInHomeActivity((TMenuItem) mLeftMenuA.getItem(0),this);
+//		mViewCourier.executeInHomeActivity((TMenuItem) mLeftMenuA.getItem(0),this);
 		// mTitleBar.setTitle(App.listAll(App.class).get(0).getName());
 		mTitleBar.setLeftBtnClickListener(this);
 //		mTitleBar.setRightBtnClickListener(this);
@@ -537,10 +545,10 @@ public class HomeSlideMenuActivity extends HomeBaseActivity implements OnItemCli
 	 * 
 	 * @param fragment
 	 */
-	private BaseFragment mCurFrg;
+	private Fragment mCurFrg;
 
 	@Override
-	public void changeContent(BaseFragment fragment) {
+	public void changeContent(Fragment fragment) {
 		mTitleBar.removeLeft2ndView();
 		mTitleBar.removeRight2ndView();
 		mTitleBar.removeRightView();
@@ -576,6 +584,7 @@ public class HomeSlideMenuActivity extends HomeBaseActivity implements OnItemCli
 			}
 			LogM.log(this.getClass(), "onItemClick" + position);
 			mSlidingMenu.toggle();
+
 //			ViewGroup item = (ViewGroup) mLeftMenuLv.getChildAt(position);
 			view.setBackgroundColor(Color.parseColor("#30000000"));
 			https://192.168.1.140/svn/wmh/trunk/Mportal
@@ -583,12 +592,12 @@ public class HomeSlideMenuActivity extends HomeBaseActivity implements OnItemCli
 
 				@Override
 				public void run() {
-					mViewCourier.executeInHomeActivity((TMenuItem) view.getTag(),HomeSlideMenuActivity.this);
+//					mViewCourier.executeInHomeActivity((TMenuItem) view.getTag(),HomeSlideMenuActivity.this);
 				}
 			}, 300);
 
 		} else {
-			mViewCourier.executeInHomeActivity((TMenuItem) view.getTag(),this);
+//			mViewCourier.executeInHomeActivity((TMenuItem) view.getTag(),this);
 		}
 
 	}
@@ -601,9 +610,9 @@ public class HomeSlideMenuActivity extends HomeBaseActivity implements OnItemCli
 				mHelper.showContent();
 				return true;
 			}
-			if(mCurFrg!=null&&mCurFrg.onKeyDown(keyCode, event)){
-				return true;
-			}
+//			if(mCurFrg!=null&&mCurFrg.onKeyDown(keyCode, event)){
+//				return true;
+//			}
 
 		}
 		return super.onKeyDown(keyCode, event);
@@ -615,10 +624,16 @@ public class HomeSlideMenuActivity extends HomeBaseActivity implements OnItemCli
 	}
 
 	@Override
+	public void setMenus(List<TMenuItem> menus) {
+
+	}
+
+	@Override
 	protected void onDestroy() {
 		super.onDestroy();
 		Log.v("HomeActivity", "主界面onDestory");
 	}
+
 
 	public class MenuLeftAdapter extends BaseAdapter {
 

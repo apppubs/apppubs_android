@@ -39,6 +39,7 @@ import com.apppubs.bean.http.AppInfoResult;
 import com.apppubs.bean.http.CompelReadMessageResult;
 import com.apppubs.bean.http.MenusResult;
 import com.apppubs.constant.APError;
+import com.apppubs.constant.Constants;
 import com.apppubs.constant.URLs;
 import com.apppubs.d20.R;
 import com.apppubs.model.message.UserBussiness;
@@ -211,8 +212,7 @@ public class SystemBiz extends BaseBiz {
             }
         }
 
-        AppInfoResult info = syncPOST("http://result.eolinker" +
-                        ".com/gN1zjDlc87a75d671a2d954f809ebcdd19e7698dc2478fa?uri=app_info", null,
+        AppInfoResult info = syncPOST(Constants.API_NAME_APP_INFO, null,
                 AppInfoResult.class);
 
         mAppContext.updateWithAppInfo(info);
@@ -313,10 +313,8 @@ public class SystemBiz extends BaseBiz {
     }
 
     public void loadCompelReadMessage(final IAPCallback<List<CompelReadMessageModel>> callback) {
-        String url = "http://result.eolinker" +
-                ".com/gN1zjDlc87a75d671a2d954f809ebcdd19e7698dc2478fa?uri=alert_messages";
         Map<String, String> params = new HashMap<>();
-        asyncPOST(url, params, CompelReadMessageResult.class, new
+        asyncPOST(Constants.API_NAME_ALERT_MESSAGES, params, CompelReadMessageResult.class, new
                 IRQListener<CompelReadMessageResult>() {
 
                     @Override
@@ -343,9 +341,8 @@ public class SystemBiz extends BaseBiz {
     }
 
     public void markCompelReadMessage(String serviceArticleId, final IAPCallback<Object> callback) {
-        String url = "http://result.eolinker" +
-                ".com/gN1zjDlc87a75d671a2d954f809ebcdd19e7698dc2478fa?uri=mark_alert_message";
-        asyncPOST(url, null, new IRQStringListener() {
+
+        asyncPOST(Constants.API_NAME_MAKR_ALERT_MESSAGE, null, new IRQStringListener() {
             @Override
             public void onResponse(String result, final APError error) {
                 if (error == null) {
@@ -738,9 +735,8 @@ public class SystemBiz extends BaseBiz {
      */
     public void initMenus(final IAPCallback<Boolean> callback) {
         // 初始化菜单
-        String url = "http://result.eolinker" +
-                ".com/gN1zjDlc87a75d671a2d954f809ebcdd19e7698dc2478fa?uri=menus";
-        asyncPOST(url, null, MenusResult.class, new IRQListener<MenusResult>() {
+        asyncPOST(Constants.API_NAME_MENUS, new HashMap<String, String>(), MenusResult.class, new
+                IRQListener<MenusResult>() {
             @Override
             public void onResponse(MenusResult menus, final APError error) {
                 if (error == null) {
@@ -794,14 +790,12 @@ public class SystemBiz extends BaseBiz {
     }
 
     public void commitPushRegisterId(final String registerId, final IAPCallback callback) {
-        String url = "http://result.eolinker" +
-                ".com/gN1zjDlc87a75d671a2d954f809ebcdd19e7698dc2478fa?uri=commit_push_register_id";
         Map<String, String> params = new HashMap<>();
-        params.put("registerid", registerId);
-        asyncPOST(url, params, new IRQStringListener() {
+        params.put("registerId", registerId);
+        asyncPOST(Constants.API_NAME_COMMIT_PUSH_REGISTER_ID, params, new IRQStringListener() {
             @Override
             public void onResponse(final String result, final APError error) {
-                if (error == null){
+                if (error == null) {
                     MainHandler.getInstance().post(new Runnable() {
                         @Override
                         public void run() {
@@ -809,7 +803,7 @@ public class SystemBiz extends BaseBiz {
                         }
                     });
 
-                }else {
+                } else {
                     MainHandler.getInstance().post(new Runnable() {
                         @Override
                         public void run() {

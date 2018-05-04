@@ -5,6 +5,7 @@ import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.content.res.TypedArray;
 import android.graphics.Color;
+import android.text.TextUtils;
 
 import com.apppubs.bean.App;
 import com.apppubs.bean.AppConfig;
@@ -16,9 +17,14 @@ import com.apppubs.model.myfile.FileCacheManager;
 import com.apppubs.model.myfile.FileCacheManagerImpl;
 import com.apppubs.net.WMHHttpClient;
 import com.apppubs.net.WMHHttpClientDefaultImpl;
+import com.apppubs.ui.activity.CustomWebAppUrlProtocolAndIpActivity;
 import com.apppubs.util.FileUtils;
 import com.apppubs.util.LogM;
 import com.apppubs.util.Utils;
+
+import java.util.Map;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  * Created by zhangwen on 2017/2/22.
@@ -66,7 +72,6 @@ public class AppContext {
     }
 
     public App getApp() {
-        LogM.log(AppContext.class, "获取app:" + mApp.toString());
         return mApp;
     }
 
@@ -155,6 +160,14 @@ public class AppContext {
         setSettings(mSettings);
     }
 
+    public String getLocalBaseURL() {
+        return mSettings.getBaseURL();
+    }
+
+    public String getLocalAppId() {
+        return mSettings.getAppCode();
+    }
+
     public void setSettings(Settings mSettings) {
         this.mSettings = mSettings;
         FileUtils.writeObj(mContext, mSettings, SYSTEM_SETTING_FILE_NAME);
@@ -193,6 +206,7 @@ public class AppContext {
         if (url.contains(PLACEHOLDER_PASSWORD)) {
             url = url.replace(PLACEHOLDER_PASSWORD, getCurrentUser().getPassword());
         }
+
         return url;
     }
 

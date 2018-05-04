@@ -1,7 +1,7 @@
 package com.apppubs.ui.myfile;
 
 import com.apppubs.constant.APError;
-import com.apppubs.model.MyFileModel;
+import com.apppubs.bean.MyFileModel;
 
 import java.util.List;
 
