@@ -17,57 +17,43 @@ import java.util.Date;
  * 2015年3月10日 by zhangwen create
  * 2015-04-15 增加menuPower字段 by zhangwen
  */
-@Table(name="user_info")
 public class UserInfo implements Serializable{
 
 	private static final long serialVersionUID = 1L;
 	//result":"2","username":"zhangw","email":"zhangw@hingesoft.com.cn","cnname":"张稳","userid":"1429733645294","inoutset":"2","password":"","mobile":"18686030360"}
 
 	private String id;
-	@SerializedName("userid")
 	private String userId;
-	@SerializedName("username")
 	private String username;
-	@SerializedName("truename")
+	private String token;
 	private String trueName;
-	@SerializedName("nickname")
 	private String nickName;
 	private String type;
-	// private transient String user_permissions;
 	private String icon;
 	private String password;
-	@SerializedName("email")
 	private String email;
-	@SerializedName("mobile")
 	private String mobile;
-	@SerializedName("mobile2")
 	private String mobile2;
-	@SerializedName("officeno")
 	private String officeNO;
-	@SerializedName("worktel")
 	private String workTEL;
-	@SerializedName("sex")
 	private String sex;
-	@SerializedName("szm")
 	private String initials;//拼音首字母
 
 	private Date lastUsedTime;//上次使用时间，用来判断常用
 
 	private String menuPower;//菜单权限字符串
 	private String addressBookPower;//通讯录组织权限
-	@SerializedName("orderno")
 	private int sortId;
 
 	private String addressbookPermissionString;
 
-	@SerializedName("photourl")
 	private String avatarUrl;//20170113
 	private String orgCode;
 
 	private String chatPermissionString;
 
-	@SerializedName("appcodeversion")
 	private String appCodeVersion;
+
 
 	public UserInfo() {
 	}
@@ -112,6 +98,14 @@ public class UserInfo implements Serializable{
 
 	public void setUsername(String username) {
 		this.username = username;
+	}
+
+	public String getToken() {
+		return token;
+	}
+
+	public void setToken(String token) {
+		this.token = token;
 	}
 
 	public String getTrueName() {

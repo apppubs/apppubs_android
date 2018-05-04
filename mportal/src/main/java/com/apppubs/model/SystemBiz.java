@@ -191,7 +191,7 @@ public class SystemBiz extends BaseBiz {
         // 如果是第一次初始化，无论那init个步骤出现问题都清空数据库重新初始化
         App localApp = AppContext.getInstance(mContext).getApp();
 
-        LogM.log(AppContext.class, "初始化:" + localApp.toString());
+        LogM.log(AppContext.class, "初始化本地app:" + localApp.toString());
 
 
         //如果是新版本第一次启动
@@ -371,89 +371,6 @@ public class SystemBiz extends BaseBiz {
         return MathUtils.MD5("sdk=" + Build.VERSION.SDK_INT + "|" + "model=" + Build.MODEL + "|"
                 + Build.SERIAL + "|"
                 + Build.DEVICE);
-
-    }
-
-
-    public AppConfig syncAppConfig() throws IOException, InterruptedException {
-
-        String result = WebUtils.requestWithGet(String.format(URLs.URL_APP_CONFIG, URLs.baseURL,
-                URLs.appCode, ""));
-        JSONResult jsonResult = JSONResult.compile(result);
-        if (jsonResult.code != 1) {
-            LogM.log(this.getClass(), "获取appconfig错误");
-        } else {
-            Map<String, String> resultMap = jsonResult.getResultMap();
-            // service_id":"1428155175898","address_apiflag":"0","usersync_url":"",
-            // "adbookversion":"5","adbookauth":"1","deptsync_url":"",
-            // "address_depturl":"http://202.99.19.140:8080/wmh360/json/getaddressdata
-            // .jsp?appcode=D20&flag=dept","address_encflag":"1","chatflag":"0",
-            // "address_deptuserurl":"http://202.99.19.140:8080/wmh360/json/getaddressdata
-            // .jsp?appcode=D20&flag=deptuser","userauth_url":"","adbookupdateflag":"0",
-            // "address_userurl":"http://202.99.19.140:8080/wmh360/json/getaddressdata
-            // .jsp?appcode=D20&flag=user","autologout":"1","mduserinfoflag":"0",
-            // "userauth_flag":"0","userdeptsync_url":""
-            App app = AppContext.getInstance(mContext).getApp();
-            app.setAddressbookUserUrl(resultMap.get("address_userurl"));
-            app.setAddressbookDetpUrl(resultMap.get("address_depturl"));
-            app.setAddressbookDeptUserUrl(resultMap.get("address_deptuserurl"));
-            app.setAddressbookNeedDecryption(Integer.parseInt(resultMap.get("address_encflag")));
-            app.setAddressbookNeedPermission(Integer.parseInt(resultMap.get("adbookauth")));
-            app.setDocumentReaderPageUrl(resultMap.get("document_reader_url"));
-            app.setAddressbookVersion(Integer.parseInt(resultMap.get("adbookversion")));
-
-            AppConfig appconfig = (AppConfig) jsonResult.getResultObject(AppConfig.class);
-            app.setAppConfig(appconfig);
-
-            UserInfo ui = AppContext.getInstance(mContext).getCurrentUser();
-            if (!TextUtils.isEmpty(ui.getUserId()) && appconfig.getAdbookAuthFlag() == 1) {
-                String url = String.format(URLs.URL_ADDRESS_PERMISSION, URLs.baseURL, URLs
-                        .appCode, AppContext.getInstance(mContext).getCurrentUser().getUserId());
-                String permissionResult = WebUtils.requestWithGet(url);
-                JSONResult jr = JSONResult.compile(permissionResult);
-                if (jr.code == 1) {
-                    UserInfo userInfo = AppContext.getInstance(mContext).getCurrentUser();
-                    userInfo.setAddressbookPermissionString(jr.result);
-                    AppContext.getInstance(mContext).setCurrentUser(userInfo);
-                }
-            }
-
-            if (!TextUtils.isEmpty(ui.getUserId()) && appconfig.getChatAuthFlag() == 1) {
-                String url = String.format(URLs.URL_USER_PERMISSION, URLs.baseURL, URLs.appCode,
-                        AppContext.getInstance(mContext).getCurrentUser().getUserId());
-                String permissionResult = WebUtils.requestWithGet(url);
-                JSONResult jr = JSONResult.compile(permissionResult);
-                if (jr.code == 1) {
-                    UserInfo userInfo = AppContext.getInstance(mContext).getCurrentUser();
-                    userInfo.setChatPermissionString(jr.result);
-                    AppContext.getInstance(mContext).setCurrentUser(userInfo);
-                }
-            }
-
-            AppContext.getInstance(mContext).setAppConfig(appconfig);
-            return appconfig;
-        }
-        return null;
-    }
-
-    /**
-     * 更新appconfig，将getappconfig中的数据同步到本地的APP对象中。
-     */
-    public void aSyncAppConfig(final Context context, final IAPCallback<AppConfig> callback) {
-        sDefaultExecutor.submit(new Runnable() {
-
-            @Override
-            public void run() {
-                try {
-                    AppConfig ac = syncAppConfig();
-                    sHandler.post(new OnDoneRun<AppConfig>(callback, ac));// 与主线程的通信
-                } catch (Exception e) {
-                    e.printStackTrace();
-                    sHandler.post(new OnExceptionRun<AppConfig>(callback));// 与主线程的通信
-                }
-
-            }
-        });
 
     }
 
@@ -735,7 +652,7 @@ public class SystemBiz extends BaseBiz {
      */
     public void initMenus(final IAPCallback<Boolean> callback) {
         // 初始化菜单
-        asyncPOST(Constants.API_NAME_MENUS, new HashMap<String, String>(), MenusResult.class, new
+        asyncPOST(Constants.API_NAME_MENUS, null,true, MenusResult.class, new
                 IRQListener<MenusResult>() {
             @Override
             public void onResponse(MenusResult menus, final APError error) {
@@ -743,7 +660,7 @@ public class SystemBiz extends BaseBiz {
                     final List<TMenuItem> list = convert2TMenuItems(menus);
                     String netItems = JSON.toJSONString(list);
                     String localItems = JSON.toJSONString(selectLocalMenus());
-                    boolean isUpdated = false;
+                    boolean isUpdated;
                     if (!TextUtils.equals(netItems, localItems)) {
                         insertOrUpdateLocalMenus(list);
                         isUpdated = true;
@@ -792,7 +709,7 @@ public class SystemBiz extends BaseBiz {
     public void commitPushRegisterId(final String registerId, final IAPCallback callback) {
         Map<String, String> params = new HashMap<>();
         params.put("registerId", registerId);
-        asyncPOST(Constants.API_NAME_COMMIT_PUSH_REGISTER_ID, params, new IRQStringListener() {
+        asyncPOST(Constants.API_NAME_COMMIT_PUSH_REGISTER_ID, params, true, new IRQStringListener() {
             @Override
             public void onResponse(final String result, final APError error) {
                 if (error == null) {

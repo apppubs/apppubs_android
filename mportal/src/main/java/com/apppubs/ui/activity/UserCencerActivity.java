@@ -21,6 +21,7 @@ import com.apppubs.asytask.AsyTaskCallback;
 import com.apppubs.asytask.AsyTaskExecutor;
 import com.apppubs.bean.UserInfo;
 import com.apppubs.constant.URLs;
+import com.apppubs.model.UserBiz;
 import com.apppubs.model.message.UserBasicInfo;
 import com.apppubs.model.IAPCallback;
 import com.apppubs.util.BitmapUtils;
@@ -147,7 +148,7 @@ public class UserCencerActivity extends BaseActivity {
 
 					@Override
 					public void onOkClick() {
-						mUserBussiness.logout(UserCencerActivity.this);
+						UserBiz.getInstance(mContext).logout(UserCencerActivity.this);
 						UserCencerActivity.this.finish();
 					}
 

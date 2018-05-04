@@ -133,21 +133,14 @@ public class PageFragment extends TitleMenuFragment implements OnClickListener, 
             mPageId = bundle.getString(EXTRA_STRING_NAME_PAGE_ID);
         }
         initView();
-        mPresenter.onCreateView();
         return mRootFL;
-    }
-
-    @Override
-    public void onResume() {
-        super.onResume();
-        mPresenter.onVisiable();
     }
 
     @Override
     public void onHiddenChanged(boolean hidden) {
         super.onHiddenChanged(hidden);
         if (!hidden) {
-            mPresenter.onVisiable();
+            mPresenter.onVisible();
         }
     }
 
@@ -155,8 +148,7 @@ public class PageFragment extends TitleMenuFragment implements OnClickListener, 
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         mInflater = LayoutInflater.from(mContext);
-//		loadCache();
-//		loadRemoteData();
+        mPresenter.onCreateView();
     }
 
     @Override
@@ -766,11 +758,11 @@ public class PageFragment extends TitleMenuFragment implements OnClickListener, 
         JSONObject component = pc.getJSONObject();
         RelativeLayout picCon = new RelativeLayout(mContext);
 
-        double ratio = component.getDouble("picheightwidthratio");
+        double ratio = component.getDouble("picHeightWidthRatio");
         HotAreaView iv = new HotAreaView(mContext);
         JSONArray items = component.getJSONArray("items");
         List<HotArea> hotAreas = new ArrayList<HotArea>();
-        iv.setPicWidth(component.getInt("picwidth"));
+        iv.setPicWidth(component.getInt("picWidth"));
         for (int j = -1; ++j < items.length(); ) {
             JSONObject item = items.getJSONObject(j);
             HotArea ha = new HotArea();
@@ -779,8 +771,8 @@ public class PageFragment extends TitleMenuFragment implements OnClickListener, 
             if (item.has("shape")) {
                 ha.setShape(item.getString("shape"));
             }
-            if (item.has("url")) {
-                ha.setUrl(item.getString("url"));
+            if (item.has("URL")) {
+                ha.setUrl(item.getString("URL"));
             }
             if (item.has("coords")) {
                 ha.setCoords(item.getString("coords"));
@@ -808,7 +800,7 @@ public class PageFragment extends TitleMenuFragment implements OnClickListener, 
         int height = (int) (ratio * width);
         RelativeLayout.LayoutParams lp = new RelativeLayout.LayoutParams(width, height);
         lp.addRule(RelativeLayout.CENTER_IN_PARENT);
-        mImageLoader.displayImage(component.getString("picurl"), iv);
+        mImageLoader.displayImage(component.getString("picURL"), iv);
         iv.setBackgroundColor(Color.BLACK);
         picCon.addView(iv, lp);
 
@@ -834,12 +826,12 @@ public class PageFragment extends TitleMenuFragment implements OnClickListener, 
 
     private void addDefaultHotArea(PageComponent pc) throws JSONException {
         JSONObject component = pc.getJSONObject();
-        double ratio = component.getDouble("picheightwidthratio");
+        double ratio = component.getDouble("picHeightWidthRatio");
         HotAreaView iv = new HotAreaView(mContext);
         JSONArray items = component.getJSONArray("items");
         UUID uuid = UUID.randomUUID();
         iv.setTag(uuid.toString());
-        iv.setPicWidth(component.getInt("picwidth"));
+        iv.setPicWidth(component.getInt("picWidth"));
 
         AsyTaskExecutor.getInstance().startTask(ASY_TASK_TAG_RESOLVE_HOTAREAS, new
                 AsyTaskCallback() {
@@ -848,7 +840,7 @@ public class PageFragment extends TitleMenuFragment implements OnClickListener, 
                     public void onTaskSuccess(Integer tag, Object obj) {
                         Map<String, Object> map = (Map<String, Object>) obj;
                         String viewTag = (String) map.get("viewTag");
-                        List<HotArea> hotAreas = (List<HotArea>) map.get("hotareas");
+                        List<HotArea> hotAreas = (List<HotArea>) map.get("hotAreas");
                         HotAreaView iv = (HotAreaView) mContainerLl
                                 .findViewWithTag(viewTag);
                         if (iv != null) {
@@ -867,7 +859,7 @@ public class PageFragment extends TitleMenuFragment implements OnClickListener, 
                         List<HotArea> areas = resolveHotareaItems(params[0]);
                         Map<String, Object> map = new HashMap<String, Object>();
                         map.put("viewTag", params[1]);
-                        map.put("hotareas", areas);
+                        map.put("hotAreas", areas);
                         return map;
                     }
                 }, new String[]{items.toString(), uuid.toString()});
@@ -954,7 +946,7 @@ public class PageFragment extends TitleMenuFragment implements OnClickListener, 
         int width = wm.getDefaultDisplay().getWidth();
         LayoutParams lp = new LayoutParams(width, (int) (ratio
                 * width));
-        mImageLoader.displayImage(component.getString("picurl"), iv, getDefaultImageLoaderOptions
+        mImageLoader.displayImage(component.getString("picURL"), iv, getDefaultImageLoaderOptions
                 ());
         mContainerLl.addView(iv, lp);
     }
@@ -1038,9 +1030,9 @@ public class PageFragment extends TitleMenuFragment implements OnClickListener, 
             TextView tv = (TextView) rl.findViewById(R.id.menu_tv);
             tv.setText(item.getString("title"));
             ImageView iv = (ImageView) rl.findViewById(R.id.menu_iv);
-            mImageLoader.displayImage(item.getString("picurl"), iv);
+            mImageLoader.displayImage(item.getString("picURL"), iv);
             rl.setOnClickListener(this);
-            rl.setTag(item.getString("url"));
+            rl.setTag(item.getString("URL"));
             gl.addView(rl, glp);
 
         }
@@ -1077,9 +1069,9 @@ public class PageFragment extends TitleMenuFragment implements OnClickListener, 
             TextView tv = (TextView) rl.findViewById(R.id.menu_tv);
             tv.setText(item.getString("title"));
             ImageView iv = (ImageView) rl.findViewById(R.id.menu_iv);
-            mImageLoader.displayImage(item.getString("picurl"), iv);
+            mImageLoader.displayImage(item.getString("picURL"), iv);
             rl.setOnClickListener(this);
-            rl.setTag(item.getString("url"));
+            rl.setTag(item.getString("URL"));
             gl.addView(rl, glp);
 
         }
@@ -1090,7 +1082,7 @@ public class PageFragment extends TitleMenuFragment implements OnClickListener, 
     private void addSlidePicWithPageControlOnlyComponent(PageComponent pc) throws
             JSONException {
         JSONObject component = pc.getJSONObject();
-        float ratio = (float) component.getDouble("widthheightratio");
+        float ratio = (float) component.getDouble("widthHeightRatio");
         SlidePicView spv = new SlidePicView(mContext, SlidePicView
                 .STYLE_PAGE_CONTROL_ONLY, ratio);
         spv.setBackgroundColor(Color.WHITE);
@@ -1099,8 +1091,8 @@ public class PageFragment extends TitleMenuFragment implements OnClickListener, 
         for (int j = -1; ++j < items.length(); ) {
             SlidePicView.SlidePicItem sp = new SlidePicView.SlidePicItem();
             JSONObject item = items.getJSONObject(j);
-            sp.picURL = item.getString("picurl");
-            sp.linkValue = item.getString("url");
+            sp.picURL = item.getString("picURL");
+            sp.linkValue = item.getString("URL");
             list.add(sp);
         }
         spv.setOnItemClickListener(new SlidePicView.OnItemClickListener() {
@@ -1124,9 +1116,9 @@ public class PageFragment extends TitleMenuFragment implements OnClickListener, 
         for (int j = -1; ++j < items.length(); ) {
             SlidePicView.SlidePicItem sp = new SlidePicView.SlidePicItem();
             JSONObject item = items.getJSONObject(j);
-            sp.picURL = item.getString("picurl");
+            sp.picURL = item.getString("picURL");
             sp.title = item.getString("title");
-            sp.linkValue = item.getString("url");
+            sp.linkValue = item.getString("URL");
             list.add(sp);
         }
         spv.setOnItemClickListener(new SlidePicView.OnItemClickListener() {

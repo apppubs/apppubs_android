@@ -70,15 +70,14 @@ public class FragmentFactory {
             String title = StringUtils.getQueryParameter(uri, "title");
             frg = new ServiceNOsOfMineFragment();
             Bundle args = new Bundle();
-            String[] params = StringUtils.getPathParams(uri);
             frg.setArguments(args);
             frg.setTitle(title);
         } else if (uri.matches("apppubs:\\/\\/setting[\\S]*")) {
             String title = StringUtils.getQueryParameter(uri, "title");
             frg = new SettingFragment();
             Bundle args = new Bundle();
-            String[] params = StringUtils.getPathParams(uri);
             frg.setArguments(args);
+            frg.setTitle(title);
         } else {
             frg = new ExceptionFragment();
         }

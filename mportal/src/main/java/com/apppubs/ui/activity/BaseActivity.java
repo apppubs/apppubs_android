@@ -167,6 +167,9 @@ public abstract class BaseActivity extends FragmentActivity implements OnClickLi
 			@Override
 			public void onReceive(Context context, Intent intent) {
 				LogM.log(this.getClass(), "onReceive finish");
+				if (BaseActivity.this instanceof FirstLoginActity){
+				    return;
+                }
 				finish();
 			}
 		};
@@ -282,73 +285,6 @@ public abstract class BaseActivity extends FragmentActivity implements OnClickLi
 	protected void onAppActive() {
 
 	}
-
-	private void preCheckUpdate(){
-		mSystemBiz.aSyncAppConfig(this, new IAPCallback<AppConfig>() {
-			@Override
-			public void onDone(AppConfig obj) {
-				System.out.print("同步appconfig成功");
-				//避免在startupactivit中进行重复检测
-				if (!(BaseActivity.this instanceof StartUpActivity)){
-					checkUpdate();
-				}
-			}
-
-			@Override
-			public void onException(APError error) {
-				System.out.print("同步appconfig失败");
-			}
-		});
-	}
-	protected void checkUpdate() {
-		mSystemBiz.checkUpdate(BaseActivity.this,new SystemBiz.CheckUpdateListener(){
-
-			@Override
-			public void onDone(final VersionInfo vi) {
-				if (vi.isNeedUpdate()&&vi.isNeedAlert()){
-					String title = String.format("检查到有新版 %s", TextUtils.isEmpty(vi.getVersion())?"":"V"+vi.getVersion());
-					if(vi.isNeedForceUpdate()){
-						AlertDialog ad = new AlertDialog(BaseActivity.this, new AlertDialog.OnOkClickListener() {
-
-							@Override
-							public void onclick() {
-								AppManager.getInstant(mContext).downloadApp(vi.getUpdateUrl());
-//								Intent it = new Intent(BaseActivity.this, DownloadAppService.class);
-//								it.putExtra(DownloadAppService.SERVICRINTENTURL, vi.getUpdateUrl());
-//								it.putExtra(DownloadAppService.SERVACESHARENAME, 0);
-//								startService(it);
-								Toast.makeText(BaseActivity.this, "正在下载中，请稍候", Toast.LENGTH_SHORT).show();
-							}
-						}, title, vi.getUpdateDescribe(),"更新");
-						ad.show();
-						ad.setCancelable(false);
-						ad.setCanceledOnTouchOutside(false);
-					}else{
-						ConfirmDialog dialog = new ConfirmDialog(BaseActivity.this, new ConfirmDialog.ConfirmListener() {
-
-							@Override
-							public void onCancelClick() {
-							}
-
-							@Override
-							public void onOkClick() {
-								AppManager.getInstant(mContext).downloadApp(vi.getUpdateUrl());
-//								Intent it = new Intent(BaseActivity.this, DownloadAppService.class);
-//								it.putExtra(DownloadAppService.SERVICRINTENTURL, vi.getUpdateUrl());
-//								it.putExtra(DownloadAppService.SERVACESHARENAME, 0);
-//								startService(it);
-//								mUserBussiness.logout(BaseActivity.this);
-							}
-						}, title , vi.getUpdateDescribe(), "下次", "更新");
-						dialog.show();
-						dialog.setCanceledOnTouchOutside(false);
-					}
-				}else{
-				}
-			}
-		});
-	}
-
 
 	@Override
 	protected void onStop() {

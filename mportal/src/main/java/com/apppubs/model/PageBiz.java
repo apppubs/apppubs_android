@@ -37,7 +37,7 @@ public class PageBiz extends BaseBiz implements IPageBiz {
     public void loadPage(String pageId, final IAPCallback<PageModel> callback) {
         Map<String, String> params = new HashMap<>();
         params.put("pageId", pageId);
-        asyncPOST(Constants.API_NAME_PAGE, params, new IRQStringListener() {
+        asyncPOST(Constants.API_NAME_PAGE, params,true, new IRQStringListener() {
 
             @Override
             public void onResponse(String result, final APError error) {

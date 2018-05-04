@@ -182,7 +182,7 @@ public class HomeBottomMenuActivity extends HomeBaseActivity implements IHomeBot
 	private Fragment mCurFrg;
 
 	@Override
-	public void changeContent(Fragment fragment) {
+	public void changeContent(BaseFragment fragment) {
 
 		FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
 		List<Fragment> fragments = getSupportFragmentManager().getFragments();

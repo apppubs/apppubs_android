@@ -20,6 +20,7 @@ import com.apppubs.net.APHttpClient;
 import com.apppubs.net.APNetException;
 import com.apppubs.net.IHttpClient;
 import com.apppubs.net.IRequestListener;
+import com.apppubs.util.Utils;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -102,7 +103,7 @@ public abstract class BaseBiz {
         }
 
         public void run() {
-            mCallback.onException(new APError(APErrorCode.GENERAL_ERROR,"系统异常！"));
+            mCallback.onException(new APError(APErrorCode.GENERAL_ERROR, "系统异常！"));
         }
     }
 
@@ -139,21 +140,21 @@ public abstract class BaseBiz {
         String screenDimenFlag = getScreenStr();
 
         Map<String, String> headers = new HashMap<String, String>();
-        headers.put("version",mAppContext.getVersionName());
-        headers.put("versionCode",mAppContext.getVersionCode()+"");
-        headers.put("os",Build.VERSION.RELEASE);
-        headers.put("from","android");
-        headers.put("screen",screenDimenFlag);
-        headers.put("model",Build.DEVICE);
-        headers.put("channel","default");
-        headers.put("net","unknow");
-        headers.put("deviceId",SystemBiz.getInstance(mContext).getMachineId());
-        headers.put("nonce","");
-        headers.put("timestamp","");
-        headers.put("sign","");
-        headers.put("appId",mAppContext.getLocalAppId());
-        headers.put("orgCode",mAppContext.getApp().getOrgCode());
-        headers.put("apiVersion","1.0.0");
+        headers.put("version", mAppContext.getVersionName());
+        headers.put("versionCode", mAppContext.getVersionCode() + "");
+        headers.put("os", Build.VERSION.RELEASE);
+        headers.put("from", "android");
+        headers.put("screen", screenDimenFlag);
+        headers.put("model", Build.DEVICE);
+        headers.put("channel", "default");
+        headers.put("net", "unknow");
+        headers.put("deviceId", SystemBiz.getInstance(mContext).getMachineId());
+        headers.put("nonce", "");
+        headers.put("timestamp", "");
+        headers.put("sign", "");
+        headers.put("appId", mAppContext.getLocalAppId());
+        headers.put("orgCode", mAppContext.getApp().getOrgCode());
+        headers.put("apiVersion", "1.0.0");
 
         return headers;
     }
@@ -166,10 +167,18 @@ public abstract class BaseBiz {
         return dm.widthPixels + "*" + dm.heightPixels;
     }
 
-    protected  <T extends IJsonResult> void asyncPOST( String apiName, Map<String, String>
+    protected <T extends IJsonResult> void asyncPOST(String apiName, Map<String, String>
             params, final Class<T> clazz, final IRQListener listener) {
+        asyncPOST(apiName, params, false, clazz, listener);
+    }
+
+    protected <T extends IJsonResult> void asyncPOST(String apiName, Map<String, String>
+            params, boolean needUser, final Class<T> clazz, final IRQListener listener) {
         String entryURL = getEntryURL();
         params = getTrueParams(apiName, params);
+        if (needUser) {
+            params.putAll(getUserParams());
+        }
         mHttpClient.asyncPOST(entryURL, getCommonHeader(), params, new IRequestListener() {
 
             @Override
@@ -195,16 +204,25 @@ public abstract class BaseBiz {
 
     @NonNull
     private Map<String, String> getTrueParams(String apiName, Map<String, String> params) {
-        if (null == params){
+        if (null == params) {
             params = new HashMap<String, String>();
         }
-        params.put("apiName",apiName);
+        params.put("apiName", apiName);
         return params;
     }
 
-    protected void asyncPOST(String apiName, Map<String,String> params, @NonNull final IRQStringListener listener){
+    protected void asyncPOST(String apiName, Map<String, String> params, @NonNull final
+    IRQStringListener listener) {
+        asyncPOST(apiName, params, false, listener);
+    }
+
+    protected void asyncPOST(String apiName, Map<String, String> params, boolean needUser,
+                             @NonNull final IRQStringListener listener) {
         String entryURL = getEntryURL();
         params = getTrueParams(apiName, params);
+        if (needUser) {
+            params.putAll(getUserParams());
+        }
         mHttpClient.asyncPOST(entryURL, getCommonHeader(), params, new IRequestListener() {
 
             @Override
@@ -226,14 +244,23 @@ public abstract class BaseBiz {
             }
         });
     }
+
     private String getEntryURL() {
-        return mAppContext.getLocalBaseURL()+ Constants.API_ENTRY;
+        return mAppContext.getLocalBaseURL() + Constants.API_ENTRY;
     }
 
-    protected  <T extends IJsonResult> T syncPOST(String apiName, @NonNull Map<String, String> params,
-                                              Class<T> clazz) throws APNetException {
+    protected <T extends IJsonResult> T syncPOST(String apiName, @NonNull Map<String, String>
+            params, Class<T> clazz) throws APNetException {
+        return syncPOST(apiName, params, false, clazz);
+    }
+
+    protected <T extends IJsonResult> T syncPOST(String apiName, @NonNull Map<String, String>
+            params, boolean needUser, Class<T> clazz) throws APNetException {
         String entryURL = getEntryURL();
         params = getTrueParams(apiName, params);
+        if (needUser) {
+            params.putAll(getUserParams());
+        }
         String json = mHttpClient.syncPOST(entryURL, getCommonHeader(), params);
         JSONObject jo = JSONObject.parseObject(json);
         Integer code = jo.getInteger("code");
@@ -251,8 +278,18 @@ public abstract class BaseBiz {
         void onResponse(T jr, APError error);
     }
 
-    public interface IRQStringListener{
-        void onResponse(String result,APError error);
+    public interface IRQStringListener {
+        void onResponse(String result, APError error);
     }
 
+    private Map<String, String> getUserParams() {
+        if (Utils.isEmpty(mAppContext.getCurrentUser()) || Utils.isEmpty(mAppContext
+                .getCurrentUser().getUserId())) {
+            return new HashMap<>();
+        }
+        Map<String, String> params = new HashMap<>();
+        params.put("username", mAppContext.getCurrentUser().getUsername());
+        params.put("token", mAppContext.getCurrentUser().getToken());
+        return params;
+    }
 }

@@ -20,7 +20,7 @@ import java.util.Map;
 
 public abstract class HomePresenter<T extends IHomeView> extends AbsPresenter<T> {
 
-    private Map<String, Fragment> mFragmentsMap;
+    private Map<String, BaseFragment> mFragmentsMap;
 
     public HomePresenter(Context context, T view) {
         super(context, view);

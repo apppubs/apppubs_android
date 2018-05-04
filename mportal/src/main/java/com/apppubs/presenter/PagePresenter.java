@@ -26,19 +26,22 @@ public class PagePresenter {
     private IPageView mPageView;
     private PageModel mPageModel;
 
+    private boolean isLoading;
+
     public PagePresenter(Context context, IPageView view) {
         mContext = context;
         mPageBiz = new PageBiz(context);
         mPageView = view;
     }
 
-    public void onVisiable() {
+    public void onVisible() {
         LogM.log(this.getClass(), "可以显示了");
         loadPage();
     }
 
     public void onCreateView() {
-//        loadPage();
+        mPageView.showLoading();
+        loadPage();
     }
 
     public void onAddressSelected(AddressModel model) {
@@ -48,11 +51,16 @@ public class PagePresenter {
 
     //private
     private void loadPage() {
-        mPageView.showLoading();
+        if (isLoading){
+            return;
+        }
+        isLoading = isLoading;
+
         String pageId = mPageView.getPageId();
         mPageBiz.loadPage(pageId, new IAPCallback<PageModel>() {
             @Override
             public void onDone(final PageModel model) {
+                isLoading = false;
                 mPageView.hideLoading();
                 if (mPageModel != null && mPageModel.equals(model)) {
                     //不需要更新
@@ -64,6 +72,7 @@ public class PagePresenter {
 
             @Override
             public void onException(final APError error) {
+                isLoading = false;
                 MainHandler.getInstance().post(new Runnable() {
                     @Override
                     public void run() {

@@ -154,7 +154,7 @@ public class AppContext {
 
     public void resetBaseUrlAndAppCode() {
         String baseUrl = Utils.getMetaValue(mContext, "BASE_URL");
-        String appCode = Utils.getMetaValue(mContext, "APPCODE");
+        String appCode = Utils.getMetaValue(mContext, "APPID");
         mSettings.setBaseURL(baseUrl);
         mSettings.setAppCode(appCode);
         setSettings(mSettings);

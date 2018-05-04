@@ -28,7 +28,9 @@ public class APHttpClient implements IHttpClient {
     private OkHttpClient mOkHttpClient;
     private final long cacheSize = 1024 * 1024 * 20;// 缓存文件最大限制大小20M
     private Cache cache;
-    private static String cacheDirectory = Environment.getExternalStorageDirectory() + "/okttpcaches";
+    private static String cacheDirectory = Environment.getExternalStorageDirectory() +
+            "/okttpcaches";
+
     public APHttpClient() {
 
         cache = new Cache(new File(cacheDirectory), cacheSize);
@@ -49,6 +51,8 @@ public class APHttpClient implements IHttpClient {
     @Override
     public void asyncPOST(String url, Map<String, String> headers, Map<String, String> params,
                           final IRequestListener listener) {
+        LogM.log(APHttpClient.class, "onRequest url:" + url + ",headers: " + headers + " params:"
+                + params);
         FormBody.Builder builder = new FormBody.Builder();
         if (params != null) {
             for (String key : params.keySet()) {
@@ -77,13 +81,14 @@ public class APHttpClient implements IHttpClient {
             @Override
             public void onFailure(Call call, IOException e) {
                 e.printStackTrace();
-                listener.onResponse(null, new APError(APErrorCode.NETWORK_ERROR,"网络异常！请检查网络是否畅通！"));
+                listener.onResponse(null, new APError(APErrorCode.NETWORK_ERROR,
+                        "网络异常！请检查网络是否畅通！"));
             }
 
             @Override
             public void onResponse(Call call, Response response) throws IOException {
                 String responseStr = response.body().string();
-                LogM.log(APHttpClient.class,"onResponse："+responseStr);
+                LogM.log(APHttpClient.class, "onResponse：" + responseStr);
                 listener.onResponse(responseStr, null);
             }
         });
@@ -104,12 +109,14 @@ public class APHttpClient implements IHttpClient {
 
     @Override
     public String syncPOST(String url, Map<String, String> params) throws APNetException {
-        return syncPOST(url,null,params);
+        return syncPOST(url, null, params);
     }
 
     @Override
     public String syncPOST(String url, Map<String, String> headers, Map<String, String> params)
             throws APNetException {
+        LogM.log(APHttpClient.class, "onRequest url:" + url + ",headers: " + headers + " params:"
+                + params);
         FormBody.Builder builder = new FormBody.Builder();
         if (params != null) {
             for (String key : params.keySet()) {
@@ -118,8 +125,6 @@ public class APHttpClient implements IHttpClient {
             }
         }
         FormBody formBody = builder.build();
-
-
         Request.Builder requestBuilder = new Request.Builder()
                 .url(url)
                 .post(formBody);
@@ -136,11 +141,11 @@ public class APHttpClient implements IHttpClient {
         Call call = mOkHttpClient.newCall(request);
         try {
             String responseStr = call.execute().body().string();
-            LogM.log(APHttpClient.class,"onResponse："+responseStr);
+            LogM.log(APHttpClient.class, "onResponse：url:" + url + " response: " + responseStr);
             return responseStr;
         } catch (IOException e) {
             e.printStackTrace();
-            throw new APNetException(new APError(APErrorCode.NETWORK_ERROR,"网络异常！请检查网络是否畅通！"));
+            throw new APNetException(new APError(APErrorCode.NETWORK_ERROR, "网络异常！请检查网络是否畅通！"));
         }
 
     }

@@ -17,18 +17,20 @@ public class ServiceNoBiz extends BaseBiz {
         super(context);
     }
 
-    public void loadMyServiceNOs(final IAPCallback<MyServiceNOsResult> callback){
-        asyncPOST(Constants.API_NAME_MY_SERVICENOS, null, MyServiceNOsResult.class, new IRQListener<MyServiceNOsResult>() {
+    public void loadMyServiceNOs(final IAPCallback<MyServiceNOsResult> callback) {
+
+        asyncPOST(Constants.API_NAME_MY_SERVICENOS, null, true, MyServiceNOsResult.class, new
+                IRQListener<MyServiceNOsResult>() {
             @Override
             public void onResponse(final MyServiceNOsResult result, final APError error) {
-                if (error == null){
+                if (error == null) {
                     MainHandler.getInstance().post(new Runnable() {
                         @Override
                         public void run() {
                             callback.onDone(result);
                         }
                     });
-                }else{
+                } else {
                     MainHandler.getInstance().post(new Runnable() {
                         @Override
                         public void run() {
@@ -40,23 +42,25 @@ public class ServiceNoBiz extends BaseBiz {
         });
     }
 
-    public void loadInfoPage(String servicenoId, int pageNum, int pageSize, final IAPCallback<ServiceNOInfoPageResult> callback){
+    public void loadInfoPage(String servicenoId, int pageNum, int pageSize, final
+    IAPCallback<ServiceNOInfoPageResult> callback) {
         Map<String, String> params = new HashMap<>();
-        params.put("pageNum", pageNum+"");
-        params.put("pageSize", pageSize+"");
+        params.put("pageNum", pageNum + "");
+        params.put("pageSize", pageSize + "");
         params.put("servicenoId", servicenoId);
-        asyncPOST(Constants.API_NAME_SERVICENO_ARTICLE_PAGE, params, ServiceNOInfoPageResult.class, new IRQListener<ServiceNOInfoPageResult>(){
+        asyncPOST(Constants.API_NAME_SERVICENO_ARTICLE_PAGE, params, true,
+                ServiceNOInfoPageResult.class, new IRQListener<ServiceNOInfoPageResult>() {
 
             @Override
             public void onResponse(final ServiceNOInfoPageResult jr, final APError error) {
-                if (error == null){
+                if (error == null) {
                     MainHandler.getInstance().post(new Runnable() {
                         @Override
                         public void run() {
                             callback.onDone(jr);
                         }
                     });
-                }else {
+                } else {
                     MainHandler.getInstance().post(new Runnable() {
                         @Override
                         public void run() {
@@ -69,21 +73,22 @@ public class ServiceNoBiz extends BaseBiz {
         });
     }
 
-    public void loadServiceNOInfo(String id, final IAPCallback<ServiceNOInfoResult> callback){
+    public void loadServiceNOInfo(String id, final IAPCallback<ServiceNOInfoResult> callback) {
         Map<String, String> params = new HashMap<>();
         params.put("id", id);
-        asyncPOST(Constants.API_NAME_SERVICENO, params, ServiceNOInfoResult.class, new IRQListener<ServiceNOInfoResult>(){
+        asyncPOST(Constants.API_NAME_SERVICENO, params, true, ServiceNOInfoResult.class, new
+                IRQListener<ServiceNOInfoResult>() {
 
             @Override
             public void onResponse(final ServiceNOInfoResult jr, final APError error) {
-                if (error == null){
+                if (error == null) {
                     MainHandler.getInstance().post(new Runnable() {
                         @Override
                         public void run() {
                             callback.onDone(jr);
                         }
                     });
-                }else {
+                } else {
                     MainHandler.getInstance().post(new Runnable() {
                         @Override
                         public void run() {

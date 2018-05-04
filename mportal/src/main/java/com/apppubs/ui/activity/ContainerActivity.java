@@ -126,6 +126,24 @@ public class ContainerActivity<T> extends BaseActivity {
 		
 		context.startActivity(i);
 	}
+
+	public static void startFullScreenContainerActivity(Context context, Class<? extends BaseFragment> frgClass, Bundle extras,
+														String title){
+		Intent i = new Intent(context, ContainerActivity.class);
+		i.putExtra(EXTRA_FRAGMENT_CLASS_NAME, frgClass.getName());
+
+		if (extras != null){
+			i.putExtras(extras);
+		}
+
+		if (title != null) {
+			i.putExtra(EXTRA_STRING_TITLE, title);
+		}
+
+		i.putExtra(EXTRA_BOOLEAN_IS_FULLSCREEN, true);
+
+		context.startActivity(i);
+	}
 	
 
 	/**

@@ -307,19 +307,7 @@ public class AddressBookFragement extends BaseFragment {
 	 */
 	private void sync() {
 		mProgressHUD = ProgressHUD.show(mHostActivity, "同步中", true, false, null);
-		mSystemBiz.aSyncAppConfig(mHostActivity, new IAPCallback<AppConfig>() {
-
-			@Override
-			public void onDone(AppConfig obj) {
-				syncAddressbook();
-			}
-
-			@Override
-			public void onException(APError excepCode) {
-				Toast.makeText(mHostActivity, "同步失败", Toast.LENGTH_SHORT).show();
-				mProgressHUD.dismiss();
-			}
-		});
+		syncAddressbook();
 
 	}
 

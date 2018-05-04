@@ -29,6 +29,7 @@ import com.apppubs.ui.activity.BaseActivity;
 import com.apppubs.ui.activity.CompelMessageDialogActivity;
 import com.apppubs.ui.activity.FirstLoginActity;
 import com.apppubs.ui.activity.ViewCourier;
+import com.apppubs.ui.fragment.BaseFragment;
 import com.apppubs.util.FileUtils;
 import com.apppubs.util.LogM;
 import com.apppubs.util.SharedPreferenceUtils;
@@ -335,7 +336,7 @@ public abstract class HomeBaseActivity extends BaseActivity implements IHomeView
 	protected abstract void selectTab(int index);
 
 	@Override
-	public void changeContent(Fragment frg) {
+	public void changeContent(BaseFragment frg) {
 
 	}
 

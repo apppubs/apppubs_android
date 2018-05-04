@@ -1,6 +1,7 @@
 package com.apppubs.model;
 
 import android.content.Context;
+import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 
@@ -10,6 +11,7 @@ import com.apppubs.AppContext;
 import com.apppubs.bean.http.DefaultResult;
 import com.apppubs.bean.http.LoginResult;
 import com.apppubs.constant.APError;
+import com.apppubs.constant.Actions;
 import com.apppubs.constant.Constants;
 import com.apppubs.constant.URLs;
 import com.apppubs.net.WMHHttpClient;
@@ -23,6 +25,8 @@ import com.apppubs.util.WebUtils;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
+import io.rong.imkit.RongIM;
 
 /**
  * Created by zhangwen on 2017/10/24.
@@ -89,28 +93,28 @@ public class UserBiz extends BaseBiz {
         params.put("pwd", pwd);
         asyncPOST(Constants.API_NAME_LOGIN_WITH_USERNAME_AND_PWD, params, LoginResult.class, new
                 IRQListener<LoginResult>() {
-            @Override
-            public void onResponse(LoginResult jr, final APError error) {
-                if (error == null) {
-                    final UserInfo user = updateLocalUserInfo(jr, autoLogin);
-                    MainHandler.getInstance().post(new Runnable() {
-                        @Override
-                        public void run() {
-                            callback.onDone(user);
-                        }
-                    });
+                    @Override
+                    public void onResponse(LoginResult jr, final APError error) {
+                        if (error == null) {
+                            final UserInfo user = updateLocalUserInfo(jr, autoLogin);
+                            MainHandler.getInstance().post(new Runnable() {
+                                @Override
+                                public void run() {
+                                    callback.onDone(user);
+                                }
+                            });
 
-                } else {
-                    MainHandler.getInstance().post(new Runnable() {
-                        @Override
-                        public void run() {
-                            callback.onException(error);
-                        }
-                    });
+                        } else {
+                            MainHandler.getInstance().post(new Runnable() {
+                                @Override
+                                public void run() {
+                                    callback.onException(error);
+                                }
+                            });
 
-                }
-            }
-        });
+                        }
+                    }
+                });
     }
 
     @NonNull
@@ -118,7 +122,7 @@ public class UserBiz extends BaseBiz {
         UserInfo user = new UserInfo(jr.getUserId(), jr.getUsername(), jr
                 .getCNName(),
                 null, jr.getEmail(), jr.getMobile());
-//                    user.setMenuPower(jo.getString("menupower"));
+        user.setToken(jr.getToken());
         mAppContext.setCurrentUser(user);
         // 保存user对象，并保存是否自动登录的配置
         Settings settings = mAppContext.getSettings();
@@ -165,26 +169,26 @@ public class UserBiz extends BaseBiz {
         params.put("username", username);
         asyncPOST(Constants.API_NAME_LOGIN_WITH_USERNAME, params, DefaultResult.class, new
                 IRQListener<DefaultResult>() {
-            @Override
-            public void onResponse(final DefaultResult jr, final APError error) {
-                if (error == null) {
-                    MainHandler.getInstance().post(new Runnable() {
-                        @Override
-                        public void run() {
-                            callback.onDone((String) jr.get("phone"));
-                        }
-                    });
-                } else {
-                    MainHandler.getInstance().post(new Runnable() {
-                        @Override
-                        public void run() {
-                            callback.onException(error);
-                        }
-                    });
+                    @Override
+                    public void onResponse(final DefaultResult jr, final APError error) {
+                        if (error == null) {
+                            MainHandler.getInstance().post(new Runnable() {
+                                @Override
+                                public void run() {
+                                    callback.onDone((String) jr.get("phone"));
+                                }
+                            });
+                        } else {
+                            MainHandler.getInstance().post(new Runnable() {
+                                @Override
+                                public void run() {
+                                    callback.onException(error);
+                                }
+                            });
 
-                }
-            }
-        });
+                        }
+                    }
+                });
     }
 
     public void loginWithUsernamePwdAndOrgCode(String username, String pwd, String orgCode, final
@@ -335,6 +339,12 @@ public class UserBiz extends BaseBiz {
             sb.append(userId);
         }
         return sb.toString();
+    }
+
+    public void logout(Context context) {
+        AppContext.getInstance(mContext).clearCurrentUser();
+        RongIM.getInstance().logout();
+        context.sendBroadcast(new Intent(Actions.ACTION_LOGOUT));
     }
 
 }

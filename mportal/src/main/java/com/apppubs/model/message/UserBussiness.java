@@ -786,12 +786,6 @@ public class UserBussiness extends BaseBiz {
 		return result;
 	}
 
-	public void logout(Context context) {
-		AppContext.getInstance(mContext).clearCurrentUser();
-		RongIM.getInstance().logout();
-		context.sendBroadcast(new Intent(Actions.ACTION_LOGOUT));
-	}
-
 	/**
 	 * 判断在是否有某用户的读取权限
 	 * @param userid

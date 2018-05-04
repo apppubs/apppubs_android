@@ -34,7 +34,7 @@ import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.wang.avi.AVLoadingIndicatorView;
 
-public class BaseFragment extends Fragment implements KeyEvent.Callback, OnClickListener {
+public abstract class BaseFragment extends Fragment implements KeyEvent.Callback, OnClickListener {
 
     protected static int mDefaultColor;
     /**
@@ -120,7 +120,6 @@ public class BaseFragment extends Fragment implements KeyEvent.Callback, OnClick
         } else {
             rootView = contentFL;
         }
-
         return rootView;
     }
 
@@ -163,10 +162,6 @@ public class BaseFragment extends Fragment implements KeyEvent.Callback, OnClick
     protected TitleBar getDefaultTitleBar() {
         TitleBar titleBar = new TitleBar(mContext);
         titleBar.setBackgroundColor(getThemeColor());
-        Bundle args = getArguments();
-        if (args != null) {
-            args.getString(ContainerActivity.EXTRA_STRING_TITLE);
-        }
         float titleSize = mContext.getResources().getDimension(R.dimen.title_text_size);
         titleBar.setTitleTextSize(TypedValue.COMPLEX_UNIT_PX, titleSize);
         titleBar.setTitle(mTitle);
@@ -192,16 +187,6 @@ public class BaseFragment extends Fragment implements KeyEvent.Callback, OnClick
         super.onActivityCreated(savedInstanceState);
 
         mImageLoader = mHostActivity.getImageLoader();
-        mTitleBar = mHostActivity.getTitleBar();
-        changeActivityTitleView(mTitleBar);
-    }
-
-    @Override
-    public void onHiddenChanged(boolean hidden) {
-        super.onHiddenChanged(hidden);
-        if (!hidden) {
-            changeActivityTitleView(mTitleBar);
-        }
     }
 
     /**

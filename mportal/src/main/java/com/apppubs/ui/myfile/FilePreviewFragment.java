@@ -493,22 +493,11 @@ public class FilePreviewFragment extends BaseFragment {
 	//显示提示框之前首先获取服务端参数，如果已经配置好下载地址则允许用户点击下载按钮否则给出提示框即可
 	private void showInstallAppDialog(final String message) {
 
-		mSystemBiz.aSyncAppConfig(mContext, new IAPCallback<AppConfig>() {
-
-			@Override
-			public void onException(APError excepCode) {
-				showAlertDialog(message);
-			}
-
-			@Override
-			public void onDone(AppConfig obj) {
-				if (TextUtils.isEmpty(mAppContext.getApp().getDocumentReaderPageUrl())) {
-					showAlertDialog(message);
-				} else {
-					showSelectiveDialog(message);
-				}
-			}
-		});
+		if (TextUtils.isEmpty(mAppContext.getApp().getDocumentReaderPageUrl())) {
+			showAlertDialog(message);
+		} else {
+			showSelectiveDialog(message);
+		}
 
 	}
 
@@ -538,20 +527,9 @@ public class FilePreviewFragment extends BaseFragment {
 	}
 
 	private void skip2DownloadPage() {
-		mSystemBiz.aSyncAppConfig(mContext, new IAPCallback<AppConfig>() {
-
-			@Override
-			public void onException(APError excepCode) {
-				Toast.makeText(mContext, "网络错误", Toast.LENGTH_SHORT).show();
-			}
-
-			@Override
-			public void onDone(AppConfig obj) {
-				Bundle extra = new Bundle();
-				extra.putString(WebAppFragment.ARGUMENT_STRING_URL, mAppContext.getApp().getDocumentReaderPageUrl());
-				ContainerActivity.startContainerActivity(mContext, WebAppFragment.class, extra);
-			}
-		});
+		Bundle extra = new Bundle();
+		extra.putString(WebAppFragment.ARGUMENT_STRING_URL, mAppContext.getApp().getDocumentReaderPageUrl());
+		ContainerActivity.startContainerActivity(mContext, WebAppFragment.class, extra);
 	}
 
 	@Override

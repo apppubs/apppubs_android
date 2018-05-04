@@ -46,11 +46,12 @@ import com.apppubs.ui.activity.CustomWebAppUrlProtocolAndIpActivity;
 import com.apppubs.ui.activity.LogsListActivity;
 import com.apppubs.ui.activity.ThemeSwitchActivity;
 import com.apppubs.bean.Settings;
+import com.apppubs.ui.widget.TitleBar;
 import com.apppubs.util.FileUtils;
 import com.apppubs.util.Utils;
 import com.orm.SugarRecord;
 
-public class SettingFragment extends TitleMenuFragment implements OnClickListener{
+public class SettingFragment extends BaseFragment implements OnClickListener{
 
 	private TextView mCacheTv;
 	private ToggleButton mPushTb;
@@ -67,19 +68,21 @@ public class SettingFragment extends TitleMenuFragment implements OnClickListene
     protected View initLayout(LayoutInflater inflater, ViewGroup container, Bundle
             savedInstanceState) {
         mRootView = inflater.inflate(R.layout.frg_setting, null);
-//			//左右滑动的布局下从下打开，其他情况用默认打开方式
-//			if(mAppContext.getApp().getLayoutLocalScheme()==App.STYLE_SLIDE_MENU){
-//				mTitleBar.setLeftImageResource(R.drawable.close);
-//			}
         init();
         initState1();
         return mRootView;
     }
 
-    @Override
+	@Override
+	protected TitleBar initTitleBar() {
+		return getDefaultTitleBar();
+	}
+
+	@Override
 	public void onActivityCreated(Bundle savedInstanceState) {
 		super.onActivityCreated(savedInstanceState);
 		mApp = (MportalApplication) mHostActivity.getApplication();
+		initTitleClickListener();
 	}
 	private void initState1() {
 		mSystemBiz.checkUpdate(mHostActivity, new SystemBiz.CheckUpdateListener() {
@@ -160,8 +163,7 @@ public class SettingFragment extends TitleMenuFragment implements OnClickListene
 		
 		
 		mClickNum = 0;
-		initTitleClickListener();
-		
+
 		List<TMenuItem> list = SugarRecord.find(TMenuItem.class, "is_allow_custom_ip = ?", TMenuItem.YES+"");
 		if(list.size()>0){
 			setVisibilityOfViewByResId(mRootView, R.id.setting_segment3, View.VISIBLE);
@@ -227,12 +229,12 @@ public class SettingFragment extends TitleMenuFragment implements OnClickListene
 	@Override
 	public void onHiddenChanged(boolean hidden) {
 		super.onHiddenChanged(hidden);
-		if(hidden){
-			//界面不能显示时禁用titlebar标题上的点击事件，否则如果settingfragment在主界面上是会导致其他界面下点击标题依然触发彩蛋
-			mTitleBar.setOnTitleClickListener(null);
-		}else{
-			initTitleClickListener();
-		}
+//		if(hidden){
+//			//界面不能显示时禁用titlebar标题上的点击事件，否则如果settingfragment在主界面上是会导致其他界面下点击标题依然触发彩蛋
+//			mTitleBar.setOnTitleClickListener(null);
+//		}else{
+//			initTitleClickListener();
+//		}
 	}
 	
 	@Override
@@ -356,7 +358,7 @@ public class SettingFragment extends TitleMenuFragment implements OnClickListene
 				@Override
 				public void onClick(View v) {
 					String baseUrl = Utils.getMetaValue(mContext, "BASE_URL");
-					String appCode = Utils.getMetaValue(mContext, "APPCODE");
+					String appCode = Utils.getMetaValue(mContext, "APPID");
 					ipEt.setText(baseUrl);
 					codeEt.setText(appCode);
 				}

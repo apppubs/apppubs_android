@@ -1,6 +1,7 @@
 package com.apppubs.ui.activity;
 
 import android.app.Activity;
+import android.app.Service;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
@@ -148,7 +149,8 @@ public class ViewCourier {
             ContainerActivity.startContainerActivity(context, AddressBookFragement.class, args);
         } else if (url.matches("apppubs:\\/\\/setting[\\S]*")) {
             String title = StringUtils.getQueryParameter(url, "title");
-            ContainerActivity.startContainerActivity(context, SettingFragment.class, null, title);
+            ContainerActivity.startFullScreenContainerActivity(context, SettingFragment.class,
+                    null, title);
         } else if (url.matches("apppubs:\\/\\/favorite[\\S]*")) {
             CollectionFragment frg = new CollectionFragment();
             ContainerActivity.startContainerActivity(context, frg.getClass());
@@ -177,11 +179,8 @@ public class ViewCourier {
             context.startActivity(intent);
         } else if (url.startsWith("apppubs://service_no")) {
             String title = StringUtils.getQueryParameter(url, "title");
-            Bundle args = new Bundle();
-            args.putBoolean(ContainerActivity.EXTRA_BOOLEAN_IS_FULLSCREEN, true);
-            ContainerActivity.startContainerActivity(context, ServiceNOsOfMineFragment.class,
-                    args, title);
-
+            ContainerActivity.startFullScreenContainerActivity(context, ServiceNOsOfMineFragment
+                    .class, null, title);
         } else if (url.startsWith("tel:")) {
             String str[] = url.split(":");
             final String uri = url;

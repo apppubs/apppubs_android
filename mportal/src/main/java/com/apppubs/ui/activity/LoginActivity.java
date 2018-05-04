@@ -1,7 +1,5 @@
 package com.apppubs.ui.activity;
 
-import org.json.JSONObject;
-
 import android.content.Context;
 import android.content.Intent;
 import android.os.Build;
@@ -12,17 +10,19 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Toast;
 
-import com.apppubs.ui.webapp.WebAppFragment;
-import com.apppubs.d20.R;
 import com.apppubs.asytask.AsyTaskCallback;
 import com.apppubs.asytask.AsyTaskExecutor;
 import com.apppubs.bean.App;
 import com.apppubs.constant.Constants;
+import com.apppubs.d20.R;
+import com.apppubs.ui.webapp.WebAppFragment;
+import com.apppubs.ui.widget.AlertDialog;
+import com.apppubs.ui.widget.LoadingDialog;
 import com.apppubs.util.FileUtils;
 import com.apppubs.util.SystemUtils;
 import com.apppubs.util.Utils;
-import com.apppubs.ui.widget.AlertDialog;
-import com.apppubs.ui.widget.LoadingDialog;
+
+import org.json.JSONObject;
 
 import cn.jpush.android.api.JPushInterface;
 

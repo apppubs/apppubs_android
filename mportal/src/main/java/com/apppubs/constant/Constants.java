@@ -81,6 +81,7 @@ public class Constants {
 
 	//服务号
 	public static final String API_NAME_MY_SERVICENOS = "my_servicenos";
+	public static final String API_NAME_SERVICENOS = "servicenos";
 	public static final String API_NAME_SERVICENO = "serviceno";
 	public static final String API_NAME_SERVICENO_ARTICLE_PAGE = "serviceno_article_page";
 	public static final String API_NAME_ALERT_MESSAGES = "alert_messages";

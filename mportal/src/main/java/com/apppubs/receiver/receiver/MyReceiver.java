@@ -9,7 +9,11 @@ import android.util.Log;
 
 import com.apppubs.AppContext;
 import com.apppubs.bean.TMsg;
+import com.apppubs.constant.APError;
+import com.apppubs.model.IAPCallback;
 import com.apppubs.model.MsgController;
+import com.apppubs.model.SystemBiz;
+import com.apppubs.presenter.HomeBottomPresenter;
 import com.apppubs.ui.home.HomeBaseActivity;
 import com.apppubs.util.LogM;
 
@@ -38,8 +42,20 @@ public class MyReceiver extends BroadcastReceiver {
 		Log.d(TAG, "[MyReceiver] onReceive - " + intent.getAction() + ", extras: " + printBundle(bundle));
 		
         if (JPushInterface.ACTION_REGISTRATION_ID.equals(intent.getAction())) {
-            String regId = bundle.getString(JPushInterface.EXTRA_REGISTRATION_ID);
+            final String regId = bundle.getString(JPushInterface.EXTRA_REGISTRATION_ID);
             Log.d(TAG, "[MyReceiver] 接收Registration Id : " + regId);
+			SystemBiz biz = SystemBiz.getInstance(context);
+			biz.commitPushRegisterId(regId, new IAPCallback() {
+				@Override
+				public void onDone(Object obj) {
+					LogM.log(HomeBottomPresenter.class, "success 成功提交极光注册register id： "+regId);
+				}
+
+				@Override
+				public void onException(APError error) {
+					LogM.log(HomeBottomPresenter.class, "fail 极光注册提交失败id： "+regId);
+				}
+			});
         } else if (JPushInterface.ACTION_MESSAGE_RECEIVED.equals(intent.getAction())) {
         	Log.d(TAG, "[MyReceiver] 接收到推送下来的自定义消息: " + bundle.getString(JPushInterface.EXTRA_MESSAGE));
         	processCustomMessage(context, bundle);

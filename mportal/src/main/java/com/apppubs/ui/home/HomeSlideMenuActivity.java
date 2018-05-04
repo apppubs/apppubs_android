@@ -548,7 +548,7 @@ public class HomeSlideMenuActivity extends HomeBaseActivity implements OnItemCli
 	private Fragment mCurFrg;
 
 	@Override
-	public void changeContent(Fragment fragment) {
+	public void changeContent(BaseFragment fragment) {
 		mTitleBar.removeLeft2ndView();
 		mTitleBar.removeRight2ndView();
 		mTitleBar.removeRightView();
