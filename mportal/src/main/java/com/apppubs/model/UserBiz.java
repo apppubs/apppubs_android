@@ -20,7 +20,6 @@ import com.apppubs.net.WMHRequestListener;
 import com.apppubs.ui.activity.MainHandler;
 import com.apppubs.util.JSONResult;
 import com.apppubs.util.JSONUtils;
-import com.apppubs.util.WebUtils;
 
 import java.util.HashMap;
 import java.util.List;
@@ -308,7 +307,7 @@ public class UserBiz extends BaseBiz {
         String idsStr = getUserIdsStr(userIds);
         Map<String, String> params = new HashMap<>();
         params.put("userIds", idsStr);
-        asyncPOST(Constants.API_NAME_REQUTST_SENT_INVITE_SMS, params, new IRQStringListener() {
+        asyncPOST(Constants.API_NAME_REQUEST_SENT_INVITE_SMS, params, new IRQStringListener() {
             @Override
             public void onResponse(final String result, final APError error) {
                 if (error == null) {

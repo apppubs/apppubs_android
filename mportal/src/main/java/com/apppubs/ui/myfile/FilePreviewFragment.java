@@ -30,6 +30,7 @@ import com.apppubs.d20.R;
 import com.apppubs.ui.activity.ContainerActivity;
 import com.apppubs.bean.AppConfig;
 import com.apppubs.ui.fragment.BaseFragment;
+import com.apppubs.ui.fragment.TitleBarFragment;
 import com.apppubs.ui.webapp.WebAppFragment;
 import com.apppubs.util.LogM;
 import com.apppubs.ui.widget.AlertDialog;
@@ -47,7 +48,7 @@ import java.io.InputStreamReader;
  *
  * @author hezheng
  */
-public class FilePreviewFragment extends BaseFragment {
+public class FilePreviewFragment extends TitleBarFragment {
 
 	public static final int REQUEST_CODE_SAVE_PDF = 1;
 

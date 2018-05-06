@@ -9,6 +9,7 @@ import com.apppubs.ui.fragment.ChannelsFragment;
 import com.apppubs.ui.fragment.ChannelsSlideFragment;
 import com.apppubs.ui.fragment.ChannelsSquareFragment;
 import com.apppubs.ui.fragment.ExceptionFragment;
+import com.apppubs.ui.fragment.MsgRecordListFragment;
 import com.apppubs.ui.fragment.PapersFragment;
 import com.apppubs.ui.fragment.ServiceNOsOfMineFragment;
 import com.apppubs.ui.fragment.SettingFragment;
@@ -48,8 +49,6 @@ public class FragmentFactory {
             frg = cf;
         } else if (uri.startsWith("apppubs//newspaper")) {// 报纸
             frg = new PapersFragment();
-            Bundle b = new Bundle();
-            frg.setArguments(b);
         } else if (uri.startsWith("apppubs://message")) {
             frg = new ConversationListFragment();
         } else if (uri.startsWith("apppubs://addressbook")) {
@@ -67,20 +66,14 @@ public class FragmentFactory {
             args.putString(PageFragment.EXTRA_STRING_NAME_PAGE_ID, params[1]);
             frg.setArguments(args);
         } else if (uri.startsWith("apppubs://service_no")) {
-            String title = StringUtils.getQueryParameter(uri, "title");
             frg = new ServiceNOsOfMineFragment();
-            Bundle args = new Bundle();
-            frg.setArguments(args);
-            frg.setTitle(title);
         } else if (uri.matches("apppubs:\\/\\/setting[\\S]*")) {
-            String title = StringUtils.getQueryParameter(uri, "title");
             frg = new SettingFragment();
-            Bundle args = new Bundle();
-            frg.setArguments(args);
-            frg.setTitle(title);
         } else {
             frg = new ExceptionFragment();
         }
+        String title = StringUtils.getQueryParameter(uri, "title");
+        frg.setTitle(title);
         return frg;
     }
 }

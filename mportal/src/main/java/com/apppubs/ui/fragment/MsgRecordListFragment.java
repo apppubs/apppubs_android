@@ -72,7 +72,7 @@ import com.orm.SugarRecord;
  * ChangeLog: 2015年3月18日 by zhangwen create
  * 
  */
-public class MsgRecordListFragment extends BaseFragment implements OnClickListener {
+public class MsgRecordListFragment extends TitleBarFragment implements OnClickListener {
 
 	
 	

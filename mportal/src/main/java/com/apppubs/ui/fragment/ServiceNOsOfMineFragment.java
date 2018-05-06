@@ -49,7 +49,7 @@ import java.util.Locale;
  * <p>
  * ChangeLog: 2015年3月18日 by zhangwen create
  */
-public class ServiceNOsOfMineFragment extends BaseFragment implements OnClickListener,
+public class ServiceNOsOfMineFragment extends TitleBarFragment implements OnClickListener,
         ICommonListView<MyServiceNOsResult.MyServiceNOItem> {
 
     private ListView mLv;
@@ -87,12 +87,6 @@ public class ServiceNOsOfMineFragment extends BaseFragment implements OnClickLis
             }
         };
         return mRootView;
-    }
-
-    @Override
-    protected TitleBar initTitleBar() {
-        TitleBar titleBar = getDefaultTitleBar();
-        return titleBar;
     }
 
     private void initRootView() {

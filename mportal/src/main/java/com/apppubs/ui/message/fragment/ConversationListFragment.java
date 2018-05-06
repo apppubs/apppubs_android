@@ -21,6 +21,7 @@ import com.apppubs.ui.activity.ChatNewGroupChatOrAddUserActivity;
 import com.apppubs.ui.activity.ContainerActivity;
 import com.apppubs.ui.fragment.ServiceNoSubscribeFragment;
 import com.apppubs.model.message.UserPickerHelper;
+import com.apppubs.ui.fragment.TitleBarFragment;
 import com.apppubs.ui.widget.TitleBar;
 
 import java.util.ArrayList;
@@ -34,7 +35,7 @@ import io.rong.imlib.model.Conversation;
  * Created by zhangwen on 2017/1/11.
  */
 
-public class ConversationListFragment extends BaseFragment implements View.OnClickListener{
+public class ConversationListFragment extends TitleBarFragment implements View.OnClickListener{
 
     private PopupWindow mMenuPW;
 
@@ -61,13 +62,12 @@ public class ConversationListFragment extends BaseFragment implements View.OnCli
     }
 
     @Override
-    public void changeActivityTitleView(TitleBar titleBar) {
-
-        super.changeActivityTitleView(titleBar);
-        if (titleBar == null) {
+    public void onActivityCreated(Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+        if (mTitleBar == null) {
             return;
         }
-        titleBar.addRightBtnWithImageResourceIdAndClickListener(R.drawable.plus, new View.OnClickListener() {
+        mTitleBar.addRightBtnWithImageResourceIdAndClickListener(R.drawable.plus, new View.OnClickListener() {
 
             @Override
             public void onClick(View v) {

@@ -480,7 +480,7 @@ public class UserBussiness extends BaseBiz {
 				try {
 					// 用户
 					App app = mAppContext.getApp();
-					String urlUser = app.getAddressbookUserUrl();
+					String urlUser = app.getAppConfig().getAdbookUserURL();
 					WebUtils.requestWithGet(urlUser, new WebUtils.DownloadLisener() {
 						@Override
 						public void onUpdate(double progress) {
@@ -510,7 +510,7 @@ public class UserBussiness extends BaseBiz {
 					});
 
 					// 部门
-					String urlDep = app.getAddressbookDetpUrl();
+					String urlDep = app.getAppConfig().getAdbookDeptURL();
 					WebUtils.requestWithGet(urlDep, new WebUtils.DownloadLisener() {
 						@Override
 						public void onUpdate(double progress) {
@@ -542,7 +542,7 @@ public class UserBussiness extends BaseBiz {
 
 
 					// 关联
-					String urlLink = mAppContext.getApp().getAddressbookDeptUserUrl();
+					String urlLink = mAppContext.getApp().getAppConfig().getAdbookLinkURL();
 					WebUtils.requestWithGet(urlLink, new WebUtils.DownloadLisener() {
 						@Override
 						public void onUpdate(double progress) {

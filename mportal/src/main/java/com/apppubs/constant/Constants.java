@@ -16,6 +16,10 @@ public class Constants {
 	public static final String APP_CONFIG_ABOUT_PROPERTIES = "about_properties";
 	public static final String APP_CONFIG_PDF_DEFAULT_READ_MODE = "pdf_default_read_mode";
 
+	public static final String APP_CONFIG_ADBOOK_USER_URL = "address_userurl";
+	public static final String APP_CONFIG_ADBOOK_DEPT_URL = "address_depturl";
+	public static final String APP_CONFIG_ADBOOK_USER_DETP_LINK_URL = "address_deptuserurl";
+
 
 	public static final String CUSTOM_SCHEMA_APPPUBS_NEWS = "apppubsnews";
 	public static final String CUSTOM_SCHEMA_APPPUBS = "apppubs";
@@ -96,7 +100,7 @@ public class Constants {
 	public static final String API_NAME_CONFIRM_VERIFY_CODE = "confirm_verfify_code";
 	public static final String API_NAME_MODIFY_PWD = "modify_pwd";
 	public static final String API_NAME_UPLOAD_AVATAR = "upload_avatar";
-	public static final String API_NAME_REQUTST_SENT_INVITE_SMS = "reqauest_sent_invite_sms";
+	public static final String API_NAME_REQUEST_SENT_INVITE_SMS = "reqauest_sent_invite_sms";
 	public static final String API_NAME_COMMIT_PUSH_REGISTER_ID = "commit_push_register_id";
 
 	//cms

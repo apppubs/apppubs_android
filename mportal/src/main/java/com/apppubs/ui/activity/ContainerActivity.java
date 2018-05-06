@@ -9,6 +9,7 @@ import android.view.KeyEvent;
 
 import com.apppubs.ui.fragment.BaseFragment;
 import com.apppubs.d20.R;
+import com.apppubs.ui.fragment.TitleBarFragment;
 
 /**
  * 充当容器的activity
@@ -49,6 +50,9 @@ public class ContainerActivity<T> extends BaseActivity {
 			mFrg.setArguments(bundle);
 			mFrg.setNeedBack(true);
 			mFrg.setTitle(title);
+			if (mFrg instanceof TitleBarFragment){
+				setNeedTitleBar(false);
+			}
 		} catch (ClassNotFoundException e) {
 
 			e.printStackTrace();

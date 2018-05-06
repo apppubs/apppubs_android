@@ -38,6 +38,7 @@ import com.apppubs.presenter.WebAppPresenter;
 import com.apppubs.d20.R;
 import com.apppubs.ui.activity.CaptureActivity;
 import com.apppubs.ui.activity.ContainerActivity;
+import com.apppubs.ui.fragment.TitleBarFragment;
 import com.apppubs.ui.home.HomeBaseActivity;
 import com.apppubs.ui.activity.ViewCourier;
 import com.apppubs.ui.fragment.BaseFragment;
@@ -94,7 +95,7 @@ import cn.sharesdk.tencent.qq.QQ;
 import cn.sharesdk.wechat.friends.Wechat;
 import cn.sharesdk.wechat.moments.WechatMoments;
 
-public class WebAppFragment extends BaseFragment implements OnClickListener, IWebAppView,
+public class WebAppFragment extends TitleBarFragment implements OnClickListener, IWebAppView,
         IVersionView {
 
     public static final String ARGUMENT_INT_MENUBARTYPE = "menu_bar_type";
@@ -171,7 +172,8 @@ public class WebAppFragment extends BaseFragment implements OnClickListener, IWe
     }
 
     @Override
-    protected View initLayout(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+    protected View initLayout(LayoutInflater inflater, ViewGroup container, Bundle
+            savedInstanceState) {
         mRootView = inflater.inflate(R.layout.frg_webapp, null);
         initComponent(mRootView);
         initStates();
@@ -201,6 +203,52 @@ public class WebAppFragment extends BaseFragment implements OnClickListener, IWe
             });
         }
 
+        if (mTitleBar != null) {
+            mTitleBar.reset();
+            if (mHostActivity instanceof HomeBaseActivity) {
+                isCloseButtonAdded = true;// 避免出现关闭
+            }
+
+
+            if (mMoreMenusStr != null && !mMoreMenusStr.equals("") && mMoreMenusStr.split(",")
+                    .length > 1) {
+                mTitleBar.addRightBtnWithImageResourceIdAndClickListener(R.drawable.title_more,
+                        new OnClickListener() {
+
+                            @Override
+                            public void onClick(View arg0) {
+                                openMenu();
+                            }
+                        });
+            } else if (mMoreMenusStr != null && !mMoreMenusStr.equals("") && mMoreMenusStr.split
+                    (",").length == 1) {
+                if (mMoreMenusStr.equals(TMenuItem.WEB_APP_MENU_REFRESH + "")) {
+                    mTitleBar.addRightBtnWithImageResourceIdAndClickListener(R.drawable
+                            .titlebar_refresh, new OnClickListener() {
+
+                        @Override
+                        public void onClick(View v) {
+                            refresh();
+                        }
+                    });
+                } else if (mMoreMenusStr.equals(TMenuItem.WEB_APP_MENU_SHARE + "")) {
+                    mTitleBar.addRightBtnWithTextAndClickListener("分享", new OnClickListener() {
+
+                        @Override
+                        public void onClick(View v) {
+                        }
+                    });
+                } else if (mMoreMenusStr.equals(TMenuItem.WEB_APP_MENU_OPEN_WITH_BROWSER + "")) {
+                    mTitleBar.addRightBtnWithTextAndClickListener("浏览器打开", new OnClickListener() {
+
+                        @Override
+                        public void onClick(View v) {
+                            openInBrowser();
+                        }
+                    });
+                }
+            }
+        }
     }
 
     @Override
@@ -224,7 +272,7 @@ public class WebAppFragment extends BaseFragment implements OnClickListener, IWe
 
     private void initPresenter() {
         mPresenter = new WebAppPresenter(getContext(), this);
-        mVersionPresenter = new VersionPresenter(getContext(),this);
+        mVersionPresenter = new VersionPresenter(getContext(), this);
     }
 
     @SuppressLint({"NewApi", "SetJavaScriptEnabled"})
@@ -509,66 +557,6 @@ public class WebAppFragment extends BaseFragment implements OnClickListener, IWe
         }
     }
 
-    @Override
-    public void changeActivityTitleView(TitleBar titleBar) {
-        super.changeActivityTitleView(titleBar);
-        if (titleBar != null) {
-            titleBar.reset();
-            titleBar.setTitle(titleBar.getTitle() + "");
-            if (mHostActivity instanceof HomeBaseActivity) {
-                isCloseButtonAdded = true;// 避免出现关闭
-//			titleBar.addLeftBtnWithImageResourceIdAndClickListener(R.drawable.top_back_btn, new
-// OnClickListener() {
-//
-//				@Override
-//				public void onClick(View v) {
-//					webviewGoBack();
-//				}
-//			});
-            }
-
-
-            if (mMoreMenusStr != null && !mMoreMenusStr.equals("") && mMoreMenusStr.split(",")
-                    .length > 1) {
-                titleBar.addRightBtnWithImageResourceIdAndClickListener(R.drawable.title_more,
-                        new OnClickListener() {
-
-                            @Override
-                            public void onClick(View arg0) {
-                                openMenu();
-                            }
-                        });
-            } else if (mMoreMenusStr != null && !mMoreMenusStr.equals("") && mMoreMenusStr.split
-                    (",").length == 1) {
-                if (mMoreMenusStr.equals(TMenuItem.WEB_APP_MENU_REFRESH + "")) {
-                    titleBar.addRightBtnWithImageResourceIdAndClickListener(R.drawable
-                            .titlebar_refresh, new OnClickListener() {
-
-                        @Override
-                        public void onClick(View v) {
-                            refresh();
-                        }
-                    });
-                } else if (mMoreMenusStr.equals(TMenuItem.WEB_APP_MENU_SHARE + "")) {
-                    titleBar.addRightBtnWithTextAndClickListener("分享", new OnClickListener() {
-
-                        @Override
-                        public void onClick(View v) {
-                        }
-                    });
-                } else if (mMoreMenusStr.equals(TMenuItem.WEB_APP_MENU_OPEN_WITH_BROWSER + "")) {
-                    titleBar.addRightBtnWithTextAndClickListener("浏览器打开", new OnClickListener() {
-
-                        @Override
-                        public void onClick(View v) {
-                            openInBrowser();
-                        }
-                    });
-                }
-            }
-        }
-    }
-
     private void openMenu() {
 
         View menuPop = LayoutInflater.from(mHostActivity).inflate(R.layout.pop_web_menu, null);
@@ -633,7 +621,9 @@ public class WebAppFragment extends BaseFragment implements OnClickListener, IWe
                 args.putString(FilePreviewFragment.ARGS_STRING_URL, url);
                 args.putString(ContainerActivity.EXTRA_STRING_TITLE, "文件预览");
                 args.putString(FilePreviewFragment.ARGS_STRING_MIME_TYPE, mimetype);
-                ContainerActivity.startContainerActivity(getContext(), FilePreviewFragment.class, args);
+                ContainerActivity.startContainerActivity(getContext(), FilePreviewFragment.class,
+                        args);
+
             }
 
             private String fetchFileName(String contentDisposition, String url) {

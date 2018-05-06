@@ -70,25 +70,6 @@ public class ViewCourier {
         ContainerActivity.startContainerActivity(context, SettingFragment.class, args, "设置");
     }
 
-    public void execute(int action) {
-        switch (action) {
-            case ACTION_USER_CENTER:
-                String userId = AppContext.getInstance(mContext).getCurrentUser().getUserId();
-                Intent intent = null;
-                if (userId != null && !userId.equals("")) {// 已登录
-                    intent = new Intent(mContext, UserCencerActivity.class);
-                } else {
-                    intent = new Intent(mContext, LoginActivity.class);
-                }
-                mContext.startActivity(intent);
-                break;
-
-            default:
-                break;
-        }
-    }
-
-
     /**
      * 通过URL打开一个界面，如果上下文为HomeBaseActivity则在homeBase中打开否则打开新界面
      *
@@ -103,6 +84,7 @@ public class ViewCourier {
             WebAppFragment frg = new WebAppFragment();
             Bundle args = new Bundle();
             args.putString(WebAppFragment.ARGUMENT_STRING_URL, url);
+            args.putBoolean(ContainerActivity.EXTRA_BOOLEAN_IS_FULLSCREEN, true);
             frg.setArguments(args);
             ContainerActivity.startContainerActivity(context, WebAppFragment.class, args);
         } else if (url.matches("apppubs:\\/\\/newsinfo\\/[A-Z0-9]*\\/[A-Za-z0-9]*\\/[A-Za-z0-9" +

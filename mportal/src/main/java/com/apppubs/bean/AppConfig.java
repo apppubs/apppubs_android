@@ -49,6 +49,9 @@ public class AppConfig implements Serializable {
     private Integer chatAuthFlag;
     @SerializedName("about_properties")
     private String aboutProperties;
+    private String adbookUserURL;
+    private String adbookDeptURL;
+    private String adbookLinkURL;
 
     public AppConfig() {
         adbookRootId = "0";
@@ -201,11 +204,41 @@ public class AppConfig implements Serializable {
         this.aboutProperties = aboutProperties;
     }
 
-    public void update(List<AppInfoResult.ConfigItem> configs){
-        for (AppInfoResult.ConfigItem item : configs){
+    public String getAdbookUserURL() {
+        return adbookUserURL;
+    }
+
+    public void setAdbookUserURL(String adbookUserURL) {
+        this.adbookUserURL = adbookUserURL;
+    }
+
+    public String getAdbookDeptURL() {
+        return adbookDeptURL;
+    }
+
+    public void setAdbookDeptURL(String adbookDeptURL) {
+        this.adbookDeptURL = adbookDeptURL;
+    }
+
+    public String getAdbookLinkURL() {
+        return adbookLinkURL;
+    }
+
+    public void setAdbookLinkURL(String adbookLinkURL) {
+        this.adbookLinkURL = adbookLinkURL;
+    }
+
+    public void update(List<AppInfoResult.ConfigItem> configs) {
+        for (AppInfoResult.ConfigItem item : configs) {
             String key = item.getKey();
-            if (Constants.APP_CONFIG_PARAM_USER_ACCOUNT_PWD_FLAGS.equals(key)){
+            if (Constants.APP_CONFIG_PARAM_USER_ACCOUNT_PWD_FLAGS.equals(key)) {
                 setAdbookAccountPWDFlags(item.getValue());
+            } else if (Constants.APP_CONFIG_ADBOOK_USER_URL.equals(key)) {
+                setAdbookUserURL(item.getValue());
+            } else if (Constants.APP_CONFIG_ADBOOK_DEPT_URL.equals(key)) {
+                setAdbookDeptURL(item.getValue());
+            } else if (Constants.APP_CONFIG_ADBOOK_USER_DETP_LINK_URL.equals(key)) {
+                setAdbookLinkURL(item.getValue());
             }
         }
     }

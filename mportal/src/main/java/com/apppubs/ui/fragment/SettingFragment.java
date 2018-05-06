@@ -51,19 +51,15 @@ import com.apppubs.util.FileUtils;
 import com.apppubs.util.Utils;
 import com.orm.SugarRecord;
 
-public class SettingFragment extends BaseFragment implements OnClickListener{
+public class SettingFragment extends TitleBarFragment implements OnClickListener{
 
 	private TextView mCacheTv;
 	private ToggleButton mPushTb;
 	private boolean isSwitch, isSwitchTheme;
 	private TextView currentVersionTv;
 	private ImageView newVresion;
-	private boolean isHaveNewVersion;
 	private int mClickNum = 0;
-	
-	private MportalApplication mApp;
-	private RequestQueue mRequestQueue;
-	
+
     @Override
     protected View initLayout(LayoutInflater inflater, ViewGroup container, Bundle
             savedInstanceState) {
@@ -74,14 +70,8 @@ public class SettingFragment extends BaseFragment implements OnClickListener{
     }
 
 	@Override
-	protected TitleBar initTitleBar() {
-		return getDefaultTitleBar();
-	}
-
-	@Override
 	public void onActivityCreated(Bundle savedInstanceState) {
 		super.onActivityCreated(savedInstanceState);
-		mApp = (MportalApplication) mHostActivity.getApplication();
 		initTitleClickListener();
 	}
 	private void initState1() {
@@ -380,7 +370,7 @@ public class SettingFragment extends BaseFragment implements OnClickListener{
 			startActivity(LogsListActivity.class);
 			break;
 		default:
-			break;
+			super.onClick(v);
 		}
 	}
 
@@ -440,10 +430,4 @@ public class SettingFragment extends BaseFragment implements OnClickListener{
 
 
 	}
-
-
-	
-	
-	
-	
 }

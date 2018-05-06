@@ -159,20 +159,6 @@ public abstract class BaseFragment extends Fragment implements KeyEvent.Callback
         return null;
     }
 
-    protected TitleBar getDefaultTitleBar() {
-        TitleBar titleBar = new TitleBar(mContext);
-        titleBar.setBackgroundColor(getThemeColor());
-        float titleSize = mContext.getResources().getDimension(R.dimen.title_text_size);
-        titleBar.setTitleTextSize(TypedValue.COMPLEX_UNIT_PX, titleSize);
-        titleBar.setTitle(mTitle);
-
-        if (needBack) {
-            titleBar.setLeftBtnClickListener(this);
-            titleBar.setLeftImageResource(R.drawable.top_back_btn);
-        }
-        return titleBar;
-    }
-
     public void setTitle(String title) {
         mTitle = title;
     }

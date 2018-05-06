@@ -296,7 +296,6 @@ public class HomeSlideMenuActivity extends HomeBaseActivity implements OnItemCli
 			@Override
 			public void onClick(View arg0) {
 
-				mViewCourier.execute(ViewCourier.ACTION_USER_CENTER);
 			}
 		});
 
