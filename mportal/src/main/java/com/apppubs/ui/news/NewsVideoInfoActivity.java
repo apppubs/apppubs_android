@@ -1,4 +1,4 @@
-package com.apppubs.ui.activity;
+package com.apppubs.ui.news;
 
 import java.io.IOException;
 import java.text.SimpleDateFormat;
@@ -35,6 +35,8 @@ import com.apppubs.bean.NewsVideoInfo;
 import com.apppubs.model.IAPCallback;
 import com.apppubs.model.CollectionBiz;
 import com.apppubs.constant.URLs;
+import com.apppubs.ui.activity.BaseActivity;
+import com.apppubs.ui.activity.CommentActivity;
 import com.apppubs.util.ShareTools;
 import com.apppubs.util.Utils;
 import com.apppubs.util.WebUtils;

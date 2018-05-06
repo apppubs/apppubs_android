@@ -7,7 +7,7 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
 import android.view.ViewGroup;
 
-import com.apppubs.ui.fragment.ChannelFragment;
+import com.apppubs.ui.news.ChannelFragment;
 import com.apppubs.util.LogM;
 
 public class NewsFragmentPagerAdapter extends FragmentStatePagerAdapter{

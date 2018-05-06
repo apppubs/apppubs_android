@@ -1,4 +1,4 @@
-package com.apppubs.ui.activity;
+package com.apppubs.ui.news;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -32,6 +32,8 @@ import com.apppubs.bean.TNewsInfo;
 import com.apppubs.bean.NewsPictureInfo;
 import com.apppubs.constant.APError;
 import com.apppubs.model.IAPCallback;
+import com.apppubs.ui.activity.BaseActivity;
+import com.apppubs.ui.activity.CommentActivity;
 import com.apppubs.util.LogM;
 import com.apppubs.util.ShareTools;
 import com.apppubs.util.Utils;

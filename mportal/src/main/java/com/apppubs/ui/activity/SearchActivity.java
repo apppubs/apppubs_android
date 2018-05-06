@@ -20,6 +20,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.apppubs.constant.URLs;
+import com.apppubs.ui.news.NewsInfoActivity;
 import com.apppubs.util.SystemUtils;
 import com.apppubs.util.Tools;
 import com.apppubs.util.Utils;

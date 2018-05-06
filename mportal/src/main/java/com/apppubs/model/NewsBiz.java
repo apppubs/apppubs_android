@@ -1,10 +1,31 @@
 package com.apppubs.model;
 
+import android.content.Context;
+import android.util.Log;
+
+import com.apppubs.bean.NewsPictureInfo;
+import com.apppubs.bean.TCollection;
+import com.apppubs.bean.THeadPic;
+import com.apppubs.bean.TNewsChannel;
+import com.apppubs.bean.TNewsInfo;
+import com.apppubs.bean.http.ArticlePageResult;
+import com.apppubs.bean.http.ArticleResult;
+import com.apppubs.bean.http.ChannelsResult;
+import com.apppubs.bean.http.IJsonResult;
+import com.apppubs.constant.APError;
+import com.apppubs.constant.Constants;
+import com.apppubs.constant.URLs;
+import com.apppubs.ui.activity.MainHandler;
+import com.apppubs.util.LogM;
+import com.apppubs.util.WebUtils;
+import com.google.gson.JsonParseException;
+import com.orm.SugarRecord;
+
+import org.json.JSONException;
+
 import java.io.IOException;
-import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
@@ -12,28 +33,6 @@ import java.util.Map;
 import java.util.concurrent.Future;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import android.content.Context;
-import android.util.Log;
-
-import com.alibaba.fastjson.JSON;
-import com.apppubs.bean.TCollection;
-import com.apppubs.bean.TNewsChannel;
-import com.apppubs.AppContext;
-import com.apppubs.bean.THeadPic;
-import com.apppubs.bean.TNewsInfo;
-import com.apppubs.bean.http.ChannelsResult;
-import com.apppubs.bean.http.IJsonResult;
-import com.apppubs.constant.APError;
-import com.apppubs.util.LogM;
-import com.apppubs.util.WebUtils;
-import com.google.gson.JsonParseException;
-import com.apppubs.bean.NewsPictureInfo;
-import com.apppubs.constant.URLs;
-import com.orm.SugarRecord;
 
 public class NewsBiz extends BaseBiz {
 
@@ -59,161 +58,90 @@ public class NewsBiz extends BaseBiz {
         return mNewsBizImpl;
     }
 
-    /**
-     * 更新频道组
-     *
-     * @param channelGroupId
-     * @param callback       返回频道是否已经更新
-     */
-    public void updateChannelGroup(final String channelGroupId, IAPCallback<Boolean> callback) {
-        String url = "http://result.eolinker" +
-                ".com/gN1zjDlc87a75d671a2d954f809ebcdd19e7698dc2478fa?uri=channels";
+    public void loadChannelGroup(String channelGroupId, final IAPCallback<List<TNewsChannel>>
+            callback) {
         Map<String, String> params = new HashMap<>();
-        asyncPOST(url, params, ChannelsResult.class, new IRQListener<ChannelsResult>() {
-            @Override
-            public void onResponse(ChannelsResult jr, APError error) {
-                List<TNewsChannel> channels = TNewsChannel.createFrom(jr);
-                getChannelGroup(channelGroupId);
-            }
-        });
-    }
-
-    public List<TNewsChannel> getOrderedChannelGroup(String channelGroupId) {
-        List<TNewsChannel> list = SugarRecord.find(TNewsChannel.class, "TYPE_ID = ?",
-                new String[]{channelGroupId}, null, "DISPLAY_ORDER", null);
-        return list;
-    }
-
-    /**
-     * 获取显示在前端的频道
-     * @param channelGroupId
-     * @return
-     */
-    public List<TNewsChannel> getSelectedChannelGroup(String channelGroupId){
-        List<TNewsChannel> list = SugarRecord.find(TNewsChannel.class, "TYPE_ID = ? and DISPLAY_ORDER != 0",
-                new String[]{channelGroupId}, null, "DISPLAY_ORDER", null);
-        return list;
-    }
-
-    public List<TNewsChannel> getChannelGroup(String channelGroupId){
-        List<TNewsChannel> list = SugarRecord.find(TNewsChannel.class, "TYPE_ID = ?",
-                new String[]{channelGroupId}, null, null, null);
-        return list;
-    }
-
-    /**
-     * 获取某个频道下的某一页信息列表，如果获取的是第一页，则刷新数据库,并给此频道的刷新时间赋值 如果取第0页说明是要刷新
-     */
-    public Future<?> getNewsInfoPage(final String type, final String channelCode, final int page,
-                                     final int pageSize,
-                                     final IAPCallback<List<TNewsInfo>> callback) {
-
-        Future<?> f = sDefaultExecutor.submit(new Runnable() {
-
-            @Override
-            public void run() {
-
-                try {
-                    // 先从数据库获取数据
-                    List<TNewsInfo> infoList = null;
-                    if (page == 0) {
-                        if (type == TNewsInfo.NEWS_TYPE_NORAML) {
-
-                            // 如果page==0，刷新数据库信息
-                            String url = String.format(URLs.URL_NEWS_LIST_OF_CHANNEL, URLs
-                                    .baseURL) + "&channelcode=" + channelCode
-                                    + "&pno=1&pernum=" + pageSize;
-
-                            infoList = WebUtils.requestList(url, TNewsInfo.class, "info");
-
-                            SugarRecord.deleteAll(TNewsInfo.class, "CHANNEL_CODE=?", channelCode);
-                            Date curDate = new Date();
-                            SugarRecord.update(TNewsChannel.class, "LOCAL_LAST_UPDATE_TIME",
-                                    curDate.getTime() + "",
-                                    "CODE = ?", new String[]{channelCode});
-                            saveList(infoList, channelCode);
-                        } else if (type == TNewsInfo.NEWS_TYPE_PICTURE) {
-                            // 如果page==0，刷新数据库信息
-                            String url = String.format(URLs.URL_PIC_LIST, URLs.baseURL) +
-                                    "&channelcode=" + channelCode + "&pno=1&pernum="
-                                    + pageSize;
-                            List<NewsPictureInfo> picList = WebUtils.requestList(url,
-                                    NewsPictureInfo.class, "data");
-
-                            SugarRecord.deleteAll(TNewsInfo.class, "CHANNEL_CODE=?", channelCode);
-                            Date curDate = new Date();
-                            SugarRecord.update(TNewsChannel.class, "LOCAL_LAST_UPDATE_TIME",
-                                    curDate.getTime() + "",
-                                    "CODE = ?", new String[]{channelCode});
-                            infoList = savePicInfoList(picList);
-                        }
-                    } else if (page == 1) {
-                        infoList = SugarRecord.find(TNewsInfo.class, "CHANNEL_CODE = ?", new
-                                        String[]{channelCode},
-                                null, "PUB_TIME desc", (page - 1) * pageSize + "," + pageSize);
-                        LogM.log(NewsBiz.class, "从数据库中查询出的数据条数：" + infoList.size());
-                    } else {
-
-                        infoList = SugarRecord.find(TNewsInfo.class, "CHANNEL_CODE = ? ", new
-                                        String[]{channelCode},
-                                null, "PUB_TIME desc", (page - 1) * pageSize + "," + pageSize);
-                        if (infoList.size() != pageSize && type == TNewsInfo.NEWS_TYPE_NORAML) {
-
-                            String url = String.format(URLs.URL_NEWS_LIST_OF_CHANNEL, URLs
-                                    .baseURL) + "&channelcode=" + channelCode + "&pno=" + page
-                                    + "&pernum=" + pageSize;
-                            infoList = WebUtils.requestList(url, TNewsInfo.class, "info");
-                            saveList(infoList, channelCode);
-                        } else if (infoList.size() == 0 && type == TNewsInfo.NEWS_TYPE_PICTURE) {
-                            String url = String.format(URLs.URL_PIC_LIST, URLs.baseURL) +
-                                    "&channelcode=" + channelCode + "&pno=" + page
-                                    + "&pernum=" + pageSize;
-                            ;
-                            List<NewsPictureInfo> picList = WebUtils.requestList(url,
-                                    NewsPictureInfo.class, "data");
-                            infoList = savePicInfoList(picList);
+        params.put("webAppId", mAppContext.getApp().getWebAppCode());
+        params.put("typeId", channelGroupId);
+        asyncPOST(Constants.API_NAME_NEWS_CHANNELS, params, ChannelsResult.class, new
+                IRQListener<ChannelsResult>() {
+                    @Override
+                    public void onResponse(ChannelsResult jr, final APError error) {
+                        if (error == null) {
+                            final List<TNewsChannel> channels = TNewsChannel.createFrom(jr);
+                            MainHandler.getInstance().post(new Runnable() {
+                                @Override
+                                public void run() {
+                                    callback.onDone(channels);
+                                }
+                            });
+                        } else {
+                            MainHandler.getInstance().post(new Runnable() {
+                                @Override
+                                public void run() {
+                                    callback.onException(error);
+                                }
+                            });
                         }
                     }
-                    LogM.log(NewsBiz.class, "准备返回到界面：" + infoList.size());
-                    sHandler.post(new OnDoneRun<List<TNewsInfo>>(callback, infoList));
+                });
+    }
 
-                } catch (IOException e) {
-                    e.printStackTrace();
-                    sHandler.post(new OnExceptionRun<List<TNewsInfo>>(callback));
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                    sHandler.post(new OnExceptionRun<List<TNewsInfo>>(callback));
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                    sHandler.post(new OnExceptionRun<List<TNewsInfo>>(callback));
-                }
-            }
+    public void loadChannelArticlePage(String channelCode, int pageNum, int pageSize, final
+    IAPCallback<ArticlePageResult> callback) {
+        Map<String, String> params = new HashMap<>();
+        params.put("channelCode", channelCode);
+        params.put("pageNum", pageNum + "");
+        params.put("pageSize", pageSize + "");
+        asyncPOST(Constants.API_NAME_NEWS_ARTICLE_PAGE, params, ArticlePageResult.class, new
+                IRQListener<ArticlePageResult>() {
+                    @Override
+                    public void onResponse(final ArticlePageResult jr, final APError error) {
+                        if (error == null) {
+                            MainHandler.getInstance().post(new Runnable() {
+                                @Override
+                                public void run() {
+                                    callback.onDone(jr);
+                                }
+                            });
+                        } else {
+                            MainHandler.getInstance().post(new Runnable() {
+                                @Override
+                                public void run() {
+                                    callback.onException(error);
+                                }
+                            });
+                        }
+                    }
+                });
+    }
 
-            /**
-             * 将图片列表转换为newinfo列表，并保存
-             *
-             * @param picList
-             * @return
-             */
-            private List<TNewsInfo> savePicInfoList(List<NewsPictureInfo> picList) {
-                List<TNewsInfo> desList = new ArrayList<TNewsInfo>();
-                for (NewsPictureInfo npi : picList) {
-                    TNewsInfo ni = new TNewsInfo();
-                    ni.setType(TNewsInfo.NEWS_TYPE_PICTURE);
-                    ni.setTitle(npi.getTitle());
-                    ni.setId(npi.getInfoId());
-                    ni.setChannelCode(npi.getChannelCode());
-                    ni.setPicURL(npi.getUrl());
-                    ni.setCommontNum(Integer.parseInt(npi.getCommontNum()));
-                    ni.setPubTime(npi.getPubTime());
-                    desList.add(ni);
-                    ni.save();
-                }
-                return desList;
-            }
-        });
-
-        return f;
+    public void loadArticle(String articleId, String channelCode, final IAPCallback<ArticleResult>
+            callback) {
+        Map<String, String> params = new HashMap<>();
+        params.put("id", articleId);
+        params.put("channelCode", channelCode);
+        asyncPOST(Constants.API_NAME_NEWS_ARTICLE, params, ArticleResult.class, new
+                IRQListener<ArticleResult>() {
+                    @Override
+                    public void onResponse(final ArticleResult jr, final APError error) {
+                        if (error == null) {
+                            MainHandler.getInstance().post(new Runnable() {
+                                @Override
+                                public void run() {
+                                    callback.onDone(jr);
+                                }
+                            });
+                        } else {
+                            MainHandler.getInstance().post(new Runnable() {
+                                @Override
+                                public void run() {
+                                    callback.onException(error);
+                                }
+                            });
+                        }
+                    }
+                });
     }
 
     public void saveList(List<TNewsInfo> list, String channelCode) {

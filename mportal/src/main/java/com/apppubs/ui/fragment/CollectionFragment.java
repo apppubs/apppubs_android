@@ -19,9 +19,9 @@ import android.widget.TextView;
 
 import com.apppubs.bean.TCollection;
 import com.apppubs.d20.R;
-import com.apppubs.ui.activity.NewsInfoActivity;
-import com.apppubs.ui.activity.NewsPictureInfoActivity;
-import com.apppubs.ui.activity.NewsVideoInfoActivity;
+import com.apppubs.ui.news.NewsInfoActivity;
+import com.apppubs.ui.news.NewsPictureInfoActivity;
+import com.apppubs.ui.news.NewsVideoInfoActivity;
 import com.apppubs.ui.activity.PaperInfoActivity;
 import com.apppubs.ui.adapter.CommonAdapter;
 import com.apppubs.ui.adapter.ViewHolder;

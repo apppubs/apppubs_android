@@ -1,4 +1,4 @@
-package com.apppubs.ui.fragment;
+package com.apppubs.ui.news;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -31,7 +31,6 @@ import com.apppubs.bean.THeadPic;
 import com.apppubs.util.LogM;
 import com.apppubs.ui.widget.SlidePicView;
 import com.apppubs.d20.R;
-import com.apppubs.ui.activity.NewsInfoActivity;
 import com.apppubs.ui.widget.HeaderGridView;
 import com.orm.SugarRecord;
 /**
@@ -170,7 +169,12 @@ public class ChannelsSquareFragment extends ChannelsFragment implements OnClickL
 	
 		
 	}
-	
+
+	@Override
+	public void setSelectedChannels(List<TNewsChannel> channels) {
+
+	}
+
 	private class MyAdapter extends BaseAdapter{
 
 		@Override

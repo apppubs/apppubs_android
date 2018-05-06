@@ -11,19 +11,20 @@ import android.widget.Toast;
 
 import com.apppubs.AppContext;
 import com.apppubs.bean.TMenuItem;
-import com.apppubs.ui.fragment.ChannelFragment;
-import com.apppubs.ui.fragment.ChannelFragmentFactory;
-import com.apppubs.ui.fragment.ChannelsFragment;
-import com.apppubs.ui.fragment.ChannelsSlideFragment;
-import com.apppubs.ui.fragment.ChannelsSquareFragment;
 import com.apppubs.ui.fragment.CollectionFragment;
-import com.apppubs.ui.fragment.ServiceNOsOfMineFragment;
 import com.apppubs.ui.fragment.HistoryFragment;
 import com.apppubs.ui.fragment.MsgRecordListFragment;
+import com.apppubs.ui.fragment.ServiceNOsOfMineFragment;
 import com.apppubs.ui.fragment.SettingFragment;
 import com.apppubs.ui.fragment.TitleMenuFragment;
 import com.apppubs.ui.message.fragment.AddressBookFragement;
 import com.apppubs.ui.myfile.MyFileFragment;
+import com.apppubs.ui.news.ChannelFragment;
+import com.apppubs.ui.news.ChannelFragmentFactory;
+import com.apppubs.ui.news.ChannelsFragment;
+import com.apppubs.ui.news.ChannelsSlideFragment;
+import com.apppubs.ui.news.ChannelsSquareFragment;
+import com.apppubs.ui.news.NewsInfoBaseActivity;
 import com.apppubs.ui.page.PageFragment;
 import com.apppubs.ui.webapp.WebAppFragment;
 import com.apppubs.ui.widget.ConfirmDialog;
@@ -91,14 +92,16 @@ public class ViewCourier {
             String[] arr = StringUtils.getPathParams(url);
             NewsInfoBaseActivity.startInfoActivity(context, arr[1], new String[]{arr[2], arr[3]})
             ;//频道
-        } else if (url.matches("apppubs:\\/\\/channel\\/[0-9]\\/[A-Za-z0-9]*")) {
+        } else if (url.matches("apppubs:\\/\\/channel/[^\\\\s]*")) {
             String[] arr = StringUtils.getPathParams(url);
             ChannelFragment cf = ChannelFragmentFactory.getChannelFragment(Integer.parseInt
                     (arr[1]));
             Bundle args = new Bundle();
             args.putString(ChannelFragment.ARG_KEY, arr[2]);
+            String title = StringUtils.getQueryParameter(url, "title");
+            args.putString(ContainerActivity.EXTRA_STRING_TITLE, title);
             ContainerActivity.startContainerActivity(context, cf.getClass(), args);
-        } else if (url.matches("apppubs://channelgroup/[0-9?&=a-zA-Z]*")) {//频道组
+        } else if (url.matches("apppubs://channelgroup/[^\\s]*")) {//频道组
             String[] arr = StringUtils.getPathParams(url);
             String layout = StringUtils.getQueryParameter(url, "layout");
             ChannelsFragment frg = null;
@@ -107,7 +110,9 @@ public class ViewCourier {
             } else {
                 frg = new ChannelsSlideFragment();
             }
+            String title = StringUtils.getQueryParameter(url, "title");
             Bundle args = new Bundle();
+            args.putString(ContainerActivity.EXTRA_STRING_TITLE, title);
             args.putString(ChannelsFragment.ARGUMENT_NAME_CHANNELTYPEID, arr[1]);
             ContainerActivity.startContainerActivity(context, frg.getClass(), args);
         } else if (url.matches("apppubs:\\/\\/page\\/[\\S]*")) {

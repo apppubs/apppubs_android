@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.util.TypedValue;
 import android.view.Gravity;
@@ -24,10 +25,9 @@ import com.apppubs.AppContext;
 import com.apppubs.constant.APError;
 import com.apppubs.d20.R;
 import com.apppubs.model.SystemBiz;
-import com.apppubs.ui.activity.BaseActivity;
 import com.apppubs.model.message.MsgBussiness;
 import com.apppubs.model.message.UserBussiness;
-import com.apppubs.ui.activity.ContainerActivity;
+import com.apppubs.ui.activity.BaseActivity;
 import com.apppubs.ui.widget.TitleBar;
 import com.apppubs.util.Utils;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
@@ -35,6 +35,8 @@ import com.nostra13.universalimageloader.core.ImageLoader;
 import com.wang.avi.AVLoadingIndicatorView;
 
 public abstract class BaseFragment extends Fragment implements KeyEvent.Callback, OnClickListener {
+
+    public static final String ARGS_STRING_TITLE = "fragment_title";
 
     protected static int mDefaultColor;
     /**
@@ -81,6 +83,15 @@ public abstract class BaseFragment extends Fragment implements KeyEvent.Callback
         mUserBussiness = UserBussiness.getInstance(activity);
         mRequestQueue = mHostActivity.getRequestQueue();
         mAppContext = AppContext.getInstance(mContext);
+    }
+
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        Bundle args = getArguments();
+        if (args != null){
+            mTitle = args.getString(ARGS_STRING_TITLE);
+        }
     }
 
     @Override

@@ -12,7 +12,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.apppubs.d20.R;
-import com.apppubs.ui.activity.NewsInfoActivity;
+import com.apppubs.ui.news.NewsInfoActivity;
 
 public class SubjectAdapter extends BaseAdapter {
 	private Context context;

@@ -7,7 +7,7 @@ import android.app.Activity;
 import android.os.Bundle;
 import android.widget.Toast;
 
-import com.apppubs.ui.activity.NewsInfoBaseActivity;
+import com.apppubs.ui.news.NewsInfoBaseActivity;
 import com.apppubs.constant.Constants;
 
 public class SkipActivity extends Activity {

@@ -1,4 +1,4 @@
-package com.apppubs.ui.fragment;
+package com.apppubs.ui.news;
 
 import java.util.List;
 
@@ -10,9 +10,8 @@ import android.widget.BaseAdapter;
 import com.apppubs.bean.TNewsChannel;
 import com.apppubs.bean.TNewsInfo;
 import com.apppubs.model.NewsBiz;
+import com.apppubs.ui.fragment.BaseFragment;
 import com.apppubs.util.LogM;
-import com.apppubs.ui.activity.NewsInfoActivity;
-import com.apppubs.ui.activity.NewsInfoBaseActivity;
 import com.orm.SugarRecord;
 /**
  * 频道fragment，展示频道信息列表
@@ -25,7 +24,7 @@ import com.orm.SugarRecord;
  * 2015年1月28日 by zhangwen create
  *
  */
-public abstract class ChannelFragment extends BaseFragment{
+public abstract class ChannelFragment extends BaseFragment {
 	
 	public static final String ARG_KEY = "channel_code"; 
 	protected String mChannelCode;

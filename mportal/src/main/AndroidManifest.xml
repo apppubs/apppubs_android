@@ -187,7 +187,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name="com.apppubs.ui.activity.NewsVideoInfoActivity"
+            android:name="com.apppubs.ui.news.NewsVideoInfoActivity"
             android:screenOrientation="portrait" />
         <activity
             android:name="com.apppubs.ui.activity.SubjectInfoActivity"
@@ -196,13 +196,13 @@
             android:name="com.apppubs.ui.activity.WebAppActivity"
             android:screenOrientation="portrait" />
         <activity
-            android:name="com.apppubs.ui.activity.NewsInfoActivity"
+            android:name="com.apppubs.ui.news.NewsInfoActivity"
             android:screenOrientation="portrait" />
         <activity
-            android:name="com.apppubs.ui.activity.NewsPictureInfoActivity"
+            android:name="com.apppubs.ui.news.NewsPictureInfoActivity"
             android:screenOrientation="portrait" />
         <activity
-            android:name="com.apppubs.ui.activity.NewsAudioInfoActivity"
+            android:name="com.apppubs.ui.news.NewsAudioInfoActivity"
             android:screenOrientation="portrait" />
         <activity
             android:name="com.apppubs.ui.activity.BaoliaoActivity"

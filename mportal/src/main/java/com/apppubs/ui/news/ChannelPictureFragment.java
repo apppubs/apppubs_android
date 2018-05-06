@@ -1,6 +1,4 @@
-package com.apppubs.ui.fragment;
-
-import java.util.List;
+package com.apppubs.ui.news;
 
 import android.content.Context;
 import android.content.Intent;
@@ -18,10 +16,6 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.apppubs.bean.TNewsInfo;
-import com.apppubs.constant.APError;
-import com.apppubs.model.IAPCallback;
-import com.apppubs.ui.activity.NewsPictureInfoActivity;
-import com.apppubs.constant.URLs;
 import com.apppubs.util.LogM;
 import com.apppubs.ui.widget.commonlist.CommonListView;
 import com.apppubs.ui.widget.commonlist.CommonListViewListener;
@@ -107,48 +101,48 @@ public class ChannelPictureFragment extends ChannelFragment {
 
 	private void load(){
 		
-		mNewsBiz.getNewsInfoPage(TNewsInfo.NEWS_TYPE_PICTURE,mChannelCode, mCurPage, URLs.PAGE_PIC_SIZE, new IAPCallback<List<TNewsInfo>>() {
-			
-			@Override
-			public void onException(APError excepCode) {
-				mLv.stopRefresh();
-				mLv.stopLoadMore();
-			}
-			
-			@Override
-			public void onDone(List<TNewsInfo> obj) {
-				
-				mProgress.setVisibility(View.GONE);
-				
-				LogM.log(this.getClass(), "返回成功 size:"+obj.size()+"mCurPage:"+mCurPage);
-				if(mCurPage==0){
-					mNewsInfoList = obj;
-					mAdapter = new PicGridViewAdapter();
-					mLv.setAdapter(mAdapter);
-					mLv.stopRefresh();
-					mCurPage = 2;
-				}else if(mCurPage==1){
-					mNewsInfoList = obj;
-					mAdapter = new PicGridViewAdapter();
-					mLv.setAdapter(mAdapter);
-					
-					mCurPage ++;
-					
-					if(mNewsInfoList.size()==0){
-						refresh();
-					}
-					
-				}else {
-					mNewsInfoList.addAll(obj);
-					mAdapter.notifyDataSetChanged();
-					mLv.stopLoadMore();
-					mCurPage ++;
-				}
-				if(obj.size()!=URLs.PAGE_PIC_SIZE){
-					mLv.haveLoadAll();
-				}
-			}
-		});
+//		mNewsBiz.getNewsInfoPage(TNewsInfo.NEWS_TYPE_PICTURE,mChannelCode, mCurPage, URLs.PAGE_PIC_SIZE, new IAPCallback<List<TNewsInfo>>() {
+//
+//			@Override
+//			public void onException(APError excepCode) {
+//				mLv.stopRefresh();
+//				mLv.stopLoadMore();
+//			}
+//
+//			@Override
+//			public void onDone(List<TNewsInfo> obj) {
+//
+//				mProgress.setVisibility(View.GONE);
+//
+//				LogM.log(this.getClass(), "返回成功 size:"+obj.size()+"mCurPage:"+mCurPage);
+//				if(mCurPage==0){
+//					mNewsInfoList = obj;
+//					mAdapter = new PicGridViewAdapter();
+//					mLv.setAdapter(mAdapter);
+//					mLv.stopRefresh();
+//					mCurPage = 2;
+//				}else if(mCurPage==1){
+//					mNewsInfoList = obj;
+//					mAdapter = new PicGridViewAdapter();
+//					mLv.setAdapter(mAdapter);
+//
+//					mCurPage ++;
+//
+//					if(mNewsInfoList.size()==0){
+//						refresh();
+//					}
+//
+//				}else {
+//					mNewsInfoList.addAll(obj);
+//					mAdapter.notifyDataSetChanged();
+//					mLv.stopLoadMore();
+//					mCurPage ++;
+//				}
+//				if(obj.size()!=URLs.PAGE_PIC_SIZE){
+//					mLv.haveLoadAll();
+//				}
+//			}
+//		});
 		
 	}
 	

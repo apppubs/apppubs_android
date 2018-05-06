@@ -19,7 +19,7 @@ import android.widget.Toast;
 import com.apppubs.constant.APError;
 import com.apppubs.d20.R;
 import com.apppubs.model.IAPCallback;
-import com.apppubs.ui.activity.NewsInfoActivity;
+import com.apppubs.ui.news.NewsInfoActivity;
 import com.apppubs.bean.TServiceNOInfo;
 import com.apppubs.util.StringUtils;
 import com.apppubs.util.SystemUtils;

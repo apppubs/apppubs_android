@@ -22,12 +22,12 @@ import android.widget.TextView;
 
 import com.apppubs.bean.TCollection;
 import com.apppubs.bean.TNewsInfo;
-import com.apppubs.ui.activity.NewsVideoInfoActivity;
+import com.apppubs.ui.news.NewsVideoInfoActivity;
 import com.apppubs.util.LogM;
 import com.apppubs.d20.R;
 import com.apppubs.ui.activity.CollectionActivity;
-import com.apppubs.ui.activity.NewsInfoActivity;
-import com.apppubs.ui.activity.NewsPictureInfoActivity;
+import com.apppubs.ui.news.NewsInfoActivity;
+import com.apppubs.ui.news.NewsPictureInfoActivity;
 import com.apppubs.ui.activity.PaperInfoActivity;
 import com.apppubs.ui.fragment.CollectionFragment1.CollectionAdapter.ViewHoder;
 import com.apppubs.ui.widget.ConfirmDialog;

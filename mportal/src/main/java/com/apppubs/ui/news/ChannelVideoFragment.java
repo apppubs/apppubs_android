@@ -1,4 +1,4 @@
-package com.apppubs.ui.fragment;
+package com.apppubs.ui.news;
 
 import java.io.IOException;
 import java.util.List;
@@ -16,7 +16,6 @@ import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.apppubs.ui.activity.NewsVideoInfoActivity;
 import com.apppubs.ui.adapter.CommonAdapter;
 import com.apppubs.ui.adapter.ViewHolder;
 import com.apppubs.asytask.AsyTaskExecutor;

@@ -1,5 +1,5 @@
  
-package com.apppubs.ui.fragment;
+package com.apppubs.ui.news;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -35,6 +35,7 @@ import com.apppubs.asytask.AsyTaskExecutor;
 import com.apppubs.bean.TNewsInfo;
 import com.apppubs.model.NewsBiz;
 import com.apppubs.constant.URLs;
+import com.apppubs.presenter.ChannelDefaultPresenter;
 import com.apppubs.util.JSONResult;
 import com.apppubs.util.JSONUtils;
 import com.apppubs.util.LogM;
@@ -52,7 +53,7 @@ import com.orm.SugarRecord;
  * 新闻Fragment
  *
  */
-public class ChannelDefaultFragment extends ChannelFragment  implements OnClickListener,AsyTaskCallback {
+public class ChannelDefaultFragment extends ChannelFragment  implements OnClickListener,AsyTaskCallback , IChannelDefaultView{
 	
 	public static final String ARGUMENT_SERIALIZABLE_NAME_CHANNEL = "channel";
 	private final int TAST_CODE_REQUEST_CHANNEL = 1;
@@ -69,7 +70,14 @@ public class ChannelDefaultFragment extends ChannelFragment  implements OnClickL
 	private Future<?> mLoadFuture;
 	private Future<?> mCheckOutofDateFuture;
 	private SimpleDateFormat mDateFormat;
-	
+	private ChannelDefaultPresenter mPresenter;
+
+	@Override
+	public void onCreate(Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
+		mPresenter = new ChannelDefaultPresenter(mContext, this, mChannelCode);
+	}
+
 	@Override
 	protected View initLayout(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
@@ -117,14 +125,14 @@ public class ChannelDefaultFragment extends ChannelFragment  implements OnClickL
 			@Override
 			public void onRefresh() {
 				Log.v("ChannelFragment"," 刷新");
-				mCurPage = 1;
-				ChannelDefaultFragment.this.onRefresh();
+				mPresenter.onRefreshClicked();
+
 			}
 			
 			@Override
 			public void onLoadMore() {
 				Log.v("ChannelFragment"," 下一页");
-				load();
+				mPresenter.onLoadMoreClicked();
 				
 			}
 		});
@@ -199,17 +207,34 @@ public class ChannelDefaultFragment extends ChannelFragment  implements OnClickL
 	public void refresh(){
 		mCommonLv.refresh();
 	}
-	private void onRefresh(){
-		
-		AsyTaskExecutor.getInstance().startTask(TAST_CODE_REFRESH__CHANNEL, this, null);
-	}
-	
-	
+
 	private void load() {
 		AsyTaskExecutor.getInstance().startTask(TAST_CODE_LOAD_DATA, this, null);
 		// 首先检测服务端和客户端的更新时间，如果客户端更新时间为空或者客户端更新时间在服务器更新之前则刷新
 	}
-	
+
+	@Override
+	public void stopRefresh() {
+		mCommonLv.stopRefresh();
+	}
+
+	@Override
+	public void stopLoadMore() {
+		mCommonLv.stopLoadMore();
+	}
+
+	@Override
+	public void setDatas(List<TNewsInfo> datas) {
+		mNewsInfoList = datas;
+		mAdapter.notifyDataSetChanged();
+		if (mAdapter == null) {
+			mAdapter = new MyListAdapter();
+			mCommonLv.setAdapter(mAdapter);
+		} else {
+			mAdapter.notifyDataSetChanged();
+		}
+	}
+
 	private class MyListAdapter extends BaseAdapter{
 		
 		@Override

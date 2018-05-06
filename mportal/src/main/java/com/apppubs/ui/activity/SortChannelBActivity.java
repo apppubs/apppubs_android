@@ -14,11 +14,11 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.apppubs.bean.TNewsChannel;
-import com.apppubs.ui.fragment.ChannelFragment;
+import com.apppubs.ui.news.ChannelFragment;
 import com.apppubs.util.LogM;
 import com.apppubs.ui.widget.DragSortListView;
 import com.apppubs.d20.R;
-import com.apppubs.ui.fragment.ChannelFragmentFactory;
+import com.apppubs.ui.news.ChannelFragmentFactory;
 import com.orm.SugarRecord;
 
 public class SortChannelBActivity extends BaseActivity {

@@ -1,4 +1,6 @@
-package com.apppubs.ui.activity;
+package com.apppubs.ui.news;
+
+import java.util.concurrent.Future;
 
 import android.annotation.SuppressLint;
 import android.app.AlertDialog;
@@ -7,7 +9,6 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
-import android.text.TextUtils;
 import android.util.Log;
 import android.util.TypedValue;
 import android.view.Gravity;
@@ -29,46 +30,39 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.apppubs.asytask.AsyTaskCallback;
-import com.apppubs.asytask.AsyTaskExecutor;
 import com.apppubs.bean.TCollection;
 import com.apppubs.bean.Comment;
-import com.apppubs.bean.TLocalFile;
 import com.apppubs.bean.TNewsInfo;
-import com.apppubs.bean.Settings;
 import com.apppubs.constant.APError;
 import com.apppubs.model.IAPCallback;
 import com.apppubs.model.CollectionBiz;
-import com.apppubs.ui.myfile.FilePreviewFragment;
-import com.apppubs.ui.webapp.WebAppFragment;
+import com.apppubs.model.NewsBiz;
+import com.apppubs.ui.activity.BaseActivity;
+import com.apppubs.ui.activity.CommentActivity;
 import com.apppubs.util.LogM;
 import com.apppubs.util.ShareTools;
 import com.apppubs.util.Utils;
-import com.apppubs.util.WebUtils;
 import com.apppubs.ui.widget.MyWebChromeClient;
 import com.apppubs.d20.R;
+import com.apppubs.bean.Settings;
 import com.orm.SugarRecord;
 
 /**
  * 新闻详情页
  */
-public class NewsInfoActivity extends BaseActivity implements AsyTaskCallback {
+public class NewsAudioInfoActivity extends BaseActivity {
 
 	public static final String EXTRA_STRING_NAME_ID = "id";
 	public static final String EXTRA_STRING_NAME_CHANNELCODE = "channel_code";
-	
-	private final int REQUEST_TAG = 1;
-	private final int REQUEST_HTML_TAG = 2;
-	
 	private WebView mWebView;
 	// private ImageView back, mSaveImagview, share;
 	// private View mCommontTv;
-	private LinearLayout progress;
 	private TNewsInfo mNewsInfo;
 	private String mInfoId;
 	private String mChannelCode;
 	private Comment mCommment;// 评论数，赞，踩
-//	private Future<?> mFuture;
+	private NewsBiz mNewsBiz;
+	private Future<?> mFuture;
 	private TextView mCommentTv;
 	private PopupWindow mMenuPW;
 	private boolean isCollected;
@@ -90,21 +84,46 @@ public class NewsInfoActivity extends BaseActivity implements AsyTaskCallback {
 		}else{
 			mChannelCode = mNewsInfo.getChannelCode();
 		}
-		AsyTaskExecutor.getInstance().startTask(REQUEST_TAG, this, new String[]{mInfoId,mChannelCode});
-		
+		mNewsBiz = NewsBiz.getInstance(mContext);
+		mFuture = mNewsBiz.getNewsInfo(mNewsInfo.getId(), mNewsInfo.getChannelCode(),
+				new IAPCallback<TNewsInfo>() {
+
+					@Override
+					public void onException(APError excepCode) {
+						Log.v("newsInfoActivity", "getNewsInfo出现异常");
+						Toast.makeText(NewsAudioInfoActivity.this, "获取正文出错", Toast.LENGTH_SHORT).show();
+					}
+
+					@Override
+					public void onDone(TNewsInfo obj) {
+
+						mNewsInfo = obj;
+						Log.v("newsInfoActivity", "getNewsInfo完成" + obj.getContent());
+						mWebView.loadDataWithBaseURL("", obj.getContent(), "text/html", "utf-8", null);
+						mWebView.loadUrl("http://www.baidu.com");
+						
+						if (obj.getShareFlag() == 0) {
+							// share.setVisibility(View.GONE);
+						}
+						System.out.println("打印新闻正文的链接..................." + obj.getContent());
+
+						// 数据完整后初始化菜单
+						initMenu();
+					}
+				});
+
 	}
 
 	private void init() {
 
 		setTitle("正文");
 		mWebView = (WebView) findViewById(R.id.newsinfo_wv);
-		progress = (LinearLayout) findViewById(R.id.newsinfo_progressBar);
 		WebSettings webSettings = mWebView.getSettings();
 		webSettings.setCacheMode(WebSettings.LOAD_NO_CACHE);
 		webSettings.setAppCacheEnabled(false);
 		webSettings.setLayoutAlgorithm(LayoutAlgorithm.NORMAL);
 		// 设置WebView属性，能够执行Javascript脚本
-		webSettings.setJavaScriptEnabled(true);
+		webSettings.setJavaScriptEnabled(false);
 		int textSize = mAppContext.getSettings().getTextSize();
 		switch (textSize) {
 		case Settings.TEXTSIZE_BIG:
@@ -125,7 +144,6 @@ public class NewsInfoActivity extends BaseActivity implements AsyTaskCallback {
 			@Override
 			public void onPageFinished(WebView view, String url) {
 				super.onPageFinished(view, url);
-				progress.setVisibility(View.GONE);
 			}
 
 			@Override
@@ -148,22 +166,23 @@ public class NewsInfoActivity extends BaseActivity implements AsyTaskCallback {
 			public boolean shouldOverrideUrlLoading(WebView view, String url) {
 				System.out.println("shouldOverrideUrlLoading url" + url);
 
-				// 如果此链接是pdf，doc，txt，等等附件则跳转到附件预览界面
-				if (FilePreviewFragment.isAbleToRead(url)) {
-					Bundle args = new Bundle();
-					args.putString(FilePreviewFragment.ARGS_STRING_URL, url);
-					TLocalFile localFile = SugarRecord.findByProperty(TLocalFile.class, "source_path", url);
-					if(localFile!=null){
-						args.putString(FilePreviewFragment.ARGS_STRING_FILE_LOCAL_PATH, localFile.getSourcePath());
-					}
-					ContainerActivity.startContainerActivity(NewsInfoActivity.this, FilePreviewFragment.class, args, "文件预览");
-					return true;
-				} else {
-					Bundle bundle = new Bundle();
-					bundle.putString(WebAppFragment.ARGUMENT_STRING_URL, url);
-					ContainerActivity.startContainerActivity(NewsInfoActivity.this, WebAppFragment.class, bundle, "详情");
-					return true;
-				}
+//				// 如果此链接是pdf，doc，txt，等等附件则跳转到附件预览界面
+//				if (FilePreviewFragment.isAbleToRead(url)) {
+//					Bundle args = new Bundle();
+//					args.putString(FilePreviewFragment.ARGS_STRING_URL, url);
+//					TLocalFile localFile = SugarRecord.findByProperty(TLocalFile.class, "source_path", url);
+//					if(localFile!=null){
+//						args.putString(FilePreviewFragment.ARGS_STRING_FILE_LOCAL_PATH, localFile.getSourcePath());
+//					}
+//					ContainerActivity.startContainerActivity(NewsAudioInfoActivity.this, FilePreviewFragment.class, args, "文件预览");
+//					return true;
+//				} else {
+//					Bundle bundle = new Bundle();
+//					bundle.putString(WebAppFragment.ARGUMENT_STRING_URL, url);
+//					ContainerActivity.startContainerActivity(NewsAudioInfoActivity.this, WebAppFragment.class, bundle, "详情");
+//					return true;
+//				}
+				return super.shouldOverrideUrlLoading(view, url);
 
 			}
 
@@ -178,8 +197,7 @@ public class NewsInfoActivity extends BaseActivity implements AsyTaskCallback {
 
 			@Override
 			public void onClick(View v) {
-				View menuPop = LayoutInflater.from(NewsInfoActivity.this).inflate(R.layout.pop_news_info_menu, null);
-				menuPop.setBackgroundColor(mThemeColor);
+				View menuPop = LayoutInflater.from(NewsAudioInfoActivity.this).inflate(R.layout.pop_news_info_menu, null);
 				mMenuPW = new PopupWindow(menuPop, ViewGroup.LayoutParams.WRAP_CONTENT,
 						ViewGroup.LayoutParams.WRAP_CONTENT);
 				mMenuPW.setFocusable(true);
@@ -226,7 +244,7 @@ public class NewsInfoActivity extends BaseActivity implements AsyTaskCallback {
 
 				@Override
 				public void onClick(View v) {
-					Intent intent = new Intent(NewsInfoActivity.this, CommentActivity.class);
+					Intent intent = new Intent(NewsAudioInfoActivity.this, CommentActivity.class);
 					intent.putExtra(EXTRA_STRING_NAME_ID, mInfoId);
 					startActivity(intent);
 					overridePendingTransition(android.R.anim.slide_in_left, android.R.anim.slide_out_right);
@@ -298,6 +316,17 @@ public class NewsInfoActivity extends BaseActivity implements AsyTaskCallback {
 			)  
 			.setNegativeButton("取消", null)  
 			.show(); 
+//			WebSettings webSettings = mWebView.getSettings();
+//			if (tempTextSize == 0) {
+//				webSettings.setTextSize(TextSize.LARGER);
+//				tempTextSize = 1;
+//			} else if (tempTextSize == 1) {
+//				webSettings.setTextSize(TextSize.SMALLER);
+//				tempTextSize = -1;
+//			} else {
+//				webSettings.setTextSize(TextSize.NORMAL);
+//				tempTextSize = 0;
+//			}
 
 			break;
 
@@ -339,6 +368,7 @@ public class NewsInfoActivity extends BaseActivity implements AsyTaskCallback {
 	}
 	@Override
 	protected void onDestroy() {
+		mFuture.cancel(true);
 		if(mWebView!=null){
 			mWebView.destroy();
 		}
@@ -347,6 +377,10 @@ public class NewsInfoActivity extends BaseActivity implements AsyTaskCallback {
 
 	public void refreshCommet() {
 		mSystemBiz.getCommentSizeZanCai(mInfoId, new IAPCallback<Comment>() {
+			@Override
+			public void onException(APError excepCode) {
+				mCommment = null;
+			}
 
 			@Override
 			public void onDone(Comment obj) {
@@ -358,56 +392,6 @@ public class NewsInfoActivity extends BaseActivity implements AsyTaskCallback {
 				// 更新数据库中的评论数
 				SugarRecord.updateById(TNewsInfo.class, mInfoId, "COMMENT_NUM", mCommment.getCommentnum());
 			}
-
-			@Override
-			public void onException(APError error) {
-
-			}
 		});
-	}
-
-	@Override
-	public Object onExecute(Integer tag, String[] params) throws Exception {
-		Object obj = null;
-		if(tag==REQUEST_TAG){
-			obj = mNewsBiz.getNewInfo(params[0], params[1]);
-		}else if(tag==REQUEST_HTML_TAG){
-			obj = WebUtils.requestWithGet(params[0]);
-		}
-		return obj;
-	}
-
-	@Override
-	public void onTaskSuccess(Integer tag, Object obj) {
-		
-		if(tag==REQUEST_TAG){
-			mNewsInfo = (TNewsInfo) obj;
-			Log.v("newsInfoActivity", "getNewsInfo完成" + mNewsInfo.getContent());
-			String contentUrl = mNewsInfo.getContentUrl();
-			if(!TextUtils.isEmpty(contentUrl)){
-				AsyTaskExecutor.getInstance().startTask(REQUEST_HTML_TAG, this, new String[]{contentUrl});
-			}else{
-				mWebView.loadDataWithBaseURL("", mNewsInfo.getContent(), "text/html", "utf-8", null);
-//				mWebView.loadData( mNewsInfo.getContent(), "text/html", "utf-8");
-				progress.setVisibility(View.GONE);
-				// 数据完整后初始化菜单
-				initMenu();
-			}
-		}else if(tag==REQUEST_HTML_TAG){
-			mWebView.loadDataWithBaseURL("", obj.toString(), "text/html", "utf-8", null);
-			progress.setVisibility(View.GONE);
-			// 数据完整后初始化菜单
-			initMenu();
-		}
-		
-
-	
-	}
-
-	@Override
-	public void onTaskFail(Integer tag, Exception e) {
-		Log.v("newsInfoActivity", "getNewsInfo出现异常");
-		Toast.makeText(NewsInfoActivity.this, "获取正文出错", Toast.LENGTH_SHORT).show();
-		progress.setVisibility(View.GONE);
 	}
 }

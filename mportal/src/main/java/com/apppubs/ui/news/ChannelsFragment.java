@@ -1,19 +1,22 @@
-package com.apppubs.ui.fragment;
+package com.apppubs.ui.news;
 
 import java.util.List;
 
 import android.os.Bundle;
+import android.support.annotation.Nullable;
+import android.view.View;
 
 import com.apppubs.bean.TMenuItem;
 import com.apppubs.bean.TNewsChannel;
 import com.apppubs.model.NewsBiz;
+import com.apppubs.ui.fragment.TitleBarFragment;
 import com.orm.SugarRecord;
 /**
  * 资讯列表容器,需要传入频道所属的类别
  * @author Administrator
  *
  */
-public class ChannelsFragment extends TitleMenuFragment{
+public abstract class ChannelsFragment extends TitleBarFragment implements IChannelsView{
 	
 	public static final String ARGUMENT_NAME_CHANNELTYPEID = "channel_type_id";
 	
@@ -50,9 +53,4 @@ public class ChannelsFragment extends TitleMenuFragment{
 	protected void refreshChannelList () {
 		mChannelList = SugarRecord.find(TNewsChannel.class,  "TYPE_ID=?", new String[]{mChannelTypeId+""}, null, "DISPLAY_ORDER", null);
 	}
-	
-
-	
-	
-	
 }

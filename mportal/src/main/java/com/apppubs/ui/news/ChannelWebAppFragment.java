@@ -1,4 +1,4 @@
-package com.apppubs.ui.fragment;
+package com.apppubs.ui.news;
 
 import android.content.Intent;
 import android.net.Uri;

@@ -16,10 +16,10 @@ import android.widget.TextView;
 import android.widget.ToggleButton;
 
 import com.apppubs.bean.TNewsChannel;
-import com.apppubs.ui.fragment.ChannelFragment;
+import com.apppubs.ui.news.ChannelFragment;
 import com.apppubs.util.LogM;
 import com.apppubs.d20.R;
-import com.apppubs.ui.fragment.ChannelFragmentFactory;
+import com.apppubs.ui.news.ChannelFragmentFactory;
 import com.apppubs.ui.widget.commonlist.CommonListView;
 import com.orm.SugarRecord;
 /**

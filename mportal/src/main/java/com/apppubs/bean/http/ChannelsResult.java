@@ -1,10 +1,13 @@
 package com.apppubs.bean.http;
 
+import com.alibaba.fastjson.annotation.JSONField;
+
 import java.util.Date;
 import java.util.List;
 
 public class ChannelsResult implements IJsonResult {
 
+    @JSONField(name="channels")
     private List<Item> items;
 
     public void setItems(List<Item> items) {

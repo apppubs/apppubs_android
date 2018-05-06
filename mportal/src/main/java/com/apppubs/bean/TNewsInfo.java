@@ -1,8 +1,11 @@
 package com.apppubs.bean;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
+import com.apppubs.bean.http.ArticlePageResult;
 import com.google.gson.annotations.SerializedName;
 import com.orm.SugarRecord;
 import com.orm.dsl.Table;
@@ -248,6 +251,40 @@ public class TNewsInfo extends SugarRecord implements Serializable{
 	public void setTag(String tag) {
 		this.tag = tag;
 	}
-	
+
+
+	public static TNewsInfo createFrom(ArticlePageResult.Item item){
+//		private String infoId;
+//		private String URL;
+//		private String topic;
+//		private Date pubTime;
+//		private String summary;
+//		private String picURL;
+//		private int comment;
+//		private String contentType;
+//		private String channelCode;
+//		private String tag;
+
+		TNewsInfo info = new TNewsInfo();
+		info.setId(item.getInfoId());
+		info.setUrl(item.getURL());
+		info.setTitle(item.getTopic());
+		info.setPubTime(item.getPubTime());
+		info.setSummary(item.getSummary());
+		info.setPicURL(item.getPicURL());
+		info.setCommontNum(item.getComment());
+		info.setType(item.getContentType());
+		info.setChannelCode(item.getChannelCode());
+		info.setTag(item.getTag());
+		return info;
+	}
+
+	public static List<TNewsInfo> createFrom(ArticlePageResult result){
+		List<TNewsInfo> list = new ArrayList<>();
+		for (ArticlePageResult.Item item : result.getItems()){
+			list.add(createFrom(item));
+		}
+		return list;
+	}
 	
 }

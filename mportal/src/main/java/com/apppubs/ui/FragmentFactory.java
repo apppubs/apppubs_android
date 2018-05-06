@@ -3,13 +3,12 @@ package com.apppubs.ui;
 import android.os.Bundle;
 
 import com.apppubs.ui.fragment.BaseFragment;
-import com.apppubs.ui.fragment.ChannelFragment;
-import com.apppubs.ui.fragment.ChannelFragmentFactory;
-import com.apppubs.ui.fragment.ChannelsFragment;
-import com.apppubs.ui.fragment.ChannelsSlideFragment;
-import com.apppubs.ui.fragment.ChannelsSquareFragment;
+import com.apppubs.ui.news.ChannelFragment;
+import com.apppubs.ui.news.ChannelFragmentFactory;
+import com.apppubs.ui.news.ChannelsFragment;
+import com.apppubs.ui.news.ChannelsSlideFragment;
+import com.apppubs.ui.news.ChannelsSquareFragment;
 import com.apppubs.ui.fragment.ExceptionFragment;
-import com.apppubs.ui.fragment.MsgRecordListFragment;
 import com.apppubs.ui.fragment.PapersFragment;
 import com.apppubs.ui.fragment.ServiceNOsOfMineFragment;
 import com.apppubs.ui.fragment.SettingFragment;

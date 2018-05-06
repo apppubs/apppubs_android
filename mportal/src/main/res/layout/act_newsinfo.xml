@@ -85,18 +85,4 @@
         android:layout_above="@id/line"
         android:overScrollMode="never" />
 
-    <LinearLayout
-        android:id="@+id/newsinfo_progressBar"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:background="#00000000"
-        android:gravity="center"
-        android:orientation="vertical" >
-
-        <ProgressBar
-            android:layout_width="50dip"
-            android:layout_height="50dip"
-            android:layout_gravity="center" />
-    </LinearLayout>
-
 </RelativeLayout>
