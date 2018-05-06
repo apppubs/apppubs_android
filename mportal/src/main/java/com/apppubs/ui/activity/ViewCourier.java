@@ -1,7 +1,6 @@
 package com.apppubs.ui.activity;
 
 import android.app.Activity;
-import android.app.Service;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
@@ -147,7 +146,7 @@ public class ViewCourier {
             String userId = AppContext.getInstance(context).getCurrentUser().getUserId();
             Intent intent = null;
             if (userId != null && !userId.equals("")) {// 已登录
-                intent = new Intent(context, UserCencerActivity.class);
+                intent = new Intent(context, UserCenterActivity.class);
             } else {
                 intent = new Intent(context, LoginActivity.class);
             }

@@ -7,16 +7,21 @@ import android.content.IntentFilter;
 import android.content.pm.ActivityInfo;
 import android.content.res.TypedArray;
 import android.graphics.Bitmap;
+import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.support.annotation.NonNull;
 import android.support.v4.app.FragmentActivity;
 import android.text.TextUtils;
+import android.util.TypedValue;
+import android.view.Gravity;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.webkit.ValueCallback;
+import android.widget.FrameLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -44,6 +49,7 @@ import com.apppubs.bean.VersionInfo;
 import com.apppubs.model.message.MsgBussiness;
 import com.apppubs.model.message.UserBussiness;
 import com.apppubs.ui.APErrorHandler;
+import com.apppubs.ui.ICommonView;
 import com.apppubs.ui.start.StartUpActivity;
 import com.apppubs.ui.widget.AlertDialog;
 import com.apppubs.ui.widget.ConfirmDialog;
@@ -53,12 +59,13 @@ import com.apppubs.util.LogM;
 import com.apppubs.util.Utils;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
+import com.wang.avi.AVLoadingIndicatorView;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
-public abstract class BaseActivity extends FragmentActivity implements OnClickListener {
+public abstract class BaseActivity extends FragmentActivity implements OnClickListener, ICommonView {
 
 	public static final int FILECHOOSER_RESULTCODE = 1;
 	public static final String EXTRA_STRING_TITLE = "extra_title";
@@ -100,6 +107,9 @@ public abstract class BaseActivity extends FragmentActivity implements OnClickLi
 	private Handler mHandler;
 
 	protected APErrorHandler mErrorHandler;
+
+	private View mLoadingView;
+    private View mEmptyView;
 
 	@Override
 	protected void onCreate(Bundle arg0) {
@@ -216,25 +226,65 @@ public abstract class BaseActivity extends FragmentActivity implements OnClickLi
 	@Override
 	public void setContentView(int layoutResID) {
 
-		if (isNeedTitleBar) {
-			super.setContentView(R.layout.act_base);
-			ViewGroup vg = (ViewGroup) findViewById(R.id.title_ll);
-			getLayoutInflater().inflate(layoutResID, vg);
-			mTitleBar = (TitleBar) findViewById(R.id.base_tb);
-			mTitleBar.setBackgroundColor(mThemeColor);
-			if (isNeedBack) {
-				mTitleBar.setLeftBtnClickListener(this);
-				mTitleBar.setLeftImageResource(R.drawable.top_back_btn);
-				String title = getIntent().getStringExtra(EXTRA_STRING_TITLE);
-				if (!TextUtils.isEmpty(title)) {
-					setTitle(title);
-				}
-			}
-		} else {
-			super.setContentView(layoutResID);
-		}
+        View content = getLayoutInflater().inflate(layoutResID, null);
 
+        FrameLayout contentFL = new FrameLayout(mContext);
+        contentFL.addView(content);
+        //content中加入等待图标
+        mLoadingView = initLoadingView();
+        FrameLayout.LayoutParams loadingLP = getLoadingLayoutParams();
+        contentFL.addView(mLoadingView, loadingLP);
+
+        mEmptyView = initEmptyView();
+        FrameLayout.LayoutParams emptyLP = new FrameLayout.LayoutParams(FrameLayout.LayoutParams
+                .WRAP_CONTENT, FrameLayout.LayoutParams.WRAP_CONTENT);
+        emptyLP.gravity = Gravity.CENTER;
+        contentFL.addView(mEmptyView);
+        if (isNeedTitleBar){
+            super.setContentView(R.layout.act_base);
+            ViewGroup vg = (ViewGroup) findViewById(R.id.title_ll);
+            vg.addView(contentFL);
+            mTitleBar = (TitleBar) findViewById(R.id.base_tb);
+            mTitleBar.setBackgroundColor(mThemeColor);
+            if (isNeedBack) {
+                mTitleBar.setLeftBtnClickListener(this);
+                mTitleBar.setLeftImageResource(R.drawable.top_back_btn);
+                String title = getIntent().getStringExtra(EXTRA_STRING_TITLE);
+                if (!TextUtils.isEmpty(title)) {
+                    setTitle(title);
+                }
+            }
+        }else{
+            setContentView(contentFL);
+        }
 	}
+
+    @NonNull
+    private FrameLayout.LayoutParams getLoadingLayoutParams() {
+        FrameLayout.LayoutParams loadingLP = new FrameLayout.LayoutParams(Utils.dip2px(mContext,
+                40), Utils.dip2px(mContext, 40));
+        loadingLP.gravity = Gravity.CENTER;
+        return loadingLP;
+    }
+
+    private AVLoadingIndicatorView initLoadingView() {
+        AVLoadingIndicatorView mLoadingView = new AVLoadingIndicatorView(mContext);
+        mLoadingView.setIndicator("BallBeatIndicator");
+        mLoadingView.setIndicatorColor(Color.parseColor("#C0C0C0"));
+        mLoadingView.setVisibility(View.GONE);
+        return mLoadingView;
+    }
+
+    protected View initEmptyView() {
+        TextView emptyView = new TextView(mContext);
+        emptyView.setText(R.string.have_no_content);
+        emptyView.setTextSize(TypedValue.COMPLEX_UNIT_PX, mContext.getResources().getDimension(R
+                .dimen.item_text_size));
+        emptyView.setTextColor(mContext.getResources().getColor(R.color.common_text_gray));
+        emptyView.setGravity(Gravity.CENTER);
+        emptyView.setVisibility(View.GONE);
+        return emptyView;
+    }
 
 	@Override
 	public void setContentView(View view) {
@@ -453,4 +503,29 @@ public abstract class BaseActivity extends FragmentActivity implements OnClickLi
 	public APErrorHandler getErrorHandler(){
 		return mErrorHandler;
 	}
+
+    @Override
+    public void showLoading() {
+		mLoadingView.setVisibility(View.VISIBLE);
+    }
+
+    @Override
+    public void hideLoading() {
+		mLoadingView.setVisibility(View.GONE);
+    }
+
+    @Override
+    public void onError(APError error) {
+		mErrorHandler.onError(error);
+    }
+
+    @Override
+    public void showEmptyView() {
+		mEmptyView.setVisibility(View.VISIBLE);
+    }
+
+    @Override
+    public void hideEmptyView() {
+		mEmptyView.setVisibility(View.GONE);
+    }
 }

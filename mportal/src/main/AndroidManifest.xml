@@ -209,7 +209,7 @@
             android:screenOrientation="portrait"
             android:windowSoftInputMode="adjustUnspecified|stateHidden" />
         <activity
-            android:name="com.apppubs.ui.activity.UserCencerActivity"
+            android:name="com.apppubs.ui.activity.UserCenterActivity"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="adjustUnspecified|stateHidden" />
         <activity

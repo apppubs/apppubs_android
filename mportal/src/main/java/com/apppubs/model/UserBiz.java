@@ -340,10 +340,31 @@ public class UserBiz extends BaseBiz {
         return sb.toString();
     }
 
-    public void logout(Context context) {
-        AppContext.getInstance(mContext).clearCurrentUser();
-        RongIM.getInstance().logout();
-        context.sendBroadcast(new Intent(Actions.ACTION_LOGOUT));
+    public void logout(final Context context, final IAPCallback<Object> callback) {
+        asyncPOST(Constants.API_NAME_LOGOUT, null, new IRQStringListener() {
+
+            @Override
+            public void onResponse(final String result, final APError error) {
+                if (error == null) {
+                    AppContext.getInstance(mContext).clearCurrentUser();
+                    RongIM.getInstance().logout();
+                    context.sendBroadcast(new Intent(Actions.ACTION_LOGOUT));
+                    MainHandler.getInstance().post(new Runnable() {
+                        @Override
+                        public void run() {
+                            callback.onDone(result);
+                        }
+                    });
+                } else {
+                    MainHandler.getInstance().post(new Runnable() {
+                        @Override
+                        public void run() {
+                            callback.onException(error);
+                        }
+                    });
+                }
+            }
+        });
     }
 
 }

@@ -30,7 +30,6 @@ import com.apppubs.util.Utils;
 import com.apppubs.util.WebUtils;
 import com.apppubs.ui.widget.CircleTextImageView;
 import com.apppubs.ui.widget.ConfirmDialog;
-import com.apppubs.ui.widget.LoadingDialog;
 import com.apppubs.ui.widget.ProgressHUD;
 
 import java.io.ByteArrayOutputStream;
@@ -43,10 +42,9 @@ import java.util.Map;
 import io.rong.imkit.RongIM;
 
 
-public class UserCencerActivity extends BaseActivity {
+public class UserCenterActivity extends BaseActivity {
 
 	private final int REQUEST_CODE_PICTURES = 3;
-	private LoadingDialog dialog;
 	private Button mMOdify;
 	private boolean isHidden = true; // 密码的显示和隐藏
 	private EditText mName, mEmail, mNicname, mPhone;
@@ -84,7 +82,7 @@ public class UserCencerActivity extends BaseActivity {
 
 					@Override
 					public void onClick(View arg0) {
-						Intent intent = new Intent(UserCencerActivity.this,ChangePasswordActivity.class);
+						Intent intent = new Intent(UserCenterActivity.this,ChangePasswordActivity.class);
 						startActivity(intent);
 					}
 				});
@@ -143,13 +141,12 @@ public class UserCencerActivity extends BaseActivity {
 	}
 
 	private void onLogout() {
-		new ConfirmDialog(UserCencerActivity.this,
+		new ConfirmDialog(UserCenterActivity.this,
 				new ConfirmDialog.ConfirmListener() {
 
 					@Override
 					public void onOkClick() {
-						UserBiz.getInstance(mContext).logout(UserCencerActivity.this);
-						UserCencerActivity.this.finish();
+						logout();
 					}
 
 					@Override
@@ -159,11 +156,29 @@ public class UserCencerActivity extends BaseActivity {
 				}, "确定注销登陆吗？", "取消", "注销").show();
 	}
 
+	private void logout(){
+		showLoading();
+		UserBiz.getInstance(mContext).logout(mContext, new IAPCallback() {
+			@Override
+			public void onDone(Object obj) {
+				hideLoading();
+				UserCenterActivity.this.finish();
+			}
+
+			@Override
+			public void onException(APError error) {
+				hideLoading();
+				onError(error);
+			}
+		});
+
+	}
+	
 	@Override
 	public void finish() {
 		super.finish();
 		// 关闭键盘
-		Utils.colseInput(UserCencerActivity.this);
+		Utils.colseInput(UserCenterActivity.this);
 	}
 
 	@Override
@@ -208,8 +223,8 @@ public class UserCencerActivity extends BaseActivity {
 
 				@Override
 				public void onTaskSuccess(Integer tag, Object obj) {
-					ProgressHUD.dismissProgressHUDInThisContext(UserCencerActivity.this);
-					Toast.makeText(UserCencerActivity.this,"头像修改成功",Toast.LENGTH_SHORT).show();
+					ProgressHUD.dismissProgressHUDInThisContext(UserCenterActivity.this);
+					Toast.makeText(UserCenterActivity.this,"头像修改成功",Toast.LENGTH_SHORT).show();
 					mImageLoader.displayImage(AppContext.getInstance(mContext).getCurrentUser().getAvatarUrl(),mAvatarIV);
 					List<String> ids = new ArrayList<String>();
 					ids.add(mAppContext.getCurrentUser().getUserId());
@@ -234,8 +249,8 @@ public class UserCencerActivity extends BaseActivity {
 
 				@Override
 				public void onTaskFail(Integer tag, Exception e) {
-					ProgressHUD.dismissProgressHUDInThisContext(UserCencerActivity.this);
-					Toast.makeText(UserCencerActivity.this,"头像修改失败",Toast.LENGTH_SHORT).show();
+					ProgressHUD.dismissProgressHUDInThisContext(UserCenterActivity.this);
+					Toast.makeText(UserCenterActivity.this,"头像修改失败",Toast.LENGTH_SHORT).show();
 				}
 			},new String[]{AppContext.getInstance(mContext).getCurrentUser().getUserId(),mAppContext.getSettings().getAppCode()});
 
