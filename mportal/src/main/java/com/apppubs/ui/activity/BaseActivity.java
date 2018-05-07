@@ -22,6 +22,7 @@ import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.webkit.ValueCallback;
 import android.widget.FrameLayout;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -243,7 +244,10 @@ public abstract class BaseActivity extends FragmentActivity implements OnClickLi
         if (isNeedTitleBar){
             super.setContentView(R.layout.act_base);
             ViewGroup vg = (ViewGroup) findViewById(R.id.title_ll);
-            vg.addView(contentFL);
+			LinearLayout.LayoutParams contentLP = new LinearLayout.LayoutParams(LinearLayout
+					.LayoutParams.MATCH_PARENT,0);
+			contentLP.weight = 1;
+            vg.addView(contentFL, contentLP);
             mTitleBar = (TitleBar) findViewById(R.id.base_tb);
             mTitleBar.setBackgroundColor(mThemeColor);
             if (isNeedBack) {

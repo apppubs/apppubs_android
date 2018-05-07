@@ -66,9 +66,6 @@ public class ChannelDefaultFragment extends ChannelFragment  implements OnClickL
 	private CommonListView mCommonLv;
 	private SlidePicView mSlidePicView;
 	private DisplayImageOptions mImageLoaderOptions;
-	private Future<?> mRefreshFuture;
-	private Future<?> mLoadFuture;
-	private Future<?> mCheckOutofDateFuture;
 	private SimpleDateFormat mDateFormat;
 	private ChannelDefaultPresenter mPresenter;
 
@@ -118,10 +115,8 @@ public class ChannelDefaultFragment extends ChannelFragment  implements OnClickL
 		.build();
 		
 		mCommonLv = (CommonListView) mRootView.findViewById(R.id.channel_lv);
-		
-		mCommonLv.setPullLoadEnable(true);
 		mCommonLv.setCommonListViewListener(new CommonListViewListener() {
-			
+
 			@Override
 			public void onRefresh() {
 				Log.v("ChannelFragment"," 刷新");
@@ -136,7 +131,8 @@ public class ChannelDefaultFragment extends ChannelFragment  implements OnClickL
 				
 			}
 		});
-		
+		mCommonLv.setPullLoadEnable(true);
+		mCommonLv.setPullRefreshEnable(true);
 		mCommonLv.setOnItemClickListener(new OnItemClickListener() {
 			
 			@Override
@@ -318,18 +314,6 @@ public class ChannelDefaultFragment extends ChannelFragment  implements OnClickL
 	private class ViewHolder{
 		public ImageView iv;
 		private TextView titleTv,tagTv,commentTv,pubtimeTv;
-	}
-	
-	@Override
-	public void onStop() {
-		super.onStop();
-		if(mRefreshFuture!=null)
-			mRefreshFuture.cancel(true);
-		if(mLoadFuture!=null)
-			mLoadFuture.cancel(true);
-		if(mCheckOutofDateFuture!=null){
-			mCheckOutofDateFuture.cancel(true);
-		}
 	}
 	
 	@Override

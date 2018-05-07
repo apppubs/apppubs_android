@@ -34,6 +34,8 @@ import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.wang.avi.AVLoadingIndicatorView;
 
+import okhttp3.internal.Util;
+
 public abstract class BaseFragment extends Fragment implements KeyEvent.Callback, OnClickListener {
 
     public static final String ARGS_STRING_TITLE = "fragment_title";
@@ -89,7 +91,7 @@ public abstract class BaseFragment extends Fragment implements KeyEvent.Callback
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         Bundle args = getArguments();
-        if (args != null){
+        if (args != null && !Utils.isEmpty(args.getString(ARGS_STRING_TITLE))){
             mTitle = args.getString(ARGS_STRING_TITLE);
         }
     }

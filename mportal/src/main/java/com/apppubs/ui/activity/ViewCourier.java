@@ -18,6 +18,7 @@ import com.apppubs.ui.fragment.ServiceNOsOfMineFragment;
 import com.apppubs.ui.fragment.SettingFragment;
 import com.apppubs.ui.fragment.TitleMenuFragment;
 import com.apppubs.ui.message.fragment.AddressBookFragement;
+import com.apppubs.ui.message.fragment.ConversationListFragment;
 import com.apppubs.ui.myfile.MyFileFragment;
 import com.apppubs.ui.news.ChannelFragment;
 import com.apppubs.ui.news.ChannelFragmentFactory;
@@ -141,7 +142,7 @@ public class ViewCourier {
             CollectionFragment frg = new CollectionFragment();
             ContainerActivity.startContainerActivity(context, frg.getClass());
         } else if (url.matches("apppubs:\\/\\/message[\\S]*")) {
-            ContainerActivity.startContainerActivity(context, MsgRecordListFragment.class);
+            ContainerActivity.startContainerActivity(context, ConversationListFragment.class);
         } else if (url.matches("apppubs:\\/\\/history_message[\\S]*")) {
             ContainerActivity.startContainerActivity(context, HistoryFragment.class);
         } else if (url.matches("apppubs:\\/\\/baol[\\S]*")) {
