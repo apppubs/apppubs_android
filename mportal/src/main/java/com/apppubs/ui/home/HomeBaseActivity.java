@@ -97,7 +97,17 @@ public abstract class HomeBaseActivity extends BaseActivity implements IHomeView
 		mViewCourier = ViewCourier.getInstance(this);
 
 		if (mAppContext.getAppConfig().getChatFlag().equals("1")) {
-			mMsgBussiness.loginRC();
+			mMsgBussiness.loginRC(new IAPCallback() {
+				@Override
+				public void onDone(Object obj) {
+					System.out.println("融云登录成功！");
+				}
+
+				@Override
+				public void onException(APError error) {
+					onError(error);
+				}
+			});
 		}
 
 		initBroadcastReceiver();

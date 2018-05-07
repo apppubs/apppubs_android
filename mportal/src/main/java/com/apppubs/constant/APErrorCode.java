@@ -27,7 +27,10 @@ public enum APErrorCode {
     /**本地错误*/
     NETWORK_ERROR(2000),//网络错误
     JSON_PARSE_ERROR(2002),//json解析错误
-    HAVE_NO_ERROR(2003)//没有更多
+    HAVE_NO_ERROR(2003),//没有更多
+    RONG_TOKEN_EMPTY(3004),//融云token为空
+    ONG_TOKEN_ERROR(3005),
+    RONG_LOGIN_ERROR(3006)//融云token为空
     ;
 
 

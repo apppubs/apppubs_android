@@ -122,6 +122,8 @@ public class UserBiz extends BaseBiz {
                 .getCNName(),
                 null, jr.getEmail(), jr.getMobile());
         user.setToken(jr.getToken());
+        user.setRongToken(jr.getRongToken());
+
         mAppContext.setCurrentUser(user);
         // 保存user对象，并保存是否自动登录的配置
         Settings settings = mAppContext.getSettings();

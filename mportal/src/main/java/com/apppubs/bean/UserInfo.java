@@ -26,6 +26,7 @@ public class UserInfo implements Serializable{
 	private String userId;
 	private String username;
 	private String token;
+	private String rongToken;
 	private String trueName;
 	private String nickName;
 	private String type;
@@ -106,6 +107,14 @@ public class UserInfo implements Serializable{
 
 	public void setToken(String token) {
 		this.token = token;
+	}
+
+	public String getRongToken() {
+		return rongToken;
+	}
+
+	public void setRongToken(String rongToken) {
+		this.rongToken = rongToken;
 	}
 
 	public String getTrueName() {
