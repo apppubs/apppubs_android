@@ -8,6 +8,7 @@ import com.apppubs.util.LogM;
 
 import java.io.File;
 import java.io.IOException;
+import java.net.SocketTimeoutException;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
@@ -81,8 +82,13 @@ public class APHttpClient implements IHttpClient {
             @Override
             public void onFailure(Call call, IOException e) {
                 e.printStackTrace();
-                listener.onResponse(null, new APError(APErrorCode.NETWORK_ERROR,
-                        "网络异常！请检查网络是否畅通！"));
+                if (e instanceof SocketTimeoutException) {
+                    listener.onResponse(null, new APError(APErrorCode.NETWORK_ERROR,
+                            "网络请求超时！请检查网络是否畅通！"));
+                } else {
+                    listener.onResponse(null, new APError(APErrorCode.NETWORK_ERROR,
+                            "网络异常！请检查网络是否畅通！"));
+                }
             }
 
             @Override
