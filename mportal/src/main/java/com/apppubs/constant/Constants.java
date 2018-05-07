@@ -97,10 +97,10 @@ public class Constants {
 	public static final String API_NAME_LOGIN_WITH_USERNAME = "login_with_username";
 	public static final String API_NAME_LOGIN_WITH_ORG = "login_with_org";
 	public static final String API_NAME_REQUEST_SENT_VERIFY_CODE = "request_send_verify_code";
-	public static final String API_NAME_CONFIRM_VERIFY_CODE = "confirm_verfify_code";
+	public static final String API_NAME_CONFIRM_VERIFY_CODE = "confirm_verify_code";
 	public static final String API_NAME_MODIFY_PWD = "modify_pwd";
 	public static final String API_NAME_UPLOAD_AVATAR = "upload_avatar";
-	public static final String API_NAME_REQUEST_SENT_INVITE_SMS = "reqauest_sent_invite_sms";
+	public static final String API_NAME_REQUEST_SENT_INVITE_SMS = "request_sent_invite_sms";
 	public static final String API_NAME_COMMIT_PUSH_REGISTER_ID = "commit_push_register_id";
 	public static final String API_NAME_LOGOUT = "log_out";
 

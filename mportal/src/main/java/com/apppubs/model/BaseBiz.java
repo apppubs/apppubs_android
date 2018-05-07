@@ -188,15 +188,20 @@ public abstract class BaseBiz {
                     return;
                 }
                 JSONObject jo = JSONObject.parseObject(json);
-                Integer code = jo.getInteger("code");
-                String msg = jo.getString("msg");
-                if (code == APErrorCode.SUCCESS.getCode()) {
-                    String resultStr = jo.getString("result");
-                    T r = JSONObject.parseObject(resultStr, clazz);
-                    listener.onResponse(r, null);
-                } else {
-                    APError err = new APError(code, msg);
-                    listener.onResponse(null, err);
+                try {
+                    Integer code = jo.getInteger("code");
+                    String msg = jo.getString("msg");
+                    if (code == APErrorCode.SUCCESS.getCode()) {
+                        String resultStr = jo.getString("result");
+                        T r = JSONObject.parseObject(resultStr, clazz);
+                        listener.onResponse(r, null);
+                    } else {
+                        APError err = new APError(code, msg);
+                        listener.onResponse(null, err);
+                    }
+                }catch (Exception ex){
+                    ex.printStackTrace();
+                    listener.onResponse(null, new APError(APErrorCode.JSON_PARSE_ERROR, "json格式错误！"));
                 }
             }
         });
