@@ -65,6 +65,8 @@ public class ChannelDefaultPresenter extends AbsPresenter<IChannelDefaultView> {
                     @Override
                     public void onException(APError error) {
                         mView.onError(error);
+                        mView.stopLoadMore();
+                        mView.stopRefresh();
                     }
                 });
     }

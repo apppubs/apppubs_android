@@ -344,6 +344,7 @@ public class FirstLoginActity extends BaseActivity {
         super.onActivityResult(requestCode, resultCode, intent);
         if (requestCode == REQUEST_CODE_VERIFICATION && resultCode == RESULT_OK) {
             HomeBaseActivity.startHomeActivity(this);
+            finish();
         }
     }
 }
