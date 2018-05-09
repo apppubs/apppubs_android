@@ -267,7 +267,9 @@ public class PageFragment extends TitleMenuFragment implements OnClickListener, 
             mRootLl.removeView(mContentRL);
         }
         mContentRL = new RelativeLayout(mContext);
-        mRootLl.addView(mContentRL);
+        LinearLayout.LayoutParams lp = new LayoutParams(LayoutParams.MATCH_PARENT,0);
+        lp.weight = 1;
+        mRootLl.addView(mContentRL, lp);
     }
 
     /**
@@ -663,7 +665,8 @@ public class PageFragment extends TitleMenuFragment implements OnClickListener, 
         }
         ScrollView sv = new ScrollView(mContext);
         mScrollView = sv;
-        mContentRL.addView(sv);
+        LinearLayout.LayoutParams scrollViewLp = new LayoutParams(LayoutParams.MATCH_PARENT,LayoutParams.MATCH_PARENT);
+        mContentRL.addView(sv,scrollViewLp);
 
         //首先清除容器内的所有view
         mContainerLl = new LinearLayout(mContext);
