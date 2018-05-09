@@ -23,8 +23,6 @@ import com.apppubs.ui.widget.ConfirmDialog;
 import com.apppubs.ui.widget.ConfirmDialog.ConfirmListener;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 
-import cn.jpush.android.api.JPushInterface;
-
 /**
  * app入口
  * 
@@ -71,20 +69,17 @@ public class StartUpActivity extends BaseActivity implements IStartUpView {
 	@Override
 	protected void onNewIntent(Intent intent) {
 		super.onNewIntent(intent);
-		hideWelcomeFragment();
-		mPresenter.init();
+		mPresenter.onWelcomeBack();
 	}
 
 	@Override
 	protected void onResume() {
 		super.onResume();
-		JPushInterface.onResume(this);
 	}
 
 	@Override
 	protected void onPause() {
 		super.onPause();
-		JPushInterface.onPause(this);
 	}
 
 	@Override
@@ -100,7 +95,6 @@ public class StartUpActivity extends BaseActivity implements IStartUpView {
 	@Override
 	public void finish() {
 		super.finish();
-		overridePendingTransition(android.R.anim.fade_in, R.anim.zoom_fade_out);
 		mPresenter.cancelSkip2Home();
 	}
 
@@ -137,20 +131,20 @@ public class StartUpActivity extends BaseActivity implements IStartUpView {
 		skipView.startProgress(millis, new ProgressSkipView.SkipListener() {
 			@Override
 			public void onClick() {
-				skip2Home();
+				mPresenter.onSkipBtnClicked();
 			}
 
 			@Override
 			public void onComplete() {
-				skip2Home();
+				mPresenter.onSkipBtnCompleted();
 			}
 		});
 	}
 
 	@Override
 	public void skip2Home() {
-		HomeBaseActivity.startHomeActivity(StartUpActivity.this);
 		finish();
+		HomeBaseActivity.startHomeActivity(StartUpActivity.this);
 	}
 
 	@Override
@@ -172,7 +166,7 @@ public class StartUpActivity extends BaseActivity implements IStartUpView {
 
 				@Override
 				public void onCancelClick() {
-					skip2Home();
+					mPresenter.onUpdateCancel();
 				}
 
 				@Override

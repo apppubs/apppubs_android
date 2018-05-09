@@ -162,7 +162,7 @@ public abstract class HomeBaseActivity extends BaseActivity implements IHomeView
 	@Override
 	protected void onResume() {
 		super.onResume();
-
+		JPushInterface.onResume(this);
 		String paddingUrl = mAppContext.getApp().getPaddingUrlOnHomeActivityStartUp();
 		if (!TextUtils.isEmpty(paddingUrl)) {
 			mAppContext.getApp().setPaddingUrlOnHomeActivityStartUp(null);
@@ -270,6 +270,12 @@ public abstract class HomeBaseActivity extends BaseActivity implements IHomeView
 
 	private static boolean isNeedLogin(AppContext context) {
 		return context.getCurrentUser()==null|| TextUtils.isEmpty(context.getCurrentUser().getUserId());
+	}
+
+	@Override
+	protected void onPause() {
+		super.onPause();
+		JPushInterface.onPause(this);
 	}
 
 	@Override

@@ -24,120 +24,141 @@ import java.util.TimerTask;
 
 public class StartupPresenter {
 
-	public static final String SHARED_PREFERENCE_NAME_WELCOME_LOAD_HISTORY = "welcome_load_history";
+    public static final String SHARED_PREFERENCE_NAME_WELCOME_LOAD_HISTORY = "welcome_load_history";
 
-	private final long SKIP_MILLIS = 5*1000;
-	private SystemBiz mSystemBiz;
-	private IStartUpView mView;
-	private Context mContext;
-	private boolean isStartCanceled;
+    private final long SKIP_MILLIS = 5 * 1000;
+    private SystemBiz mSystemBiz;
+    private IStartUpView mView;
+    private Context mContext;
+    private boolean isStartCanceled;
 
-	public StartupPresenter(Context context, IStartUpView view) {
-		mContext = context;
-		mSystemBiz = SystemBiz.getInstance(context);
-		mView = view;
-	}
+    public StartupPresenter(Context context, IStartUpView view) {
+        mContext = context;
+        mSystemBiz = SystemBiz.getInstance(context);
+        mView = view;
+    }
 
-	public void onStart() {
+    public void onStart() {
 
-		String startUpPic = AppContext.getInstance(mContext).getApp().getStartUpPic();
-		if (!TextUtils.isEmpty(startUpPic)){
-			showBgPic(startUpPic);
-		}
-		if (isNeedWelcome()){
-			mView.showWelcomeFragment();
-		}else{
-			init();
-		}
-		if (Utils.getBooleanMetaValue(mContext,"NEED_START_UP_VERSION")){
-			String versionStr = AppContext.getInstance(mContext).getVersionString();
-			mView.showVersion(versionStr);
-		}
-	}
+        String startUpPic = AppContext.getInstance(mContext).getApp().getStartUpPic();
+        if (!TextUtils.isEmpty(startUpPic)) {
+            showBgPic(startUpPic);
+        }
+        if (isNeedWelcome()) {
+            mView.showWelcomeFragment();
+        } else {
+            init();
+        }
+    }
 
-	public void init(){
-		mSystemBiz.initSystem(new IAPCallback<App>() {
-			@Override
-			public void onDone(App obj) {
-				showBgPic(obj.getStartUpPic());
-				checkUpdate();
-			}
+    public void onWelcomeBack() {
+        mView.hideWelcomeFragment();
+        init();
+    }
 
-			@Override
-			public void onException(APError excepCode) {
-				mView.showInitFailDialog();
-			}
-		});
-	}
+    public void onSkipBtnClicked() {
+        mView.skip2Home();
+    }
 
-	private void showBgPic(String url){
-		mView.showBgImage(url);
-	}
+    public void onSkipBtnCompleted() {
+        mView.skip2Home();
+    }
 
-	private boolean isNeedWelcome() {
+    public void onUpdateCancel() {
+        mView.skip2Home();
+    }
 
-		String flag = SharedPreferenceUtils.getInstance(mContext).getString(SHARED_PREFERENCE_NAME_WELCOME_LOAD_HISTORY,Utils.getVersionCode(mContext)+"","");
+    public void init() {
+        mSystemBiz.initSystem(new IAPCallback<App>() {
+            @Override
+            public void onDone(App obj) {
+                showBgPic(obj.getStartUpPic());
+                checkUpdate();
+            }
 
-		//版本升级,并且有欢迎图
-		if(TextUtils.isEmpty(flag)){
+            @Override
+            public void onException(APError excepCode) {
+                mView.showInitFailDialog();
+            }
+        });
+    }
 
-			int welcomePicNum = 0;
-			try {
-				welcomePicNum = mContext.getAssets().list("welcome").length;
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
-			if (welcomePicNum > 0) {
-				return true;
-			}
-		}
-		return false;
-	}
+    private void showBgPic(String url) {
+        mView.showBgImage(url);
+    }
 
-	private void checkUpdate() {
-		mSystemBiz.checkUpdate(mContext, new SystemBiz.CheckUpdateListener() {
+    private boolean isNeedWelcome() {
 
-			@Override
-			public void onDone(VersionInfo vi) {
-				if (vi.isNeedUpdate()&&vi.isNeedAlert()) {
-					String title = String.format("检查到有新版 %s", TextUtils.isEmpty(vi.getVersion()) ? "" : "V" + vi.getVersion());
-					mView.showUpdateDialog(title, vi.getUpdateDescribe(), vi.getUpdateUrl(), vi.isNeedForceUpdate());
-				}else{
-					boolean enableSkip = Utils.getBooleanMetaValue(mContext,"ENABLE_SPLASH_SKIP");
-					if (enableSkip){
-						mView.showSkipBtn(SKIP_MILLIS);
-					}else{
-						preSkip2Home();
-					}
-				}
-			}
-		});
-	}
+        String flag = SharedPreferenceUtils.getInstance(mContext).getString
+				(SHARED_PREFERENCE_NAME_WELCOME_LOAD_HISTORY, Utils.getVersionCode(mContext) + "",
+						"");
 
-	public void startDownloadApp(String updateUrl) {
+        //版本升级,并且有欢迎图
+        if (TextUtils.isEmpty(flag)) {
+
+            int welcomePicNum = 0;
+            try {
+                welcomePicNum = mContext.getAssets().list("welcome").length;
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            if (welcomePicNum > 0) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    private void checkUpdate() {
+        mSystemBiz.checkUpdate(mContext, new SystemBiz.CheckUpdateListener() {
+
+            @Override
+            public void onDone(VersionInfo vi) {
+                if (vi.isNeedUpdate() && vi.isNeedAlert()) {
+                    String title = String.format("检查到有新版 %s", TextUtils.isEmpty(vi.getVersion())
+							? "" : "V" + vi.getVersion());
+                    mView.showUpdateDialog(title, vi.getUpdateDescribe(), vi.getUpdateUrl(), vi
+							.isNeedForceUpdate());
+                } else {
+                    boolean enableSkip = Utils.getBooleanMetaValue(mContext, "ENABLE_SPLASH_SKIP");
+                    if (enableSkip) {
+                        mView.showSkipBtn(SKIP_MILLIS);
+                    } else {
+                        preSkip2Home();
+                    }
+                }
+            }
+        });
+    }
+
+    public void startDownloadApp(String updateUrl) {
 //		Intent it = new Intent(mContext, DownloadAppService.class);
 //		it.putExtra(DownloadAppService.SERVICRINTENTURL, updateUrl);
 //		it.putExtra(DownloadAppService.SERVACESHARENAME, 0);
 //		mContext.startService(it);
-		AppManager.getInstant(mContext).downloadApp(updateUrl);
-	}
+        AppManager.getInstant(mContext).downloadApp(updateUrl);
+    }
 
-	public void preSkip2Home(){
-		Timer skipTimer = new Timer();
-		skipTimer.schedule(new TimerTask() {
-			@Override
-			public void run() {
-				if (isStartCanceled){
-					return;
-				}
-				mView.skip2Home();
-			}
-		},2*1000);
-	}
+    public void preSkip2Home() {
+        if (Utils.getBooleanMetaValue(mContext, "NEED_START_UP_VERSION")) {
+            String versionStr = AppContext.getInstance(mContext).getVersionString();
+            mView.showVersion(versionStr);
+        }
+        Timer skipTimer = new Timer();
+        skipTimer.schedule(new TimerTask() {
+            @Override
+            public void run() {
+                if (isStartCanceled) {
+                    return;
+                }
+                mView.skip2Home();
+            }
+        }, 2 * 1000);
+    }
 
-	public void cancelSkip2Home(){
-		isStartCanceled = true;
-	}
+    public void cancelSkip2Home() {
+        isStartCanceled = true;
+    }
 
 
 }
