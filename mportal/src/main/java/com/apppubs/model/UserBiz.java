@@ -343,7 +343,7 @@ public class UserBiz extends BaseBiz {
     }
 
     public void logout(final Context context, final IAPCallback<Object> callback) {
-        asyncPOST(Constants.API_NAME_LOGOUT, null, new IRQStringListener() {
+        asyncPOST(Constants.API_NAME_LOGOUT, null, true, new IRQStringListener() {
 
             @Override
             public void onResponse(final String result, final APError error) {

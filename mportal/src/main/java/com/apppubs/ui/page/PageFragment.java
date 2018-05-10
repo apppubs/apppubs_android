@@ -682,8 +682,8 @@ public class PageFragment extends TitleMenuFragment implements OnClickListener, 
         double heightWidthRatio = 0;
         int bgColor = 0;
         try {
-            heightWidthRatio = component.getDouble("widthheightratio");
-            String colorStr = component.getString("bgcolor");
+            heightWidthRatio = component.getDouble("widthHeightRatio");
+            String colorStr = component.getString("bgColor");
             bgColor = Color.parseColor(colorStr);
 
         } catch (JSONException e) {

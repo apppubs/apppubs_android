@@ -16,28 +16,30 @@ import java.util.Map;
 
 import io.rong.imlib.IStringCallback;
 
-public class MyFileBiz extends BaseBiz{
+public class MyFileBiz extends BaseBiz {
 
 
     public MyFileBiz(Context context) {
         super(context);
     }
 
-    public void loadMyFilePage(int pageNum, int pageSize, final IAPCallback<MyFilePageResult> callback){
-        Map<String,String> params = new HashMap<>();
-        params.put("pageNum", pageNum+"");
-        params.put("pageSize", pageSize+"");
-        asyncPOST(Constants.API_NAME_MYFILE_PAGE, params, MyFilePageResult.class, new IRQListener<MyFilePageResult>() {
+    public void loadMyFilePage(int pageNum, int pageSize, final IAPCallback<MyFilePageResult>
+            callback) {
+        Map<String, String> params = new HashMap<>();
+        params.put("pageNum", pageNum + "");
+        params.put("pageSize", pageSize + "");
+        asyncPOST(Constants.API_NAME_MYFILE_PAGE, params, true, MyFilePageResult.class, new
+                IRQListener<MyFilePageResult>() {
             @Override
             public void onResponse(final MyFilePageResult jr, final APError error) {
-                if (error == null){
+                if (error == null) {
                     MainHandler.getInstance().post(new Runnable() {
                         @Override
                         public void run() {
                             callback.onDone(jr);
                         }
                     });
-                }else{
+                } else {
                     MainHandler.getInstance().post(new Runnable() {
                         @Override
                         public void run() {
@@ -49,22 +51,24 @@ public class MyFileBiz extends BaseBiz{
         });
     }
 
-    public void searchMyFilePage(String searchText, int pageNum, int pageSize, final IAPCallback<MyFilePageResult> callback){
-        Map<String,String> params = new HashMap<>();
-        params.put("pageNum", pageNum+"");
-        params.put("pageSize", pageSize+"");
-        params.put("fileName",searchText);
-        asyncPOST(Constants.API_NAME_SEARCH_MY_FILE, params, MyFilePageResult.class, new IRQListener<MyFilePageResult>() {
+    public void searchMyFilePage(String searchText, int pageNum, int pageSize, final
+    IAPCallback<MyFilePageResult> callback) {
+        Map<String, String> params = new HashMap<>();
+        params.put("pageNum", pageNum + "");
+        params.put("pageSize", pageSize + "");
+        params.put("fileName", searchText);
+        asyncPOST(Constants.API_NAME_SEARCH_MY_FILE, params, true, MyFilePageResult.class, new
+                IRQListener<MyFilePageResult>() {
             @Override
             public void onResponse(final MyFilePageResult jr, final APError error) {
-                if (error == null){
+                if (error == null) {
                     MainHandler.getInstance().post(new Runnable() {
                         @Override
                         public void run() {
                             callback.onDone(jr);
                         }
                     });
-                }else{
+                } else {
                     MainHandler.getInstance().post(new Runnable() {
                         @Override
                         public void run() {
@@ -76,21 +80,21 @@ public class MyFileBiz extends BaseBiz{
         });
     }
 
-    public void deleMyFile(String fileId, final IAPCallback<String> callback){
-        Map<String,String> params = new HashMap<>();
+    public void deleMyFile(String fileId, final IAPCallback<String> callback) {
+        Map<String, String> params = new HashMap<>();
         params.put("fileId", fileId);
-        asyncPOST(Constants.API_NAME_DEL_MY_FILE,params, new IRQStringListener(){
+        asyncPOST(Constants.API_NAME_DEL_MY_FILE, params, true,  new IRQStringListener() {
 
             @Override
             public void onResponse(String jr, final APError error) {
-                if (error == null){
+                if (error == null) {
                     MainHandler.getInstance().post(new Runnable() {
                         @Override
                         public void run() {
                             callback.onDone(null);
                         }
                     });
-                }else{
+                } else {
                     MainHandler.getInstance().post(new Runnable() {
                         @Override
                         public void run() {
