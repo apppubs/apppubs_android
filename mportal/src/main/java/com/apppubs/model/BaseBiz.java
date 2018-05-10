@@ -187,8 +187,8 @@ public abstract class BaseBiz {
                     listener.onResponse(null, e);
                     return;
                 }
-                JSONObject jo = JSONObject.parseObject(json);
                 try {
+                    JSONObject jo = JSONObject.parseObject(json);
                     Integer code = jo.getInteger("code");
                     String msg = jo.getString("msg");
                     if (code == APErrorCode.SUCCESS.getCode()) {

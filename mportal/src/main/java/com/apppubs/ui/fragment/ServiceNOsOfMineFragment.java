@@ -160,7 +160,6 @@ public class ServiceNOsOfMineFragment extends TitleBarFragment implements OnClic
                     MyServiceNOsResult.MyServiceNOItem item = mDatas.get(position);
                     Bundle b = new Bundle();
                     b.putString(ServiceNOArticlesFragment.ARGS_STRING_SERVICE_NO_ID, item.getId());
-                    b.putString(ServiceNOArticlesActivity.EXTRA_STRING_TITLE, getResources().getString(R.string.service_no));
                     intent.putExtras(b);
                     startActivity(intent);
                 }

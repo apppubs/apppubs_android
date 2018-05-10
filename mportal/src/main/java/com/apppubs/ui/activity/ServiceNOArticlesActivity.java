@@ -11,10 +11,11 @@ public class ServiceNOArticlesActivity extends BaseActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.act_service_noinfo);
-
-        setTitle(R.string.service_no);
+        setContentView(R.layout.act_common_container);
+        setNeedTitleBar(false);
         ServiceNOArticlesFragment frg = new ServiceNOArticlesFragment();
+        frg.setNeedBack(true);
+        frg.setTitle(getString(R.string.service_no));
         frg.setArguments(getIntent().getExtras());
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
         transaction.replace(R.id.container_fg, frg);

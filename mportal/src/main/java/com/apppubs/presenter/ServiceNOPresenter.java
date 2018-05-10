@@ -7,7 +7,6 @@ import com.apppubs.constant.APError;
 import com.apppubs.model.IAPCallback;
 import com.apppubs.model.ServiceNoBiz;
 import com.apppubs.ui.ICommonListView;
-import com.apppubs.ui.ICommonView;
 import com.apppubs.util.Utils;
 
 public class ServiceNOPresenter extends AbsPresenter<ICommonListView<MyServiceNOsResult.MyServiceNOItem>> {
@@ -25,7 +24,7 @@ public class ServiceNOPresenter extends AbsPresenter<ICommonListView<MyServiceNO
 
     private void loadData(){
         mView.showLoading();
-        mBiz.loadMyServiceNOs(new IAPCallback<MyServiceNOsResult>() {
+        mBiz.loadServiceNOs(new IAPCallback<MyServiceNOsResult>() {
             @Override
             public void onDone(MyServiceNOsResult obj) {
                 if (Utils.isEmpty(obj.getItems())){

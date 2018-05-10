@@ -35,7 +35,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 
-public class ServiceNOArticlesFragment extends BaseFragment implements IServiceNoInfoPageView{
+public class ServiceNOArticlesFragment extends TitleBarFragment implements IServiceNoInfoPageView{
 	
 	public static final int REUQEST_CODE_SERVICE_NO = 1;
 

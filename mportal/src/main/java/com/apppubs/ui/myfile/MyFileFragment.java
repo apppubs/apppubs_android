@@ -30,6 +30,7 @@ import com.apppubs.ui.activity.ContainerActivity;
 import com.apppubs.ui.adapter.CommonAdapter;
 import com.apppubs.ui.adapter.ViewHolder;
 import com.apppubs.ui.fragment.BaseFragment;
+import com.apppubs.ui.fragment.TitleBarFragment;
 import com.apppubs.ui.message.activity.TranspondActivity;
 import com.apppubs.ui.widget.ConfirmDialog;
 import com.apppubs.ui.widget.ProgressHUD;
@@ -44,7 +45,7 @@ import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.util.List;
 
-public class MyFileFragment extends BaseFragment implements OnClickListener ,IMyFileView{
+public class MyFileFragment extends TitleBarFragment implements OnClickListener ,IMyFileView{
 
     public static final String EXTRA_NAME_DISPLAY_MODE = "mode";
     public static final int EXTRA_VALUE_DISPLAY_MODE_NORMAL = 0;

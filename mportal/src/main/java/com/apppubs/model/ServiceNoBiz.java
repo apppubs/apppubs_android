@@ -17,9 +17,9 @@ public class ServiceNoBiz extends BaseBiz {
         super(context);
     }
 
-    public void loadMyServiceNOs(final IAPCallback<MyServiceNOsResult> callback) {
+    public void loadServiceNOs(final IAPCallback<MyServiceNOsResult> callback) {
 
-        asyncPOST(Constants.API_NAME_MY_SERVICENOS, null, true, MyServiceNOsResult.class, new
+        asyncPOST(Constants.API_NAME_SERVICENOS, null, MyServiceNOsResult.class, new
                 IRQListener<MyServiceNOsResult>() {
             @Override
             public void onResponse(final MyServiceNOsResult result, final APError error) {

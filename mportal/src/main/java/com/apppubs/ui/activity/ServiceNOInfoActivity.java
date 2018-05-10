@@ -1,7 +1,6 @@
 package com.apppubs.ui.activity;
 
 import android.support.v4.app.FragmentTransaction;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 
 import com.apppubs.d20.R;
@@ -12,7 +11,7 @@ public class ServiceNOInfoActivity extends BaseActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.act_service_noinfo);
+        setContentView(R.layout.act_common_container);
 
         ServiceNoInfoFragment frg = new ServiceNoInfoFragment();
         frg.setArguments(getIntent().getExtras());

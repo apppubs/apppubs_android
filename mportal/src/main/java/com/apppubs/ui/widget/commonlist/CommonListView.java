@@ -61,7 +61,7 @@ public class CommonListView extends FrameLayout implements OnScrollListener {
     private final static int SCROLLBACK_HEADER = 0;
     private final static int SCROLLBACK_FOOTER = 1;
 
-    final static int SCROLL_DURATION = 500; // scroll back duration
+    final static int SCROLL_DURATION = 300; // scroll back duration
     private final static int PULL_LOAD_MORE_DELTA = 50; // when pull up >= 50px
     // at bottom, trigger
     // load more.
@@ -135,7 +135,8 @@ public class CommonListView extends FrameLayout implements OnScrollListener {
         mFooterView = new CommonListViewFooter(context);
 
 //		// init header height
-        mHeaderViewHeight = (int) context.getResources().getDimension(R.dimen.commonlistview_header_h);
+        mHeaderViewHeight = (int) context.getResources().getDimension(R.dimen
+                .commonlistview_header_h);
         mHeaderViewHeightReciprocal = 1.0f / mHeaderViewHeight;
     }
 
@@ -381,9 +382,11 @@ public class CommonListView extends FrameLayout implements OnScrollListener {
     public void computeScroll() {
         if (mScroller.computeScrollOffset()) {
             if (mScrollBack == SCROLLBACK_HEADER) {
-                AbsListView.LayoutParams lp = (android.widget.AbsListView.LayoutParams) mListHeader.getLayoutParams();
+                AbsListView.LayoutParams lp = (android.widget.AbsListView.LayoutParams)
+                        mListHeader.getLayoutParams();
                 if (lp == null) {
-                    lp = new AbsListView.LayoutParams(LayoutParams.MATCH_PARENT, mScroller.getCurrY());
+                    lp = new AbsListView.LayoutParams(LayoutParams.MATCH_PARENT, mScroller
+                            .getCurrY());
                 } else {
                     lp.height = mScroller.getCurrY();
                 }
@@ -496,12 +499,14 @@ public class CommonListView extends FrameLayout implements OnScrollListener {
                         }
                         resetHeaderHeight();
                         if (getHeaderHeight() > 0) return true;
-//					AbsListView.LayoutParams lp2 = (AbsListView.LayoutParams) mListHeader.getLayoutParams();
+//					AbsListView.LayoutParams lp2 = (AbsListView.LayoutParams) mListHeader
+// .getLayoutParams();
 //					if(lp2!=null&&lp2.height>0)
 //						return true;
                     } else if (mListView.getLastVisiblePosition() == mTotalItemCount - 1) {
                         // invoke load more.
-                        if (mEnablePullLoad && !mPullRefreshing && mFooterView.getBottomMargin() > PULL_LOAD_MORE_DELTA
+                        if (mEnablePullLoad && !mPullRefreshing && mFooterView.getBottomMargin()
+                                > PULL_LOAD_MORE_DELTA
                                 && !mPullLoading) {
                             startLoadMore();
                         }

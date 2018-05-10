@@ -34,8 +34,6 @@ import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.wang.avi.AVLoadingIndicatorView;
 
-import okhttp3.internal.Util;
-
 public abstract class BaseFragment extends Fragment implements KeyEvent.Callback, OnClickListener {
 
     public static final String ARGS_STRING_TITLE = "fragment_title";
