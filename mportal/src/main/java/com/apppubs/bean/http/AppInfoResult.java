@@ -21,8 +21,7 @@ public class AppInfoResult implements IJsonResult {
     private Date menuUpdateTime;
     private String startupPicURL;
     private String loginPicURL;
-    private String androidVersion;
-    private String iosVersion;
+    private int updateType;
     private int chatFlag;
     private String CMSId;
     private List<ConfigItem> configs;
@@ -115,20 +114,12 @@ public class AppInfoResult implements IJsonResult {
         return loginPicURL;
     }
 
-    public void setAndroidVersion(String androidVersion) {
-        this.androidVersion = androidVersion;
+    public int getUpdateType() {
+        return updateType;
     }
 
-    public String getAndroidVersion() {
-        return androidVersion;
-    }
-
-    public void setIosVersion(String iosVersion) {
-        this.iosVersion = iosVersion;
-    }
-
-    public String getIosVersion() {
-        return iosVersion;
+    public void setUpdateType(int updateType) {
+        this.updateType = updateType;
     }
 
     public void setChatFlag(int chatFlag) {

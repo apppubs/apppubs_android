@@ -123,13 +123,13 @@ public class App implements Serializable {
      */
     private int latestVersion;
     private int preWorkingVersion;//上一个工作的版本
+    private int updateType;
     private String defaultServiceNoId;//默认的服务号id,通过此id来进行读取推送列表
 
     private int weatherDisplayFlag;
 
     private int pushVendorType;
 
-    private String jpushRegistrationID;
     private String orgCode;
     private String webLoginUrl;
 
@@ -314,6 +314,14 @@ public class App implements Serializable {
         this.latestVersion = latestVersion;
     }
 
+    public int getUpdateType() {
+        return updateType;
+    }
+
+    public void setUpdateType(int updateType) {
+        this.updateType = updateType;
+    }
+
     public Date getMenuGroupUpdateTime() {
         return menuGroupUpdateTime;
     }
@@ -449,32 +457,12 @@ public class App implements Serializable {
         this.pushVendorType = pushVendorType;
     }
 
-    @Deprecated
-    public String getJpushRegistrationID() {
-        return jpushRegistrationID;
-    }
-
-    @Deprecated
-    public void setJpushRegistrationID(String jpushRegistrationID) {
-        this.jpushRegistrationID = jpushRegistrationID;
-    }
-
-
     public String getDocumentReaderPageUrl() {
         return documentReaderPageUrl;
     }
 
     public void setDocumentReaderPageUrl(String documentReaderPageUrl) {
         this.documentReaderPageUrl = documentReaderPageUrl;
-    }
-
-    @Deprecated
-    public String getPushToken() {
-        if (pushVendorType == PUSH_VENDOR_TYPE_BAIDU) {
-            return baiduPushUserId;
-        } else {
-            return jpushRegistrationID;
-        }
     }
 
     public String getOrgCode() {
@@ -561,7 +549,6 @@ public class App implements Serializable {
                 ", defaultServiceNoId='" + defaultServiceNoId + '\'' +
                 ", weatherDisplayFlag=" + weatherDisplayFlag +
                 ", pushVendorType=" + pushVendorType +
-                ", jpushRegistrationID='" + jpushRegistrationID + '\'' +
                 ", orgCode='" + orgCode + '\'' +
                 ", webLoginUrl='" + webLoginUrl + '\'' +
                 ", paddingUrlOnHomeActivityStartUp='" + paddingUrlOnHomeActivityStartUp + '\'' +

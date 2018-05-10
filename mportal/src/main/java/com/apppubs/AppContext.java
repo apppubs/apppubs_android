@@ -102,6 +102,7 @@ public class AppContext {
         mApp.setMenuUpdateTime(info.getMenuUpdateTime());
         mApp.setStartUpPic(info.getStartupPicURL());
         mApp.setLoginPicUrl(info.getLoginPicURL());
+        mApp.setUpdateType(info.getUpdateType());
         mApp.setWebAppCode(info.getCMSId());
         if (mApp.getInitTimes() == 0) {
             mApp.setLayoutLocalScheme(info.getLayoutSchema());

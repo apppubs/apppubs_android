@@ -110,25 +110,22 @@ public class StartupPresenter {
     }
 
     private void checkUpdate() {
-        mSystemBiz.checkUpdate(mContext, new SystemBiz.CheckUpdateListener() {
+        int updateType = AppContext.getInstance(mContext).getApp().getUpdateType();
+        if (updateType != 0){
+            //需要进行版本检查
+            afterCheckUpdate();
+        }else{
+            afterCheckUpdate();
+        }
+    }
 
-            @Override
-            public void onDone(VersionInfo vi) {
-                if (vi.isNeedUpdate() && vi.isNeedAlert()) {
-                    String title = String.format("检查到有新版 %s", TextUtils.isEmpty(vi.getVersion())
-							? "" : "V" + vi.getVersion());
-                    mView.showUpdateDialog(title, vi.getUpdateDescribe(), vi.getUpdateUrl(), vi
-							.isNeedForceUpdate());
-                } else {
-                    boolean enableSkip = Utils.getBooleanMetaValue(mContext, "ENABLE_SPLASH_SKIP");
-                    if (enableSkip) {
-                        mView.showSkipBtn(SKIP_MILLIS);
-                    } else {
-                        preSkip2Home();
-                    }
-                }
-            }
-        });
+    private void afterCheckUpdate() {
+        boolean enableSkip = Utils.getBooleanMetaValue(mContext, "ENABLE_SPLASH_SKIP");
+        if (enableSkip) {
+            mView.showSkipBtn(SKIP_MILLIS);
+        } else {
+            preSkip2Home();
+        }
     }
 
     public void startDownloadApp(String updateUrl) {

@@ -336,7 +336,7 @@ public class FirstLoginActity extends BaseActivity {
     @Override
     public void finish() {
         super.finish();
-        overridePendingTransition(android.R.anim.fade_in, R.anim.zoom_fade_out);
+        overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
     }
 
     @Override

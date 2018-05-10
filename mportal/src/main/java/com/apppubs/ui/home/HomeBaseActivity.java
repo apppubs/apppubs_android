@@ -265,7 +265,6 @@ public abstract class HomeBaseActivity extends BaseActivity implements IHomeView
 		}
 		intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK|Intent.FLAG_ACTIVITY_CLEAR_TOP);
 		fromActivy.startActivity(intent);
-
 	}
 
 	private static boolean isNeedLogin(AppContext context) {

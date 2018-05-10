@@ -143,8 +143,10 @@ public class StartUpActivity extends BaseActivity implements IStartUpView {
 
 	@Override
 	public void skip2Home() {
-		finish();
 		HomeBaseActivity.startHomeActivity(StartUpActivity.this);
+		overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
+		finish();
+		overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
 	}
 
 	@Override
