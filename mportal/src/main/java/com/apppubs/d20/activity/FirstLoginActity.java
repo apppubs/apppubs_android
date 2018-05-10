@@ -164,6 +164,9 @@ public class FirstLoginActity extends BaseActivity implements ErrorListener, Asy
 						}
 
 						return true;
+					} else if(url.startsWith("apppubs://userreg")){
+						ViewCourier.getInstance(mContext).openRegView(mContext);
+						return true;
 					}
 					return false;
 				}
@@ -211,12 +214,7 @@ public class FirstLoginActity extends BaseActivity implements ErrorListener, Asy
 	}
 
 	private void onRegClicked() {
-		String regURL = AppContext.getInstance(mContext).getAppConfig().getRegURL();
-		if (!TextUtils.isEmpty(regURL)){
-			ViewCourier.getInstance(mContext).execute(mContext, regURL);
-		}else{
-			startActivity(RegisterActivity.class);
-		}
+		ViewCourier.getInstance(mContext).openRegView(this);
 	}
 
 	private void login() {
