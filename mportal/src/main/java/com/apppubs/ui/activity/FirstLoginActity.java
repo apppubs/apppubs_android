@@ -24,7 +24,6 @@ import com.apppubs.bean.UserInfo;
 import com.apppubs.bean.http.LoginResult;
 import com.apppubs.constant.APError;
 import com.apppubs.d20.R;
-import com.apppubs.d20.activity.ViewCourier;
 import com.apppubs.model.IAPCallback;
 import com.apppubs.model.UserBiz;
 import com.apppubs.ui.home.HomeBaseActivity;
@@ -94,7 +93,6 @@ public class FirstLoginActity extends BaseActivity {
         mContainerLl = (LinearLayout) findViewById(R.id.firstlogin_container_ll);
         mFristZhuce = (TextView) findViewById(R.id.frist_login_reg);
         mFristZhuce.setOnClickListener(this);
-        mFristZhuce.setTextColor(mThemeColor);
         mFristZhuce.setVisibility(mAppContext.getApp().getAllowRegister() == 0 ? View.GONE : View
                 .VISIBLE);
         mUsernameTv = (EditText) findViewById(R.id.fristregist_name);
