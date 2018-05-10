@@ -221,6 +221,8 @@ public class ViewCourier {
             }
         } else if (url.equals(TMenuItem.MENU_URL_EMAIL) || url.startsWith("apppubs://email")) {
             openEmailApp();
+        } else if (url.startsWith("apppubs://userreg")) {
+            openRegView(mContext);
         } else {
             Toast.makeText(context, "请求地址(" + url + ")错误", Toast.LENGTH_SHORT).show();
         }
@@ -250,6 +252,16 @@ public class ViewCourier {
         } else {
             Toast.makeText(mContext, "没有邮件客户端", Toast.LENGTH_LONG).show();
 
+        }
+    }
+
+    public void openRegView(Context context) {
+        String regURL = AppContext.getInstance(mContext).getAppConfig().getRegURL();
+        if (!TextUtils.isEmpty(regURL)) {
+            ViewCourier.getInstance(mContext).execute(mContext, regURL);
+        } else {
+            Intent intent = new Intent(context, RegisterActivity.class);
+            context.startActivity(intent);
         }
     }
 

@@ -24,6 +24,7 @@ import com.apppubs.bean.UserInfo;
 import com.apppubs.bean.http.LoginResult;
 import com.apppubs.constant.APError;
 import com.apppubs.d20.R;
+import com.apppubs.d20.activity.ViewCourier;
 import com.apppubs.model.IAPCallback;
 import com.apppubs.model.UserBiz;
 import com.apppubs.ui.home.HomeBaseActivity;
@@ -77,7 +78,7 @@ public class FirstLoginActity extends BaseActivity {
         AnimationSet animSet = new AnimationSet(true);
         AlphaAnimation alpha = new AlphaAnimation(0.0f, 1.0f);
         TranslateAnimation trans = new TranslateAnimation(Animation.ABSOLUTE, 0, Animation
-				.ABSOLUTE, 0,
+                .ABSOLUTE, 0,
                 Animation.RELATIVE_TO_SELF, 1.0f, Animation.ABSOLUTE, 0);
         animSet.addAnimation(alpha);
         animSet.addAnimation(trans);
@@ -95,7 +96,7 @@ public class FirstLoginActity extends BaseActivity {
         mFristZhuce.setOnClickListener(this);
         mFristZhuce.setTextColor(mThemeColor);
         mFristZhuce.setVisibility(mAppContext.getApp().getAllowRegister() == 0 ? View.GONE : View
-				.VISIBLE);
+                .VISIBLE);
         mUsernameTv = (EditText) findViewById(R.id.fristregist_name);
         mPasswordTv = (EditText) findViewById(R.id.fristregist_password);
         mPhoneEt = (EditText) findViewById(R.id.firstlogin_phone_et);
@@ -106,7 +107,7 @@ public class FirstLoginActity extends BaseActivity {
         mTitleTv.setText(title);
         mBgIv = (ImageView) findViewById(R.id.firstlogin_bg_iv);
         LogM.log(this.getClass(), "mAppContext.getApp().getLoginPicUrl()" + mAppContext.getApp()
-				.getLoginPicUrl());
+                .getLoginPicUrl());
         mImageLoader.displayImage(mAppContext.getApp().getLoginPicUrl(), mBgIv);
         mCheckBox = (CheckBox) findViewById(R.id.firstlogin_ckb);
         if (mLoginType == App.LOGIN_ONSTART_USE_USERNAME_PASSWORD) {
@@ -154,6 +155,9 @@ public class FirstLoginActity extends BaseActivity {
                         }
 
                         return true;
+                    } else if (url.startsWith("apppubs://userreg")) {
+                        ViewCourier.getInstance(mContext).openRegView(mContext);
+                        return true;
                     }
                     return false;
                 }
@@ -190,7 +194,7 @@ public class FirstLoginActity extends BaseActivity {
 
         switch (v.getId()) {
             case R.id.frist_login_reg:
-                BaseActivity.startActivity(this, RegisterActivity.class);
+                ViewCourier.getInstance(mContext).openRegView(this);
                 break;
             case R.id.frist_login_login:
                 login();
@@ -241,20 +245,20 @@ public class FirstLoginActity extends BaseActivity {
         } else {
             mProgressHUD = ProgressHUD.show(this, "登录中...", true, false, null);
             UserBiz.getInstance(mContext).loginWithUsernameAndPwd(username, password, autoLogin,
-					new IAPCallback<UserInfo>() {
+                    new IAPCallback<UserInfo>() {
 
-                @Override
-                public void onDone(UserInfo obj) {
-                    enterHome();
-                    ProgressHUD.dismissProgressHUDInThisContext(FirstLoginActity.this);
-                }
+                        @Override
+                        public void onDone(UserInfo obj) {
+                            enterHome();
+                            ProgressHUD.dismissProgressHUDInThisContext(FirstLoginActity.this);
+                        }
 
-                @Override
-                public void onException(APError error) {
-                    ProgressHUD.dismissProgressHUDInThisContext(FirstLoginActity.this);
-                    mErrorHandler.onError(error);
-                }
-            });
+                        @Override
+                        public void onException(APError error) {
+                            ProgressHUD.dismissProgressHUDInThisContext(FirstLoginActity.this);
+                            mErrorHandler.onError(error);
+                        }
+                    });
         }
     }
 
@@ -315,9 +319,10 @@ public class FirstLoginActity extends BaseActivity {
     }
 
     private void loginWithUsernamePasswordAndOrgId(String username, String password, String
-			orgCode) {
+            orgCode) {
         ProgressHUD.show(this);
-        UserBiz.getInstance(mContext).loginWithUsernamePwdAndOrgCode(username, password, orgCode, new IAPCallback<LoginResult>() {
+        UserBiz.getInstance(mContext).loginWithUsernamePwdAndOrgCode(username, password, orgCode,
+                new IAPCallback<LoginResult>() {
 
             @Override
             public void onDone(LoginResult obj) {
