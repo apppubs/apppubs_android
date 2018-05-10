@@ -202,11 +202,20 @@ public class FirstLoginActity extends BaseActivity implements ErrorListener, Asy
 
 		switch (v.getId()) {
 			case R.id.frist_login_reg:
-				startActivity(RegisterActivity.class);
+				onRegClicked();
 				break;
 			case R.id.frist_login_login:
 				login();
 				break;
+		}
+	}
+
+	private void onRegClicked() {
+		String regURL = AppContext.getInstance(mContext).getAppConfig().getRegURL();
+		if (!TextUtils.isEmpty(regURL)){
+			ViewCourier.getInstance(mContext).execute(mContext, regURL);
+		}else{
+			startActivity(RegisterActivity.class);
 		}
 	}
 
