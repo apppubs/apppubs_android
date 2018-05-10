@@ -7,6 +7,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 
+import com.apppubs.AppManager;
 import com.apppubs.constant.Actions;
 import com.apppubs.d20.R;
 import com.apppubs.bean.Settings;
@@ -76,10 +77,8 @@ public class ThemeSwitchActivity extends BaseActivity {
 				mAppContext.getSettings().setTheme(Settings.THEME_BROWN);
 				mApp.setTheme(R.style.AppThemeBrown);
 			}
-			mAppContext.setSettings(mAppContext.getSettings());
-			Intent i = new Intent(Actions.CLOSE_ALL_ACTIVITY);
-			sendBroadcast(i);
-			HomeBaseActivity.startHomeActivity(this);
+
+			AppManager.getInstance(mContext).restart();
 			break;
 		default:
 			break;

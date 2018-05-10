@@ -4,7 +4,6 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.support.v4.app.Fragment;
 import android.text.TextUtils;
 import android.view.KeyEvent;
 import android.view.View;
@@ -282,7 +281,7 @@ public abstract class HomeBaseActivity extends BaseActivity implements IHomeView
 		super.onDestroy();
 		SharedPreferenceUtils.getInstance(this).putBoolean(MPORTAL_PREFERENCE_NAME, MPORTAL_PREFERENCE_APP_RUNNING_KEY, false);
 		unregisterReceiver(mLogoutBR);
-		AppManager.getInstant(this).destroy();
+		AppManager.getInstance(this).destroy();
 
 		//如果是用户名密码登录，没有自动登录时候清空用户信息
 		if(mAppContext.getApp().getLoginFlag()==App.LOGIN_ONSTART_USE_USERNAME_PASSWORD&&!mAppContext.getSettings().isAllowAutoLogin()){

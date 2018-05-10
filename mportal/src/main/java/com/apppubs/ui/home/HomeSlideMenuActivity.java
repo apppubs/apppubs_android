@@ -42,7 +42,6 @@ import com.apppubs.bean.Weather;
 import com.apppubs.presenter.HomePresenter;
 import com.apppubs.presenter.HomeSlidePresenter;
 import com.apppubs.ui.activity.SplashActivity;
-import com.apppubs.ui.activity.ViewCourier;
 import com.apppubs.ui.activity.WeatherActivity;
 import com.apppubs.ui.fragment.BaseFragment;
 import com.apppubs.model.IAPCallback;
@@ -241,7 +240,7 @@ public class HomeSlideMenuActivity extends HomeBaseActivity implements OnItemCli
 												Toast.makeText(HomeSlideMenuActivity.this, "升级服务已经启动,无需再次启动", Toast.LENGTH_LONG)
 														.show();
 											} else {
-												AppManager.getInstant(mContext).downloadApp(obj[1]);
+												AppManager.getInstance(mContext).downloadApp(obj[1]);
 //												Intent it = new Intent(HomeSlideMenuActivity.this,
 //														DownloadAppService.class);
 //												it.putExtra(DownloadAppService.SERVICRINTENTURL, obj[1]);

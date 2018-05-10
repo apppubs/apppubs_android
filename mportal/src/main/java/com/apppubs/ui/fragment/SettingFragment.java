@@ -27,7 +27,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.ToggleButton;
 
-import com.android.volley.RequestQueue;
 import com.android.volley.toolbox.Volley;
 import com.apppubs.bean.TMenuItem;
 import com.apppubs.AppManager;
@@ -39,14 +38,12 @@ import com.apppubs.ui.activity.FeedbackActivity;
 import com.apppubs.bean.VersionInfo;
 import com.apppubs.ui.start.StartUpActivity;
 import com.apppubs.ui.widget.ConfirmDialog;
-import com.apppubs.MportalApplication;
 import com.apppubs.d20.R;
 import com.apppubs.ui.activity.ContainerActivity;
 import com.apppubs.ui.activity.CustomWebAppUrlProtocolAndIpActivity;
 import com.apppubs.ui.activity.LogsListActivity;
 import com.apppubs.ui.activity.ThemeSwitchActivity;
 import com.apppubs.bean.Settings;
-import com.apppubs.ui.widget.TitleBar;
 import com.apppubs.util.FileUtils;
 import com.apppubs.util.Utils;
 import com.orm.SugarRecord;
@@ -55,7 +52,6 @@ public class SettingFragment extends TitleBarFragment implements OnClickListener
 
 	private TextView mCacheTv;
 	private ToggleButton mPushTb;
-	private boolean isSwitch, isSwitchTheme;
 	private TextView currentVersionTv;
 	private ImageView newVresion;
 	private int mClickNum = 0;
@@ -310,8 +306,7 @@ public class SettingFragment extends TitleBarFragment implements OnClickListener
 
 				@Override
 				public void onOkClick() {
-					isSwitchTheme = true;
-					AppManager.getInstant(mContext).switchLayout();
+					AppManager.getInstance(mContext).switchLayout();
 				}
 
 				@Override
@@ -338,7 +333,7 @@ public class SettingFragment extends TitleBarFragment implements OnClickListener
 				@Override
 				public void onClick(View v) {
 
-					AppManager.getInstant(mContext).showChangeDialog(mContext, ipEt.getText().toString(), codeEt.getText().toString());
+					AppManager.getInstance(mContext).showChangeDialog(mContext, ipEt.getText().toString(), codeEt.getText().toString());
 				}
 			});
 
@@ -378,19 +373,6 @@ public class SettingFragment extends TitleBarFragment implements OnClickListener
 	public void onDestroy() {
 
 		super.onDestroy();
-		if (isSwitch || isSwitchTheme) {
-			Intent mStartActivity = new Intent(mHostActivity, StartUpActivity.class);
-			mStartActivity.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-			int mPendingIntentId = 123456;
-
-			PendingIntent mPendingIntent = PendingIntent.getActivity(mHostActivity, mPendingIntentId, mStartActivity,
-					PendingIntent.FLAG_CANCEL_CURRENT);
-			AlarmManager mgr = (AlarmManager) mHostActivity.getSystemService(Context.ALARM_SERVICE);
-			mgr.set(AlarmManager.RTC, System.currentTimeMillis() + 100, mPendingIntent);
-			if (isSwitch)
-				android.os.Process.killProcess(android.os.Process.myPid());
-
-		}
 	}
 
 	private void checkVersion() {
@@ -410,7 +392,7 @@ public class SettingFragment extends TitleBarFragment implements OnClickListener
 
 						@Override
 						public void onOkClick() {
-							AppManager.getInstant(mContext).downloadApp( vi.getUpdateUrl());
+							AppManager.getInstance(mContext).downloadApp( vi.getUpdateUrl());
 //							Intent it = new Intent(mHostActivity, DownloadAppService.class);
 //							it.putExtra(DownloadAppService.SERVICRINTENTURL, vi.getUpdateUrl());
 //							it.putExtra(DownloadAppService.SERVACESHARENAME, 0);

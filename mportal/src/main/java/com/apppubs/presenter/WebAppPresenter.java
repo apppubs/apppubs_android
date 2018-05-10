@@ -126,8 +126,8 @@ public class WebAppPresenter {
             @Override
             public void handler(String data, CallBackFunction function) {
                 try {
-                    String code = AppManager.getInstant(mContext).getCurrentAddressCode();
-                    String name = AppManager.getInstant(mContext).getCurrentAddressName();
+                    String code = AppManager.getInstance(mContext).getCurrentAddressCode();
+                    String name = AppManager.getInstance(mContext).getCurrentAddressName();
                     JSONObject result = new JSONObject();
                     result.put("name", name);
                     result.put("code", code);

@@ -9,7 +9,6 @@ import com.apppubs.bean.App;
 import com.apppubs.constant.APError;
 import com.apppubs.model.IAPCallback;
 import com.apppubs.model.SystemBiz;
-import com.apppubs.bean.VersionInfo;
 import com.apppubs.ui.start.IStartUpView;
 import com.apppubs.util.SharedPreferenceUtils;
 import com.apppubs.util.Utils;
@@ -133,7 +132,7 @@ public class StartupPresenter {
 //		it.putExtra(DownloadAppService.SERVICRINTENTURL, updateUrl);
 //		it.putExtra(DownloadAppService.SERVACESHARENAME, 0);
 //		mContext.startService(it);
-        AppManager.getInstant(mContext).downloadApp(updateUrl);
+        AppManager.getInstance(mContext).downloadApp(updateUrl);
     }
 
     public void preSkip2Home() {

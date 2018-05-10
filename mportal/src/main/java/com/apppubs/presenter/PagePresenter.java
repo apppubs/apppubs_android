@@ -45,7 +45,7 @@ public class PagePresenter {
     }
 
     public void onAddressSelected(AddressModel model) {
-        AppManager.getInstant(mContext).saveCurrentAddress(model.getName(), model.getCode());
+        AppManager.getInstance(mContext).saveCurrentAddress(model.getName(), model.getCode());
         mPageView.setTitleBarAddress(model.getName());
     }
 
@@ -96,7 +96,7 @@ public class PagePresenter {
                 mPageView.hideLoading();
                 //显示地址
                 if (isAddressTitleBar(model)) {
-                    AppManager manager = AppManager.getInstant(mContext);
+                    AppManager manager = AppManager.getInstance(mContext);
                     String addressName = manager.getCurrentAddressName();
                     mPageView.setTitleBarAddress(addressName);
                 }
@@ -107,11 +107,11 @@ public class PagePresenter {
 
     private void saveCurAddressIfEmpty(PageModel model) {
         if (isAddressTitleBar(model)) {
-            String addressName = AppManager.getInstant(mContext).getCurrentAddressName();
+            String addressName = AppManager.getInstance(mContext).getCurrentAddressName();
             if (TextUtils.isEmpty(addressName)) {
                 TitleBarAddressModel titleBarModel = (TitleBarAddressModel)
                         model.getTitleBarModel();
-                AppManager.getInstant(mContext)
+                AppManager.getInstance(mContext)
                         .saveCurrentAddress(titleBarModel.getDefaultAddress(),
                                 titleBarModel.getDefaultAddressCode());
             }

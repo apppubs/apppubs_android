@@ -29,7 +29,7 @@ public class VersionPresenter extends AbsPresenter<IVersionView> {
     }
 
     public void startDownloadApp(String updateUrl) {
-        AppManager.getInstant(mContext).downloadApp(updateUrl);
+        AppManager.getInstance(mContext).downloadApp(updateUrl);
     }
 
 

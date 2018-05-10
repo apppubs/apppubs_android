@@ -38,7 +38,7 @@ public class AppManager {
         mAppContext = AppContext.getInstance(context);
     }
 
-    public static AppManager getInstant(Context context) {
+    public static AppManager getInstance(Context context) {
         if (sAppManager == null) {
             synchronized (AppManager.class) {
                 if (sAppManager == null) {
@@ -88,7 +88,7 @@ public class AppManager {
                             app.init();
                             AppContext.getInstance(context).setApp(app);
                             AppContext.getInstance(context).serializeApp();
-                            AppManager.getInstant(context).restart();
+                            AppManager.getInstance(context).restart();
 
                         } else {
 

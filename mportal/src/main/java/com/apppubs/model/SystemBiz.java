@@ -32,7 +32,6 @@ import com.apppubs.bean.TNewsChannel;
 import com.apppubs.bean.TNewsInfo;
 import com.apppubs.bean.TMenuItem;
 import com.apppubs.bean.TUser;
-import com.apppubs.bean.UserInfo;
 import com.apppubs.bean.TUserDeptLink;
 import com.apppubs.bean.VersionInfo;
 import com.apppubs.bean.http.AppInfoResult;
@@ -46,7 +45,6 @@ import com.apppubs.model.message.UserBussiness;
 import com.apppubs.ui.activity.MainHandler;
 import com.apppubs.ui.home.CompelReadMessageModel;
 import com.apppubs.util.FileUtils;
-import com.apppubs.util.JSONResult;
 import com.apppubs.util.LogM;
 import com.apppubs.util.MathUtils;
 import com.apppubs.util.StringUtils;
@@ -197,7 +195,7 @@ public class SystemBiz extends BaseBiz {
         //如果是新版本第一次启动
         System.out.println("当前版本，" + Utils.getVersionCode(mContext) + "上一次启动的版本：" + localApp
                 .getPreWorkingVersion());
-        if (AppManager.getInstant(mContext).isFirstStartupOfNewVersion()) {
+        if (AppManager.getInstance(mContext).isFirstStartupOfNewVersion()) {
             System.out.println("新版本第一次启动");
             AppContext.getInstance(mContext).resetBaseUrlAndAppCode();
             switch (localApp.getPreWorkingVersion()) {
