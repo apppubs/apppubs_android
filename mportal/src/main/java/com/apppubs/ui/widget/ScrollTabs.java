@@ -113,7 +113,7 @@ public class ScrollTabs extends RelativeLayout {
 
         mCursorV = new View(context);
 
-        FrameLayout.LayoutParams cursorVLp = new FrameLayout.LayoutParams(40, Utils.dip2px
+        FrameLayout.LayoutParams cursorVLp = new FrameLayout.LayoutParams(0, Utils.dip2px
                 (mContext, 2));
         cursorVLp.leftMargin = Utils.dip2px(mContext, LEFT_MARGIN_DP);
         cursorVLp.gravity = Gravity.BOTTOM;

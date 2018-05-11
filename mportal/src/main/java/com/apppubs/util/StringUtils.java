@@ -460,8 +460,6 @@ public class StringUtils {
     }
 
     public static boolean equals(String res, String des) {
-        LogM.log(StringUtils.class,"比较字符串:"+res);
-        LogM.log(StringUtils.class,"比较字符串 第二个："+des);
         if (res == null || des == null) {
             return res == des;
         } else {

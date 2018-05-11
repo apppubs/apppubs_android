@@ -37,19 +37,15 @@ public class ProgressPie extends View{
 	protected void onDraw(Canvas canvas) {
 		canvas.drawCircle(mCir.width()/2, mCir.height()/2, mCir.width()/2-2, mPaint);
 		canvas.drawArc(mArcRec,-90,360*mProgress,true,mArcPaint);
-		
 	}
 
 	@Override
 	protected void onFinishInflate() {
 		super.onFinishInflate();
-		Log.v("ProgressPie", "onFinishInflate");
 	}
 	
 	@Override
 	protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
-		Log.v("ProgressPie ","onMeasure widthMeasureSpec:"+widthMeasureSpec+" heightMeasureSpec:"+ heightMeasureSpec);
-		
 		setMeasuredDimension(getDefaultSize(getSuggestedMinimumWidth(), widthMeasureSpec),
                 getDefaultSize(getSuggestedMinimumHeight(), heightMeasureSpec));
 	}
@@ -64,13 +60,10 @@ public class ProgressPie extends View{
 	protected void onLayout(boolean changed, int left, int top, int right,
 
 			int bottom) {
-		Log.v("ProgressPie", "onLayout changed:"+changed+" left:"+left+" top:"+top+" right:"+right+" buttom:"+bottom);
 	}
 	
 	@Override
 	protected void onSizeChanged(int w, int h, int oldw, int oldh) {
-		
-		Log.v("ProgressPie", "onSizeChanged width:"+ w+"height:"+ h+"old width:"+oldw+"old height:"+oldh);
 		
 		int padLeft =  getPaddingLeft();
 		int padRight = getPaddingRight();

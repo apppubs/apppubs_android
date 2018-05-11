@@ -134,6 +134,11 @@ public class ServiceNOArticlesFragment extends TitleBarFragment implements IServ
 		mLv.stopRefresh();
 	}
 
+	@Override
+	public void haveLoadAll() {
+		mLv.haveLoadAll();
+	}
+
 	public class HistoryAdapter extends BaseAdapter {
 
 		@Override

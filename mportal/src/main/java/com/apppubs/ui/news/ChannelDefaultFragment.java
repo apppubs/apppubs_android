@@ -142,19 +142,7 @@ public class ChannelDefaultFragment extends ChannelFragment  implements OnClickL
 
 			}
 		});
-		
-		Date lastUpdateTime = mChannel.getLastUpdateTime();
-		final Date lastLocalUpdateTime = mChannel.getLocalLastupdateTime();
-		if(lastLocalUpdateTime==null||lastLocalUpdateTime.before(lastUpdateTime)){
-			mNewsInfoList = new ArrayList<TNewsInfo>();
-			mAdapter = new MyListAdapter();
-			mCommonLv.setAdapter(mAdapter);
-			refresh();
-		}else{
-			loadHeader();
-			load();
-		}
-		
+		refresh();
 	}
 
 	private void loadHeader() {
@@ -220,9 +208,13 @@ public class ChannelDefaultFragment extends ChannelFragment  implements OnClickL
 	}
 
 	@Override
+	public void haveLoadAll() {
+		mCommonLv.haveLoadAll();
+	}
+
+	@Override
 	public void setDatas(List<TNewsInfo> datas) {
 		mNewsInfoList = datas;
-		mAdapter.notifyDataSetChanged();
 		if (mAdapter == null) {
 			mAdapter = new MyListAdapter();
 			mCommonLv.setAdapter(mAdapter);
@@ -297,7 +289,6 @@ public class ChannelDefaultFragment extends ChannelFragment  implements OnClickL
 			}
 			
 			holder.pubtimeTv.setText(mDateFormat.format(info.getPubTime()));
-			Log.v("ChannelFragment","position"+position+"title:"+info.getTitle());
 			return convertView;
 		}
 		

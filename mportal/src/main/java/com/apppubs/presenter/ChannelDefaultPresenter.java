@@ -41,7 +41,7 @@ public class ChannelDefaultPresenter extends AbsPresenter<IChannelDefaultView> {
 
     private void loadMore() {
         if (mPageNum > 1 && mPageNum * mPageSize > mTotalNum) {
-            mView.onError(new APError(APErrorCode.HAVE_NO_ERROR, "没有更多！"));
+            mView.haveLoadAll();
             return;
         }
         mNewsBiz.loadChannelArticlePage(mChannelCode, mPageNum, mPageSize, new

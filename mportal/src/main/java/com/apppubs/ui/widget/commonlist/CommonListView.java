@@ -3,8 +3,10 @@ package com.apppubs.ui.widget.commonlist;
 import android.annotation.TargetApi;
 import android.content.Context;
 import android.content.res.TypedArray;
+import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
+import android.text.Layout;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.view.Gravity;
@@ -20,8 +22,8 @@ import android.widget.ListView;
 import android.widget.Scroller;
 import android.widget.TextView;
 
-import com.apppubs.util.LogM;
 import com.apppubs.d20.R;
+import com.apppubs.util.LogM;
 
 public class CommonListView extends FrameLayout implements OnScrollListener {
 
@@ -89,7 +91,6 @@ public class CommonListView extends FrameLayout implements OnScrollListener {
         mEmptyString = ta.getString(R.styleable.CommonListView_empty_string);
         ta.recycle();
         initWithContext(context);
-
     }
 
     public CommonListView(Context context, AttributeSet attrs, int defStyle) {
@@ -97,15 +98,11 @@ public class CommonListView extends FrameLayout implements OnScrollListener {
         initWithContext(context);
     }
 
-    @TargetApi(Build.VERSION_CODES.GINGERBREAD)
     private void initWithContext(Context context) {
         //初始化设置请listview样式,listview的背景为透明，每个item赋给的颜色，留下，header 和 footer为透明滑动时改变header的高度
         mListView = new MyListView(context);
         mListView.setDivider(null);
-        if (Build.VERSION.SDK_INT > 8) {
-            mListView.setOverScrollMode(View.OVER_SCROLL_NEVER);
-        }
-        mListView.setEmptyView(mEmptyTv);
+        mListView.setOverScrollMode(View.OVER_SCROLL_NEVER);
         mEmptyTv = new TextView(mContext);
         mEmptyTv.setText(mEmptyString);
 
@@ -119,17 +116,15 @@ public class CommonListView extends FrameLayout implements OnScrollListener {
         mListView.setOnScrollListener(this);
         mListHeader = new View(context);
         mListView.addHeaderView(mListHeader);
-        if (mListSel != null)
+        if (mListSel != null){
             mListView.setSelector(mListSel);
+        }
         // init header view
         mHeaderBgView = new CommonListViewHeaderBackground(context);
-//		mHeaderViewContent = (RelativeLayout) mHeaderBgView
-//				.findViewById(R.id.clv_header_content);
-        mHeaderTimeView = (TextView) mHeaderBgView
-                .findViewById(R.id.clv_header_time);
-        mHeaderBgView.setVisibility(View.GONE);
+        mHeaderTimeView = (TextView) mHeaderBgView.findViewById(R.id.clv_header_time);
         addView(mHeaderBgView);
-        addView(mListView);
+        FrameLayout.LayoutParams listViewLP = new FrameLayout.LayoutParams(LayoutParams.MATCH_PARENT,LayoutParams.MATCH_PARENT);
+        addView(mListView, listViewLP);
 
         // init footer view
         mFooterView = new CommonListViewFooter(context);
@@ -215,8 +210,7 @@ public class CommonListView extends FrameLayout implements OnScrollListener {
     public void refresh() {
         mHeaderBgView.setVisibility(View.VISIBLE);
         startRefresh();
-        mScroller.startScroll(0, 0, 0, mHeaderViewHeight,
-                SCROLL_DURATION);
+        mScroller.startScroll(0, 0, 0, mHeaderViewHeight,0);
         LogM.log(this.getClass(), "开始刷新");
         // trigger computeScroll
         invalidate();
@@ -224,7 +218,7 @@ public class CommonListView extends FrameLayout implements OnScrollListener {
     }
 
     private void startRefresh() {
-        if (mPullRefreshing)
+        if (isRefreshing())
             return;
         mPullRefreshing = true;
         mHeaderBgView.setState(CommonListViewHeaderBackground.STATE_REFRESHING);
@@ -278,6 +272,7 @@ public class CommonListView extends FrameLayout implements OnScrollListener {
     }
 
     private void updateHeaderHeight(float delta) {
+        LogM.log(this.getClass(), "updateHeaderHeight delta:"+delta);
         if (mEnablePullRefresh && mHeaderBgView.getVisibility() == View.GONE) {
             mHeaderBgView.setVisibility(View.VISIBLE);
         }
@@ -309,7 +304,7 @@ public class CommonListView extends FrameLayout implements OnScrollListener {
      * reset header view's height.
      */
     private void resetHeaderHeight() {
-//		int height = mHeaderView.getVisiableHeight();
+        LogM.log(this.getClass(), "resetHeaderHeight headerHeight:"+getHeaderHeight());
         int headerHeight = getHeaderHeight();
         if (headerHeight == 0) // not visible.
             return;
@@ -327,16 +322,16 @@ public class CommonListView extends FrameLayout implements OnScrollListener {
         mScroller.startScroll(0, headerHeight, 0, finalHeight - headerHeight,
                 SCROLL_DURATION);
         Log.v("CommonListView", "startY:" + headerHeight + "dy:" + (finalHeight - headerHeight));
-        if (finalHeight == 0) {
-
-            this.postDelayed(new Runnable() {
-
-                @Override
-                public void run() {
-                    mHeaderBgView.setVisibility(View.GONE);
-                }
-            }, SCROLL_DURATION);
-        }
+//        if (finalHeight == 0) {
+//
+//            this.postDelayed(new Runnable() {
+//
+//                @Override
+//                public void run() {
+////                    mHeaderBgView.setVisibility(View.GONE);
+//                }
+//            }, SCROLL_DURATION);
+//        }
         // trigger computeScroll
         invalidate();
     }
@@ -482,13 +477,13 @@ public class CommonListView extends FrameLayout implements OnScrollListener {
                             && (getHeaderHeight() > 0 || deltaY > 0)) {
                         // the first item is showing, header has shown or pull down.
                         updateHeaderHeight(deltaY * OFFSET_RADIO);
-                        return true;
                     } else if (mListView.getLastVisiblePosition() == mTotalItemCount - 1
                             && (mFooterView.getBottomMargin() > 0 || deltaY < 0)) {
                         // last item, already pulled up or want to pull up.
                         updateFooterHeight(-deltaY * OFFSET_RADIO);
 
                     }
+                    System.out.println("onTouchEvent: deltaY:"+deltaY+" mLastY:"+mLastY);
                     break;
                 case MotionEvent.ACTION_UP:
                     mLastY = -1; // reset
@@ -498,11 +493,9 @@ public class CommonListView extends FrameLayout implements OnScrollListener {
                             startRefresh();
                         }
                         resetHeaderHeight();
-                        if (getHeaderHeight() > 0) return true;
-//					AbsListView.LayoutParams lp2 = (AbsListView.LayoutParams) mListHeader
-// .getLayoutParams();
-//					if(lp2!=null&&lp2.height>0)
-//						return true;
+                        AbsListView.LayoutParams lp2 = (AbsListView.LayoutParams) mListHeader.getLayoutParams();
+                        if(lp2!=null&&lp2.height>0)
+                            return true;
                     } else if (mListView.getLastVisiblePosition() == mTotalItemCount - 1) {
                         // invoke load more.
                         if (mEnablePullLoad && !mPullRefreshing && mFooterView.getBottomMargin()

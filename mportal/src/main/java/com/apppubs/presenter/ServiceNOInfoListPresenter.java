@@ -38,7 +38,7 @@ public class ServiceNOInfoListPresenter extends AbsPresenter<IServiceNoInfoPageV
     public void onLoadMore() {
 
         if (mPageNum > 1 && mPageNum * mPageSize > mTotalNum) {
-            mView.onError(new APError(APErrorCode.HAVE_NO_ERROR, "没有更多！"));
+            mView.haveLoadAll();
         }else {
             loadMore();
         }
