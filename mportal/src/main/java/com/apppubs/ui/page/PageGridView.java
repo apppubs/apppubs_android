@@ -7,7 +7,6 @@ import android.support.annotation.Nullable;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.widget.GridLayout;
-import android.text.TextUtils;
 import android.util.AttributeSet;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -22,10 +21,9 @@ import android.widget.TextView;
 import com.apppubs.bean.page.GridViewItem;
 import com.apppubs.bean.page.GridViewModel;
 import com.apppubs.d20.R;
-import com.apppubs.util.StringUtils;
-import com.apppubs.util.Utils;
 import com.apppubs.ui.widget.Indicator;
-import com.nostra13.universalimageloader.core.ImageLoader;
+import com.apppubs.util.Utils;
+import com.bumptech.glide.Glide;
 
 import java.util.List;
 
@@ -159,8 +157,7 @@ public class PageGridView extends RelativeLayout implements View.OnClickListener
             TextView tv = (TextView) rl.findViewById(R.id.menu_tv);
             tv.setText(item.getTitle());
             ImageView iv = (ImageView) rl.findViewById(R.id.menu_iv);
-            ImageLoader.getInstance().displayImage(item.getPicUrl(), iv);
-
+            Glide.with(getContext()).load(item.getPicUrl()).into(iv);
             TextView badgeTV = (TextView) rl.findViewById(R.id.menu_reddot);
             Integer badgeNum = item.getBadgeNum();
             if (!Utils.isEmpty(badgeNum)

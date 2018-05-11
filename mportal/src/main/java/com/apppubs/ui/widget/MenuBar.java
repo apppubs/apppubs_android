@@ -1,8 +1,5 @@
 package com.apppubs.ui.widget;
 
-import java.util.HashMap;
-import java.util.Map;
-
 import android.content.Context;
 import android.graphics.PorterDuff.Mode;
 import android.util.AttributeSet;
@@ -16,7 +13,10 @@ import android.widget.TextView;
 
 import com.apppubs.bean.TMenuItem;
 import com.apppubs.d20.R;
-import com.nostra13.universalimageloader.core.ImageLoader;
+import com.bumptech.glide.Glide;
+
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * 主界面底部的菜单
@@ -57,8 +57,7 @@ public class MenuBar extends LinearLayout implements OnClickListener{
 		lp.weight = 1;
 		tv.setText(item.getName());
 		iv.setColorFilter( getResources().getColor(R.color.menubar_default), Mode.SRC_ATOP);
-
-		ImageLoader.getInstance().displayImage(item.getIconpic(), iv);
+		Glide.with(mContext).load(item.getIconpic()).into(iv);
 		addView(itemFrameLayout,lp);
 		mMenuViewMap.put(item.getId(), itemFrameLayout);
 		mMenuNum++;
@@ -96,9 +95,4 @@ public class MenuBar extends LinearLayout implements OnClickListener{
 			mOnItemClickListener.onItemClick(Integer.parseInt(v.getTag().toString()));
 		}
 	}
-	
-	
-	
-	
-	
 }
