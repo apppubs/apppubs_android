@@ -31,26 +31,25 @@ import android.widget.Toast;
 
 import com.alipay.sdk.app.PayTask;
 import com.amap.api.location.AMapLocation;
-import com.apppubs.bean.TMenuItem;
 import com.apppubs.AppContext;
 import com.apppubs.AppManager;
-import com.apppubs.presenter.WebAppPresenter;
+import com.apppubs.bean.TMenuItem;
+import com.apppubs.bean.VersionInfo;
 import com.apppubs.d20.R;
+import com.apppubs.jsbridge.BridgeHandler;
+import com.apppubs.jsbridge.BridgeWebView;
+import com.apppubs.jsbridge.CallBackFunction;
+import com.apppubs.jsbridge.DefaultHandler;
+import com.apppubs.presenter.VersionPresenter;
+import com.apppubs.presenter.WebAppPresenter;
+import com.apppubs.ui.IVersionView;
 import com.apppubs.ui.activity.CaptureActivity;
 import com.apppubs.ui.activity.ContainerActivity;
+import com.apppubs.ui.activity.ViewCourier;
 import com.apppubs.ui.fragment.TitleBarFragment;
 import com.apppubs.ui.home.HomeBaseActivity;
-import com.apppubs.ui.activity.ViewCourier;
-import com.apppubs.bean.VersionInfo;
+import com.apppubs.ui.imageselector.MultiImageSelectorActivity;
 import com.apppubs.ui.myfile.FilePreviewFragment;
-import com.apppubs.presenter.VersionPresenter;
-import com.apppubs.util.Base64;
-import com.apppubs.util.BitmapUtils;
-import com.apppubs.util.LocationManager;
-import com.apppubs.util.LogM;
-import com.apppubs.util.SystemUtils;
-import com.apppubs.util.Utils;
-import com.apppubs.ui.IVersionView;
 import com.apppubs.ui.widget.ConfirmDialog;
 import com.apppubs.ui.widget.HorizontalScrollLabels;
 import com.apppubs.ui.widget.ProgressHUD;
@@ -58,11 +57,12 @@ import com.apppubs.ui.widget.ProgressWebView;
 import com.apppubs.ui.widget.ProgressWebView.ProgressWebViewListener;
 import com.apppubs.ui.widget.SegmentedGroup;
 import com.apppubs.ui.widget.SignatureView;
-import com.apppubs.jsbridge.BridgeHandler;
-import com.apppubs.jsbridge.BridgeWebView;
-import com.apppubs.jsbridge.CallBackFunction;
-import com.apppubs.jsbridge.DefaultHandler;
-import com.apppubs.ui.imageselector.MultiImageSelectorActivity;
+import com.apppubs.util.Base64;
+import com.apppubs.util.BitmapUtils;
+import com.apppubs.util.LocationManager;
+import com.apppubs.util.LogM;
+import com.apppubs.util.SystemUtils;
+import com.apppubs.util.Utils;
 import com.jelly.mango.ImageSelectListener;
 import com.jelly.mango.Mango;
 import com.jelly.mango.MultiplexImage;
@@ -130,6 +130,11 @@ public class WebAppFragment extends TitleBarFragment implements OnClickListener,
     private SegmentedGroup mSignatureSegmentedGroup;
     private SignatureView mSignatureSignatureView;
     private EditText mSignatureET;
+    private Listener mListener;
+
+    public interface Listener {
+        void onLinkClicked(String url);
+    }
 
     @SuppressLint("HandlerLeak")
     private Handler mHandler = new Handler() {
@@ -297,7 +302,9 @@ public class WebAppFragment extends TitleBarFragment implements OnClickListener,
 
             @Override
             public void onURLClicked(String url) {
-
+                if (mListener != null){
+                    mListener.onLinkClicked(url);
+                }
             }
 
             @Override
@@ -553,6 +560,10 @@ public class WebAppFragment extends TitleBarFragment implements OnClickListener,
         } else {
             Log.d("PAY_GET", "返回错误" + json.getString("retmsg"));
         }
+    }
+
+    public void setListener(Listener listener) {
+        mListener = listener;
     }
 
     private void openMenu() {

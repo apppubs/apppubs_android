@@ -3,6 +3,7 @@ package com.apppubs.ui.activity;
 import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v4.app.FragmentTransaction;
 import android.text.TextUtils;
 import android.view.View;
 import android.view.animation.AlphaAnimation;
@@ -27,6 +28,7 @@ import com.apppubs.d20.R;
 import com.apppubs.model.IAPCallback;
 import com.apppubs.model.UserBiz;
 import com.apppubs.ui.home.HomeBaseActivity;
+import com.apppubs.ui.webapp.WebAppFragment;
 import com.apppubs.ui.widget.ProgressHUD;
 import com.apppubs.util.LogM;
 
@@ -46,7 +48,7 @@ public class FirstLoginActity extends BaseActivity {
     private LinearLayout mContainerLl;
     private TextView mTitleTv, mFristZhuce;
     private ImageView mBgIv;
-    private WebView mWebview;
+    private WebAppFragment mWebAppFragment;
     // private LoadingDialog dialog;
     private EditText mUsernameTv, mPasswordTv, mPhoneEt, mUsernameEt, mOrgEt;
     private CheckBox mCheckBox;
@@ -128,40 +130,38 @@ public class FirstLoginActity extends BaseActivity {
         } else if (mLoginType == App.LOGIN_ONSTART_WEB) {
             setVisibilityOfViewByResId(R.id.firstlogin_container_ll, View.GONE);
             setVisibilityOfViewByResId(R.id.firstlogin_bg_iv, View.GONE);
-            setVisibilityOfViewByResId(R.id.first_login_wv, View.VISIBLE);
-            mWebview = (WebView) findViewById(R.id.first_login_wv);
-            mWebview.getSettings().setDomStorageEnabled(true);
-            mWebview.getSettings().setJavaScriptEnabled(true);
-            mWebview.setWebViewClient(new WebViewClient() {
+            setVisibilityOfViewByResId(R.id.first_login_web_container_fl, View.VISIBLE);
+
+            mWebAppFragment = new WebAppFragment();
+            Bundle args = new Bundle();
+            args.putString(WebAppFragment.ARGUMENT_STRING_URL, mAppContext.getApp()
+                    .getWebLoginUrl());
+            mWebAppFragment.setArguments(args);
+            mWebAppFragment.setListener(new WebAppFragment.Listener() {
                 @Override
-                public boolean shouldOverrideUrlLoading(WebView view, String url) {
-                    System.out.println(url);
+                public void onLinkClicked(String url) {
                     if (url.contains("app:login")) {
                         String params = url.substring(url.indexOf("{"));
                         System.out.println(params);
                         try {
-
                             JSONObject jo = new JSONObject(URLDecoder.decode(params, "utf-8"));
                             String username = jo.getString("username");
                             String password = jo.getString("password");
                             int autoLoginFlag = jo.getInt("autologinflag");
-                            loginWithUsernameAndPassword(username, password, autoLoginFlag == 1);
+                            loginWithUsernameAndPassword(username, password, autoLoginFlag == 0 ?
+                                    false : true);
                         } catch (JSONException e) {
                             e.printStackTrace();
                         } catch (UnsupportedEncodingException e) {
                             e.printStackTrace();
                         }
-
-                        return true;
-                    } else if (url.startsWith("apppubs://userreg")) {
-                        ViewCourier.getInstance(mContext).openRegView(mContext);
-                        return true;
                     }
-                    return false;
                 }
             });
-
-            mWebview.loadUrl(mAppContext.getApp().getWebLoginUrl());
+            FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+            transaction.replace(R.id.first_login_web_container_fl, mWebAppFragment);
+            transaction.setTransition(FragmentTransaction.TRANSIT_NONE);
+            transaction.commit();
         }
     }
 
@@ -182,7 +182,6 @@ public class FirstLoginActity extends BaseActivity {
                 mOrgEt.setText(user.getOrgCode());
                 mPasswordTv.requestFocus();
                 mCheckBox.setChecked(mAppContext.getSettings().isAllowAutoLogin());
-
             }
         }
     }
@@ -322,18 +321,18 @@ public class FirstLoginActity extends BaseActivity {
         UserBiz.getInstance(mContext).loginWithUsernamePwdAndOrgCode(username, password, orgCode,
                 new IAPCallback<LoginResult>() {
 
-            @Override
-            public void onDone(LoginResult obj) {
-                ProgressHUD.dismissProgressHUDInThisContext(FirstLoginActity.this);
-                enterHome();
-            }
+                    @Override
+                    public void onDone(LoginResult obj) {
+                        ProgressHUD.dismissProgressHUDInThisContext(FirstLoginActity.this);
+                        enterHome();
+                    }
 
-            @Override
-            public void onException(APError error) {
-                ProgressHUD.dismissProgressHUDInThisContext(FirstLoginActity.this);
-                mErrorHandler.onError(error);
-            }
-        });
+                    @Override
+                    public void onException(APError error) {
+                        ProgressHUD.dismissProgressHUDInThisContext(FirstLoginActity.this);
+                        mErrorHandler.onError(error);
+                    }
+                });
     }
 
     @Override

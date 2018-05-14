@@ -213,8 +213,6 @@ public class ViewCourier {
             }
         } else if (url.equals(TMenuItem.MENU_URL_EMAIL) || url.startsWith("apppubs://email")) {
             openEmailApp();
-        } else if (url.startsWith("apppubs://userreg")) {
-            openRegView(mContext);
         } else {
             Toast.makeText(context, "请求地址(" + url + ")错误", Toast.LENGTH_SHORT).show();
         }

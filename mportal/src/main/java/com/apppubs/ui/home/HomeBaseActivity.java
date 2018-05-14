@@ -162,6 +162,14 @@ public abstract class HomeBaseActivity extends BaseActivity implements IHomeView
 	protected void onResume() {
 		super.onResume();
 		JPushInterface.onResume(this);
+		//检测是否需要登录而且是否登录
+		if (mAppContext.getApp().getLoginFlag() != App.LOGIN_INAPP && TextUtils.isEmpty
+				(mAppContext.getCurrentUser().getUserId())) {
+			//跳转到登录界面
+			Intent intent = new Intent(this, FirstLoginActity.class);
+			startActivity(intent);
+			finish();
+		}
 		String paddingUrl = mAppContext.getApp().getPaddingUrlOnHomeActivityStartUp();
 		if (!TextUtils.isEmpty(paddingUrl)) {
 			mAppContext.getApp().setPaddingUrlOnHomeActivityStartUp(null);
