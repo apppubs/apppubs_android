@@ -38,6 +38,7 @@ import com.apppubs.bean.http.AppInfoResult;
 import com.apppubs.bean.http.CompelReadMessageResult;
 import com.apppubs.bean.http.MenusResult;
 import com.apppubs.constant.APError;
+import com.apppubs.constant.APErrorCode;
 import com.apppubs.constant.Constants;
 import com.apppubs.constant.URLs;
 import com.apppubs.d20.R;
@@ -650,28 +651,43 @@ public class SystemBiz extends BaseBiz {
      */
     public void initMenus(final IAPCallback<Boolean> callback) {
         // 初始化菜单
-        asyncPOST(Constants.API_NAME_MENUS, null,true, MenusResult.class, new
-                IRQListener<MenusResult>() {
+        asyncPOST(Constants.API_NAME_MENUS, null, true, MenusResult.class, new IRQListener<MenusResult>() {
             @Override
             public void onResponse(MenusResult menus, final APError error) {
                 if (error == null) {
-                    final List<TMenuItem> list = convert2TMenuItems(menus);
-                    String netItems = JSON.toJSONString(list);
-                    String localItems = JSON.toJSONString(selectLocalMenus());
-                    boolean isUpdated;
-                    if (!TextUtils.equals(netItems, localItems)) {
-                        insertOrUpdateLocalMenus(list);
-                        isUpdated = true;
+                    if (Utils.isEmpty(menus.getItems())) {
+                        MainHandler.getInstance().post(new Runnable() {
+                            @Override
+                            public void run() {
+                                callback.onException(new APError(APErrorCode.GENERAL_ERROR, "请配置菜单！"));
+                            }
+                        });
+                    } else if (menus.getItems().size() > 4) {
+                        MainHandler.getInstance().post(new Runnable() {
+                            @Override
+                            public void run() {
+                                callback.onException(new APError(APErrorCode.GENERAL_ERROR, "最大菜单数为5！"));
+                            }
+                        });
                     } else {
-                        isUpdated = false;
-                    }
-                    final boolean finalIsUpdated = isUpdated;
-                    MainHandler.getInstance().post(new Runnable() {
-                        @Override
-                        public void run() {
-                            callback.onDone(finalIsUpdated);
+                        final List<TMenuItem> list = convert2TMenuItems(menus);
+                        String netItems = JSON.toJSONString(list);
+                        String localItems = JSON.toJSONString(selectLocalMenus());
+                        boolean isUpdated;
+                        if (!TextUtils.equals(netItems, localItems)) {
+                            insertOrUpdateLocalMenus(list);
+                            isUpdated = true;
+                        } else {
+                            isUpdated = false;
                         }
-                    });
+                        final boolean finalIsUpdated = isUpdated;
+                        MainHandler.getInstance().post(new Runnable() {
+                            @Override
+                            public void run() {
+                                callback.onDone(finalIsUpdated);
+                            }
+                        });
+                    }
                 } else {
                     MainHandler.getInstance().post(new Runnable() {
                         @Override
@@ -707,7 +723,8 @@ public class SystemBiz extends BaseBiz {
     public void commitPushRegisterId(final String registerId, final IAPCallback callback) {
         Map<String, String> params = new HashMap<>();
         params.put("registerId", registerId);
-        asyncPOST(Constants.API_NAME_COMMIT_PUSH_REGISTER_ID, params, true, new IRQStringListener() {
+        asyncPOST(Constants.API_NAME_COMMIT_PUSH_REGISTER_ID, params, true, new IRQStringListener
+                () {
             @Override
             public void onResponse(final String result, final APError error) {
                 if (error == null) {
