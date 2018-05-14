@@ -662,7 +662,7 @@ public class SystemBiz extends BaseBiz {
                                 callback.onException(new APError(APErrorCode.GENERAL_ERROR, "请配置菜单！"));
                             }
                         });
-                    } else if (menus.getItems().size() > 4) {
+                    } else if (menus.getItems().size() > 5) {
                         MainHandler.getInstance().post(new Runnable() {
                             @Override
                             public void run() {
