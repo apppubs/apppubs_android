@@ -124,6 +124,11 @@ public class WebAppFragment extends BaseFragment implements OnClickListener, IWe
     private SegmentedGroup mSignatureSegmentedGroup;
     private SignatureView mSignatureSignatureView;
     private EditText mSignatureET;
+    private Listener mListener;
+
+    public interface Listener {
+        void onLinkClicked(String url);
+    }
 
     @SuppressLint("HandlerLeak")
     private Handler mHandler = new Handler() {
@@ -244,7 +249,9 @@ public class WebAppFragment extends BaseFragment implements OnClickListener, IWe
 
             @Override
             public void onURLClicked(String url) {
-
+                if (mListener != null){
+                    mListener.onLinkClicked(url);
+                }
             }
 
             @Override
@@ -570,6 +577,10 @@ public class WebAppFragment extends BaseFragment implements OnClickListener, IWe
                 }
             }
         }
+    }
+
+    public void setListener(Listener listener) {
+        mListener = listener;
     }
 
     private void openMenu() {
@@ -962,7 +973,7 @@ public class WebAppFragment extends BaseFragment implements OnClickListener, IWe
     @Override
     public void showScanQRCode(boolean needSelfResolve) {
         Intent intent = new Intent(mContext, CaptureActivity.class);
-        intent.putExtra(CaptureActivity.EXTRA_NAME_BOOLEAN_NEED_SELF_RESOLVE,needSelfResolve);
+        intent.putExtra(CaptureActivity.EXTRA_NAME_BOOLEAN_NEED_SELF_RESOLVE, needSelfResolve);
         startActivityForResult(intent, REQUEST_CODE_QRCODE);
     }
 
