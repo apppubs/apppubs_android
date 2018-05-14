@@ -357,16 +357,6 @@ public abstract class HomeBaseActivity extends BaseActivity implements IHomeView
     public abstract void setMenus(List<TMenuItem> menus);
 
     @Override
-    public void showLoading() {
-
-    }
-
-    @Override
-    public void hideLoading() {
-
-    }
-
-    @Override
     public void onError(APError error) {
         mErrorHandler.onError(error);
     }

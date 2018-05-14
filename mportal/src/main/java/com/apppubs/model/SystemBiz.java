@@ -35,6 +35,7 @@ import com.apppubs.bean.TUser;
 import com.apppubs.bean.TUserDeptLink;
 import com.apppubs.bean.VersionInfo;
 import com.apppubs.bean.http.AppInfoResult;
+import com.apppubs.bean.http.CheckVersionResult;
 import com.apppubs.bean.http.CompelReadMessageResult;
 import com.apppubs.bean.http.MenusResult;
 import com.apppubs.constant.APError;
@@ -626,6 +627,30 @@ public class SystemBiz extends BaseBiz {
             listener.onDone(new VersionInfo());
 
         }
+    }
+
+    public void checkUpdate(final IAPCallback<CheckVersionResult> callback) {
+        asyncPOST(Constants.API_NAME_CHECK_VERSION, null, CheckVersionResult.class, new
+                IRQListener<CheckVersionResult>() {
+            @Override
+            public void onResponse(final CheckVersionResult result, final APError error) {
+                if (error == null) {
+                    MainHandler.getInstance().post(new Runnable() {
+                        @Override
+                        public void run() {
+                            callback.onDone(result);
+                        }
+                    });
+                } else {
+                    MainHandler.getInstance().post(new Runnable() {
+                        @Override
+                        public void run() {
+                            callback.onException(error);
+                        }
+                    });
+                }
+            }
+        });
     }
 
     /**

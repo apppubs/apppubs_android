@@ -4,9 +4,7 @@ public class Constants {
 
 
 	public static final String REAL_PACKAGE_NAME = "com.apppubs.d20";
-	public static final String MENU_URI_SLIDING_PIC = "app:{$sliding_pic}";
 
-	public static final String APP_CONFIG_PARAM_ADBOOK_ROOT_ID = "adbook_rootid";
 	public static final String APP_CONFIG_PARAM_REG_URL = "reg_url";
 	public static final String APP_CONFIG_PARAM_FORGET_PWD_URL = "forget_password_url";
 	public static final String APP_CONFIG_PARAM_ADBOOK_USER_ICON_FLAGS = "adbook_user_icon_flags";
@@ -75,7 +73,7 @@ public class Constants {
 	public static final String API_NAME_MENUS = "menus";
 	public static final String API_NAME_PAGE = "page";
 	public static final String API_NAME_UPLOAD_FILE = "upload_file";
-	public static final String API_NAME_APP_VERSION = "app_version";
+	public static final String API_NAME_CHECK_VERSION = "check_version";
 
 	//文件管理
 	public static final String API_NAME_MYFILE_PAGE = "my_file_page";
@@ -120,5 +118,24 @@ public class Constants {
 	public static final String API_NAME_NEWS_PIC = "pic";
 	public static final String API_NAME_NEWS_COMMENT_PAGE = "comment_page";
 
-
+	public static final String APPPUBS_PROTOCOL_TYPE_CHANNEL_GROUP = "channelGroup";
+	public static final String APPPUBS_PROTOCOL_TYPE_CHANNEL = "channel";
+	public static final String APPPUBS_PROTOCOL_TYPE_NEWS_INFO = "newsInfo";
+	public static final String APPPUBS_PROTOCOL_TYPE_PAGE = "page";
+	public static final String APPPUBS_PROTOCOL_TYPE_ANCHOR_POINTER = "anchorPointer";
+	public static final String APPPUBS_PROTOCOL_TYPE_ADDRESS_BOOK = "addressBook";
+	public static final String APPPUBS_PROTOCOL_TYPE_SETTING = "setting";
+	public static final String APPPUBS_PROTOCOL_TYPE_FAVORITE = "favorite";
+	public static final String APPPUBS_PROTOCOL_TYPE_MESSAGE = "message";
+	public static final String APPPUBS_PROTOCOL_TYPE_USER_ACCOUNT = "userAccount";
+	public static final String APPPUBS_PROTOCOL_TYPE_CLOSE_WINDOW = "closeWindow";
+	public static final String APPPUBS_PROTOCOL_TYPE_TEL = "tel";
+	public static final String APPPUBS_PROTOCOL_TYPE_HINT= "hint";
+	public static final String APPPUBS_PROTOCOL_TYPE_SERVICENO = "serviceno";
+	public static final String APPPUBS_PROTOCOL_TYPE_QRCODE = "QRCode";
+	public static final String APPPUBS_PROTOCOL_TYPE_EMAIL = "email";
+	public static final String APPPUBS_PROTOCOL_TYPE_MY_FILE = "myFile";
+	public static final String APPPUBS_PROTOCOL_TYPE_NEWSPAPER = "newspaper";
+	public static final String APPPUBS_PROTOCOL_TYPE_CHECK_VERSION = "checkVersion";
+	public static final String APPPUBS_PROTOCOL_TYPE_OPEN_SLIDE_MENU = "openSlideMenu";
 }

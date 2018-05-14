@@ -2,6 +2,8 @@ package com.apppubs.ui;
 
 import android.os.Bundle;
 
+import com.apppubs.bean.ApppubsProtocol;
+import com.apppubs.constant.Constants;
 import com.apppubs.ui.fragment.BaseFragment;
 import com.apppubs.ui.fragment.ExceptionFragment;
 import com.apppubs.ui.fragment.PapersFragment;
@@ -27,41 +29,46 @@ public class FragmentFactory {
             Bundle args = new Bundle();
             args.putString(WebAppFragment.ARGUMENT_STRING_URL, uri);
             frg.setArguments(args);
-        } else if (uri.matches("apppubs://channelgroup/[^\\s]*")) {//频道组
-            String[] arr = StringUtils.getPathParams(uri);
-            frg = new ChannelsSlideFragment();
-            Bundle args = new Bundle();
-            args.putString(ChannelsFragment.ARGUMENT_NAME_CHANNELTYPEID, arr[1]);
-            frg.setArguments(args);
-        } else if (uri.matches("apppubs:\\/\\/channel\\/[0-9]\\/[A-Za-z0-9]*")) {
-            String[] arr = StringUtils.getPathParams(uri);
-            ChannelFragment cf = ChannelFragmentFactory.getChannelFragment(Integer.parseInt
-                    (arr[1]));
-            Bundle args = new Bundle();
-            args.putString(ChannelFragment.ARG_KEY, arr[2]);
-            frg = cf;
-        } else if (uri.startsWith("apppubs//newspaper")) {// 报纸
-            frg = new PapersFragment();
-        } else if (uri.startsWith("apppubs://message")) {
-            frg = new ConversationListFragment();
-        } else if (uri.startsWith("apppubs://addressbook")) {
-            String rootSuperId = StringUtils.getQueryParameter(uri, "rootsuperid");
-            Bundle args = new Bundle();
-            args.putString(AddressBookFragement.ARGS_ROOT_DEPARTMENT_SUPER_ID, rootSuperId);
-            frg = new AddressBookFragement();
-            frg.setArguments(args);
-        } else if (uri.startsWith("apppubs://myfile")) {
-            frg = new MyFileFragment();
-        } else if (uri.startsWith("apppubs://page")) {
-            frg = new PageFragment();
-            Bundle args = new Bundle();
-            String[] params = StringUtils.getPathParams(uri);
-            args.putString(PageFragment.EXTRA_STRING_NAME_PAGE_ID, params[1]);
-            frg.setArguments(args);
-        } else if (uri.startsWith("apppubs://service_no")) {
-            frg = new ServiceNOsOfMineFragment();
-        } else if (uri.matches("apppubs:\\/\\/setting[\\S]*")) {
-            frg = new SettingFragment();
+        } else if(ApppubsProtocol.isApppubsProtocol(uri)){
+            ApppubsProtocol pro = new ApppubsProtocol(uri);
+            if (Constants.APPPUBS_PROTOCOL_TYPE_CHANNEL_GROUP.equals(pro.getType())){
+                String[] arr = StringUtils.getPathParams(uri);
+                frg = new ChannelsSlideFragment();
+                Bundle args = new Bundle();
+                args.putString(ChannelsFragment.ARGUMENT_NAME_CHANNELTYPEID, arr[1]);
+                frg.setArguments(args);
+            }else if(Constants.APPPUBS_PROTOCOL_TYPE_CHANNEL.equals(pro.getType())){
+                String[] arr = StringUtils.getPathParams(uri);
+                ChannelFragment cf = ChannelFragmentFactory.getChannelFragment(Integer.parseInt
+                        (arr[1]));
+                Bundle args = new Bundle();
+                args.putString(ChannelFragment.ARG_KEY, arr[2]);
+                frg = cf;
+            }else if(Constants.APPPUBS_PROTOCOL_TYPE_NEWSPAPER.equals(pro.getType())){
+                frg = new PapersFragment();
+            }else if(Constants.APPPUBS_PROTOCOL_TYPE_MESSAGE.equals(pro.getType())){
+                frg = new ConversationListFragment();
+            }else if(Constants.APPPUBS_PROTOCOL_TYPE_MY_FILE.equals(pro.getType())){
+                frg = new MyFileFragment();
+            }else if(Constants.APPPUBS_PROTOCOL_TYPE_ADDRESS_BOOK.equals(pro.getType())){
+                String rootSuperId = StringUtils.getQueryParameter(uri, "rootsuperid");
+                Bundle args = new Bundle();
+                args.putString(AddressBookFragement.ARGS_ROOT_DEPARTMENT_SUPER_ID, rootSuperId);
+                frg = new AddressBookFragement();
+                frg.setArguments(args);
+            }else if(Constants.APPPUBS_PROTOCOL_TYPE_PAGE.equals(pro.getType())){
+                frg = new PageFragment();
+                Bundle args = new Bundle();
+                String[] params = StringUtils.getPathParams(uri);
+                args.putString(PageFragment.EXTRA_STRING_NAME_PAGE_ID, params[1]);
+                frg.setArguments(args);
+            }else if(Constants.APPPUBS_PROTOCOL_TYPE_SERVICENO.equals(pro.getType())){
+                frg = new ServiceNOsOfMineFragment();
+            }else if(Constants.APPPUBS_PROTOCOL_TYPE_SETTING.equals(pro.getType())){
+                frg = new SettingFragment();
+            }else {
+                frg = new ExceptionFragment();
+            }
         } else {
             frg = new ExceptionFragment();
         }

@@ -27,30 +27,25 @@ import android.widget.EditText;
 import android.widget.PopupWindow;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
-import android.widget.Toast;
 
 import com.alipay.sdk.app.PayTask;
 import com.amap.api.location.AMapLocation;
 import com.apppubs.AppContext;
 import com.apppubs.AppManager;
 import com.apppubs.bean.TMenuItem;
-import com.apppubs.bean.VersionInfo;
+import com.apppubs.constant.Constants;
 import com.apppubs.d20.R;
 import com.apppubs.jsbridge.BridgeHandler;
 import com.apppubs.jsbridge.BridgeWebView;
 import com.apppubs.jsbridge.CallBackFunction;
 import com.apppubs.jsbridge.DefaultHandler;
-import com.apppubs.presenter.VersionPresenter;
 import com.apppubs.presenter.WebAppPresenter;
-import com.apppubs.ui.IVersionView;
 import com.apppubs.ui.activity.CaptureActivity;
 import com.apppubs.ui.activity.ContainerActivity;
-import com.apppubs.ui.activity.ViewCourier;
 import com.apppubs.ui.fragment.TitleBarFragment;
 import com.apppubs.ui.home.HomeBaseActivity;
 import com.apppubs.ui.imageselector.MultiImageSelectorActivity;
 import com.apppubs.ui.myfile.FilePreviewFragment;
-import com.apppubs.ui.widget.ConfirmDialog;
 import com.apppubs.ui.widget.HorizontalScrollLabels;
 import com.apppubs.ui.widget.ProgressHUD;
 import com.apppubs.ui.widget.ProgressWebView;
@@ -93,8 +88,7 @@ import cn.sharesdk.tencent.qq.QQ;
 import cn.sharesdk.wechat.friends.Wechat;
 import cn.sharesdk.wechat.moments.WechatMoments;
 
-public class WebAppFragment extends TitleBarFragment implements OnClickListener, IWebAppView,
-        IVersionView {
+public class WebAppFragment extends TitleBarFragment implements OnClickListener, IWebAppView{
 
     public static final String ARGUMENT_INT_MENUBARTYPE = "menu_bar_type";
     public static final String ARGUMENT_STRING_URL = "url";
@@ -123,7 +117,6 @@ public class WebAppFragment extends TitleBarFragment implements OnClickListener,
     private String mOnloadingText = "载入中 ···";
 
     private WebAppPresenter mPresenter;
-    private VersionPresenter mVersionPresenter;
 
     //pop signature
     private PopupWindow mSignaturePopWin;
@@ -275,7 +268,6 @@ public class WebAppFragment extends TitleBarFragment implements OnClickListener,
 
     private void initPresenter() {
         mPresenter = new WebAppPresenter(getContext(), this);
-        mVersionPresenter = new VersionPresenter(getContext(), this);
     }
 
     @SuppressLint({"NewApi", "SetJavaScriptEnabled"})
@@ -963,32 +955,8 @@ public class WebAppFragment extends TitleBarFragment implements OnClickListener,
     }
 
     @Override
-    public VersionPresenter getVersionPresenter() {
-        return mVersionPresenter;
-    }
-
-    @Override
-    public void showVersionInfo(final VersionInfo vi) {
-        if (!vi.isNeedUpdate()) {
-            Toast.makeText(mHostActivity, "当前已是最新版本", Toast.LENGTH_SHORT).show();
-            return;
-        }
-        String title = String.format("检查到有新版 %s", TextUtils.isEmpty(vi.getVersion()) ? "" : "V" +
-                vi.getVersion());
-        ConfirmDialog dialog = new ConfirmDialog(getContext(), new ConfirmDialog.ConfirmListener() {
-
-            @Override
-            public void onCancelClick() {
-            }
-
-            @Override
-            public void onOkClick() {
-                mVersionPresenter.startDownloadApp(vi.getUpdateUrl());
-                Toast.makeText(mContext, "正在下载中，请稍候", Toast.LENGTH_SHORT).show();
-            }
-        }, title, vi.getUpdateDescribe(), "下次", "更新");
-        dialog.show();
-        dialog.setCanceledOnTouchOutside(false);
+    public void checkUpdate() {
+        executeURL("apppubs://"+ Constants.APPPUBS_PROTOCOL_TYPE_CHECK_VERSION);
     }
 
     private void dim() {

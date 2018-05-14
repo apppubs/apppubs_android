@@ -169,7 +169,7 @@ public class WebAppPresenter {
 
             @Override
             public void handler(String data, CallBackFunction function) {
-                mView.getVersionPresenter().checkUpdate();
+                mView.checkUpdate();
             }
         });
 

@@ -1,6 +1,5 @@
 package com.apppubs.ui.activity;
 
-import android.app.Activity;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -38,21 +37,20 @@ import com.android.volley.toolbox.Volley;
 import com.apppubs.AppContext;
 import com.apppubs.AppManager;
 import com.apppubs.MportalApplication;
-import com.apppubs.bean.AppConfig;
 import com.apppubs.bean.Settings;
+import com.apppubs.bean.http.CheckVersionResult;
 import com.apppubs.constant.APError;
 import com.apppubs.constant.Actions;
+import com.apppubs.constant.Constants;
 import com.apppubs.d20.R;
 import com.apppubs.model.IAPCallback;
 import com.apppubs.model.NewsBiz;
 import com.apppubs.model.PaperBiz;
 import com.apppubs.model.SystemBiz;
-import com.apppubs.bean.VersionInfo;
 import com.apppubs.model.message.MsgBussiness;
 import com.apppubs.model.message.UserBussiness;
 import com.apppubs.ui.APErrorHandler;
 import com.apppubs.ui.ICommonView;
-import com.apppubs.ui.start.StartUpActivity;
 import com.apppubs.ui.widget.AlertDialog;
 import com.apppubs.ui.widget.ConfirmDialog;
 import com.apppubs.ui.widget.TitleBar;
@@ -533,10 +531,61 @@ public abstract class BaseActivity extends FragmentActivity implements OnClickLi
     }
 
     public void executeURL(String url) {
-        if (url.equals("apppubs://closeWindow")) {
+        if (url.equals("apppubs://" + Constants.APPPUBS_PROTOCOL_TYPE_CLOSE_WINDOW)) {
             finish();
+        } else if (url.equals("apppubs://" + Constants.APPPUBS_PROTOCOL_TYPE_CHECK_VERSION)) {
+            showLoading();
+            SystemBiz.getInstance(mContext).checkUpdate(new IAPCallback<CheckVersionResult>() {
+                @Override
+                public void onDone(CheckVersionResult obj) {
+                    showVersionUpdateAlert(obj);
+                    hideLoading();
+                }
+
+                @Override
+                public void onException(APError error) {
+                    mErrorHandler.onError(error);
+                    hideLoading();
+                }
+            });
         } else {
             ViewCourier.getInstance(mContext).openWindow(url);
+        }
+    }
+
+    private void showVersionUpdateAlert(final CheckVersionResult obj) {
+        if (obj.getUpdateType() < 1) {
+            Toast.makeText(mContext, "当前版本为最新版本！", Toast.LENGTH_LONG).show();
+        } else if (obj.getUpdateType()<3){
+            String title = String.format("检查到有新版 %s", TextUtils.isEmpty(obj.getVersionName()) ? "" : "V" +
+                    obj.getVersionName());
+            ConfirmDialog dialog = new ConfirmDialog(mContext, new ConfirmDialog.ConfirmListener() {
+
+                @Override
+                public void onCancelClick() {
+                }
+
+                @Override
+                public void onOkClick() {
+                    AppManager.getInstance(mContext).downloadApp(obj.getDownloadURL());
+                    Toast.makeText(mContext, "正在下载中，请稍候!", Toast.LENGTH_SHORT).show();
+                }
+            }, title, obj.getDescribe(), "下次", "更新");
+            dialog.show();
+            dialog.setCanceledOnTouchOutside(false);
+        }else {
+            String title = String.format("检查到有新版 %s", TextUtils.isEmpty(obj.getVersionName()) ? "" : "V" +
+                    obj.getVersionName());
+
+            AlertDialog dialog = new AlertDialog(mContext, new AlertDialog.OnOkClickListener() {
+                @Override
+                public void onclick() {
+                    AppManager.getInstance(mContext).downloadApp(obj.getDownloadURL());
+                    Toast.makeText(mContext, "正在下载中，请稍候!", Toast.LENGTH_SHORT).show();
+                }
+            },title,obj.getDescribe(),"更新");
+            dialog.show();
+            dialog.setCanceledOnTouchOutside(false);
         }
     }
 }

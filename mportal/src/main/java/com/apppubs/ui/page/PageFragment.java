@@ -37,7 +37,6 @@ import com.apppubs.MportalApplication;
 import com.apppubs.asytask.AsyTaskCallback;
 import com.apppubs.asytask.AsyTaskExecutor;
 import com.apppubs.bean.AddressModel;
-import com.apppubs.bean.VersionInfo;
 import com.apppubs.bean.page.DefaultUserinfoComponent;
 import com.apppubs.bean.page.GridViewModel;
 import com.apppubs.bean.page.PageComponent;
@@ -50,8 +49,6 @@ import com.apppubs.bean.page.TitleBarNomalModel;
 import com.apppubs.constant.Constants;
 import com.apppubs.d20.R;
 import com.apppubs.presenter.PagePresenter;
-import com.apppubs.presenter.VersionPresenter;
-import com.apppubs.ui.IVersionView;
 import com.apppubs.ui.activity.BaseActivity;
 import com.apppubs.ui.adapter.PageFragmentPagerAdapter;
 import com.apppubs.ui.fragment.BaseFragment;
@@ -61,7 +58,6 @@ import com.apppubs.ui.news.ChannelFragment;
 import com.apppubs.ui.news.ChannelFragmentFactory;
 import com.apppubs.ui.webapp.WebAppFragment;
 import com.apppubs.ui.widget.CheckableFlowLayout;
-import com.apppubs.ui.widget.ConfirmDialog;
 import com.apppubs.ui.widget.DraggableGridView;
 import com.apppubs.ui.widget.DraggableGridView.OnRearrangeListener;
 import com.apppubs.ui.widget.EditTextDialog;
@@ -91,8 +87,7 @@ import java.util.UUID;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public class PageFragment extends TitleMenuFragment implements OnClickListener, IPageView,
-        IVersionView {
+public class PageFragment extends TitleMenuFragment implements OnClickListener, IPageView{
 
     public static final String EXTRA_STRING_NAME_PAGE_ID = "page_id";
     public static final String CUSTOM_WEB_APP_URL_SERIALIZED_FILE_NAME = "custom_web_app_url_map";
@@ -116,7 +111,6 @@ public class PageFragment extends TitleMenuFragment implements OnClickListener, 
     private List<String> mUnselectedTabs;
 
     private PagePresenter mPresenter;
-    private VersionPresenter mVersionPrsenter;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -224,30 +218,6 @@ public class PageFragment extends TitleMenuFragment implements OnClickListener, 
         return mPageId;
     }
 
-    @Override
-    public void showVersionInfo(final VersionInfo vi) {
-        if (!vi.isNeedUpdate()) {
-            Toast.makeText(mHostActivity, "当前已是最新版本", Toast.LENGTH_SHORT).show();
-            return;
-        }
-        String title = String.format("检查到有新版 %s", TextUtils.isEmpty(vi.getVersion()) ? "" : "V" +
-                vi.getVersion());
-        ConfirmDialog dialog = new ConfirmDialog(getContext(), new ConfirmDialog.ConfirmListener() {
-
-            @Override
-            public void onCancelClick() {
-            }
-
-            @Override
-            public void onOkClick() {
-                mVersionPrsenter.startDownloadApp(vi.getUpdateUrl());
-                Toast.makeText(mContext, "正在下载中，请稍候", Toast.LENGTH_SHORT).show();
-            }
-        }, title, vi.getUpdateDescribe(), "下次", "更新");
-        dialog.show();
-        dialog.setCanceledOnTouchOutside(false);
-    }
-
     //pragma private
     private void replaceTitleBar(TitleBar titlebar) {
         if (titlebar == null) {
@@ -277,7 +247,6 @@ public class PageFragment extends TitleMenuFragment implements OnClickListener, 
 
     private void initPresenter() {
         mPresenter = new PagePresenter(mContext, this);
-        mVersionPrsenter = new VersionPresenter(mContext, this);
     }
 
     private void initView() {
@@ -699,7 +668,7 @@ public class PageFragment extends TitleMenuFragment implements OnClickListener, 
         ll.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
-                executeURL("apppubs://user_account");
+                executeURL("apppubs://"+Constants.APPPUBS_PROTOCOL_TYPE_USER_ACCOUNT);
             }
         });
 
@@ -1401,11 +1370,11 @@ public class PageFragment extends TitleMenuFragment implements OnClickListener, 
     }
 
     //解析url
-    private void executeURL(String url) {
+    public void executeURL(String url) {
         if (TextUtils.isEmpty(url)) {
             return;
         }
-        if ((url.startsWith("apppubs://") && url.contains("anchorpointer"))) {
+        if ((url.startsWith("apppubs://") && url.contains(Constants.APPPUBS_PROTOCOL_TYPE_ANCHOR_POINTER))) {
             mScrollView.scrollTo(0, 100);
             for (int i = -1; ++i < mAnchorPointerViewList.size(); ) {
                 View view = mAnchorPointerViewList.get(i);
@@ -1415,10 +1384,8 @@ public class PageFragment extends TitleMenuFragment implements OnClickListener, 
                     mScrollView.smoothScrollTo(0, view.getTop());
                 }
             }
-        } else if (url.startsWith("apppubs://checkversion")) {
-            mVersionPrsenter.checkUpdate();
-        } else {
-            mHostActivity.executeURL(url);
+        }else {
+            super.executeURL(url);
         }
     }
 

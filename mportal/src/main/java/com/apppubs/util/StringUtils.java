@@ -9,8 +9,10 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -367,6 +369,23 @@ public class StringUtils {
             }
         }
         return result;
+    }
+
+    public static Map<String, String> getQueryParameters(String url) {
+        Map<String, String> map = new HashMap<>();
+        int indexOfQuerySymbol = -1;
+        //如果搜不到“？”或者这个字符串只有一个？那就算了
+        if ((indexOfQuerySymbol = url.indexOf("?")) > -1 && (indexOfQuerySymbol < url.length())) {
+            url = url.substring(indexOfQuerySymbol + 1);
+            String[] params = url.split("&");
+            for (String param : params) {
+                String[] keyValueArr = param.split("=");
+                if (keyValueArr.length > 1) {
+                    map.put(keyValueArr[0], keyValueArr[1]);
+                }
+            }
+        }
+        return map;
     }
 
     public static String inputURL(String url, String paramName, String paramValue) {

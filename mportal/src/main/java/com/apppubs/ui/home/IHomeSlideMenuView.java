@@ -10,4 +10,6 @@ import java.util.List;
 
 public interface IHomeSlideMenuView extends IHomeView {
     void hideMenu();
+
+    void executeURL(String uri);
 }

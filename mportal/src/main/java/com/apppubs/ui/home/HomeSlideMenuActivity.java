@@ -29,6 +29,7 @@ import android.widget.TextView;
 import com.apppubs.AppContext;
 import com.apppubs.bean.TMenuItem;
 import com.apppubs.bean.UserInfo;
+import com.apppubs.constant.Constants;
 import com.apppubs.d20.R;
 import com.apppubs.presenter.HomePresenter;
 import com.apppubs.presenter.HomeSlidePresenter;
@@ -191,7 +192,10 @@ public class HomeSlideMenuActivity extends HomeBaseActivity implements OnItemCli
      */
     @Override
     public void setContentView(int id) {
-        setContentView(getLayoutInflater().inflate(id, null));
+        super.setContentView(id);
+        mHelper.registerAboveContentView(getLayoutInflater().inflate(id, null), new LayoutParams(LayoutParams
+                .MATCH_PARENT, LayoutParams.MATCH_PARENT));
+
     }
 
     /*
@@ -386,7 +390,7 @@ public class HomeSlideMenuActivity extends HomeBaseActivity implements OnItemCli
         if (TextUtils.isEmpty(url)) {
             return;
         }
-        if (url.equals("apppubs://openSlideMenu")) {
+        if (url.equals("apppubs://" + Constants.APPPUBS_PROTOCOL_TYPE_OPEN_SLIDE_MENU)) {
             showMenu();
         } else {
             super.executeURL(url);

@@ -312,4 +312,8 @@ public abstract class BaseFragment extends Fragment implements KeyEvent.Callback
     public void hideEmptyView(){
         mEmptyView.setVisibility(View.GONE);
     }
+
+    public void executeURL(String url) {
+        mHostActivity.executeURL(url);
+    }
 }

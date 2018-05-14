@@ -25,7 +25,7 @@ public class HomeSlidePresenter extends HomePresenter<IHomeSlideMenuView> {
             super.onMenuSelected(uri);
             mView.hideMenu();
         }else{
-            ViewCourier.getInstance(mContext).openWindow(uri);
+            mView.executeURL(uri);
         }
     }
 }

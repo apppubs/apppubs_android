@@ -10,9 +10,12 @@ import android.text.TextUtils;
 import android.widget.Toast;
 
 import com.apppubs.AppContext;
+import com.apppubs.bean.ApppubsProtocol;
 import com.apppubs.bean.TMenuItem;
+import com.apppubs.constant.Constants;
 import com.apppubs.ui.fragment.CollectionFragment;
 import com.apppubs.ui.fragment.HistoryFragment;
+import com.apppubs.ui.fragment.PapersFragment;
 import com.apppubs.ui.fragment.ServiceNOsOfMineFragment;
 import com.apppubs.ui.fragment.SettingFragment;
 import com.apppubs.ui.fragment.TitleMenuFragment;
@@ -36,11 +39,8 @@ import com.apppubs.util.StringUtils;
  */
 public class ViewCourier {
 
-    // 用户中心动作
-    public static final int ACTION_USER_CENTER = 0;
 
     private Context mContext;
-
 
     /**
      * 当前的菜单
@@ -88,104 +88,102 @@ public class ViewCourier {
             args.putString(WebAppFragment.ARGUMENT_STRING_URL, url);
             args.putBoolean(ContainerActivity.EXTRA_BOOLEAN_IS_FULLSCREEN, true);
             ContainerActivity.startContainerActivity(mContext, WebAppFragment.class, args);
-        } else if (url.matches("apppubs:\\/\\/newsinfo\\/[A-Z0-9]*\\/[A-Za-z0-9]*\\/[A-Za-z0-9" +
-                "]*")) {//新闻正文
-            String[] arr = StringUtils.getPathParams(url);
-            NewsInfoBaseActivity.startInfoActivity(mContext, arr[1], new String[]{arr[2], arr[3]})
-            ;//频道
-        } else if (url.matches("apppubs:\\/\\/channel/[^\\\\s]*")) {
-            String[] arr = StringUtils.getPathParams(url);
-            ChannelFragment cf = ChannelFragmentFactory.getChannelFragment(Integer.parseInt
-                    (arr[1]));
-            Bundle args = new Bundle();
-            args.putString(ChannelFragment.ARG_KEY, arr[2]);
-            String title = StringUtils.getQueryParameter(url, "title");
-            args.putString(ContainerActivity.EXTRA_STRING_TITLE, title);
-            ContainerActivity.startContainerActivity(mContext, cf.getClass(), args);
-        } else if (url.matches("apppubs://channelgroup/[^\\s]*")) {//频道组
-            String[] arr = StringUtils.getPathParams(url);
-            ChannelsFragment frg = new ChannelsSlideFragment();
-            String title = StringUtils.getQueryParameter(url, "title");
-            Bundle args = new Bundle();
-            args.putString(ContainerActivity.EXTRA_STRING_TITLE, title);
-            args.putString(ChannelsFragment.ARGUMENT_NAME_CHANNELTYPEID, arr[1]);
-            ContainerActivity.startContainerActivity(mContext, frg.getClass(), args);
-        } else if (url.matches("apppubs:\\/\\/page\\/[\\S]*")) {
-            PageFragment pageF = new PageFragment();
-            String[] pathParams = StringUtils.getPathParams(url);
-            String titlebarFlag = StringUtils.getQueryParameter(url, "titlebar");
-            String title = StringUtils.getQueryParameter(url, "title");
-            Bundle args = new Bundle();
-            if (!TextUtils.isEmpty(titlebarFlag) && titlebarFlag.equals("0")) {
+        } else if (ApppubsProtocol.isApppubsProtocol(url)) {
+            ApppubsProtocol pro = new ApppubsProtocol(url);
+            if (Constants.APPPUBS_PROTOCOL_TYPE_NEWS_INFO.equals(pro.getType())) {
+                String[] arr = StringUtils.getPathParams(pro.getUri());
+                NewsInfoBaseActivity.startInfoActivity(mContext, arr[1], new String[]{arr[2], arr[3]});//频道
+            } else if (Constants.APPPUBS_PROTOCOL_TYPE_ADDRESS_BOOK.equals(pro.getType())) {
+                String rootSuperId = StringUtils.getQueryParameter(pro.getUri(), "rootsuperid");
+                Bundle args = new Bundle();
+                args.putString(AddressBookFragement.ARGS_ROOT_DEPARTMENT_SUPER_ID, rootSuperId);
                 args.putBoolean(ContainerActivity.EXTRA_BOOLEAN_IS_FULLSCREEN, true);
-            }
-            args.putString(PageFragment.EXTRA_STRING_NAME_PAGE_ID, pathParams[1]);
-            args.putString(ContainerActivity.EXTRA_STRING_TITLE, title);
-            ContainerActivity.startContainerActivity(mContext, pageF.getClass(), args);
-        } else if (url.matches("apppubs:\\/\\/addressbook[\\S]*")) {
-            String rootSuperId = StringUtils.getQueryParameter(url, "rootsuperid");
-            Bundle args = new Bundle();
-            args.putString(AddressBookFragement.ARGS_ROOT_DEPARTMENT_SUPER_ID, rootSuperId);
-            args.putBoolean(ContainerActivity.EXTRA_BOOLEAN_IS_FULLSCREEN, true);
-            ContainerActivity.startContainerActivity(mContext, AddressBookFragement.class, args);
-        } else if (url.matches("apppubs:\\/\\/setting[\\S]*")) {
-            String title = StringUtils.getQueryParameter(url, "title");
-            ContainerActivity.startFullScreenContainerActivity(mContext, SettingFragment.class,
-                    null, title);
-        } else if (url.matches("apppubs:\\/\\/favorite[\\S]*")) {
-            CollectionFragment frg = new CollectionFragment();
-            ContainerActivity.startContainerActivity(mContext, frg.getClass());
-        } else if (url.matches("apppubs:\\/\\/message[\\S]*")) {
-            ContainerActivity.startContainerActivity(mContext, ConversationListFragment.class);
-        } else if (url.matches("apppubs:\\/\\/history_message[\\S]*")) {
-            ContainerActivity.startContainerActivity(mContext, HistoryFragment.class);
-        } else if (url.matches("apppubs:\\/\\/baol[\\S]*")) {
-            Intent intent = new Intent(mContext, BaoliaoActivity.class);
-            mContext.startActivity(intent);
-        } else if (url.matches("apppubs:\\/\\/user_account[\\S]*")) {
-            String userId = AppContext.getInstance(mContext).getCurrentUser().getUserId();
-            Intent intent = null;
-            if (userId != null && !userId.equals("")) {// 已登录
-                intent = new Intent(mContext, UserCenterActivity.class);
+                ContainerActivity.startContainerActivity(mContext, AddressBookFragement.class, args);
+            } else if (Constants.APPPUBS_PROTOCOL_TYPE_CHANNEL.equals(pro.getType())) {
+                String[] arr = StringUtils.getPathParams(url);
+                ChannelFragment cf = ChannelFragmentFactory.getChannelFragment(Integer.parseInt
+                        (arr[1]));
+                Bundle args = new Bundle();
+                args.putString(ChannelFragment.ARG_KEY, arr[2]);
+                String title = StringUtils.getQueryParameter(url, "title");
+                args.putString(ContainerActivity.EXTRA_STRING_TITLE, title);
+                ContainerActivity.startContainerActivity(mContext, cf.getClass(), args);
+            } else if (Constants.APPPUBS_PROTOCOL_TYPE_CHANNEL_GROUP.equals(pro.getType())) {
+                String[] arr = StringUtils.getPathParams(url);
+                ChannelsFragment frg = new ChannelsSlideFragment();
+                String title = StringUtils.getQueryParameter(url, "title");
+                Bundle args = new Bundle();
+                args.putString(ContainerActivity.EXTRA_STRING_TITLE, title);
+                args.putString(ChannelsFragment.ARGUMENT_NAME_CHANNELTYPEID, arr[1]);
+                ContainerActivity.startContainerActivity(mContext, frg.getClass(), args);
+            } else if (Constants.APPPUBS_PROTOCOL_TYPE_EMAIL.equals(pro.getType())) {
+                openEmailApp();
+            } else if (Constants.APPPUBS_PROTOCOL_TYPE_FAVORITE.equals(pro.getType())) {
+                CollectionFragment frg = new CollectionFragment();
+                ContainerActivity.startContainerActivity(mContext, frg.getClass());
+            } else if (Constants.APPPUBS_PROTOCOL_TYPE_HINT.equals(pro.getType())) {
+                String[] params = StringUtils.getPathParams(url);
+                if (params.length > 1) {
+                    Toast.makeText(mContext, params[1], Toast.LENGTH_LONG).show();
+                }
+            } else if (Constants.APPPUBS_PROTOCOL_TYPE_MESSAGE.equals(pro.getType())) {
+                ContainerActivity.startContainerActivity(mContext, ConversationListFragment.class);
+            } else if (Constants.APPPUBS_PROTOCOL_TYPE_MY_FILE.equals(pro.getType())) {
+                String title = StringUtils.getQueryParameter(url, "title");
+                Bundle args = new Bundle();
+                args.putString(ContainerActivity.EXTRA_STRING_TITLE, title);
+                ContainerActivity.startContainerActivity(mContext, MyFileFragment.class, args);
+            } else if (Constants.APPPUBS_PROTOCOL_TYPE_NEWSPAPER.equals(pro.getType())) {
+                ContainerActivity.startContainerActivity(mContext, PapersFragment.class, null);
+            } else if (Constants.APPPUBS_PROTOCOL_TYPE_PAGE.equals(pro.getType())) {
+                PageFragment pageF = new PageFragment();
+                String[] pathParams = StringUtils.getPathParams(url);
+                String titlebarFlag = StringUtils.getQueryParameter(url, "titlebar");
+                String title = StringUtils.getQueryParameter(url, "title");
+                Bundle args = new Bundle();
+                if (!TextUtils.isEmpty(titlebarFlag) && titlebarFlag.equals("0")) {
+                    args.putBoolean(ContainerActivity.EXTRA_BOOLEAN_IS_FULLSCREEN, true);
+                }
+                args.putString(PageFragment.EXTRA_STRING_NAME_PAGE_ID, pathParams[1]);
+                args.putString(ContainerActivity.EXTRA_STRING_TITLE, title);
+                ContainerActivity.startContainerActivity(mContext, pageF.getClass(), args);
+            } else if (Constants.APPPUBS_PROTOCOL_TYPE_QRCODE.equals(pro.getType())) {
+                Intent intent = new Intent(mContext, CaptureActivity.class);
+                mContext.startActivity(intent);
+            } else if (Constants.APPPUBS_PROTOCOL_TYPE_SERVICENO.startsWith(pro.getType())) {
+                String title = StringUtils.getQueryParameter(url, "title");
+                ContainerActivity.startFullScreenContainerActivity(mContext, ServiceNOsOfMineFragment
+                        .class, null, title);
+            } else if (Constants.APPPUBS_PROTOCOL_TYPE_USER_ACCOUNT.equals(pro.getType())) {
+                String userId = AppContext.getInstance(mContext).getCurrentUser().getUserId();
+                Intent intent = null;
+                if (userId != null && !userId.equals("")) {// 已登录
+                    intent = new Intent(mContext, UserCenterActivity.class);
+                } else {
+                    intent = new Intent(mContext, LoginActivity.class);
+                }
+                mContext.startActivity(intent);
+            } else if (Constants.APPPUBS_PROTOCOL_TYPE_TEL.equals(pro.getType())) {
+                String str[] = url.split(":");
+                final String uri = url;
+                final Context con = mContext;
+                new ConfirmDialog(mContext, new ConfirmDialog.ConfirmListener() {
+
+                    @Override
+                    public void onOkClick() {
+                        Intent intentCall = new Intent(android.content.Intent.ACTION_CALL);
+                        intentCall.setData(Uri.parse(uri));
+                        con.startActivity(intentCall);
+                    }
+
+                    @Override
+                    public void onCancelClick() {
+
+                    }
+                }, "确定拨号?", "电话：" + str[1], "放弃", "拨号").show();
             } else {
-                intent = new Intent(mContext, LoginActivity.class);
+                Toast.makeText(mContext, "请求地址(" + url + ")错误", Toast.LENGTH_SHORT).show();
             }
-            mContext.startActivity(intent);
-        } else if (url.startsWith("apppubs://qrcode")) {
-            Intent intent = new Intent(mContext, CaptureActivity.class);
-            mContext.startActivity(intent);
-        } else if (url.startsWith("apppubs://service_no")) {
-            String title = StringUtils.getQueryParameter(url, "title");
-            ContainerActivity.startFullScreenContainerActivity(mContext, ServiceNOsOfMineFragment
-                    .class, null, title);
-        } else if (url.startsWith("tel:")) {
-            String str[] = url.split(":");
-            final String uri = url;
-            final Context con = mContext;
-            new ConfirmDialog(mContext, new ConfirmDialog.ConfirmListener() {
-
-                @Override
-                public void onOkClick() {
-                    Intent intentCall = new Intent(android.content.Intent.ACTION_CALL);
-                    intentCall.setData(Uri.parse(uri));
-                    con.startActivity(intentCall);
-                }
-
-                @Override
-                public void onCancelClick() {
-
-                }
-            }, "确定拨号?", "电话：" + str[1], "放弃", "拨号").show();
-        } else if (url.startsWith("apppubs://hint")) {
-            String[] params = StringUtils.getPathParams(url);
-            if (params.length > 1) {
-                Toast.makeText(mContext, params[1], Toast.LENGTH_LONG).show();
-            }
-        } else if (url.startsWith("apppubs://myfile")) {
-            String title = StringUtils.getQueryParameter(url, "title");
-            Bundle args = new Bundle();
-            args.putString(ContainerActivity.EXTRA_STRING_TITLE, title);
-            ContainerActivity.startContainerActivity(mContext, MyFileFragment.class, args);
         } else if (url.startsWith("hxLink://")) {
             String username = AppContext.getInstance(mContext).getCurrentUser().getUsername();
             String password = AppContext.getInstance(mContext).getCurrentUser().getPassword();
@@ -209,8 +207,6 @@ public class ViewCourier {
             } catch (Exception e) {
                 Toast.makeText(mContext, "启动E-Link失败", Toast.LENGTH_LONG).show();
             }
-        } else if (url.equals(TMenuItem.MENU_URL_EMAIL) || url.startsWith("apppubs://email")) {
-            openEmailApp();
         } else {
             Toast.makeText(mContext, "请求地址(" + url + ")错误", Toast.LENGTH_SHORT).show();
         }

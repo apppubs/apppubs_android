@@ -1,6 +1,5 @@
 package com.apppubs.ui.webapp;
 
-import com.apppubs.presenter.VersionPresenter;
 import com.apppubs.jsbridge.BridgeWebView;
 import com.jelly.mango.MultiplexImage;
 
@@ -24,5 +23,5 @@ public interface IWebAppView {
 
     void showScanQRCode(boolean needSelfResolve);
 
-    VersionPresenter getVersionPresenter();
+    void checkUpdate();
 }
