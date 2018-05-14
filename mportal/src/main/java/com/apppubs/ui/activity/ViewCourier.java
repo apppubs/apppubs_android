@@ -13,7 +13,6 @@ import com.apppubs.AppContext;
 import com.apppubs.bean.TMenuItem;
 import com.apppubs.ui.fragment.CollectionFragment;
 import com.apppubs.ui.fragment.HistoryFragment;
-import com.apppubs.ui.fragment.MsgRecordListFragment;
 import com.apppubs.ui.fragment.ServiceNOsOfMineFragment;
 import com.apppubs.ui.fragment.SettingFragment;
 import com.apppubs.ui.fragment.TitleMenuFragment;
@@ -24,7 +23,6 @@ import com.apppubs.ui.news.ChannelFragment;
 import com.apppubs.ui.news.ChannelFragmentFactory;
 import com.apppubs.ui.news.ChannelsFragment;
 import com.apppubs.ui.news.ChannelsSlideFragment;
-import com.apppubs.ui.news.ChannelsSquareFragment;
 import com.apppubs.ui.news.NewsInfoBaseActivity;
 import com.apppubs.ui.page.PageFragment;
 import com.apppubs.ui.webapp.WebAppFragment;
@@ -104,13 +102,7 @@ public class ViewCourier {
             ContainerActivity.startContainerActivity(context, cf.getClass(), args);
         } else if (url.matches("apppubs://channelgroup/[^\\s]*")) {//频道组
             String[] arr = StringUtils.getPathParams(url);
-            String layout = StringUtils.getQueryParameter(url, "layout");
-            ChannelsFragment frg = null;
-            if (!"0".equals(layout)) {
-                frg = new ChannelsSquareFragment();
-            } else {
-                frg = new ChannelsSlideFragment();
-            }
+            ChannelsFragment frg = new ChannelsSlideFragment();
             String title = StringUtils.getQueryParameter(url, "title");
             Bundle args = new Bundle();
             args.putString(ContainerActivity.EXTRA_STRING_TITLE, title);

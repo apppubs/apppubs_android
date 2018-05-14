@@ -3,11 +3,6 @@ package com.apppubs.ui;
 import android.os.Bundle;
 
 import com.apppubs.ui.fragment.BaseFragment;
-import com.apppubs.ui.news.ChannelFragment;
-import com.apppubs.ui.news.ChannelFragmentFactory;
-import com.apppubs.ui.news.ChannelsFragment;
-import com.apppubs.ui.news.ChannelsSlideFragment;
-import com.apppubs.ui.news.ChannelsSquareFragment;
 import com.apppubs.ui.fragment.ExceptionFragment;
 import com.apppubs.ui.fragment.PapersFragment;
 import com.apppubs.ui.fragment.ServiceNOsOfMineFragment;
@@ -15,6 +10,10 @@ import com.apppubs.ui.fragment.SettingFragment;
 import com.apppubs.ui.message.fragment.AddressBookFragement;
 import com.apppubs.ui.message.fragment.ConversationListFragment;
 import com.apppubs.ui.myfile.MyFileFragment;
+import com.apppubs.ui.news.ChannelFragment;
+import com.apppubs.ui.news.ChannelFragmentFactory;
+import com.apppubs.ui.news.ChannelsFragment;
+import com.apppubs.ui.news.ChannelsSlideFragment;
 import com.apppubs.ui.page.PageFragment;
 import com.apppubs.ui.webapp.WebAppFragment;
 import com.apppubs.util.StringUtils;
@@ -28,14 +27,9 @@ public class FragmentFactory {
             Bundle args = new Bundle();
             args.putString(WebAppFragment.ARGUMENT_STRING_URL, uri);
             frg.setArguments(args);
-        } else if (uri.matches("apppubs://channelgroup/[0-9?&=a-zA-Z]*")) {//频道组
+        } else if (uri.matches("apppubs://channelgroup/[^\\s]*")) {//频道组
             String[] arr = StringUtils.getPathParams(uri);
-            String layout = StringUtils.getQueryParameter(uri, "layout");
-            if (!"0".equals(layout)) {
-                frg = new ChannelsSquareFragment();
-            } else {
-                frg = new ChannelsSlideFragment();
-            }
+            frg = new ChannelsSlideFragment();
             Bundle args = new Bundle();
             args.putString(ChannelsFragment.ARGUMENT_NAME_CHANNELTYPEID, arr[1]);
             frg.setArguments(args);

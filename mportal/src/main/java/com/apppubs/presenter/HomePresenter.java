@@ -39,11 +39,11 @@ public abstract class HomePresenter<T extends IHomeView> extends AbsPresenter<T>
         }
         if (mFragmentsMap.keySet().contains(uri)) {
             mView.changeContent(mFragmentsMap.get(uri));
-            return;
+        } else {
+            BaseFragment frg = FragmentFactory.getFragment(uri);
+            mFragmentsMap.put(uri, frg);
+            mView.changeContent(frg);
         }
-        BaseFragment frg = FragmentFactory.getFragment(uri);
-        mFragmentsMap.put(uri, frg);
-        mView.changeContent(frg);
     }
 
     private void showMenus() {

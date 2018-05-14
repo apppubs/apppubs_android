@@ -43,6 +43,7 @@ public abstract class ChannelFragment extends BaseFragment {
 		}
 		super.onCreate(savedInstanceState);
 		mNewsBiz = NewsBiz.getInstance(mContext);
+		mAdapter = null;
 	}
 	
 	public abstract void refresh();
@@ -50,7 +51,7 @@ public abstract class ChannelFragment extends BaseFragment {
 	
 	/**
 	 * 根据newsinfo的类型不同打开不同的正文activity
-	 * @param infoId
+	 * @param newsInfo
 	 */
 	protected void startInfoActivity(TNewsInfo newsInfo){
 		String type = newsInfo.getType();
