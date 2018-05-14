@@ -926,7 +926,7 @@ public class CustomViewAbove extends ViewGroup {
 	 * scrolling from a key event, just as if the event had been dispatched to
 	 * it by the view hierarchy.
 	 *
-	 * @param event The key event to execute.
+	 * @param event The key event to onMenuSelected.
 	 * @return Return true if the event was handled, else false.
 	 */
 	public boolean executeKeyEvent(KeyEvent event) {

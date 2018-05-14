@@ -6,47 +6,6 @@
     android:layout_height="match_parent"
     android:background="?attr/appSlideMenuBg" >
 
-    <RelativeLayout
-        android:id="@+id/menu_left_weather"
-        android:layout_width="wrap_content"
-        android:layout_height="70dp"
-        android:layout_alignParentTop="true"
-        android:layout_centerInParent="true"
-        android:layout_marginTop="20dp"
-        android:gravity="center"
-        android:onClick="onClick" >
-
-        <ImageView
-            android:id="@+id/menu_left_weather_pic"
-            android:layout_width="70dp"
-            android:layout_height="match_parent"
-            android:layout_centerVertical="true"
-            android:src="@drawable/biz_pc_plugin_weather_xiaoxue" />
-
-        <TextView
-            android:id="@+id/menu_left_weather_temp"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="3dp"
-            android:layout_marginTop="13dp"
-            android:layout_toRightOf="@id/menu_left_weather_pic"
-            android:text="1°/0°"
-            android:textColor="@android:color/white"
-            android:textSize="14sp" />
-
-        <TextView
-            android:id="@+id/menu_left_weather_cityname"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentBottom="true"
-            android:layout_marginBottom="13dp"
-            android:layout_marginLeft="3dp"
-            android:layout_toRightOf="@id/menu_left_weather_pic"
-            android:text="北京"
-            android:textColor="@android:color/white"
-            android:textSize="14dp" />
-    </RelativeLayout>
-
     <com.apppubs.ui.widget.ImageButton
         android:id="@+id/left_back_splash"
         android:layout_width="30dip"

@@ -91,7 +91,7 @@ import android.os.Process;
  *
  * <p>Once created, a task is executed very simply:</p>
  * <pre class="prettyprint">
- * new DownloadFilesTask().execute(url1, url2, url3);
+ * new DownloadFilesTask().onMenuSelected(url1, url2, url3);
  * </pre>
  *
  * <h2>AsyncTask's generic types</h2>
@@ -196,7 +196,7 @@ public abstract class AsyncTask<Params, Progress, Result> {
             new LinkedBlockingQueue<Runnable>(10);
 
     /**
-     * An {@link Executor} that can be used to execute tasks in parallel.
+     * An {@link Executor} that can be used to onMenuSelected tasks in parallel.
      */
     public static final Executor THREAD_POOL_EXECUTOR
             = new ThreadPoolExecutor(CORE_POOL_SIZE, MAXIMUM_POOL_SIZE, KEEP_ALIVE,
@@ -575,10 +575,10 @@ public abstract class AsyncTask<Params, Progress, Result> {
         if (mStatus != Status.PENDING) {
             switch (mStatus) {
                 case RUNNING:
-                    throw new IllegalStateException("Cannot execute task:"
+                    throw new IllegalStateException("Cannot onMenuSelected task:"
                             + " the task is already running.");
                 case FINISHED:
-                    throw new IllegalStateException("Cannot execute task:"
+                    throw new IllegalStateException("Cannot onMenuSelected task:"
                             + " the task has already been executed "
                             + "(a task can be executed only once)");
             }

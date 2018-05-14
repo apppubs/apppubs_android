@@ -333,7 +333,7 @@ public class ProgressWebView extends BridgeWebView {
 						@Override
 						protected void onPostExecute(String result) {
 							// mCurrentTask = new
-							// DownloadFileAsync().execute(result);
+							// DownloadFileAsync().onMenuSelected(result);
 							openFileWithUrl(result);
 						}
 
@@ -381,7 +381,7 @@ public class ProgressWebView extends BridgeWebView {
 
 					@Override
 					protected void onPostExecute(String result) {
-						// new DownloadFileAsync().execute(result);
+						// new DownloadFileAsync().onMenuSelected(result);
 						openFileWithUrl(result);
 					}
 
@@ -452,7 +452,7 @@ public class ProgressWebView extends BridgeWebView {
 				mContext.startActivity(skipIntent);
 				return true;
 			} else if(url.startsWith(Constants.CUSTOM_SCHEMA_APPPUBS+"://")){
-				ViewCourier.getInstance(mHostActivity).execute(mHostActivity, url);
+				mHostActivity.executeURL(url);
 				cancelNetworkError();
 				return true;
 			}else if (url.startsWith(BridgeUtil.YY_RETURN_DATA)) { // 如果是返回数据

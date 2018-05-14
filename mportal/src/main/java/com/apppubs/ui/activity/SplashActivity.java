@@ -16,6 +16,7 @@ import android.widget.ImageView.ScaleType;
 
 import com.apppubs.d20.R;
 import com.apppubs.bean.TStartUpPic;
+import com.bumptech.glide.Glide;
 import com.nostra13.universalimageloader.core.ImageLoader;
 
 /**
@@ -25,7 +26,6 @@ import com.nostra13.universalimageloader.core.ImageLoader;
  * 
  */
 public class SplashActivity extends BaseActivity{
-//	private ViewPager viewparge;
     private ImageView iv;
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -34,10 +34,7 @@ public class SplashActivity extends BaseActivity{
 		overridePendingTransition(R.anim.slide_in_from_left, R.anim.slide_out_to_right);
 		setContentView(R.layout.act_splash);
 		iv=(ImageView) findViewById(R.id.splash_iv);
-		
-		mImageLoader.displayImage(mAppContext.getApp().getStartUpPic(), iv);
-//		viewparge = (ViewPager) findViewById(R.id.spladh_viewparge);
-//		viewparge.setAdapter(new SplashPagerAdapter(getApplication()));
+		Glide.with(this).load(mAppContext.getApp().getStartUpPic()).into(iv);
 	}
      /**
       * 滑动关闭界面
@@ -79,56 +76,5 @@ public class SplashActivity extends BaseActivity{
 			super.onClick(v);
 			
 		}
-
-}
-
-class SplashPagerAdapter extends PagerAdapter {
-	List<ImageView> viewLists = new ArrayList<ImageView>();
-	private Context context;
-
-	public SplashPagerAdapter(Context contex) {
-		super();
-		context = contex;
-		viewLists = getViewLists();
-
-	}
-
-	private List<ImageView> getViewLists() {
-		// TODO Auto-generated method stub
-		List<ImageView> viewLists = new ArrayList<ImageView>();
-		TStartUpPic pic = TStartUpPic.find(TStartUpPic.class, null, null).get(0);
-		ImageView iv = new ImageView(context);
-		iv.setScaleType(ScaleType.CENTER_CROP);
-		ImageLoader.getInstance().displayImage(pic.getPicURL(), iv);
-		viewLists.add(iv);
-		return viewLists;
-	}
-
-	@Override
-	public int getCount() {
-		return viewLists.size();
-	}
-
-	@Override
-	public boolean isViewFromObject(View arg0, Object arg1) {
-		// TODO Auto-generated method stub
-		return arg0 == arg1;
-	}
-
-	// 销毁Item
-	@Override
-	public void destroyItem(ViewGroup view, int position, Object object) {
-		// TODO Auto-generated method stub
-		super.destroyItem(view, position, object);
-		((ViewPager) view).removeView(viewLists.get(position));
-	}
-
-	// 实例化Item
-	@Override
-	public Object instantiateItem(View view, int position) {
-		// TODO Auto-generated method stub
-		((ViewPager) view).addView(viewLists.get(position), 0);
-		return viewLists.get(position);
-	}
 
 }

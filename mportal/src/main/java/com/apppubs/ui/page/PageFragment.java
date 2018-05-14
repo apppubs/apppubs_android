@@ -53,7 +53,6 @@ import com.apppubs.presenter.PagePresenter;
 import com.apppubs.presenter.VersionPresenter;
 import com.apppubs.ui.IVersionView;
 import com.apppubs.ui.activity.BaseActivity;
-import com.apppubs.ui.activity.ViewCourier;
 import com.apppubs.ui.adapter.PageFragmentPagerAdapter;
 import com.apppubs.ui.fragment.BaseFragment;
 import com.apppubs.ui.fragment.TitleMenuFragment;
@@ -700,7 +699,7 @@ public class PageFragment extends TitleMenuFragment implements OnClickListener, 
         ll.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
-                ViewCourier.getInstance(mContext).execute(mContext, "apppubs://user_account");
+                executeURL("apppubs://user_account");
             }
         });
 
@@ -790,7 +789,7 @@ public class PageFragment extends TitleMenuFragment implements OnClickListener, 
 
             @Override
             public void onItemClick(int index, HotArea hotArea) {
-                resolveUrl(hotArea.getUrl());
+                executeURL(hotArea.getUrl());
             }
 
             @Override
@@ -872,9 +871,9 @@ public class PageFragment extends TitleMenuFragment implements OnClickListener, 
             public void onItemClick(int index, HotArea hotArea) {
                 System.out.println("PageFragment 点击热区 index:"+index);
                 if (!TextUtils.isEmpty(getUrlReplacement(hotArea.getUrl()))) {
-                    resolveUrl(convertUri(hotArea.getUrl()));
+                    executeURL(convertUri(hotArea.getUrl()));
                 } else {
-                    resolveUrl(hotArea.getUrl());
+                    executeURL(hotArea.getUrl());
                 }
             }
 
@@ -998,7 +997,7 @@ public class PageFragment extends TitleMenuFragment implements OnClickListener, 
         gridView.setOnItemClickListener(new PageGridView.OnItemClickListener() {
             @Override
             public void onItemClick(String action) {
-                resolveUrl(action);
+                executeURL(action);
             }
         });
         mContainerLl.addView(gridView, lp);
@@ -1102,7 +1101,7 @@ public class PageFragment extends TitleMenuFragment implements OnClickListener, 
 
             @Override
             public void onClick(int pos, SlidePicView.SlidePicItem item) {
-                resolveUrl(item.linkValue);
+                executeURL(item.linkValue);
             }
         });
         spv.setData(list);
@@ -1128,7 +1127,7 @@ public class PageFragment extends TitleMenuFragment implements OnClickListener, 
 
             @Override
             public void onClick(int pos, SlidePicView.SlidePicItem item) {
-                resolveUrl(item.linkValue);
+                executeURL(item.linkValue);
             }
         });
         spv.setData(list);
@@ -1232,8 +1231,8 @@ public class PageFragment extends TitleMenuFragment implements OnClickListener, 
             if (item.has("shape")) {
                 ha.setShape(item.getString("shape"));
             }
-            if (item.has("url")) {
-                ha.setUrl(item.getString("url"));
+            if (item.has("URL")) {
+                ha.setUrl(item.getString("URL"));
             }
             if (item.has("coords")) {
                 ha.setCoords(item.getString("coords"));
@@ -1398,11 +1397,11 @@ public class PageFragment extends TitleMenuFragment implements OnClickListener, 
     @Override
     public void onClick(View v) {
         String tag = (String) v.getTag();
-        resolveUrl(tag);
+        executeURL(tag);
     }
 
     //解析url
-    private void resolveUrl(String url) {
+    private void executeURL(String url) {
         if (TextUtils.isEmpty(url)) {
             return;
         }
@@ -1419,7 +1418,7 @@ public class PageFragment extends TitleMenuFragment implements OnClickListener, 
         } else if (url.startsWith("apppubs://checkversion")) {
             mVersionPrsenter.checkUpdate();
         } else {
-            ViewCourier.getInstance(mHostActivity).execute(mHostActivity, url);
+            mHostActivity.executeURL(url);
         }
     }
 

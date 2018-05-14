@@ -353,7 +353,7 @@ public class WebAppFragment extends TitleBarFragment implements OnClickListener,
         mWebView.registerHandler("openWindow", new BridgeHandler() {
             @Override
             public void handler(String data, CallBackFunction function) {
-                ViewCourier.getInstance(mHostActivity).execute(mHostActivity, data);
+                mHostActivity.executeURL(data);
                 function.onCallBack("请求结束");
             }
         });

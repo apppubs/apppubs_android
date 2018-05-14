@@ -9,4 +9,5 @@ import com.apppubs.ui.widget.commonlist.CommonListView;
 import java.util.List;
 
 public interface IHomeSlideMenuView extends IHomeView {
+    void hideMenu();
 }

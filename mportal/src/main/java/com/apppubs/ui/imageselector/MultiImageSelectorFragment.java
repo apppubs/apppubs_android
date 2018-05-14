@@ -397,7 +397,7 @@ public class MultiImageSelectorFragment extends Fragment {
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         // 首次加载所有图片
-        //new LoadImageTask().execute();
+        //new LoadImageTask().onMenuSelected();
         getActivity().getSupportLoaderManager().initLoader(LOADER_ALL, null, mLoaderCallback);
     }
 

@@ -4,17 +4,6 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical" >
-
-    <com.apppubs.ui.widget.TitleBar
-        android:id="@+id/home_tb"
-        android:layout_width="match_parent"
-        android:layout_height="@dimen/title_height"
-        android:background="?attr/appDefaultColor"
-        mportal:leftImgSrc="@drawable/menu_left"
-        mportal:rightTextSize="@dimen/title_text_left_right"
-        mportal:titleSize="@dimen/title_text_size" >
-    </com.apppubs.ui.widget.TitleBar>
-
     <FrameLayout
         android:id="@+id/home_container_fgm"
         android:layout_width="match_parent"

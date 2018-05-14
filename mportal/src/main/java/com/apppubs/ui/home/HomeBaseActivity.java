@@ -23,7 +23,6 @@ import com.apppubs.model.IAPCallback;
 import com.apppubs.model.SystemBiz;
 import com.apppubs.presenter.HomeBottomPresenter;
 import com.apppubs.presenter.HomePresenter;
-import com.apppubs.service.DownloadAppService;
 import com.apppubs.ui.activity.BaseActivity;
 import com.apppubs.ui.activity.CompelMessageDialogActivity;
 import com.apppubs.ui.activity.FirstLoginActity;
@@ -41,352 +40,344 @@ import java.util.List;
 import cn.jpush.android.api.JPushInterface;
 import io.rong.imkit.RongIM;
 
-public abstract class HomeBaseActivity extends BaseActivity implements IHomeView{
+public abstract class HomeBaseActivity extends BaseActivity implements IHomeView {
 
-	public static String MPORTAL_PREFERENCE_NAME = "mportal_preference";
-	public static String MPORTAL_PREFERENCE_APP_RUNNING_KEY = "is_app_running";
+    public static String MPORTAL_PREFERENCE_NAME = "mportal_preference";
+    public static String MPORTAL_PREFERENCE_APP_RUNNING_KEY = "is_app_running";
 
-	/**
-	 * 应用主目录
-	 */
-	protected List<TMenuItem> mPrimaryMenuList;
-	/**
-	 * 应用次目录
-	 */
-	protected static ArrayList<Weather> mWeathers;
-	protected List<TMenuItem> mSecondaryMenuList;
-	protected ViewCourier mViewCourier;// 视图控制器
-	protected MportalApplication mApp;
+    /**
+     * 应用主目录
+     */
+    protected List<TMenuItem> mPrimaryMenuList;
+    /**
+     * 应用次目录
+     */
+    protected static ArrayList<Weather> mWeathers;
+    protected List<TMenuItem> mSecondaryMenuList;
+    protected ViewCourier mViewCourier;// 视图控制器
+    protected MportalApplication mApp;
 
-	private BroadcastReceiver mLogoutBR;
+    private BroadcastReceiver mLogoutBR;
 
-	protected void onCreate(android.os.Bundle arg0) {
-		super.onCreate(arg0);
-		setNeedTitleBar(false);//主页面activity没有titlebar，titlebar由其包含的fragment负责渲染
-		overridePendingTransition(R.anim.abc_fade_in, R.anim.abc_fade_out);
-		//检测是否需要登录而且是否登录
-		if(mAppContext.getApp().getLoginFlag()!=App.LOGIN_INAPP&&TextUtils.isEmpty(mAppContext.getCurrentUser().getUserId())){
-			//跳转到登录界面
-			BaseActivity.startActivity(mContext, FirstLoginActity.class);
-			finish();
-		}
+    protected void onCreate(android.os.Bundle arg0) {
+        super.onCreate(arg0);
+        setNeedTitleBar(false);//主页面activity没有titlebar，titlebar由其包含的fragment负责渲染
+        overridePendingTransition(R.anim.abc_fade_in, R.anim.abc_fade_out);
+        //检测是否需要登录而且是否登录
+        if (mAppContext.getApp().getLoginFlag() != App.LOGIN_INAPP && TextUtils.isEmpty(mAppContext.getCurrentUser()
+                .getUserId())) {
+            //跳转到登录界面
+            BaseActivity.startActivity(mContext, FirstLoginActity.class);
+            finish();
+        }
 
-		LogM.log(this.getClass(), " HomeActivity onCreate");
-		if (AppContext.getInstance(mContext).getCurrentUser().getMenuPower() != null) {
-			String menuPower = AppContext.getInstance(mContext).getCurrentUser().getMenuPower();
-			String[] menus = menuPower.split(",");
-			String sqlParam = "";
-			for (int i = -1; ++i < menus.length; ) {
-				if (i != 0) {
-					sqlParam += ",";
-				}
-				sqlParam += "'" + menus[i] + "'";
-			}
-			mPrimaryMenuList = SugarRecord.find(TMenuItem.class, "LOCATION=? and (PROTECTED_FLAG = 0 or ID in (" + sqlParam + "))",
+        LogM.log(this.getClass(), " HomeActivity onCreate");
+        if (AppContext.getInstance(mContext).getCurrentUser().getMenuPower() != null) {
+            String menuPower = AppContext.getInstance(mContext).getCurrentUser().getMenuPower();
+            String[] menus = menuPower.split(",");
+            String sqlParam = "";
+            for (int i = -1; ++i < menus.length; ) {
+                if (i != 0) {
+                    sqlParam += ",";
+                }
+                sqlParam += "'" + menus[i] + "'";
+            }
+            mPrimaryMenuList = SugarRecord.find(TMenuItem.class, "LOCATION=? and (PROTECTED_FLAG = 0 or ID in (" +
+                            sqlParam + "))",
                     new String[]{TMenuItem.MENU_LOCATION_PRIMARY + ""}, null,
                     "SORT_ID", null);
-		} else {
+        } else {
 
-			mPrimaryMenuList = SugarRecord.find(TMenuItem.class, "LOCATION=? and PROTECTED_FLAG = 0",
-					new String[]{TMenuItem.MENU_LOCATION_PRIMARY + ""}, null, "SORT_ID", null);
-		}
-		mSecondaryMenuList = SugarRecord.find(TMenuItem.class, "LOCATION=?",
-				new String[]{TMenuItem.MENU_LOCATION_SECONDARY + ""}, null, "SORT_ID", null);
-		mApp = (MportalApplication) this.getApplication();
-		mViewCourier = ViewCourier.getInstance(this);
+            mPrimaryMenuList = SugarRecord.find(TMenuItem.class, "LOCATION=? and PROTECTED_FLAG = 0",
+                    new String[]{TMenuItem.MENU_LOCATION_PRIMARY + ""}, null, "SORT_ID", null);
+        }
+        mSecondaryMenuList = SugarRecord.find(TMenuItem.class, "LOCATION=?",
+                new String[]{TMenuItem.MENU_LOCATION_SECONDARY + ""}, null, "SORT_ID", null);
+        mApp = (MportalApplication) this.getApplication();
+        mViewCourier = ViewCourier.getInstance(this);
 
-		if (mAppContext.getAppConfig().getChatFlag().equals("1")) {
-			mMsgBussiness.loginRC(new IAPCallback() {
-				@Override
-				public void onDone(Object obj) {
-					System.out.println("融云登录成功！");
-				}
+        if (mAppContext.getAppConfig().getChatFlag().equals("1")) {
+            mMsgBussiness.loginRC(new IAPCallback() {
+                @Override
+                public void onDone(Object obj) {
+                    System.out.println("融云登录成功！");
+                }
 
-				@Override
-				public void onException(APError error) {
-					onError(error);
-				}
-			});
-		}
+                @Override
+                public void onException(APError error) {
+                    onError(error);
+                }
+            });
+        }
 
-		initBroadcastReceiver();
+        initBroadcastReceiver();
 
-		SharedPreferenceUtils.getInstance(this).putBoolean(MPORTAL_PREFERENCE_NAME, MPORTAL_PREFERENCE_APP_RUNNING_KEY, true);
+        SharedPreferenceUtils.getInstance(this).putBoolean(MPORTAL_PREFERENCE_NAME,
+                MPORTAL_PREFERENCE_APP_RUNNING_KEY, true);
 
-		commitRegisterId();
-	}
+        commitRegisterId();
+    }
 
-	private void commitRegisterId(){
-		final String registerId = JPushInterface.getRegistrationID(mContext);
-		if (Utils.isEmpty(registerId)){
-			LogM.log(HomeBottomPresenter.class, "fail 极光注册提交失败id：注册id为空! ");
-			return;
-		}
-		SystemBiz biz = SystemBiz.getInstance(mContext);
-		biz.commitPushRegisterId(registerId, new IAPCallback() {
-			@Override
-			public void onDone(Object obj) {
-				LogM.log(HomeBottomPresenter.class, "success 成功提交极光注册register id： "+registerId);
-			}
+    private void commitRegisterId() {
+        final String registerId = JPushInterface.getRegistrationID(mContext);
+        if (Utils.isEmpty(registerId)) {
+            LogM.log(HomeBottomPresenter.class, "fail 极光注册提交失败id：注册id为空! ");
+            return;
+        }
+        SystemBiz biz = SystemBiz.getInstance(mContext);
+        biz.commitPushRegisterId(registerId, new IAPCallback() {
+            @Override
+            public void onDone(Object obj) {
+                LogM.log(HomeBottomPresenter.class, "success 成功提交极光注册register id： " + registerId);
+            }
 
-			@Override
-			public void onException(APError error) {
-				LogM.log(HomeBottomPresenter.class, "fail 极光注册提交失败id： "+registerId);
-			}
-		});
-	}
+            @Override
+            public void onException(APError error) {
+                LogM.log(HomeBottomPresenter.class, "fail 极光注册提交失败id： " + registerId);
+            }
+        });
+    }
 
-	private void initBroadcastReceiver() {
-		mLogoutBR = new BroadcastReceiver() {
+    private void initBroadcastReceiver() {
+        mLogoutBR = new BroadcastReceiver() {
 
-			@Override
-			public void onReceive(Context arg0, Intent arg1) {
-				logout();
-			}
-		};
-		registerReceiver(mLogoutBR, new IntentFilter(Actions.ACTION_LOGOUT));
-	}
+            @Override
+            public void onReceive(Context arg0, Intent arg1) {
+                skip2Login();
+            }
+        };
+        registerReceiver(mLogoutBR, new IntentFilter(Actions.ACTION_LOGOUT));
+    }
 
-	protected abstract HomePresenter getPresenter();
-	/**
-	 * 天气信息(系统静态变量)
-	 */
-	public static void refreshWether(Context context, ArrayList<Weather> weathers) {
-		mWeathers = weathers;
-		FileUtils.writeObj(context, weathers, "weathers.cfg");
-	}
+    protected abstract HomePresenter getPresenter();
 
-	protected abstract void setUnreadNumForMenu(String menuId, int num);
+    /**
+     * 天气信息(系统静态变量)
+     */
+    public static void refreshWether(Context context, ArrayList<Weather> weathers) {
+        mWeathers = weathers;
+        FileUtils.writeObj(context, weathers, "weathers.cfg");
+    }
 
-	@Override
-	protected void onResume() {
-		super.onResume();
-		JPushInterface.onResume(this);
-		//检测是否需要登录而且是否登录
-		if (mAppContext.getApp().getLoginFlag() != App.LOGIN_INAPP && TextUtils.isEmpty
-				(mAppContext.getCurrentUser().getUserId())) {
-			//跳转到登录界面
-			Intent intent = new Intent(this, FirstLoginActity.class);
-			startActivity(intent);
-			finish();
-		}
-		String paddingUrl = mAppContext.getApp().getPaddingUrlOnHomeActivityStartUp();
-		if (!TextUtils.isEmpty(paddingUrl)) {
-			mAppContext.getApp().setPaddingUrlOnHomeActivityStartUp(null);
-			if (paddingUrl.startsWith("apppubs://message")){
-				for (TMenuItem mi:mPrimaryMenuList){
-					if (mi.getUrl().startsWith("apppubs://message")){
-						getPresenter().execute(mi.getUrl());
-						break;
-					}
-				}
-			}else{
-				ViewCourier.getInstance(mContext).execute(mContext, paddingUrl);
-			}
-		}
+    protected abstract void setUnreadNumForMenu(String menuId, int num);
 
-		showCompelMessageIfHave();
-	}
+    @Override
+    protected void onResume() {
+        super.onResume();
+        JPushInterface.onResume(this);
+        //检测是否需要登录而且是否登录
+        if (mAppContext.getApp().getLoginFlag() != App.LOGIN_INAPP && TextUtils.isEmpty
+                (mAppContext.getCurrentUser().getUserId())) {
+            //跳转到登录界面
+            Intent intent = new Intent(this, FirstLoginActity.class);
+            startActivity(intent);
+            finish();
+        }
+        String paddingUrl = mAppContext.getApp().getPaddingUrlOnHomeActivityStartUp();
+        if (!TextUtils.isEmpty(paddingUrl)) {
+            mAppContext.getApp().setPaddingUrlOnHomeActivityStartUp(null);
+            if (paddingUrl.startsWith("apppubs://message")) {
+                for (TMenuItem mi : mPrimaryMenuList) {
+                    if (mi.getUrl().startsWith("apppubs://message")) {
+                        getPresenter().onMenuSelected(mi.getUrl());
+                        break;
+                    }
+                }
+            } else {
+                executeURL(paddingUrl);
+            }
+        }
 
-	public void showCompelMessageIfHave() {
+        showCompelMessageIfHave();
+    }
 
-		mSystemBiz.loadCompelReadMessage(new IAPCallback<List<CompelReadMessageModel>>() {
-			@Override
-			public void onDone(List<CompelReadMessageModel> models) {
-				if (Utils.isEmpty(models)){
-					return;
-				}
-				ArrayList<CompelReadMessageModel> serializableList = new ArrayList<CompelReadMessageModel>(models);
-				Intent i = new Intent(mContext, CompelMessageDialogActivity.class);
-				i.putExtra(CompelMessageDialogActivity.EXTRA_DATAS, serializableList);
-				mContext.startActivity(i);
-			}
+    public void showCompelMessageIfHave() {
 
-			@Override
-			public void onException(APError error) {
+        mSystemBiz.loadCompelReadMessage(new IAPCallback<List<CompelReadMessageModel>>() {
+            @Override
+            public void onDone(List<CompelReadMessageModel> models) {
+                if (Utils.isEmpty(models)) {
+                    return;
+                }
+                ArrayList<CompelReadMessageModel> serializableList = new ArrayList<CompelReadMessageModel>(models);
+                Intent i = new Intent(mContext, CompelMessageDialogActivity.class);
+                i.putExtra(CompelMessageDialogActivity.EXTRA_DATAS, serializableList);
+                mContext.startActivity(i);
+            }
 
-			}
-		});
-	}
+            @Override
+            public void onException(APError error) {
 
-	@Override
-	protected void onNewIntent(Intent intent) {
-		super.onNewIntent(intent);
-	}
+            }
+        });
+    }
 
-	public ViewCourier getViewController() {
-		return mViewCourier;
-	}
+    @Override
+    protected void onNewIntent(Intent intent) {
+        super.onNewIntent(intent);
+    }
 
-	@Override
-	public void onClick(View v) {
+    public ViewCourier getViewController() {
+        return mViewCourier;
+    }
 
-	}
+    @Override
+    public void onClick(View v) {
 
-	public List<TMenuItem> getPrimaryMenuList() {
-		return mPrimaryMenuList;
-	}
+    }
 
-	public List<TMenuItem> getSecondaryMenuList() {
-		return mSecondaryMenuList;
-	}
+    @Override
+    public void finish() {
+        LogM.log(this.getClass(), "关闭应用");
+        super.finish();
+        // 发广播关闭下载服务
+        Intent closeService = new Intent("com.apppubs.d20.stopdownload");
+        sendBroadcast(closeService);
+    }
 
-	@Override
-	public void finish() {
-		LogM.log(this.getClass(), "关闭应用");
-		super.finish();
-		// 发广播关闭下载服务
-		Intent closeService = new Intent("com.apppubs.d20.stopdownload");
-		sendBroadcast(closeService);
-		stopService(new Intent(HomeBaseActivity.this, DownloadAppService.class));
-	}
+    public static void startHomeActivity(Context fromActivy) {
 
+        LogM.log(Class.class, "startHomeActivity-->启动主界面");
 
-	public static void startHomeActivity(Context fromActivy) {
+        Intent intent = null;
+        AppContext appContext = AppContext.getInstance(fromActivy);
+        if (appContext.getApp().getLoginFlag() != App.LOGIN_INAPP) {
+            UserInfo currentUser = AppContext.getInstance(fromActivy).getCurrentUser();
 
-		LogM.log(Class.class, "startHomeActivity-->启动主界面");
+            int layout = AppContext.getInstance(fromActivy).getApp().getLayoutLocalScheme();
 
-		Intent intent = null;
-		AppContext appContext = AppContext.getInstance(fromActivy);
-		if (appContext.getApp().getLoginFlag()!=App.LOGIN_INAPP){
-			UserInfo currentUser = AppContext.getInstance(fromActivy).getCurrentUser();
+            if (currentUser == null || TextUtils.isEmpty(currentUser.getUserId())) {
+                intent = new Intent(fromActivy, FirstLoginActity.class);
+            } else {
+                if (layout == App.STYLE_SLIDE_MENU) {
+                    intent = new Intent(fromActivy, HomeSlideMenuActivity.class);
+                } else {
+                    intent = new Intent(fromActivy, HomeBottomMenuActivity.class);
+                }
+            }
+        } else {
+            int layout = AppContext.getInstance(fromActivy).getApp().getLayoutLocalScheme();
+            if (layout == App.STYLE_SLIDE_MENU) {
+                intent = new Intent(fromActivy, HomeSlideMenuActivity.class);
+            } else {
+                intent = new Intent(fromActivy, HomeBottomMenuActivity.class);
+            }
+        }
+        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        fromActivy.startActivity(intent);
+    }
 
-			int layout = AppContext.getInstance(fromActivy).getApp().getLayoutLocalScheme();
+    @Override
+    protected void onPause() {
+        super.onPause();
+        JPushInterface.onPause(this);
+    }
 
-			if (isNeedLogin(appContext)){
-				intent = new Intent(fromActivy,FirstLoginActity.class);
-			}else{
-				if (layout == App.STYLE_SLIDE_MENU) {
-					intent = new Intent(fromActivy, HomeSlideMenuActivity.class);
-				} else {
-					intent = new Intent(fromActivy, HomeBottomMenuActivity.class);
-				}
-			}
-		}else{
-			int layout = AppContext.getInstance(fromActivy).getApp().getLayoutLocalScheme();
-			if (layout == App.STYLE_SLIDE_MENU) {
-				intent = new Intent(fromActivy, HomeSlideMenuActivity.class);
-			} else {
-				intent = new Intent(fromActivy, HomeBottomMenuActivity.class);
-			}
-		}
-		intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK|Intent.FLAG_ACTIVITY_CLEAR_TOP);
-		fromActivy.startActivity(intent);
-	}
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        SharedPreferenceUtils.getInstance(this).putBoolean(MPORTAL_PREFERENCE_NAME,
+                MPORTAL_PREFERENCE_APP_RUNNING_KEY, false);
+        unregisterReceiver(mLogoutBR);
+        AppManager.getInstance(this).destroy();
 
-	private static boolean isNeedLogin(AppContext context) {
-		return context.getCurrentUser()==null|| TextUtils.isEmpty(context.getCurrentUser().getUserId());
-	}
+        //如果是用户名密码登录，没有自动登录时候清空用户信息
+        if (mAppContext.getApp().getLoginFlag() == App.LOGIN_ONSTART_USE_USERNAME_PASSWORD && !mAppContext
+                .getSettings().isAllowAutoLogin()) {
+            mAppContext.clearCurrentUser();
+        }
+    }
 
-	@Override
-	protected void onPause() {
-		super.onPause();
-		JPushInterface.onPause(this);
-	}
+    private long lastClickTime = 0;
 
-	@Override
-	protected void onDestroy() {
-		super.onDestroy();
-		SharedPreferenceUtils.getInstance(this).putBoolean(MPORTAL_PREFERENCE_NAME, MPORTAL_PREFERENCE_APP_RUNNING_KEY, false);
-		unregisterReceiver(mLogoutBR);
-		AppManager.getInstance(this).destroy();
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        if (event.getAction() == KeyEvent.ACTION_DOWN && keyCode == KeyEvent.KEYCODE_BACK) {
+            long curClickTime = System.currentTimeMillis();
+            if (curClickTime - lastClickTime < 1000) {
+                HomeBaseActivity.super.finish();
+                overridePendingTransition(R.anim.abc_fade_in, R.anim.abc_fade_out);
+                Intent closeI = new Intent(Actions.CLOSE_ALL_ACTIVITY);
+                sendBroadcast(closeI);
+                RongIM.getInstance().disconnect();
+            } else {
+                lastClickTime = curClickTime;
+                Toast.makeText(HomeBaseActivity.this, "再按一次退出", Toast.LENGTH_SHORT).show();
+            }
+            // exit();
+            return true;
+        }
+        return super.onKeyDown(keyCode, event);
+    }
 
-		//如果是用户名密码登录，没有自动登录时候清空用户信息
-		if(mAppContext.getApp().getLoginFlag()==App.LOGIN_ONSTART_USE_USERNAME_PASSWORD&&!mAppContext.getSettings().isAllowAutoLogin()){
-			mAppContext.clearCurrentUser();
-		}
-	}
+    public List<Weather> getWeatherList() {
+        return mWeathers;
+    }
 
-	private long lastClickTime = 0;
+    public void skip2Login() {
+        AppContext.getInstance(mContext).setCurrentUser(new UserInfo());
+        if (mAppContext.getApp().getLoginFlag() == App.LOGIN_ONSTART_USE_USERNAME_PASSWORD || mAppContext.getApp().getLoginFlag() == App.LOGIN_ONSTART_USE_USERNAME_PASSWORD_ORGCODE) {
+            Intent closeI = new Intent(Actions.CLOSE_ALL_ACTIVITY);
+            sendBroadcast(closeI);
+            Intent intent = new Intent(this, FirstLoginActity.class);
+            startActivity(intent);
 
-	@Override
-	public boolean onKeyDown(int keyCode, KeyEvent event) {
-		if (event.getAction() == KeyEvent.ACTION_DOWN && keyCode == KeyEvent.KEYCODE_BACK) {
-			long curClickTime = System.currentTimeMillis();
-			if (curClickTime - lastClickTime < 1000) {
-				HomeBaseActivity.super.finish();
-				overridePendingTransition(R.anim.abc_fade_in, R.anim.abc_fade_out);
-				Intent closeI = new Intent(Actions.CLOSE_ALL_ACTIVITY);
-				sendBroadcast(closeI);
-				RongIM.getInstance().disconnect();
-			} else {
-				lastClickTime = curClickTime;
-				Toast.makeText(HomeBaseActivity.this, "再按一次退出", Toast.LENGTH_SHORT).show();
-			}
-			// exit();
-			return true;
-		}
-		return super.onKeyDown(keyCode, event);
-	}
+        } else if (mAppContext.getApp().getLoginFlag() == App.LOGIN_ONSTART_USE_USERNAME) {
+            Intent closeI = new Intent(Actions.CLOSE_ALL_ACTIVITY);
+            sendBroadcast(closeI);
+            Intent intent = new Intent(this, FirstLoginActity.class);
+            startActivity(intent);
 
-	public List<Weather> getWeatherList() {
-		return mWeathers;
-	}
+        } else if (mAppContext.getApp().getLoginFlag() == App.LOGIN_ONSTART_USE_PHONE_NUMBER) {
+            Intent closeI = new Intent(Actions.CLOSE_ALL_ACTIVITY);
+            sendBroadcast(closeI);
+            Intent intent = new Intent(this, FirstLoginActity.class);
+            startActivity(intent);
+        } else {
+        }
+    }
 
-	public void logout() {
-		AppContext.getInstance(mContext).setCurrentUser(new UserInfo());
-		if (mAppContext.getApp().getLoginFlag() == App.LOGIN_ONSTART_USE_USERNAME_PASSWORD || mAppContext.getApp().getLoginFlag() == App.LOGIN_ONSTART_USE_USERNAME_PASSWORD_ORGCODE) {
-			Intent closeI = new Intent(Actions.CLOSE_ALL_ACTIVITY);
-			sendBroadcast(closeI);
-			Intent intent = new Intent(this, FirstLoginActity.class);
-			startActivity(intent);
+    public void selectMessageFragment() {
+        for (int i = -1; ++i < mPrimaryMenuList.size(); ) {
+            TMenuItem mi = mPrimaryMenuList.get(i);
+            if (mi.getUrl().contains("apppubs://message")) {
+                selectTab(i);
+            }
+        }
+    }
 
-		} else if (mAppContext.getApp().getLoginFlag() == App.LOGIN_ONSTART_USE_USERNAME) {
-			Intent closeI = new Intent(Actions.CLOSE_ALL_ACTIVITY);
-			sendBroadcast(closeI);
-			Intent intent = new Intent(this, FirstLoginActity.class);
-			startActivity(intent);
+    protected abstract void selectTab(int index);
 
-		} else if (mAppContext.getApp().getLoginFlag() == App.LOGIN_ONSTART_USE_PHONE_NUMBER) {
-			Intent closeI = new Intent(Actions.CLOSE_ALL_ACTIVITY);
-			sendBroadcast(closeI);
-			Intent intent = new Intent(this, FirstLoginActity.class);
-			startActivity(intent);
-		} else {
-		}
-	}
+    @Override
+    public void changeContent(BaseFragment frg) {
 
-	public void selectMessageFragment() {
-		for (int i = -1; ++i < mPrimaryMenuList.size(); ) {
-			TMenuItem mi = mPrimaryMenuList.get(i);
-			if (mi.getUrl().contains("apppubs://message")) {
-				selectTab(i);
-			}
-		}
-	}
+    }
 
-	protected abstract void selectTab(int index);
+    @Override
+    public abstract void setMenus(List<TMenuItem> menus);
 
-	@Override
-	public void changeContent(BaseFragment frg) {
+    @Override
+    public void showLoading() {
 
-	}
+    }
 
-	@Override
-	public abstract void setMenus(List<TMenuItem> menus);
+    @Override
+    public void hideLoading() {
 
-	@Override
-	public void showLoading() {
+    }
 
-	}
+    @Override
+    public void onError(APError error) {
+        mErrorHandler.onError(error);
+    }
 
-	@Override
-	public void hideLoading() {
+    @Override
+    public void showEmptyView() {
 
-	}
+    }
 
-	@Override
-	public void onError(APError error) {
-		mErrorHandler.onError(error);
-	}
+    @Override
+    public void hideEmptyView() {
 
-	@Override
-	public void showEmptyView() {
-
-	}
-
-	@Override
-	public void hideEmptyView() {
-
-	}
+    }
 }

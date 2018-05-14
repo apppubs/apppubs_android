@@ -93,19 +93,19 @@ public class ContainerActivity<T> extends BaseActivity {
      */
 
     public static void startContainerActivity(Context context, Class<? extends BaseFragment>
-			frgClass, boolean isFullScreen) {
+            frgClass, boolean isFullScreen) {
         Bundle args = new Bundle();
         args.putBoolean(EXTRA_BOOLEAN_IS_FULLSCREEN, isFullScreen);
         startContainerActivity(context, frgClass, args, null);
     }
 
     public static void startContainerActivity(Context context, Class<? extends BaseFragment>
-			frgClass) {
+            frgClass) {
         startContainerActivity(context, frgClass, null, null);
     }
 
     public static void startContainerActivity(Context context, Class<? extends BaseFragment>
-			frgClass, Bundle extras) {
+            frgClass, Bundle extras) {
         startContainerActivity(context, frgClass, extras, null);
     }
 
@@ -118,8 +118,7 @@ public class ContainerActivity<T> extends BaseActivity {
      * @param title
      */
     public static void startContainerActivity(Context context, Class<? extends BaseFragment>
-			frgClass, Bundle extras,
-                                              String title) {
+            frgClass, Bundle extras, String title) {
         Intent i = new Intent(context, ContainerActivity.class);
         i.putExtra(EXTRA_FRAGMENT_CLASS_NAME, frgClass.getName());
 
@@ -135,7 +134,7 @@ public class ContainerActivity<T> extends BaseActivity {
     }
 
     public static void startFullScreenContainerActivity(Context context, Class<? extends
-			BaseFragment> frgClass, Bundle extras,
+            BaseFragment> frgClass, Bundle extras,
                                                         String title) {
         Intent i = new Intent(context, ContainerActivity.class);
         i.putExtra(EXTRA_FRAGMENT_CLASS_NAME, frgClass.getName());

@@ -15,7 +15,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.apppubs.bean.TMenuItem;
-import com.apppubs.constant.APError;
 import com.apppubs.d20.R;
 import com.apppubs.constant.Actions;
 import com.apppubs.presenter.HomeBottomPresenter;
@@ -139,7 +138,7 @@ public class HomeBottomMenuActivity extends HomeBaseActivity implements IHomeBot
             return;
         }
 //		TMenuItem mi = miArr[position];
-        mPresenter.execute(mi.getUrl());
+        mPresenter.onMenuSelected(mi.getUrl());
 
         ImageView ivC = (ImageView) mMenuBar.getChildAt(mCurPos).findViewById(R.id.menu_buttom_iv);
         ivC.setColorFilter(mMenuBarBtnDefaultColor, Mode.SRC_ATOP);

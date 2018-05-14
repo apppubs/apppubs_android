@@ -284,7 +284,7 @@ public class WebUtils {
 		 * // 编码方式为HTTP.UTF_8) hp.setEntity(new UrlEncodedFormEntity(parameters,
 		 * HTTP.UTF_8)); // 告知服务器端解码 hp.setHeader("Content-Type",
 		 * "application/x-www-form-urlencoded; charset=utf-8"); HttpResponse hr
-		 * = hc.execute(hp); String data = EntityUtils.toString(hr.getEntity(),
+		 * = hc.onMenuSelected(hp); String data = EntityUtils.toString(hr.getEntity(),
 		 * "utf-8");
 		 */
 		try {

@@ -417,7 +417,7 @@ public class SystemBiz extends BaseBiz {
                  * UrlEncodedFormEntity(parameters, HTTP.UTF_8)); // 告知服务器端解码
                  * hp.setHeader("Content-Type",
                  * "application/x-www-form-urlencoded; charset=utf-8");
-                 * HttpResponse hr = hc.execute(hp); String data =
+                 * HttpResponse hr = hc.onMenuSelected(hp); String data =
                  * EntityUtils.toString(hr.getEntity(), "utf-8");
                  */
                 try {

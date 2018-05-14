@@ -28,7 +28,7 @@ public abstract class HomePresenter<T extends IHomeView> extends AbsPresenter<T>
         mFragmentsMap = new HashMap<>();
     }
 
-    public void execute(String uri) {
+    public void onMenuSelected(String uri) {
         changeContent(uri);
     }
 

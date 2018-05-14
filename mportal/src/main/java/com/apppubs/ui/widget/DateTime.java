@@ -352,7 +352,7 @@ public class DateTime extends ScrollView {
 //							mclickday = Utils.getFormatData(Dtime, ((TextView) v).getText().toString());
 							dateclecksp.edit().putString("clickday", mclickday)
 									.commit();
-							// callBack.execute(v, year + "", (month + 1) + "",
+							// callBack.onMenuSelected(v, year + "", (month + 1) + "",
 							// ((TextView) v).getText().toString());
 						}
 					}

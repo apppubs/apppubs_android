@@ -76,20 +76,22 @@ public class ViewCourier {
      * @param url
      */
     public void execute(Context context, String url) {
+        openWindow(url);
+    }
+
+    public void openWindow(String url) {
         if (TextUtils.isEmpty(url)) {
             return;
         }
         if (url.startsWith("http://") || url.startsWith("https://")) {
-            WebAppFragment frg = new WebAppFragment();
             Bundle args = new Bundle();
             args.putString(WebAppFragment.ARGUMENT_STRING_URL, url);
             args.putBoolean(ContainerActivity.EXTRA_BOOLEAN_IS_FULLSCREEN, true);
-            frg.setArguments(args);
-            ContainerActivity.startContainerActivity(context, WebAppFragment.class, args);
+            ContainerActivity.startContainerActivity(mContext, WebAppFragment.class, args);
         } else if (url.matches("apppubs:\\/\\/newsinfo\\/[A-Z0-9]*\\/[A-Za-z0-9]*\\/[A-Za-z0-9" +
                 "]*")) {//新闻正文
             String[] arr = StringUtils.getPathParams(url);
-            NewsInfoBaseActivity.startInfoActivity(context, arr[1], new String[]{arr[2], arr[3]})
+            NewsInfoBaseActivity.startInfoActivity(mContext, arr[1], new String[]{arr[2], arr[3]})
             ;//频道
         } else if (url.matches("apppubs:\\/\\/channel/[^\\\\s]*")) {
             String[] arr = StringUtils.getPathParams(url);
@@ -99,7 +101,7 @@ public class ViewCourier {
             args.putString(ChannelFragment.ARG_KEY, arr[2]);
             String title = StringUtils.getQueryParameter(url, "title");
             args.putString(ContainerActivity.EXTRA_STRING_TITLE, title);
-            ContainerActivity.startContainerActivity(context, cf.getClass(), args);
+            ContainerActivity.startContainerActivity(mContext, cf.getClass(), args);
         } else if (url.matches("apppubs://channelgroup/[^\\s]*")) {//频道组
             String[] arr = StringUtils.getPathParams(url);
             ChannelsFragment frg = new ChannelsSlideFragment();
@@ -107,7 +109,7 @@ public class ViewCourier {
             Bundle args = new Bundle();
             args.putString(ContainerActivity.EXTRA_STRING_TITLE, title);
             args.putString(ChannelsFragment.ARGUMENT_NAME_CHANNELTYPEID, arr[1]);
-            ContainerActivity.startContainerActivity(context, frg.getClass(), args);
+            ContainerActivity.startContainerActivity(mContext, frg.getClass(), args);
         } else if (url.matches("apppubs:\\/\\/page\\/[\\S]*")) {
             PageFragment pageF = new PageFragment();
             String[] pathParams = StringUtils.getPathParams(url);
@@ -119,52 +121,48 @@ public class ViewCourier {
             }
             args.putString(PageFragment.EXTRA_STRING_NAME_PAGE_ID, pathParams[1]);
             args.putString(ContainerActivity.EXTRA_STRING_TITLE, title);
-            ContainerActivity.startContainerActivity(context, pageF.getClass(), args);
+            ContainerActivity.startContainerActivity(mContext, pageF.getClass(), args);
         } else if (url.matches("apppubs:\\/\\/addressbook[\\S]*")) {
             String rootSuperId = StringUtils.getQueryParameter(url, "rootsuperid");
             Bundle args = new Bundle();
             args.putString(AddressBookFragement.ARGS_ROOT_DEPARTMENT_SUPER_ID, rootSuperId);
             args.putBoolean(ContainerActivity.EXTRA_BOOLEAN_IS_FULLSCREEN, true);
-            ContainerActivity.startContainerActivity(context, AddressBookFragement.class, args);
+            ContainerActivity.startContainerActivity(mContext, AddressBookFragement.class, args);
         } else if (url.matches("apppubs:\\/\\/setting[\\S]*")) {
             String title = StringUtils.getQueryParameter(url, "title");
-            ContainerActivity.startFullScreenContainerActivity(context, SettingFragment.class,
+            ContainerActivity.startFullScreenContainerActivity(mContext, SettingFragment.class,
                     null, title);
         } else if (url.matches("apppubs:\\/\\/favorite[\\S]*")) {
             CollectionFragment frg = new CollectionFragment();
-            ContainerActivity.startContainerActivity(context, frg.getClass());
+            ContainerActivity.startContainerActivity(mContext, frg.getClass());
         } else if (url.matches("apppubs:\\/\\/message[\\S]*")) {
-            ContainerActivity.startContainerActivity(context, ConversationListFragment.class);
+            ContainerActivity.startContainerActivity(mContext, ConversationListFragment.class);
         } else if (url.matches("apppubs:\\/\\/history_message[\\S]*")) {
-            ContainerActivity.startContainerActivity(context, HistoryFragment.class);
+            ContainerActivity.startContainerActivity(mContext, HistoryFragment.class);
         } else if (url.matches("apppubs:\\/\\/baol[\\S]*")) {
-            Intent intent = new Intent(context, BaoliaoActivity.class);
-            context.startActivity(intent);
+            Intent intent = new Intent(mContext, BaoliaoActivity.class);
+            mContext.startActivity(intent);
         } else if (url.matches("apppubs:\\/\\/user_account[\\S]*")) {
-            String userId = AppContext.getInstance(context).getCurrentUser().getUserId();
+            String userId = AppContext.getInstance(mContext).getCurrentUser().getUserId();
             Intent intent = null;
             if (userId != null && !userId.equals("")) {// 已登录
-                intent = new Intent(context, UserCenterActivity.class);
+                intent = new Intent(mContext, UserCenterActivity.class);
             } else {
-                intent = new Intent(context, LoginActivity.class);
+                intent = new Intent(mContext, LoginActivity.class);
             }
-            context.startActivity(intent);
-        } else if (url.equals("apppubs://closewindow")) {
-            if (context instanceof Activity) {
-                ((Activity) context).finish();
-            }
+            mContext.startActivity(intent);
         } else if (url.startsWith("apppubs://qrcode")) {
-            Intent intent = new Intent(context, CaptureActivity.class);
-            context.startActivity(intent);
+            Intent intent = new Intent(mContext, CaptureActivity.class);
+            mContext.startActivity(intent);
         } else if (url.startsWith("apppubs://service_no")) {
             String title = StringUtils.getQueryParameter(url, "title");
-            ContainerActivity.startFullScreenContainerActivity(context, ServiceNOsOfMineFragment
+            ContainerActivity.startFullScreenContainerActivity(mContext, ServiceNOsOfMineFragment
                     .class, null, title);
         } else if (url.startsWith("tel:")) {
             String str[] = url.split(":");
             final String uri = url;
-            final Context con = context;
-            new ConfirmDialog(context, new ConfirmDialog.ConfirmListener() {
+            final Context con = mContext;
+            new ConfirmDialog(mContext, new ConfirmDialog.ConfirmListener() {
 
                 @Override
                 public void onOkClick() {
@@ -181,16 +179,16 @@ public class ViewCourier {
         } else if (url.startsWith("apppubs://hint")) {
             String[] params = StringUtils.getPathParams(url);
             if (params.length > 1) {
-                Toast.makeText(context, params[1], Toast.LENGTH_LONG).show();
+                Toast.makeText(mContext, params[1], Toast.LENGTH_LONG).show();
             }
         } else if (url.startsWith("apppubs://myfile")) {
             String title = StringUtils.getQueryParameter(url, "title");
             Bundle args = new Bundle();
             args.putString(ContainerActivity.EXTRA_STRING_TITLE, title);
-            ContainerActivity.startContainerActivity(context, MyFileFragment.class, args);
+            ContainerActivity.startContainerActivity(mContext, MyFileFragment.class, args);
         } else if (url.startsWith("hxLink://")) {
-            String username = AppContext.getInstance(context).getCurrentUser().getUsername();
-            String password = AppContext.getInstance(context).getCurrentUser().getPassword();
+            String username = AppContext.getInstance(mContext).getCurrentUser().getUsername();
+            String password = AppContext.getInstance(mContext).getCurrentUser().getPassword();
             Intent intent = new Intent();
             //启动IM
             ComponentName comp = new ComponentName("elink.mobile.im", "elink.mobile.im.splash" +
@@ -207,14 +205,14 @@ public class ViewCourier {
 //			bundle.putString("httpPort","9090");	//http端口
             intent.putExtras(bundle);
             try {
-                context.startActivity(intent);
+                mContext.startActivity(intent);
             } catch (Exception e) {
-                Toast.makeText(context, "启动E-Link失败", Toast.LENGTH_LONG).show();
+                Toast.makeText(mContext, "启动E-Link失败", Toast.LENGTH_LONG).show();
             }
         } else if (url.equals(TMenuItem.MENU_URL_EMAIL) || url.startsWith("apppubs://email")) {
             openEmailApp();
         } else {
-            Toast.makeText(context, "请求地址(" + url + ")错误", Toast.LENGTH_SHORT).show();
+            Toast.makeText(mContext, "请求地址(" + url + ")错误", Toast.LENGTH_SHORT).show();
         }
 
     }
@@ -248,7 +246,7 @@ public class ViewCourier {
     public void openRegView(Context context) {
         String regURL = AppContext.getInstance(mContext).getAppConfig().getRegURL();
         if (!TextUtils.isEmpty(regURL)) {
-            ViewCourier.getInstance(mContext).execute(mContext, regURL);
+            ViewCourier.getInstance(mContext).openWindow(regURL);
         } else {
             Intent intent = new Intent(context, RegisterActivity.class);
             context.startActivity(intent);
