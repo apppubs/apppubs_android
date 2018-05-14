@@ -241,6 +241,8 @@ public class AppConfig implements Serializable {
                 setAdbookLinkURL(item.getValue());
             } else if(Constants.APP_CONFIG_PARAM_CHAT_FLAG.equals(key)){
                 setChatFlag(item.getValue());
+            }else if(Constants.APP_CONFIG_PARAM_REG_URL.equals(key)){
+                setRegURL(item.getValue());
             }
         }
     }
