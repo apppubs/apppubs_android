@@ -4,6 +4,8 @@ import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
@@ -375,6 +377,7 @@ public class Utils {
 
     /**
      * 根据对象类型不同判断是否为空
+     *
      * @param obj
      * @return
      */
@@ -383,9 +386,16 @@ public class Utils {
             return true;
         } else if (obj instanceof java.util.Collection) {
             return ((java.util.Collection) obj).isEmpty();
+        } else if (obj instanceof Map) {
+            Set keys = (((Map) obj).keySet());
+            if (keys != null && keys.size() > 0) {
+                return true;
+            } else {
+                return false;
+            }
         } else if (obj instanceof String) {
-            return TextUtils.isEmpty((String)obj);
-        }else{
+            return TextUtils.isEmpty((String) obj);
+        } else {
             return false;
         }
     }
