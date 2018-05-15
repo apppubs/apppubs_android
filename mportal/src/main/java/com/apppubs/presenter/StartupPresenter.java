@@ -6,6 +6,7 @@ import android.text.TextUtils;
 import com.apppubs.AppContext;
 import com.apppubs.AppManager;
 import com.apppubs.bean.App;
+import com.apppubs.bean.http.CheckVersionResult;
 import com.apppubs.constant.APError;
 import com.apppubs.model.IAPCallback;
 import com.apppubs.model.SystemBiz;
@@ -89,7 +90,7 @@ public class StartupPresenter {
     private boolean isNeedWelcome() {
 
         String flag = SharedPreferenceUtils.getInstance(mContext).getString
-                (SHARED_PREFERENCE_NAME_WELCOME_LOAD_HISTORY, Utils.getVersionCode(mContext) + "","");
+                (SHARED_PREFERENCE_NAME_WELCOME_LOAD_HISTORY, Utils.getVersionCode(mContext) + "", "");
 
         //版本升级,并且有欢迎图
         if (TextUtils.isEmpty(flag)) {
@@ -110,8 +111,28 @@ public class StartupPresenter {
     private void checkUpdate() {
         int updateType = AppContext.getInstance(mContext).getApp().getUpdateType();
         if (updateType != 0) {
-            //需要进行版本检查
-            afterCheckUpdate();
+            mSystemBiz.checkUpdate(new IAPCallback<CheckVersionResult>() {
+                @Override
+                public void onDone(CheckVersionResult obj) {
+                    //需要进行版本检查
+                    if (obj.getUpdateType() > 1) {
+                        String title = "发现新版本 V" + obj.getVersionName();
+                        mView.showUpdateDialog(title, obj.getDescribe(), obj.getDownloadURL(), obj.getUpdateType() > 2);
+                        if (obj.getUpdateType() < 2) {
+                            afterCheckUpdate();
+                        } else {
+                            //强制更新，不能进入主界面
+                        }
+                    } else {
+                        afterCheckUpdate();
+                    }
+                }
+
+                @Override
+                public void onException(APError error) {
+                    afterCheckUpdate();
+                }
+            });
         } else {
             afterCheckUpdate();
         }

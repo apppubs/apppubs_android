@@ -607,26 +607,6 @@ public class SystemBiz extends BaseBiz {
         void onDone(VersionInfo info);
     }
 
-    public void checkUpdate(Context context, CheckUpdateListener listener) {
-        AppConfig appConfig = AppContext.getInstance(mContext).getAppConfig();
-        if (appConfig != null && StringUtils.compareVersion(appConfig.getLatestVersion(),
-                mAppContext.getVersionName()) > 0) {
-            VersionInfo vi = new VersionInfo();
-            vi.setNeedUpdate(true);
-            if (appConfig.getMinSupportedVersionCode() > Utils.getVersionCode(context)) {
-                vi.setNeedForceUpdate(true);
-            }
-            vi.setUpdateDescribe(appConfig.getLatestVersionDescribe());
-            vi.setVersion(appConfig.getLatestVersion());
-            vi.setUpdateUrl(appConfig.getUpdateUrl());
-            vi.setNeedAlert(appConfig.getNeedVersionAlertFlag() == 1);
-            listener.onDone(vi);
-        } else {
-            listener.onDone(new VersionInfo());
-
-        }
-    }
-
     public void checkUpdate(final IAPCallback<CheckVersionResult> callback) {
         asyncPOST(Constants.API_NAME_CHECK_VERSION, null, CheckVersionResult.class, new
                 IRQListener<CheckVersionResult>() {

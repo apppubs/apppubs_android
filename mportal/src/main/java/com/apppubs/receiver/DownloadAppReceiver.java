@@ -5,6 +5,7 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
+import android.widget.Toast;
 
 import com.apppubs.constant.Constants;
 import com.apppubs.util.SharedPreferenceUtils;
@@ -25,9 +26,13 @@ public class DownloadAppReceiver extends BroadcastReceiver {
             DownloadManager dManager = (DownloadManager) context.getSystemService(serviceString);
             Intent install = new Intent(Intent.ACTION_VIEW);
             Uri downloadFileUri = dManager.getUriForDownloadedFile(curDownloadId);
-            install.setDataAndType(downloadFileUri, "application/vnd.android.package-archive");
-            install.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-            context.startActivity(install);
+            if (downloadFileUri != null) {
+                install.setDataAndType(downloadFileUri, "application/vnd.android.package-archive");
+                install.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                context.startActivity(install);
+            } else {
+                Toast.makeText(context, "更新失败！", Toast.LENGTH_LONG).show();
+            }
         }
     }
 }
