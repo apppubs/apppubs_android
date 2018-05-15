@@ -31,6 +31,7 @@ public class StartupPresenter {
     private IStartUpView mView;
     private Context mContext;
     private boolean isStartCanceled;
+    private CheckVersionResult mCheckVersionResult;
 
     public StartupPresenter(Context context, IStartUpView view) {
         mContext = context;
@@ -64,10 +65,6 @@ public class StartupPresenter {
         mView.skip2Home();
     }
 
-    public void onUpdateCancel() {
-        mView.skip2Home();
-    }
-
     public void init() {
         mSystemBiz.initSystem(new IAPCallback<App>() {
             @Override
@@ -81,6 +78,17 @@ public class StartupPresenter {
                 mView.showInitFailDialog();
             }
         });
+    }
+
+    public void oneUpdateConfirm(boolean isCanceled) {
+        if (isCanceled) {
+            afterCheckUpdate();
+        } else {
+            AppManager.getInstance(mContext).downloadApp(mCheckVersionResult.getDownloadURL());
+            if (mCheckVersionResult.getUpdateType() < 3) {
+                afterCheckUpdate();
+            }
+        }
     }
 
     private void showBgPic(String url) {
@@ -114,15 +122,11 @@ public class StartupPresenter {
             mSystemBiz.checkUpdate(new IAPCallback<CheckVersionResult>() {
                 @Override
                 public void onDone(CheckVersionResult obj) {
+                    mCheckVersionResult = obj;
                     //需要进行版本检查
                     if (obj.getUpdateType() > 1) {
                         String title = "发现新版本 V" + obj.getVersionName();
                         mView.showUpdateDialog(title, obj.getDescribe(), obj.getDownloadURL(), obj.getUpdateType() > 2);
-                        if (obj.getUpdateType() < 2) {
-                            afterCheckUpdate();
-                        } else {
-                            //强制更新，不能进入主界面
-                        }
                     } else {
                         afterCheckUpdate();
                     }
@@ -145,14 +149,6 @@ public class StartupPresenter {
         } else {
             preSkip2Home();
         }
-    }
-
-    public void startDownloadApp(String updateUrl) {
-//		Intent it = new Intent(mContext, DownloadAppService.class);
-//		it.putExtra(DownloadAppService.SERVICRINTENTURL, updateUrl);
-//		it.putExtra(DownloadAppService.SERVACESHARENAME, 0);
-//		mContext.startService(it);
-        AppManager.getInstance(mContext).downloadApp(updateUrl);
     }
 
     public void preSkip2Home() {

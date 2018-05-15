@@ -148,7 +148,7 @@ public class StartUpActivity extends BaseActivity implements IStartUpView {
 
                 @Override
                 public void onclick() {
-                    mPresenter.startDownloadApp(updateUrl);
+                    mPresenter.oneUpdateConfirm(false);
                     Toast.makeText(mContext, "正在下载中，请稍候", Toast.LENGTH_SHORT).show();
                 }
             }, title, message, "更新");
@@ -160,12 +160,12 @@ public class StartUpActivity extends BaseActivity implements IStartUpView {
 
                 @Override
                 public void onCancelClick() {
-                    mPresenter.onUpdateCancel();
+                    mPresenter.oneUpdateConfirm(true);
                 }
 
                 @Override
                 public void onOkClick() {
-                    mPresenter.startDownloadApp(updateUrl);
+                    mPresenter.oneUpdateConfirm(false);
                     Toast.makeText(mContext, "正在下载中，请稍候", Toast.LENGTH_SHORT).show();
                 }
             }, title, message, "下次", "更新");
