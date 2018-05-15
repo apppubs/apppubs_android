@@ -748,43 +748,6 @@ public class UserBussiness extends BaseBiz {
 		// return f;
 		return result;
 	}
-	public TUser login1(final String username, final String password, final String deviceid, final String dev,
-                        final String systemVresion, final String currentVersionName) {
-		
-		TUser result = null;
-		try {
-			Map<String, Object> requestParamsMap = new HashMap<String, Object>();
-			requestParamsMap.put("username", username);
-			requestParamsMap.put("password", password);
-			requestParamsMap.put("deviceid", deviceid);
-			requestParamsMap.put("dev", URLEncoder.encode(dev, "utf-8"));
-			requestParamsMap.put("os", systemVresion);
-			requestParamsMap.put("app", currentVersionName);
-			requestParamsMap.put("fr", "4");
-			
-			String data = WebUtils.requestWithPost(String.format(URLs.URL_LOGIN,URLs.baseURL,URLs.appCode), requestParamsMap);
-			JSONObject jo = new JSONObject(data);
-			/**
-			 * //0、用户名或密码错误 //1、还未注册 //2、已经注册并且信息一致 //3、已经注册但信息不一致，该帐户被其他人注册
-			 * //参数4 用户中文名字
-			 */
-			if(jo.getInt("result")==2){
-				
-				result = new TUser(jo.getString("userid"), jo.getString("username"), jo.getString("cnname"), password,
-						jo.getString("email"), jo.getString("mobile"));
-				result.setMenuPower(jo.getString("menupower"));
-			}
-			
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-		
-		// };
-		// Future<?> f = sDefaultExecutor.submit(r);
-		//
-		// return f;
-		return result;
-	}
 
 	/**
 	 * 判断在是否有某用户的读取权限

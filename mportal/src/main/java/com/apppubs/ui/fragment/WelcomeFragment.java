@@ -100,6 +100,7 @@ public class WelcomeFragment extends BaseFragment implements OnPageChangeListene
 
 						@Override
 						public void onClick(View v) {
+							//每一次完成时记录此版本已经完成了欢迎图的显示；新版app不会受到影响
 							SharedPreferenceUtils.getInstance(getContext()).putString( StartupPresenter.SHARED_PREFERENCE_NAME_WELCOME_LOAD_HISTORY, Utils.getVersionCode(getContext())+"","f");
 							Intent i = new Intent(mContext,StartUpActivity.class);
 							startActivity(i);
@@ -121,7 +122,6 @@ public class WelcomeFragment extends BaseFragment implements OnPageChangeListene
 				lp.rightMargin = Utils.dip2px(mContext, 40);
 				lp.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM);
 				lp.bottomMargin = Utils.dip2px(mContext, 40);
-//				fl.addView(btn, lp);
 
 				((ViewPager) viewPager).addView(fl);
 				v = fl;

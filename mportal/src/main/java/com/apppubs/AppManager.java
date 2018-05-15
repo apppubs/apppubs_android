@@ -4,6 +4,7 @@ import android.app.DownloadManager;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
+import android.os.Build;
 import android.text.TextUtils;
 import android.widget.Toast;
 
@@ -17,6 +18,7 @@ import com.apppubs.bean.App;
 import com.apppubs.bean.Settings;
 import com.apppubs.constant.URLs;
 import com.apppubs.util.LogM;
+import com.apppubs.util.MathUtils;
 import com.apppubs.util.SharedPreferenceUtils;
 import com.apppubs.util.Utils;
 import com.apppubs.ui.widget.ConfirmDialog;
@@ -29,7 +31,7 @@ public class AppManager {
 
     private Context mContext;
 
-    private static AppManager sAppManager;
+    private volatile static AppManager sAppManager;
 
     private AppContext mAppContext;
 
@@ -170,5 +172,15 @@ public class AppManager {
         SharedPreferenceUtils utils = SharedPreferenceUtils.getInstance(mContext);
         return utils.getString(Constants.DEFAULT_SHARED_PREFERENCE_NAME, Constants
                 .SHAREDPREFRERENCE_KEY_ADDRESS_CODE, "");
+    }
+
+    /**
+     * 机器唯一标识
+     */
+    public String getMachineId() {
+        return MathUtils.MD5("sdk=" + Build.VERSION.SDK_INT + "|" + "model=" + Build.MODEL + "|"
+                + Build.SERIAL + "|"
+                + Build.DEVICE);
+
     }
 }

@@ -110,35 +110,6 @@ public class SystemBiz extends BaseBiz {
 
     }
 
-    public Future<?> update(final IAPCallback<String[]> callback) {
-        Future<?> f = sDefaultExecutor.submit(new Runnable() {
-
-            @Override
-            public void run() {
-
-                String updateverurl = String.format(URLs.URL_UPDATE, URLs.baseURL) + "appcode=" +
-                        URLs.appCode + "&type=android&clientkey="
-                        + URLs.CLIENTKEY;
-                System.out.println("更新链接 ，，，" + updateverurl);
-                try {
-                    String verJson = WebUtils.requestWithGet(updateverurl);
-                    JSONObject jsonO = new JSONObject(verJson);
-                    String[] result = new String[3];
-                    result[0] = jsonO.getString("appdesc");
-                    result[1] = jsonO.getString("updateurl");
-                    result[2] = jsonO.getString("version");
-                    result[2] = "2001003";
-                    sHandler.post(new OnDoneRun<String[]>(callback, result));// 与主线程的通信
-                } catch (IOException | InterruptedException | JSONException e) {
-                    e.printStackTrace();
-                    sHandler.post(new OnExceptionRun<String[]>(callback));
-                }
-            }
-        });
-
-        return f;
-    }
-
     private boolean isFirstInit() {
         return mAppContext.getApp().getInitTimes() == 0;
     }
@@ -363,16 +334,6 @@ public class SystemBiz extends BaseBiz {
     }
 
     /**
-     * 机器唯一标识
-     */
-    public String getMachineId() {
-        return MathUtils.MD5("sdk=" + Build.VERSION.SDK_INT + "|" + "model=" + Build.MODEL + "|"
-                + Build.SERIAL + "|"
-                + Build.DEVICE);
-
-    }
-
-    /**
      * 注册 修改 useridstr 用户的id emailstr passwordstr clientidstr mobilestr
      * nicknamestr
      *
@@ -436,35 +397,6 @@ public class SystemBiz extends BaseBiz {
                     e.printStackTrace();
                 }
 
-            }
-        });
-
-        return f;
-    }
-
-    public Future<?> postZhuce1(final String usernamestr, final String emailstr, final String
-            passwordstr,
-                                final String mobilestr, final String nicknamestr, final
-                                IAPCallback<String> callback) {
-        // TODO Auto-generated method stub
-        Future<?> f = sDefaultExecutor.submit(new Runnable() {
-
-            @Override
-            public void run() {
-                // TODO Auto-generated method stub
-                String info = "";
-                String requestUrl = URLs.URL_ZHUCE;
-                Map<String, Object> requestParamsMap = new HashMap<String, Object>();
-                requestParamsMap.put("usernamestr", usernamestr);
-                requestParamsMap.put("emailstr", emailstr);
-                requestParamsMap.put("passwordstr", passwordstr);
-                requestParamsMap.put("clientidstr", URLs.baseURL);
-                requestParamsMap.put("mobilestr", mobilestr);
-                requestParamsMap.put("nicknamestr", nicknamestr);
-                String resurt = "";
-                resurt = WebUtils.requestWithPost(requestUrl, requestParamsMap);
-                info = resurt.trim();
-                sHandler.post(new OnDoneRun<String>(callback, info));// 与主线程的通信
             }
         });
 
@@ -601,10 +533,6 @@ public class SystemBiz extends BaseBiz {
         };
         Future<?> f = sDefaultExecutor.submit(r);
 
-    }
-
-    public interface CheckUpdateListener {
-        void onDone(VersionInfo info);
     }
 
     public void checkUpdate(final IAPCallback<CheckVersionResult> callback) {

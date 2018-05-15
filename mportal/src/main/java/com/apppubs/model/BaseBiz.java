@@ -12,6 +12,7 @@ import android.view.WindowManager;
 
 import com.alibaba.fastjson.JSONObject;
 import com.apppubs.AppContext;
+import com.apppubs.AppManager;
 import com.apppubs.bean.http.IJsonResult;
 import com.apppubs.constant.APError;
 import com.apppubs.constant.APErrorCode;
@@ -148,7 +149,7 @@ public abstract class BaseBiz {
         headers.put("model", Build.DEVICE);
         headers.put("channel", "default");
         headers.put("net", "unknow");
-        headers.put("deviceId", SystemBiz.getInstance(mContext).getMachineId());
+        headers.put("deviceId", AppManager.getInstance(mContext).getMachineId());
         headers.put("nonce", "");
         headers.put("timestamp", "");
         headers.put("sign", "");

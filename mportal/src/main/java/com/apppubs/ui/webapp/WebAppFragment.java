@@ -365,7 +365,7 @@ public class WebAppFragment extends TitleBarFragment implements OnClickListener,
 
             @Override
             public void handler(String data, CallBackFunction function) {
-                function.onCallBack(mSystemBiz.getMachineId());
+                function.onCallBack(AppManager.getInstance(mContext).getMachineId());
             }
 
         });
