@@ -193,12 +193,11 @@ public class SystemBiz extends BaseBiz {
 
         LogM.log(AppContext.class, "初始化本地app:" + localApp.toString());
 
-
         //如果是新版本第一次启动
-        System.out.println("当前版本，" + Utils.getVersionCode(mContext) + "上一次启动的版本：" + localApp
+        LogM.log(SystemBiz.class, "当前版本，" + Utils.getVersionCode(mContext) + "上一次启动的版本：" + localApp
                 .getPreWorkingVersion());
         if (AppManager.getInstance(mContext).isFirstStartupOfNewVersion()) {
-            System.out.println("新版本第一次启动");
+            LogM.log(SystemBiz.class, "新版本第一次启动");
             AppContext.getInstance(mContext).resetBaseUrlAndAppCode();
             switch (localApp.getPreWorkingVersion()) {
                 case 200001:
@@ -212,8 +211,7 @@ public class SystemBiz extends BaseBiz {
             }
         }
 
-        AppInfoResult info = syncPOST(Constants.API_NAME_APP_INFO, null,
-                AppInfoResult.class);
+        AppInfoResult info = syncPOST(Constants.API_NAME_APP_INFO, null, AppInfoResult.class);
 
         mAppContext.updateWithAppInfo(info);
         if (mAppContext.getApp().getInitTimes() == 0) {
@@ -632,25 +630,25 @@ public class SystemBiz extends BaseBiz {
     public void checkUpdate(final IAPCallback<CheckVersionResult> callback) {
         asyncPOST(Constants.API_NAME_CHECK_VERSION, null, CheckVersionResult.class, new
                 IRQListener<CheckVersionResult>() {
-            @Override
-            public void onResponse(final CheckVersionResult result, final APError error) {
-                if (error == null) {
-                    MainHandler.getInstance().post(new Runnable() {
-                        @Override
-                        public void run() {
-                            callback.onDone(result);
+                    @Override
+                    public void onResponse(final CheckVersionResult result, final APError error) {
+                        if (error == null) {
+                            MainHandler.getInstance().post(new Runnable() {
+                                @Override
+                                public void run() {
+                                    callback.onDone(result);
+                                }
+                            });
+                        } else {
+                            MainHandler.getInstance().post(new Runnable() {
+                                @Override
+                                public void run() {
+                                    callback.onException(error);
+                                }
+                            });
                         }
-                    });
-                } else {
-                    MainHandler.getInstance().post(new Runnable() {
-                        @Override
-                        public void run() {
-                            callback.onException(error);
-                        }
-                    });
-                }
-            }
-        });
+                    }
+                });
     }
 
     /**

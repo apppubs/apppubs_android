@@ -89,8 +89,7 @@ public class StartupPresenter {
     private boolean isNeedWelcome() {
 
         String flag = SharedPreferenceUtils.getInstance(mContext).getString
-				(SHARED_PREFERENCE_NAME_WELCOME_LOAD_HISTORY, Utils.getVersionCode(mContext) + "",
-						"");
+                (SHARED_PREFERENCE_NAME_WELCOME_LOAD_HISTORY, Utils.getVersionCode(mContext) + "","");
 
         //版本升级,并且有欢迎图
         if (TextUtils.isEmpty(flag)) {
@@ -110,10 +109,10 @@ public class StartupPresenter {
 
     private void checkUpdate() {
         int updateType = AppContext.getInstance(mContext).getApp().getUpdateType();
-        if (updateType != 0){
+        if (updateType != 0) {
             //需要进行版本检查
             afterCheckUpdate();
-        }else{
+        } else {
             afterCheckUpdate();
         }
     }
