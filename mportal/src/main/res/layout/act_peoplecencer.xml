@@ -20,6 +20,7 @@
             android:layout_height="80dp"
             android:onClick="onClick"
             android:background="@drawable/sel_com_list"
+            android:visibility="gone"
              >
 
             <TextView

@@ -5,6 +5,7 @@ import android.os.Environment;
 import com.apppubs.constant.APError;
 import com.apppubs.constant.APErrorCode;
 import com.apppubs.util.LogM;
+import com.apppubs.util.Utils;
 
 import java.io.File;
 import java.io.IOException;
@@ -16,8 +17,10 @@ import okhttp3.Cache;
 import okhttp3.Call;
 import okhttp3.Callback;
 import okhttp3.FormBody;
+import okhttp3.MultipartBody;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
+import okhttp3.RequestBody;
 import okhttp3.Response;
 
 /**
@@ -104,13 +107,55 @@ public class APHttpClient implements IHttpClient {
     @Override
     public void asyncPOST(String url, Map<String, String> params, File file, IRequestListener
             listener) {
-
     }
 
     @Override
-    public void asyncPOST(String url, Map<String, String> headers, File file, Map<String, String>
-            params, IRequestListener listener) {
+    public void asyncMultiPOST(String url, Map<String, String> headers, Map<String, Object>
+            params, final IRequestListener listener) {
 
+        MultipartBody.Builder builder = new MultipartBody.Builder();
+        builder.setType(MultipartBody.FORM);
+        if (headers != null) {
+            for (String key : headers.keySet()) {
+                String val = headers.get(key);
+                builder.addFormDataPart(key, val);
+            }
+        }
+        if (!Utils.isEmpty(params)) {
+            //追加参数
+            for (String key : params.keySet()) {
+                Object object = params.get(key);
+                if (object instanceof File) {
+                    File file = ((File) object);
+                    builder.addFormDataPart(key, file.getName(), RequestBody.create(null, file));
+                } else {
+                    builder.addFormDataPart(key, object.toString());
+                }
+            }
+        }
+
+        //创建RequestBody
+        RequestBody body = builder.build();
+        //创建Request
+        final Request request = new Request.Builder().url(url).post(body).build();
+        //单独设置参数 比如读取超时时间
+        final Call call = mOkHttpClient.newBuilder().writeTimeout(50, TimeUnit.SECONDS).build().newCall(request);
+        call.enqueue(new Callback() {
+            @Override
+            public void onFailure(Call call, IOException e) {
+                listener.onResponse(null, new APError(APErrorCode.GENERAL_ERROR, "上传失败！"));
+            }
+
+            @Override
+            public void onResponse(Call call, Response response) throws IOException {
+                if (response.isSuccessful()) {
+                    String string = response.body().string();
+                    listener.onResponse(string, null);
+                } else {
+                    listener.onResponse(null, new APError(APErrorCode.GENERAL_ERROR, "上传失败！"));
+                }
+            }
+        });
     }
 
     @Override
