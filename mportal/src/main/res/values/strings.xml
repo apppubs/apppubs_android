@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
+    <string name="err_msg_network_faile">网络异常，请检查网络是否通畅！</string>
+    <string name="err_msg_token_expire">登录已过期，请重新登录！</string>
     <string name="app_name">国投移动门户</string>
     <string name="from_gallery">相册选择</string>
     <string name="cancel">取消</string>
@@ -16,7 +18,6 @@
     <string name="border_top">Border Top</string>
     <string name="border_bottom">Border Bottom</string>
     <string name="image_url">Image Url</string>
-    <string name="network_faile">网络不给力...</string>
     <string name="finish">完成</string>
     <string name="sharing">分享操作正在后台进行…</string>
     <string name="share_to">分享到</string>

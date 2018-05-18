@@ -86,11 +86,9 @@ public class APHttpClient implements IHttpClient {
             public void onFailure(Call call, IOException e) {
                 e.printStackTrace();
                 if (e instanceof SocketTimeoutException) {
-                    listener.onResponse(null, new APError(APErrorCode.NETWORK_ERROR,
-                            "网络请求超时！请检查网络是否畅通！"));
+                    listener.onResponse(null, new APError(APErrorCode.NETWORK_ERROR, "网络异常！"));
                 } else {
-                    listener.onResponse(null, new APError(APErrorCode.NETWORK_ERROR,
-                            "网络异常！请检查网络是否畅通！"));
+                    listener.onResponse(null, new APError(APErrorCode.NETWORK_ERROR, "网络异常！"));
                 }
             }
 

@@ -44,7 +44,7 @@ public class ShareTools {
 			// 启动分享GUI
 			oks.show(context);
 		} else {
-			Toast.makeText(context, context.getString(R.string.network_faile), 2000);
+			Toast.makeText(context, context.getString(R.string.err_msg_network_faile), 2000);
 		}
 
 	}

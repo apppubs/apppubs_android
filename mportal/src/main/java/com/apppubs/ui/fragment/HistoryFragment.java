@@ -90,7 +90,7 @@ public class HistoryFragment extends BaseFragment {
 				}
 			});
 		} else {
-			Toast.makeText(mContext, getResources().getString(R.string.network_faile), Toast.LENGTH_LONG).show();
+			Toast.makeText(mContext, getResources().getString(R.string.err_msg_network_faile), Toast.LENGTH_LONG).show();
 		}
 	}
 

@@ -198,7 +198,7 @@ public class CommentActivity extends BaseActivity {
 			if (SystemUtils.canConnectNet(getApplication())) {
 				sendComment();
 			} else {
-				Toast.makeText(getApplication(), R.string.network_faile, Toast.LENGTH_SHORT).show();
+				Toast.makeText(getApplication(), R.string.err_msg_network_faile, Toast.LENGTH_SHORT).show();
 			}
 			break;
 		default:
@@ -248,7 +248,7 @@ public class CommentActivity extends BaseActivity {
 					};
 				}.start();
 			} else {
-				Toast.makeText(getApplication(), getResources().getString(R.string.network_faile), Toast.LENGTH_LONG).show();
+				Toast.makeText(getApplication(), getResources().getString(R.string.err_msg_network_faile), Toast.LENGTH_LONG).show();
 			}
 
 		}

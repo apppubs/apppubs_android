@@ -21,7 +21,6 @@ import android.widget.Toast;
 import com.apppubs.d20.R;
 import com.apppubs.bean.Weather;
 import com.apppubs.constant.Actions;
-import com.apppubs.ui.fragment.BaseFragment;
 import com.apppubs.ui.home.HomeBaseActivity;
 import com.apppubs.util.StringUtils;
 import com.apppubs.util.SystemUtils;
@@ -144,7 +143,7 @@ public class WeatherActivity extends BaseActivity {
 			}.start();
 
 		} else {
-			Toast.makeText(getApplication(), getResources().getString(R.string.network_faile), 2000).show();
+			Toast.makeText(getApplication(), getResources().getString(R.string.err_msg_network_faile), 2000).show();
 		}
 	}
 

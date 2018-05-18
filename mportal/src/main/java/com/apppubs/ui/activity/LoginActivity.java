@@ -108,7 +108,7 @@ public class LoginActivity extends BaseActivity implements AsyTaskCallback {
 					String[] params = new String[]{usernameT,passwordT,deviceid,token,Build.MODEL,systemVresion,currentVersionCode};
 					AsyTaskExecutor.getInstance().startTask(LOGIN_TAG, LoginActivity.this, params);
 				} else {
-					Toast.makeText(getApplication(), getResources().getString(R.string.network_faile), Toast.LENGTH_LONG).show();
+					Toast.makeText(getApplication(), getResources().getString(R.string.err_msg_network_faile), Toast.LENGTH_LONG).show();
 				}
 
 			}

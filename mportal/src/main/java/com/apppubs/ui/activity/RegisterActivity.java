@@ -187,7 +187,7 @@ public class RegisterActivity extends BaseActivity {
 					
 				}
 				else{
-					Toast.makeText(context, getResources().getString(R.string.network_faile), Toast.LENGTH_SHORT).show();
+					Toast.makeText(context, getResources().getString(R.string.err_msg_network_faile), Toast.LENGTH_SHORT).show();
 				}
 			}
 		}
