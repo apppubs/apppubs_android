@@ -148,7 +148,7 @@ public abstract class BaseBiz {
         headers.put("screen", screenDimenFlag);
         headers.put("model", Build.DEVICE);
         headers.put("channel", "default");
-        headers.put("net", "unknow");
+        headers.put("net", "unknown");
         headers.put("deviceId", AppManager.getInstance(mContext).getMachineId());
         headers.put("nonce", "");
         headers.put("timestamp", "");

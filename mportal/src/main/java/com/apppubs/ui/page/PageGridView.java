@@ -8,6 +8,7 @@ import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.widget.GridLayout;
 import android.util.AttributeSet;
+import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -71,7 +72,7 @@ public class PageGridView extends RelativeLayout implements View.OnClickListener
         if (model == null) {
             throw new IllegalArgumentException("model不可为空");
         }
-        getAdapter(model);
+        initAdapter(model);
         mViewPager.setAdapter(mPagerAdapter);
         if (model.getTotalPage() > 1) {
             addIndicator(model);
@@ -86,7 +87,7 @@ public class PageGridView extends RelativeLayout implements View.OnClickListener
     }
 
     //pargma private
-    private void getAdapter(final GridViewModel model) {
+    private void initAdapter(final GridViewModel model) {
         mPagerAdapter = new PagerAdapter() {
             @Override
             public int getCount() {
@@ -120,9 +121,9 @@ public class PageGridView extends RelativeLayout implements View.OnClickListener
         int pageHeight = 0;
         int indicatorHeight = Utils.dip2px(getContext(), 30);
         if (model.getTotalPage() > 1) {
-            pageHeight = (int) (itemWidth * 1.1) * model.getRealMaxRow() + indicatorHeight;
+            pageHeight = (int) itemWidth * model.getRealMaxRow() + indicatorHeight;
         } else {
-            pageHeight = (int) (itemWidth * 1.1) * model.getRealMaxRow();
+            pageHeight = (int) itemWidth * model.getRealMaxRow();
         }
         return pageHeight;
     }
@@ -148,6 +149,7 @@ public class PageGridView extends RelativeLayout implements View.OnClickListener
         int width = wm.getDefaultDisplay().getWidth();
 
         List<GridViewItem> items = mModel.getItemsForPage(index);
+
         for (int i = -1; ++i < items.size(); ) {
             GridViewItem item = items.get(i);
             RelativeLayout rl = (RelativeLayout) LayoutInflater.from(getContext()).inflate(R
@@ -157,12 +159,29 @@ public class PageGridView extends RelativeLayout implements View.OnClickListener
             TextView tv = (TextView) rl.findViewById(R.id.menu_tv);
             tv.setText(item.getTitle());
             ImageView iv = (ImageView) rl.findViewById(R.id.menu_iv);
+
+            if (gridLayout.getColumnCount() <= 2) {
+                int padding1 = Utils.dip2px(getContext(), 40);
+                int padding2 = Utils.dip2px(getContext(), 60);
+                iv.setPadding(padding1, padding1, padding1, padding2);
+                tv.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 15);
+            } else if (gridLayout.getColumnCount() == 3) {
+                int padding1 = Utils.dip2px(getContext(), 25);
+                int padding2 = Utils.dip2px(getContext(), 50);
+                iv.setPadding(padding1, padding1, padding1, padding2);
+                tv.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 14);
+            } else {
+                int padding1 = Utils.dip2px(getContext(), 12);
+                int padding2 = Utils.dip2px(getContext(), 34);
+                iv.setPadding(padding1, padding1, padding1, padding2);
+                tv.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 13);
+            }
             Glide.with(getContext()).load(item.getPicUrl()).into(iv);
             TextView badgeTV = (TextView) rl.findViewById(R.id.menu_reddot);
             Integer badgeNum = item.getBadgeNum();
             if (!Utils.isEmpty(badgeNum)
                     && badgeNum > 0) {
-                badgeTV.setText(badgeNum+"");
+                badgeTV.setText(badgeNum + "");
                 badgeTV.setVisibility(View.VISIBLE);
             } else {
                 badgeTV.setVisibility(View.GONE);
@@ -172,7 +191,7 @@ public class PageGridView extends RelativeLayout implements View.OnClickListener
             rl.setTag(item.getAction());
             GridLayout.LayoutParams glp = new GridLayout.LayoutParams();
             glp.width = width / gridLayout.getColumnCount();
-            glp.height = (int) (glp.width * 1.1);
+            glp.height = (int) (glp.width * 1);
             glp.setGravity(Gravity.FILL);
             gridLayout.addView(rl, glp);
         }

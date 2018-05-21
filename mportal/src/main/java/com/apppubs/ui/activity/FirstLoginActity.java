@@ -136,6 +136,7 @@ public class FirstLoginActity extends BaseActivity {
             Bundle args = new Bundle();
             args.putString(WebAppFragment.ARGUMENT_STRING_URL, mAppContext.getApp()
                     .getWebLoginUrl());
+            mWebAppFragment.setNeedTitleBar(false);
             mWebAppFragment.setArguments(args);
             mWebAppFragment.setListener(new WebAppFragment.Listener() {
                 @Override

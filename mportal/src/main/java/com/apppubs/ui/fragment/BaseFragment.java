@@ -51,6 +51,7 @@ public abstract class BaseFragment extends Fragment implements KeyEvent.Callback
     protected Context mContext;
 
     protected ImageLoader mImageLoader;
+    protected boolean isNeedTitleBar = true;
     protected TitleBar mTitleBar;
 
     /**
@@ -116,7 +117,7 @@ public abstract class BaseFragment extends Fragment implements KeyEvent.Callback
         contentFL.addView(mEmptyView);
 
         View rootView = null;
-        if (mTitleBar != null) {
+        if (isNeedTitleBar && mTitleBar != null) {
             LinearLayout ll = new LinearLayout(mContext);
             ll.setOrientation(LinearLayout.VERTICAL);
             LinearLayout.LayoutParams titleBarLl = new LinearLayout.LayoutParams(LinearLayout
@@ -176,6 +177,14 @@ public abstract class BaseFragment extends Fragment implements KeyEvent.Callback
 
     public String getTitle() {
         return mTitle;
+    }
+
+    public boolean isNeedTitleBar() {
+        return isNeedTitleBar;
+    }
+
+    public void setNeedTitleBar(boolean needTitleBar) {
+        isNeedTitleBar = needTitleBar;
     }
 
     @Override
