@@ -136,7 +136,7 @@ public abstract class BaseBiz {
         sHandler.post(new OnExceptionRun<T>(callback));
     }
 
-    private Map<String, String> getCommonHeader() {
+    public Map<String, String> getCommonHeader() {
 
         String screenDimenFlag = getScreenStr();
 

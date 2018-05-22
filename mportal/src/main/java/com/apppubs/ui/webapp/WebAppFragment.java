@@ -27,6 +27,7 @@ import android.widget.EditText;
 import android.widget.PopupWindow;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
+import android.widget.Toast;
 
 import com.alipay.sdk.app.PayTask;
 import com.amap.api.location.AMapLocation;
@@ -39,6 +40,7 @@ import com.apppubs.jsbridge.BridgeHandler;
 import com.apppubs.jsbridge.BridgeWebView;
 import com.apppubs.jsbridge.CallBackFunction;
 import com.apppubs.jsbridge.DefaultHandler;
+import com.apppubs.model.SystemBiz;
 import com.apppubs.presenter.WebAppPresenter;
 import com.apppubs.ui.activity.CaptureActivity;
 import com.apppubs.ui.activity.ContainerActivity;
@@ -88,7 +90,7 @@ import cn.sharesdk.tencent.qq.QQ;
 import cn.sharesdk.wechat.friends.Wechat;
 import cn.sharesdk.wechat.moments.WechatMoments;
 
-public class WebAppFragment extends TitleBarFragment implements OnClickListener, IWebAppView{
+public class WebAppFragment extends TitleBarFragment implements OnClickListener, IWebAppView {
 
     public static final String ARGUMENT_INT_MENUBARTYPE = "menu_bar_type";
     public static final String ARGUMENT_STRING_URL = "url";
@@ -294,7 +296,7 @@ public class WebAppFragment extends TitleBarFragment implements OnClickListener,
 
             @Override
             public void onURLClicked(String url) {
-                if (mListener != null){
+                if (mListener != null) {
                     mListener.onLinkClicked(url);
                 }
             }
@@ -658,12 +660,11 @@ public class WebAppFragment extends TitleBarFragment implements OnClickListener,
             }
         });
 
-        // 判断联网请求数据
-        if (SystemUtils.canConnectNet(getActivity())) {
-            mWebView.loadUrl(mUrl);
-        } else {
-            SystemUtils.showToast(getActivity(), "联网失败，请检查您的网络");
-        }
+        loadUrl();
+    }
+
+    private void loadUrl() {
+        mWebView.loadUrl(mUrl, SystemBiz.getInstance(mContext).getCommonHeader());
     }
 
     public boolean webviewGoBack() {
@@ -722,9 +723,9 @@ public class WebAppFragment extends TitleBarFragment implements OnClickListener,
 
     public void refresh() {
         if (SystemUtils.canConnectNet(mHostActivity)) {
-            mWebView.reload();
+            loadUrl();
         } else {
-            SystemUtils.showToast(getActivity(), "联网失败，请检查您的网络");
+            Toast.makeText(mContext, mContext.getString(R.string.err_msg_network_faile), Toast.LENGTH_LONG).show();
         }
     }
 
@@ -735,7 +736,7 @@ public class WebAppFragment extends TitleBarFragment implements OnClickListener,
             Intent it = new Intent(Intent.ACTION_VIEW, uri);
             startActivity(it);
         } else {
-            SystemUtils.showToast(getActivity(), "联网失败，请检查您的网络");
+            Toast.makeText(mContext, mContext.getString(R.string.err_msg_network_faile), Toast.LENGTH_LONG).show();
         }
     }
 
@@ -956,7 +957,7 @@ public class WebAppFragment extends TitleBarFragment implements OnClickListener,
 
     @Override
     public void checkUpdate() {
-        executeURL("apppubs://"+ Constants.APPPUBS_PROTOCOL_TYPE_CHECK_VERSION);
+        executeURL("apppubs://" + Constants.APPPUBS_PROTOCOL_TYPE_CHECK_VERSION);
     }
 
     private void dim() {

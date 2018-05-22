@@ -12,6 +12,7 @@ import com.apppubs.bean.AppConfig;
 import com.apppubs.bean.Settings;
 import com.apppubs.bean.UserInfo;
 import com.apppubs.bean.http.AppInfoResult;
+import com.apppubs.constant.Constants;
 import com.apppubs.d20.R;
 import com.apppubs.model.myfile.FileCacheManager;
 import com.apppubs.model.myfile.FileCacheManagerImpl;
@@ -20,6 +21,10 @@ import com.apppubs.net.WMHHttpClientDefaultImpl;
 import com.apppubs.util.FileUtils;
 import com.apppubs.util.LogM;
 import com.apppubs.util.Utils;
+import com.bumptech.glide.load.Encoder;
+
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
 
 /**
  * Created by zhangwen on 2017/2/22.
@@ -174,40 +179,21 @@ public class AppContext {
     }
 
     /**
-     * 各种url中的占位符
-     */
-    private static final String PLACEHOLDER_USERNAME = "$username";//用户名
-    private static final String PLACEHOLDER_USERID = "$userid";//用户ID；
-    private static final String PLACEHOLDER_APPID = "$appid";//appid==appcode
-    private static final String PLACEHOLDER_COPER_CODE = "$corpcode";
-    private static final String PLACEHOLDER_PASSWORD = "$password";
-
-    /**
      * 转换服务器传来的url
      *
      * @param url 转化之前url
      * @return 转换之后的url
      */
     public String convertUrl(String url) {
-        if (url.contains(PLACEHOLDER_USERNAME)) {
-            url = url.replace(PLACEHOLDER_USERNAME, getCurrentUser().getUsername());
-
+        try {
+            url = URLEncoder.encode(url,"utf-8");
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
         }
-        if (url.contains(PLACEHOLDER_USERID)) {
-            url = url.replace(PLACEHOLDER_USERID, getCurrentUser().getUserId());
-
-        }
-        if (url.contains(PLACEHOLDER_APPID)) {
-            url = url.replace(PLACEHOLDER_APPID, getApp().getCode());
-        }
-        if (url.contains(PLACEHOLDER_COPER_CODE)) {
-            url = url.replace(PLACEHOLDER_COPER_CODE, getCurrentUser().getOrgCode());
-        }
-        if (url.contains(PLACEHOLDER_PASSWORD)) {
-            url = url.replace(PLACEHOLDER_PASSWORD, getCurrentUser().getPassword());
-        }
-
-        return url;
+        String myURL = getLocalBaseURL() + Constants.API_ENTRY + "?apiName=" + Constants.API_NAME_HTTP +
+                "&redirectURL=" + url + "&username=" +
+                getCurrentUser().getUsername() + "&token=" + getCurrentUser().getToken();
+        return myURL;
     }
 
     public FileCacheManager getCacheManager() {

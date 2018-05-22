@@ -98,6 +98,7 @@ public class Constants {
 	public static final String API_NAME_REQUEST_SENT_INVITE_SMS = "request_sent_invite_sms";
 	public static final String API_NAME_COMMIT_PUSH_REGISTER_ID = "commit_push_register_id";
 	public static final String API_NAME_LOGOUT = "logout";
+	public static final String API_NAME_HTTP = "http";
 
 	//cms
 	public static final String API_NAME_NEWS_CHANNELS = "channels";
