@@ -5,7 +5,6 @@ import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.content.res.TypedArray;
 import android.graphics.Color;
-import android.text.TextUtils;
 
 import com.apppubs.bean.App;
 import com.apppubs.bean.AppConfig;
@@ -17,14 +16,9 @@ import com.apppubs.model.myfile.FileCacheManager;
 import com.apppubs.model.myfile.FileCacheManagerImpl;
 import com.apppubs.net.WMHHttpClient;
 import com.apppubs.net.WMHHttpClientDefaultImpl;
-import com.apppubs.ui.activity.CustomWebAppUrlProtocolAndIpActivity;
 import com.apppubs.util.FileUtils;
 import com.apppubs.util.LogM;
 import com.apppubs.util.Utils;
-
-import java.util.Map;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 /**
  * Created by zhangwen on 2017/2/22.
