@@ -135,4 +135,5 @@ public class Constants {
 	public static final String APPPUBS_PROTOCOL_TYPE_NEWSPAPER = "newspaper";
 	public static final String APPPUBS_PROTOCOL_TYPE_CHECK_VERSION = "checkVersion";
 	public static final String APPPUBS_PROTOCOL_TYPE_OPEN_SLIDE_MENU = "openSlideMenu";
+	public static final String APPPUBS_PROTOCOL_TYPE_LOGOUT = "logout";
 }

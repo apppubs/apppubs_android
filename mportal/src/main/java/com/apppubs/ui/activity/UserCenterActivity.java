@@ -16,6 +16,7 @@ import android.widget.Toast;
 
 import com.apppubs.AppContext;
 import com.apppubs.constant.APError;
+import com.apppubs.constant.Constants;
 import com.apppubs.d20.R;
 import com.apppubs.asytask.AsyTaskCallback;
 import com.apppubs.asytask.AsyTaskExecutor;
@@ -109,7 +110,7 @@ public class UserCenterActivity extends BaseActivity {
 		switch (v.getId()) {
 
 		case R.id.people_logout:
-			onLogout();
+			executeURL("apppubs://"+ Constants.APPPUBS_PROTOCOL_TYPE_LOGOUT);
 			break;
 		case R.id.usercenter_avatar_rl:
 			onChangeAvatar();
@@ -140,40 +141,6 @@ public class UserCenterActivity extends BaseActivity {
 		dialog.show();
 	}
 
-	private void onLogout() {
-		new ConfirmDialog(UserCenterActivity.this,
-				new ConfirmDialog.ConfirmListener() {
-
-					@Override
-					public void onOkClick() {
-						logout();
-					}
-
-					@Override
-					public void onCancelClick() {
-
-					}
-				}, "确定注销登陆吗？", "取消", "注销").show();
-	}
-
-	private void logout(){
-		showLoading();
-		UserBiz.getInstance(mContext).logout(mContext, new IAPCallback() {
-			@Override
-			public void onDone(Object obj) {
-				hideLoading();
-				UserCenterActivity.this.finish();
-			}
-
-			@Override
-			public void onException(APError error) {
-				hideLoading();
-				onError(error);
-			}
-		});
-
-	}
-	
 	@Override
 	public void finish() {
 		super.finish();

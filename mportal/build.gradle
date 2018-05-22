@@ -8,7 +8,7 @@ android {
         applicationId "com.apppubs.d20"
         minSdkVersion 14
         targetSdkVersion 19
-        versionCode 20001001
+        versionCode 20100001
         versionName "1.0.0"
         resValue "string","app_name","移动平台"
         compileOptions {
@@ -24,8 +24,8 @@ android {
                 JPUSH_PKGNAME        : applicationId,
                 JPUSH_APPKEY         : "85358a757b2da7055f45f83c", //JPush上注册的包名对应的appkey.
                 JPUSH_CHANNEL        : "developer-default", //暂时填写默认值即可.
-                APPID                : "U1520730357291",
-                BASE_URL             : "http://49.4.12.131:8086/",
+                APPID                : "U1528130991152",
+                BASE_URL             : "http://218.28.192.28:13129/",
                 DISPLAY_ORIENTATION  : "1",
                 ENABLE_SPLASH_SKIP   : false,
                 NEED_START_UP_VERSION: true,
@@ -43,7 +43,7 @@ android {
 
     buildTypes{
         debug{
-            resValue "string", "app_name", "dev移动平台"
+            resValue "string", "app_name", "移动平台dev"
         }
     }
 

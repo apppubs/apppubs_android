@@ -5,6 +5,7 @@ import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.content.res.TypedArray;
 import android.graphics.Color;
+import android.text.TextUtils;
 
 import com.apppubs.bean.App;
 import com.apppubs.bean.AppConfig;
@@ -119,6 +120,10 @@ public class AppContext {
 
     public UserInfo getCurrentUser() {
         return mCurrentUser;
+    }
+
+    public boolean haveLogined() {
+        return mCurrentUser != null && !TextUtils.isEmpty(mCurrentUser.getUsername());
     }
 
     public synchronized void setCurrentUser(UserInfo user) {

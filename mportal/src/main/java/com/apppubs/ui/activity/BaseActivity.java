@@ -47,6 +47,7 @@ import com.apppubs.model.IAPCallback;
 import com.apppubs.model.NewsBiz;
 import com.apppubs.model.PaperBiz;
 import com.apppubs.model.SystemBiz;
+import com.apppubs.model.UserBiz;
 import com.apppubs.model.message.MsgBussiness;
 import com.apppubs.model.message.UserBussiness;
 import com.apppubs.ui.APErrorHandler;
@@ -548,6 +549,8 @@ public abstract class BaseActivity extends FragmentActivity implements OnClickLi
                     hideLoading();
                 }
             });
+        } else if (url.equals("apppubs://" + Constants.APPPUBS_PROTOCOL_TYPE_LOGOUT)) {
+            onLogout();
         } else {
             ViewCourier.getInstance(mContext).openWindow(url);
         }
@@ -556,7 +559,7 @@ public abstract class BaseActivity extends FragmentActivity implements OnClickLi
     private void showVersionUpdateAlert(final CheckVersionResult obj) {
         if (obj.getUpdateType() < 1) {
             Toast.makeText(mContext, "当前版本为最新版本！", Toast.LENGTH_LONG).show();
-        } else if (obj.getUpdateType()<3){
+        } else if (obj.getUpdateType() < 3) {
             String title = String.format("检查到有新版 %s", TextUtils.isEmpty(obj.getVersionName()) ? "" : "V" +
                     obj.getVersionName());
             ConfirmDialog dialog = new ConfirmDialog(mContext, new ConfirmDialog.ConfirmListener() {
@@ -573,7 +576,7 @@ public abstract class BaseActivity extends FragmentActivity implements OnClickLi
             }, title, obj.getDescribe(), "下次", "更新");
             dialog.show();
             dialog.setCanceledOnTouchOutside(false);
-        }else {
+        } else {
             String title = String.format("检查到有新版 %s", TextUtils.isEmpty(obj.getVersionName()) ? "" : "V" +
                     obj.getVersionName());
 
@@ -583,9 +586,44 @@ public abstract class BaseActivity extends FragmentActivity implements OnClickLi
                     AppManager.getInstance(mContext).downloadApp(obj.getDownloadURL());
                     Toast.makeText(mContext, "正在下载中，请稍候!", Toast.LENGTH_SHORT).show();
                 }
-            },title,obj.getDescribe(),"更新");
+            }, title, obj.getDescribe(), "更新");
             dialog.show();
             dialog.setCanceledOnTouchOutside(false);
         }
+    }
+
+    private void onLogout() {
+        new ConfirmDialog(this,
+                new ConfirmDialog.ConfirmListener() {
+
+                    @Override
+                    public void onOkClick() {
+                        logout();
+                    }
+
+                    @Override
+                    public void onCancelClick() {
+
+                    }
+                }, "确定注销登陆吗？", "取消", "注销").show();
+    }
+
+    private void logout() {
+        showLoading();
+        UserBiz.getInstance(mContext).logout(mContext, new IAPCallback() {
+            @Override
+            public void onDone(Object obj) {
+                hideLoading();
+                BaseActivity.this.finish();
+                overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
+            }
+
+            @Override
+            public void onException(APError error) {
+                hideLoading();
+                onError(error);
+            }
+        });
+
     }
 }

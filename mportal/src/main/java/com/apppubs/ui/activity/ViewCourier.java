@@ -1,6 +1,5 @@
 package com.apppubs.ui.activity;
 
-import android.app.Activity;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
@@ -11,10 +10,8 @@ import android.widget.Toast;
 
 import com.apppubs.AppContext;
 import com.apppubs.bean.ApppubsProtocol;
-import com.apppubs.bean.TMenuItem;
 import com.apppubs.constant.Constants;
 import com.apppubs.ui.fragment.CollectionFragment;
-import com.apppubs.ui.fragment.HistoryFragment;
 import com.apppubs.ui.fragment.PapersFragment;
 import com.apppubs.ui.fragment.ServiceNOsOfMineFragment;
 import com.apppubs.ui.fragment.SettingFragment;
@@ -181,6 +178,10 @@ public class ViewCourier {
 
                     }
                 }, "确定拨号?", "电话：" + str[1], "放弃", "拨号").show();
+            } else if (Constants.APPPUBS_PROTOCOL_TYPE_SETTING.equals(pro.getType())) {
+                String title = StringUtils.getQueryParameter(url, "title");
+                ContainerActivity.startFullScreenContainerActivity(mContext, SettingFragment
+                        .class, null, title);
             } else {
                 Toast.makeText(mContext, "请求地址(" + url + ")错误", Toast.LENGTH_SHORT).show();
             }

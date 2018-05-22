@@ -27,6 +27,7 @@ import com.apppubs.constant.APError;
 import com.apppubs.constant.Constants;
 import com.apppubs.d20.R;
 import com.apppubs.model.IAPCallback;
+import com.apppubs.model.SystemBiz;
 import com.apppubs.ui.activity.AboutActivity;
 import com.apppubs.ui.activity.ContainerActivity;
 import com.apppubs.ui.activity.CustomWebAppUrlProtocolAndIpActivity;
@@ -49,6 +50,7 @@ public class SettingFragment extends TitleBarFragment implements OnClickListener
     private TextView currentVersionTv;
     private ImageView newVresion;
     private int mClickNum = 0;
+    private Button mLogoutBtn;
 
     @Override
     protected View initLayout(LayoutInflater inflater, ViewGroup container, Bundle
@@ -86,6 +88,7 @@ public class SettingFragment extends TitleBarFragment implements OnClickListener
 //		mNetworkTb = (ToggleButton) mRootView.findViewById(R.id.settings_network_tb);
         mCacheTv = (TextView) mRootView.findViewById(R.id.settings_cache_tv);
 //		mTextSizeTv = (TextView) findViewById(R.id.settings_textsize_tv);
+        mLogoutBtn = (Button) mRootView.findViewById(R.id.frg_setting_logout_btn);
 
         registerOnClickListener(R.id.setting_push_tb, this);
 //		registerOnClickListener(R.id.settings_network_tb, this);
@@ -99,6 +102,7 @@ public class SettingFragment extends TitleBarFragment implements OnClickListener
         registerOnClickListener(R.id.settings_switch_app, this);
         registerOnClickListener(R.id.setting_custom_webapp_url_ip_rl, this);
         registerOnClickListener(R.id.settings_logs_rl, this);
+        registerOnClickListener(R.id.frg_setting_logout_btn, this);
         mRequestQueue = Volley.newRequestQueue(mHostActivity);
 
         //根据assets文件夹下的welcome文件夹来判断是否显示欢迎图
@@ -114,6 +118,8 @@ public class SettingFragment extends TitleBarFragment implements OnClickListener
             setVisibilityOfViewByResId(mRootView, R.id.settings_welcome_line, View.VISIBLE);
         }
 
+        setVisibilityOfViewByResId(mRootView, R.id.frg_setting_logout_btn, mAppContext.haveLogined() ? View.VISIBLE :
+                View.GONE);
     }
 
 
@@ -286,7 +292,7 @@ public class SettingFragment extends TitleBarFragment implements OnClickListener
 //			mAppContext.setSettings(settings);
 //			break;
             case R.id.settings_update:
-                executeURL("apppubs://"+ Constants.APPPUBS_PROTOCOL_TYPE_CHECK_VERSION);
+                executeURL("apppubs://" + Constants.APPPUBS_PROTOCOL_TYPE_CHECK_VERSION);
                 break;
             case R.id.settings_switch:// 切换样式
                 new ConfirmDialog(mHostActivity, new ConfirmDialog.ConfirmListener() {
@@ -321,7 +327,7 @@ public class SettingFragment extends TitleBarFragment implements OnClickListener
                     public void onClick(View v) {
 
                         AppManager.getInstance(mContext).showChangeDialog(mContext, ipEt.getText().toString(), codeEt
-								.getText().toString());
+                                .getText().toString());
                     }
                 });
 
@@ -351,6 +357,9 @@ public class SettingFragment extends TitleBarFragment implements OnClickListener
                 break;
             case R.id.settings_logs_rl:
                 startActivity(LogsListActivity.class);
+                break;
+            case R.id.frg_setting_logout_btn:
+                executeURL("apppubs://" + Constants.APPPUBS_PROTOCOL_TYPE_LOGOUT);
                 break;
             default:
                 super.onClick(v);
