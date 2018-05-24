@@ -178,24 +178,6 @@ public class AppContext {
         FileUtils.writeObj(mContext, mSettings, SYSTEM_SETTING_FILE_NAME);
     }
 
-    /**
-     * 转换服务器传来的url
-     *
-     * @param url 转化之前url
-     * @return 转换之后的url
-     */
-    public String convertUrl(String url) {
-        try {
-            url = URLEncoder.encode(url,"utf-8");
-        } catch (UnsupportedEncodingException e) {
-            e.printStackTrace();
-        }
-        String myURL = getLocalBaseURL() + Constants.API_ENTRY + "?apiName=" + Constants.API_NAME_HTTP +
-                "&redirectURL=" + url + "&username=" +
-                getCurrentUser().getUsername() + "&token=" + getCurrentUser().getToken();
-        return myURL;
-    }
-
     public FileCacheManager getCacheManager() {
 
         return FileCacheManagerImpl.getInstance(mContext);

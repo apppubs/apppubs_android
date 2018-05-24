@@ -556,6 +556,8 @@ public class TitleBar extends RelativeLayout {
         if (mCurLeftView.getParent() != null) {
             setLeft2ndBtnWithImageResourceId(resId);
             setLeft2ndClickListener(listener);
+            mTitleLp.leftMargin = mImageBtnWidth *2;
+            mCurTitleView.setLayoutParams(mTitleLp);
         } else {
             setLeftBtnWithImageResourceId(resId);
             setLeftBtnClickListener(listener);

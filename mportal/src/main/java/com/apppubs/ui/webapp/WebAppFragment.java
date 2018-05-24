@@ -77,6 +77,7 @@ import java.io.UnsupportedEncodingException;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLDecoder;
+import java.net.URLEncoder;
 import java.util.List;
 import java.util.Map;
 import java.util.regex.Matcher;
@@ -105,6 +106,8 @@ public class WebAppFragment extends TitleBarFragment implements OnClickListener,
     private static final int SDK_PAY_FLAG = 1;
 
     private String mUrl;
+    private String mPreviousURL;
+    private String mApppubsMiddleURL;//中间url，访问中间url会重定向到目标url
     private String mMoreMenusStr;
 
     private ProgressWebView mWebView;
@@ -156,15 +159,39 @@ public class WebAppFragment extends TitleBarFragment implements OnClickListener,
         super.onAttach(activity);
         LogM.log(this.getClass(), "WebAppFragment-->onAttach");
         Bundle args = getArguments();
-        mUrl = args.getString(ARGUMENT_STRING_URL);
+        initURLs(args.getString(ARGUMENT_STRING_URL));
         mMoreMenusStr = args.getString(ARGUMENT_STRING_MORE_MENUS);
         isNeedTitleBar = args.getBoolean(ARGUMENT_STRING_NEED_TITLEBAR, isNeedTitleBar);
         if (TextUtils.isEmpty(mMoreMenusStr)) {
             mMoreMenusStr = "0";
         }
-        mUrl = AppContext.getInstance(mContext).convertUrl(mUrl);
         mHostActivity.setShouldInterceptBackClick(true);
     }
+
+    private void initURLs(String url){
+        mUrl = url;
+        mPreviousURL = extractPreviousFromUrl(mUrl);
+        mApppubsMiddleURL = convertUrl(mUrl);
+    }
+
+    /**
+     * 转换服务器传来的url
+     *
+     * @param url 转化之前url
+     * @return 转换之后的url
+     */
+    private String convertUrl(String url) {
+        try {
+            url = URLEncoder.encode(url,"utf-8");
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        }
+        String myURL = mAppContext.getLocalBaseURL() + Constants.API_ENTRY + "?apiName=" + Constants.API_NAME_HTTP +
+                "&redirectURL=" + url + "&username=" +
+                mAppContext.getCurrentUser().getUsername() + "&token=" + mAppContext.getCurrentUser().getToken();
+        return myURL;
+    }
+
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -196,9 +223,7 @@ public class WebAppFragment extends TitleBarFragment implements OnClickListener,
 
                 @Override
                 public void onClick(View v) {
-                    if (!webviewGoBack()) {
-                        mHostActivity.finish();
-                    }
+                    webviewGoBack();
                 }
             });
         }
@@ -263,8 +288,8 @@ public class WebAppFragment extends TitleBarFragment implements OnClickListener,
 
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
-        if (event.getAction() == KeyEvent.ACTION_DOWN && keyCode == KeyEvent.KEYCODE_BACK &&
-                webviewGoBack()) {
+        if (event.getAction() == KeyEvent.ACTION_DOWN && keyCode == KeyEvent.KEYCODE_BACK) {
+            webviewGoBack();
             return true;
         }
         return super.onKeyDown(keyCode, event);
@@ -298,6 +323,7 @@ public class WebAppFragment extends TitleBarFragment implements OnClickListener,
 
             @Override
             public void onURLClicked(String url) {
+                initURLs(url);
                 if (mListener != null) {
                     mListener.onLinkClicked(url);
                 }
@@ -666,45 +692,38 @@ public class WebAppFragment extends TitleBarFragment implements OnClickListener,
     }
 
     private void loadUrl() {
-        mWebView.loadUrl(mUrl, SystemBiz.getInstance(mContext).getCommonHeader());
+        mWebView.loadUrl(mApppubsMiddleURL, SystemBiz.getInstance(mContext).getCommonHeader());
     }
 
-    public boolean webviewGoBack() {
-
-        String curUrl = mWebView.getUrl();
-        LogM.log(this.getClass(), curUrl + "<->" + mUrl);
-
-        boolean result = false;
-        String previousUrl = null;
-        try {
-            previousUrl = extractPreviousFromUrl(curUrl);
-        } catch (UnsupportedEncodingException e) {
-            e.printStackTrace();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        if (previousUrl != null && previousUrl.equals("main")) {
-            result = false;
-        } else if (previousUrl != null) {
-            result = true;
-            mWebView.loadUrl(previousUrl);
-        } else if (mWebView.canGoBack()) {
-            if (!isCloseButtonAdded) {
-                addClose();
+    public void webviewGoBack() {
+        if (!Utils.isEmpty(mPreviousURL)){
+            if (mPreviousURL.equals("main")){
+                mHostActivity.finish();
+            }else{
+                mWebView.loadUrl(mPreviousURL);
             }
-            mWebView.goBack();
-            result = true;
+        }else{
+             if (mWebView.canGoBack()) {
+                if (!isCloseButtonAdded) {
+                    addClose();
+                }
+                 mWebView.goBack();
+            }else{
+                 mHostActivity.finish();
+             }
         }
-
-        return result;
     }
 
-    private String extractPreviousFromUrl(String url) throws UnsupportedEncodingException {
+    private String extractPreviousFromUrl(String url) {
 
         Pattern pattern = Pattern.compile("previousurl=([^&?]*)");
         Matcher m = pattern.matcher(url);
         while (m.find()) {
-            return URLDecoder.decode(m.group(1), "utf-8");
+            try {
+                return URLDecoder.decode(m.group(1), "utf-8");
+            } catch (UnsupportedEncodingException e) {
+                e.printStackTrace();
+            }
         }
         return null;
     }

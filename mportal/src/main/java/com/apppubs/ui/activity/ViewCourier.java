@@ -6,7 +6,6 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.text.TextUtils;
-import android.view.TextureView;
 import android.widget.Toast;
 
 import com.apppubs.AppContext;

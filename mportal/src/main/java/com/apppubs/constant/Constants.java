@@ -42,6 +42,7 @@ public class Constants {
 	public static final String PAGE_COMPONENT_ICON_LIST_3_COLUMN = "8002";//默认图标列表组件(三列)
 	public static final String PAGE_COMPONENT_ICON_PURE_TEXT_LIST = "8003";//流式圆角关键词
 	public static final String PAGE_COMPONENT_ICON_LIST = "8004";
+	public static final String PAGE_COMPONENT_PIC_ICON_LIST = "8005";
 	public static final String PAGE_COMPONENT_ICON_LIST_VERTICAL = "8010";//默认纵向图标列表
 	public static final String PAGE_COMPONENT_HOT_AREA_DEFAULT = "9001";//默认热区组件
 	public static final String PAGE_COMPONENT_HOT_AREA_SINGLE_PAGE = "9002";//单页热区组件
