@@ -19,6 +19,7 @@ import com.apppubs.ui.news.ChannelsSlideFragment;
 import com.apppubs.ui.page.PageFragment;
 import com.apppubs.ui.webapp.WebAppFragment;
 import com.apppubs.util.StringUtils;
+import com.apppubs.util.Utils;
 
 public class FragmentFactory {
 
@@ -28,6 +29,10 @@ public class FragmentFactory {
             frg = new WebAppFragment();
             Bundle args = new Bundle();
             args.putString(WebAppFragment.ARGUMENT_STRING_URL, uri);
+            String titlebarFlag = StringUtils.getQueryParameter(uri, "titlebar");
+            if (!Utils.isEmpty(titlebarFlag)){
+                args.putBoolean(WebAppFragment.ARGUMENT_STRING_NEED_TITLEBAR,Utils.compare(titlebarFlag,"1"));
+            }
             frg.setArguments(args);
         } else if(ApppubsProtocol.isApppubsProtocol(uri)){
             ApppubsProtocol pro = new ApppubsProtocol(uri);

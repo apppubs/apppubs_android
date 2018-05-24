@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.view.TextureView;
 import android.widget.Toast;
 
 import com.apppubs.AppContext;
@@ -28,6 +29,7 @@ import com.apppubs.ui.page.PageFragment;
 import com.apppubs.ui.webapp.WebAppFragment;
 import com.apppubs.ui.widget.ConfirmDialog;
 import com.apppubs.util.StringUtils;
+import com.apppubs.util.Utils;
 
 /**
  * 界面控制器，用户跳转页面
@@ -84,6 +86,10 @@ public class ViewCourier {
             Bundle args = new Bundle();
             args.putString(WebAppFragment.ARGUMENT_STRING_URL, url);
             args.putBoolean(ContainerActivity.EXTRA_BOOLEAN_IS_FULLSCREEN, true);
+            String titlebarFlag = StringUtils.getQueryParameter(url, "titlebar");
+            if (!Utils.isEmpty(titlebarFlag)){
+                args.putBoolean(WebAppFragment.ARGUMENT_STRING_NEED_TITLEBAR,Utils.compare(titlebarFlag,"1"));
+            }
             ContainerActivity.startContainerActivity(mContext, WebAppFragment.class, args);
         } else if (ApppubsProtocol.isApppubsProtocol(url)) {
             ApppubsProtocol pro = new ApppubsProtocol(url);

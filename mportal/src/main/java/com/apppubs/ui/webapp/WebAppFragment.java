@@ -95,6 +95,7 @@ public class WebAppFragment extends TitleBarFragment implements OnClickListener,
     public static final String ARGUMENT_INT_MENUBARTYPE = "menu_bar_type";
     public static final String ARGUMENT_STRING_URL = "url";
     public static final String ARGUMENT_STRING_MORE_MENUS = "more_menus";
+    public static final String ARGUMENT_STRING_NEED_TITLEBAR = "fragment_title_bar";
 
     public static final int REQUEST_CODE_PICTURES = 100;
     public static final int REQUEST_CODE_QRCODE = 101;//二维码扫描接过
@@ -157,6 +158,7 @@ public class WebAppFragment extends TitleBarFragment implements OnClickListener,
         Bundle args = getArguments();
         mUrl = args.getString(ARGUMENT_STRING_URL);
         mMoreMenusStr = args.getString(ARGUMENT_STRING_MORE_MENUS);
+        isNeedTitleBar = args.getBoolean(ARGUMENT_STRING_NEED_TITLEBAR, isNeedTitleBar);
         if (TextUtils.isEmpty(mMoreMenusStr)) {
             mMoreMenusStr = "0";
         }
