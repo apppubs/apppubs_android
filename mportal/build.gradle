@@ -8,7 +8,7 @@ android {
         applicationId "com.apppubs.d20"
         minSdkVersion 14
         targetSdkVersion 19
-        versionCode 20100001
+        versionCode 20101001
         versionName "1.0.0"
         resValue "string","app_name","移动平台"
         compileOptions {

@@ -239,10 +239,12 @@ public class AppConfig implements Serializable {
                 setAdbookDeptURL(item.getValue());
             } else if (Constants.APP_CONFIG_ADBOOK_USER_DETP_LINK_URL.equals(key)) {
                 setAdbookLinkURL(item.getValue());
-            } else if(Constants.APP_CONFIG_PARAM_CHAT_FLAG.equals(key)){
+            } else if (Constants.APP_CONFIG_PARAM_CHAT_FLAG.equals(key)) {
                 setChatFlag(item.getValue());
-            }else if(Constants.APP_CONFIG_PARAM_REG_URL.equals(key)){
+            } else if (Constants.APP_CONFIG_PARAM_REG_URL.equals(key)) {
                 setRegURL(item.getValue());
+            } else if (Constants.APP_CONFIG_ABOUT_PROPERTIES.equals(key)) {
+                setAboutProperties(item.getValue());
             }
         }
     }
