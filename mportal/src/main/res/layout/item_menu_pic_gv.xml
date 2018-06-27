@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:mportal="http://schemas.android.com/apk/res-auto"
+    android:layout_width="wrap_content"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="@drawable/sel_common_item"
+     >
+
+    <ImageView
+        android:id="@+id/menu_iv"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:scaleType="fitXY" />
+   <TextView
+       android:id="@+id/menu_reddot" 
+       android:layout_width="18dp"
+       android:layout_height="18dp"
+       android:layout_marginTop="12dp"
+       android:layout_marginRight="20dp"
+       android:background="@drawable/dot_red"
+       android:layout_alignTop="@id/menu_iv"
+       android:layout_alignRight="@id/menu_iv"
+       android:textColor="#ffffff"
+       android:textSize="@dimen/item_text_size_small"
+       android:gravity="center"
+       android:text="2"
+       android:visibility="gone"
+       />
+    <View
+        android:id="@+id/vertical_line" 
+        android:layout_width="1px"
+        android:layout_height="match_parent"
+        android:background="@color/common_divider"
+        android:layout_alignParentRight="true"
+        />
+
+</RelativeLayout>

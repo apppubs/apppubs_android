@@ -71,10 +71,6 @@ public class PageModel {
             return false;
         }
         PageModel des = (PageModel) o;
-        System.out.println("比较pagemodel pageId相同？" + Utils.compare(this.pageId, des.getPageId()));
-        System.out.println("比较pagemodel content？" + Utils.compare(this.content, des.getContent()));
-        System.out.println("比较pagemodel titleBarModel相同？" + Utils.compare(this.titleBarModel, des
-                .getTitleBarModel()));
         if (!Utils.compare(this.pageId, des.getPageId())
                 || !Utils.compare(this.content, des.getContent())
                 || !Utils.compare(this.titleBarModel, des.getTitleBarModel())) {

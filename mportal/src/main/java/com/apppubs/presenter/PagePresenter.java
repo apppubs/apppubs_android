@@ -73,14 +73,8 @@ public class PagePresenter {
             @Override
             public void onException(final APError error) {
                 isLoading = false;
-                MainHandler.getInstance().post(new Runnable() {
-                    @Override
-                    public void run() {
-                        mPageView.hideLoading();
-                        mPageView.onError(error);
-                    }
-                });
-
+                mPageView.hideLoading();
+                mPageView.onError(error);
             }
         });
     }
@@ -88,21 +82,15 @@ public class PagePresenter {
     private void onDataUpdated(final PageModel model) {
         mPageModel = model;
         saveCurAddressIfEmpty(model);
-        MainHandler.getInstance().post(new Runnable() {
-            @Override
-            public void run() {
-                mPageView.showTitleBar(model.getTitleBarModel());
-                mPageView.showContentView(model.getContent());
-                mPageView.hideLoading();
-                //显示地址
-                if (isAddressTitleBar(model)) {
-                    AppManager manager = AppManager.getInstance(mContext);
-                    String addressName = manager.getCurrentAddressName();
-                    mPageView.setTitleBarAddress(addressName);
-                }
-
-            }
-        });
+        mPageView.showTitleBar(model.getTitleBarModel());
+        mPageView.showContentView(model.getContent());
+        mPageView.hideLoading();
+        //显示地址
+        if (isAddressTitleBar(model)) {
+            AppManager manager = AppManager.getInstance(mContext);
+            String addressName = manager.getCurrentAddressName();
+            mPageView.setTitleBarAddress(addressName);
+        }
     }
 
     private void saveCurAddressIfEmpty(PageModel model) {

@@ -197,7 +197,7 @@ public class PageFragment extends TitleMenuFragment implements OnClickListener, 
                     try {
 
                         if (str.equals(items.getJSONObject(i).getString("title"))) {
-                            urls.add(items.getJSONObject(i).getString("url"));
+                            urls.add(items.getJSONObject(i).getString("URL"));
                             break;
                         }
                     } catch (JSONException e) {
@@ -372,7 +372,7 @@ public class PageFragment extends TitleMenuFragment implements OnClickListener, 
     private void refreshNav(JSONObject navBarObj) throws JSONException {
         mContentRL.removeView(mScrollTabs);
         mScrollTabs = new ScrollTabs(mContext);
-        int bgColor = Color.parseColor(navBarObj.getString("bgcolor"));
+        int bgColor = Color.parseColor(navBarObj.getString("bgColor"));
         mScrollTabs.setBackgroundColor(bgColor);
         if (isLightColor(bgColor)) {
             mScrollTabs.setSelectedTextColor(mHostActivity.getThemeColor());
@@ -381,7 +381,7 @@ public class PageFragment extends TitleMenuFragment implements OnClickListener, 
             mScrollTabs.setSelectedTextColor(Color.WHITE);
             mScrollTabs.setTextColor(Color.parseColor("#D0D0D0"));
         }
-        if ("2".equals(navBarObj.getString("navtype"))) {
+        if ("2".equals(navBarObj.getString("navType"))) {
             mScrollTabs.setHaveDownArrow(true);
         }
         mScrollTabs.setSelectedSize(Utils.dip2px(mContext, 15));
@@ -613,6 +613,8 @@ public class PageFragment extends TitleMenuFragment implements OnClickListener, 
                 addIconListWith3ColumnComponent(component);
             } else if (comType.equals(Constants.PAGE_COMPONENT_ICON_LIST)) {
                 addIconListComponent(component);
+            } else if (comType.equals(Constants.PAGE_COMPONENT_PIC_ICON_LIST)) {
+                addPicIconListComponent(component);
             } else if (comType.equals(Constants.PAGE_COMPONENT_ICON_PURE_TEXT_LIST)) {
                 addFlowTagComponent(component);
             } else if (comType.equals(Constants.PAGE_COMPONENT_HOT_AREA_DEFAULT)) {
@@ -964,6 +966,22 @@ public class PageFragment extends TitleMenuFragment implements OnClickListener, 
                 LayoutParams.WRAP_CONTENT);
         gridView.setModel(m);
         gridView.setOnItemClickListener(new PageGridView.OnItemClickListener() {
+            @Override
+            public void onItemClick(String action) {
+                executeURL(action);
+            }
+        });
+        mContainerLl.addView(gridView, lp);
+    }
+
+    private void addPicIconListComponent(PageComponent pc) {
+        PagePicGridView gridView = new PagePicGridView(getContext());
+        PagePicGridView.Model m = gridView.new Model(pc.getJson());
+        LayoutParams lp = new LayoutParams(LayoutParams
+                .MATCH_PARENT,
+                LayoutParams.WRAP_CONTENT);
+        gridView.setModel(m);
+        gridView.setOnItemClickListener(new PagePicGridView.OnItemClickListener() {
             @Override
             public void onItemClick(String action) {
                 executeURL(action);

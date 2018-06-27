@@ -48,17 +48,23 @@ import com.apppubs.ui.myfile.FilePreviewFragment;
 import com.apppubs.ui.webapp.WebAppFragment;
 import com.apppubs.util.LogM;
 import com.apppubs.util.ShareTools;
+import com.apppubs.util.StringUtils;
 import com.apppubs.util.Utils;
 import com.apppubs.util.WebUtils;
 import com.apppubs.ui.widget.MyWebChromeClient;
 import com.apppubs.d20.R;
 import com.orm.SugarRecord;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
 /**
  * 新闻详情页
  */
-public class NewsInfoActivity extends BaseActivity implements AsyTaskCallback,
-		INewsDefaultInfoView {
+public class NewsInfoActivity extends BaseActivity implements
+        INewsDefaultInfoView {
 
     public static final String EXTRA_STRING_NAME_ID = "id";
     public static final String EXTRA_STRING_NAME_CHANNELCODE = "channel_code";
@@ -160,19 +166,19 @@ public class NewsInfoActivity extends BaseActivity implements AsyTaskCallback,
                     Bundle args = new Bundle();
                     args.putString(FilePreviewFragment.ARGS_STRING_URL, url);
                     TLocalFile localFile = SugarRecord.findByProperty(TLocalFile.class,
-							"source_path", url);
+                            "source_path", url);
                     if (localFile != null) {
                         args.putString(FilePreviewFragment.ARGS_STRING_FILE_LOCAL_PATH, localFile
-								.getSourcePath());
+                                .getSourcePath());
                     }
                     ContainerActivity.startContainerActivity(NewsInfoActivity.this,
-							FilePreviewFragment.class, args, "文件预览");
+                            FilePreviewFragment.class, args, "文件预览");
                     return true;
                 } else {
                     Bundle bundle = new Bundle();
                     bundle.putString(WebAppFragment.ARGUMENT_STRING_URL, url);
                     ContainerActivity.startContainerActivity(NewsInfoActivity.this,
-							WebAppFragment.class, bundle, "详情");
+                            WebAppFragment.class, bundle, "详情");
                     return true;
                 }
 
@@ -190,7 +196,7 @@ public class NewsInfoActivity extends BaseActivity implements AsyTaskCallback,
             @Override
             public void onClick(View v) {
                 View menuPop = LayoutInflater.from(NewsInfoActivity.this).inflate(R.layout
-						.pop_news_info_menu, null);
+                        .pop_news_info_menu, null);
                 menuPop.setBackgroundColor(mThemeColor);
                 mMenuPW = new PopupWindow(menuPop, ViewGroup.LayoutParams.WRAP_CONTENT,
                         ViewGroup.LayoutParams.WRAP_CONTENT);
@@ -208,10 +214,10 @@ public class NewsInfoActivity extends BaseActivity implements AsyTaskCallback,
                     setVisibilityOfViewByResId(menuPop, R.id.pop_news_info_collect, View.GONE);
                 } else {
                     isCollected = null != SugarRecord.findByProperty(TCollection.class,
-							"info_id", mInfoId + "," + mChannelCode) ? true : false;
+                            "info_id", mInfoId + "," + mChannelCode) ? true : false;
                     if (isCollected) {
                         ImageView iv = (ImageView) menuPop.findViewById(R.id
-								.pop_news_info_collect_ib);
+                                .pop_news_info_collect_ib);
                         iv.setImageResource(R.drawable.menubar_favorite_h);
                     }
 
@@ -244,7 +250,7 @@ public class NewsInfoActivity extends BaseActivity implements AsyTaskCallback,
                     intent.putExtra(EXTRA_STRING_NAME_ID, mInfoId);
                     startActivity(intent);
                     overridePendingTransition(android.R.anim.slide_in_left, android.R.anim
-							.slide_out_right);
+                            .slide_out_right);
                 }
             });
         }
@@ -280,17 +286,17 @@ public class NewsInfoActivity extends BaseActivity implements AsyTaskCallback,
                 String title = mNewsInfo.getTitle();
                 String summy = mNewsInfo.getSummary();
                 ImageView iv = (ImageView) mMenuPW.getContentView().findViewById(R.id
-						.pop_news_info_collect_ib);
+                        .pop_news_info_collect_ib);
                 CollectionBiz.toggleCollect(TCollection.TYPE_NORMAL, this, isCollected, mInfoId +
-						"," + mChannelCode, title, summy);
+                        "," + mChannelCode, title, summy);
                 isCollected = !isCollected;
                 Toast.makeText(this, isCollected ? "已收藏" : "取消收藏", Toast.LENGTH_SHORT).show();
                 iv.setImageResource(isCollected ? R.drawable.menubar_favorite_h : R.drawable
-						.menubar_favorite);
+                        .menubar_favorite);
                 break;
             case R.id.pop_news_info_share:
                 new ShareTools(getApplication()).showShare(mNewsInfo.getTitle(), mNewsInfo.getUrl
-						(), "");
+                        (), "");
                 break;
             case R.id.pop_news_info_textsize:
 
@@ -388,46 +394,122 @@ public class NewsInfoActivity extends BaseActivity implements AsyTaskCallback,
     }
 
     @Override
-    public Object onExecute(Integer tag, String[] params) throws Exception {
-        Object obj = null;
-        if (tag == REQUEST_TAG) {
-            obj = mNewsBiz.getNewInfo(params[0], params[1]);
-        } else if (tag == REQUEST_HTML_TAG) {
-            obj = WebUtils.requestWithGet(params[0]);
-        }
-        return obj;
-    }
-
-    @Override
-    public void onTaskSuccess(Integer tag, Object obj) {
-
-        if (tag == REQUEST_TAG) {
-            mNewsInfo = (TNewsInfo) obj;
-            Log.v("newsInfoActivity", "getNewsInfo完成" + mNewsInfo.getContent());
-            String contentUrl = mNewsInfo.getContentUrl();
-            if (!TextUtils.isEmpty(contentUrl)) {
-                AsyTaskExecutor.getInstance().startTask(REQUEST_HTML_TAG, this, new String[]{contentUrl});
-            } else {
-                mWebView.loadDataWithBaseURL("", mNewsInfo.getContent(), "text/html", "utf-8", null);
-//				mWebView.loadData( mNewsInfo.getContent(), "text/html", "utf-8");
-                // 数据完整后初始化菜单
-                initMenu();
-            }
-        } else if (tag == REQUEST_HTML_TAG) {
-            mWebView.loadDataWithBaseURL("", obj.toString(), "text/html", "utf-8", null);
-            // 数据完整后初始化菜单
-            initMenu();
-        }
-    }
-
-    @Override
-    public void onTaskFail(Integer tag, Exception e) {
-        Log.v("newsInfoActivity", "getNewsInfo出现异常");
-        Toast.makeText(NewsInfoActivity.this, "获取正文出错", Toast.LENGTH_SHORT).show();
-    }
-
-    @Override
     public void setData(ArticleResult result) {
-        mWebView.loadDataWithBaseURL("", result.getContent(), "text/html", "utf-8", null);
+        mWebView.loadDataWithBaseURL("", getFormatedHtml(result), "text/html", "utf-8", null);
+    }
+
+    private String getFormatedHtml(ArticleResult articleResult){
+
+        Log.v("NewsBiz", "拼接html字符串");
+
+//        String fontCssLink = "";
+//        switch (articleResult.getFontName()) {
+//            case 1:
+//                fontCssLink = "<link rel=\"stylesheet\" type=\"text/css\" " +
+//                        "href=\"file:///android_asset/css/font_fangsong.css\" />";
+//                break;
+//            case 2:
+//                fontCssLink = "<link rel=\"stylesheet\" type=\"text/css\" " +
+//                        "href=\"file:///android_asset/css/font_heiti.css\" />";
+//                break;
+//            case 3:
+//                fontCssLink = "<link rel=\"stylesheet\" type=\"text/css\" " +
+//                        "href=\"file:///android_asset/css/font_kaiti.css\" />";
+//                break;
+//            default:
+//                break;
+//        }
+
+//        String fontSizeLink = "";
+//        switch (newsInfo.getFontSizeFlag()) {
+//            case 0:
+//                fontSizeLink = "<link rel=\"stylesheet\" type=\"text/css\" " +
+//                        "href=\"file:///android_asset/css/font_size_normal.css\" />";
+//                break;
+//            case 1:
+//                fontSizeLink = "<link rel=\"stylesheet\" type=\"text/css\" " +
+//                        "href=\"file:////css/font_size_xsmall.css\" />";
+//                break;
+//            case 2:
+//                fontSizeLink = "<link rel=\"stylesheet\" type=\"text/css\" " +
+//                        "href=\"file:///android_asset/css/font_size_small.css\" />";
+//                break;
+//            case 3:
+//                fontSizeLink = "<link rel=\"stylesheet\" type=\"text/css\" " +
+//                        "href=\"file:///android_asset/css/font_size_normal.css\" />";
+//                break;
+//            case 4:
+//                fontSizeLink = "<link rel=\"stylesheet\" type=\"text/css\" " +
+//                        "href=\"file:///android_asset/css/font_size_large.css\" />";
+//                break;
+//            case 5:
+//                fontSizeLink = "<link rel=\"stylesheet\" type=\"text/css\" " +
+//                        "href=\"file:///android_asset/css/font_size_xlarge.css\" />";
+//                break;
+//
+//            default:
+//                break;
+//        }
+
+        // 拼接html字符串
+        StringBuilder htmlSb = new StringBuilder(1200);
+
+        htmlSb.append("<body margin=0>");
+//        htmlSb.append(fontCssLink);
+//        htmlSb.append(fontSizeLink);
+        // htmlSb.append("<link rel=\"stylesheet\" type=\"text/css\"
+        // href=\"file:///android_asset/font_kaiti.css\" />");//
+        // 写入csslink
+        htmlSb.append("<link rel=\"stylesheet\" type=\"text/css\" " +
+                "href=\"file:///android_asset/css/news.css\" />");// 写入csslink
+        htmlSb.append("<div class=infotitle>");
+        htmlSb.append("<div class=titleshow>" + articleResult.getTopic() + "</div>");
+        htmlSb.append("<div class=pubtimeshow>" + StringUtils.formatDate(articleResult.getPubTime(),"yyyy-MM-dd") + "</div>");
+        htmlSb.append("</div>");
+        htmlSb.append("<DIV class=arcinfo>");
+        // 下载图片
+        htmlSb.append("<div class=contetshow>");
+
+        // 处理content
+        String content = articleResult.getContent();
+        // content = content.replaceAll("href=[\'\"][^\'\"]*[\"\']", "");
+//		content = content.replaceAll("styledis=[\'\"][^\']*[\'\"]", "");
+//		content = content.replaceAll("style=[\'\"][^\']*[\'\"]", "");
+//		content = content.replaceAll("color:[^)]*[)][;]?", "");
+        // content = content.replaceAll("<a[^>]*>", "");
+        // content = content.replaceAll("</a[^>]*>", "");
+
+        // 为img添加 href
+
+        String img = "";
+        Pattern p_image;
+        Matcher m_image;
+        List<String> pics = new ArrayList<String>();
+
+        // String regEx_img = "<img.*src=(.*?)[^>]*?>"; //图片链接地址
+
+        String regEx_img = "<img.*src\\s*=\\s*(.*?)[^>]*?>";
+        p_image = Pattern.compile(regEx_img, Pattern.CASE_INSENSITIVE);
+        m_image = p_image.matcher(content);
+        while (m_image.find()) {
+            img = img + "," + m_image.group();
+
+            Matcher m = Pattern.compile("src\\s*=\\s*\"?(.*?)(\"|>|\\s+)").matcher(img);
+
+            while (m.find()) {
+
+                pics.add(m.group(1));
+            }
+        }
+
+        htmlSb.append(content);
+
+        htmlSb.append("</div>");
+        htmlSb.append("</div>");
+        htmlSb.append("<div style=\"height:60px\"></div>");
+        htmlSb.append("</body>");
+        // 将html保存为info的content属性
+        String htmlStr = htmlSb.toString();
+        return htmlStr;
     }
 }
