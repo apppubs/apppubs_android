@@ -52,7 +52,7 @@ public class AdbookBiz extends BaseBiz {
                 });
     }
 
-    private void cacheAdbookInfo(AdbookInfoResult result) {
+    public void cacheAdbookInfo(AdbookInfoResult result) {
         FileUtils.writeObj(mContext, result, FILE_NAME_ADBOOK_INFO);
     }
 
@@ -66,7 +66,13 @@ public class AdbookBiz extends BaseBiz {
             public void run() {
                 AdbookXMLParser parser = new AdbookXMLParser();
                 parser.parseXML(file);
-                callback.onDone(null);
+                MainHandler.getInstance().post(new Runnable() {
+                    @Override
+                    public void run() {
+                        callback.onDone(null);
+                    }
+                });
+
             }
         }).start();
 
@@ -176,11 +182,11 @@ public class AdbookBiz extends BaseBiz {
                             if (dept.getDeptId() == null) {
                                 dept.setDeptId(parser.getText());
                             }
-                        } else if ("name".equals(mCurPropertyName)) {
+                        } else if ("deptname".equals(mCurPropertyName)) {
                             if (dept.getName() == null) {
                                 dept.setName(parser.getText());
                             }
-                        } else if ("level".equals(mCurPropertyName)) {
+                        } else if ("deptlevel".equals(mCurPropertyName)) {
                             if (dept.getLevel() == null) {
                                 dept.setLevel(parser.getText());
                             }
@@ -192,6 +198,12 @@ public class AdbookBiz extends BaseBiz {
                             if (dept.getSortId() == 0) {
                                 if (StringUtils.isInteger(parser.getText())) {
                                     dept.setSortId(Integer.parseInt(parser.getText()));
+                                }
+                            }
+                        }else if("totalusernum".equals(mCurPropertyName)){
+                            if (dept.getTotalNum() == 0){
+                                if (StringUtils.isInteger(parser.getText())){
+                                    dept.setTotalNum(Integer.parseInt(parser.getText()));
                                 }
                             }
                         }

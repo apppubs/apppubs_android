@@ -2,7 +2,9 @@ package com.apppubs.bean.http;//
 //	AdbookInfoResult.java
 //	Model file generated using JSONExport: https://github.com/Ahmed-Ali/JSONExport
 
-public class AdbookInfoResult implements IJsonResult {
+import java.io.Serializable;
+
+public class AdbookInfoResult implements IJsonResult, Serializable {
 
     private boolean chatPermission;
     private String chatPermissionStr;

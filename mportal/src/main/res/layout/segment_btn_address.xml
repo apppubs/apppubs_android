@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:gravity="center" >
+    android:gravity="center"  android:layout_height="wrap_content" android:layout_width="wrap_content">
 
     <com.apppubs.ui.widget.SegmentedGroup
         android:id="@+id/segmented"
@@ -18,13 +18,13 @@
             android:text="组织"
             android:textSize="12dp" />
 
-        <RadioButton
-            android:id="@+id/segmented_button2"
-            style="@style/RadioButton"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="全部"
-            android:textSize="12dp" />
+        <!--<RadioButton-->
+            <!--android:id="@+id/segmented_button2"-->
+            <!--style="@style/RadioButton"-->
+            <!--android:layout_width="wrap_content"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:text="全部"-->
+            <!--android:textSize="12dp" />-->
 
         <RadioButton
             android:id="@+id/segmented_button3"

@@ -7,7 +7,11 @@ import com.apppubs.ui.ICommonView;
 import java.util.List;
 
 public interface IAdbookView extends ICommonView{
-    void showUpdateDialog();
+    void showSyncDialog();
+    void showSyncLoading();
+    void setSyncProgress(Float progress);
+    void setSyncLoadText(String text);
+    void hideSyncLoading();
     void showHaveNewVersion(String updateTime);
     void showDepts(List<TDepartment> depts);
     void showUsers(List<TUser> users);

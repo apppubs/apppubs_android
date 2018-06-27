@@ -2,6 +2,8 @@ package com.apppubs.util;
 
 import android.text.TextUtils;
 
+import org.w3c.dom.Text;
+
 import java.net.URL;
 import java.net.URLConnection;
 import java.text.ParseException;
@@ -479,6 +481,9 @@ public class StringUtils {
     }
 
     public static boolean isInteger(String str) {
+        if (TextUtils.isEmpty(str)){
+            return false;
+        }
         Pattern pattern = Pattern.compile("^[-\\+]?[\\d]*$");
         return pattern.matcher(str).matches();
     }

@@ -47,13 +47,12 @@ public class AdbookPresenter extends AbsPresenter<IAdbookView> {
                 LogM.log(this.getClass(), "获取AdbookInfoResult成功");
                 AdbookInfoResult adbookInfo = mBiz.getCachedAdbookInfo();
                 if (adbookInfo == null) {
-                    mView.showUpdateDialog();
+                    mView.showSyncDialog();
                 } else if (!Utils.compare(adbookInfo.getUpdateTime(), obj.getUpdateTime())) {
                     mView.showHaveNewVersion(obj.getUpdateTime());
                 } else {
                     //已经是最新
                 }
-
             }
 
             @Override
@@ -71,6 +70,7 @@ public class AdbookPresenter extends AbsPresenter<IAdbookView> {
     }
 
     private void startDownload() {
+        mView.showSyncLoading();
         FileCacheManager manager = AppContext.getInstance(mContext).getCacheManager();
         manager.cacheFile(mAdbookInfo.getDownloadURL(), null, new CacheListener() {
             @Override
@@ -81,11 +81,15 @@ public class AdbookPresenter extends AbsPresenter<IAdbookView> {
             @Override
             public void onDone(String localPath) {
                 LogM.log(this.getClass(), "下载完成"+localPath);
+                mView.setSyncLoadText("解析中...");
                 mBiz.parseXML(new File(localPath), new IAPCallback() {
                     @Override
                     public void onDone(Object obj) {
 //                        mView.showDepts();
-                        Toast.makeText(mContext,"加载完成",Toast.LENGTH_LONG).show();
+                        Toast.makeText(mContext,"同步完成",Toast.LENGTH_LONG).show();
+                        mBiz.cacheAdbookInfo(mAdbookInfo);
+                        mView.hideSyncLoading();
+                        mView.showDepts(null);
                     }
 
                     @Override
@@ -98,12 +102,8 @@ public class AdbookPresenter extends AbsPresenter<IAdbookView> {
             @Override
             public void onProgress(float progress, long totalBytesExpectedToRead) {
                 LogM.log(this.getClass(),"下载进度："+progress);
+                mView.setSyncProgress(progress);
             }
         });
     }
-
-
-
-
-
 }

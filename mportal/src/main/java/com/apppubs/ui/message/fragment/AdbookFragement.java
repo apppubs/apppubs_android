@@ -31,7 +31,6 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.apppubs.AppContext;
 import com.apppubs.bean.App;
-import com.apppubs.bean.AppConfig;
 import com.apppubs.bean.TDepartment;
 import com.apppubs.bean.TUser;
 import com.apppubs.bean.UserInfo;
@@ -50,7 +49,6 @@ import com.apppubs.ui.widget.ProgressHUD;
 import com.apppubs.ui.widget.SegmentedGroup;
 import com.apppubs.ui.widget.TitleBar;
 import com.apppubs.util.JSONResult;
-import com.apppubs.util.LogM;
 
 import java.text.NumberFormat;
 import java.util.ArrayList;
@@ -123,14 +121,14 @@ public class AdbookFragement extends BaseFragment implements IAdbookView {
 
                         }
                         break;
-                    case R.id.segmented_button2:
-                        fg = mFrgArr[1];
-                        if (fg == null) {
-
-                            fg = new AddressBookAllUserFragment();
-                            mFrgArr[1] = fg;
-                        }
-                        break;
+//                    case R.id.segmented_button2:
+//                        fg = mFrgArr[1];
+//                        if (fg == null) {
+//
+//                            fg = new AddressBookAllUserFragment();
+//                            mFrgArr[1] = fg;
+//                        }
+//                        break;
                     case R.id.segmented_button3:
                         fg = mFrgArr[2];
                         if (fg == null) {
@@ -154,18 +152,7 @@ public class AdbookFragement extends BaseFragment implements IAdbookView {
         titleBar.addRightBtnWithTextAndClickListener("同步", new OnClickListener() {
             @Override
             public void onClick(View v) {
-                new ConfirmDialog(mContext, new ConfirmDialog.ConfirmListener() {
-
-                    @Override
-                    public void onOkClick() {
-                        sync();
-                    }
-
-                    @Override
-                    public void onCancelClick() {
-
-                    }
-                }, "确定同步？", "同步可能需要几秒到几分钟的时间！", "取消", "确定").show();
+                showSyncDialog();
             }
         });
 
@@ -263,133 +250,6 @@ public class AdbookFragement extends BaseFragment implements IAdbookView {
         }
     }
 
-    private void init() {
-        // 本地的版本小于服务器版本则需要更新
-        AppConfig appconfig = AppContext.getInstance(mContext).getAppConfig();
-        if (appconfig.getAdbookVersion() > mAppContext.getApp().getAddressbookLocalVersion()) {
-            onNewVerisonFound();
-        } else if (mUserBussiness.countAllUser() == 0) {
-
-            Dialog dialog = new ConfirmDialog(mHostActivity, new ConfirmDialog.ConfirmListener() {
-
-                @Override
-                public void onOkClick() {
-                    sync();
-                }
-
-                @Override
-                public void onCancelClick() {
-
-                }
-
-            }, "是否同步？", "同步可能需要几秒到几分钟时间！", "取消", "同步");
-            dialog.show();
-            dialog.setCancelable(false);
-            dialog.setCanceledOnTouchOutside(false);
-
-        }
-    }
-
-    private void onNewVerisonFound() {
-        if (mAppContext.getApp().getNeedForceUploadAddressbook() == App.NEED_FORCE_UPDATE_ADDRESSBOOK_YES) {
-
-            LogM.log(getClass(), "直接更新。。。。。。");
-            sync();
-        } else {
-            Dialog dialog = new ConfirmDialog(mHostActivity, new ConfirmDialog.ConfirmListener() {
-
-                @Override
-                public void onOkClick() {
-                    sync();
-                }
-
-                @Override
-                public void onCancelClick() {
-
-                }
-
-            }, "通讯录有更新 是否同步？", "取消", "同步");
-            dialog.show();
-
-        }
-    }
-
-    /**
-     * 同步数据
-     */
-    private void sync() {
-        mProgressHUD = ProgressHUD.show(mHostActivity, "同步中", true, false, null);
-        syncAddressbook();
-
-    }
-
-    private void syncAddressbook() {
-        mUserBussiness.sycnAddressBook(new AbstractBussinessCallback<Object>() {
-
-            @Override
-            public void onException(APError excepCode) {
-                Toast.makeText(mHostActivity, "同步失败", Toast.LENGTH_SHORT).show();
-                mProgressHUD.dismiss();
-            }
-
-            @Override
-            public void onDone(Object obj) {
-                // 完成更新后更改版本
-                App app = AppContext.getInstance(mContext).getApp();
-                app.setAddressbookLocalVersion(mAppContext.getApp().getAddressbookVersion());
-                AppContext.getInstance(mContext).setApp(app);
-                AppContext.getInstance(mContext).serializeApp();
-
-                if (mAppContext.getApp().getAddressbookNeedPermission() == App.NEED) {
-                    final UserInfo currentUser = AppContext.getInstance(mContext).getCurrentUser();
-                    String url = String.format(URLs.URL_ADDRESS_PERMISSION, URLs.baseURL, URLs.appCode, currentUser
-                            .getUserId());
-                    mRequestQueue.add(new StringRequest(url, new Listener<String>() {
-
-                        @Override
-                        public void onResponse(String response) {
-                            JSONResult jr = JSONResult.compile(response);
-                            currentUser.setAddressbookPermissionString(jr.result);
-                            AppContext.getInstance(mContext).setCurrentUser(currentUser);
-                            refreshDepartAndUserFragmentIfExist();
-
-                            Toast.makeText(mHostActivity, "同步完成", Toast.LENGTH_SHORT).show();
-                            mProgressHUD.dismiss();
-                        }
-                    }, new ErrorListener() {
-
-                        @Override
-                        public void onErrorResponse(VolleyError error) {
-                            Toast.makeText(mHostActivity, "同步失败", Toast.LENGTH_SHORT).show();
-                            mProgressHUD.dismiss();
-                        }
-                    }));
-                } else {
-                    refreshDepartAndUserFragmentIfExist();
-                    Toast.makeText(mHostActivity, "同步完成", Toast.LENGTH_SHORT).show();
-                    mProgressHUD.dismiss();
-                }
-
-            }
-
-            @Override
-            public void onProgressUpdate(float progress) {
-                NumberFormat nf = NumberFormat.getPercentInstance();
-                nf.setMinimumFractionDigits(0);
-                mProgressHUD.setMessage(nf.format(progress));
-            }
-        });
-    }
-
-    private void refreshDepartAndUserFragmentIfExist() {
-        if (mFrgArr[0] != null) {
-            ((AddressBookOrganizationFragement) mFrgArr[0]).refreshList();
-        }
-        if (mFrgArr[1] != null) {
-            ((AddressBookAllUserFragment) mFrgArr[1]).refreshList();
-        }
-    }
-
     protected void changeContent(Fragment fragment) {
         FragmentTransaction transaction = getActivity().getSupportFragmentManager().beginTransaction();
         List<Fragment> fragments = getActivity().getSupportFragmentManager().getFragments();
@@ -412,7 +272,7 @@ public class AdbookFragement extends BaseFragment implements IAdbookView {
     }
 
     @Override
-    public void showUpdateDialog() {
+    public void showSyncDialog() {
         Dialog dialog = new ConfirmDialog(mHostActivity, new ConfirmDialog.ConfirmListener() {
 
             @Override
@@ -432,12 +292,34 @@ public class AdbookFragement extends BaseFragment implements IAdbookView {
     }
 
     @Override
+    public void showSyncLoading() {
+        mProgressHUD = ProgressHUD.show(mHostActivity, "同步中", true, false, null);
+    }
+
+    @Override
+    public void setSyncProgress(Float progress) {
+        NumberFormat nf = NumberFormat.getPercentInstance();
+        nf.setMinimumFractionDigits(0);
+        mProgressHUD.setMessage(nf.format(progress));
+    }
+
+    @Override
+    public void setSyncLoadText(String text) {
+        mProgressHUD.setMessage(text);
+    }
+
+    @Override
+    public void hideSyncLoading() {
+        mProgressHUD.dismiss();
+    }
+
+    @Override
     public void showHaveNewVersion(String updateTime) {
         Dialog dialog = new ConfirmDialog(mHostActivity, new ConfirmDialog.ConfirmListener() {
 
             @Override
             public void onOkClick() {
-                showUpdateDialog();
+                showSyncDialog();
             }
 
             @Override
@@ -453,11 +335,10 @@ public class AdbookFragement extends BaseFragment implements IAdbookView {
 
     @Override
     public void showDepts(List<TDepartment> depts) {
-
+        ((AddressBookOrganizationFragement) mFrgArr[0]).refreshList();
     }
 
     @Override
     public void showUsers(List<TUser> users) {
-
     }
 }
