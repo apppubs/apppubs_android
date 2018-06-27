@@ -5,8 +5,8 @@ import android.net.Uri;
 import android.util.Log;
 
 import com.apppubs.AppContext;
-import com.apppubs.model.myfile.CacheListener;
-import com.apppubs.model.myfile.FileCacheErrorCode;
+import com.apppubs.model.cache.CacheListener;
+import com.apppubs.model.cache.FileCacheErrorCode;
 
 import java.io.File;
 import java.util.List;

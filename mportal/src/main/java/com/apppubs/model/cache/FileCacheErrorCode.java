@@ -1,4 +1,4 @@
-package com.apppubs.model.myfile;
+package com.apppubs.model.cache;
 
 /**
  * Created by zhangwen on 2017/7/23.

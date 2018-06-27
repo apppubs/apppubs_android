@@ -16,7 +16,7 @@ public interface IHttpClient {
     void asyncPOST(String url, Map<String, String> params, File file, IRequestListener listener);
 
     void asyncMultiPOST(String url, Map<String, String> headers, Map<String, Object> params,
-                   IRequestListener listener);
+                        IRequestListener listener);
 
     String syncPOST(String url, Map<String, String> params) throws APNetException;
 
@@ -28,6 +28,7 @@ public interface IHttpClient {
 
     String syncPOST(String url, Map<String, String> headers, File file, Map<String, String>
             params) throws APNetException;
+
 }
 
 

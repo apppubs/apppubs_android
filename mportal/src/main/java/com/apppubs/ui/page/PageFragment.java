@@ -87,7 +87,7 @@ import java.util.UUID;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public class PageFragment extends TitleMenuFragment implements OnClickListener, IPageView{
+public class PageFragment extends TitleMenuFragment implements OnClickListener, IPageView {
 
     public static final String EXTRA_STRING_NAME_PAGE_ID = "page_id";
     public static final String CUSTOM_WEB_APP_URL_SERIALIZED_FILE_NAME = "custom_web_app_url_map";
@@ -236,7 +236,7 @@ public class PageFragment extends TitleMenuFragment implements OnClickListener, 
             mRootLl.removeView(mContentRL);
         }
         mContentRL = new RelativeLayout(mContext);
-        LinearLayout.LayoutParams lp = new LayoutParams(LayoutParams.MATCH_PARENT,0);
+        LinearLayout.LayoutParams lp = new LayoutParams(LayoutParams.MATCH_PARENT, 0);
         lp.weight = 1;
         mRootLl.addView(mContentRL, lp);
     }
@@ -633,8 +633,8 @@ public class PageFragment extends TitleMenuFragment implements OnClickListener, 
         }
         ScrollView sv = new ScrollView(mContext);
         mScrollView = sv;
-        LinearLayout.LayoutParams scrollViewLp = new LayoutParams(LayoutParams.MATCH_PARENT,LayoutParams.MATCH_PARENT);
-        mContentRL.addView(sv,scrollViewLp);
+        LinearLayout.LayoutParams scrollViewLp = new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT);
+        mContentRL.addView(sv, scrollViewLp);
 
         //首先清除容器内的所有view
         mContainerLl = new LinearLayout(mContext);
@@ -668,7 +668,7 @@ public class PageFragment extends TitleMenuFragment implements OnClickListener, 
         ll.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
-                executeURL("apppubs://"+Constants.APPPUBS_PROTOCOL_TYPE_USER_ACCOUNT);
+                executeURL("apppubs://" + Constants.APPPUBS_PROTOCOL_TYPE_USER_ACCOUNT);
             }
         });
 
@@ -838,7 +838,7 @@ public class PageFragment extends TitleMenuFragment implements OnClickListener, 
 
             @Override
             public void onItemClick(int index, HotArea hotArea) {
-                System.out.println("PageFragment 点击热区 index:"+index);
+                System.out.println("PageFragment 点击热区 index:" + index);
                 if (!TextUtils.isEmpty(getUrlReplacement(hotArea.getUrl()))) {
                     executeURL(convertUri(hotArea.getUrl()));
                 } else {
@@ -1278,13 +1278,13 @@ public class PageFragment extends TitleMenuFragment implements OnClickListener, 
             if (!TextUtils.isEmpty(normalMordel.getLeftImgUrl())) {
                 titlebar.addLeftBtnWithImageUrlAndClickListener(normalMordel.getLeftImgUrl(),
                         normalMordel
-                        .getLeftAction(), PageFragment.this);
+                                .getLeftAction(), PageFragment.this);
             }
             //显示右边按钮
             if (!TextUtils.isEmpty(normalMordel.getRightImgUrl())) {
                 titlebar.addRightBtnWithImageUrlAndClickListener(normalMordel.getRightImgUrl(),
                         normalMordel
-                        .getRightAction(), PageFragment.this);
+                                .getRightAction(), PageFragment.this);
             }
             titlebar.setUnderlineColor(normalMordel.getUnderlineColor());
         } else if (model.getType().equals(TitleBarModel.TYPE_ADDRESS)) {
@@ -1384,7 +1384,7 @@ public class PageFragment extends TitleMenuFragment implements OnClickListener, 
                     mScrollView.smoothScrollTo(0, view.getTop());
                 }
             }
-        }else {
+        } else {
             super.executeURL(url);
         }
     }

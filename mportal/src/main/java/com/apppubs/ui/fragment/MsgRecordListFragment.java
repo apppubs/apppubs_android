@@ -55,7 +55,7 @@ import com.apppubs.ui.activity.ContainerActivity;
 import com.apppubs.constant.Actions;
 import com.apppubs.constant.Constants;
 import com.apppubs.constant.URLs;
-import com.apppubs.ui.message.fragment.AddressBookFragement;
+import com.apppubs.ui.message.fragment.AdbookFragement;
 import com.apppubs.util.JSONResult;
 import com.apppubs.util.StringUtils;
 import com.apppubs.ui.widget.TitleBar;
@@ -489,7 +489,7 @@ public class MsgRecordListFragment extends TitleBarFragment implements OnClickLi
 			
 			Log.e(this.getClass().getName(), "此处需要，增加AddressBookFragement的参数");
 			Bundle args = new Bundle();
-			ContainerActivity.startContainerActivity(mContext, AddressBookFragement.class, null, "开始聊天");
+			ContainerActivity.startContainerActivity(mContext, AdbookFragement.class, null, "开始聊天");
 			
 			mMenuPW.dismiss();
 			break;

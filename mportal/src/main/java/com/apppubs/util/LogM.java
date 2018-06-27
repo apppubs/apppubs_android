@@ -30,7 +30,7 @@ public class LogM {
 
 	
 	public static void log(Class<?> clazz, String msg) {
-		Log.v(clazz.getSimpleName(), msg);
+		Log.v("LogM V"+clazz.getSimpleName(), msg);
 		// 写入本地文件
 		if (Constants.IS_DEBUG) {
 			formatMsg(clazz, msg);

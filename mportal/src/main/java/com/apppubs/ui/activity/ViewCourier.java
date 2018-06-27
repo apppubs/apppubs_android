@@ -16,7 +16,7 @@ import com.apppubs.ui.fragment.PapersFragment;
 import com.apppubs.ui.fragment.ServiceNOsOfMineFragment;
 import com.apppubs.ui.fragment.SettingFragment;
 import com.apppubs.ui.fragment.TitleMenuFragment;
-import com.apppubs.ui.message.fragment.AddressBookFragement;
+import com.apppubs.ui.message.fragment.AdbookFragement;
 import com.apppubs.ui.message.fragment.ConversationListFragment;
 import com.apppubs.ui.myfile.MyFileFragment;
 import com.apppubs.ui.news.ChannelFragment;
@@ -98,9 +98,9 @@ public class ViewCourier {
             } else if (Constants.APPPUBS_PROTOCOL_TYPE_ADDRESS_BOOK.equals(pro.getType())) {
                 String rootSuperId = StringUtils.getQueryParameter(pro.getUri(), "rootsuperid");
                 Bundle args = new Bundle();
-                args.putString(AddressBookFragement.ARGS_ROOT_DEPARTMENT_SUPER_ID, rootSuperId);
+                args.putString(AdbookFragement.ARGS_ROOT_DEPARTMENT_SUPER_ID, rootSuperId);
                 args.putBoolean(ContainerActivity.EXTRA_BOOLEAN_IS_FULLSCREEN, true);
-                ContainerActivity.startContainerActivity(mContext, AddressBookFragement.class, args);
+                ContainerActivity.startContainerActivity(mContext, AdbookFragement.class, args);
             } else if (Constants.APPPUBS_PROTOCOL_TYPE_CHANNEL.equals(pro.getType())) {
                 String[] arr = StringUtils.getPathParams(url);
                 ChannelFragment cf = ChannelFragmentFactory.getChannelFragment(Integer.parseInt

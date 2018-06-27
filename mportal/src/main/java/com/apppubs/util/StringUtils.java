@@ -478,6 +478,11 @@ public class StringUtils {
         return false;
     }
 
+    public static boolean isInteger(String str) {
+        Pattern pattern = Pattern.compile("^[-\\+]?[\\d]*$");
+        return pattern.matcher(str).matches();
+    }
+
     public static boolean equals(String res, String des) {
         if (res == null || des == null) {
             return res == des;

@@ -13,8 +13,8 @@ import com.apppubs.d20.R;
 import com.apppubs.ui.activity.BaseActivity;
 import com.apppubs.model.message.FilePickerModel;
 import com.apppubs.model.message.MyFilePickerHelper;
-import com.apppubs.model.myfile.CacheListener;
-import com.apppubs.model.myfile.FileCacheErrorCode;
+import com.apppubs.model.cache.CacheListener;
+import com.apppubs.model.cache.FileCacheErrorCode;
 import com.apppubs.util.LogM;
 import com.apppubs.ui.widget.ProgressHUD;
 

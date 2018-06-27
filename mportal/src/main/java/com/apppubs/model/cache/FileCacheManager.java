@@ -1,4 +1,4 @@
-package com.apppubs.model.myfile;
+package com.apppubs.model.cache;
 
 import java.io.File;
 import java.util.List;

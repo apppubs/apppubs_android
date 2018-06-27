@@ -72,6 +72,7 @@ public class Constants {
 	public static final String API_NAME_PAGE = "page";
 	public static final String API_NAME_UPLOAD_FILE = "upload_file";
 	public static final String API_NAME_CHECK_VERSION = "check_version";
+	public static final String API_NAME_ADBOOK_INFO = "adbook_info";
 
 	//文件管理
 	public static final String API_NAME_MYFILE_PAGE = "my_file_page";

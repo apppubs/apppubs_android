@@ -12,19 +12,14 @@ import com.apppubs.bean.AppConfig;
 import com.apppubs.bean.Settings;
 import com.apppubs.bean.UserInfo;
 import com.apppubs.bean.http.AppInfoResult;
-import com.apppubs.constant.Constants;
 import com.apppubs.d20.R;
-import com.apppubs.model.myfile.FileCacheManager;
-import com.apppubs.model.myfile.FileCacheManagerImpl;
+import com.apppubs.model.cache.FileCacheManager;
+import com.apppubs.model.cache.FileCacheManagerImpl;
 import com.apppubs.net.WMHHttpClient;
 import com.apppubs.net.WMHHttpClientDefaultImpl;
 import com.apppubs.util.FileUtils;
 import com.apppubs.util.LogM;
 import com.apppubs.util.Utils;
-import com.bumptech.glide.load.Encoder;
-
-import java.io.UnsupportedEncodingException;
-import java.net.URLEncoder;
 
 /**
  * Created by zhangwen on 2017/2/22.
@@ -179,7 +174,6 @@ public class AppContext {
     }
 
     public FileCacheManager getCacheManager() {
-
         return FileCacheManagerImpl.getInstance(mContext);
     }
 

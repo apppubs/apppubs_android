@@ -9,7 +9,7 @@ import com.apppubs.ui.fragment.ExceptionFragment;
 import com.apppubs.ui.fragment.PapersFragment;
 import com.apppubs.ui.fragment.ServiceNOsOfMineFragment;
 import com.apppubs.ui.fragment.SettingFragment;
-import com.apppubs.ui.message.fragment.AddressBookFragement;
+import com.apppubs.ui.message.fragment.AdbookFragement;
 import com.apppubs.ui.message.fragment.ConversationListFragment;
 import com.apppubs.ui.myfile.MyFileFragment;
 import com.apppubs.ui.news.ChannelFragment;
@@ -58,8 +58,8 @@ public class FragmentFactory {
             }else if(Constants.APPPUBS_PROTOCOL_TYPE_ADDRESS_BOOK.equals(pro.getType())){
                 String rootSuperId = StringUtils.getQueryParameter(uri, "rootsuperid");
                 Bundle args = new Bundle();
-                args.putString(AddressBookFragement.ARGS_ROOT_DEPARTMENT_SUPER_ID, rootSuperId);
-                frg = new AddressBookFragement();
+                args.putString(AdbookFragement.ARGS_ROOT_DEPARTMENT_SUPER_ID, rootSuperId);
+                frg = new AdbookFragement();
                 frg.setArguments(args);
             }else if(Constants.APPPUBS_PROTOCOL_TYPE_PAGE.equals(pro.getType())){
                 frg = new PageFragment();

@@ -21,15 +21,11 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.apppubs.AppContext;
-import com.apppubs.constant.APError;
-import com.apppubs.model.IAPCallback;
-import com.apppubs.model.myfile.CacheListener;
-import com.apppubs.model.myfile.FileCacheErrorCode;
-import com.apppubs.model.myfile.FileCacheManager;
+import com.apppubs.model.cache.CacheListener;
+import com.apppubs.model.cache.FileCacheErrorCode;
+import com.apppubs.model.cache.FileCacheManager;
 import com.apppubs.d20.R;
 import com.apppubs.ui.activity.ContainerActivity;
-import com.apppubs.bean.AppConfig;
-import com.apppubs.ui.fragment.BaseFragment;
 import com.apppubs.ui.fragment.TitleBarFragment;
 import com.apppubs.ui.webapp.WebAppFragment;
 import com.apppubs.util.LogM;

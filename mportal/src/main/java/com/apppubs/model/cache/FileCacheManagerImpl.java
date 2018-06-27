@@ -1,4 +1,4 @@
-package com.apppubs.model.myfile;
+package com.apppubs.model.cache;
 
 import android.content.Context;
 import android.os.Handler;
@@ -7,6 +7,7 @@ import android.support.annotation.NonNull;
 import android.text.TextUtils;
 import android.util.Log;
 
+import com.apppubs.MportalApplication;
 import com.apppubs.constant.URLs;
 import com.apppubs.exception.APUnavailableException;
 import com.apppubs.util.FileUtils;
@@ -170,7 +171,6 @@ public class FileCacheManagerImpl implements FileCacheManager {
 								bos.write(buffer, 0, len);
 								curLen += len;
 								float curProgress = curLen / (float) totalLen;// 当前进度位置
-								System.out.print("当前进度"+curProgress);
 								if (curProgress - preProgress > 0.01) {// 当下载量超过1%时进行通知
 									mHandler.post(getOnProgressRunnable(curProgress,totalLen));
 									preProgress = curProgress;
@@ -187,6 +187,7 @@ public class FileCacheManagerImpl implements FileCacheManager {
 							}
 							//下载完成
 							File desFile = getDesFile(mFileName);
+							desFile.deleteOnExit();
 							desTempFile.renameTo(desFile);
 							FileCacheDataHelper.getInstance().put(mFileUrl,desFile.getAbsolutePath());
 							mHandler.post(getOnProgressRunnable(1,totalLen));
@@ -410,12 +411,18 @@ public class FileCacheManagerImpl implements FileCacheManager {
 	}
 
 	@NonNull
-	private File getDesFile(String fileName) throws APUnavailableException {
-		File cacheDir = getCacheDirFile();
-		File desFile = new File(cacheDir,fileName);
+	private File getDesEmptyFile(String fileName) throws APUnavailableException {
+		File desFile = getDesFile(fileName);
 		while (desFile.exists()){
 			desFile = getNextSameNameFile(desFile);
 		}
+		return desFile;
+	}
+
+	private File getDesFile(String fileName) throws APUnavailableException {
+		File cacheDir = getCacheDirFile();
+		File desFile = new File(cacheDir,fileName);
+
 		return desFile;
 	}
 
@@ -509,14 +516,18 @@ class FileCacheDataHelper {
 	private Map<String,String> mData = new HashMap<String,String>();
 	private File mDataFile ;
 	private static FileCacheDataHelper sHelper;
+	private Context mContext;
 
-	private FileCacheDataHelper(){
+	private FileCacheDataHelper(Context context){
+		mContext = context;
 		try {
-			mDataFile = new File(FileUtils.getAppExternalFilesStorageFile(),"files.data");
+			mDataFile = new File(FileUtils.getAppFilesDirectory(mContext),"files.data");
 			if (mDataFile.exists()){
 				restoreFromDisk();
+			}else{
+				mDataFile.createNewFile();
 			}
-		} catch (APUnavailableException e) {
+		} catch (IOException e) {
 			e.printStackTrace();
 		}
 	}
@@ -525,7 +536,8 @@ class FileCacheDataHelper {
 		if (sHelper==null){
 			synchronized (FileCacheDataHelper.class){
 				if (sHelper==null){
-					sHelper = new FileCacheDataHelper();
+
+					sHelper = new FileCacheDataHelper(MportalApplication.getContext());
 				}
 			}
 		}

@@ -23,8 +23,8 @@ import com.apppubs.model.message.TranspondDataHelper;
 import com.apppubs.model.message.UserBussiness;
 import com.apppubs.model.message.UserPickerHelper;
 import com.apppubs.model.IAPCallback;
-import com.apppubs.model.myfile.CacheListener;
-import com.apppubs.model.myfile.FileCacheErrorCode;
+import com.apppubs.model.cache.CacheListener;
+import com.apppubs.model.cache.FileCacheErrorCode;
 import com.apppubs.ui.widget.ConfirmDialog;
 import com.apppubs.ui.widget.ProgressHUD;
 
