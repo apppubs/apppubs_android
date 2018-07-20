@@ -15,4 +15,7 @@ public interface IAdbookView extends ICommonView{
     void showHaveNewVersion(String updateTime);
     void showDepts(List<TDepartment> depts);
     void showUsers(List<TUser> users);
+    void clearBreadcrumb(TDepartment department);
+    void showParsingLoading();
+    void hideParsingLoading();
 }

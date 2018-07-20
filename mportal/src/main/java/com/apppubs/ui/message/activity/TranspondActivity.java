@@ -13,6 +13,7 @@ import android.widget.Toast;
 
 import com.apppubs.bean.TUser;
 import com.apppubs.constant.APError;
+import com.apppubs.model.AdbookBiz;
 import com.apppubs.ui.adapter.CommonAdapter;
 import com.apppubs.AppContext;
 import com.apppubs.d20.R;
@@ -116,7 +117,7 @@ public class TranspondActivity extends BaseActivity {
 					@Override
 					public void onPickDone(List<String> userIds) {
 						if (userIds != null && userIds.size() > 0) {
-							TUser user = UserBussiness.getInstance(mContext).getUserByUserId(userIds.get(0));
+							TUser user = AdbookBiz.getInstance(mContext).getUserByUserId(userIds.get(0));
 							ConversationModel model = new ConversationModel(userIds.get(0), Conversation.ConversationType.PRIVATE, user.getTrueName(), "");
 							showSendAlert(model);
 						}

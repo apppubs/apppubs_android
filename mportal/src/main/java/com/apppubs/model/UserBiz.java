@@ -9,7 +9,9 @@ import com.apppubs.bean.Settings;
 import com.apppubs.bean.UserInfo;
 import com.apppubs.AppContext;
 import com.apppubs.bean.http.DefaultResult;
+import com.apppubs.bean.http.IJsonResult;
 import com.apppubs.bean.http.LoginResult;
+import com.apppubs.bean.http.UserBasicInfosResult;
 import com.apppubs.constant.APError;
 import com.apppubs.constant.Actions;
 import com.apppubs.constant.Constants;
@@ -42,9 +44,9 @@ public class UserBiz extends BaseBiz {
     }
 
     public interface GetUserInfoCallback {
-        void onException(WMHErrorCode code);
+        void onException(APError error);
 
-        void onDone(UserInfo user);
+        void onDone(UserBasicInfosResult userInfos);
     }
 
     public static UserBiz getInstance(Context context) {
@@ -58,31 +60,25 @@ public class UserBiz extends BaseBiz {
         return sUserBiz;
     }
 
-    public void getUserInfo(String userid, final GetUserInfoCallback callback) {
-        String userInfoUrl = String.format(URLs.URL_USER_INFO, URLs.baseURL, URLs.appCode, userid);
-        WMHHttpClient httpClient = AppContext.getInstance(mContext).getHttpClient();
-        httpClient.GET(userInfoUrl, null, new WMHRequestListener() {
-            @Override
-            public void onDone(JSONResult jsonResult, @Nullable WMHHttpErrorCode errorCode) {
-                if (errorCode == null) {
-                    UserInfo userinfo = JSONUtils.parseObjectFromJson(jsonResult.result, UserInfo
-                            .class);
-                    callback.onDone(userinfo);
-                } else {
-                    WMHErrorCode e = null;
-                    switch (errorCode) {
-                        case JSON_PARSE_ERROR:
-                            e = WMHErrorCode.JSON_PARSE_ERROR;
-                        case IO_EXCEPTION:
-                            e = WMHErrorCode.IO_EXCEPTION;
-                        default:
-                            e = WMHErrorCode.UNKNOWN;
+    public void fetchUserBasicInfo(String userid, final GetUserInfoCallback callback) {
+        Map<String, String> map = new HashMap<>();
+        map.put("userIds", userid);
+        this.asyncPOST(Constants.API_NAME_USER_BASIC_INFO, map, true, UserBasicInfosResult.class, new
+                IRQListener<UserBasicInfosResult>() {
+                    @Override
+                    public void onResponse(UserBasicInfosResult jr, APError error) {
+                        MainHandler.getInstance().post(new Runnable() {
+                            @Override
+                            public void run() {
+                                if (error != null) {
+                                    callback.onException(error);
+                                } else {
+                                    callback.onDone(jr);
+                                }
+                            }
+                        });
                     }
-                    callback.onException(e);
-
-                }
-            }
-        });
+                });
     }
 
     public void loginWithUsernameAndPwd(String username, String pwd, final boolean autoLogin,
@@ -309,7 +305,7 @@ public class UserBiz extends BaseBiz {
         String idsStr = getUserIdsStr(userIds);
         Map<String, String> params = new HashMap<>();
         params.put("userIds", idsStr);
-        asyncPOST(Constants.API_NAME_REQUEST_SENT_INVITE_SMS, params, new IRQStringListener() {
+        asyncPOST(Constants.API_NAME_REQUEST_SENT_INVITE_SMS, params, true, new IRQStringListener() {
             @Override
             public void onResponse(final String result, final APError error) {
                 if (error == null) {

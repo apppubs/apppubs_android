@@ -11,9 +11,12 @@ android {
         versionCode 20101001
         versionName "1.0.0"
         resValue "string","app_name","移动平台"
+        buildConfigField "boolean","ENABLE_CHAT","true"
+        buildConfigField "String","ADBOOK_START_CHAT_LABEL","\"开启国投沟通\""
+        buildConfigField "boolean","ADBOOK_ENABLE_RESEND_INVITE_SMS","true"
         compileOptions {
-            sourceCompatibility JavaVersion.VERSION_1_7
-            targetCompatibility JavaVersion.VERSION_1_7
+            sourceCompatibility JavaVersion.VERSION_1_8
+            targetCompatibility JavaVersion.VERSION_1_8
         }
         ndk {
             //选择要添加的对应cpu类型的.so库。
@@ -24,7 +27,7 @@ android {
                 JPUSH_PKGNAME        : applicationId,
                 JPUSH_APPKEY         : "85358a757b2da7055f45f83c", //JPush上注册的包名对应的appkey.
                 JPUSH_CHANNEL        : "developer-default", //暂时填写默认值即可.
-                APPID                : "U1529327114132",
+                APPID                : "D63",
                 BASE_URL             : "http://www.apppubs.com/",
                 DISPLAY_ORIENTATION  : "1",
                 ENABLE_SPLASH_SKIP   : false,
@@ -44,23 +47,17 @@ android {
     buildTypes{
         debug{
             resValue "string", "app_name", "移动平台dev"
+            minifyEnabled false
+        }
+        release{
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.txt'
         }
     }
 
     sourceSets {
         main {
             jniLibs.srcDirs = ['libs']
-        }
-    }
-
-    buildTypes {
-        debug {
-            // disable ProGuard for faster compile times for debug builds
-            minifyEnabled false
-        }
-        release {
-            minifyEnabled false
-            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.txt'
         }
     }
 
@@ -76,7 +73,6 @@ dependencies {
     // JUnit4 Rules
 
 //// Espresso core
-
 //// Espresso-contrib for DatePicker, RecyclerView, Drawer actions,
 //// Accessibility checks, CountingIdlingResource
 //    androidTestCompile 'com.android.support.test.espresso:espresso-contrib:2.2.2'

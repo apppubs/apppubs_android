@@ -46,8 +46,6 @@ public class UserInfo implements Serializable{
 	private String addressBookPower;//通讯录组织权限
 	private int sortId;
 
-	private String addressbookPermissionString;
-
 	private String avatarUrl;//20170113
 	private String orgCode;
 
@@ -74,7 +72,6 @@ public class UserInfo implements Serializable{
 		this(userid,  username,  cnname,  password,  user_email,
 				 user_phone);
 		this.menuPower = menuPower;
-		addressbookPermissionString = "";
 	}
 
 	public String getId() {
@@ -253,14 +250,6 @@ public class UserInfo implements Serializable{
 				+ ", nickName=" + nickName + ", loginResult= type=" + type + ", icon=" + icon
 				+ ", password=" + password + ", email=" + email + ", mobile=" + mobile + ", mobile2=" + mobile2
 				+ ", officeNO=" + officeNO + ", workTEL=" + workTEL + ", sex=" + sex + ", initials=" + initials + "]";
-	}
-
-	public String getAddressbookPermissionString() {
-		return addressbookPermissionString;
-	}
-
-	public void setAddressbookPermissionString(String addressbookPermissionString) {
-		this.addressbookPermissionString = addressbookPermissionString;
 	}
 
 	public String getOrgCode() {

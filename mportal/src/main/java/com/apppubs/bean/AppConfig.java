@@ -41,12 +41,6 @@ public class AppConfig implements Serializable {
     private String updateUrl;
     @SerializedName("android_version_alert")
     private Integer needVersionAlertFlag;
-    @SerializedName("chat_flag")
-    private String chatFlag;
-    @SerializedName("adbookauth")
-    private Integer adbookAuthFlag;
-    @SerializedName("chat_auth")
-    private Integer chatAuthFlag;
     @SerializedName("about_properties")
     private String aboutProperties;
     private String adbookUserURL;
@@ -62,9 +56,6 @@ public class AppConfig implements Serializable {
         pdfEditableFlag = "0";
         regURL = "";
         forgetPasswordUrl = "";
-        chatFlag = "0";
-        adbookAuthFlag = 0;
-        chatAuthFlag = 0;
     }
 
     public String getAdbookRootId() {
@@ -171,31 +162,6 @@ public class AppConfig implements Serializable {
         this.needVersionAlertFlag = needVersionAlertFlag;
     }
 
-    public String getChatFlag() {
-        return chatFlag;
-    }
-
-    public void setChatFlag(String chatFlag) {
-        this.chatFlag = chatFlag;
-    }
-
-    public Integer getAdbookAuthFlag() {
-        return adbookAuthFlag;
-    }
-
-    public void setAdbookAuthFlag(Integer adbookAuthFlag) {
-        this.adbookAuthFlag = adbookAuthFlag;
-    }
-
-    public Integer getChatAuthFlag() {
-        return chatAuthFlag;
-    }
-
-    public void setChatAuthFlag(Integer chatAuthFlag) {
-
-        this.chatAuthFlag = chatAuthFlag;
-    }
-
     public String getAboutProperties() {
         return aboutProperties;
     }
@@ -239,8 +205,6 @@ public class AppConfig implements Serializable {
                 setAdbookDeptURL(item.getValue());
             } else if (Constants.APP_CONFIG_ADBOOK_USER_DETP_LINK_URL.equals(key)) {
                 setAdbookLinkURL(item.getValue());
-            } else if (Constants.APP_CONFIG_PARAM_CHAT_FLAG.equals(key)) {
-                setChatFlag(item.getValue());
             } else if (Constants.APP_CONFIG_PARAM_REG_URL.equals(key)) {
                 setRegURL(item.getValue());
             } else if (Constants.APP_CONFIG_ABOUT_PROPERTIES.equals(key)) {

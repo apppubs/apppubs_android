@@ -346,11 +346,6 @@ public class App implements Serializable {
         this.baiduPushUserId = baiduPushUserId;
     }
 
-    public boolean isAllowChat() {
-        return "1".equals(appConfig.getChatFlag());
-    }
-
-
     public int getAllModifyUserInfo() {
         return allModifyUserInfo;
     }

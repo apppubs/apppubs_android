@@ -3,6 +3,7 @@ package com.apppubs.bean;
 import java.io.Serializable;
 import java.util.Date;
 
+import com.apppubs.util.Des3;
 import com.google.gson.annotations.SerializedName;
 import com.orm.SugarRecord;
 import com.orm.dsl.Table;

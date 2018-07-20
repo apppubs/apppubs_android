@@ -150,6 +150,10 @@ public class Breadcrumb extends ViewGroup {
         }
     }
 
+    public void clear(){
+        pop2index(-1);
+    }
+
     public void setTextColor(int color){
         mTextColor = color;
         for (View view : mPathList){

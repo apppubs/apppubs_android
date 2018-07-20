@@ -230,23 +230,22 @@ public class UserBussiness extends BaseBiz {
 		}
 	}
 
-	/**
-	 * 列出某个department下的用户
-	 * 当前系统需要限制通讯录权限且有部门权限则显示全部信息，否则只查询出userid和truename
-	 * @param departmentId
-	 * @return
-	 */
-	public List<TUser> listUser(String departmentId) {
-		String sql = "";
-		if (this.mAppContext.getAppConfig().getAdbookAuthFlag() < 1 || (this.mAppContext.getAppConfig().getAdbookAuthFlag() > 0 && hasReadPermissionOfDept(departmentId))
-				) {
-			sql = "select * from USER t1 join USER_DEPT_LINK t2 on t1.USER_ID = t2.USER_ID where t2.DEPT_ID = ? order by t2.sort_id";
-		} else {
-			sql = "select t1.USER_ID,t1.TRUE_NAME from USER t1 join USER_DEPT_LINK t2 on t1.USER_ID = t2.USER_ID where t2.DEPT_ID = ? order by t2.sort_id";
-		}
-
-		return SugarRecord.findWithQuery(TUser.class, sql, departmentId);
-	}
+//	/**
+//	 * 列出某个department下的用户
+//	 * 当前系统需要限制通讯录权限且有部门权限则显示全部信息，否则只查询出userid和truename
+//	 * @param departmentId
+//	 * @return
+//	 */
+//	public List<TUser> listUser(String departmentId) {
+//		String sql = "";
+//		if ( hasReadPermissionOfDept(departmentId)){
+//			sql = "select * from USER t1 join USER_DEPT_LINK t2 on t1.USER_ID = t2.USER_ID where t2.DEPT_ID = ? order by t2.sort_id";
+//		} else {
+//			sql = "select t1.USER_ID,t1.TRUE_NAME from USER t1 join USER_DEPT_LINK t2 on t1.USER_ID = t2.USER_ID where t2.DEPT_ID = ? order by t2.sort_id";
+//		}
+//
+//		return SugarRecord.findWithQuery(TUser.class, sql, departmentId);
+//	}
 
 	/**
 	 * 列出子部门
@@ -286,7 +285,7 @@ public class UserBussiness extends BaseBiz {
 
 	/**
 	 * 判断某个department是否为叶子节点
-	 * 
+	 *
 	 * @param departmentId
 	 * @return
 	 */
@@ -308,16 +307,6 @@ public class UserBussiness extends BaseBiz {
 	public List<TDepartment> listRootDepartment() {
 		AppConfig appConfig = AppContext.getInstance(mContext).getAppConfig();
 		return listSubDepartment(appConfig.getAdbookRootId());
-	}
-
-	/**
-	 * 获取某一个user
-	 * 
-	 * @param userId
-	 * @return
-	 */
-	public TUser getUserByUserId(String userId) {
-		return SugarRecord.findByProperty(TUser.class, "USER_ID", userId);
 	}
 
 	public TUser getUserByUsername(String username) {
@@ -374,52 +363,6 @@ public class UserBussiness extends BaseBiz {
 		cache.put(userBasicInfo.getUserId(),userBasicInfo);
 	}
 
-	public List<TDepartment> getDepartmentByUserId(String userId) {
-		String sql = "select * from DEPARTMENT t1 join USER_DEPT_LINK t2 on t1.DEPT_ID = t2.DEPT_ID where t2.USER_ID = ?";
-		return SugarRecord.findWithQuery(TDepartment.class, sql, userId);
-	}
-
-	public TDepartment getDepartmentById(String deptId){
-		List<TDepartment> deptList = SugarRecord.find(TDepartment.class,"dept_id=?",deptId);
-		if (deptList==null||deptList.size()<1){
-			return null;
-		}else{
-			return deptList.get(0);
-		}
-	}
-	
-	public List<String> getDepartmentStringListByUserId(String userId,String deptRootId){
-		List<TDepartment> deptList = getDepartmentByUserId(userId);
-		List<String> strList = new ArrayList<String>(deptList.size());
-		for(TDepartment dept:deptList){
-			StringBuilder sb = new StringBuilder();
-			getDepartmentStringByDeptId(dept.getDeptId(), deptRootId,sb);
-			strList.add(sb.toString());
-		}
-		return strList;
-	}
-
-	/**
-	 * 获取除顶级部门外两级部门名称
-	 * @param deptId
-	 * @param deptRootId
-	 * @param resultSb
-	 */
-	private void getDepartmentStringByDeptId(String deptId,String deptRootId,StringBuilder resultSb){
-		TDepartment dept = SugarRecord.findByProperty(TDepartment.class, "dept_id", deptId);
-		if(!deptId.equals(deptRootId)){
-			if(TextUtils.isEmpty(resultSb.toString())){
-				resultSb.append(dept.getName());
-			}else{
-				resultSb.insert(0, dept.getName()+"-");
-			}
-			if (!TextUtils.isEmpty(dept.getSuperId())&&!dept.getSuperId().equals(deptRootId)){
-				TDepartment superDept = SugarRecord.findByProperty(TDepartment.class, "dept_id", dept.getSuperId());
-				resultSb.insert(0,superDept.getName()+"-");
-			}
-		}
-	}
-
 	/**
 	 * 搜索用户
 	 * 
@@ -466,125 +409,6 @@ public class UserBussiness extends BaseBiz {
 	private String mDeptResponse;
 	private String mUserDeptResponse;
 
-	public Future<?> sycnAddressBook(final AbstractBussinessCallback<Object> callback) {
-		if (isSynchronizingAdbook){
-			sHandler.post(new OnExceptionRun<Object>(callback));
-			return null;
-		}
-		isSynchronizingAdbook = true;
-		Future<?> f = sDefaultExecutor.submit(new Runnable() {
-
-			@Override
-			public void run() {
-
-				try {
-					// 用户
-					App app = mAppContext.getApp();
-					String urlUser = app.getAppConfig().getAdbookUserURL();
-					WebUtils.requestWithGet(urlUser, new WebUtils.DownloadLisener() {
-						@Override
-						public void onUpdate(double progress) {
-							mUserDownloadProgress = progress;
-							sHandler.post(new OnUpdateRun(callback, (mUserDownloadProgress+mDeptDownloadProgress+mUserDeptDownloadProgress)/3.0f));
-						}
-
-						@Override
-						public void onSuccess(String response) {
-							mUserResponse = response;
-							try {
-								if(writeDbIfPossible()){
-									sHandler.post(new OnDoneRun<Object>(callback, new Object()));
-								}
-							} catch (Exception e) {
-								e.printStackTrace();
-								sHandler.post(new OnExceptionRun<Object>(callback));
-							}
-						}
-
-						@Override
-						public void onExceptioin(Exception e) {
-							e.printStackTrace();
-							sHandler.post(new OnExceptionRun<Object>(callback));
-							isSynchronizingAdbook = false;
-						}
-					});
-
-					// 部门
-					String urlDep = app.getAppConfig().getAdbookDeptURL();
-					WebUtils.requestWithGet(urlDep, new WebUtils.DownloadLisener() {
-						@Override
-						public void onUpdate(double progress) {
-							mDeptDownloadProgress = progress;
-							sHandler.post(new OnUpdateRun(callback, (mUserDownloadProgress+mDeptDownloadProgress+mUserDeptDownloadProgress)/3.0f));
-						}
-
-						@Override
-						public void onSuccess(String response) {
-							mDeptResponse = response;
-							try {
-								if(writeDbIfPossible()){
-									sHandler.post(new OnDoneRun<Object>(callback, new Object()));
-								}
-							} catch (Exception e) {
-								e.printStackTrace();
-								sHandler.post(new OnExceptionRun<Object>(callback));
-							}
-						}
-
-						@Override
-						public void onExceptioin(Exception e) {
-							e.printStackTrace();
-							callback.onException(new APError(APErrorCode.GENERAL_ERROR,"系统异常！"));
-							sHandler.post(new OnExceptionRun<Object>(callback));
-							isSynchronizingAdbook = false;
-						}
-					});
-
-
-					// 关联
-					String urlLink = mAppContext.getApp().getAppConfig().getAdbookLinkURL();
-					WebUtils.requestWithGet(urlLink, new WebUtils.DownloadLisener() {
-						@Override
-						public void onUpdate(double progress) {
-							mUserDeptDownloadProgress = progress;
-							sHandler.post(new OnUpdateRun(callback, (mUserDownloadProgress+mDeptDownloadProgress+mUserDeptDownloadProgress)/3.0f));
-						}
-
-						@Override
-						public void onSuccess(String response) {
-							mUserDeptResponse = response;
-							try {
-								if(writeDbIfPossible()){
-									sHandler.post(new OnDoneRun<Object>(callback, new Object()));
-								}
-							} catch (Exception e) {
-								e.printStackTrace();
-								sHandler.post(new OnExceptionRun<Object>(callback));
-							}
-						}
-
-						@Override
-						public void onExceptioin(Exception e) {
-							sHandler.post(new OnExceptionRun<Object>(callback));
-							isSynchronizingAdbook = false;
-						}
-					});
-
-
-				} catch (Exception e) {
-					sHandler.post(new OnExceptionRun<Object>(callback));
-					e.printStackTrace();
-					isSynchronizingAdbook = false;
-				} finally {
-
-				}
-
-			}
-		});
-
-		return f;
-	}
-
 	protected class OnUpdateRun implements Runnable{
 		private AbstractBussinessCallback mCallback;
 		private double mProgress;
@@ -599,91 +423,6 @@ public class UserBussiness extends BaseBiz {
 
 	}
 
-	private boolean writeDbIfPossible() throws Exception {
-		if (shouldWriteDb()){
-
-			SQLiteDatabase db = SugarRecord.getDatabase();
-			db.beginTransaction();
-			SugarRecord.deleteAll(TUser.class);
-			SugarRecord.deleteAll(TDepartment.class);
-			SugarRecord.deleteAll(TUserDeptLink.class);
-
-			GsonBuilder gb = new GsonBuilder();
-			gb.registerTypeAdapter(Integer.class, new JsonDeserializer<Integer>() {
-
-				@Override
-				public Integer deserialize(JsonElement json, Type arg1, JsonDeserializationContext arg2)
-						throws JsonParseException {
-					Integer result = 0;
-					String jsonStr = json.getAsString();
-					try {
-						result = Integer.parseInt(jsonStr);
-					} catch (Exception e) {
-						result = 0;
-					}
-					return result;
-				}
-			});
-			Gson gson = gb.create();
-			App app = AppContext.getInstance(mContext).getApp();
-
-			try {
-
-				if (app.getAddressbookNeedDecryption() == App.NEED) {
-					mUserResponse = Des3.decode(mUserResponse);
-				}
-				JSONObject userJson = new JSONObject(mUserResponse);
-				List<TUser> userL = gson.fromJson(userJson.getString("users"), new TypeToken<List<TUser>>() {
-				}.getType());
-				mUserResponse = null;
-				for (TUser u : userL) {
-					u.save();
-				}
-				userL.clear();
-
-				//部门
-				if (app.getAddressbookNeedDecryption() == App.NEED) {
-					mDeptResponse = Des3.decode(mDeptResponse);
-				}
-				JSONObject deptJson = new JSONObject(mDeptResponse);
-				List<TDepartment> deptL = gson.fromJson(deptJson.getString("depts"),
-						new TypeToken<List<TDepartment>>() {
-						}.getType());
-				mDeptResponse = null;
-				for (TDepartment d : deptL) {
-					d.save();
-				}
-				deptL.clear();
-
-				//关联表
-
-				if (mAppContext.getApp().getAddressbookNeedDecryption() == App.NEED) {
-					mUserDeptResponse = Des3.decode(mUserDeptResponse);
-				}
-				JSONObject linkJson = new JSONObject(mUserDeptResponse);
-				List<TUserDeptLink> linkL = gson.fromJson(linkJson.getString("deptuser"),
-						new TypeToken<List<TUserDeptLink>>() {
-						}.getType());
-				mUserDeptResponse = null;
-				for (TUserDeptLink l : linkL) {
-					l.save();
-				}
-				linkL.clear();
-				db.setTransactionSuccessful();
-				return true;
-			}catch (Exception e){
-				throw e;
-			}finally {
-				db.endTransaction();
-				isSynchronizingAdbook = false;
-				mUserDeptDownloadProgress = 0;
-				mDeptDownloadProgress = 0;
-				mUserDeptDownloadProgress = 0;
-			}
-		}
-
-		return false;
-	}
 
 	/**
 	 * 判断是否通讯录信息是否下载完毕,是否可以写数据库
@@ -749,58 +488,4 @@ public class UserBussiness extends BaseBiz {
 		return result;
 	}
 
-	/**
-	 * 判断在是否有某用户的读取权限
-	 * @param userid
-	 * @return
-	 */
-	public boolean hasReadPermissionOfUser(String userid){
-		List<TDepartment> dl = getDepartmentByUserId(userid);
-		for (TDepartment d: dl){
-			if (hasReadPermissionOfDept(d.getDeptId())){
-				return true;
-			}
-		}
-		return false;
-	}
-
-	private boolean hasReadPermissionOfDept(String deptId){
-		if (TextUtils.isEmpty(deptId)){
-			return false;
-		}
-		String permissionStr = AppContext.getInstance(mContext).getCurrentUser().getAddressbookPermissionString();
-		String [] deptIds = permissionStr.split(",");
-		for (String curDeptId : deptIds){
-			if (deptId.equals(curDeptId)){
-				return true;
-			}
-		}
-		return false;
-	}
-
-	public boolean hasChatPermissionOfUser(String userId){
-		List<TDepartment> dl = getDepartmentByUserId(userId);
-		String permissionStr = AppContext.getInstance(mContext).getCurrentUser().getChatPermissionString();
-		for (TDepartment d: dl){
-			if (!TextUtils.isEmpty(permissionStr)&&hasChatPermissionOfDept(d.getDeptId())){
-				return true;
-			}
-		}
-		return false;
-	}
-
-	private boolean hasChatPermissionOfDept(String deptId){
-		if (TextUtils.isEmpty(deptId)){
-			return false;
-		}
-		String permissionStr = AppContext.getInstance(mContext).getCurrentUser().getChatPermissionString();
-		String[] deptIds = permissionStr.split(",");
-		for (String curDeptId : deptIds){
-			if (curDeptId.equals(deptId)){
-				return true;
-			}
-		}
-
-		return false;
-	}
 }

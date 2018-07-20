@@ -7,6 +7,7 @@ import android.os.Handler;
 import android.support.annotation.Nullable;
 import android.text.TextUtils;
 import android.util.Log;
+import android.view.TextureView;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.Toast;
@@ -14,20 +15,20 @@ import android.widget.Toast;
 import com.apppubs.bean.TUser;
 import com.apppubs.bean.UserInfo;
 import com.apppubs.AppContext;
+import com.apppubs.bean.http.UserBasicInfosResult;
 import com.apppubs.constant.APError;
+import com.apppubs.d20.BuildConfig;
 import com.apppubs.d20.R;
-import com.apppubs.model.SystemBiz;
+import com.apppubs.model.AdbookBiz;
+import com.apppubs.model.WMHErrorCode;
 import com.apppubs.ui.activity.ImageViewActivity;
 import com.apppubs.ui.adbook.IUserInfoView;
-import com.apppubs.ui.adbook.IUserInfoViewListener;
 import com.apppubs.model.UserBiz;
 import com.apppubs.model.message.UserBussiness;
 import com.apppubs.model.IAPCallback;
-import com.apppubs.model.WMHErrorCode;
 import com.apppubs.ui.widget.ConfirmDialog;
 import com.apppubs.ui.widget.ProgressHUD;
 import com.apppubs.ui.widget.menudialog.MenuDialog;
-import com.nostra13.universalimageloader.core.ImageLoader;
 
 import java.util.Arrays;
 
@@ -38,150 +39,92 @@ import io.rong.imlib.model.Conversation;
  * Created by zhangwen on 2017/10/24.
  */
 
-public class UserInfoPresenter implements IUserInfoViewListener {
+public class UserInfoPresenter {
 
     private Context mContext;
     private IUserInfoView mView;
-    private Handler mHandler;
-    private UserInfo mCurrentUser;
+    private UserBiz mUserBiz;
+    private AdbookBiz mAdbookBiz;
+    private UserBasicInfosResult.Item mCurrentUserInfo;
 
     public UserInfoPresenter(Context context, IUserInfoView view) {
         mContext = context;
         mView = view;
-        mHandler = new Handler();
+        mUserBiz = UserBiz.getInstance(context);
+        mAdbookBiz = AdbookBiz.getInstance(context);
     }
 
-    @Override
-    public void onResume() {
-        final UserBiz userBiz = UserBiz.getInstance(mContext);
-        userBiz.getUserInfo(mView.getUserId(), new UserBiz.GetUserInfoCallback() {
-            @Override
-            public void onException(WMHErrorCode code) {
+    public void onCreate() {
+        TUser user = mAdbookBiz.getUserByUserId(mView.getUserId());
+        mView.setUser(user);
+        mView.setDepartmentStr(mAdbookBiz.getDepartmentStringByUserId(mView.getUserId()));
+    }
 
+    public void onResume() {
+        mUserBiz.fetchUserBasicInfo(mView.getUserId(), new UserBiz.GetUserInfoCallback() {
+            @Override
+            public void onException(APError error) {
+                mView.onError(error);
             }
 
             @Override
-            public void onDone(final UserInfo user) {
-                mCurrentUser = user;
-                //底部聊天按钮的显示与隐藏
-                AppContext appContext = AppContext.getInstance(mContext);
-                UserBussiness ub = UserBussiness.getInstance(mContext);
-                //底部按钮
-                //不需要权限限制或需要限制而且有权限的情况下并且在移动门户下有用户时进行按钮的下一步逻辑判断
-                if (appContext.getAppConfig().getChatAuthFlag() == 0 || (appContext.getAppConfig
-                        ().getChatAuthFlag() == 1 && ub.hasChatPermissionOfUser(mView.getUserId())
-                )) {
-                    if (appContext.getApp().isAllowChat() && !mView
-                            .getUserId().equals(AppContext.getInstance(mContext).getCurrentUser()
-                                    .getUserId())) {
-                        //如果未激活显示未激活按钮，如果已激活显示开始聊天按钮,
-
-                        if (TextUtils.isEmpty(user.getAppCodeVersion())) {
-                            mHandler.post(new Runnable() {
-                                @Override
-                                public void run() {
-                                    mView.showInviteLabel();
-                                }
-                            });
-
+            public void onDone(UserBasicInfosResult userInfos) {
+                if (userInfos.getItems().size() > 0) {
+                    UserBasicInfosResult.Item item = userInfos.getItems().get(0);
+                    mCurrentUserInfo = item;
+                    if (!TextUtils.isEmpty(item.getAvatarURL())) {
+                        mView.showIcon(item.getAvatarURL(), item.getTruename(), true);
+                    } else {
+                        mView.showIcon(item.getAvatarURL(), item.getTruename(), false);
+                    }
+                    UserInfo curUser = AppContext.getInstance(mContext).getCurrentUser();
+                    if (BuildConfig.ENABLE_CHAT && !mView.getUserId().equals(curUser.getUserId())) {
+                        if (AdbookBiz.getInstance(mContext).hasChatPermissionOfUser(mView.getUserId())) {
+                            if (item.getAppVersionCode() > 0) {
+                                mView.setBottomBtnType(IUserInfoView.BOTTOM_BTN_TYPE_NORMAL);
+                            } else {
+                                mView.setBottomBtnType(IUserInfoView.BOTTOM_BTN_TYPE_ACTIVE);
+                            }
                         } else {
-                            mHandler.post(new Runnable() {
-                                @Override
-                                public void run() {
-                                    mView.showStartChatLabel();
-                                    mView.showSendInviteMsgBtn();
-                                }
-                            });
-
+                            mView.setBottomBtnType(IUserInfoView.BOTTOM_BTN_TYPE_NONE);
                         }
-
+                    } else {
+                        mView.setBottomBtnType(IUserInfoView.BOTTOM_BTN_TYPE_NONE);
                     }
-                }
-
-                //头像显示
-                String[] iconConfigParams = getIconParams();
-                if (iconConfigParams != null && iconConfigParams.length > 0 &&
-                        iconConfigParams[0].equals("1")) {
-                    mHandler.post(new Runnable() {
-                        @Override
-                        public void run() {
-                            mView.getIconImageView().setVisibility(View.VISIBLE);
-                        }
-                    });
-
-                    if (iconConfigParams.length > 2 && iconConfigParams[2].equals("1")) {
-                        mHandler.post(new Runnable() {
-                            @Override
-                            public void run() {
-                                mView.getIconImageView().setScaleType(ImageView.ScaleType
-                                        .CENTER_CROP);
-                            }
-                        });
-
-                    }
-                    if (!TextUtils.isEmpty(user.getAvatarUrl())) {
-                        mHandler.post(new Runnable() {
-                            @Override
-                            public void run() {
-                                ImageLoader.getInstance().displayImage(user.getAvatarUrl(), mView
-                                        .getIconImageView());
-                            }
-                        });
-
-                    }
-                }
-
-                //聊天头像更新
-                if ("1".equals(appContext.getAppConfig().getChatFlag())) {
-                    if (!TextUtils.isEmpty(user.getAvatarUrl())) {
-                        RongIM.getInstance().refreshUserInfoCache(new io.rong.imlib.model
-                                .UserInfo(mView.getUserId(), user.getTrueName(), Uri.parse(user
-                                .getAvatarUrl())));
-                    }
+                } else {
+                    Toast.makeText(mContext, "未找到用户信息", Toast.LENGTH_LONG).show();
                 }
             }
         });
     }
 
-    @Nullable
-    private String[] getIconParams() {
-        AppContext appContext = AppContext.getInstance(mContext);
-        String flags = appContext.getAppConfig().getAdbookUserIconFlags();
-        return TextUtils.isEmpty(flags) ? null : flags.split(",");
-    }
-
-    @Override
     public void onIconClicked() {
-        String[] iconConfigParams = getIconParams();
-        boolean isAllowOpen = iconConfigParams != null && iconConfigParams.length > 3 && "1"
-                .equals(iconConfigParams[3]);
-        if (!TextUtils.isEmpty(mCurrentUser.getAvatarUrl()) && isAllowOpen) {
+        if (!TextUtils.isEmpty(mCurrentUserInfo.getAvatarURL())) {
             Intent ivIntent = new Intent(mContext, ImageViewActivity.class);
-            ivIntent.putExtra(ImageViewActivity.EXTRA_STRING_IMG_URL, mCurrentUser.getAvatarUrl());
+            ivIntent.putExtra(ImageViewActivity.EXTRA_STRING_IMG_URL, mCurrentUserInfo.getAvatarURL());
             mContext.startActivity(ivIntent);
         }
     }
 
     private void sendInviteSms() {
-        ProgressHUD.show(mContext);
+        mView.showLoading();
         String[] userIdArr = new String[]{mView.getUserId()};
         UserBiz sysBiz = UserBiz.getInstance(mContext);
         sysBiz.inviteUsers(Arrays.asList(userIdArr), new IAPCallback() {
             @Override
             public void onDone(Object obj) {
-                ProgressHUD.dismissProgressHUDInThisContext(mContext);
-                Toast.makeText(mContext, R.string.send_success, Toast.LENGTH_SHORT).show();
-                mView.disableInviteLabel();
+                mView.hideLoading();
+                mView.showMessage(R.string.send_success);
+                mView.setBottomBtnType(IUserInfoView.BOTTOM_BTN_TYPE_ACTIVED);
             }
 
             @Override
-            public void onException(APError excepCode) {
-                ProgressHUD.dismissProgressHUDInThisContext(mContext);
-                Toast.makeText(mContext, R.string.send_invite_failed, Toast.LENGTH_SHORT).show();
+            public void onException(APError error) {
+                mView.hideLoading();
+                mView.onError(error);
             }
         });
     }
-
 
     public void onAddContactClicked() {
 
@@ -191,7 +134,7 @@ public class UserInfoPresenter implements IUserInfoViewListener {
         // it.setType("vnd.android.cursor.dir/contact");
         // it.setType("vnd.android.cursor.dir/raw_contact");
         // 联系人姓名
-        TUser user = UserBussiness.getInstance(mContext).getUserByUserId(mView.getUserId());
+        TUser user = AdbookBiz.getInstance(mContext).getUserByUserId(mView.getUserId());
         it.putExtra(android.provider.ContactsContract.Intents.Insert.NAME, user.getTrueName());
         // 公司
         it.putExtra(android.provider.ContactsContract.Intents.Insert.COMPANY,
@@ -212,15 +155,14 @@ public class UserInfoPresenter implements IUserInfoViewListener {
 
     }
 
-    @Override
     public void onButtonClicked(int index) {
-        final TUser user = UserBussiness.getInstance(mContext).getUserByUserId(mView.getUserId());
+        final TUser user = AdbookBiz.getInstance(mContext).getUserByUserId(mView.getUserId());
         switch (index) {
-            case START_CHAT_BTN:
+            case IUserInfoView.START_CHAT_BTN:
                 RongIM.getInstance().startConversation(mContext, Conversation.ConversationType
-                        .PRIVATE, mCurrentUser.getUserId(), mCurrentUser.getTrueName());
+                        .PRIVATE, mCurrentUserInfo.getUserId(), mCurrentUserInfo.getTruename());
                 break;
-            case MOBILE_PHONE_BTN:
+            case IUserInfoView.MOBILE_PHONE_BTN:
 
                 if (TextUtils.isEmpty(user.getMobile())) {
                     Toast.makeText(mContext, "手机号不存在!", Toast.LENGTH_SHORT).show();
@@ -247,7 +189,7 @@ public class UserInfoPresenter implements IUserInfoViewListener {
                     }).show();
                 }
                 break;
-            case TEL_PHONE_BTN:
+            case IUserInfoView.TEL_PHONE_BTN:
                 final String tel = user.getWorkTEL();
                 if (tel == null || tel.equals("")) {
                     Toast.makeText(mContext, "电话号码不存在!", Toast.LENGTH_SHORT).show();
@@ -258,12 +200,12 @@ public class UserInfoPresenter implements IUserInfoViewListener {
                     UserBussiness.getInstance(mContext).recordUser(user.getUserId());
                 }
                 break;
-            case EMAIL_BTN:
+            case IUserInfoView.EMAIL_BTN:
                 if (TextUtils.isEmpty(user.getEmail())) {
                     Toast.makeText(mContext, "邮箱不存在!", Toast.LENGTH_SHORT).show();
                 } else {
                     Intent email = new Intent(android.content.Intent.ACTION_SENDTO);
-                    email.setData(Uri.parse("mailto:"+user.getEmail()));
+                    email.setData(Uri.parse("mailto:" + user.getEmail()));
                     // 设置邮件默认地址
                     email.putExtra(android.content.Intent.EXTRA_EMAIL, user.getEmail());
                     // // 设置邮件默认标题
@@ -271,23 +213,7 @@ public class UserInfoPresenter implements IUserInfoViewListener {
                     UserBussiness.getInstance(mContext).recordUser(user.getUserId());
                 }
                 break;
-            case INVITE_BTN:
-            case RE_SEND_INVITE_BTN:
-                ConfirmDialog dialog = new ConfirmDialog(mContext, new ConfirmDialog
-                        .ConfirmListener() {
-                    @Override
-                    public void onOkClick() {
-                        sendInviteSms();
-                    }
-
-                    @Override
-                    public void onCancelClick() {
-
-                    }
-                }, "确定发送？", "给 " + mCurrentUser.getTrueName() + " 发送客户端安装短信", "取消", "确定");
-                dialog.show();
-                break;
-            case ADD_CONTACT_BTN:
+            case IUserInfoView.ADD_CONTACT_BTN:
                 onAddContactClicked();
                 break;
             default:
@@ -296,4 +222,7 @@ public class UserInfoPresenter implements IUserInfoViewListener {
 
     }
 
+    public void onConfirmSendSMS() {
+        sendInviteSms();
+    }
 }

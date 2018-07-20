@@ -44,7 +44,6 @@
                     android:layout_width="65dp"
                     android:layout_height="65dp"
                     android:layout_alignParentRight="true"
-                    android:onClick="onClick"
                     app:citv_fill_color="@color/common_btn_bg_gray"
                     app:citv_text_color="@android:color/white"
                     app:citv_text_size="18dp"
@@ -77,6 +76,22 @@
                 android:layout_marginTop="@dimen/item_group_spacing"
                 android:background="@color/common_divider" />
 
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <View
+                    android:layout_width="@dimen/item_padding_left"
+                    android:layout_height="1px"
+                    android:background="@android:color/white" />
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1px"
+                    android:background="@color/common_divider_light" />
+            </LinearLayout>
             <RelativeLayout
                 android:id="@+id/userinfo_email_lay"
                 android:layout_width="match_parent"
@@ -112,7 +127,6 @@
                     android:textSize="@dimen/item_text_size_small" />
             </RelativeLayout>
 
-
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -128,7 +142,6 @@
                     android:layout_height="1px"
                     android:background="@color/common_divider_light" />
             </LinearLayout>
-
             <RelativeLayout
                 android:id="@+id/userinfo_mobile_lay"
                 android:layout_width="match_parent"
@@ -334,7 +347,6 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:background="@drawable/userinfo_bg"
-                    android:onClick="onClick"
                     android:paddingBottom="12dp"
                     android:paddingLeft="@dimen/item_padding_left"
                     android:paddingRight="@dimen/item_padding_left"
@@ -383,7 +395,7 @@
         android:text="未激活，点击邀请"
         android:textColor="@android:color/white"
         android:textSize="@dimen/item_text_size"
-        android:visibility="gone" />
+         />
 
     <LinearLayout
         android:id="@+id/userinfo_begin_talk"
@@ -391,7 +403,6 @@
         android:layout_height="wrap_content"
         android:background="@drawable/sel_common_item"
         android:gravity="center"
-        android:onClick="onClick"
         android:orientation="horizontal"
         android:padding="10dp"
         android:visibility="gone">
@@ -402,6 +413,7 @@
             android:src="@drawable/userinfo_chat_bubble" />
 
         <TextView
+            android:id="@+id/act_user_info_startchat_tv"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginLeft="6dp"

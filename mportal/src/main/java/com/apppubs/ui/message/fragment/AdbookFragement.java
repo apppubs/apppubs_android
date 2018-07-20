@@ -2,6 +2,8 @@ package com.apppubs.ui.message.fragment;
 
 import android.app.Activity;
 import android.app.Dialog;
+import android.app.NotificationManager;
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
@@ -9,6 +11,7 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v7.app.NotificationCompat;
 import android.support.v7.widget.SearchView;
 import android.support.v7.widget.SearchView.OnQueryTextListener;
 import android.text.TextUtils;
@@ -23,21 +26,10 @@ import android.widget.ListView;
 import android.widget.RadioGroup;
 import android.widget.RadioGroup.OnCheckedChangeListener;
 import android.widget.TextView;
-import android.widget.Toast;
 
-import com.android.volley.Response.ErrorListener;
-import com.android.volley.Response.Listener;
-import com.android.volley.VolleyError;
-import com.android.volley.toolbox.StringRequest;
-import com.apppubs.AppContext;
-import com.apppubs.bean.App;
 import com.apppubs.bean.TDepartment;
 import com.apppubs.bean.TUser;
-import com.apppubs.bean.UserInfo;
-import com.apppubs.constant.APError;
-import com.apppubs.constant.URLs;
 import com.apppubs.d20.R;
-import com.apppubs.model.AbstractBussinessCallback;
 import com.apppubs.presenter.AdbookPresenter;
 import com.apppubs.ui.adapter.CommonAdapter;
 import com.apppubs.ui.adapter.ViewHolder;
@@ -48,7 +40,6 @@ import com.apppubs.ui.widget.ConfirmDialog;
 import com.apppubs.ui.widget.ProgressHUD;
 import com.apppubs.ui.widget.SegmentedGroup;
 import com.apppubs.ui.widget.TitleBar;
-import com.apppubs.util.JSONResult;
 
 import java.text.NumberFormat;
 import java.util.ArrayList;
@@ -72,6 +63,9 @@ public class AdbookFragement extends BaseFragment implements IAdbookView {
     private Fragment mCurFrg;
     private int mCurCheckedRadioBtnResId;// 当前选中的radio btn 的id用于下次恢复状态
     private AdbookPresenter mPresenter;
+
+    private NotificationManager mNotifyManager;
+    private NotificationCompat.Builder mBuilder;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -224,6 +218,11 @@ public class AdbookFragement extends BaseFragment implements IAdbookView {
         mFrgArr[0] = fg;
 //		init();
         mPresenter.onCreateView();
+
+        mNotifyManager = (NotificationManager) mContext.getSystemService(Context.NOTIFICATION_SERVICE);
+        mBuilder = new NotificationCompat.Builder(mContext);
+        mBuilder.setContentTitle("正在更新通讯录！")
+                .setSmallIcon(R.drawable.icon);
     }
 
     /**
@@ -232,7 +231,23 @@ public class AdbookFragement extends BaseFragment implements IAdbookView {
      * @return
      */
     private Fragment getRootFragment() {
-        Fragment fg = new AddressBookOrganizationFragement();
+        AddressBookOrganizationFragement fg = new AddressBookOrganizationFragement();
+        fg.setListener(new AddressBookOrganizationFragement.Listener() {
+            @Override
+            public void onCreateView() {
+                mPresenter.onOrgFragmentCreate();
+            }
+
+            @Override
+            public void onDeptSelected(String deptId) {
+                mPresenter.onDeptSelected(deptId);
+            }
+
+            @Override
+            public void onCreateDiscussClicked(String deptId) {
+                mPresenter.onCreateDiscussClicked(deptId);
+            }
+        });
         return fg;
     }
 
@@ -250,7 +265,7 @@ public class AdbookFragement extends BaseFragment implements IAdbookView {
         }
     }
 
-    protected void changeContent(Fragment fragment) {
+    private void changeContent(Fragment fragment) {
         FragmentTransaction transaction = getActivity().getSupportFragmentManager().beginTransaction();
         List<Fragment> fragments = getActivity().getSupportFragmentManager().getFragments();
         if (fragments == null || !fragments.contains(fragment)) {
@@ -293,24 +308,31 @@ public class AdbookFragement extends BaseFragment implements IAdbookView {
 
     @Override
     public void showSyncLoading() {
-        mProgressHUD = ProgressHUD.show(mHostActivity, "同步中", true, false, null);
+        mBuilder.setContentText("同步中");
+        mNotifyManager.notify(1,mBuilder.build());
     }
 
     @Override
     public void setSyncProgress(Float progress) {
         NumberFormat nf = NumberFormat.getPercentInstance();
         nf.setMinimumFractionDigits(0);
-        mProgressHUD.setMessage(nf.format(progress));
+//        mProgressHUD.setMessage(nf.format(progress));
+        mBuilder.setProgress(100, (int) (progress*100), false);
+        // Displays the progress bar for the first time.
+        mNotifyManager.notify(1, mBuilder.build());
     }
 
     @Override
     public void setSyncLoadText(String text) {
-        mProgressHUD.setMessage(text);
+//        mProgressHUD.setMessage(text);
+        mBuilder.setContentText(text);
+        mNotifyManager.notify(1, mBuilder.build());
     }
 
     @Override
     public void hideSyncLoading() {
-        mProgressHUD.dismiss();
+//        mProgressHUD.dismiss();
+        mNotifyManager.cancel(1);
     }
 
     @Override
@@ -335,10 +357,29 @@ public class AdbookFragement extends BaseFragment implements IAdbookView {
 
     @Override
     public void showDepts(List<TDepartment> depts) {
-        ((AddressBookOrganizationFragement) mFrgArr[0]).refreshList();
+        ((AddressBookOrganizationFragement) mFrgArr[0]).setDetps(depts);
     }
 
     @Override
     public void showUsers(List<TUser> users) {
+        ((AddressBookOrganizationFragement) mFrgArr[0]).setUsers(users);
     }
+
+    @Override
+    public void clearBreadcrumb(TDepartment department) {
+        ((AddressBookOrganizationFragement) mFrgArr[0]).clearBreadcrumb(department);
+    }
+
+    @Override
+    public void showParsingLoading() {
+        setVisibilityOfViewByResId(mRootView,R.id.adbook_wait_tv,View.VISIBLE);
+//        mProgressHUD = ProgressHUD.show(getContext(), "解析中...", true, false, null);
+    }
+
+    @Override
+    public void hideParsingLoading() {
+        setVisibilityOfViewByResId(mRootView,R.id.adbook_wait_tv,View.GONE);
+//        mProgressHUD.dismiss();
+    }
+
 }

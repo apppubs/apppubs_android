@@ -68,7 +68,7 @@ public class AddressBookAllUserFragment extends BaseFragment {
 			if (temp.equals("")) {
 				// 填充所有的
 				UserInfo currentUser = AppContext.getInstance(mContext).getCurrentUser();
-				mUsers = mUserBussiness.listAllUser(currentUser.getAddressbookPermissionString());
+//				mUsers = mUserBussiness.listAllUser(currentUser.getAddressbookPermissionString());
 				adapter = new MyAdapter(mUsers);
 				mCityLv.setAdapter(adapter);
 			}

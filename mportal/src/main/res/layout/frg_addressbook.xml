@@ -26,4 +26,15 @@
 	    android:divider="@null"
 	    android:visibility="gone"
 	    ></ListView>
+	<TextView
+		android:id="@+id/adbook_wait_tv"
+		android:layout_width="match_parent"
+		android:layout_height="match_parent"
+		android:text="正在解析，请稍候！"
+		android:textSize="@dimen/item_text_size"
+		android:textColor="@color/common_text_gray"
+		android:visibility="gone"
+		android:gravity="center"
+		android:background="#FFFFFF"
+		/>
 </RelativeLayout>

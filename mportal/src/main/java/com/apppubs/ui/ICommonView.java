@@ -11,4 +11,6 @@ public interface ICommonView {
     void onError(APError error);
     void showEmptyView();
     void hideEmptyView();
+    void showMessage(String message);
+    void showMessage(int resId);
 }

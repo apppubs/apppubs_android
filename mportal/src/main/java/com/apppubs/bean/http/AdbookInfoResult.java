@@ -43,7 +43,7 @@ public class AdbookInfoResult implements IJsonResult, Serializable {
         this.readPermission = readPermission;
     }
 
-    public boolean isReadPermission() {
+    public boolean needReadPermission() {
         return this.readPermission;
     }
 
@@ -51,7 +51,7 @@ public class AdbookInfoResult implements IJsonResult, Serializable {
         this.readPermissionStr = readPermissionStr;
     }
 
-    public String getReadPermissionStr() {
+    public String needReadPermissionStr() {
         return this.readPermissionStr;
     }
 

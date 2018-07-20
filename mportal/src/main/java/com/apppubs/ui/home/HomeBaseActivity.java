@@ -18,6 +18,7 @@ import com.apppubs.bean.UserInfo;
 import com.apppubs.bean.Weather;
 import com.apppubs.constant.APError;
 import com.apppubs.constant.Actions;
+import com.apppubs.d20.BuildConfig;
 import com.apppubs.d20.R;
 import com.apppubs.model.IAPCallback;
 import com.apppubs.model.SystemBiz;
@@ -96,7 +97,7 @@ public abstract class HomeBaseActivity extends BaseActivity implements IHomeView
         mApp = (MportalApplication) this.getApplication();
         mViewCourier = ViewCourier.getInstance(this);
 
-        if (mAppContext.getAppConfig().getChatFlag().equals("1")) {
+        if (BuildConfig.ENABLE_CHAT) {
             mMsgBussiness.loginRC(new IAPCallback() {
                 @Override
                 public void onDone(Object obj) {

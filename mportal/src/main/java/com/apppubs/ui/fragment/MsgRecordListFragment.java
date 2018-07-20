@@ -42,6 +42,7 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.apppubs.AppContext;
 import com.apppubs.bean.TMsgRecord;
+import com.apppubs.d20.BuildConfig;
 import com.apppubs.model.MsgController;
 import com.apppubs.util.FileUtils;
 import com.apppubs.util.SharedPreferenceUtils;
@@ -160,7 +161,7 @@ public class MsgRecordListFragment extends TitleBarFragment implements OnClickLi
 				mMenuPW.setOutsideTouchable(true);
 				mMenuPW.setBackgroundDrawable(new BitmapDrawable());
 				mMenuPW.showAsDropDown(mTitleBar.getRightView());
-				if (mAppContext.getApp().isAllowChat()) {
+				if (BuildConfig.ENABLE_CHAT) {
 					// 当没有聊天功能时隐藏新建聊天
 					setVisibilityOfViewByResId(menuPop, R.id.pop_msg_record_add_chat_ll, View.GONE);
 					setVisibilityOfViewByResId(menuPop, R.id.pop_msg_record_add_group_chat_ll, View.GONE);

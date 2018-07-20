@@ -250,6 +250,7 @@ public abstract class BaseActivity extends FragmentActivity implements OnClickLi
             vg.addView(contentFL, contentLP);
             mTitleBar = (TitleBar) findViewById(R.id.base_tb);
             mTitleBar.setBackgroundColor(mThemeColor);
+            mTitleBar.setTitle(getTitle()!=null?getTitle().toString():null);
             if (isNeedBack) {
                 mTitleBar.setLeftBtnClickListener(this);
                 mTitleBar.setLeftImageResource(R.drawable.top_back_btn);
@@ -403,6 +404,7 @@ public abstract class BaseActivity extends FragmentActivity implements OnClickLi
      * @param title
      */
     protected void setTitle(String title) {
+        super.setTitle(title);
         if (mTitleBar != null)
             mTitleBar.setTitle(title);
     }
@@ -529,6 +531,16 @@ public abstract class BaseActivity extends FragmentActivity implements OnClickLi
     @Override
     public void hideEmptyView() {
         mEmptyView.setVisibility(View.GONE);
+    }
+
+    @Override
+    public void showMessage(String message) {
+        Toast.makeText(this,message,Toast.LENGTH_LONG).show();
+    }
+
+    @Override
+    public void showMessage(int resId) {
+        showMessage(getString(resId));
     }
 
     public void executeURL(String url) {

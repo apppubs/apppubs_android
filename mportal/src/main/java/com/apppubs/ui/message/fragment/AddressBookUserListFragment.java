@@ -17,6 +17,7 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import com.apppubs.bean.TUser;
+import com.apppubs.model.AdbookBiz;
 import com.apppubs.ui.fragment.BaseFragment;
 import com.apppubs.d20.R;
 import com.apppubs.ui.adbook.UserInfoActivity;
@@ -52,7 +53,7 @@ public class AddressBookUserListFragment extends BaseFragment implements OnClick
 	public void onActivityCreated(Bundle savedInstanceState) {
 
 		super.onActivityCreated(savedInstanceState);
-		mUserL = mUserBussiness.listUser(mSuperId);
+		mUserL = AdbookBiz.getInstance(mContext).listUser(mSuperId);
 
 		ListAdapter adapter1 = new BaseAdapter() {
 			

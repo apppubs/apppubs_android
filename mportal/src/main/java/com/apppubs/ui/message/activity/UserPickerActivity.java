@@ -319,7 +319,7 @@ public class UserPickerActivity extends BaseActivity implements UserSelectionBar
         //存储上一个列表的偏移量
         mListViewOffsetMap.put(mSuperId,mListView.getFirstVisiblePosition());
         if (!mUserBussiness.isLeaf(superId)) {
-			if(mAppContext.getAppConfig().getChatAuthFlag()==1){
+			if(true){
 				mDepartmentList = mUserBussiness.listSubDepartment(superId,mAppContext.getCurrentUser().getChatPermissionString());
 			}else{
 				mDepartmentList = mUserBussiness.listSubDepartment(superId);
@@ -327,7 +327,7 @@ public class UserPickerActivity extends BaseActivity implements UserSelectionBar
             mDeptAdapter.setData(mDepartmentList);
             mListView.setAdapter(mDeptAdapter);
         } else {
-            mUserList = mUserBussiness.listUser(superId);
+//            mUserList = mUserBussiness.listUser(superId);
             mUserAdapter.setData(mUserList);
             mListView.setAdapter(mUserAdapter);
             List<String> userIds = new ArrayList<String>();

@@ -15,6 +15,8 @@ import android.widget.PopupWindow;
 
 import com.apppubs.bean.TUser;
 import com.apppubs.AppContext;
+import com.apppubs.d20.BuildConfig;
+import com.apppubs.model.AdbookBiz;
 import com.apppubs.ui.fragment.BaseFragment;
 import com.apppubs.d20.R;
 import com.apppubs.ui.activity.ChatNewGroupChatOrAddUserActivity;
@@ -79,7 +81,7 @@ public class ConversationListFragment extends TitleBarFragment implements View.O
                 mMenuPW.setOutsideTouchable(true);
                 mMenuPW.setBackgroundDrawable(new BitmapDrawable());
                 mMenuPW.showAsDropDown(mTitleBar.getRightView());
-                if (!mAppContext.getApp().isAllowChat()) {
+                if (BuildConfig.ENABLE_CHAT) {
                     // 当没有聊天功能时隐藏新建聊天
                     setVisibilityOfViewByResId(menuPop, R.id.pop_msg_record_add_chat_ll, View.GONE);
                     setVisibilityOfViewByResId(menuPop, R.id.pop_msg_record_add_group_chat_ll, View.GONE);
@@ -116,7 +118,7 @@ public class ConversationListFragment extends TitleBarFragment implements View.O
                                 String title = getTitleName(userIds);
                                 RongIM.getInstance().createDiscussionChat(mContext,userIds,title);
                             }else {
-                                TUser user = mUserBussiness.getUserByUserId(userIds.get(0));
+                                TUser user = AdbookBiz.getInstance(mContext).getUserByUserId(userIds.get(0));
                                 RongIM.getInstance().startConversation(mContext,Conversation.ConversationType.PRIVATE,userIds.get(0),user.getTrueName());
                             }
                         }
@@ -130,7 +132,7 @@ public class ConversationListFragment extends TitleBarFragment implements View.O
                                 titleSb.append("...");
                                 break;
                             }
-                            TUser user = mUserBussiness.getUserByUserId(userIds.get(i));
+                            TUser user = AdbookBiz.getInstance(mContext).getUserByUserId(userIds.get(i));
                             String trueName = user.getTrueName();
                             if (titleSb.length()>0){
                                 titleSb.append("、");

@@ -189,6 +189,7 @@ public abstract class BaseBiz {
                     return;
                 }
                 try {
+                    System.out.println("asyncPOST 当前线程："+Thread.currentThread());
                     JSONObject jo = JSONObject.parseObject(json);
                     Integer code = jo.getInteger("code");
                     String msg = jo.getString("msg");

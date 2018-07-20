@@ -19,6 +19,7 @@ import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.android.volley.RequestQueue;
 import com.apppubs.AppContext;
@@ -27,6 +28,7 @@ import com.apppubs.d20.R;
 import com.apppubs.model.SystemBiz;
 import com.apppubs.model.message.MsgBussiness;
 import com.apppubs.model.message.UserBussiness;
+import com.apppubs.ui.ICommonView;
 import com.apppubs.ui.activity.BaseActivity;
 import com.apppubs.ui.widget.TitleBar;
 import com.apppubs.util.Utils;
@@ -34,7 +36,7 @@ import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.wang.avi.AVLoadingIndicatorView;
 
-public abstract class BaseFragment extends Fragment implements KeyEvent.Callback, OnClickListener {
+public abstract class BaseFragment extends Fragment implements KeyEvent.Callback, OnClickListener,ICommonView{
 
     public static final String ARGS_STRING_TITLE = "fragment_title";
 
@@ -320,6 +322,17 @@ public abstract class BaseFragment extends Fragment implements KeyEvent.Callback
 
     public void hideEmptyView(){
         mEmptyView.setVisibility(View.GONE);
+    }
+
+
+    @Override
+    public void showMessage(String message) {
+        Toast.makeText(mContext,message,Toast.LENGTH_LONG).show();
+    }
+
+    @Override
+    public void showMessage(int resId) {
+        showMessage(getString(resId));
     }
 
     public void executeURL(String url) {
