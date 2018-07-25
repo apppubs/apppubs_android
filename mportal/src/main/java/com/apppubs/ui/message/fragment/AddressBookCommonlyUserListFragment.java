@@ -17,6 +17,7 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import com.apppubs.bean.TUser;
+import com.apppubs.model.AdbookBiz;
 import com.apppubs.ui.adbook.UserInfoActivity;
 import com.apppubs.ui.fragment.BaseFragment;
 import com.apppubs.d20.R;
@@ -42,14 +43,14 @@ public class AddressBookCommonlyUserListFragment extends BaseFragment {
 	public void onResume() {
 
 		super.onResume();
-		mUserL = mUserBussiness.listRectent();
+		mUserL = AdbookBiz.getInstance(mContext).listRectent();
 		ListAdapter adapter = new UserListAdapter();
 		mLv.setAdapter(adapter);
 		mLv.setOnItemClickListener(new OnItemClickListener() {
 
 			@Override
 			public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-				mUserBussiness.recordUser(mUserL.get(position).getUserId());
+				AdbookBiz.getInstance(mContext).recordUser(mUserL.get(position).getUserId());
 				UserInfoActivity.startActivity(mHostActivity, mUserL.get(position).getUserId());
 			}
 		});

@@ -6,13 +6,16 @@ import android.widget.Toast;
 
 import com.apppubs.AppContext;
 import com.apppubs.bean.TDepartment;
+import com.apppubs.bean.TUser;
 import com.apppubs.bean.UserInfo;
 import com.apppubs.bean.http.AdbookInfoResult;
+import com.apppubs.bean.http.UserBasicInfosResult;
 import com.apppubs.constant.APError;
 import com.apppubs.constant.APErrorCode;
 import com.apppubs.d20.BuildConfig;
 import com.apppubs.model.AdbookBiz;
 import com.apppubs.model.IAPCallback;
+import com.apppubs.model.UserBiz;
 import com.apppubs.model.cache.CacheListener;
 import com.apppubs.model.cache.FileCacheErrorCode;
 import com.apppubs.model.cache.FileCacheManager;
@@ -25,6 +28,7 @@ import com.apppubs.util.LogM;
 import com.apppubs.util.Utils;
 
 import java.io.File;
+import java.util.ArrayList;
 import java.util.List;
 
 import io.rong.imkit.RongIM;
@@ -157,9 +161,9 @@ public class AdbookPresenter extends AbsPresenter<IAdbookView> {
             return;
         }
         TDepartment rootDept = mBiz.getDepartmentById(mAdbookInfo.getRootDeptId());
-        if (rootDept == null){
+        if (rootDept == null) {
 
-        }else{
+        } else {
             mView.clearBreadcrumb(rootDept);
             List<TDepartment> departments = mBiz.listSubDepartments(mAdbookInfo.getRootDeptId());
             mView.showDepts(departments);
@@ -175,10 +179,26 @@ public class AdbookPresenter extends AbsPresenter<IAdbookView> {
     }
 
     private void loadUsers(String deptId) {
+        List<TUser> users = mBiz.listUser(deptId);
         mView.showUsers(mBiz.listUser(deptId));
+        List<String> userIds = new ArrayList<String>();
+        for (TUser user : users) {
+            userIds.add(user.getUserId());
+        }
+        UserBiz.getInstance(mContext).cacheUserBasicInfo(userIds, new IAPCallback<List<UserBasicInfosResult.Item>>() {
+            @Override
+            public void onDone(List<UserBasicInfosResult.Item> obj) {
+                mView.showUsers(mBiz.listUser(deptId));
+            }
+
+            @Override
+            public void onException(APError error) {
+
+            }
+        });
     }
 
-    public void onCreateDiscussClicked(String deptId){
+    public void onCreateDiscussClicked(String deptId) {
         TDepartment department = mBiz.getDepartmentById(deptId);
         String deptName = department != null ? department.getName() : "组织";
         final List<String> userIdList = mBiz.getUserIdsOfCertainDepartment(deptId, mAdbookInfo.needReadPermission());
@@ -202,9 +222,10 @@ public class AdbookPresenter extends AbsPresenter<IAdbookView> {
         ConfirmDialog dialog = new ConfirmDialog(mContext, new ConfirmDialog.ConfirmListener() {
             @Override
             public void onOkClick() {
-//                ((HomeBaseActivity) mHostActivity).selectMessageFragment();
-//                String title = currentUser.getTrueName() + "+" + mUserBussiness.getDepartmentById(mSuperId).getName();
-//                RongIM.getInstance().createDiscussion(title, userIdList, null);
+                AppContext.getInstance(mContext).getHomeBaseActivity().selectMessageFragment();
+                String title = currentUser.getTrueName() + "+" + AdbookBiz.getInstance(mContext).getDepartmentById
+                        (deptId).getName();
+                RongIM.getInstance().createDiscussion(title, userIdList, null);
             }
 
             @Override

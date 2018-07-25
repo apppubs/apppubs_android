@@ -30,6 +30,7 @@ import android.widget.TextView;
 import com.apppubs.bean.TDepartment;
 import com.apppubs.bean.TUser;
 import com.apppubs.d20.R;
+import com.apppubs.model.AdbookBiz;
 import com.apppubs.presenter.AdbookPresenter;
 import com.apppubs.ui.adapter.CommonAdapter;
 import com.apppubs.ui.adapter.ViewHolder;
@@ -176,7 +177,7 @@ public class AdbookFragement extends BaseFragment implements IAdbookView {
                     setVisibilityOfViewByResId(mRootView, R.id.addressbook_search_result_lv, View.GONE);
                 } else {
                     setVisibilityOfViewByResId(mRootView, R.id.addressbook_search_result_lv, View.VISIBLE);
-                    mSearchResultList = mUserBussiness.searchUser(searchText);
+                    mSearchResultList = AdbookBiz.getInstance(mContext).searchUser(searchText);
                     mSearchResultAdapter.notifyDataSetChanged(mSearchResultList);
                 }
                 return false;
@@ -266,8 +267,8 @@ public class AdbookFragement extends BaseFragment implements IAdbookView {
     }
 
     private void changeContent(Fragment fragment) {
-        FragmentTransaction transaction = getActivity().getSupportFragmentManager().beginTransaction();
-        List<Fragment> fragments = getActivity().getSupportFragmentManager().getFragments();
+        FragmentTransaction transaction = getChildFragmentManager().beginTransaction();
+        List<Fragment> fragments = getChildFragmentManager().getFragments();
         if (fragments == null || !fragments.contains(fragment)) {
 //			transaction.remove(fragment);
             transaction.add(R.id.fragment_container, fragment);

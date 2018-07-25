@@ -17,6 +17,7 @@ import com.apppubs.model.cache.FileCacheManager;
 import com.apppubs.model.cache.FileCacheManagerImpl;
 import com.apppubs.net.WMHHttpClient;
 import com.apppubs.net.WMHHttpClientDefaultImpl;
+import com.apppubs.ui.home.HomeBaseActivity;
 import com.apppubs.util.FileUtils;
 import com.apppubs.util.LogM;
 import com.apppubs.util.Utils;
@@ -33,6 +34,7 @@ public class AppContext {
 
 
     private static AppContext sAppContext;
+
     private Context mContext;
 
     private App mApp;
@@ -42,6 +44,8 @@ public class AppContext {
     private Settings mSettings;
 
     private WMHHttpClient mHttpClient;
+
+    private HomeBaseActivity mHomeBaseActivity;
 
     private AppContext(Context context) {
         mContext = context;
@@ -244,4 +248,11 @@ public class AppContext {
         return themeColor;
     }
 
+    public HomeBaseActivity getHomeBaseActivity() {
+        return mHomeBaseActivity;
+    }
+
+    public void setHomeBaseActivity(HomeBaseActivity mHomeBaseActivity) {
+        this.mHomeBaseActivity = mHomeBaseActivity;
+    }
 }

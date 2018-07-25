@@ -3,13 +3,8 @@ package com.apppubs.presenter;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
-import android.os.Handler;
-import android.support.annotation.Nullable;
 import android.text.TextUtils;
 import android.util.Log;
-import android.view.TextureView;
-import android.view.View;
-import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.apppubs.bean.TUser;
@@ -20,14 +15,10 @@ import com.apppubs.constant.APError;
 import com.apppubs.d20.BuildConfig;
 import com.apppubs.d20.R;
 import com.apppubs.model.AdbookBiz;
-import com.apppubs.model.WMHErrorCode;
 import com.apppubs.ui.activity.ImageViewActivity;
 import com.apppubs.ui.adbook.IUserInfoView;
 import com.apppubs.model.UserBiz;
-import com.apppubs.model.message.UserBussiness;
 import com.apppubs.model.IAPCallback;
-import com.apppubs.ui.widget.ConfirmDialog;
-import com.apppubs.ui.widget.ProgressHUD;
 import com.apppubs.ui.widget.menudialog.MenuDialog;
 
 import java.util.Arrays;
@@ -61,7 +52,7 @@ public class UserInfoPresenter {
     }
 
     public void onResume() {
-        mUserBiz.fetchUserBasicInfo(mView.getUserId(), new UserBiz.GetUserInfoCallback() {
+        mUserBiz.cacheUserBasicInfo(mView.getUserId(), new UserBiz.GetUserInfoCallback() {
             @Override
             public void onException(APError error) {
                 mView.onError(error);
@@ -175,13 +166,13 @@ public class UserInfoPresenter {
                                 Intent intentCall = new Intent(android.content.Intent.ACTION_CALL);
                                 intentCall.setData(Uri.parse("tel:" + user.getMobile()));
                                 mContext.startActivity(intentCall);
-                                UserBussiness.getInstance(mContext).recordUser(user.getUserId());
+                                AdbookBiz.getInstance(mContext).recordUser(user.getUserId());
                             } else if (index == 1) {
                                 Uri smsToUri = Uri.parse("smsto:" + user.getMobile());
                                 Intent mIntent = new Intent(android.content.Intent.ACTION_SENDTO);
                                 mIntent.setData(smsToUri);
                                 mContext.startActivity(mIntent);
-                                UserBussiness.getInstance(mContext).recordUser(user.getUserId());
+                                AdbookBiz.getInstance(mContext).recordUser(user.getUserId());
                             } else {
                                 Log.v("UserInfoActivity", "鬼才知道发生什么");
                             }
@@ -197,7 +188,7 @@ public class UserInfoPresenter {
                     Intent intentCall = new Intent(android.content.Intent.ACTION_CALL);
                     intentCall.setData(Uri.parse("tel:" + tel));
                     mContext.startActivity(intentCall);
-                    UserBussiness.getInstance(mContext).recordUser(user.getUserId());
+                    AdbookBiz.getInstance(mContext).recordUser(user.getUserId());
                 }
                 break;
             case IUserInfoView.EMAIL_BTN:
@@ -210,7 +201,7 @@ public class UserInfoPresenter {
                     email.putExtra(android.content.Intent.EXTRA_EMAIL, user.getEmail());
                     // // 设置邮件默认标题
                     mContext.startActivity(Intent.createChooser(email, " 请选择邮件发送软件"));
-                    UserBussiness.getInstance(mContext).recordUser(user.getUserId());
+                    AdbookBiz.getInstance(mContext).recordUser(user.getUserId());
                 }
                 break;
             case IUserInfoView.ADD_CONTACT_BTN:

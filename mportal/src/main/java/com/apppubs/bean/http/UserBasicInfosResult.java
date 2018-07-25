@@ -1,8 +1,9 @@
 package com.apppubs.bean.http;
 
+import java.io.Serializable;
 import java.util.List;
 
-public class UserBasicInfosResult implements IJsonResult {
+public class UserBasicInfosResult implements IJsonResult,Serializable {
 
     private List<Item> items;
 
@@ -14,7 +15,7 @@ public class UserBasicInfosResult implements IJsonResult {
         this.items = items;
     }
 
-    public class Item {
+    public class Item implements Serializable{
         private String userId;
         private String truename;
         private String avatarURL;

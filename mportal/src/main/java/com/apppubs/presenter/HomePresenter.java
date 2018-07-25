@@ -1,15 +1,13 @@
 package com.apppubs.presenter;
 
 import android.content.Context;
-import android.content.Intent;
-import android.support.v4.app.Fragment;
 import android.text.TextUtils;
 
 import com.apppubs.bean.TMenuItem;
 import com.apppubs.constant.APError;
 import com.apppubs.model.IAPCallback;
 import com.apppubs.model.SystemBiz;
-import com.apppubs.ui.FragmentFactory;
+import com.apppubs.ui.ContentFragmentFactory;
 import com.apppubs.ui.fragment.BaseFragment;
 import com.apppubs.ui.home.IHomeView;
 import com.apppubs.util.Utils;
@@ -40,7 +38,7 @@ public abstract class HomePresenter<T extends IHomeView> extends AbsPresenter<T>
         if (mFragmentsMap.keySet().contains(uri)) {
             mView.changeContent(mFragmentsMap.get(uri));
         } else {
-            BaseFragment frg = FragmentFactory.getFragment(uri);
+            BaseFragment frg = ContentFragmentFactory.getFragment(uri);
             mFragmentsMap.put(uri, frg);
             mView.changeContent(frg);
         }

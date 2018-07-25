@@ -395,6 +395,7 @@
         android:text="未激活，点击邀请"
         android:textColor="@android:color/white"
         android:textSize="@dimen/item_text_size"
+        android:visibility="gone"
          />
 
     <LinearLayout

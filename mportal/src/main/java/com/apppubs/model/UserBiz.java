@@ -16,12 +16,15 @@ import com.apppubs.constant.APError;
 import com.apppubs.constant.Actions;
 import com.apppubs.constant.Constants;
 import com.apppubs.constant.URLs;
+import com.apppubs.model.message.UserBasicInfo;
 import com.apppubs.net.WMHHttpClient;
 import com.apppubs.net.WMHHttpErrorCode;
 import com.apppubs.net.WMHRequestListener;
 import com.apppubs.ui.activity.MainHandler;
+import com.apppubs.util.ACache;
 import com.apppubs.util.JSONResult;
 import com.apppubs.util.JSONUtils;
+import com.apppubs.util.StringUtils;
 
 import java.util.HashMap;
 import java.util.List;
@@ -37,6 +40,7 @@ public class UserBiz extends BaseBiz {
 
     private static UserBiz sUserBiz;
     private Context mContext;
+    private static final String CACHE_NAME = "com.client.message.model.UserBussiness";
 
     private UserBiz(Context context) {
         super(context);
@@ -60,25 +64,81 @@ public class UserBiz extends BaseBiz {
         return sUserBiz;
     }
 
-    public void fetchUserBasicInfo(String userid, final GetUserInfoCallback callback) {
+    public void cacheUserBasicInfo(String userid, final GetUserInfoCallback callback) {
         Map<String, String> map = new HashMap<>();
         map.put("userIds", userid);
         this.asyncPOST(Constants.API_NAME_USER_BASIC_INFO, map, true, UserBasicInfosResult.class, new
                 IRQListener<UserBasicInfosResult>() {
                     @Override
                     public void onResponse(UserBasicInfosResult jr, APError error) {
-                        MainHandler.getInstance().post(new Runnable() {
-                            @Override
-                            public void run() {
-                                if (error != null) {
-                                    callback.onException(error);
-                                } else {
-                                    callback.onDone(jr);
-                                }
+                        if (error == null) {
+
+                            ACache cache = ACache.get(mContext, CACHE_NAME);
+                            for (UserBasicInfosResult.Item item : jr.getItems()) {
+                                cache.put(item.getUserId(), item);
                             }
-                        });
+                            MainHandler.getInstance().post(new Runnable() {
+                                @Override
+                                public void run() {
+                                    if (error != null) {
+                                        callback.onException(error);
+                                    } else {
+                                        callback.onDone(jr);
+                                    }
+                                }
+                            });
+                        } else {
+                            MainHandler.getInstance().post(new Runnable() {
+                                @Override
+                                public void run() {
+                                    callback.onException(error);
+                                }
+                            });
+                        }
                     }
                 });
+    }
+
+    public void cacheUserBasicInfo(List<String> userIds, IAPCallback<List<UserBasicInfosResult.Item>> callback) {
+        Map<String, String> map = new HashMap<>();
+        String userIdsStr = StringUtils.join(userIds);
+        map.put("userIds", userIdsStr);
+        this.asyncPOST(Constants.API_NAME_USER_BASIC_INFO, map, true, UserBasicInfosResult.class, new
+                IRQListener<UserBasicInfosResult>() {
+                    @Override
+                    public void onResponse(UserBasicInfosResult jr, APError error) {
+                        if (error == null) {
+                            ACache cache = ACache.get(mContext, CACHE_NAME);
+                            for (UserBasicInfosResult.Item item : jr.getItems()) {
+                                cache.put(item.getUserId(), item);
+                            }
+                            MainHandler.getInstance().post(new Runnable() {
+                                @Override
+                                public void run() {
+                                    if (error != null) {
+                                        callback.onException(error);
+                                    } else {
+                                        callback.onDone(jr.getItems());
+                                    }
+                                }
+                            });
+                        } else {
+                            MainHandler.getInstance().post(new Runnable() {
+                                @Override
+                                public void run() {
+                                    callback.onException(error);
+                                }
+                            });
+                        }
+
+                    }
+                });
+    }
+
+    public UserBasicInfosResult.Item getCachedUserBasicInfo(String userId) {
+        ACache cache = ACache.get(mContext, CACHE_NAME);
+        UserBasicInfosResult.Item item = (UserBasicInfosResult.Item) cache.getAsObject(userId);
+        return item;
     }
 
     public void loginWithUsernameAndPwd(String username, String pwd, final boolean autoLogin,

@@ -28,6 +28,7 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 public class AdbookBiz extends BaseBiz {
@@ -77,6 +78,45 @@ public class AdbookBiz extends BaseBiz {
     public AdbookInfoResult getCachedAdbookInfo() {
         return (AdbookInfoResult) FileUtils.readObj(mContext, FILE_NAME_ADBOOK_INFO);
     }
+
+    public List<TUser> getUsersByUserIds(List<String> userIds){
+        StringBuilder sb = new StringBuilder();
+        for (String userId : userIds){
+            if (sb.length()>0){
+                sb.append(",");
+            }
+            sb.append("'"+userId+"'");
+        }
+        String sql = "select * from USER where USER_ID in ("+sb.toString()+")";
+        return SugarRecord.findWithQuery(TUser.class,sql);
+    }
+
+    public long countUserOfCertainDepartment(String deptId){
+        int count = 0;
+
+        List<TUser> user = new ArrayList<TUser>();
+        List<String> deptIds = new ArrayList<String>();
+        deptIds.add(deptId);
+        recurseGet(deptId,deptIds);
+
+        StringBuilder sb = new StringBuilder();
+        for (String id:deptIds){
+            if (sb.length()>0){
+                sb.append(",");
+            }
+            sb.append("'");
+            sb.append(id);
+            sb.append("'");
+        }
+        String sql = String.format("select count(user_id) as usercount from user_dept_link where dept_id in(%s)",sb.toString());
+
+        Cursor cursor = SugarRecord.getDatabase().rawQuery(sql,null);
+        cursor.moveToFirst();
+        int result = cursor.getInt(0);
+        cursor.close();
+        return result;
+    }
+
 
     public String getDepartmentStringByUserId(String userId){
         List<String> deptNameStringList = getDepartmentStringListByUserId(userId);
@@ -323,6 +363,37 @@ public class AdbookBiz extends BaseBiz {
         }
     }
 
+
+    /**
+     * 记录用户使用记录
+     *
+     * @param userId
+     */
+    public void recordUser(String userId) {
+        SugarRecord.update(TUser.class, "LAST_USED_TIME", new Date().getTime() + "", "USER_ID = ?",
+                new String[] { userId });
+    }
+
+    /*
+     * 列出常用用户
+     */
+    public List<TUser> listRectent() {
+
+        return SugarRecord.find(TUser.class, "LAST_USED_TIME IS NOT NULL", null, null, "LAST_USED_TIME desc", "0,20");
+    }
+
+    /**
+     * 搜索用户
+     *
+     * @param str
+     * @return
+     */
+    public List<TUser> searchUser(String str) {
+
+        String dimStr = "%"+str+"%";
+        return SugarRecord
+                .find(TUser.class, "TRUE_NAME like ? or mobile like ? or work_tel like ? or office_no like ? or email like ?", new String[] { dimStr,dimStr,dimStr,dimStr,dimStr }, null, "sort_id", null);
+    }
 
     public void parseXML(final File file, final IAPCallback callback) {
         new Thread(new Runnable() {

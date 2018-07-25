@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.text.TextUtils;
 
 import com.apppubs.bean.TUser;
+import com.apppubs.model.AdbookBiz;
 import com.apppubs.ui.activity.BaseActivity;
 import com.apppubs.ui.message.activity.UserPickerActivity;
 
@@ -95,7 +96,7 @@ public class UserPickerHelper {
     }
 
     public List<TUser> getSelectedUsers(){
-        return UserBussiness.getInstance(mContext).getUsersByUserIds(mUserIds);
+        return AdbookBiz.getInstance(mContext).getUsersByUserIds(mUserIds);
     }
 
     public List<String> getSelectedUserIds(){

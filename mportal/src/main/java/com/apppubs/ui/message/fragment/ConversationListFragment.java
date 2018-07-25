@@ -13,18 +13,16 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.PopupWindow;
 
-import com.apppubs.bean.TUser;
 import com.apppubs.AppContext;
+import com.apppubs.bean.TUser;
 import com.apppubs.d20.BuildConfig;
-import com.apppubs.model.AdbookBiz;
-import com.apppubs.ui.fragment.BaseFragment;
 import com.apppubs.d20.R;
+import com.apppubs.model.AdbookBiz;
+import com.apppubs.model.message.UserPickerHelper;
 import com.apppubs.ui.activity.ChatNewGroupChatOrAddUserActivity;
 import com.apppubs.ui.activity.ContainerActivity;
 import com.apppubs.ui.fragment.ServiceNoSubscribeFragment;
-import com.apppubs.model.message.UserPickerHelper;
 import com.apppubs.ui.fragment.TitleBarFragment;
-import com.apppubs.ui.widget.TitleBar;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -52,14 +50,9 @@ public class ConversationListFragment extends TitleBarFragment implements View.O
                 .appendQueryParameter(Conversation.ConversationType.DISCUSSION.getName(),"false")
                 .build();
         fragment.setUri(uri);
-        FragmentTransaction transaction = getActivity().getSupportFragmentManager().beginTransaction();
-        List<Fragment> fragments = getActivity().getSupportFragmentManager().getFragments();
-        if (fragments == null || !fragments.contains(fragment)) {
-            transaction.remove(fragment);
-            transaction.add(R.id.frag_container, fragment);
-        }
-        transaction.show(fragment);
-        transaction.commit();
+
+        FragmentTransaction transaction = getChildFragmentManager().beginTransaction();
+        transaction.add(R.id.frag_container, fragment).commit();
         return mRootView;
     }
 

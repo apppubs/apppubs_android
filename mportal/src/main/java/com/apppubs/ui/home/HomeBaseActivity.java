@@ -62,6 +62,7 @@ public abstract class HomeBaseActivity extends BaseActivity implements IHomeView
 
     protected void onCreate(android.os.Bundle arg0) {
         super.onCreate(arg0);
+        AppContext.getInstance(mContext).setHomeBaseActivity(this);
         setNeedTitleBar(false);//主页面activity没有titlebar，titlebar由其包含的fragment负责渲染
         overridePendingTransition(R.anim.abc_fade_in, R.anim.abc_fade_out);
         //检测是否需要登录而且是否登录

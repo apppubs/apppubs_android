@@ -133,7 +133,7 @@ public class UserBussiness extends BaseBiz {
 
 	/**
 	 * 所有用户数
-	 * 
+	 *
 	 * @return
 	 */
 	public long countAllUser() {
@@ -283,48 +283,6 @@ public class UserBussiness extends BaseBiz {
 		return sb.toString();
 	}
 
-	/**
-	 * 判断某个department是否为叶子节点
-	 *
-	 * @param departmentId
-	 * @return
-	 */
-	public boolean isLeaf(String departmentId) {
-
-		long count = SugarRecord.count(TDepartment.class, "SUPER_ID = ?", new String[] { departmentId });
-		return count == 0;
-
-	}
-
-	public String getRootSuperId(){
-		AppConfig appConfig = AppContext.getInstance(mContext).getAppConfig();
-		return appConfig.getAdbookRootId();
-	}
-	/*
-	 * 列出第一层组织
-	 * 
-	 */
-	public List<TDepartment> listRootDepartment() {
-		AppConfig appConfig = AppContext.getInstance(mContext).getAppConfig();
-		return listSubDepartment(appConfig.getAdbookRootId());
-	}
-
-	public TUser getUserByUsername(String username) {
-		return SugarRecord.findByProperty(TUser.class, "username", username);
-	}
-
-	public List<TUser> getUsersByUserIds(List<String> userIds){
-		StringBuilder sb = new StringBuilder();
-		for (String userId : userIds){
-			if (sb.length()>0){
-				sb.append(",");
-			}
-			sb.append("'"+userId+"'");
-		}
-		String sql = "select * from USER where USER_ID in ("+sb.toString()+")";
-		return SugarRecord.findWithQuery(TUser.class,sql);
-	}
-
 	public Future cacheUserBasicInfoList(final List<String> userIds, final IAPCallback<List<UserBasicInfo>> callback){
 		Future future = post(new Runnable() {
 			@Override
@@ -356,85 +314,6 @@ public class UserBussiness extends BaseBiz {
 		ACache cache =  ACache.get(mContext,CACHE_NAME);
 		UserBasicInfo userInfo = (UserBasicInfo) cache.getAsObject(userId);
 		return userInfo;
-	}
-
-	public void addOrUpdateUserBasicInfo(UserBasicInfo userBasicInfo){
-		ACache cache =  ACache.get(mContext,CACHE_NAME);
-		cache.put(userBasicInfo.getUserId(),userBasicInfo);
-	}
-
-	/**
-	 * 搜索用户
-	 * 
-	 * @param str
-	 * @return
-	 */
-	public List<TUser> searchUser(String str) {
-
-		String dimStr = "%"+str+"%";
-		return SugarRecord
-				.find(TUser.class, "TRUE_NAME like ? or mobile like ? or work_tel like ? or office_no like ? or email like ?", new String[] { dimStr,dimStr,dimStr,dimStr,dimStr }, null, "sort_id", null);
-	}
-
-	/**
-	 * 记录用户使用记录
-	 * 
-	 * @param userId
-	 */
-	public void recordUser(String userId) {
-
-		SugarRecord.update(TUser.class, "LAST_USED_TIME", new Date().getTime() + "", "USER_ID = ?",
-				new String[] { userId });
-	}
-
-	/*
-	 * 列出常用用户
-	 */
-	public List<TUser> listRectent() {
-
-		return SugarRecord.find(TUser.class, "LAST_USED_TIME IS NOT NULL", null, null, "LAST_USED_TIME desc", "0,20");
-	}
-
-	/**
-	 * 同步通讯录
-	 * 
-	 * @param callback
-	 */
-
-	private double mUserDownloadProgress;//用户信息下载进度
-	private double mDeptDownloadProgress;//部门信息下载进度
-	private double mUserDeptDownloadProgress;//用户，部门信息关联表下载进度
-
-	private String mUserResponse;
-	private String mDeptResponse;
-	private String mUserDeptResponse;
-
-	protected class OnUpdateRun implements Runnable{
-		private AbstractBussinessCallback mCallback;
-		private double mProgress;
-		public OnUpdateRun(AbstractBussinessCallback callback,double progress){
-			mCallback = callback;
-			mProgress = progress;
-		}
-		@Override
-		public void run() {
-			mCallback.onProgressUpdate((float)mProgress);
-		}
-
-	}
-
-
-	/**
-	 * 判断是否通讯录信息是否下载完毕,是否可以写数据库
-	 * @return
-	 */
-	private boolean shouldWriteDb(){
-		if((mUserDownloadProgress==mUserDeptDownloadProgress)&&
-				(mUserDeptDownloadProgress==mDeptDownloadProgress)&&
-				(mDeptDownloadProgress==1.0f)){
-			return true;
-		}
-		return false;
 	}
 
 	/**

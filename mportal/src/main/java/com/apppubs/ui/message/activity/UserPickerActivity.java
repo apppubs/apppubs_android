@@ -15,6 +15,7 @@ import com.apppubs.bean.TDepartment;
 import com.apppubs.AppContext;
 import com.apppubs.bean.TUser;
 import com.apppubs.constant.APError;
+import com.apppubs.model.AdbookBiz;
 import com.apppubs.ui.activity.BaseActivity;
 import com.apppubs.ui.adapter.ViewHolder;
 import com.apppubs.model.IAPCallback;
@@ -185,7 +186,7 @@ public class UserPickerActivity extends BaseActivity implements UserSelectionBar
         mListViewOffsetMap = new HashMap<String,Integer>();
         String rootId = AppContext.getInstance(this).getAppConfig().getAdbookRootId();
         mSuperId =  rootId;
-        mDepartmentList = mUserBussiness.listRootDepartment();
+//        mDepartmentList = AdbookBiz.getInstance(mContext).listRootDepartment();
         mUserPickerHelper = UserPickerHelper.getInstance(this);
     }
 
@@ -233,7 +234,7 @@ public class UserPickerActivity extends BaseActivity implements UserSelectionBar
 					setVisibilityOfViewByResId(R.id.user_picker_search_result_lv, View.GONE);
 				}else{
 					setVisibilityOfViewByResId( R.id.user_picker_search_result_lv, View.VISIBLE);
-					mSearchResultList = mUserBussiness.searchUser(searchText);
+					mSearchResultList = AdbookBiz.getInstance(mContext).searchUser(searchText);
 					mSearchResultAdapter.notifyDataSetChanged(mSearchResultList);
 				}
 				return false;
@@ -318,7 +319,7 @@ public class UserPickerActivity extends BaseActivity implements UserSelectionBar
 
         //存储上一个列表的偏移量
         mListViewOffsetMap.put(mSuperId,mListView.getFirstVisiblePosition());
-        if (!mUserBussiness.isLeaf(superId)) {
+        if (!AdbookBiz.getInstance(mContext).isLeaf(superId)) {
 			if(true){
 				mDepartmentList = mUserBussiness.listSubDepartment(superId,mAppContext.getCurrentUser().getChatPermissionString());
 			}else{
@@ -354,7 +355,7 @@ public class UserPickerActivity extends BaseActivity implements UserSelectionBar
         }
         mSuperId = superId;
 
-        hideOrShowAllCheckBtn(mUserBussiness.isLeaf(superId));
+        hideOrShowAllCheckBtn(AdbookBiz.getInstance(mContext).isLeaf(superId));
     }
 
     private void hideOrShowAllCheckBtn(boolean isShow) {
@@ -404,7 +405,7 @@ public class UserPickerActivity extends BaseActivity implements UserSelectionBar
     }
 
     private boolean currentSuperIdIsLeaf(){
-        return mUserBussiness.isLeaf(mSuperId);
+        return AdbookBiz.getInstance(mContext).isLeaf(mSuperId);
     }
 
     private void selectComplete(){

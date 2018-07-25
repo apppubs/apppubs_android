@@ -15,10 +15,12 @@ import android.widget.TextView;
 import com.apppubs.AppContext;
 import com.apppubs.bean.TDepartment;
 import com.apppubs.bean.TUser;
+import com.apppubs.bean.http.UserBasicInfosResult;
 import com.apppubs.constant.APError;
 import com.apppubs.d20.BuildConfig;
 import com.apppubs.d20.R;
 import com.apppubs.model.IAPCallback;
+import com.apppubs.model.UserBiz;
 import com.apppubs.model.message.UserBasicInfo;
 import com.apppubs.ui.adapter.CommonAdapter;
 import com.apppubs.ui.adapter.ViewHolder;
@@ -110,22 +112,27 @@ public class AddressBookOrganizationFragement extends BaseFragment {
                     desTv.setText("手机:" + user.getMobile());
                 } else if (!TextUtils.isEmpty(user.getWorkTEL()) && TextUtils.isEmpty(user.getMobile())) {
                     desTv.setText("电话:" + user.getWorkTEL());
+                } else {
+                    desTv.setText("");
                 }
                 CircleTextImageView imageView = holder.getView(R.id.item_user_picker_user_iv);
                 imageView.setTextColor(Color.WHITE);
                 imageView.setFillColor(getResources().getColor(R.color.common_btn_bg_gray));
                 imageView.setText(user.getTrueName());
-                UserBasicInfo userBasicInfo = mUserBussiness.getCachedUserBasicInfo(user.getUserId());
+                UserBasicInfosResult.Item userBasicInfo = UserBiz.getInstance(mContext).getCachedUserBasicInfo(user
+                        .getUserId());
                 if (userBasicInfo != null) {
-                    if (!TextUtils.isEmpty(userBasicInfo.getAtatarUrl())) {
-                        mImageLoader.displayImage(userBasicInfo.getAtatarUrl(), imageView);
+                    if (!TextUtils.isEmpty(userBasicInfo.getAvatarURL())) {
+                        mImageLoader.displayImage(userBasicInfo.getAvatarURL(), imageView);
+                    }else{
+                        imageView.setImageDrawable(null);
                     }
                     if (BuildConfig.ENABLE_CHAT) {
                         TextView registerTv = holder.getView(R.id.item_user_picker_user_title1_tv);
-                        registerTv.setVisibility(!TextUtils.isEmpty(userBasicInfo.getAppCodeVersion()) ? View.GONE :
+                        registerTv.setVisibility(userBasicInfo.getAppVersionCode() > 0 ? View.GONE :
                                 View.VISIBLE);
                         ImageView chatBubble = holder.getView(R.id.item_user_picker_bubble_iv);
-                        chatBubble.setVisibility(!TextUtils.isEmpty(userBasicInfo.getAppCodeVersion()) ? View.VISIBLE
+                        chatBubble.setVisibility(userBasicInfo.getAppVersionCode() > 0 ? View.VISIBLE
                                 : View.GONE);
                     }
                 } else {
@@ -133,6 +140,7 @@ public class AddressBookOrganizationFragement extends BaseFragment {
                     registerTv.setVisibility(View.GONE);
                     ImageView chatBubble = holder.getView(R.id.item_user_picker_bubble_iv);
                     chatBubble.setVisibility(View.GONE);
+                    imageView.setImageDrawable(null);
                 }
             }
         };
@@ -165,7 +173,7 @@ public class AddressBookOrganizationFragement extends BaseFragment {
     }
 
     private void prepareForCreateDiscuss() {
-        if (mListener != null){
+        if (mListener != null) {
             mListener.onCreateDiscussClicked(mSuperId);
         }
     }
@@ -194,6 +202,7 @@ public class AddressBookOrganizationFragement extends BaseFragment {
         mBreadcrumb.setOnItemClickListener(new Breadcrumb.OnItemClickListener() {
             @Override
             public void onItemClick(int index, String tag) {
+                mSuperId = tag;
                 if (mListener != null) {
                     mListener.onDeptSelected(tag);
                 }
@@ -218,28 +227,11 @@ public class AddressBookOrganizationFragement extends BaseFragment {
         mUserAdapter.setData(mUserList);
         mListView.setAdapter(mUserAdapter);
         mListView.setTag(TAG_USER);
-        List<String> userIds = new ArrayList<String>();
-        for (TUser user : mUserList) {
-            userIds.add(user.getUserId());
-        }
-        mUserBussiness.cacheUserBasicInfoList(userIds, new IAPCallback<List<UserBasicInfo>>() {
-            @Override
-            public void onDone(List<UserBasicInfo> obj) {
-
-                mUserAdapter.notifyDataSetChanged();
-
-            }
-
-            @Override
-            public void onException(APError excepCode) {
-
-            }
-        });
     }
 
     public void clearBreadcrumb(TDepartment dept) {
         mBreadcrumb.clear();
-        if (dept!=null){
+        if (dept != null) {
             mBreadcrumb.push(dept.getName(), dept.getDeptId());
         }
         mSuperId = dept.getDeptId();

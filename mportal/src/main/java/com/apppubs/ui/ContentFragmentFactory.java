@@ -21,7 +21,7 @@ import com.apppubs.ui.webapp.WebAppFragment;
 import com.apppubs.util.StringUtils;
 import com.apppubs.util.Utils;
 
-public class FragmentFactory {
+public class ContentFragmentFactory {
 
     public static BaseFragment getFragment(String uri) {
         BaseFragment frg;
