@@ -16,7 +16,6 @@ import com.apppubs.constant.APErrorCode;
 import com.apppubs.constant.URLs;
 import com.apppubs.model.IAPCallback;
 import com.apppubs.model.BaseBiz;
-import com.apppubs.net.APHttpClient;
 import com.apppubs.ui.activity.MainHandler;
 import com.apppubs.ui.message.MyFilePlugin;
 import com.apppubs.util.JSONResult;
@@ -37,7 +36,6 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
-import java.util.Map;
 import java.util.concurrent.Future;
 
 import io.rong.imkit.DefaultExtensionModule;
@@ -60,27 +58,24 @@ import io.rong.imlib.model.Conversation;
  * <p>
  * ChangeLog: 2015年3月16日 by zhangwen create
  */
-public class MsgBussiness extends BaseBiz {
+public class MsgBiz extends BaseBiz {
 
-    private static MsgBussiness sMessageBussiness;
+    private volatile static MsgBiz sMessageBussiness;
     private Context mContext;
 
-    private MsgBussiness(Context context) {
+    private MsgBiz(Context context) {
         super(context);
         mContext = context;
     }
 
-    public static MsgBussiness getInstance(Context context) {
-
+    public static MsgBiz getInstance(Context context) {
         if (sMessageBussiness == null) {
-            synchronized (MsgBussiness.class) {
+            synchronized (MsgBiz.class) {
                 if (sMessageBussiness == null) {
-                    sMessageBussiness = new MsgBussiness(context);
+                    sMessageBussiness = new MsgBiz(context);
                 }
             }
-
         }
-
         return sMessageBussiness;
     }
 

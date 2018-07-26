@@ -5,8 +5,11 @@ import android.net.Uri;
 import android.util.Log;
 
 import com.apppubs.AppContext;
+import com.apppubs.constant.APError;
+import com.apppubs.model.BaseBiz;
 import com.apppubs.model.cache.CacheListener;
 import com.apppubs.model.cache.FileCacheErrorCode;
+import com.apppubs.model.message.MsgBiz;
 
 import java.io.File;
 import java.util.List;
@@ -54,22 +57,16 @@ public class ConversationFragmentEx extends ConversationFragment {
 
 					Log.v("ConversationFragmentEx","发送图片"+new File(uri.getPath()).getAbsolutePath());
 
-					AppContext.getInstance(getContext()).getCacheManager().uploadFile(new File(uri.getPath()), new CacheListener() {
+					MsgBiz.getInstance(getContext()).uploadFile(new File(uri.getPath()),true , new BaseBiz.IRQStringListener(){
 						@Override
-						public void onException(FileCacheErrorCode errorCode) {
-							Log.v("ConversationFragmentEx","发送图片异常"+errorCode.getMessage());
-							uploadImageStatusListener.error();
-						}
-
-						@Override
-						public void onDone(String fileUrl) {
-							uploadImageStatusListener.success(Uri.parse(fileUrl));
-							Log.v("ConversationFragmentEx","发送图片完成"+fileUrl);
-						}
-
-						@Override
-						public void onProgress(float progress, long totalBytesExpectedToRead) {
-							uploadImageStatusListener.update((int)(totalBytesExpectedToRead*progress));
+						public void onResponse(String result, APError error) {
+							if (null == error){
+								uploadImageStatusListener.success(Uri.parse(result));
+								Log.v("ConversationFragmentEx","发送图片完成"+result);
+							}else{
+								Log.v("ConversationFragmentEx","发送图片异常"+error.getMsg());
+								uploadImageStatusListener.error();
+							}
 						}
 					});
 				}

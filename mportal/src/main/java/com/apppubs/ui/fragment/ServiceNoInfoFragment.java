@@ -20,7 +20,6 @@ import com.apppubs.ui.ICommonDataView;
 import com.apppubs.ui.activity.ServiceNOArticlesActivity;
 import com.apppubs.util.DateUtils;
 import com.apppubs.d20.R;
-import com.apppubs.ui.activity.ContainerActivity;
 
 /**
  * 服务号详情
@@ -52,7 +51,7 @@ public class ServiceNoInfoFragment extends BaseFragment implements
         mServiceNoId = args.getString(ARGS_STRING_SERVICE_NO_ID);
         progressBar = (LinearLayout) mRootView.findViewById(R.id.service_no_progress_ll);
         attentionBt = (Button) mRootView.findViewById(R.id.service_no_attention);
-//		mServiceNo = mMsgBussiness.getServiceNoById(mServiceNoId);
+//		mServiceNo = mMsgBiz.getServiceNoById(mServiceNoId);
         registerClickListener();
 
         mPresenter = new ServiceNOInfoPresenter(mContext, this, mServiceNoId);
@@ -84,7 +83,7 @@ public class ServiceNoInfoFragment extends BaseFragment implements
             public void onClick(View arg0) {
                 progressBar.setVisibility(View.VISIBLE);
                 if (attentionBt.getText().equals("关注")) {
-                    mMsgBussiness.getServiceAttention(mServiceNoId, AppContext.getInstance
+                    mMsgBiz.getServiceAttention(mServiceNoId, AppContext.getInstance
 									(mContext).getCurrentUser().getUsername(),
                             new IAPCallback<String>() {
 
@@ -112,7 +111,7 @@ public class ServiceNoInfoFragment extends BaseFragment implements
                                 }
                             });
                 } else {// 取消关注
-                    mMsgBussiness.getServiceUnAttention(mServiceNoId, AppContext.getInstance
+                    mMsgBiz.getServiceUnAttention(mServiceNoId, AppContext.getInstance
 									(mContext).getCurrentUser().getUsername(),
                             new IAPCallback<String>() {
 

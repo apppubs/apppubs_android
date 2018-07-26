@@ -2,6 +2,7 @@ package com.apppubs.model;
 
 import android.content.Context;
 import android.content.Intent;
+import android.net.Uri;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 
@@ -76,6 +77,9 @@ public class UserBiz extends BaseBiz {
                             ACache cache = ACache.get(mContext, CACHE_NAME);
                             for (UserBasicInfosResult.Item item : jr.getItems()) {
                                 cache.put(item.getUserId(), item);
+                                io.rong.imlib.model.UserInfo ui = new io.rong.imlib.model.UserInfo(item.getUserId(),
+                                        item.getTruename(), Uri.parse(item.getAvatarURL()));
+                                RongIM.getInstance().refreshUserInfoCache(ui);
                             }
                             MainHandler.getInstance().post(new Runnable() {
                                 @Override
@@ -111,6 +115,9 @@ public class UserBiz extends BaseBiz {
                             ACache cache = ACache.get(mContext, CACHE_NAME);
                             for (UserBasicInfosResult.Item item : jr.getItems()) {
                                 cache.put(item.getUserId(), item);
+                                io.rong.imlib.model.UserInfo ui = new io.rong.imlib.model.UserInfo(item.getUserId(),
+                                        item.getTruename(), Uri.parse(item.getAvatarURL()));
+                                RongIM.getInstance().refreshUserInfoCache(ui);
                             }
                             MainHandler.getInstance().post(new Runnable() {
                                 @Override

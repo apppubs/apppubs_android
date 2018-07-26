@@ -389,9 +389,9 @@ public class Utils {
         } else if (obj instanceof Map) {
             Set keys = (((Map) obj).keySet());
             if (keys != null && keys.size() > 0) {
-                return true;
-            } else {
                 return false;
+            } else {
+                return true;
             }
         } else if (obj instanceof String) {
             return TextUtils.isEmpty((String) obj);

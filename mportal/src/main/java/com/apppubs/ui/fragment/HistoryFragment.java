@@ -68,7 +68,7 @@ public class HistoryFragment extends BaseFragment {
 				public void onDone(Date obj) {
 					mStandardDateTime = obj;
 
-					mMsgBussiness.getAloneServiceList(mAppContext.getApp().getDefaultServiceNoId(),
+					mMsgBiz.getAloneServiceList(mAppContext.getApp().getDefaultServiceNoId(),
 							new IAPCallback<List<TServiceNOInfo>>() {
 
 								@Override

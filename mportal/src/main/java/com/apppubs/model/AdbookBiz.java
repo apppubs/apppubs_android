@@ -188,7 +188,12 @@ public class AdbookBiz extends BaseBiz {
     }
 
     public List<TDepartment> listSubDepartments(String superDepId) {
-        return listSubDepartments(superDepId, null);
+        AdbookInfoResult info = getCachedAdbookInfo();
+        if (info.needReadPermission()){
+            return listSubDepartments(superDepId,info.getReadPermissionStr());
+        }else{
+            return listSubDepartments(superDepId, null);
+        }
     }
 
     public List<TDepartment> listSubDepartments(String superDepId, String permissionString) {

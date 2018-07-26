@@ -8,15 +8,16 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Toast;
 
-import com.apppubs.AppContext;
+import com.apppubs.constant.APError;
 import com.apppubs.d20.R;
-import com.apppubs.ui.activity.BaseActivity;
-import com.apppubs.model.message.FilePickerModel;
-import com.apppubs.model.message.MyFilePickerHelper;
+import com.apppubs.model.BaseBiz;
 import com.apppubs.model.cache.CacheListener;
 import com.apppubs.model.cache.FileCacheErrorCode;
-import com.apppubs.util.LogM;
+import com.apppubs.model.message.FilePickerModel;
+import com.apppubs.model.message.MyFilePickerHelper;
+import com.apppubs.ui.activity.BaseActivity;
 import com.apppubs.ui.widget.ProgressHUD;
+import com.apppubs.util.LogM;
 
 import java.io.File;
 import java.util.List;
@@ -89,21 +90,13 @@ public class ConversationActivity extends BaseActivity {
 		List<FilePickerModel> models = MyFilePickerHelper.getInstance(this).getSelectionModels();
 		for (final FilePickerModel model : models) {
 			if(TextUtils.isEmpty(model.getFilePath())){
-				mAppContext.getCacheManager().cacheFile(model.getFileUrl(), new CacheListener() {
+				mMsgBiz.uploadFile(new File(model.getFileUrl()), true, new BaseBiz.IRQStringListener() {
 					@Override
-					public void onException(FileCacheErrorCode errorCode) {
-
-					}
-
-					@Override
-					public void onDone(String localPath) {
-						model.setFilePath(localPath);
-						sendFileMessage(model);
-					}
-
-					@Override
-					public void onProgress(float progress, long totalBytesExpectedToRead) {
-
+					public void onResponse(String result, APError error) {
+						if (null == error){
+							model.setFilePath(result);
+							sendFileMessage(model);
+						}
 					}
 				});
 			}else{
@@ -121,26 +114,16 @@ public class ConversationActivity extends BaseActivity {
 			@Override
 			public void onAttached(Message message, final IRongCallback.MediaMessageUploader mediaMessageUploader) {
 				FileMessage me = (FileMessage) message.getContent();
-				AppContext.getInstance(ConversationActivity.this).getCacheManager().uploadFile(new File(me.getLocalPath().getPath()), new CacheListener() {
+				mMsgBiz.uploadFile(new File(me.getLocalPath().getPath()), true, new BaseBiz.IRQStringListener() {
 					@Override
-					public void onException(FileCacheErrorCode errorCode) {
-						Log.v("ConversationFragmentEx", "发送图片异常" + errorCode.getMessage());
-						mediaMessageUploader.error();
-					}
-
-					@Override
-					public void onDone(String fileUrl) {
-						if (!TextUtils.isEmpty(fileUrl)) {
-							mediaMessageUploader.success(Uri.parse(fileUrl));
-							Log.v("ConversationFragmentEx", "发送图片完成" + fileUrl);
-						} else {
+					public void onResponse(String result, APError error) {
+						if (null==error){
+							mediaMessageUploader.success(Uri.parse(result));
+							Log.v("ConversationFragmentEx", "发送图片完成" + result);
+						}else{
+							Log.v("ConversationFragmentEx", "发送图片异常" + error.getMsg());
 							mediaMessageUploader.error();
 						}
-					}
-
-					@Override
-					public void onProgress(float progress, long totalBytesExpectedToRead) {
-						mediaMessageUploader.update((int) (totalBytesExpectedToRead * progress));
 					}
 				});
 			}

@@ -48,7 +48,7 @@ import com.apppubs.model.NewsBiz;
 import com.apppubs.model.PaperBiz;
 import com.apppubs.model.SystemBiz;
 import com.apppubs.model.UserBiz;
-import com.apppubs.model.message.MsgBussiness;
+import com.apppubs.model.message.MsgBiz;
 import com.apppubs.model.message.UserBussiness;
 import com.apppubs.ui.APErrorHandler;
 import com.apppubs.ui.ICommonView;
@@ -87,7 +87,7 @@ public abstract class BaseActivity extends FragmentActivity implements OnClickLi
     protected SystemBiz mSystemBiz;
     protected PaperBiz mPaperBiz;
     protected UserBussiness mUserBussiness;
-    protected MsgBussiness mMsgBussiness;
+    protected MsgBiz mMsgBiz;
 
     protected int curTheme;
     protected int mThemeColor;
@@ -171,7 +171,7 @@ public abstract class BaseActivity extends FragmentActivity implements OnClickLi
         mSystemBiz = SystemBiz.getInstance(this);
         mPaperBiz = PaperBiz.getInstance(this);
         mUserBussiness = UserBussiness.getInstance(this);
-        mMsgBussiness = MsgBussiness.getInstance(this);
+        mMsgBiz = MsgBiz.getInstance(this);
 
         mBr = new BroadcastReceiver() {
 

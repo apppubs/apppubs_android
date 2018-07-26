@@ -2,6 +2,9 @@ package com.apppubs.model.message;
 
 import android.content.Context;
 
+import com.apppubs.bean.http.UserBasicInfosResult;
+import com.apppubs.model.UserBiz;
+
 import io.rong.imlib.model.Conversation;
 
 /**
@@ -27,9 +30,9 @@ public class ConversationModel {
 		String portraitUrl = null;
 		if (conversation.getConversationType() == Conversation.ConversationType.PRIVATE) {
 
-			UserBasicInfo ubi = UserBussiness.getInstance(context).getCachedUserBasicInfo(conversation.getTargetId());
-			title = ubi.getTrueName();
-			portraitUrl = ubi.getAtatarUrl();
+			UserBasicInfosResult.Item ubi = UserBiz.getInstance(context).getCachedUserBasicInfo(conversation.getTargetId());
+			title = ubi.getTruename();
+			portraitUrl = ubi.getAvatarURL();
 		} else {
 			title = conversation.getConversationTitle();
 		}

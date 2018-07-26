@@ -242,7 +242,7 @@ public class ChatActivity extends BaseActivity implements OnClickListener {
 			deleteDateStr = map.get(mChatGroupId);
 		}
 		UserInfo currentUser = AppContext.getInstance(mContext).getCurrentUser();
-		mMsgBussiness.getChatGroupChatList(currentUser.getUsername(), mChatGroupId,deleteDateStr,
+		mMsgBiz.getChatGroupChatList(currentUser.getUsername(), mChatGroupId,deleteDateStr,
 				new IAPCallback<List<TMsg>>() {
 
 					@Override
@@ -399,12 +399,12 @@ public class ChatActivity extends BaseActivity implements OnClickListener {
 								mChatAdapter.notifyDataSetChanged();
 								mListView.setSelection(infos.size() - 1);
 								// if(mChatType==CHAT_TYPE_SINGLE){
-								// mMsgBussiness.sendSoundMsg(MportalApplication.user.getUsername(),
+								// mMsgBiz.sendSoundMsg(MportalApplication.user.getUsername(),
 								// mOtherUser.getUsername(),
 								// mFileName,mVoiceDuration);
 								// }else{
 								// }
-								mMsgBussiness.sendGroupSoundMsg(currentUser.getUsername(), mChatGroupId,
+								mMsgBiz.sendGroupSoundMsg(currentUser.getUsername(), mChatGroupId,
 										mSoundPath, mVoiceDuration);
 							}
 
@@ -576,7 +576,7 @@ public class ChatActivity extends BaseActivity implements OnClickListener {
 						// mChatType==CHAT_TYPE_SINGLE?mOtherUser.getUsername():"";
 						// String receiverUsername =
 						// mChatType==CHAT_TYPE_SINGLE?mOtherUser.getUsername():"";
-						mMsgBussiness.sendTextMsg(AppContext.getInstance(mContext).getCurrentUser().getUsername(), "", groupId,
+						mMsgBiz.sendTextMsg(AppContext.getInstance(mContext).getCurrentUser().getUsername(), "", groupId,
 								info.getContent(), new IAPCallback<Object>() {
 
 									@Override
@@ -758,7 +758,7 @@ public class ChatActivity extends BaseActivity implements OnClickListener {
 
 				mChatAdapter.notifyDataSetChanged();
 				mListView.setSelection(infos.size() - 1);
-				mMsgBussiness.sendGroupPicMsg(AppContext.getInstance(mContext).getCurrentUser().getUsername(), mChatGroupId, smallImagePath);
+				mMsgBiz.sendGroupPicMsg(AppContext.getInstance(mContext).getCurrentUser().getUsername(), mChatGroupId, smallImagePath);
 				break;
 			case 2:
 				// 相机拍摄
@@ -800,11 +800,11 @@ public class ChatActivity extends BaseActivity implements OnClickListener {
 				mChatAdapter.notifyDataSetChanged();
 				mListView.setSelection(infos.size() - 1);
 				// if(mChatType==CHAT_TYPE_SINGLE){
-				// mMsgBussiness.sendPicMsg(MportalApplication.user.getUsername(),mOtherUser.getUsername(),mPicPath);
+				// mMsgBiz.sendPicMsg(MportalApplication.user.getUsername(),mOtherUser.getUsername(),mPicPath);
 				// }else{
-				// mMsgBussiness.sendGroupPicMsg(MportalApplication.user.getUsername(),mChatGroupId,mPicPath);
+				// mMsgBiz.sendGroupPicMsg(MportalApplication.user.getUsername(),mChatGroupId,mPicPath);
 				// }
-				mMsgBussiness.sendGroupPicMsg(AppContext.getInstance(mContext).getCurrentUser().getUsername(), mChatGroupId, cameraBitSmallPath);
+				mMsgBiz.sendGroupPicMsg(AppContext.getInstance(mContext).getCurrentUser().getUsername(), mChatGroupId, cameraBitSmallPath);
 				break;
 			case 3:// 文件
 				System.out.println("打印文件传送返回来的..........." + data.getDataString());
@@ -845,7 +845,7 @@ public class ChatActivity extends BaseActivity implements OnClickListener {
 				ProgressHUD.show(this);
 				// if(mChatType==CHAT_TYPE_SINGLE){
 				//
-				// mMsgBussiness.sendVideoMsg(MportalApplication.user.getUsername(),mOtherUser.getUsername(),videoPath,new
+				// mMsgBiz.sendVideoMsg(MportalApplication.user.getUsername(),mOtherUser.getUsername(),videoPath,new
 				// IAPCallback<Object>() {
 				//
 				// @Override
@@ -857,7 +857,7 @@ public class ChatActivity extends BaseActivity implements OnClickListener {
 				// public void onDone(Object obj) {
 				//
 				//
-				// mMsgBussiness.getChatList(mOtherUser.getUsername(),
+				// mMsgBiz.getChatList(mOtherUser.getUsername(),
 				// MportalApplication.user.getUsername(),
 				// new IAPCallback<List<TMsg>>() {
 				//
@@ -882,7 +882,7 @@ public class ChatActivity extends BaseActivity implements OnClickListener {
 				// });
 				// }else{
 				// }
-				mMsgBussiness.sendGroupVideoMsg(AppContext.getInstance(mContext).getCurrentUser().getUsername(), mChatGroupId, videoPath,
+				mMsgBiz.sendGroupVideoMsg(AppContext.getInstance(mContext).getCurrentUser().getUsername(), mChatGroupId, videoPath,
 						new IAPCallback<Object>() {
 
 							@Override
@@ -897,7 +897,7 @@ public class ChatActivity extends BaseActivity implements OnClickListener {
 								if(map!=null){
 									deleteDateStr = map.get(mChatGroupId);
 								}
-								mMsgBussiness.getChatGroupChatList(AppContext.getInstance(mContext).getCurrentUser().getUsername(), mChatGroupId,deleteDateStr,
+								mMsgBiz.getChatGroupChatList(AppContext.getInstance(mContext).getCurrentUser().getUsername(), mChatGroupId,deleteDateStr,
 										new IAPCallback<List<TMsg>>() {
 
 											@Override

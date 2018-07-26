@@ -22,7 +22,9 @@ import com.apppubs.net.APNetException;
 import com.apppubs.net.IHttpClient;
 import com.apppubs.net.IRequestListener;
 import com.apppubs.util.Utils;
+import com.google.gson.JsonObject;
 
+import java.io.File;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.BlockingQueue;
@@ -279,6 +281,32 @@ public abstract class BaseBiz {
             APError error = new APError(code, msg);
             throw new APNetException(error);
         }
+    }
+
+    public void uploadFile(File file, boolean needUser,IRQStringListener listener){
+        String entryURL = getEntryURL();
+        Map<String,Object> params = new HashMap<>();
+        params.put("file",file);//file必须放到最后，否则服务端无法得到其他参数
+        params.put("apiName",Constants.API_NAME_UPLOAD_FILE);
+        if (needUser){
+            params.putAll(getUserParams());
+        }
+        mHttpClient.asyncMultiPOST(entryURL, getCommonHeader(), params, new IRequestListener() {
+            @Override
+            public void onResponse(String json, APError e) {
+                JSONObject jo = JSONObject.parseObject(json);
+                Integer code = jo.getInteger("code");
+                String msg = jo.getString("msg");
+                if (code == APErrorCode.SUCCESS.getCode()) {
+                    JSONObject resultStr = jo.getJSONObject("result");
+                    String fileURL = resultStr.getString("fileURL");
+                    listener.onResponse(fileURL,null);
+                } else {
+                    APError error = new APError(code, msg);
+                    listener.onResponse(null,error);
+                }
+            }
+        });
     }
 
     public interface IRQListener<T extends IJsonResult> {

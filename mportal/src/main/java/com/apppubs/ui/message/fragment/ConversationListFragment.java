@@ -74,10 +74,10 @@ public class ConversationListFragment extends TitleBarFragment implements View.O
                 mMenuPW.setOutsideTouchable(true);
                 mMenuPW.setBackgroundDrawable(new BitmapDrawable());
                 mMenuPW.showAsDropDown(mTitleBar.getRightView());
-                if (BuildConfig.ENABLE_CHAT) {
+                if (!BuildConfig.ENABLE_CHAT) {
                     // 当没有聊天功能时隐藏新建聊天
                     setVisibilityOfViewByResId(menuPop, R.id.pop_msg_record_add_chat_ll, View.GONE);
-                    setVisibilityOfViewByResId(menuPop, R.id.pop_msg_record_add_group_chat_ll, View.GONE);
+//                    setVisibilityOfViewByResId(menuPop, R.id.pop_msg_record_add_group_chat_ll, View.GONE);
                 }
 
                 View addChatV = menuPop.findViewById(R.id.pop_msg_record_add_chat_ll);

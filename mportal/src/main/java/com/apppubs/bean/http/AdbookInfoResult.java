@@ -51,6 +51,10 @@ public class AdbookInfoResult implements IJsonResult, Serializable {
         this.readPermissionStr = readPermissionStr;
     }
 
+    public String getReadPermissionStr() {
+        return readPermissionStr;
+    }
+
     public String needReadPermissionStr() {
         return this.readPermissionStr;
     }

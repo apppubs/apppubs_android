@@ -71,7 +71,7 @@ public class ServiceNoSubscribeFragment extends BaseFragment {
 		// }
 		// });
 
-		mMsgBussiness.getSubcribableServiceNoList(new IAPCallback<List<TServiceNo>>() {
+		mMsgBiz.getSubcribableServiceNoList(new IAPCallback<List<TServiceNo>>() {
 
 			@Override
 			public void onException(APError excepCode) {

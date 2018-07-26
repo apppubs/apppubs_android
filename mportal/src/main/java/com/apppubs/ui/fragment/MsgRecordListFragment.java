@@ -250,7 +250,7 @@ public class MsgRecordListFragment extends TitleBarFragment implements OnClickLi
 							msgRecord.save();
 						}
 						
-						mMsgRecordL = mMsgBussiness.listMsgRecord();
+						mMsgRecordL = mMsgBiz.listMsgRecord();
 						fill();
 					} catch (JSONException e) {
 						e.printStackTrace();
@@ -276,7 +276,7 @@ public class MsgRecordListFragment extends TitleBarFragment implements OnClickLi
 
 	private void fill() {
 		
-		mMsgRecordL = mMsgBussiness.listMsgRecord();
+		mMsgRecordL = mMsgBiz.listMsgRecord();
 		
 		if(mMsgRecordL==null||mMsgRecordL.size()==0){
 			
@@ -328,7 +328,7 @@ public class MsgRecordListFragment extends TitleBarFragment implements OnClickLi
 						Bundle b = new Bundle();
 						b.putString(ServiceNOArticlesFragment.ARGS_STRING_SERVICE_NO_ID, mr.getSourceUsernameOrId());
 						ContainerActivity.startContainerActivity(mHostActivity, ServiceNOArticlesFragment.class, b, mr.getTitle());
-						mMsgBussiness.cleanUnread(mr.getSourceUsernameOrId());
+						mMsgBiz.cleanUnread(mr.getSourceUsernameOrId());
 					}
 					
 				}
@@ -432,7 +432,7 @@ public class MsgRecordListFragment extends TitleBarFragment implements OnClickLi
 						}));
 						
 						SugarRecord.deleteAll(TMsgRecord.class, "id = ? ", mMsgRecordL.get(pos).getId());
-						mMsgRecordL = mMsgBussiness.listMsgRecord();
+						mMsgRecordL = mMsgBiz.listMsgRecord();
 						mAdapter.notifyDataSetChanged();
 						if(mMsgRecordL==null||mMsgRecordL.size()==0){
 							

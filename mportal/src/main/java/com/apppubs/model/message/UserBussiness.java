@@ -1,63 +1,34 @@
 package com.apppubs.model.message;
 
 import android.content.Context;
-import android.content.Intent;
 import android.database.Cursor;
-import android.database.sqlite.SQLiteDatabase;
-import android.os.Build;
 import android.text.TextUtils;
 import android.util.Log;
 
+import com.apppubs.AppContext;
+import com.apppubs.bean.Settings;
 import com.apppubs.bean.TDepartment;
 import com.apppubs.bean.TUser;
 import com.apppubs.bean.UserInfo;
-import com.apppubs.bean.TUserDeptLink;
-import com.apppubs.constant.APError;
-import com.apppubs.constant.APErrorCode;
-import com.apppubs.constant.Actions;
-import com.apppubs.AppContext;
-import com.apppubs.bean.App;
-import com.apppubs.bean.AppConfig;
-import com.apppubs.bean.Settings;
 import com.apppubs.constant.URLs;
-import com.apppubs.model.AbstractBussinessCallback;
 import com.apppubs.model.BaseBiz;
 import com.apppubs.model.IAPCallback;
-import com.apppubs.model.SystemBiz;
 import com.apppubs.util.ACache;
-import com.apppubs.util.Des3;
 import com.apppubs.util.JSONResult;
-import com.apppubs.util.LogM;
 import com.apppubs.util.StringUtils;
-import com.apppubs.util.Utils;
 import com.apppubs.util.WebUtils;
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
-import com.google.gson.JsonDeserializationContext;
-import com.google.gson.JsonDeserializer;
-import com.google.gson.JsonElement;
-import com.google.gson.JsonParseException;
-import com.google.gson.reflect.TypeToken;
 import com.orm.SugarRecord;
 
-import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.io.IOException;
-import java.io.UnsupportedEncodingException;
-import java.lang.reflect.Type;
 import java.net.URLEncoder;
 import java.text.Collator;
 import java.util.ArrayList;
 import java.util.Comparator;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.Future;
-
-import cn.jpush.android.api.JPushInterface;
-import io.rong.imkit.RongIM;
 
 /**
  * 用户相关业务
@@ -308,12 +279,6 @@ public class UserBussiness extends BaseBiz {
 			}
 		});
 		return future;
-	}
-
-	public UserBasicInfo getCachedUserBasicInfo(String userId){
-		ACache cache =  ACache.get(mContext,CACHE_NAME);
-		UserBasicInfo userInfo = (UserBasicInfo) cache.getAsObject(userId);
-		return userInfo;
 	}
 
 	/**

@@ -99,7 +99,7 @@ public abstract class HomeBaseActivity extends BaseActivity implements IHomeView
         mViewCourier = ViewCourier.getInstance(this);
 
         if (BuildConfig.ENABLE_CHAT) {
-            mMsgBussiness.loginRC(new IAPCallback() {
+            mMsgBiz.loginRC(new IAPCallback() {
                 @Override
                 public void onDone(Object obj) {
                     System.out.println("融云登录成功！");

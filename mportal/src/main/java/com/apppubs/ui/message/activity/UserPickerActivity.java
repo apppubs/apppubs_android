@@ -14,8 +14,12 @@ import android.widget.TextView;
 import com.apppubs.bean.TDepartment;
 import com.apppubs.AppContext;
 import com.apppubs.bean.TUser;
+import com.apppubs.bean.http.AdbookInfoResult;
+import com.apppubs.bean.http.UserBasicInfosResult;
 import com.apppubs.constant.APError;
 import com.apppubs.model.AdbookBiz;
+import com.apppubs.model.UserBiz;
+import com.apppubs.presenter.UserPickerPresenter;
 import com.apppubs.ui.activity.BaseActivity;
 import com.apppubs.ui.adapter.ViewHolder;
 import com.apppubs.model.IAPCallback;
@@ -32,7 +36,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class UserPickerActivity extends BaseActivity implements UserSelectionBar.UserSelectionBarListener {
+public class UserPickerActivity extends BaseActivity implements IUserPickerView, UserSelectionBar
+        .UserSelectionBarListener {
 
     public static final String ARG_STRING_SUPER_ID = "super_id";
     private String mSuperId;
@@ -43,78 +48,87 @@ public class UserPickerActivity extends BaseActivity implements UserSelectionBar
     private List<TUser> mUserList;
     private Breadcrumb mBreadcrumb;
     private UserSelectionBar mUserSelectBar;
-    private Map<String,Integer> mListViewOffsetMap;
+    private Map<String, Integer> mListViewOffsetMap;
     private UserPickerHelper mUserPickerHelper;
-	private SearchView mSearchView;
-	private ListView mSearchResultLV;
-	private List<TUser> mSearchResultList;
-	private CommonAdapter mSearchResultAdapter;
+    private SearchView mSearchView;
+    private ListView mSearchResultLV;
+    private List<TUser> mSearchResultList;
+    private CommonAdapter mSearchResultAdapter;
+    private UserPickerPresenter mPresenter;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        initPresenter();
         initData();
         initView();
         initAdapter();
-        displayBySuperId(mSuperId,false);
+        displayBySuperId(mSuperId, false);
+        mPresenter.onCreate();
+    }
+
+    private void initPresenter() {
+        mPresenter = new UserPickerPresenter(this, this);
     }
 
     private void initAdapter() {
         final int totalRow = mDepartmentList.size();
         final String showCountFlag = AppContext.getInstance(this).getAppConfig().getAdbookOrgCountFlag();
-        mDeptAdapter = new CommonAdapter<TDepartment>(this,mDepartmentList, R.layout.item_organization_lv) {
+        mDeptAdapter = new CommonAdapter<TDepartment>(this, mDepartmentList, R.layout.item_organization_lv) {
 
             @Override
             protected void fillValues(ViewHolder holder, TDepartment bean, int position) {
 
-                ((TextView)holder.getView(R.id.org_item_name_tv)).setText(bean.getName());
+                ((TextView) holder.getView(R.id.org_item_name_tv)).setText(bean.getName());
                 TextView detailTv = ((TextView) holder.getView(R.id.org_item_count_tv));
-                if(showCountFlag.equals("1")){
+                if (showCountFlag.equals("1")) {
                     detailTv.setVisibility(View.VISIBLE);
                     detailTv.setText("共" + bean.getTotalNum() + "人");
-                }else{
+                } else {
                     detailTv.setVisibility(View.GONE);
                 }
                 View line = holder.getView(R.id.line);
                 View longerLine = holder.getView(R.id.line_longer);
                 //最后一行的宽度是全屏的.隐藏item里的线
-                if((totalRow-1)==position){
+                if ((totalRow - 1) == position) {
                     line.setVisibility(View.GONE);
                     longerLine.setVisibility(View.VISIBLE);
-                }else{
+                } else {
                     line.setVisibility(View.VISIBLE);
                     longerLine.setVisibility(View.GONE);
                 }
             }
         };
 
-        mUserAdapter = new CommonAdapter<TUser>(this,mUserList,R.layout.item_user_picker_user_lv) {
+        mUserAdapter = new CommonAdapter<TUser>(this, mUserList, R.layout.item_user_picker_user_lv) {
             @Override
             protected void fillValues(ViewHolder holder, TUser user, int position) {
                 TextView titleTv = holder.getView(R.id.item_user_picker_user_title_tv);
                 titleTv.setText(user.getTrueName());
                 TextView desTv = holder.getView(R.id.item_user_picker_user_des_tv);
-                if(!TextUtils.isEmpty(user.getWorkTEL())&&!TextUtils.isEmpty(user.getMobile())){
-                    desTv.setText("手机:"+user.getMobile()+" 电话:"+user.getWorkTEL());
-                }else if(TextUtils.isEmpty(user.getWorkTEL())&&!TextUtils.isEmpty(user.getMobile())){
-                    desTv.setText("手机:"+user.getMobile());
-                }else if(!TextUtils.isEmpty(user.getWorkTEL())&&TextUtils.isEmpty(user.getMobile())){
-                    desTv.setText("电话:"+user.getWorkTEL());
+                if (!TextUtils.isEmpty(user.getWorkTEL()) && !TextUtils.isEmpty(user.getMobile())) {
+                    desTv.setText("手机:" + user.getMobile() + " 电话:" + user.getWorkTEL());
+                } else if (TextUtils.isEmpty(user.getWorkTEL()) && !TextUtils.isEmpty(user.getMobile())) {
+                    desTv.setText("手机:" + user.getMobile());
+                } else if (!TextUtils.isEmpty(user.getWorkTEL()) && TextUtils.isEmpty(user.getMobile())) {
+                    desTv.setText("电话:" + user.getWorkTEL());
                 }
                 ImageView checkBtnIv = holder.getView(R.id.item_user_picker_check_btn);
-                checkCheckBtn(checkBtnIv,mUserPickerHelper.isSelected(user.getUserId()),mUserPickerHelper.isPreselected(user.getUserId()));
+                checkCheckBtn(checkBtnIv, mUserPickerHelper.isSelected(user.getUserId()), mUserPickerHelper
+                        .isPreselected(user.getUserId()));
                 CircleTextImageView imageView = holder.getView(R.id.item_user_picker_user_iv);
                 imageView.setTextColor(Color.WHITE);
                 imageView.setFillColor(getResources().getColor(R.color.common_btn_bg_gray));
                 imageView.setText(user.getTrueName());
-                UserBasicInfo userBasicInfo = mUserBussiness.getCachedUserBasicInfo(user.getUserId());
-                if (userBasicInfo!=null){
-					if (!TextUtils.isEmpty(userBasicInfo.getAtatarUrl())){
-						mImageLoader.displayImage(userBasicInfo.getAtatarUrl(),imageView);
-					}
+                UserBasicInfosResult.Item userBasicInfo = UserBiz.getInstance(mContext).getCachedUserBasicInfo(user
+                        .getUserId());
+                if (userBasicInfo != null) {
+                    if (!TextUtils.isEmpty(userBasicInfo.getAvatarURL())) {
+                        mImageLoader.displayImage(userBasicInfo.getAvatarURL(), imageView);
+                    }
                     TextView registerTv = holder.getView(R.id.item_user_picker_user_title1_tv);
-                    registerTv.setVisibility(!TextUtils.isEmpty(userBasicInfo.getAppCodeVersion())?View.GONE:View.VISIBLE);
+                    registerTv.setVisibility(userBasicInfo.getAppVersionCode() > 0 ? View.GONE : View.VISIBLE);
                 }
             }
         };
@@ -122,60 +136,58 @@ public class UserPickerActivity extends BaseActivity implements UserSelectionBar
         mListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> arg0, View view, int position, long arg3) {
-                if (currentSuperIdIsLeaf()){
+                if (currentSuperIdIsLeaf()) {
                     ImageView checkBtnIv = (ImageView) view.findViewById(R.id.item_user_picker_check_btn);
-                    if (checkBtnIv.isEnabled()){
-                        checkCheckBtn(checkBtnIv,!checkBtnIv.isSelected(),false);
+                    if (checkBtnIv.isEnabled()) {
+                        checkCheckBtn(checkBtnIv, !checkBtnIv.isSelected(), false);
 
                         TUser user = mUserList.get(position);
                         String userId = user.getUserId();
-                        if (checkBtnIv.isSelected()){
-							checkUser(user, userId);
-                        }else{
-							uncheckUser(userId);
+                        if (checkBtnIv.isSelected()) {
+                            checkUser(user, userId);
+                        } else {
+                            uncheckUser(userId);
                         }
-						if (mUserPickerHelper.getMode()== UserPickerHelper.UserPickerMode.USER_PICKER_MODE_SINGLE){
-							selectComplete();
-						}
+                        if (mUserPickerHelper.getMode() == UserPickerHelper.UserPickerMode.USER_PICKER_MODE_SINGLE) {
+                            selectComplete();
+                        }
                     }
-                }else{
+                } else {
                     TDepartment dep = mDepartmentList.get(position);
                     String id = dep.getDeptId();
-                    mBreadcrumb.push(dep.getName(),id);
-                    displayBySuperId(id,false);
+                    mBreadcrumb.push(dep.getName(), id);
+                    displayBySuperId(id, false);
                 }
             }
         });
 
     }
 
-	private void uncheckUser(String userId) {
-		mUserPickerHelper.removeUser(userId);
-		mUserSelectBar.removeUser(userId);
-	}
+    private void uncheckUser(String userId) {
+        mUserPickerHelper.removeUser(userId);
+        mUserSelectBar.removeUser(userId);
+    }
 
-	private void checkUser(TUser user, String userId) {
-		mUserPickerHelper.selectUser(userId);
-		UserBasicInfo ui = mUserBussiness.getCachedUserBasicInfo(userId);
-		if (ui==null){
-			ui = new UserBasicInfo();
-			ui.setUserId(user.getUserId());
-			ui.setTrueName(user.getTrueName());
-			ui.setUsername(user.getUsername());
-		}
-		mUserSelectBar.addUser(ui);
-	}
+    private void checkUser(TUser user, String userId) {
+        mUserPickerHelper.selectUser(userId);
+        UserBasicInfosResult.Item ubi = UserBiz.getInstance(mContext).getCachedUserBasicInfo(userId);
+        UserBasicInfo ui = new UserBasicInfo();
+        ui.setUserId(ubi.getUserId());
+        ui.setTrueName(ubi.getTruename());
+        ui.setUsername(ubi.getUserId());
+        mUserSelectBar.addUser(ui);
+    }
 
-	private void checkCheckBtn(ImageView checkBtnIv, boolean check,boolean lock) {
-        if (lock){
+    private void checkCheckBtn(ImageView checkBtnIv, boolean check, boolean lock) {
+        if (lock) {
             checkBtnIv.setSelected(true);
             checkBtnIv.setEnabled(false);
-            checkBtnIv.setColorFilter(Color.GRAY,PorterDuff.Mode.SRC_ATOP);
-        }else{
-            if (check){
+            checkBtnIv.setColorFilter(Color.GRAY, PorterDuff.Mode.SRC_ATOP);
+        } else {
+            if (check) {
                 checkBtnIv.setSelected(true);
                 checkBtnIv.setColorFilter(mThemeColor, PorterDuff.Mode.SRC_ATOP);
-            }else{
+            } else {
                 checkBtnIv.setSelected(false);
                 checkBtnIv.clearColorFilter();
             }
@@ -183,15 +195,22 @@ public class UserPickerActivity extends BaseActivity implements UserSelectionBar
     }
 
     private void initData() {
-        mListViewOffsetMap = new HashMap<String,Integer>();
+        mListViewOffsetMap = new HashMap<String, Integer>();
         String rootId = AppContext.getInstance(this).getAppConfig().getAdbookRootId();
-        mSuperId =  rootId;
-//        mDepartmentList = AdbookBiz.getInstance(mContext).listRootDepartment();
+        mSuperId = rootId;
+        AdbookInfoResult info = AdbookBiz.getInstance(mContext).getCachedAdbookInfo();
+        if (info != null) {
+            mSuperId = info.getRootDeptId();
+            mDepartmentList = AdbookBiz.getInstance(mContext).listSubDepartments(info.getRootDeptId());
+        } else {
+            mDepartmentList = new ArrayList<>();
+        }
+
         mUserPickerHelper = UserPickerHelper.getInstance(this);
     }
 
     private void initView() {
-        overridePendingTransition(R.anim.slide_in_from_bottom,R.anim.slide_out_to_top);
+        overridePendingTransition(R.anim.slide_in_from_bottom, R.anim.slide_out_to_top);
         setContentView(R.layout.act_user_picker);
         getTitleBar().setLeftBtnWithText("取消");
         getTitleBar().setLeftBtnClickListener(new View.OnClickListener() {
@@ -206,151 +225,152 @@ public class UserPickerActivity extends BaseActivity implements UserSelectionBar
 
         mBreadcrumb = (Breadcrumb) findViewById(R.id.user_picker_bc);
         mBreadcrumb.setTextColor(Color.BLACK);
-        mBreadcrumb.push("组织",mSuperId);
+        mBreadcrumb.push("组织", mSuperId);
 
         mBreadcrumb.setTextColor(getResources().getColor(R.color.common_text));
         mBreadcrumb.setOnItemClickListener(new Breadcrumb.OnItemClickListener() {
             @Override
-            public void onItemClick(int index,String tag) {
-                displayBySuperId(tag,true);
+            public void onItemClick(int index, String tag) {
+                displayBySuperId(tag, true);
             }
         });
 
-		initUserSelectorBar();
+        initUserSelectorBar();
 
-		mSearchView = (SearchView) findViewById(R.id.user_picker_sv);
-		mSearchResultLV = (ListView) findViewById(R.id.user_picker_search_result_lv);
-		mSearchView.setFocusable(false);
-		mSearchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+        mSearchView = (SearchView) findViewById(R.id.user_picker_sv);
+        mSearchResultLV = (ListView) findViewById(R.id.user_picker_search_result_lv);
+        mSearchView.setFocusable(false);
+        mSearchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
 
-			@Override
-			public boolean onQueryTextSubmit(String searchText) {
-				return false;
-			}
+            @Override
+            public boolean onQueryTextSubmit(String searchText) {
+                return false;
+            }
 
-			@Override
-			public boolean onQueryTextChange(String searchText) {
-				if(TextUtils.isEmpty(searchText)){
-					setVisibilityOfViewByResId(R.id.user_picker_search_result_lv, View.GONE);
-				}else{
-					setVisibilityOfViewByResId( R.id.user_picker_search_result_lv, View.VISIBLE);
-					mSearchResultList = AdbookBiz.getInstance(mContext).searchUser(searchText);
-					mSearchResultAdapter.notifyDataSetChanged(mSearchResultList);
-				}
-				return false;
-			}
-		});
-		mSearchResultList = new ArrayList<TUser>();
-		mSearchResultAdapter = new CommonAdapter<TUser>(mContext,mSearchResultList,R.layout.item_user_picker_user_lv) {
+            @Override
+            public boolean onQueryTextChange(String searchText) {
+                if (TextUtils.isEmpty(searchText)) {
+                    setVisibilityOfViewByResId(R.id.user_picker_search_result_lv, View.GONE);
+                } else {
+                    setVisibilityOfViewByResId(R.id.user_picker_search_result_lv, View.VISIBLE);
+                    mSearchResultList = AdbookBiz.getInstance(mContext).searchUser(searchText);
+                    mSearchResultAdapter.notifyDataSetChanged(mSearchResultList);
+                }
+                return false;
+            }
+        });
+        mSearchResultList = new ArrayList<TUser>();
+        mSearchResultAdapter = new CommonAdapter<TUser>(mContext, mSearchResultList, R.layout
+                .item_user_picker_user_lv) {
 
-			@Override
-			protected void fillValues(ViewHolder holder, TUser user, int position) {
+            @Override
+            protected void fillValues(ViewHolder holder, TUser user, int position) {
 
-				TextView titleTv = holder.getView(R.id.item_user_picker_user_title_tv);
-				titleTv.setText(user.getTrueName());
-				TextView desTv = holder.getView(R.id.item_user_picker_user_des_tv);
-				if(!TextUtils.isEmpty(user.getWorkTEL())&&!TextUtils.isEmpty(user.getMobile())){
-					desTv.setText("手机:"+user.getMobile()+" 电话:"+user.getWorkTEL());
-				}else if(TextUtils.isEmpty(user.getWorkTEL())&&!TextUtils.isEmpty(user.getMobile())){
-					desTv.setText("手机:"+user.getMobile());
-				}else if(!TextUtils.isEmpty(user.getWorkTEL())&&TextUtils.isEmpty(user.getMobile())){
-					desTv.setText("电话:"+user.getWorkTEL());
-				}
-				ImageView checkBtnIv = holder.getView(R.id.item_user_picker_check_btn);
-				checkCheckBtn(checkBtnIv,mUserPickerHelper.isSelected(user.getUserId()),mUserPickerHelper.isPreselected(user.getUserId()));
-				CircleTextImageView imageView = holder.getView(R.id.item_user_picker_user_iv);
-				imageView.setTextColor(Color.WHITE);
-				imageView.setFillColor(getResources().getColor(R.color.common_btn_bg_gray));
-				imageView.setText(user.getTrueName());
-				UserBasicInfo userBasicInfo = mUserBussiness.getCachedUserBasicInfo(user.getUserId());
-				if (userBasicInfo!=null){
-					mImageLoader.displayImage(userBasicInfo.getAtatarUrl(),imageView);
-					TextView registerTv = holder.getView(R.id.item_user_picker_user_title1_tv);
-					registerTv.setVisibility(!TextUtils.isEmpty(userBasicInfo.getAppCodeVersion())?View.GONE:View.VISIBLE);
-				}
+                TextView titleTv = holder.getView(R.id.item_user_picker_user_title_tv);
+                titleTv.setText(user.getTrueName());
+                TextView desTv = holder.getView(R.id.item_user_picker_user_des_tv);
+                if (!TextUtils.isEmpty(user.getWorkTEL()) && !TextUtils.isEmpty(user.getMobile())) {
+                    desTv.setText("手机:" + user.getMobile() + " 电话:" + user.getWorkTEL());
+                } else if (TextUtils.isEmpty(user.getWorkTEL()) && !TextUtils.isEmpty(user.getMobile())) {
+                    desTv.setText("手机:" + user.getMobile());
+                } else if (!TextUtils.isEmpty(user.getWorkTEL()) && TextUtils.isEmpty(user.getMobile())) {
+                    desTv.setText("电话:" + user.getWorkTEL());
+                }
+                ImageView checkBtnIv = holder.getView(R.id.item_user_picker_check_btn);
+                checkCheckBtn(checkBtnIv, mUserPickerHelper.isSelected(user.getUserId()), mUserPickerHelper
+                        .isPreselected(user.getUserId()));
+                CircleTextImageView imageView = holder.getView(R.id.item_user_picker_user_iv);
+                imageView.setTextColor(Color.WHITE);
+                imageView.setFillColor(getResources().getColor(R.color.common_btn_bg_gray));
+                imageView.setText(user.getTrueName());
+                UserBasicInfosResult.Item userBasicInfo = UserBiz.getInstance(mContext).getCachedUserBasicInfo(user
+                        .getUserId());
+                if (userBasicInfo != null) {
+                    mImageLoader.displayImage(userBasicInfo.getAvatarURL(), imageView);
+                    TextView registerTv = holder.getView(R.id.item_user_picker_user_title1_tv);
+                    registerTv.setVisibility(userBasicInfo.getAppVersionCode() > 0 ? View.GONE : View.VISIBLE);
+                }
 
-			}
-		};
-		mSearchResultLV.setAdapter(mSearchResultAdapter);
-		mSearchResultLV.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            }
+        };
+        mSearchResultLV.setAdapter(mSearchResultAdapter);
+        mSearchResultLV.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 
-			@Override
-			public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-				ImageView checkBtnIv = (ImageView) view.findViewById(R.id.item_user_picker_check_btn);
-				if (checkBtnIv.isEnabled()){
-					checkCheckBtn(checkBtnIv,!checkBtnIv.isSelected(),false);
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                ImageView checkBtnIv = (ImageView) view.findViewById(R.id.item_user_picker_check_btn);
+                if (checkBtnIv.isEnabled()) {
+                    checkCheckBtn(checkBtnIv, !checkBtnIv.isSelected(), false);
 
-					TUser user = mSearchResultList.get(position);
-					String userId = user.getUserId();
-					if (checkBtnIv.isSelected()){
-						checkUser(user, userId);
-					}else{
-						uncheckUser(userId);
-					}
-					mSearchView.setQuery("", false);
-					mSearchView.clearFocus();
-					mSearchResultLV.setVisibility(View.GONE);
-					if (mUserPickerHelper.getMode()== UserPickerHelper.UserPickerMode.USER_PICKER_MODE_SINGLE){
-						selectComplete();
-					}
-				}
-			}
-		});
+                    TUser user = mSearchResultList.get(position);
+                    String userId = user.getUserId();
+                    if (checkBtnIv.isSelected()) {
+                        checkUser(user, userId);
+                    } else {
+                        uncheckUser(userId);
+                    }
+                    mSearchView.setQuery("", false);
+                    mSearchView.clearFocus();
+                    mSearchResultLV.setVisibility(View.GONE);
+                    if (mUserPickerHelper.getMode() == UserPickerHelper.UserPickerMode.USER_PICKER_MODE_SINGLE) {
+                        selectComplete();
+                    }
+                }
+            }
+        });
     }
 
-	private void initUserSelectorBar() {
-		mUserSelectBar = (UserSelectionBar) findViewById(R.id.user_picker_user_selection_bar);
-		if (mUserPickerHelper.getMode()== UserPickerHelper.UserPickerMode.USER_PICKER_MODE_MULTI){
-			mUserSelectBar.setMaxSelectCount(mUserPickerHelper.getRemainSelectionNum());
-			mUserSelectBar.setListener(this);
-		}else{
-			mUserSelectBar.setVisibility(View.GONE);
-		}
-	}
+    private void initUserSelectorBar() {
+        mUserSelectBar = (UserSelectionBar) findViewById(R.id.user_picker_user_selection_bar);
+        if (mUserPickerHelper.getMode() == UserPickerHelper.UserPickerMode.USER_PICKER_MODE_MULTI) {
+            mUserSelectBar.setMaxSelectCount(mUserPickerHelper.getRemainSelectionNum());
+            mUserSelectBar.setListener(this);
+        } else {
+            mUserSelectBar.setVisibility(View.GONE);
+        }
+    }
 
-	@Override
+    @Override
     public void finish() {
         super.finish();
         mUserPickerHelper.cancelSelect();
-        overridePendingTransition(R.anim.slide_in_from_top,R.anim.slide_out_to_bottom);
+        overridePendingTransition(R.anim.slide_in_from_top, R.anim.slide_out_to_bottom);
     }
 
-    public void displayBySuperId(final String superId,boolean needResume){
+    public void displayBySuperId(final String superId, boolean needResume) {
 
         //存储上一个列表的偏移量
-        mListViewOffsetMap.put(mSuperId,mListView.getFirstVisiblePosition());
+        mListViewOffsetMap.put(mSuperId, mListView.getFirstVisiblePosition());
         if (!AdbookBiz.getInstance(mContext).isLeaf(superId)) {
-			if(true){
-				mDepartmentList = mUserBussiness.listSubDepartment(superId,mAppContext.getCurrentUser().getChatPermissionString());
-			}else{
-				mDepartmentList = mUserBussiness.listSubDepartment(superId);
-			}
+            mDepartmentList = AdbookBiz.getInstance(mContext).listSubDepartments(superId);
             mDeptAdapter.setData(mDepartmentList);
             mListView.setAdapter(mDeptAdapter);
         } else {
-//            mUserList = mUserBussiness.listUser(superId);
+            mUserList = AdbookBiz.getInstance(mContext).listUser(superId);
             mUserAdapter.setData(mUserList);
             mListView.setAdapter(mUserAdapter);
             List<String> userIds = new ArrayList<String>();
-            for (TUser user : mUserList){
+            for (TUser user : mUserList) {
                 userIds.add(user.getUserId());
             }
-            mUserBussiness.cacheUserBasicInfoList(userIds, new IAPCallback<List<UserBasicInfo>>() {
-                @Override
-                public void onDone(List<UserBasicInfo> obj) {
+            UserBiz.getInstance(mContext).cacheUserBasicInfo(userIds, new IAPCallback<List<UserBasicInfosResult
+                    .Item>>() {
 
-//                    mUserAdapter.notifyDataSetChanged();
+
+                @Override
+                public void onDone(List<UserBasicInfosResult.Item> obj) {
+                    mUserAdapter.notifyDataSetChanged();
 
                 }
 
                 @Override
-                public void onException(APError excepCode) {
+                public void onException(APError error) {
 
                 }
             });
         }
-        if (needResume){
-            int offset = mListViewOffsetMap.get(superId)==null?0:mListViewOffsetMap.get(superId);
+        if (needResume) {
+            int offset = mListViewOffsetMap.get(superId) == null ? 0 : mListViewOffsetMap.get(superId);
             mListView.setSelection(offset);
         }
         mSuperId = superId;
@@ -359,33 +379,32 @@ public class UserPickerActivity extends BaseActivity implements UserSelectionBar
     }
 
     private void hideOrShowAllCheckBtn(boolean isShow) {
-        if (isShow){
+        if (isShow) {
             getTitleBar().setRightBtnWithText("全选");
             getTitleBar().getRightView().setVisibility(View.VISIBLE);
             getTitleBar().setRightBtnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     TextView tv = (TextView) v;
-                    if (tv.getText().equals("全选")){
-                        for (TUser user: mUserList){
+                    if (tv.getText().equals("全选")) {
+                        for (TUser user : mUserList) {
                             boolean success = mUserPickerHelper.selectUser(user.getUserId());
-                            if (success){
-                                UserBasicInfo userBasicInfo = mUserBussiness.getCachedUserBasicInfo(user.getUserId());
-                                if (userBasicInfo==null){
-                                    userBasicInfo.setUsername(user.getUsername());
-                                    userBasicInfo.setTrueName(user.getTrueName());
-                                    userBasicInfo.setUserId(user.getUserId());
-                                }
-                                mUserSelectBar.addUser(userBasicInfo);
+                            if (success) {
+                                UserBasicInfosResult.Item item = UserBiz.getInstance(mContext).getCachedUserBasicInfo
+                                        (user.getUserId());
+                                UserBasicInfo bi = new UserBasicInfo();
+                                bi.setTrueName(item.getTruename());
+                                bi.setUserId(item.getUserId());
+                                bi.setAtatarUrl(item.getAvatarURL());
+                                mUserSelectBar.addUser(bi);
                                 mUserAdapter.notifyDataSetChanged();
                             }
-
                         }
                         getTitleBar().setRightText("取消");
-                    }else{
+                    } else {
 
                         List<String> userIds = new ArrayList<String>();
-                        for (TUser user: mUserList){
+                        for (TUser user : mUserList) {
                             userIds.add(user.getUserId());
                         }
                         mUserPickerHelper.removeUsers(userIds);
@@ -395,32 +414,32 @@ public class UserPickerActivity extends BaseActivity implements UserSelectionBar
                     }
                 }
             });
-        }else{
+        } else {
 
             View view = getTitleBar().getRightView();
-            if (view!=null){
+            if (view != null) {
                 view.setVisibility(View.GONE);
             }
         }
     }
 
-    private boolean currentSuperIdIsLeaf(){
+    private boolean currentSuperIdIsLeaf() {
         return AdbookBiz.getInstance(mContext).isLeaf(mSuperId);
     }
 
-    private void selectComplete(){
-		if (mUserPickerHelper.getUserPickerListener()!=null){
-			mUserPickerHelper.getUserPickerListener().onPickDone(mUserPickerHelper.getSelectedUserIds());
-			finish();
-		}
-	}
+    private void selectComplete() {
+        if (mUserPickerHelper.getUserPickerListener() != null) {
+            mUserPickerHelper.getUserPickerListener().onPickDone(mUserPickerHelper.getSelectedUserIds());
+            finish();
+        }
+    }
 
     @Override
     public void onItemClick(String userId) {
         mUserPickerHelper.removeUser(userId);
-        if (currentSuperIdIsLeaf()){
+        if (currentSuperIdIsLeaf()) {
             mUserAdapter.notifyDataSetChanged();
-        }else{
+        } else {
             mDeptAdapter.notifyDataSetChanged();
         }
     }
@@ -431,6 +450,23 @@ public class UserPickerActivity extends BaseActivity implements UserSelectionBar
     }
 
 
+    @Override
+    public void setUsers(List<TUser> list) {
 
+    }
 
+    @Override
+    public void setDepartments(List<TDepartment> departments) {
+
+    }
+
+    @Override
+    public void onBreadcrumbClicked(String deptId) {
+
+    }
+
+    @Override
+    public void pushBreadCrumb(String deptId, String deptName) {
+
+    }
 }

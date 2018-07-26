@@ -60,7 +60,7 @@ public class ServiceNoListOfMineFragment extends BaseFragment {
 	public void onResume() {
 		super.onResume();
 		attentionServiceMsg = getActivity().getSharedPreferences(USERATTECTIONSP, Context.MODE_PRIVATE);
-		mMsgBussiness.getUserServiceNoList(AppContext.getInstance(mContext).getCurrentUser().getUsername(),
+		mMsgBiz.getUserServiceNoList(AppContext.getInstance(mContext).getCurrentUser().getUsername(),
 				new IAPCallback<List<TServiceNo>>() {
 
 					public void onException(APError excepCode) {

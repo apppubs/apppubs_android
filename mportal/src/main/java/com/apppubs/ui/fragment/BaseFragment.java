@@ -26,7 +26,7 @@ import com.apppubs.AppContext;
 import com.apppubs.constant.APError;
 import com.apppubs.d20.R;
 import com.apppubs.model.SystemBiz;
-import com.apppubs.model.message.MsgBussiness;
+import com.apppubs.model.message.MsgBiz;
 import com.apppubs.model.message.UserBussiness;
 import com.apppubs.ui.ICommonView;
 import com.apppubs.ui.activity.BaseActivity;
@@ -67,7 +67,7 @@ public abstract class BaseFragment extends Fragment implements KeyEvent.Callback
     private View mEmptyView;
 
     protected UserBussiness mUserBussiness;
-    protected MsgBussiness mMsgBussiness;
+    protected MsgBiz mMsgBiz;
     protected SystemBiz mSystemBiz;
     protected RequestQueue mRequestQueue;
     protected AppContext mAppContext;
@@ -82,7 +82,7 @@ public abstract class BaseFragment extends Fragment implements KeyEvent.Callback
         mContext = activity;
         mHostActivity = (BaseActivity) activity;
         mSystemBiz = SystemBiz.getInstance(activity);
-        mMsgBussiness = MsgBussiness.getInstance(activity);
+        mMsgBiz = MsgBiz.getInstance(activity);
         mUserBussiness = UserBussiness.getInstance(activity);
         mRequestQueue = mHostActivity.getRequestQueue();
         mAppContext = AppContext.getInstance(mContext);

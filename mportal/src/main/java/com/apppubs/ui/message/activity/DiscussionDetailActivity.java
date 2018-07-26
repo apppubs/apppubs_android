@@ -17,6 +17,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.apppubs.bean.http.UserBasicInfosResult;
 import com.apppubs.constant.APError;
 import com.apppubs.d20.R;
 import com.apppubs.model.IAPCallback;
@@ -52,7 +53,8 @@ import io.rong.imlib.model.UserInfo;
  * Created by AMing on 16/5/5.
  * Company RongCloud
  */
-public class DiscussionDetailActivity extends BaseActivity implements CompoundButton.OnCheckedChangeListener, View.OnClickListener {
+public class DiscussionDetailActivity extends BaseActivity implements CompoundButton.OnCheckedChangeListener, View
+        .OnClickListener {
 
     private static final int FIND_USER_INFO = 10;
     private String targetId;
@@ -67,7 +69,7 @@ public class DiscussionDetailActivity extends BaseActivity implements CompoundBu
     private SwitchButton discussionTop, discussionNof;
     private List<String> ids;
     private boolean isDeleteMode;
-	private  List<UserBasicInfo> mCachedUserInfoList;
+    private List<UserBasicInfosResult.Item> mCachedUserInfoList;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -108,15 +110,16 @@ public class DiscussionDetailActivity extends BaseActivity implements CompoundBu
 
         mDiscussName = (TextView) findViewById(R.id.discussion_name_tv);
 
-		View inviteLL = findViewById(R.id.discussion_invite_ll);
-		inviteLL.setOnClickListener(this);
+        View inviteLL = findViewById(R.id.discussion_invite_ll);
+        inviteLL.setOnClickListener(this);
         View changeNameLL = findViewById(R.id.discussion_name_ll);
-		changeNameLL.setOnClickListener(this);
+        changeNameLL.setOnClickListener(this);
         discussionTop.setOnCheckedChangeListener(this);
         discussionNof.setOnCheckedChangeListener(this);
         discussionClean.setOnClickListener(this);
         deleteDiscussion.setOnClickListener(this);
-        RongIM.getInstance().getConversation(Conversation.ConversationType.DISCUSSION, targetId, new RongIMClient.ResultCallback<Conversation>() {
+        RongIM.getInstance().getConversation(Conversation.ConversationType.DISCUSSION, targetId, new RongIMClient
+                .ResultCallback<Conversation>() {
             @Override
             public void onSuccess(Conversation conversation) {
                 if (conversation == null) {
@@ -136,7 +139,8 @@ public class DiscussionDetailActivity extends BaseActivity implements CompoundBu
             }
         });
 
-        RongIM.getInstance().getConversationNotificationStatus(Conversation.ConversationType.DISCUSSION, targetId, new RongIMClient.ResultCallback<Conversation.ConversationNotificationStatus>() {
+        RongIM.getInstance().getConversationNotificationStatus(Conversation.ConversationType.DISCUSSION, targetId,
+                new RongIMClient.ResultCallback<Conversation.ConversationNotificationStatus>() {
             @Override
             public void onSuccess(Conversation.ConversationNotificationStatus conversationNotificationStatus) {
 
@@ -165,20 +169,22 @@ public class DiscussionDetailActivity extends BaseActivity implements CompoundBu
         ids = mDiscussion.getMemberIdList();
         if (ids != null) {
 //            request(FIND_USER_INFO);
-            mUserBussiness.cacheUserBasicInfoList(ids, new IAPCallback<List<UserBasicInfo>>() {
+            UserBiz.getInstance(mContext).cacheUserBasicInfo(ids, new IAPCallback<List<UserBasicInfosResult.Item>>() {
                 @Override
-                public void onDone(List<UserBasicInfo> infos) {
-					mCachedUserInfoList = infos;
+                public void onDone(List<UserBasicInfosResult.Item> list) {
+                    mCachedUserInfoList = list;
                     memberList.clear();
-                    for (UserBasicInfo userBasicInfo : infos) {
-                        if (userBasicInfo.getUserId().equals(createId)){
-                            memberList.add(new UserInfo(userBasicInfo.getUserId(), userBasicInfo.getTrueName(), Uri.parse(userBasicInfo.getAtatarUrl())));
+                    for (UserBasicInfosResult.Item userBasicInfo : list) {
+                        if (userBasicInfo.getUserId().equals(createId)) {
+                            memberList.add(new UserInfo(userBasicInfo.getUserId(), userBasicInfo.getTruename(), Uri
+                                    .parse(userBasicInfo.getAvatarURL())));
                         }
                     }
-                    for (UserBasicInfo userBasicInfo : infos) {
-                        if (userBasicInfo.getUserId().equals(createId)){
-                        }else{
-                            memberList.add(new UserInfo(userBasicInfo.getUserId(), userBasicInfo.getTrueName(), Uri.parse(userBasicInfo.getAtatarUrl())));
+                    for (UserBasicInfosResult.Item userBasicInfo : list) {
+                        if (userBasicInfo.getUserId().equals(createId)) {
+                        } else {
+                            memberList.add(new UserInfo(userBasicInfo.getUserId(), userBasicInfo.getTruename(), Uri
+                                    .parse(userBasicInfo.getAvatarURL())));
                         }
                     }
                     if (memberList != null && memberList.size() > 1) {
@@ -193,7 +199,7 @@ public class DiscussionDetailActivity extends BaseActivity implements CompoundBu
                 }
 
                 @Override
-                public void onException(APError excepCode) {
+                public void onException(APError error) {
 
                 }
             });
@@ -206,9 +212,9 @@ public class DiscussionDetailActivity extends BaseActivity implements CompoundBu
         TextView tv = (TextView) findViewById(R.id.discussion_name_tv);
         tv.setText(mDiscussion.getName());
 
-		if (isCreated){
-			setVisibilityOfViewByResId(R.id.discussion_invite_ll,View.VISIBLE);
-		}
+        if (isCreated) {
+            setVisibilityOfViewByResId(R.id.discussion_invite_ll, View.VISIBLE);
+        }
     }
 
 
@@ -217,16 +223,20 @@ public class DiscussionDetailActivity extends BaseActivity implements CompoundBu
         switch (buttonView.getId()) {
             case R.id.sw_discu_top:
                 if (isChecked) {
-                    OperationRong.setConversationTop(mContext, Conversation.ConversationType.DISCUSSION, targetId, true);
+                    OperationRong.setConversationTop(mContext, Conversation.ConversationType.DISCUSSION, targetId,
+                            true);
                 } else {
-                    OperationRong.setConversationTop(mContext, Conversation.ConversationType.DISCUSSION, targetId, false);
+                    OperationRong.setConversationTop(mContext, Conversation.ConversationType.DISCUSSION, targetId,
+                            false);
                 }
                 break;
             case R.id.sw_discu_notfaction:
                 if (isChecked) {
-                    OperationRong.setConverstionNotif(mContext, Conversation.ConversationType.DISCUSSION, targetId, true);
+                    OperationRong.setConverstionNotif(mContext, Conversation.ConversationType.DISCUSSION, targetId,
+                            true);
                 } else {
-                    OperationRong.setConverstionNotif(mContext, Conversation.ConversationType.DISCUSSION, targetId, false);
+                    OperationRong.setConverstionNotif(mContext, Conversation.ConversationType.DISCUSSION, targetId,
+                            false);
                 }
                 break;
         }
@@ -240,33 +250,36 @@ public class DiscussionDetailActivity extends BaseActivity implements CompoundBu
             case R.id.discu_clean:
                 PromptPopupDialog.newInstance(mContext,
                         "确定删除讨论组聊天记录吗").setLayoutRes(io.rong.imkit.R.layout.rc_dialog_popup_prompt_warning)
-                .setPromptButtonClickedListener(new PromptPopupDialog.OnPromptButtonClickedListener() {
-                    @Override
-                    public void onPositiveButtonClicked() {
-                        if (RongIM.getInstance() != null) {
-                            RongIM.getInstance().clearMessages(Conversation.ConversationType.DISCUSSION, targetId, new RongIMClient.ResultCallback<Boolean>() {
-                                @Override
-                                public void onSuccess(Boolean aBoolean) {
-                                    NToast.shortToast(mContext, "清除成功");
-                                }
+                        .setPromptButtonClickedListener(new PromptPopupDialog.OnPromptButtonClickedListener() {
+                            @Override
+                            public void onPositiveButtonClicked() {
+                                if (RongIM.getInstance() != null) {
+                                    RongIM.getInstance().clearMessages(Conversation.ConversationType.DISCUSSION,
+                                            targetId, new RongIMClient.ResultCallback<Boolean>() {
+                                        @Override
+                                        public void onSuccess(Boolean aBoolean) {
+                                            NToast.shortToast(mContext, "清除成功");
+                                        }
 
-                                @Override
-                                public void onError(RongIMClient.ErrorCode errorCode) {
-                                    NToast.shortToast(mContext, "清除失败");
+                                        @Override
+                                        public void onError(RongIMClient.ErrorCode errorCode) {
+                                            NToast.shortToast(mContext, "清除失败");
+                                        }
+                                    });
                                 }
-                            });
-                        }
-                    }
-                }).show();
+                            }
+                        }).show();
                 break;
             case R.id.discu_quit:
-                DialogWithYesOrNoUtils.getInstance().showDialog(mContext, "是否退出并删除当前讨论组?", new DialogWithYesOrNoUtils.DialogCallBack() {
+                DialogWithYesOrNoUtils.getInstance().showDialog(mContext, "是否退出并删除当前讨论组?", new DialogWithYesOrNoUtils
+                        .DialogCallBack() {
                     @Override
                     public void executeEvent() {
                         RongIM.getInstance().quitDiscussion(targetId, new RongIMClient.OperationCallback() {
                             @Override
                             public void onSuccess() {
-                                RongIM.getInstance().removeConversation(Conversation.ConversationType.DISCUSSION, targetId);
+                                RongIM.getInstance().removeConversation(Conversation.ConversationType.DISCUSSION,
+                                        targetId);
                                 Intent i = new Intent();
                                 i.putExtra("disFinish", "disFinish");
                                 setResult(112, i);
@@ -292,89 +305,88 @@ public class DiscussionDetailActivity extends BaseActivity implements CompoundBu
                 });
 
                 break;
-			case R.id.discussion_name_ll:{
+            case R.id.discussion_name_ll: {
 
-				EditTextDialog dialog = new EditTextDialog(mContext, new EditTextDialog.ConfirmListener() {
-					@Override
-					public void onOkClick(final String result) {
-						LoadDialog.show(DiscussionDetailActivity.this);
-						RongIM.getInstance().setDiscussionName(mDiscussion.getId(),result, new RongIMClient.OperationCallback(){
+                EditTextDialog dialog = new EditTextDialog(mContext, new EditTextDialog.ConfirmListener() {
+                    @Override
+                    public void onOkClick(final String result) {
+                        LoadDialog.show(DiscussionDetailActivity.this);
+                        RongIM.getInstance().setDiscussionName(mDiscussion.getId(), result, new RongIMClient
+                                .OperationCallback() {
 
-							@Override
-							public void onSuccess() {
-								LoadDialog.dismiss(DiscussionDetailActivity.this);
-								mDiscussName.setText(result);
-								Intent i = new Intent();
-								i.putExtra("title",result);
-								setResult(RESULT_OK,i);
-							}
+                            @Override
+                            public void onSuccess() {
+                                LoadDialog.dismiss(DiscussionDetailActivity.this);
+                                mDiscussName.setText(result);
+                                Intent i = new Intent();
+                                i.putExtra("title", result);
+                                setResult(RESULT_OK, i);
+                            }
 
-							@Override
-							public void onError(RongIMClient.ErrorCode errorCode) {
-								LoadDialog.dismiss(DiscussionDetailActivity.this);
-								Toast.makeText(mContext,"修改失败",Toast.LENGTH_SHORT).show();
-							}
-						});
-					}
+                            @Override
+                            public void onError(RongIMClient.ErrorCode errorCode) {
+                                LoadDialog.dismiss(DiscussionDetailActivity.this);
+                                Toast.makeText(mContext, "修改失败", Toast.LENGTH_SHORT).show();
+                            }
+                        });
+                    }
 
-					@Override
-					public void onCancelClick() {
+                    @Override
+                    public void onCancelClick() {
 
-					}
-				},"修改讨论组名称","取消","确定");
-				dialog.setDefaultText(mDiscussName.getText().toString());
-				dialog.show();
-				break;
-			}
-			case R.id.discussion_invite_ll:{
+                    }
+                }, "修改讨论组名称", "取消", "确定");
+                dialog.setDefaultText(mDiscussName.getText().toString());
+                dialog.show();
+                break;
+            }
+            case R.id.discussion_invite_ll: {
 
-				ConfirmDialog inviteDialog = new ConfirmDialog(mContext, new ConfirmDialog.ConfirmListener() {
-					@Override
-					public void onOkClick() {
-						sendInviteSms();
-					}
+                ConfirmDialog inviteDialog = new ConfirmDialog(mContext, new ConfirmDialog.ConfirmListener() {
+                    @Override
+                    public void onOkClick() {
+                        sendInviteSms();
+                    }
 
-					@Override
-					public void onCancelClick() {
+                    @Override
+                    public void onCancelClick() {
 
-					}
-				},"确定发送邀请？","取消","确定");
-				inviteDialog.show();
+                    }
+                }, "确定发送邀请？", "取消", "确定");
+                inviteDialog.show();
 
-				break;
-			}
+                break;
+            }
 
         }
     }
 
-	private void sendInviteSms() {
-		ProgressHUD.show(this);
-		List<String> idList = new ArrayList<String>();
-		for (UserBasicInfo ubi:mCachedUserInfoList){
-			String appCodeVersion = ubi.getAppCodeVersion();
-			if (TextUtils.isEmpty(appCodeVersion)){
-				idList.add(ubi.getUserId());
-			}
-		}
+    private void sendInviteSms() {
+        ProgressHUD.show(this);
+        List<String> idList = new ArrayList<String>();
+        for (UserBasicInfosResult.Item ubi : mCachedUserInfoList) {
+            if (ubi.getAppVersionCode()<=0) {
+                idList.add(ubi.getUserId());
+            }
+        }
         UserBiz userBiz = UserBiz.getInstance(mContext);
         userBiz.inviteUsers(idList, new IAPCallback() {
-			@Override
-			public void onDone(Object obj) {
-				ProgressHUD.dismissProgressHUDInThisContext(mContext);
-				Toast.makeText(getApplicationContext(),"发送成功",Toast.LENGTH_SHORT).show();
-			}
+            @Override
+            public void onDone(Object obj) {
+                ProgressHUD.dismissProgressHUDInThisContext(mContext);
+                Toast.makeText(getApplicationContext(), "发送成功", Toast.LENGTH_SHORT).show();
+            }
 
-			@Override
-			public void onException(APError excepCode) {
-				ProgressHUD.dismissProgressHUDInThisContext(mContext);
-				Toast.makeText(getApplicationContext(),"发送邀请短信失败!",Toast.LENGTH_SHORT).show();
-			}
-		});
-	}
+            @Override
+            public void onException(APError excepCode) {
+                ProgressHUD.dismissProgressHUDInThisContext(mContext);
+                Toast.makeText(getApplicationContext(), "发送邀请短信失败!", Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
 
 
-
-	private class GridAdapter extends BaseAdapter {
+    private class GridAdapter extends BaseAdapter {
 
         private List<UserInfo> list;
         Context context;
@@ -389,7 +401,8 @@ public class DiscussionDetailActivity extends BaseActivity implements CompoundBu
         @Override
         public View getView(int position, View convertView, ViewGroup parent) {
             if (convertView == null) {
-                convertView = LayoutInflater.from(context).inflate(R.layout.social_chatsetting_gridview_item, parent, false);
+                convertView = LayoutInflater.from(context).inflate(R.layout.social_chatsetting_gridview_item, parent,
+                        false);
             }
             UserIconImageView iv_avatar = (UserIconImageView) convertView.findViewById(R.id.iv_avatar);
             TextView tv_username = (TextView) convertView.findViewById(R.id.tv_username);
@@ -427,10 +440,11 @@ public class DiscussionDetailActivity extends BaseActivity implements CompoundBu
                     public void onClick(View v) {
 
                         List<String> preSelectedUserIds = new ArrayList<String>();
-                        for (UserInfo userinfo:memberList){
+                        for (UserInfo userinfo : memberList) {
                             preSelectedUserIds.add(userinfo.getUserId());
                         }
-                        UserPickerHelper.startActivity(mContext, "添加成员", preSelectedUserIds, new UserPickerHelper.UserPickerListener() {
+                        UserPickerHelper.startActivity(mContext, "添加成员", preSelectedUserIds, new UserPickerHelper
+                                .UserPickerListener() {
                             @Override
                             public void onPickDone(final List<String> userIds) {
                                 onAddMemberPickerDone(userIds);
@@ -440,37 +454,38 @@ public class DiscussionDetailActivity extends BaseActivity implements CompoundBu
                 });
             } else { // 普通成员
                 final UserInfo bean = list.get(position);
-                UserBasicInfo userBasicInfo = mUserBussiness.getCachedUserBasicInfo(bean.getUserId());
+                UserBasicInfosResult.Item userBasicInfo = UserBiz.getInstance(mContext).getCachedUserBasicInfo(bean.getUserId());
                 if (!TextUtils.isEmpty(bean.getName())) {
                     tv_username.setText(bean.getName());
                 }
                 iv_avatar.setText(bean.getName());
                 iv_avatar.setFillColor(getResources().getColor(R.color.common_btn_bg_gray));
                 iv_avatar.setTextColor(Color.WHITE);
-                iv_avatar.setTextSize(Utils.dip2px(mContext,12));
-                if (TextUtils.isEmpty(userBasicInfo.getAppCodeVersion())){
-                    iv_avatar.setNeedNonactivated(true);
-                }else{
+                iv_avatar.setTextSize(Utils.dip2px(mContext, 12));
+                if (userBasicInfo.getAppVersionCode()>0) {
                     iv_avatar.setNeedNonactivated(false);
+                } else {
+                    iv_avatar.setNeedNonactivated(true);
                 }
-                mImageLoader.displayImage(bean.getPortraitUri().toString(),iv_avatar);
+                mImageLoader.displayImage(bean.getPortraitUri().toString(), iv_avatar);
                 iv_avatar.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-						Intent intent = new Intent(DiscussionDetailActivity.this, UserInfoActivity.class);
-						intent.putExtra(UserInfoActivity.EXTRA_STRING_USER_ID, bean.getUserId());
-						DiscussionDetailActivity.this.startActivity(intent);
+                        Intent intent = new Intent(DiscussionDetailActivity.this, UserInfoActivity.class);
+                        intent.putExtra(UserInfoActivity.EXTRA_STRING_USER_ID, bean.getUserId());
+                        DiscussionDetailActivity.this.startActivity(intent);
                     }
 
                 });
-                deleteBtn.setVisibility(isDeleteMode?View.VISIBLE:View.GONE);
+                deleteBtn.setVisibility(isDeleteMode ? View.VISIBLE : View.GONE);
                 deleteBtn.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
                         ConfirmDialog dialog = new ConfirmDialog(mContext, new ConfirmDialog.ConfirmListener() {
                             @Override
                             public void onOkClick() {
-                                RongIM.getInstance().removeMemberFromDiscussion(mDiscussion.getId(), bean.getUserId(), new RongIMClient.OperationCallback() {
+                                RongIM.getInstance().removeMemberFromDiscussion(mDiscussion.getId(), bean.getUserId()
+                                        , new RongIMClient.OperationCallback() {
                                     @Override
                                     public void onSuccess() {
                                         removeMember(bean.getUserId());
@@ -479,7 +494,7 @@ public class DiscussionDetailActivity extends BaseActivity implements CompoundBu
 
                                     @Override
                                     public void onError(RongIMClient.ErrorCode errorCode) {
-                                        Toast.makeText(mContext,"移除用户失败",Toast.LENGTH_SHORT).show();
+                                        Toast.makeText(mContext, "移除用户失败", Toast.LENGTH_SHORT).show();
                                     }
                                 });
                             }
@@ -488,7 +503,7 @@ public class DiscussionDetailActivity extends BaseActivity implements CompoundBu
                             public void onCancelClick() {
 
                             }
-                        },"确定移除\""+bean.getName()+"\"？","取消","确定");
+                        }, "确定移除\"" + bean.getName() + "\"？", "取消", "确定");
                         dialog.show();
                     }
                 });
@@ -521,7 +536,8 @@ public class DiscussionDetailActivity extends BaseActivity implements CompoundBu
                 public void onDone(List<UserBasicInfo> basicInfos) {
                     if (basicInfos != null && basicInfos.size() > 0) {
                         for (UserBasicInfo basicInfo : basicInfos) {
-                            memberList.add(new UserInfo(basicInfo.getUserId(), basicInfo.getTrueName(), Uri.parse(basicInfo.getAtatarUrl())));
+                            memberList.add(new UserInfo(basicInfo.getUserId(), basicInfo.getTrueName(), Uri.parse
+                                    (basicInfo.getAtatarUrl())));
                         }
                         adapter.updateListView(memberList);
                         memberSize.setText("讨论组成员(" + memberList.size() + ")");
@@ -565,19 +581,20 @@ public class DiscussionDetailActivity extends BaseActivity implements CompoundBu
 
     }
 
-    private void removeMember(String id){
-        UserInfo paddingDeleteUser  = null;
-        for (UserInfo user:memberList){
-            if (user.getUserId().equals(id)){
+    private void removeMember(String id) {
+        UserInfo paddingDeleteUser = null;
+        for (UserInfo user : memberList) {
+            if (user.getUserId().equals(id)) {
                 paddingDeleteUser = user;
                 break;
             }
         }
-        if (paddingDeleteUser!=null){
+        if (paddingDeleteUser != null) {
             memberList.remove(paddingDeleteUser);
         }
 
     }
+
     // 拿到新增的成员刷新adapter
     @Override
     @SuppressWarnings("unchecked")
@@ -588,17 +605,20 @@ public class DiscussionDetailActivity extends BaseActivity implements CompoundBu
             switch (requestCode) {
 //                case SealConst.DISCUSSION_ADD_MEMBER_REQUEST_CODE:
 //                    final List<String> addMember = (List<String>) data.getSerializableExtra("addDiscuMember");
-//                    RongIMClient.getInstance().addMemberToDiscussion(targetId, addMember, new RongIMClient.OperationCallback() {
+//                    RongIMClient.getInstance().addMemberToDiscussion(targetId, addMember, new RongIMClient
+// .OperationCallback() {
 //                        @Override
 //                        public void onSuccess() {
-//                            SealUserInfoManager.getInstance().getFriends(new SealUserInfoManager.ResultCallback<List<Friend>>() {
+//                            SealUserInfoManager.getInstance().getFriends(new SealUserInfoManager
+// .ResultCallback<List<Friend>>() {
 //                                @Override
 //                                public void onSuccess(List<Friend> friendList) {
 //                                    if (friendList != null && friendList.size() > 0) {
 //                                        for (Friend friend : friendList) {
 //                                            for (String userId : addMember) {
 //                                                if (userId.equals(friend.getUserId()))
-//                                                    memberList.add(new UserInfo(userId, friend.getName(), Uri.parse(friend.getPortraitUri())));
+//                                                    memberList.add(new UserInfo(userId, friend.getName(), Uri.parse
+// (friend.getPortraitUri())));
 //                                            }
 //                                        }
 //                                        adapter.updateListView(memberList);

@@ -20,6 +20,7 @@ import okhttp3.Cache;
 import okhttp3.Call;
 import okhttp3.Callback;
 import okhttp3.FormBody;
+import okhttp3.Headers;
 import okhttp3.MultipartBody;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
@@ -114,14 +115,9 @@ public class APHttpClient implements IHttpClient {
     public void asyncMultiPOST(String url, Map<String, String> headers, Map<String, Object>
             params, final IRequestListener listener) {
 
+
         MultipartBody.Builder builder = new MultipartBody.Builder();
         builder.setType(MultipartBody.FORM);
-        if (headers != null) {
-            for (String key : headers.keySet()) {
-                String val = headers.get(key);
-                builder.addFormDataPart(key, val);
-            }
-        }
         if (!Utils.isEmpty(params)) {
             //追加参数
             for (String key : params.keySet()) {
@@ -137,8 +133,14 @@ public class APHttpClient implements IHttpClient {
 
         //创建RequestBody
         RequestBody body = builder.build();
-        //创建Request
-        final Request request = new Request.Builder().url(url).post(body).build();
+
+        Request.Builder requestBuilder = new Request.Builder();
+        if (headers != null) {
+            for (String key : headers.keySet()) {
+                requestBuilder.addHeader(key,headers.get(key));
+            }
+        }
+        final Request request = requestBuilder.url(url).post(body).build();
         //单独设置参数 比如读取超时时间
         final Call call = mOkHttpClient.newBuilder().writeTimeout(50, TimeUnit.SECONDS).build().newCall(request);
         call.enqueue(new Callback() {

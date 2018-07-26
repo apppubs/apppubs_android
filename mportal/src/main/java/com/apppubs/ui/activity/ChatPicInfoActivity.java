@@ -92,7 +92,7 @@ public class ChatPicInfoActivity extends BaseActivity implements OnClickListener
 			MediaStore.Images.Media.insertImage(getContentResolver(), bit, "标题", "描述");
 		} else {
 
-			mMsgBussiness.writePicUrlSD(mPicPath, file, new IAPCallback<String>() {
+			mMsgBiz.writePicUrlSD(mPicPath, file, new IAPCallback<String>() {
 
 				@Override
 				public void onException(APError excepCode) {

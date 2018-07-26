@@ -27,7 +27,7 @@ public class DebugActivity extends BaseActivity{
 		
 		super.onCreate(arg0);
 //		
-//		mMsgBussiness.sendTextMsg("fanyi", "ly", "南哥", new IAPCallback<Object>() {
+//		mMsgBiz.sendTextMsg("fanyi", "ly", "南哥", new IAPCallback<Object>() {
 //			
 //			@Override
 //			public void onException(int excepCode) {
@@ -38,7 +38,7 @@ public class DebugActivity extends BaseActivity{
 //			}
 //		});
 		
-		mMsgBussiness.getChatList("ly", "fanyi", new IAPCallback<List<TMsg>>() {
+		mMsgBiz.getChatList("ly", "fanyi", new IAPCallback<List<TMsg>>() {
 			
 			@Override
 			public void onException(APError excepCode) {
