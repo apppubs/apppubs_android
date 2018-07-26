@@ -102,6 +102,7 @@ public class Constants {
 	public static final String API_NAME_LOGOUT = "logout";
 	public static final String API_NAME_HTTP = "http";
 	public static final String API_NAME_USER_BASIC_INFO = "user_basic_infos";
+	public static final String API_NAME_VPN_OF_USER = "user_dept_vpn";
 
 	//cms
 	public static final String API_NAME_NEWS_CHANNELS = "channels";

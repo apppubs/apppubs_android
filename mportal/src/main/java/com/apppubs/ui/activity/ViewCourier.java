@@ -29,6 +29,7 @@ import com.apppubs.ui.webapp.WebAppFragment;
 import com.apppubs.ui.widget.ConfirmDialog;
 import com.apppubs.util.StringUtils;
 import com.apppubs.util.Utils;
+import com.apppubs.vpn.VPNViewCourierHelper;
 
 /**
  * 界面控制器，用户跳转页面
@@ -78,6 +79,10 @@ public class ViewCourier {
     }
 
     public void openWindow(String url) {
+        VPNViewCourierHelper helper = VPNViewCourierHelper.getInstance(mContext);
+        if (helper.openWindow(url)){
+            return;
+        }
         if (TextUtils.isEmpty(url)) {
             return;
         }

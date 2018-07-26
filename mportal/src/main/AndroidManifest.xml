@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.apppubs.d20"
-    >
+    package="com.apppubs.d20">
+
     <uses-permission android:name="android.permission.VIBRATE" />
     <uses-permission android:name="android.permission.READ_CONTACTS" />
     <uses-permission android:name="android.permission.WRITE_CONTACTS" />
@@ -115,9 +115,8 @@
         <activity
             android:name="com.apppubs.ui.start.StartUpActivity"
             android:label="@string/app_name"
-            android:screenOrientation="portrait"
             android:launchMode="singleTop"
-            >
+            android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -236,8 +235,8 @@
             android:screenOrientation="portrait" />
         <activity
             android:name="com.apppubs.ui.activity.FirstLoginActity"
-            android:screenOrientation="portrait"
             android:launchMode="singleTop"
+            android:screenOrientation="portrait"
             android:windowSoftInputMode="stateHidden|adjustResize" />
         <activity
             android:name="com.apppubs.ui.activity.VoteActivity"
@@ -448,10 +447,10 @@
         <activity
             android:name="com.apppubs.ui.activity.ServiceNOInfoActivity"
             android:screenOrientation="portrait" />
-        <activity android:name="com.apppubs.ui.activity.ServiceNOArticlesActivity"
-            android:screenOrientation="portrait"
+        <activity
+            android:name="com.apppubs.ui.activity.ServiceNOArticlesActivity"
             android:launchMode="singleTask"
-            />
+            android:screenOrientation="portrait" />
 
         <!-- Required  SDK核心功能 -->
         <service
@@ -469,6 +468,13 @@
                 <action android:name="cn.jpush.android.intent.DaemonService" />
 
                 <category android:name="com.apppubs.d20" />
+            </intent-filter>
+        </service>
+        <service
+            android:name="com.sangfor.ssl.l3vpn.service.EasyappSvpnService"
+            android:permission="android.permission.BIND_VPN_SERVICE">
+            <intent-filter>
+                <action android:name="com.sangfor.ssl.l3vpn.service.EasyappSvpnService" />
             </intent-filter>
         </service>
 
@@ -594,6 +600,7 @@
             android:name="SERVER_CONTEXT"
             android:value="${SERVER_CONTEXT}" />
 
+        <activity android:name="com.apppubs.vpn.VPNConfigActivity"></activity>
     </application>
 
 </manifest>
