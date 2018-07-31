@@ -183,4 +183,8 @@
     <string name="send_success">发送成功!</string>
     <string name="send_invite_failed">发送邀请短信失败!</string>
 
+    <string name="pay_result_callback_msg" formatted="false">支付失败：(code=%s)</string>
+    <string name="share_result_callback_msg" formatted="false">支付失败：(code=%s)</string>
+
+
 </resources>

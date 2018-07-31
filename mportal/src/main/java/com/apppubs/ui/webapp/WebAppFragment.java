@@ -4,7 +4,6 @@ import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
 import android.os.Bundle;
@@ -31,7 +30,6 @@ import android.widget.Toast;
 
 import com.alipay.sdk.app.PayTask;
 import com.amap.api.location.AMapLocation;
-import com.apppubs.AppContext;
 import com.apppubs.AppManager;
 import com.apppubs.bean.TMenuItem;
 import com.apppubs.constant.Constants;
@@ -63,6 +61,9 @@ import com.apppubs.util.Utils;
 import com.jelly.mango.ImageSelectListener;
 import com.jelly.mango.Mango;
 import com.jelly.mango.MultiplexImage;
+import com.tencent.mm.opensdk.modelmsg.SendMessageToWX;
+import com.tencent.mm.opensdk.modelmsg.WXMediaMessage;
+import com.tencent.mm.opensdk.modelmsg.WXTextObject;
 import com.tencent.mm.opensdk.modelpay.PayReq;
 import com.tencent.mm.opensdk.openapi.IWXAPI;
 import com.tencent.mm.opensdk.openapi.WXAPIFactory;
@@ -82,14 +83,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-
-import cn.sharesdk.framework.Platform;
-import cn.sharesdk.framework.Platform.ShareParams;
-import cn.sharesdk.framework.ShareSDK;
-import cn.sharesdk.system.text.ShortMessage;
-import cn.sharesdk.tencent.qq.QQ;
-import cn.sharesdk.wechat.friends.Wechat;
-import cn.sharesdk.wechat.moments.WechatMoments;
 
 public class WebAppFragment extends TitleBarFragment implements OnClickListener, IWebAppView {
 
@@ -452,14 +445,6 @@ public class WebAppFragment extends TitleBarFragment implements OnClickListener,
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
-
-                mWebView.post(new Runnable() {
-
-                    @Override
-                    public void run() {
-
-                    }
-                });
             }
         });
 
@@ -481,65 +466,6 @@ public class WebAppFragment extends TitleBarFragment implements OnClickListener,
             }
         });
 
-        //分享
-        mWebView.registerHandler("share", new BridgeHandler() {
-            @Override
-            public void handler(String data, CallBackFunction function) {
-
-                try {
-                    JSONArray arr = new JSONArray(data);
-
-                    ShareParams sp = new ShareParams();
-                    sp.setCustomFlag(new String[]{getString(R.string.app_name)});
-
-                    ShareSDK.initSDK(mContext);
-                    String type = arr.getString(0);
-
-
-                    if ("wechat".equals(type)) {
-                        if (arr.length() > 1) {
-                            String msg = arr.getString(1);
-                            sp.setText(msg);
-                        }
-                        Platform p = ShareSDK.getPlatform(Wechat.NAME);
-                        p.share(sp);
-                    } else if ("wechat_timeline".equals(type)) {
-                        if (arr.length() > 1) {
-                            String msg = arr.getString(1);
-                            sp.setText(msg);
-                        }
-                        Platform p = ShareSDK.getPlatform(WechatMoments.NAME);
-                        Bitmap bmp = BitmapFactory.decodeResource(getResources(), R.drawable.icon);
-                        sp.setImageData(bmp);
-                        p.share(sp);
-                    } else if ("qq".equals(type)) {
-                        if (arr.length() > 1) {
-                            String msg = arr.getString(1);
-                            sp.setText(msg);
-                        }
-                        if (arr.length() > 2) {
-                            sp.setTitleUrl(arr.getString(2));
-                            sp.setUrl(arr.getString(2));
-                        }
-                        sp.setShareType(Platform.SHARE_TEXT);
-                        Platform p = ShareSDK.getPlatform(QQ.NAME);
-                        p.share(sp);
-                    } else if ("sms".equals(type)) {
-                        if (arr.length() > 1) {
-                            String msg = arr.getString(1);
-                            sp.setText(msg);
-                        }
-                        Platform p = ShareSDK.getPlatform(ShortMessage.NAME);
-                        p.share(sp);
-                    }
-
-
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
-
-            }
-        });
     }
 
     private void awakenAlipay(final String orderStr) {
@@ -577,8 +503,9 @@ public class WebAppFragment extends TitleBarFragment implements OnClickListener,
             req.sign = json.getString("sign");
             req.extData = "app data"; // optional
             // 在支付之前，如果应用没有注册到微信，应该先调用IWXMsg.registerApp将应用注册到微信
-            IWXAPI api = WXAPIFactory.createWXAPI(mContext, req.appId);
-            api.sendReq(req);
+//            IWXAPI api = WXAPIFactory.createWXAPI(mContext, req.appId);
+            Log.e("WebAppFragment", "checkArgs=" + req.checkArgs());
+            SystemBiz.getInstance(mContext).getWxApi().sendReq(req);
         } else {
             Log.d("PAY_GET", "返回错误" + json.getString("retmsg"));
         }

@@ -1231,7 +1231,7 @@ public class PageFragment extends TitleMenuFragment implements OnClickListener, 
                     e.printStackTrace();
                 }
             }
-            if (item.has("textsize") && !TextUtils.isEmpty(item.getString("textSize"))) {
+            if (item.has("textSize") && !TextUtils.isEmpty(item.getString("textSize"))) {
                 ha.setTextSize(item.getInt("textSize"));
             }
 

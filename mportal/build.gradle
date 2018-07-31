@@ -10,10 +10,11 @@ android {
         targetSdkVersion 19
         versionCode 20101001
         versionName "1.0.0"
-        resValue "string","app_name","移动平台"
-        buildConfigField "boolean","ENABLE_CHAT","true"
-        buildConfigField "String","ADBOOK_START_CHAT_LABEL","\"开启国投沟通\""
-        buildConfigField "boolean","ADBOOK_ENABLE_RESEND_INVITE_SMS","true"
+        resValue "string", "app_name", "移动平台"
+        buildConfigField "boolean", "ENABLE_CHAT", "true"
+        buildConfigField "String", "ADBOOK_START_CHAT_LABEL", "\"开启国投沟通\""
+        buildConfigField "boolean", "ADBOOK_ENABLE_RESEND_INVITE_SMS", "true"
+        buildConfigField "String", "WX_APPID", "\"wx28bd875489bd7a92\""
         compileOptions {
             sourceCompatibility JavaVersion.VERSION_1_8
             targetCompatibility JavaVersion.VERSION_1_8
@@ -27,7 +28,7 @@ android {
                 JPUSH_PKGNAME        : applicationId,
                 JPUSH_APPKEY         : "85358a757b2da7055f45f83c", //JPush上注册的包名对应的appkey.
                 JPUSH_CHANNEL        : "developer-default", //暂时填写默认值即可.
-                APPID                : "D63",
+                APPID                : "D20",
                 BASE_URL             : "http://www.apppubs.com/",
                 DISPLAY_ORIENTATION  : "1",
                 ENABLE_SPLASH_SKIP   : false,
@@ -44,12 +45,12 @@ android {
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
 
-    buildTypes{
-        debug{
+    buildTypes {
+        debug {
             resValue "string", "app_name", "移动平台dev"
             minifyEnabled false
         }
-        release{
+        release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.txt'
         }
@@ -67,7 +68,7 @@ android {
 dependencies {
     implementation fileTree(include: ['*.jar'], dir: 'libs')
     implementation project(':sugar_orm')
-    implementation project(':ShareSDK')
+//    implementation project(':ShareSDK')
     implementation project(':IMKit')
     implementation project(':mango')
     // JUnit4 Rules
