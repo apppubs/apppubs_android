@@ -118,6 +118,7 @@ public class VPNBiz extends BaseBiz implements LoginResultListener {
     @Override
     public void onLoginFailed(ErrorCode errorCode, String s) {
         mLoginCallback.onException(new APError(APErrorCode.GENERAL_ERROR, s));
+        isVerify = false;
     }
 
     @Override
@@ -131,6 +132,7 @@ public class VPNBiz extends BaseBiz implements LoginResultListener {
         if (isVerify){
             mSFManager.vpnLogout();
         }
+        isVerify = false;
     }
 
     public void savePwdInfo(VPNPwdInfo info){
