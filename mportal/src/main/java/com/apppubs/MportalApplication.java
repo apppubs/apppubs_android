@@ -16,16 +16,19 @@ import android.util.Log;
 import android.view.View;
 import android.view.WindowManager;
 
+import com.apppubs.constant.Constants;
+import com.apppubs.d20.BuildConfig;
+import com.apppubs.d20.R;
 import com.apppubs.exception.UnCeHandler;
 import com.apppubs.ui.activity.ContainerActivity;
-import com.apppubs.d20.R;
 import com.apppubs.ui.adbook.UserInfoActivity;
-import com.apppubs.constant.Constants;
 import com.apppubs.ui.myfile.FilePreviewFragment;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
 import com.orm.SugarContext;
+import com.tencent.mm.opensdk.openapi.IWXAPI;
+import com.tencent.mm.opensdk.openapi.WXAPIFactory;
 
 import java.io.File;
 import java.util.ArrayList;

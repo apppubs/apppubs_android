@@ -1,11 +1,14 @@
 package com.apppubs.presenter;
 
 import android.content.Context;
+import android.content.Intent;
+import android.net.Uri;
 import android.support.annotation.NonNull;
 
 import com.apppubs.bean.UserInfo;
 import com.apppubs.AppContext;
 import com.apppubs.AppManager;
+import com.apppubs.model.SystemBiz;
 import com.apppubs.ui.webapp.IWebAppView;
 import com.apppubs.ui.webapp.WebUserPickerActivity;
 import com.apppubs.bean.webapp.UserPickerVO;
@@ -13,6 +16,9 @@ import com.apppubs.bean.webapp.UserVO;
 import com.apppubs.jsbridge.BridgeHandler;
 import com.apppubs.jsbridge.CallBackFunction;
 import com.jelly.mango.MultiplexImage;
+import com.tencent.mm.opensdk.modelmsg.SendMessageToWX;
+import com.tencent.mm.opensdk.modelmsg.WXMediaMessage;
+import com.tencent.mm.opensdk.modelmsg.WXTextObject;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -179,6 +185,92 @@ public class WebAppPresenter {
             public void handler(String data, CallBackFunction function) {
                 JSONObject jo = getUserInfoJson();
                 function.onCallBack(jo.toString());
+            }
+        });
+
+        //分享
+        //分享
+        mView.getBridgeWebView().registerHandler("share", new BridgeHandler() {
+            @Override
+            public void handler(String data, CallBackFunction function) {
+                try {
+                    JSONArray arr = new JSONArray(data);
+                    String type = arr.getString(0);
+                    if ("wechat".equals(type)||"wechat_timeline".equals(type)){
+                        WXTextObject textObj = new WXTextObject();
+                        textObj.text = arr.getString(1);
+                        WXMediaMessage msg = new WXMediaMessage();
+                        msg.mediaObject = textObj;
+                        SendMessageToWX.Req req = new SendMessageToWX.Req();
+                        req.scene = "wechat_timeline".equals(type) ? SendMessageToWX.Req.WXSceneTimeline : SendMessageToWX.Req.WXSceneSession;//聊天界面
+                        req.message = msg;
+                        req.transaction = String.valueOf(System.currentTimeMillis());
+                        SystemBiz.getInstance(mContext).getWxApi().sendReq(req);
+                    }else if("qq".equals(type)){
+
+                    }else if("sms".equals(type)){
+                        Uri smsToUri = Uri.parse("smsto:");
+                        Intent mIntent = new Intent(Intent.ACTION_SENDTO, smsToUri);
+                        String msg = arr.getString(1);
+                        mIntent.putExtra("sms_body", msg);
+                        mContext.startActivity(mIntent);
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+
+//                try {
+//                    JSONArray arr = new JSONArray(data);
+//
+//                    ShareParams sp = new ShareParams();
+//                    sp.setCustomFlag(new String[]{getString(R.string.app_name)});
+//
+//                    ShareSDK.initSDK(mContext);
+//                    String type = arr.getString(0);
+//
+//
+//                    if ("wechat".equals(type)) {
+//                        if (arr.length() > 1) {
+//                            String msg = arr.getString(1);
+//                            sp.setText(msg);
+//                        }
+//                        Platform p = ShareSDK.getPlatform(Wechat.NAME);
+//                        p.share(sp);
+//                    } else if ("wechat_timeline".equals(type)) {
+//                        if (arr.length() > 1) {
+//                            String msg = arr.getString(1);
+//                            sp.setText(msg);
+//                        }
+//                        Platform p = ShareSDK.getPlatform(WechatMoments.NAME);
+//                        Bitmap bmp = BitmapFactory.decodeResource(getResources(), R.drawable.icon);
+//                        sp.setImageData(bmp);
+//                        p.share(sp);
+//                    } else if ("qq".equals(type)) {
+//                        if (arr.length() > 1) {
+//                            String msg = arr.getString(1);
+//                            sp.setText(msg);
+//                        }
+//                        if (arr.length() > 2) {
+//                            sp.setTitleUrl(arr.getString(2));
+//                            sp.setUrl(arr.getString(2));
+//                        }
+//                        sp.setShareType(Platform.SHARE_TEXT);
+//                        Platform p = ShareSDK.getPlatform(QQ.NAME);
+//                        p.share(sp);
+//                    } else if ("sms".equals(type)) {
+//                        if (arr.length() > 1) {
+//                            String msg = arr.getString(1);
+//                            sp.setText(msg);
+//                        }
+//                        Platform p = ShareSDK.getPlatform(ShortMessage.NAME);
+//                        p.share(sp);
+//                    }
+//
+
+//                } catch (JSONException e) {
+//                    e.printStackTrace();
+//                }
+
             }
         });
     }

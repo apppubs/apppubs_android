@@ -8,7 +8,6 @@ import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.widget.GridLayout;
 import android.util.AttributeSet;
-import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -19,12 +18,9 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import com.apppubs.bean.page.GridViewItem;
-import com.apppubs.bean.page.GridViewModel;
 import com.apppubs.d20.R;
 import com.apppubs.ui.widget.Indicator;
 import com.apppubs.util.Utils;
-import com.artifex.mupdfdemo.MuPDFReaderView;
 import com.bumptech.glide.Glide;
 
 import org.json.JSONArray;
@@ -64,6 +60,7 @@ public class PagePicGridView extends RelativeLayout implements View.OnClickListe
     }
 
     private void initView() {
+        setBackgroundColor(Color.WHITE);
         mViewPager = new ViewPager(getContext());
         mViewPager.setBackgroundColor(Color.WHITE);
         mViewPager.setId(R.id.temp_id);
@@ -182,7 +179,7 @@ public class PagePicGridView extends RelativeLayout implements View.OnClickListe
             GridLayout.LayoutParams glp = new GridLayout.LayoutParams();
             glp.width = width / gridLayout.getColumnCount();
             glp.height = (int) (glp.width * mModel.getCellHeightWidthRatio());
-            glp.setGravity(Gravity.FILL);
+//            glp.setGravity(Gravity.FILL);
             gridLayout.addView(rl, glp);
         }
         return gridLayout;

@@ -10,10 +10,11 @@ android {
         targetSdkVersion 19
         versionCode 20101001
         versionName "1.0.0"
-        resValue "string", "app_name", "国投移动门户beta"
+        resValue "string", "app_name", "移动平台"
         buildConfigField "boolean", "ENABLE_CHAT", "true"
         buildConfigField "String", "ADBOOK_START_CHAT_LABEL", "\"开启国投沟通\""
         buildConfigField "boolean", "ADBOOK_ENABLE_RESEND_INVITE_SMS", "true"
+        buildConfigField "String", "WX_APPID", "\"wx28bd875489bd7a92\""
         compileOptions {
             sourceCompatibility JavaVersion.VERSION_1_8
             targetCompatibility JavaVersion.VERSION_1_8
@@ -28,7 +29,7 @@ android {
                 JPUSH_APPKEY         : "85358a757b2da7055f45f83c", //JPush上注册的包名对应的appkey.
                 JPUSH_CHANNEL        : "developer-default", //暂时填写默认值即可.
                 APPID                : "D20",
-                BASE_URL             : "http://202.99.19.140:8080/",
+                BASE_URL             : "http://www.apppubs.com/",
                 DISPLAY_ORIENTATION  : "1",
                 ENABLE_SPLASH_SKIP   : false,
                 NEED_START_UP_VERSION: true,
@@ -46,7 +47,7 @@ android {
 
     buildTypes {
         debug {
-            resValue "string", "app_name", "国投移动门户beta"
+            resValue "string", "app_name", "移动平台dev"
             minifyEnabled false
         }
         release {
@@ -67,41 +68,29 @@ android {
 dependencies {
     implementation fileTree(include: ['*.jar'], dir: 'libs')
     implementation project(':sugar_orm')
-    implementation project(':ShareSDK')
+//    implementation project(':ShareSDK')
     implementation project(':IMKit')
     implementation project(':mango')
-
     // JUnit4 Rules
 
-    //// Espresso core
+//// Espresso core
+//// Espresso-contrib for DatePicker, RecyclerView, Drawer actions,
+//// Accessibility checks, CountingIdlingResource
+//    androidTestCompile 'com.android.support.test.espresso:espresso-contrib:2.2.2'
+//
+//// Espresso-web for WebView support
+//    androidTestCompile 'com.android.support.test.espresso:espresso-web:2.2.2'
+//
+//// Espresso-idling-resource for synchronization with background jobs
+//    androidTestCompile 'com.android.support.test.espresso:espresso-idling-resource:2.2.2'
+//
+//// Espresso-intents for validation and stubbing of Intents
+//    androidTestCompile 'com.android.support.test.espresso:espresso-intents:2.2.2'
 
-    //// Espresso-contrib for DatePicker, RecyclerView, Drawer actions,
-
-    //// Accessibility checks, CountingIdlingResource
-
-    //    androidTestCompile 'com.android.support.test.espresso:espresso-contrib:2.2.2'
-
-    //
-
-    //// Espresso-web for WebView support
-
-    //    androidTestCompile 'com.android.support.test.espresso:espresso-web:2.2.2'
-
-    //
-
-    //// Espresso-idling-resource for synchronization with background jobs
-
-    //    androidTestCompile 'com.android.support.test.espresso:espresso-idling-resource:2.2.2'
-
-    //
-
-    //// Espresso-intents for validation and stubbing of Intents
-
-    //    androidTestCompile 'com.android.support.test.espresso:espresso-intents:2.2.2'
-
-    // UiAutomator
+// UiAutomator
 
     //    androidTestCompile 'com.android.support.test.uiautomator:uiautomator-v18:2.1.2'
+
     implementation "com.android.support:support-annotations:${ANDROID_SUPPORT_VERSION}"
     implementation 'org.greenrobot:eventbus:3.0.0'
     implementation 'com.google.code.gson:gson:2.2.4'
@@ -124,5 +113,5 @@ dependencies {
     testImplementation 'org.mockito:mockito-core:1.10.19'
     androidTestImplementation 'com.android.support.test:rules:0.5'
     androidTestImplementation 'com.android.support.test.espresso:espresso-core:2.2.2'
-    implementation files('libs/SangforSDK.jar')
+
 }

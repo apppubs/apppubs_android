@@ -43,7 +43,7 @@ public class Indicator extends LinearLayout{
 		mRadiusH  = (float) (scale*3);
 		padding = 10;
 		if(style==STYLE_DARK){
-			mHighLightC = Color.BLACK;
+			mHighLightC = Color.GRAY;
 			mDimColor = 0x40000000;
 		}else if(style==STYLE_LIGHT){
 			mHighLightC = 0xFFFFFFFF;

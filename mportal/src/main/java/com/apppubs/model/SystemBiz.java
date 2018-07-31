@@ -42,6 +42,7 @@ import com.apppubs.constant.APError;
 import com.apppubs.constant.APErrorCode;
 import com.apppubs.constant.Constants;
 import com.apppubs.constant.URLs;
+import com.apppubs.d20.BuildConfig;
 import com.apppubs.d20.R;
 import com.apppubs.model.message.UserBussiness;
 import com.apppubs.ui.activity.MainHandler;
@@ -54,6 +55,8 @@ import com.apppubs.util.Utils;
 import com.apppubs.util.WebUtils;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.orm.SugarRecord;
+import com.tencent.mm.opensdk.openapi.IWXAPI;
+import com.tencent.mm.opensdk.openapi.WXAPIFactory;
 
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
@@ -677,6 +680,13 @@ public class SystemBiz extends BaseBiz {
                 }
             }
         });
+    }
+
+    public IWXAPI getWxApi() {
+        IWXAPI mWxApi = WXAPIFactory.createWXAPI(mContext, null);
+        mWxApi.registerApp(BuildConfig.WX_APPID);
+
+        return mWxApi;
     }
 
 }
