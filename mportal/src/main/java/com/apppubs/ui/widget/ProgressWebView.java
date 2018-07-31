@@ -439,6 +439,7 @@ public class ProgressWebView extends BridgeWebView {
 			} else if (url.contains("target=_blank")) {
 				
 				Bundle args = new Bundle();
+                url = url.replaceAll("&target=_blank","").replace("?target=_blank","");
 				args.putString(WebAppFragment.ARGUMENT_STRING_URL, url);
 				if(url.contains("titlebarflag=0")){
 					args.putBoolean(BaseActivity.EXTRA_BOOLEAN_NEED_TITLEBAR, false);
