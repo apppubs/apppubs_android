@@ -201,7 +201,7 @@ public class UserPickerActivity extends BaseActivity implements IUserPickerView,
         AdbookInfoResult info = AdbookBiz.getInstance(mContext).getCachedAdbookInfo();
         if (info != null) {
             mSuperId = info.getRootDeptId();
-            mDepartmentList = AdbookBiz.getInstance(mContext).listSubDepartments(info.getRootDeptId());
+            mDepartmentList = AdbookBiz.getInstance(mContext).listSubDepartments(info.getRootDeptId(), true);
         } else {
             mDepartmentList = new ArrayList<>();
         }
@@ -253,7 +253,7 @@ public class UserPickerActivity extends BaseActivity implements IUserPickerView,
                     setVisibilityOfViewByResId(R.id.user_picker_search_result_lv, View.GONE);
                 } else {
                     setVisibilityOfViewByResId(R.id.user_picker_search_result_lv, View.VISIBLE);
-                    mSearchResultList = AdbookBiz.getInstance(mContext).searchUser(searchText);
+                    mSearchResultList = AdbookBiz.getInstance(mContext).searchUserHashChatPermission(searchText);
                     mSearchResultAdapter.notifyDataSetChanged(mSearchResultList);
                 }
                 return false;
@@ -342,7 +342,7 @@ public class UserPickerActivity extends BaseActivity implements IUserPickerView,
         //存储上一个列表的偏移量
         mListViewOffsetMap.put(mSuperId, mListView.getFirstVisiblePosition());
         if (!AdbookBiz.getInstance(mContext).isLeaf(superId)) {
-            mDepartmentList = AdbookBiz.getInstance(mContext).listSubDepartments(superId);
+            mDepartmentList = AdbookBiz.getInstance(mContext).listSubDepartments(superId, true);
             mDeptAdapter.setData(mDepartmentList);
             mListView.setAdapter(mDeptAdapter);
         } else {
