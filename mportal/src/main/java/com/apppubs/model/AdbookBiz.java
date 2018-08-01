@@ -14,10 +14,12 @@ import com.apppubs.constant.APError;
 import com.apppubs.constant.APErrorCode;
 import com.apppubs.constant.Constants;
 import com.apppubs.ui.activity.MainHandler;
+import com.apppubs.util.ACache;
 import com.apppubs.util.Des3;
 import com.apppubs.util.FileUtils;
 import com.apppubs.util.LogM;
 import com.apppubs.util.StringUtils;
+import com.apppubs.util.Utils;
 import com.orm.SugarRecord;
 
 import org.xmlpull.v1.XmlPullParser;
@@ -34,16 +36,19 @@ import java.util.List;
 public class AdbookBiz extends BaseBiz {
 
     private final String FILE_NAME_ADBOOK_INFO = "adbook_info.cfg";
+    private final String CACHE_NAME = "adbook_cache";
+    private final String CACHE_KEY_STRING_UPDATETIME = "updateTime";
     private static volatile AdbookBiz sAdbookBiz;
+
 
     private AdbookBiz(Context context) {
         super(context);
     }
 
-    public static AdbookBiz getInstance(Context context){
-        if (sAdbookBiz == null){
-            synchronized (AdbookBiz.class){
-                if (sAdbookBiz == null){
+    public static AdbookBiz getInstance(Context context) {
+        if (sAdbookBiz == null) {
+            synchronized (AdbookBiz.class) {
+                if (sAdbookBiz == null) {
                     sAdbookBiz = new AdbookBiz(context);
                 }
             }
@@ -79,38 +84,60 @@ public class AdbookBiz extends BaseBiz {
         return (AdbookInfoResult) FileUtils.readObj(mContext, FILE_NAME_ADBOOK_INFO);
     }
 
-    public List<TUser> getUsersByUserIds(List<String> userIds){
-        StringBuilder sb = new StringBuilder();
-        for (String userId : userIds){
-            if (sb.length()>0){
-                sb.append(",");
-            }
-            sb.append("'"+userId+"'");
-        }
-        String sql = "select * from USER where USER_ID in ("+sb.toString()+")";
-        return SugarRecord.findWithQuery(TUser.class,sql);
+    public boolean isNeedReadPermission() {
+        return getCachedAdbookInfo().needReadPermission();
     }
 
-    public long countUserOfCertainDepartment(String deptId){
+    public String getReadPermissionStr() {
+        return getCachedAdbookInfo().getReadPermissionStr();
+    }
+
+    /**
+     * 存储更新时间，以便之后和服务端版本比对
+     */
+    public void cacheUpdateTime(String updateTime) {
+        ACache cache = ACache.get(mContext, CACHE_NAME);
+        cache.put(CACHE_KEY_STRING_UPDATETIME, updateTime);
+    }
+
+    public String getUpdateTime() {
+        ACache cache = ACache.get(mContext, CACHE_NAME);
+        return cache.getAsString(CACHE_KEY_STRING_UPDATETIME);
+    }
+
+    public List<TUser> getUsersByUserIds(List<String> userIds) {
+        StringBuilder sb = new StringBuilder();
+        for (String userId : userIds) {
+            if (sb.length() > 0) {
+                sb.append(",");
+            }
+            sb.append("'" + userId + "'");
+        }
+        String sql = "select * from USER where USER_ID in (" + sb.toString() + ")";
+        return SugarRecord.findWithQuery(TUser.class, sql);
+    }
+
+    public long countUserOfCertainDepartment(String deptId) {
         int count = 0;
 
         List<TUser> user = new ArrayList<TUser>();
         List<String> deptIds = new ArrayList<String>();
         deptIds.add(deptId);
-        recurseGet(deptId,deptIds);
+        recurseGet(deptId, deptIds);
 
         StringBuilder sb = new StringBuilder();
-        for (String id:deptIds){
-            if (sb.length()>0){
+        for (String id : deptIds) {
+            if (sb.length() > 0) {
                 sb.append(",");
             }
             sb.append("'");
             sb.append(id);
             sb.append("'");
         }
-        String sql = String.format("select count(user_id) as usercount from user_dept_link where dept_id in(%s)",sb.toString());
+        String sql = String.format("select count(user_id) as usercount from user_dept_link where dept_id in(%s)", sb
+                .toString());
 
-        Cursor cursor = SugarRecord.getDatabase().rawQuery(sql,null);
+        Cursor cursor = SugarRecord.getDatabase().rawQuery(sql, null);
         cursor.moveToFirst();
         int result = cursor.getInt(0);
         cursor.close();
@@ -118,11 +145,11 @@ public class AdbookBiz extends BaseBiz {
     }
 
 
-    public String getDepartmentStringByUserId(String userId){
+    public String getDepartmentStringByUserId(String userId) {
         List<String> deptNameStringList = getDepartmentStringListByUserId(userId);
         StringBuilder sb = new StringBuilder();
         int size = deptNameStringList.size();
-        for (int i = -1; ++i < size;) {
+        for (int i = -1; ++i < size; ) {
             if (i > 0) {
                 sb.append("\n" + deptNameStringList.get(i));
             } else {
@@ -133,10 +160,10 @@ public class AdbookBiz extends BaseBiz {
         return sb.toString();
     }
 
-    public List<String> getDepartmentStringListByUserId(String userId){
+    public List<String> getDepartmentStringListByUserId(String userId) {
         List<TDepartment> deptList = getDepartmentByUserId(userId);
         List<String> strList = new ArrayList<String>(deptList.size());
-        for(TDepartment dept:deptList){
+        for (TDepartment dept : deptList) {
             strList.add(getDepartmentStringByDeptId(dept.getDeptId()));
         }
         return strList;
@@ -145,19 +172,19 @@ public class AdbookBiz extends BaseBiz {
     /**
      * 获取除顶级部门外两级部门名称
      */
-    private String getDepartmentStringByDeptId(String deptId){
+    private String getDepartmentStringByDeptId(String deptId) {
         TDepartment dept = SugarRecord.findByProperty(TDepartment.class, "dept_id", deptId);
         AdbookInfoResult adbookInfo = getCachedAdbookInfo();
         StringBuilder sb = new StringBuilder();
-        if(!deptId.equals(adbookInfo.getRootDeptId())){
-            if(TextUtils.isEmpty(sb.toString())){
+        if (!deptId.equals(adbookInfo.getRootDeptId())) {
+            if (TextUtils.isEmpty(sb.toString())) {
                 sb.append(dept.getName());
-            }else{
-                sb.insert(0, dept.getName()+"-");
+            } else {
+                sb.insert(0, dept.getName() + "-");
             }
-            if (!TextUtils.isEmpty(dept.getSuperId())&&!dept.getSuperId().equals(adbookInfo.getRootDeptId())){
+            if (!TextUtils.isEmpty(dept.getSuperId()) && !dept.getSuperId().equals(adbookInfo.getRootDeptId())) {
                 TDepartment superDept = SugarRecord.findByProperty(TDepartment.class, "dept_id", dept.getSuperId());
-                sb.insert(0,superDept.getName()+"-");
+                sb.insert(0, superDept.getName() + "-");
             }
         }
         return sb.toString();
@@ -173,7 +200,8 @@ public class AdbookBiz extends BaseBiz {
     }
 
     public List<TDepartment> getDepartmentByUserId(String userId) {
-        String sql = "select * from DEPARTMENT t1 join USER_DEPT_LINK t2 on t1.DEPT_ID = t2.DEPT_ID where t2.USER_ID = ?";
+        String sql = "select * from DEPARTMENT t1 join USER_DEPT_LINK t2 on t1.DEPT_ID = t2.DEPT_ID where t2.USER_ID " +
+                "= ?";
         return SugarRecord.findWithQuery(TDepartment.class, sql, userId);
     }
 
@@ -184,16 +212,29 @@ public class AdbookBiz extends BaseBiz {
      * @return
      */
     public TUser getUserByUserId(String userId) {
-        return SugarRecord.findByProperty(TUser.class, "USER_ID", userId);
+        return getUserByUserId(userId, isNeedReadPermission());
+    }
+
+    public TUser getUserByUserId(String userId, boolean needPermission) {
+        if (needPermission) {
+            if (hasReadPermissionOfUser(userId)) {
+                return SugarRecord.findByProperty(TUser.class, "USER_ID", userId);
+            } else {
+                String sql = "SELECT id,user_id,username, true_name FROM user where user_id = ?";
+                List<TUser> results = SugarRecord.findWithQuery(TUser.class, sql, userId);
+                if (!Utils.isEmpty(results)) {
+                    return results.get(0);
+                } else {
+                    return null;
+                }
+            }
+        } else {
+            return SugarRecord.findByProperty(TUser.class, "USER_ID", userId);
+        }
     }
 
     public List<TDepartment> listSubDepartments(String superDepId) {
-        AdbookInfoResult info = getCachedAdbookInfo();
-        if (info.needReadPermission()){
-            return listSubDepartments(superDepId,info.getReadPermissionStr());
-        }else{
-            return listSubDepartments(superDepId, null);
-        }
+        return listSubDepartments(superDepId, null);
     }
 
     public List<TDepartment> listSubDepartments(String superDepId, String permissionString) {
@@ -233,7 +274,6 @@ public class AdbookBiz extends BaseBiz {
         return count == 0;
     }
 
-
     /**
      * 列出某个department下的用户
      * 当前系统需要限制通讯录权限且有部门权限则显示全部信息，否则只查询出userid和truename
@@ -242,34 +282,50 @@ public class AdbookBiz extends BaseBiz {
      * @return
      */
     public List<TUser> listUser(String departmentId) {
-        String sql = "select * from USER t1 join USER_DEPT_LINK t2 on t1.USER_ID = t2.USER_ID where t2.DEPT_ID = ? " +
-                "order by t2.sort_id";
+        return listUser(departmentId, isNeedReadPermission());
+    }
 
-        return SugarRecord.findWithQuery(TUser.class, sql, departmentId);
+    public List<TUser> listUser(String deptId, boolean needPermission) {
+
+        String selectItems = null;
+        if (needPermission) {
+            if (hasReadPermissionOfDept(deptId)) {
+                selectItems = "*";
+            } else {
+                selectItems = "t1.id,t1.user_id, t1.username, true_name";
+            }
+        } else {
+            selectItems = "*";
+        }
+        String sql = "select " + selectItems + " from USER t1 join USER_DEPT_LINK t2 on t1.USER_ID = t2.USER_ID where" +
+                " t2.DEPT_ID = ? " +
+                "order by t2.sort_id";
+        return SugarRecord.findWithQuery(TUser.class, sql, deptId);
     }
 
     /**
      * 某部门下的所有用户，包含子部门的用户
+     *
      * @param deptId
      * @return
      */
-    public List<String> getUserIdsOfCertainDepartment(String deptId){
-        return getUserIdsOfCertainDepartment(deptId,false);
+    public List<String> getUserIdsOfCertainDepartment(String deptId) {
+        AdbookInfoResult result = getCachedAdbookInfo();
+        return getUserIdsOfCertainDepartment(deptId, result.isChatPermission());
     }
 
-    public List<String> getUserIdsOfCertainDepartment(String deptId,boolean needChatPermission){
+    public List<String> getUserIdsOfCertainDepartment(String deptId, boolean needChatPermission) {
 
         List<String> userIdList = new ArrayList<String>();
         List<String> deptIds = new ArrayList<String>();
         deptIds.add(deptId);
-        recurseGet(deptId,deptIds);
+        recurseGet(deptId, deptIds);
 
         StringBuilder sb = new StringBuilder();
-        if (needChatPermission){
-            String permissionStr = AppContext.getInstance(mContext).getCurrentUser().getChatPermissionString();
-            for (String id:deptIds){
-                if (!TextUtils.isEmpty(permissionStr)&&permissionStr.contains(id)){
-                    if (sb.length()>0){
+        if (needChatPermission) {
+            for (String id : deptIds) {
+                if (hasChatPermissionOfDept(id)) {
+                    if (sb.length() > 0) {
                         sb.append(",");
                     }
                     sb.append("'");
@@ -277,9 +333,9 @@ public class AdbookBiz extends BaseBiz {
                     sb.append("'");
                 }
             }
-        }else{
-            for (String id:deptIds){
-                if (sb.length()>0){
+        } else {
+            for (String id : deptIds) {
+                if (sb.length() > 0) {
                     sb.append(",");
                 }
                 sb.append("'");
@@ -288,10 +344,10 @@ public class AdbookBiz extends BaseBiz {
             }
         }
 
-        String sql = String.format("select distinct user_id from user_dept_link where dept_id in(%s)",sb.toString());
+        String sql = String.format("select distinct user_id from user_dept_link where dept_id in(%s)", sb.toString());
 
-        Cursor cursor = SugarRecord.getDatabase().rawQuery(sql,null);
-        while (cursor.moveToNext()){
+        Cursor cursor = SugarRecord.getDatabase().rawQuery(sql, null);
+        while (cursor.moveToNext()) {
             String userid = cursor.getString(0);
             userIdList.add(userid);
         }
@@ -301,70 +357,80 @@ public class AdbookBiz extends BaseBiz {
 
     /**
      * 判断在是否有某用户的读取权限
+     *
      * @param userid
      * @return
      */
-    public boolean hasReadPermissionOfUser(String userid){
+    public boolean hasReadPermissionOfUser(String userid) {
         List<TDepartment> dl = getDepartmentByUserId(userid);
-        for (TDepartment d: dl){
-            if (hasReadPermissionOfDept(d.getDeptId())){
+        for (TDepartment d : dl) {
+            if (hasReadPermissionOfDept(d.getDeptId())) {
                 return true;
             }
         }
         return false;
     }
 
-    private boolean hasReadPermissionOfDept(String deptId){
-        if (TextUtils.isEmpty(deptId)){
+    private boolean hasReadPermissionOfDept(String deptId) {
+        if (TextUtils.isEmpty(deptId)) {
             return false;
         }
-        String permissionStr = "";
-        String [] deptIds = permissionStr.split(",");
-        for (String curDeptId : deptIds){
-            if (deptId.equals(curDeptId)){
-                return true;
-            }
-        }
-        return false;
-    }
-
-    public boolean hasChatPermissionOfUser(String userId){
-        AdbookInfoResult result = getCachedAdbookInfo();
-        if (result.needReadPermission()){
-            List<TDepartment> dl = getDepartmentByUserId(userId);
-            String permissionStr = AppContext.getInstance(mContext).getCurrentUser().getChatPermissionString();
-            for (TDepartment d: dl){
-                if (!TextUtils.isEmpty(permissionStr)&&hasChatPermissionOfDept(d.getDeptId())){
+        if (!isNeedReadPermission()) {
+            return true;
+        } else {
+            String permissionStr = getReadPermissionStr();
+            String[] deptIds = permissionStr.split(",");
+            for (String curDeptId : deptIds) {
+                if (deptId.equals(curDeptId)) {
                     return true;
                 }
             }
-        }
-        return true;
-    }
-
-    private boolean hasChatPermissionOfDept(String deptId){
-        if (TextUtils.isEmpty(deptId)){
             return false;
         }
-        String permissionStr = AppContext.getInstance(mContext).getCurrentUser().getChatPermissionString();
-        String[] deptIds = permissionStr.split(",");
-        for (String curDeptId : deptIds){
-            if (curDeptId.equals(deptId)){
-                return true;
-            }
-        }
+    }
 
-        return false;
+    public boolean hasChatPermissionOfUser(String userId) {
+        AdbookInfoResult result = getCachedAdbookInfo();
+        if (result.needReadPermission()) {
+            List<TDepartment> dl = getDepartmentByUserId(userId);
+            for (TDepartment d : dl) {
+                if (hasChatPermissionOfDept(d.getDeptId())) {
+                    return true;
+                }
+            }
+            return false;
+        } else {
+            return true;
+        }
+    }
+
+    private boolean hasChatPermissionOfDept(String deptId) {
+        if (TextUtils.isEmpty(deptId)) {
+            return false;
+        }
+        AdbookInfoResult result = getCachedAdbookInfo();
+        if (result.isChatPermission()) {
+            String permissionStr = result.getChatPermissionStr();
+            String[] deptIds = permissionStr.split(",");
+            for (String curDeptId : deptIds) {
+                if (curDeptId.equals(deptId)) {
+                    return true;
+                }
+            }
+            return false;
+        } else {
+            return true;
+        }
     }
 
     private void recurseGet(String deptId, List<String> deptIds) {
-        List<TDepartment> depts = SugarRecord.find(TDepartment.class,"super_id=?",deptId);
-        if (depts==null||depts.size()<1){
+        List<TDepartment> depts = SugarRecord.find(TDepartment.class, "super_id=?", deptId);
+        if (depts == null || depts.size() < 1) {
             return;
         }
-        for (TDepartment dept:depts){
+        for (TDepartment dept : depts) {
             deptIds.add(dept.getDeptId());
-            recurseGet(dept.getDeptId(),deptIds);
+            recurseGet(dept.getDeptId(), deptIds);
         }
     }
 
@@ -376,7 +442,7 @@ public class AdbookBiz extends BaseBiz {
      */
     public void recordUser(String userId) {
         SugarRecord.update(TUser.class, "LAST_USED_TIME", new Date().getTime() + "", "USER_ID = ?",
-                new String[] { userId });
+                new String[]{userId});
     }
 
     /*
@@ -395,9 +461,10 @@ public class AdbookBiz extends BaseBiz {
      */
     public List<TUser> searchUser(String str) {
 
-        String dimStr = "%"+str+"%";
+        String dimStr = "%" + str + "%";
         return SugarRecord
-                .find(TUser.class, "TRUE_NAME like ? or mobile like ? or work_tel like ? or office_no like ? or email like ?", new String[] { dimStr,dimStr,dimStr,dimStr,dimStr }, null, "sort_id", null);
+                .find(TUser.class, "TRUE_NAME like ? or mobile like ? or work_tel like ? or office_no like ? or email" +
+                        " like ?", new String[]{dimStr, dimStr, dimStr, dimStr, dimStr}, null, "sort_id", null);
     }
 
     public void parseXML(final File file, final IAPCallback callback) {
@@ -424,8 +491,6 @@ public class AdbookBiz extends BaseBiz {
                 });
             }
         }).start();
-
-
     }
 
     private class AdbookXMLParser {

@@ -137,59 +137,6 @@ public class UserBussiness extends BaseBiz {
 		return result;
 	}
 
-	/**
-	 * 某部门下的所有用户，包含子部门的用户
-	 * @param deptId
-	 * @return
-     */
-	public List<String> getUserIdsOfCertainDepartment(String deptId){
-		return getUserIdsOfCertainDepartment(deptId,false);
-	}
-
-	public List<String> getUserIdsOfCertainDepartment(String deptId,boolean needChatPermission){
-
-		List<String> userIdList = new ArrayList<String>();
-		List<String> deptIds = new ArrayList<String>();
-		deptIds.add(deptId);
-		recurseGet(deptId,deptIds);
-
-		StringBuilder sb = new StringBuilder();
-		if (needChatPermission){
-			String permissionStr = AppContext.getInstance(mContext).getCurrentUser().getChatPermissionString();
-			for (String id:deptIds){
-				if (!TextUtils.isEmpty(permissionStr)&&permissionStr.contains(id)){
-					if (sb.length()>0){
-						sb.append(",");
-					}
-					sb.append("'");
-					sb.append(id);
-					sb.append("'");
-				}
-			}
-		}else{
-			for (String id:deptIds){
-				if (sb.length()>0){
-					sb.append(",");
-				}
-				sb.append("'");
-				sb.append(id);
-				sb.append("'");
-			}
-		}
-
-
-
-		String sql = String.format("select distinct user_id from user_dept_link where dept_id in(%s)",sb.toString());
-
-		Cursor cursor = SugarRecord.getDatabase().rawQuery(sql,null);
-		while (cursor.moveToNext()){
-			String userid = cursor.getString(0);
-			userIdList.add(userid);
-		}
-		cursor.close();
-		return userIdList;
-	}
-
 	private void recurseGet(String deptId, List<String> deptIds) {
 		List<TDepartment> depts = SugarRecord.find(TDepartment.class,"super_id=?",deptId);
 		if (depts==null||depts.size()<1){
