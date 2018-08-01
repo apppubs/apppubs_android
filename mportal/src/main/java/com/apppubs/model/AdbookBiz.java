@@ -5,7 +5,6 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.text.TextUtils;
 
-import com.apppubs.AppContext;
 import com.apppubs.bean.TDepartment;
 import com.apppubs.bean.TUser;
 import com.apppubs.bean.TUserDeptLink;
@@ -234,13 +233,13 @@ public class AdbookBiz extends BaseBiz {
     }
 
     public List<TDepartment> listSubDepartments(String superDepId) {
-        return listSubDepartments(superDepId, null);
+        return listSubDepartments(superDepId, false);
     }
 
-    public List<TDepartment> listSubDepartments(String superDepId, String permissionString) {
+    public List<TDepartment> listSubDepartments(String superDepId, boolean chatPermission) {
         List<TDepartment> result = null;
-        if (permissionString != null) {
-            String sb = resovePermissionString(permissionString);
+        if (chatPermission) {
+            String sb = resovePermissionString(getCachedAdbookInfo().getChatPermissionStr());
             String sql = "select * from department where super_id = '" + superDepId + "' and dept_id in (" + sb + ") " +
                     "order by sort_id";
             result = SugarRecord.findWithQuery(TDepartment.class, sql, new String[]{});
@@ -467,6 +466,14 @@ public class AdbookBiz extends BaseBiz {
                         " like ?", new String[]{dimStr, dimStr, dimStr, dimStr, dimStr}, null, "sort_id", null);
     }
 
+    public List<TUser> searchUserHashChatPermission(String str) {
+        String dimStr = "%" + str + "%";
+        String resolvedPmsStr = resovePermissionString(getCachedAdbookInfo().getChatPermissionStr());
+        String sql = "select t1.id, t1.user_id,true_name from user t1 join  user_dept_link t2 on t1.user_id = " +
+                "t2.user_id where t2.dept_id in ("+resolvedPmsStr+") and TRUE_NAME like ? ";
+        return SugarRecord.findWithQuery(TUser.class, sql, dimStr);
+    }
+
     public void parseXML(final File file, final IAPCallback callback) {
         new Thread(new Runnable() {
             @Override
@@ -639,18 +646,12 @@ public class AdbookBiz extends BaseBiz {
                     } else if (mParsingObjectFlag == 3) {
                         TUserDeptLink link = (TUserDeptLink) mCurBeanObject;
                         if ("userid".equals(mCurPropertyName)) {
-                            if (link.getUserId() == null) {
-                                link.setUserId(parser.getText());
-                            }
+                            link.setUserId(parser.getText());
                         } else if ("deptid".equals(mCurPropertyName)) {
-                            if (link.getDepId() == null) {
-                                link.setDeptId(parser.getText());
-                            }
-                        } else if ("deptid".equals(mCurPropertyName)) {
-                            if (link.getSortId() == 0) {
-                                if (StringUtils.isInteger(parser.getText())) {
-                                    link.setSortId(Integer.parseInt(parser.getText()));
-                                }
+                            link.setDeptId(parser.getText());
+                        } else if ("ordernum".equals(mCurPropertyName)) {
+                            if (StringUtils.isInteger(parser.getText())) {
+                                link.setSortId(Integer.parseInt(parser.getText()));
                             }
                         }
                     }
