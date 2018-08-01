@@ -12,7 +12,6 @@ import com.apppubs.bean.http.AdbookInfoResult;
 import com.apppubs.bean.http.UserBasicInfosResult;
 import com.apppubs.constant.APError;
 import com.apppubs.constant.APErrorCode;
-import com.apppubs.d20.BuildConfig;
 import com.apppubs.model.AdbookBiz;
 import com.apppubs.model.IAPCallback;
 import com.apppubs.model.UserBiz;
@@ -20,7 +19,6 @@ import com.apppubs.model.cache.CacheListener;
 import com.apppubs.model.cache.FileCacheErrorCode;
 import com.apppubs.model.cache.FileCacheManager;
 import com.apppubs.model.message.UserPickerHelper;
-import com.apppubs.ui.home.HomeBaseActivity;
 import com.apppubs.ui.message.IAdbookView;
 import com.apppubs.ui.widget.AlertDialog;
 import com.apppubs.ui.widget.ConfirmDialog;
@@ -35,7 +33,7 @@ import io.rong.imkit.RongIM;
 
 public class AdbookPresenter extends AbsPresenter<IAdbookView> {
     private AdbookBiz mBiz;
-    private AdbookInfoResult mAdbookInfo;
+    private String mCurUpdateTime;
     private boolean isLoading;
 
     public AdbookPresenter(Context context, IAdbookView view) {
@@ -50,7 +48,6 @@ public class AdbookPresenter extends AbsPresenter<IAdbookView> {
 
     public void onCreateView() {
         loadAdbookInfo();
-        mAdbookInfo = mBiz.getCachedAdbookInfo();
     }
 
     public void onOrgFragmentCreate() {
@@ -75,15 +72,16 @@ public class AdbookPresenter extends AbsPresenter<IAdbookView> {
             @Override
             public void onDone(AdbookInfoResult obj) {
                 mView.hideLoading();
+                mBiz.cacheAdbookInfo(obj);
+                mCurUpdateTime = obj.getUpdateTime();
                 LogM.log(this.getClass(), "获取AdbookInfoResult成功");
-                if (mAdbookInfo == null) {
+                if (mBiz.getUpdateTime() == null) {
                     mView.showSyncDialog();
-                } else if (!Utils.compare(mAdbookInfo.getUpdateTime(), obj.getUpdateTime())) {
+                } else if (!Utils.compare(mBiz.getUpdateTime(), obj.getUpdateTime())) {
                     mView.showHaveNewVersion(obj.getUpdateTime());
                 } else {
                     //已经是最新
                 }
-                mAdbookInfo = obj;
                 isLoading = false;
             }
 
@@ -114,7 +112,7 @@ public class AdbookPresenter extends AbsPresenter<IAdbookView> {
         isLoading = true;
         mView.showSyncLoading();
         FileCacheManager manager = AppContext.getInstance(mContext).getCacheManager();
-        manager.cacheFile(mAdbookInfo.getDownloadURL(), null, new CacheListener() {
+        manager.cacheFile(mBiz.getCachedAdbookInfo().getDownloadURL(), null, new CacheListener() {
             @Override
             public void onException(FileCacheErrorCode errorCode) {
                 mView.hideSyncLoading();
@@ -133,7 +131,7 @@ public class AdbookPresenter extends AbsPresenter<IAdbookView> {
                         mView.hideParsingLoading();
                         mView.setSyncLoadText("同步完成");
                         Toast.makeText(mContext, "同步完成", Toast.LENGTH_LONG).show();
-                        mBiz.cacheAdbookInfo(mAdbookInfo);
+                        mBiz.cacheUpdateTime(mCurUpdateTime);
                         mView.hideSyncLoading();
                         loadRootDepartments();
                         isLoading = false;
@@ -157,15 +155,16 @@ public class AdbookPresenter extends AbsPresenter<IAdbookView> {
     }
 
     private void loadRootDepartments() {
-        if (mAdbookInfo == null) {
+        if (mBiz.getUpdateTime() == null) {
+            Toast.makeText(mContext,"尚未同步，请同步通讯录！",Toast.LENGTH_LONG).show();
             return;
         }
-        TDepartment rootDept = mBiz.getDepartmentById(mAdbookInfo.getRootDeptId());
+        TDepartment rootDept = mBiz.getDepartmentById(mBiz.getCachedAdbookInfo().getRootDeptId());
         if (rootDept == null) {
-
+            Toast.makeText(mContext,"找不到根部门，请同步通讯录!",Toast.LENGTH_LONG).show();
         } else {
             mView.clearBreadcrumb(rootDept);
-            List<TDepartment> departments = mBiz.listSubDepartments(mAdbookInfo.getRootDeptId());
+            List<TDepartment> departments = mBiz.listSubDepartments(rootDept.getDeptId());
             mView.showDepts(departments);
         }
     }
@@ -201,7 +200,7 @@ public class AdbookPresenter extends AbsPresenter<IAdbookView> {
     public void onCreateDiscussClicked(String deptId) {
         TDepartment department = mBiz.getDepartmentById(deptId);
         String deptName = department != null ? department.getName() : "组织";
-        final List<String> userIdList = mBiz.getUserIdsOfCertainDepartment(deptId, mAdbookInfo.needReadPermission());
+        final List<String> userIdList = mBiz.getUserIdsOfCertainDepartment(deptId);
         if (userIdList == null || userIdList.size() < 1) {
             String message = "此部门无可会话人员";
             AlertDialog dialog = new AlertDialog(mContext, null, "无法创建讨论组！", message, "确定");

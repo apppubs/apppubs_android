@@ -49,8 +49,6 @@ public class UserInfo implements Serializable{
 	private String avatarUrl;//20170113
 	private String orgCode;
 
-	private String chatPermissionString;
-
 	private String appCodeVersion;
 
 
@@ -266,14 +264,6 @@ public class UserInfo implements Serializable{
 
 	public void setAvatarUrl(String avatarUrl) {
 		this.avatarUrl = avatarUrl;
-	}
-
-	public String getChatPermissionString() {
-		return chatPermissionString;
-	}
-
-	public void setChatPermissionString(String chatPermissionString) {
-		this.chatPermissionString = chatPermissionString;
 	}
 
 	public String getAppCodeVersion() {

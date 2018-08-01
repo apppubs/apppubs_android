@@ -704,13 +704,13 @@ public class PageFragment extends TitleMenuFragment implements OnClickListener, 
             tv.setText(item.getString("title"));
             ImageView iv = (ImageView) rl.findViewById(R.id.menu_iv);
 
-            String picUrl = item.getString("picurl");
+            String picUrl = item.getString("picURL");
             if (!TextUtils.isEmpty(picUrl)) {
                 mImageLoader.displayImage(picUrl, iv);
             } else {
                 iv.setVisibility(View.GONE);
             }
-            rl.setTag(item.getString("url"));
+            rl.setTag(item.getString("URL"));
             rl.setOnClickListener(this);
             LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(LayoutParams
                     .MATCH_PARENT, Utils.dip2px(mContext,
