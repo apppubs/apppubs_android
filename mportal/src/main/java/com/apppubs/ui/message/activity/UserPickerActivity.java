@@ -170,11 +170,11 @@ public class UserPickerActivity extends BaseActivity implements IUserPickerView,
 
     private void checkUser(TUser user, String userId) {
         mUserPickerHelper.selectUser(userId);
-        UserBasicInfosResult.Item ubi = UserBiz.getInstance(mContext).getCachedUserBasicInfo(userId);
+//        UserBasicInfosResult.Item ubi = UserBiz.getInstance(mContext).getCachedUserBasicInfo(userId);
         UserBasicInfo ui = new UserBasicInfo();
-        ui.setUserId(ubi.getUserId());
-        ui.setTrueName(ubi.getTruename());
-        ui.setUsername(ubi.getUserId());
+        ui.setUserId(user.getUserId());
+        ui.setTrueName(user.getTrueName());
+        ui.setUsername(user.getUsername());
         mUserSelectBar.addUser(ui);
     }
 
