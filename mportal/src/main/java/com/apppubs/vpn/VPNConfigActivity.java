@@ -1,5 +1,7 @@
 package com.apppubs.vpn;
 
+import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
@@ -17,6 +19,7 @@ import com.apppubs.model.IAPCallback;
 import com.apppubs.ui.activity.BaseActivity;
 import com.apppubs.ui.widget.ConfirmDialog;
 import com.apppubs.util.Utils;
+import com.sangfor.ssl.IVpnDelegate;
 
 import java.util.List;
 
@@ -111,5 +114,19 @@ public class VPNConfigActivity extends BaseActivity implements IVPNConfigView {
                 configStatusIv.setImageResource(R.drawable.vpn_config_done);
             }
         }
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent intent) {
+        switch (requestCode) {
+
+            case IVpnDelegate.REQUEST_L3VPNSERVICE:
+                /* L3VPN模式下下必须回调此方法
+                 * 注意：当前Activity的launchMode不能设置为 singleInstance，否则L3VPN服务启动会失败。
+                 */
+                mPresenter.onActivityResult(requestCode,resultCode);
+                break;
+        }
+        super.onActivityResult(requestCode, resultCode, intent);
     }
 }

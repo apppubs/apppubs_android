@@ -31,6 +31,8 @@ import com.apppubs.ui.webapp.WebAppFragment;
 import com.apppubs.util.LogM;
 import com.apppubs.ui.widget.AlertDialog;
 import com.apppubs.ui.widget.ConfirmDialog;
+import com.apppubs.vpn.VPNBiz;
+import com.apppubs.vpn.VPNViewCourierHelper;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -152,6 +154,22 @@ public class FilePreviewFragment extends TitleBarFragment {
 		});
 
 		return mRootView;
+	}
+
+	@Override
+	public void onStart() {
+		super.onStart();
+		if (VPNViewCourierHelper.getInstance(mContext).needVPN()){
+			VPNBiz.getInstance(mContext).addCounter();
+		}
+	}
+
+	@Override
+	public void onStop() {
+		super.onStop();
+		if (VPNViewCourierHelper.getInstance(mContext).needVPN()){
+			VPNBiz.getInstance(mContext).reduceCounter();
+		}
 	}
 
 	private void initView(LayoutInflater inflater, ViewGroup container) {

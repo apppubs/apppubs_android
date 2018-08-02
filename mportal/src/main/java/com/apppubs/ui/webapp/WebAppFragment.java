@@ -58,6 +58,8 @@ import com.apppubs.util.LocationManager;
 import com.apppubs.util.LogM;
 import com.apppubs.util.SystemUtils;
 import com.apppubs.util.Utils;
+import com.apppubs.vpn.VPNBiz;
+import com.apppubs.vpn.VPNViewCourierHelper;
 import com.jelly.mango.ImageSelectListener;
 import com.jelly.mango.Mango;
 import com.jelly.mango.MultiplexImage;
@@ -705,6 +707,14 @@ public class WebAppFragment extends TitleBarFragment implements OnClickListener,
         }
     }
 
+    @Override
+    public void onStart() {
+        super.onStart();
+        if (VPNViewCourierHelper.getInstance(mContext).needVPN()){
+            VPNBiz.getInstance(mContext).addCounter();
+        }
+    }
+
     @SuppressLint("NewApi")
     @Override
     public void onPause() {
@@ -716,7 +726,9 @@ public class WebAppFragment extends TitleBarFragment implements OnClickListener,
     public void onStop() {
         super.onStop();
 //		mWebView.stopLoading();
-
+        if (VPNViewCourierHelper.getInstance(mContext).needVPN()){
+            VPNBiz.getInstance(mContext).reduceCounter();
+        }
     }
 
     @Override

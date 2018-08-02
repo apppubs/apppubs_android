@@ -18,22 +18,51 @@ public class VPNWebAppFragment extends WebAppFragment {
         Bundle args = getArguments();
         mVPNId = args.getString(ARGS_STRING_VPN_ID);
 
-        VPNBiz.getInstance(mContext).loginVPN(getActivity(), mVPNId, new IAPCallback() {
+        VPNBiz.getInstance(mContext).setCounterChangeListener(new VPNBiz.CounterChangeListener() {
             @Override
-            public void onDone(Object obj) {
-                refresh();
-            }
+            public void onCounterChanged(int preCounter, int curCounter) {
+                if (preCounter==0&&curCounter==1){
+                    VPNBiz.getInstance(mContext).loginVPN(getActivity(), mVPNId, new IAPCallback() {
+                        @Override
+                        public void onDone(Object obj) {
+                            refresh();
+                        }
 
-            @Override
-            public void onException(APError error) {
-                onError(error);
+                        @Override
+                        public void onException(APError error) {
+                            onError(error);
+                        }
+                    });
+                }
+
+                if (preCounter>0&&curCounter==0){
+                    VPNBiz.getInstance(mContext).logoutVPN();
+                }
             }
         });
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        VPNBiz.getInstance(mContext).addCounter();
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        VPNBiz.getInstance(mContext).reduceCounter();
     }
 
     @Override
     public void onDestroy() {
         super.onDestroy();
         VPNBiz.getInstance(mContext).logoutVPN();
+        VPNViewCourierHelper.getInstance(mContext).setNeedVPN(false);
     }
 }

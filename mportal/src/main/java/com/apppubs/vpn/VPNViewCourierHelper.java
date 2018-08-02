@@ -14,6 +14,7 @@ import com.apppubs.util.Utils;
 public class VPNViewCourierHelper {
     private Context mContext;
     private volatile static VPNViewCourierHelper sHelper;
+    private boolean needVPN;
 
     private VPNViewCourierHelper(Context context) {
         mContext = context;
@@ -30,6 +31,14 @@ public class VPNViewCourierHelper {
         return sHelper;
     }
 
+    public boolean needVPN(){
+        return needVPN;
+    }
+
+    public void setNeedVPN(boolean need){
+        needVPN = need;
+    }
+
     public boolean openWindow(String url) {
         String vpnId = StringUtils.getQueryParameter(url, "vpnId");
         if ((url.startsWith("http://") || url.startsWith("https://")) && !TextUtils.isEmpty(vpnId)) {
@@ -40,6 +49,7 @@ public class VPNViewCourierHelper {
             } else {
                 openWebApp(url, vpnId);
             }
+            setNeedVPN(true);
             return true;
         } else if ("apppubs://VPNManager".equals(url)) {
             Intent intent = new Intent(mContext, VPNConfigActivity.class);

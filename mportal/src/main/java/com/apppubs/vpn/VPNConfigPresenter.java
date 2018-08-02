@@ -97,4 +97,8 @@ public class VPNConfigPresenter extends AbsPresenter<IVPNConfigView> {
         mBiz.clearPwdInfo(vpnId);
         showItems(mVPNInfoList);
     }
+
+    public void onActivityResult(int requestCode, int resultCode) {
+        mBiz.onActivityResult(requestCode, resultCode);
+    }
 }
