@@ -6,6 +6,7 @@ import java.util.List;
 
 public class VPNInfosResult implements IJsonResult {
     private List<VPNInfoItem> items;
+    private String readmeURL;
 
     public List<VPNInfoItem> getItems() {
         return items;
@@ -13,6 +14,14 @@ public class VPNInfosResult implements IJsonResult {
 
     public void setItems(List<VPNInfoItem> items) {
         this.items = items;
+    }
+
+    public String getReadmeURL() {
+        return readmeURL;
+    }
+
+    public void setReadmeURL(String readmeURL) {
+        this.readmeURL = readmeURL;
     }
 
     public class VPNInfoItem {

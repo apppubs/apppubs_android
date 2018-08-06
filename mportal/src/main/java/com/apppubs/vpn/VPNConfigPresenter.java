@@ -33,6 +33,7 @@ public class VPNConfigPresenter extends AbsPresenter<IVPNConfigView> {
                 mVPNInfoList = obj.getItems();
                 mView.hideLoading();
                 showItems(obj.getItems());
+                mView.setReadmeURL(obj.getReadmeURL());
             }
 
             @Override

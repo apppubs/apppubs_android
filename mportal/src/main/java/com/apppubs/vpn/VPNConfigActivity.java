@@ -17,6 +17,7 @@ import com.apppubs.constant.APError;
 import com.apppubs.d20.R;
 import com.apppubs.model.IAPCallback;
 import com.apppubs.ui.activity.BaseActivity;
+import com.apppubs.ui.activity.ViewCourier;
 import com.apppubs.ui.widget.ConfirmDialog;
 import com.apppubs.util.Utils;
 import com.sangfor.ssl.IVpnDelegate;
@@ -29,11 +30,20 @@ public class VPNConfigActivity extends BaseActivity implements IVPNConfigView {
 
     private LinearLayout mLl;
 
+    private String mReadmeURL;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.act_vpnconfig);
         setTitle("VPN配置");
+        mTitleBar.addRightBtnWithTextAndClickListener("说明", new View.OnClickListener
+                () {
+            @Override
+            public void onClick(View v) {
+                ViewCourier.getInstance(mContext).openWindow(mReadmeURL);
+            }
+        });
         mLl = (LinearLayout) findViewById(R.id.act_vpnconfig_ll);
 
         mPresenter = new VPNConfigPresenter(this, this);
@@ -61,9 +71,6 @@ public class VPNConfigActivity extends BaseActivity implements IVPNConfigView {
             TextView nameTv = (TextView) view.findViewById(R.id.item_vpn_name_tv);
             nameTv.setText(item.getVpnName());
 
-            TextView urlTv = (TextView) view.findViewById(R.id.item_vpn_url_tv);
-            urlTv.setText(item.getVpnURL());
-
             EditText nameEt = (EditText) view.findViewById(R.id.item_vpn_user_et);
             nameEt.setText(item.getUsername());
             EditText pwdEt = (EditText) view.findViewById(R.id.item_vpn_pwd_et);
@@ -76,16 +83,16 @@ public class VPNConfigActivity extends BaseActivity implements IVPNConfigView {
                             pwdEt.getText().toString(), new IAPCallback() {
 
 
-                        @Override
-                        public void onDone(Object obj) {
-                            Toast.makeText(mContext,"验证成功！",Toast.LENGTH_LONG).show();
-                        }
+                                @Override
+                                public void onDone(Object obj) {
+                                    Toast.makeText(mContext, "验证成功！", Toast.LENGTH_LONG).show();
+                                }
 
-                        @Override
-                        public void onException(APError error) {
-                            Toast.makeText(mContext,error.getMsg(),Toast.LENGTH_LONG).show();
-                        }
-                    });
+                                @Override
+                                public void onException(APError error) {
+                                    Toast.makeText(mContext, error.getMsg(), Toast.LENGTH_LONG).show();
+                                }
+                            });
                 }
             });
 
@@ -109,11 +116,16 @@ public class VPNConfigActivity extends BaseActivity implements IVPNConfigView {
                 }
             });
 
-            if (!TextUtils.isEmpty(item.getUsername())){
+            if (!TextUtils.isEmpty(item.getUsername())) {
                 ImageView configStatusIv = (ImageView) view.findViewById(R.id.item_vpn_config_iv);
                 configStatusIv.setImageResource(R.drawable.vpn_config_done);
             }
         }
+    }
+
+    @Override
+    public void setReadmeURL(String readmeURL) {
+        mReadmeURL = readmeURL;
     }
 
     @Override
@@ -124,7 +136,7 @@ public class VPNConfigActivity extends BaseActivity implements IVPNConfigView {
                 /* L3VPN模式下下必须回调此方法
                  * 注意：当前Activity的launchMode不能设置为 singleInstance，否则L3VPN服务启动会失败。
                  */
-                mPresenter.onActivityResult(requestCode,resultCode);
+                mPresenter.onActivityResult(requestCode, resultCode);
                 break;
         }
         super.onActivityResult(requestCode, resultCode, intent);
