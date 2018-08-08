@@ -3,6 +3,7 @@ package com.apppubs.vpn;
 import android.app.Activity;
 import android.content.Context;
 
+import com.apppubs.AppContext;
 import com.apppubs.constant.APError;
 import com.apppubs.constant.APErrorCode;
 import com.apppubs.constant.Constants;
@@ -172,15 +173,21 @@ public class VPNBiz extends BaseBiz implements LoginResultListener {
     }
 
     public void savePwdInfo(VPNPwdInfo info) {
-        mCache.put(info.getVpnId(), info);
+        mCache.put(getCacheKey(info.getVpnId()), info);
     }
 
     public VPNPwdInfo getPwdInfo(String vpnId) {
-        return (VPNPwdInfo) mCache.getAsObject(vpnId);
+        return (VPNPwdInfo) mCache.getAsObject(getCacheKey(vpnId));
     }
 
     public void clearPwdInfo(String vpnId) {
-        mCache.remove(vpnId);
+        mCache.remove(getCacheKey(vpnId));
+    }
+
+    private String getCacheKey(String vpnId){
+        String username = AppContext.getInstance(mContext).getCurrentUser().getUsername();
+        String cacheKey = "vpnKey:"+vpnId+"username:"+username;
+        return cacheKey;
     }
 
     public void onActivityResult(int requestCode, int resultCode) {
