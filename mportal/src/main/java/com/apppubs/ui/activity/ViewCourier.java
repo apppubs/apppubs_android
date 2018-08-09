@@ -16,6 +16,7 @@ import com.apppubs.ui.fragment.PapersFragment;
 import com.apppubs.ui.fragment.ServiceNOsOfMineFragment;
 import com.apppubs.ui.fragment.SettingFragment;
 import com.apppubs.ui.fragment.TitleMenuFragment;
+import com.apppubs.ui.fragment.UserCenterFragment;
 import com.apppubs.ui.message.fragment.AdbookFragement;
 import com.apppubs.ui.message.fragment.ConversationListFragment;
 import com.apppubs.ui.myfile.MyFileFragment;
@@ -86,8 +87,8 @@ public class ViewCourier {
             args.putString(WebAppFragment.ARGUMENT_STRING_URL, url);
             args.putBoolean(ContainerActivity.EXTRA_BOOLEAN_IS_FULLSCREEN, true);
             String titlebarFlag = StringUtils.getQueryParameter(url, "titlebar");
-            if (!Utils.isEmpty(titlebarFlag)){
-                args.putBoolean(WebAppFragment.ARGUMENT_STRING_NEED_TITLEBAR,Utils.compare(titlebarFlag,"1"));
+            if (!Utils.isEmpty(titlebarFlag)) {
+                args.putBoolean(WebAppFragment.ARGUMENT_STRING_NEED_TITLEBAR, Utils.compare(titlebarFlag, "1"));
             }
             ContainerActivity.startContainerActivity(mContext, WebAppFragment.class, args);
         } else if (ApppubsProtocol.isApppubsProtocol(url)) {
@@ -158,13 +159,16 @@ public class ViewCourier {
                         .class, null, title);
             } else if (Constants.APPPUBS_PROTOCOL_TYPE_USER_ACCOUNT.equals(pro.getType())) {
                 String userId = AppContext.getInstance(mContext).getCurrentUser().getUserId();
-                Intent intent = null;
-                if (userId != null && !userId.equals("")) {// 已登录
-                    intent = new Intent(mContext, UserCenterActivity.class);
+                if (!TextUtils.isEmpty(userId)) {// 已登录
+                    String title = StringUtils.getQueryParameter(url, "title");
+                    ContainerActivity.startFullScreenContainerActivity(mContext, UserCenterFragment
+                            .class, null, title);
                 } else {
+                    Intent intent = null;
                     intent = new Intent(mContext, LoginActivity.class);
+                    mContext.startActivity(intent);
                 }
-                mContext.startActivity(intent);
+
             } else if (Constants.APPPUBS_PROTOCOL_TYPE_TEL.equals(pro.getType())) {
                 String str[] = url.split(":");
                 final String uri = url;

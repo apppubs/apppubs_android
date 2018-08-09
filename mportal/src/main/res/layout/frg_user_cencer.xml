@@ -194,7 +194,6 @@
         android:layout_marginLeft="@dimen/item_padding_left"
         android:layout_marginRight="@dimen/item_padding_right"
         android:layout_marginTop="30dp"
-        android:onClick="onClick"
         android:padding="10dp"
         android:text="退出登录"
         android:textColor="#fff"
