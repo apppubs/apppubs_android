@@ -2,25 +2,28 @@ package com.apppubs.net;
 
 import android.os.Environment;
 
-import com.apppubs.AppContext;
 import com.apppubs.constant.APError;
 import com.apppubs.constant.APErrorCode;
 import com.apppubs.util.LogM;
 import com.apppubs.util.Utils;
 
 import java.io.File;
-import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.InputStream;
 import java.net.SocketTimeoutException;
+import java.security.SecureRandom;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
+
+import javax.net.ssl.HostnameVerifier;
+import javax.net.ssl.SSLContext;
+import javax.net.ssl.SSLSession;
+import javax.net.ssl.SSLSocketFactory;
+import javax.net.ssl.TrustManager;
 
 import okhttp3.Cache;
 import okhttp3.Call;
 import okhttp3.Callback;
 import okhttp3.FormBody;
-import okhttp3.Headers;
 import okhttp3.MultipartBody;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
@@ -47,6 +50,13 @@ public class APHttpClient implements IHttpClient {
         builder.readTimeout(10, TimeUnit.SECONDS);
         builder.retryOnConnectionFailure(false);
         builder.cache(cache);
+        builder.sslSocketFactory(createSSLSocketFactory());
+        builder.hostnameVerifier(new HostnameVerifier() {
+            @Override
+            public boolean verify(String hostname, SSLSession session) {
+                return true;
+            }
+        });
         mOkHttpClient = builder.build();
     }
 
@@ -137,7 +147,7 @@ public class APHttpClient implements IHttpClient {
         Request.Builder requestBuilder = new Request.Builder();
         if (headers != null) {
             for (String key : headers.keySet()) {
-                requestBuilder.addHeader(key,headers.get(key));
+                requestBuilder.addHeader(key, headers.get(key));
             }
         }
         final Request request = requestBuilder.url(url).post(body).build();
@@ -214,5 +224,19 @@ public class APHttpClient implements IHttpClient {
     public String syncPOST(String url, Map<String, String> headers, File file, Map<String,
             String> params) throws APNetException {
         return null;
+    }
+
+    private static SSLSocketFactory createSSLSocketFactory() {
+        SSLSocketFactory ssfFactory = null;
+
+        try {
+            SSLContext sc = SSLContext.getInstance("TLS");
+            sc.init(null, new TrustManager[]{new TrustAllCerts()}, new SecureRandom());
+
+            ssfFactory = sc.getSocketFactory();
+        } catch (Exception e) {
+        }
+
+        return ssfFactory;
     }
 }
