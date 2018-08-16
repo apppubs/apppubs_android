@@ -101,10 +101,10 @@
             android:background="@color/common_divider"
             ></View>
     </LinearLayout>
-    <com.apppubs.ui.widget.widget.FileSelectionBar
+    <com.apppubs.ui.widget.FileSelectionBar
         android:id="@+id/file_picker_choose_selectionbar"
         android:layout_width="match_parent"
         android:layout_height="50dp"
         android:layout_alignParentBottom="true"
-        ></com.apppubs.ui.widget.widget.FileSelectionBar>
+        ></com.apppubs.ui.widget.FileSelectionBar>
 </RelativeLayout>

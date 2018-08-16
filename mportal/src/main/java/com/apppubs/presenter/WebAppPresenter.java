@@ -5,16 +5,19 @@ import android.content.Intent;
 import android.net.Uri;
 import android.support.annotation.NonNull;
 
-import com.apppubs.bean.UserInfo;
 import com.apppubs.AppContext;
 import com.apppubs.AppManager;
+import com.apppubs.bean.UserInfo;
+import com.apppubs.bean.webapp.DeptPickerDTO;
+import com.apppubs.bean.webapp.DeptPickerResultItem;
+import com.apppubs.bean.webapp.UserModel;
+import com.apppubs.bean.webapp.UserPickerDTO;
+import com.apppubs.jsbridge.BridgeHandler;
+import com.apppubs.jsbridge.CallBackFunction;
 import com.apppubs.model.SystemBiz;
 import com.apppubs.ui.webapp.IWebAppView;
 import com.apppubs.ui.webapp.WebUserPickerActivity;
-import com.apppubs.bean.webapp.UserPickerVO;
-import com.apppubs.bean.webapp.UserVO;
-import com.apppubs.jsbridge.BridgeHandler;
-import com.apppubs.jsbridge.CallBackFunction;
+import com.apppubs.util.LogM;
 import com.jelly.mango.MultiplexImage;
 import com.tencent.mm.opensdk.modelmsg.SendMessageToWX;
 import com.tencent.mm.opensdk.modelmsg.WXMediaMessage;
@@ -50,27 +53,36 @@ public class WebAppPresenter {
     private void resisterHandler() {
 
         //扫描二维码
-        mView.getBridgeWebView().registerHandler("scanQRCode", new BridgeHandler() {
+        registerScanQRCode();
 
-            @Override
-            public void handler(String data, CallBackFunction function) {
-                mPaddingCallbackFunction = function;
-                try {
-                    JSONObject jo = new JSONObject(data);
-                    boolean selfResovle = jo.getBoolean("selfResolve");
-                    mView.showScanQRCode(selfResovle);
-                } catch (Exception e) {
-                    e.printStackTrace();
-                    mView.showScanQRCode(true);
-                }
-            }
-        });
+        //选择用户
+        registerUserPicker();
 
-        //选择图片
+        //部门选择
+        registerDeptPicker();
+
+        registerHandwriting();
+
+        registerGetAddress();
+
+        registerDisplayImg();
+
+        //版本检查
+        registerCheckVersion();
+
+        //用户信息获取
+        registerGetUserInfo();
+
+        //分享
+        registerShare();
+    }
+
+
+    private void registerUserPicker() {
         mView.getBridgeWebView().registerHandler("userpicker", new BridgeHandler() {
             @Override
             public void handler(String data, final CallBackFunction function) {
-                UserPickerVO vo = new UserPickerVO();
+                UserPickerDTO vo = new UserPickerDTO();
                 try {
                     JSONObject jo = new JSONObject(data);
                     vo.setmSelectMode(jo.getInt("selectMode"));
@@ -81,30 +93,32 @@ public class WebAppPresenter {
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
-                System.out.println(data);
                 WebUserPickerActivity.startActivity(mContext, vo, new WebUserPickerActivity
                         .UserPickerListener() {
 
                     @Override
-                    public void onPickDone(List<UserVO> users) {
+                    public void onPickDone(List<UserModel> users) {
                         String result = getJsonResultStr(users);
-                        System.out.println("选择结果" + result);
+                        LogM.log(WebAppPresenter.class, "选择结果：" + result);
                         function.onCallBack(result);
                     }
 
                     @NonNull
-                    private String getJsonResultStr(List<UserVO> users) {
+                    private String getJsonResultStr(List<UserModel> users) {
                         JSONObject jo = new JSONObject();
                         try {
-                            jo.put("success", true);
+                            jo.put("code", 0);
+                            jo.put("msg", "读取成功！");
+                            JSONObject result = new JSONObject();
                             JSONArray items = new JSONArray();
-                            for (UserVO uv : users) {
+                            for (UserModel uv : users) {
                                 JSONObject j = new JSONObject();
                                 j.put("id", uv.getId());
                                 j.put("name", uv.getName());
                                 items.put(j);
                             }
-                            jo.put("users", items);
+                            result.put("items", items);
+                            jo.put("result", result);
                         } catch (JSONException e) {
                             e.printStackTrace();
                         }
@@ -113,102 +127,78 @@ public class WebAppPresenter {
                 });
             }
         });
+    }
 
-        mView.getBridgeWebView().registerHandler("handwriting", new BridgeHandler() {
-
+    private void registerDeptPicker() {
+        mView.getBridgeWebView().registerHandler("deptpicker", new BridgeHandler() {
             @Override
-            public void handler(String data, CallBackFunction function) {
-                mPaddingCallbackFunction = function;
-                try {
-                    mView.showSignaturePanel(new JSONObject(data));
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
-
-            }
-        });
-
-        mView.getBridgeWebView().registerHandler("getaddress", new BridgeHandler() {
-            @Override
-            public void handler(String data, CallBackFunction function) {
-                try {
-                    String code = AppManager.getInstance(mContext).getCurrentAddressCode();
-                    String name = AppManager.getInstance(mContext).getCurrentAddressName();
-                    JSONObject result = new JSONObject();
-                    result.put("name", name);
-                    result.put("code", code);
-                    JSONObject jo = new JSONObject();
-                    jo.put("success", true);
-                    jo.put("result", result);
-                    function.onCallBack(jo.toString());
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
-            }
-        });
-
-        mView.getBridgeWebView().registerHandler("displayImg", new BridgeHandler() {
-
-            @Override
-            public void handler(String data, CallBackFunction function) {
+            public void handler(String data, final CallBackFunction function) {
+                DeptPickerDTO dto = new DeptPickerDTO();
                 try {
                     JSONObject jo = new JSONObject(data);
-                    JSONArray ja = jo.getJSONArray("imgs");
-                    String[] imgs = new String[ja.length()];
-                    List<MultiplexImage> images = new ArrayList<>();
-                    for (int i = -1; ++i < ja.length(); ) {
-                        imgs[i] = ja.getString(i);
-                        images.add(new MultiplexImage(ja.getString(i), ja
-                                .getString(i),
-                                MultiplexImage.ImageType.NORMAL));
-                    }
-                    mView.showImages(images);
+                    dto.setSelectMode(jo.getInt("selectMode"));
+                    dto.setDeptsURL(jo.getString("deptsURL"));
+                    dto.setSearchURL(jo.getString("searchURL"));
+                    dto.setRootDeptId(jo.getString("rootDeptId"));
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
+                WebUserPickerActivity.startActivity(mContext, dto, new WebUserPickerActivity
+                        .DeptPickerListener() {
+                    @Override
+                    public void onDeptPickerDone(List<DeptPickerResultItem> result) {
+                        String resultStr = getJsonResultStr(result);
+                        LogM.log(WebAppPresenter.class, "选择结果：" + result);
+                        function.onCallBack(resultStr);
+                    }
 
+                    @NonNull
+                    private String getJsonResultStr(List<DeptPickerResultItem> depts) {
+                        JSONObject jo = new JSONObject();
+                        try {
+                            jo.put("code", 0);
+                            jo.put("msg", "选择成功！");
+                            JSONObject result = new JSONObject();
+                            JSONArray items = new JSONArray();
+                            for (DeptPickerResultItem uv : depts) {
+                                JSONObject j = new JSONObject();
+                                j.put("id", uv.getId());
+                                j.put("name", uv.getName());
+                                items.put(j);
+                            }
+                            result.put("items", items);
+                            jo.put("result", result);
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                        return jo.toString();
+                    }
+                });
             }
         });
+    }
 
-        //版本检查
-        mView.getBridgeWebView().registerHandler("checkVersion", new BridgeHandler() {
-
-            @Override
-            public void handler(String data, CallBackFunction function) {
-                mView.checkUpdate();
-            }
-        });
-
-        //用户信息获取
-        mView.getBridgeWebView().registerHandler("getUserInfo", new BridgeHandler() {
-            @Override
-            public void handler(String data, CallBackFunction function) {
-                JSONObject jo = getUserInfoJson();
-                function.onCallBack(jo.toString());
-            }
-        });
-
-        //分享
-        //分享
+    private void registerShare() {
         mView.getBridgeWebView().registerHandler("share", new BridgeHandler() {
             @Override
             public void handler(String data, CallBackFunction function) {
                 try {
                     JSONArray arr = new JSONArray(data);
                     String type = arr.getString(0);
-                    if ("wechat".equals(type)||"wechat_timeline".equals(type)){
+                    if ("wechat".equals(type) || "wechat_timeline".equals(type)) {
                         WXTextObject textObj = new WXTextObject();
                         textObj.text = arr.getString(1);
                         WXMediaMessage msg = new WXMediaMessage();
                         msg.mediaObject = textObj;
                         SendMessageToWX.Req req = new SendMessageToWX.Req();
-                        req.scene = "wechat_timeline".equals(type) ? SendMessageToWX.Req.WXSceneTimeline : SendMessageToWX.Req.WXSceneSession;//聊天界面
+                        req.scene = "wechat_timeline".equals(type) ? SendMessageToWX.Req.WXSceneTimeline :
+                                SendMessageToWX.Req.WXSceneSession;//聊天界面
                         req.message = msg;
                         req.transaction = String.valueOf(System.currentTimeMillis());
                         SystemBiz.getInstance(mContext).getWxApi().sendReq(req);
-                    }else if("qq".equals(type)){
+                    } else if ("qq".equals(type)) {
 
-                    }else if("sms".equals(type)){
+                    } else if ("sms".equals(type)) {
                         Uri smsToUri = Uri.parse("smsto:");
                         Intent mIntent = new Intent(Intent.ACTION_SENDTO, smsToUri);
                         String msg = arr.getString(1);
@@ -271,6 +261,106 @@ public class WebAppPresenter {
 //                    e.printStackTrace();
 //                }
 
+            }
+        });
+    }
+
+    private void registerGetUserInfo() {
+        mView.getBridgeWebView().registerHandler("getUserInfo", new BridgeHandler() {
+            @Override
+            public void handler(String data, CallBackFunction function) {
+                JSONObject jo = getUserInfoJson();
+                function.onCallBack(jo.toString());
+            }
+        });
+    }
+
+    private void registerCheckVersion() {
+        mView.getBridgeWebView().registerHandler("checkVersion", new BridgeHandler() {
+
+            @Override
+            public void handler(String data, CallBackFunction function) {
+                mView.checkUpdate();
+            }
+        });
+    }
+
+    private void registerDisplayImg() {
+        mView.getBridgeWebView().registerHandler("displayImg", new BridgeHandler() {
+
+            @Override
+            public void handler(String data, CallBackFunction function) {
+                try {
+                    JSONObject jo = new JSONObject(data);
+                    JSONArray ja = jo.getJSONArray("imgs");
+                    String[] imgs = new String[ja.length()];
+                    List<MultiplexImage> images = new ArrayList<>();
+                    for (int i = -1; ++i < ja.length(); ) {
+                        imgs[i] = ja.getString(i);
+                        images.add(new MultiplexImage(ja.getString(i), ja
+                                .getString(i),
+                                MultiplexImage.ImageType.NORMAL));
+                    }
+                    mView.showImages(images);
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+
+            }
+        });
+    }
+
+    private void registerGetAddress() {
+        mView.getBridgeWebView().registerHandler("getaddress", new BridgeHandler() {
+            @Override
+            public void handler(String data, CallBackFunction function) {
+                try {
+                    String code = AppManager.getInstance(mContext).getCurrentAddressCode();
+                    String name = AppManager.getInstance(mContext).getCurrentAddressName();
+                    JSONObject result = new JSONObject();
+                    result.put("name", name);
+                    result.put("code", code);
+                    JSONObject jo = new JSONObject();
+                    jo.put("success", true);
+                    jo.put("result", result);
+                    function.onCallBack(jo.toString());
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+        });
+    }
+
+    private void registerHandwriting() {
+        mView.getBridgeWebView().registerHandler("handwriting", new BridgeHandler() {
+
+            @Override
+            public void handler(String data, CallBackFunction function) {
+                mPaddingCallbackFunction = function;
+                try {
+                    mView.showSignaturePanel(new JSONObject(data));
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+
+            }
+        });
+    }
+
+    private void registerScanQRCode() {
+        mView.getBridgeWebView().registerHandler("scanQRCode", new BridgeHandler() {
+
+            @Override
+            public void handler(String data, CallBackFunction function) {
+                mPaddingCallbackFunction = function;
+                try {
+                    JSONObject jo = new JSONObject(data);
+                    boolean selfResovle = jo.getBoolean("selfResolve");
+                    mView.showScanQRCode(selfResovle);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    mView.showScanQRCode(true);
+                }
             }
         });
     }

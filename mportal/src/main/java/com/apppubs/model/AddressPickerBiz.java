@@ -1,21 +1,21 @@
 package com.apppubs.model;
 
-import android.support.annotation.Nullable;
-
-import com.apppubs.net.WMHHttpClient;
-import com.apppubs.net.WMHHttpClientDefaultImpl;
-import com.apppubs.net.WMHHttpErrorCode;
-import com.apppubs.net.WMHRequestListener;
+import com.alibaba.fastjson.JSONArray;
+import com.alibaba.fastjson.JSONObject;
 import com.apppubs.bean.AddressModel;
-import com.apppubs.util.JSONResult;
+import com.apppubs.constant.APError;
+import com.apppubs.constant.APErrorCode;
+import com.apppubs.net.APHttpClient;
+import com.apppubs.net.IHttpClient;
+import com.apppubs.net.IRequestListener;
+import com.apppubs.util.LogM;
 
-import org.json.JSONArray;
 import org.json.JSONException;
-import org.json.JSONObject;
 
-import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Created by siger on 2018/1/31.
@@ -23,41 +23,45 @@ import java.util.List;
 
 public class AddressPickerBiz {
 
-    public interface AddressPickerListener{
+    public interface AddressPickerListener {
         void onDone(List<AddressModel> models);
+
         void onFailure(Exception e);
     }
 
     public void getAddressList(String rootId, final AddressPickerListener lisenter) {
         String url = "http://result.eolinker.com" +
                 "/gN1zjDlc87a75d671a2d954f809ebcdd19e7698dc2478fa?uri=address";
-        WMHHttpClient httpClient = new WMHHttpClientDefaultImpl();
-        JSONObject params = new JSONObject();
-        try {
-            params.put("code",rootId);
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-        httpClient.POST(url, params.toString(), new WMHRequestListener() {
+        IHttpClient httpClient = new APHttpClient();
+        Map<String, String> params = new HashMap<>();
+        params.put("code", rootId);
+        httpClient.asyncPOST(url, params, new IRequestListener() {
             @Override
-            public void onDone(JSONResult jsonResult, @Nullable WMHHttpErrorCode errorCode) {
-                if(errorCode==null&&jsonResult.code == 0){
-                    try {
-                        JSONArray ja = new JSONArray(jsonResult.getResultJSONObject().getString("items"));
+            public void onResponse(String json, APError e) {
+                if (e == null) {
+                    JSONObject jsonObj = JSONObject.parseObject(json);
+                    Integer code = jsonObj.getInteger("code");
+                    if (code == APErrorCode.SUCCESS.getCode()) {
+                        JSONObject result = jsonObj.getJSONObject("result");
+                        JSONArray items = result.getJSONArray("items");
                         List<AddressModel> list = new ArrayList<AddressModel>();
-                        for (int i=-1;++i<ja.length();){
-                            String json = ja.getString(i);
-                            AddressModel model = new AddressModel(json);
+                        for (int i = -1; ++i < items.size(); ) {
+                            String itemStr = items.getString(i);
+                            AddressModel model = null;
+                            try {
+                                model = new AddressModel(itemStr);
+                            } catch (JSONException e1) {
+                                e1.printStackTrace();
+                            }
                             list.add(model);
                         }
                         lisenter.onDone(list);
-                    } catch (JSONException e) {
-                        e.printStackTrace();
-                        lisenter.onFailure(e);
+                    } else {
+                        LogM.log(AddressPickerBiz.class, e.getMsg());
                     }
 
-                }else{
-                    lisenter.onFailure(new IOException("获取地址信息失败！"));
+                } else {
+                    LogM.log(AddressPickerBiz.class, e.getMsg());
                 }
             }
         });

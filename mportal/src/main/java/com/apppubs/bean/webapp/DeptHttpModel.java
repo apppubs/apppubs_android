@@ -4,7 +4,7 @@ package com.apppubs.bean.webapp;
  * Created by zhangwen on 2018/1/9.
  */
 
-public class DeptVO {
+public class DeptHttpModel {
 
 	private String id;
 	private String name;

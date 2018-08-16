@@ -4,27 +4,18 @@ import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
 
+import com.apppubs.AppContext;
 import com.apppubs.bean.Settings;
 import com.apppubs.bean.UserInfo;
-import com.apppubs.AppContext;
 import com.apppubs.bean.http.DefaultResult;
-import com.apppubs.bean.http.IJsonResult;
 import com.apppubs.bean.http.LoginResult;
 import com.apppubs.bean.http.UserBasicInfosResult;
 import com.apppubs.constant.APError;
 import com.apppubs.constant.Actions;
 import com.apppubs.constant.Constants;
-import com.apppubs.constant.URLs;
-import com.apppubs.model.message.UserBasicInfo;
-import com.apppubs.net.WMHHttpClient;
-import com.apppubs.net.WMHHttpErrorCode;
-import com.apppubs.net.WMHRequestListener;
 import com.apppubs.ui.activity.MainHandler;
 import com.apppubs.util.ACache;
-import com.apppubs.util.JSONResult;
-import com.apppubs.util.JSONUtils;
 import com.apppubs.util.StringUtils;
 
 import java.util.HashMap;

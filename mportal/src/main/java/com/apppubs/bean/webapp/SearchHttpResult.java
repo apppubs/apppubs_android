@@ -4,11 +4,21 @@ package com.apppubs.bean.webapp;
  * Created by zhangwen on 2018/1/9.
  */
 
-public class UserVO {
+public class SearchHttpResult {
 
 	private String id;
 	private String name;
+	private String deptName;
 	private boolean isSelected;
+
+
+	public UserModel toUserVO() {
+		UserModel userModel = new UserModel();
+		userModel.setId(getId());
+		userModel.setName(getName());
+		userModel.setSelected(isSelected());
+		return userModel;
+	}
 
 	public String getId() {
 		return id;
@@ -26,6 +36,14 @@ public class UserVO {
 		this.name = name;
 	}
 
+	public String getDeptName() {
+		return deptName;
+	}
+
+	public void setDeptName(String deptName) {
+		this.deptName = deptName;
+	}
+
 	public boolean isSelected() {
 		return isSelected;
 	}
@@ -34,4 +52,3 @@ public class UserVO {
 		isSelected = selected;
 	}
 }
-
