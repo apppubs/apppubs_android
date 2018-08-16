@@ -15,8 +15,8 @@ import com.apppubs.ui.adapter.CommonAdapter;
 import com.apppubs.ui.adapter.ViewHolder;
 import com.apppubs.model.message.FilePickerModel;
 import com.apppubs.model.message.MyFilePickerHelper;
-import com.apppubs.ui.widget.widget.Breadcrumb;
-import com.apppubs.ui.widget.widget.FileSelectionBar;
+import com.apppubs.ui.widget.Breadcrumb;
+import com.apppubs.ui.widget.FileSelectionBar;
 import com.apppubs.util.FileUtils;
 import com.apppubs.util.LogM;
 

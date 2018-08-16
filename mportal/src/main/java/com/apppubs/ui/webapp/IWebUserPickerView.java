@@ -1,9 +1,12 @@
 package com.apppubs.ui.webapp;
 
-import com.apppubs.bean.webapp.SearchVO;
-import com.apppubs.bean.webapp.UserPickerVO;
-import com.apppubs.bean.webapp.DeptVO;
-import com.apppubs.bean.webapp.UserVO;
+import com.apppubs.bean.webapp.DeptModel;
+import com.apppubs.bean.webapp.DeptPickerDTO;
+import com.apppubs.bean.webapp.SearchDeptHttpResult;
+import com.apppubs.bean.webapp.SearchHttpResult;
+import com.apppubs.bean.webapp.UserModel;
+import com.apppubs.bean.webapp.UserPickerDTO;
+import com.apppubs.ui.ICommonView;
 
 import java.util.List;
 
@@ -11,33 +14,48 @@ import java.util.List;
  * Created by zhangwen on 2018/1/8.
  */
 
-public interface IWebUserPickerView {
+public interface IWebUserPickerView extends ICommonView {
 
-	void showLoading();
+    void showLoading();
 
-	void hideLoading();
+    void hideLoading();
 
-	void showError(String error);
+    void showError(String error);
 
-	void setDepts(List<DeptVO> depts);
+    void setDepts(List<DeptModel> depts);
 
-	void setUsers(List<UserVO> users);
+    void setUsers(List<UserModel> users);
 
-	void setSearchUsers(List<SearchVO> searchUsers);
+    void setSearchDepts(List<SearchDeptHttpResult> mSearchDeptList);
 
-	void refreshUserList(List<UserVO> users);
+    void setSearchUsers(List<SearchHttpResult> searchUsers);
 
-	void resreshSearchUserList(List<SearchVO> searchUsers);
+    void refreshUserList(List<UserModel> users);
 
-	void pushBreadcrumb(String name, String tag);
+    void resreshSearchUserList(List<SearchHttpResult> searchUsers);
 
-	void addSelectedBarUser(UserVO vo);
+    void hideSearchLv();
 
-	void removeSelectedBarUser(String userId);
+    void pushBreadcrumb(String name, String tag);
 
-	UserPickerVO getUserPickerVO();
 
-	WebUserPickerActivity.UserPickerListener getListener();
+    void addSelectedBarDept(DeptModel model);
 
-	void finishActivity();
+    void removeSelectedBarDept(String id);
+
+    void addSelectedBarUser(UserModel vo);
+
+    void removeSelectedBarUser(String userId);
+
+    UserPickerDTO getUserPickerVO();
+
+    DeptPickerDTO getDeptPickerDTO();
+
+    boolean isDeptSelection();
+
+    WebUserPickerActivity.UserPickerListener getListener();
+
+    WebUserPickerActivity.DeptPickerListener getDeptPickerListener();
+
+    void finishActivity();
 }

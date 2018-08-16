@@ -1,4 +1,4 @@
-package com.apppubs.ui.widget.widget;
+package com.apppubs.ui.widget;
 
 import android.content.Context;
 import android.graphics.Color;

@@ -672,8 +672,9 @@ public class WebAppFragment extends TitleBarFragment implements OnClickListener,
     }
 
     public void refresh() {
+
         if (SystemUtils.canConnectNet(mHostActivity)) {
-            loadUrl();
+            mWebView.reload();
         } else {
             Toast.makeText(mContext, mContext.getString(R.string.err_msg_network_faile), Toast.LENGTH_LONG).show();
         }

@@ -26,6 +26,7 @@ import android.text.TextUtils;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.Gravity;
+import android.view.View;
 import android.view.ViewGroup.LayoutParams;
 import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
@@ -144,7 +145,10 @@ public class Utils {
     public static void colseInput(Activity context) {
         InputMethodManager imm = (InputMethodManager) context.getSystemService(Context
                 .INPUT_METHOD_SERVICE);
-        imm.hideSoftInputFromWindow(context.getCurrentFocus().getWindowToken(), 0);
+        View view = context.getCurrentFocus();
+        if (view != null) {
+            imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
+        }
     }
 
     public static final String RESPONSE_METHOD = "method";

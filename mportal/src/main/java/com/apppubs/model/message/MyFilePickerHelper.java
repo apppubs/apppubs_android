@@ -5,7 +5,7 @@ import android.content.Intent;
 
 import com.apppubs.ui.activity.BaseActivity;
 import com.apppubs.ui.message.activity.FilePickerChooseActivity;
-import com.apppubs.ui.widget.widget.FileSelectionBar;
+import com.apppubs.ui.widget.FileSelectionBar;
 
 import java.util.ArrayList;
 import java.util.List;

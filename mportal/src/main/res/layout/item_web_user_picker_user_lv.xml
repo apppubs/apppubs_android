@@ -5,62 +5,30 @@
     android:layout_height="wrap_content"
     android:background="@drawable/sel_common_item"
     android:paddingLeft="@dimen/item_padding_left_narrow"
-    android:paddingTop="@dimen/item_padding_top_narrow">
+    >
 
-    <ImageView
-        android:id="@+id/item_web_user_picker_check_btn"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:src="@drawable/sel_checkable_btn"
-        android:layout_centerVertical="true"
-        />
-    <com.apppubs.ui.widget.CircleTextImageView
-        android:id="@+id/item_web_user_picker_user_iv"
-        android:layout_width="40dp"
-        android:layout_height="40dp"
-        app:citv_text_size="10dp"
-        android:layout_toRightOf="@id/item_web_user_picker_check_btn"
-        android:layout_centerVertical="true"
-        android:layout_marginLeft="10dp"
-         />
-
-    <View
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="@dimen/item_padding_bottom_narrow"
-        android:layout_below="@id/item_web_user_picker_check_btn" />
-
-    <RelativeLayout
-        android:id="@+id/item_user_picker_user_title_rl"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="10dp"
-        android:layout_toRightOf="@id/item_web_user_picker_check_btn">
+        android:layout_height="wrap_content">
+        <ImageView
+            android:id="@+id/item_web_user_picker_check_btn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/sel_checkable_btn"
+            android:layout_gravity="center_vertical"
+            android:layout_marginRight="10dp"
+            />
 
         <TextView
             android:id="@+id/item_user_picker_user_title_tv"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_height="45dp"
             android:textColor="@color/common_text"
+            android:gravity="center_vertical"
             android:text="名称"
             android:textSize="15dp" />
 
-    </RelativeLayout>
-
-
-    <TextView
-        android:id="@+id/item_user_picker_user_des_tv"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignLeft="@+id/item_user_picker_user_title_rl"
-        android:layout_below="@id/item_user_picker_user_title_rl"
-        android:layout_marginTop="3dp"
-        android:layout_toRightOf="@id/item_user_picker_user_iv"
-        android:paddingRight="10dp"
-        android:singleLine="true"
-        android:maxLines="1"
-        android:text=""
-        android:textColor="@color/common_text_gray"
-        android:textSize="13dp" />
+    </LinearLayout>
 
     <View
         android:layout_width="match_parent"

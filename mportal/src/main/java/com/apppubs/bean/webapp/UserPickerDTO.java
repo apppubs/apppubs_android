@@ -6,7 +6,7 @@ import java.io.Serializable;
  * Created by zhangwen on 2018/1/9.
  */
 
-public class UserPickerVO implements Serializable {
+public class UserPickerDTO implements Serializable {
 
 	public static final int SELECT_MODE_MULTI = 1;
 	public static final int SELECT_MODE_SINGLE = 0;

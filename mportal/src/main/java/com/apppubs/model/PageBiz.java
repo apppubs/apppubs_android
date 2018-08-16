@@ -2,16 +2,11 @@ package com.apppubs.model;
 
 import android.content.Context;
 
-import com.apppubs.AppContext;
-import com.apppubs.bean.UserInfo;
 import com.apppubs.bean.page.PageContentModel;
 import com.apppubs.bean.page.PageModel;
 import com.apppubs.bean.page.PageNormalContentModel;
 import com.apppubs.constant.APError;
-import com.apppubs.constant.APErrorCode;
 import com.apppubs.constant.Constants;
-import com.apppubs.constant.URLs;
-import com.apppubs.net.WMHHttpClient;
 import com.apppubs.ui.activity.MainHandler;
 import com.apppubs.util.LogM;
 
@@ -25,12 +20,10 @@ import java.util.Map;
 public class PageBiz extends BaseBiz implements IPageBiz {
 
     private Context mContext;
-    private WMHHttpClient mHttpClient;
 
     public PageBiz(Context context) {
         super(context);
         mContext = context;
-        mHttpClient = AppContext.getInstance(mContext).getHttpClient();
     }
 
     @Override

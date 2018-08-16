@@ -7,7 +7,7 @@ import android.view.View;
 import com.apppubs.d20.R;
 import com.apppubs.ui.activity.BaseActivity;
 import com.apppubs.model.message.MyFilePickerHelper;
-import com.apppubs.ui.widget.widget.FileSelectionBar;
+import com.apppubs.ui.widget.FileSelectionBar;
 
 public class FilePickerChooseActivity extends BaseActivity  {
 

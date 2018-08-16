@@ -29,10 +29,10 @@
             android:orientation="vertical"
             >
 
-            <com.apppubs.ui.widget.widget.Breadcrumb
+            <com.apppubs.ui.widget.Breadcrumb
                 android:id="@+id/web_user_picker_bc"
                 android:layout_width="match_parent"
-                android:layout_height="45dp"></com.apppubs.ui.widget.widget.Breadcrumb>
+                android:layout_height="45dp"></com.apppubs.ui.widget.Breadcrumb>
 
             <FrameLayout
                 android:layout_width="match_parent"
@@ -61,11 +61,18 @@
                 android:layout_height="1px"
                 android:background="@color/common_divider"/>
 
-            <com.apppubs.ui.widget.widget.UserSelectionBar
+            <com.apppubs.ui.widget.UserSelectionBar
                 android:id="@+id/user_picker_user_selection_bar"
                 android:layout_width="match_parent"
-                android:layout_height="50dp"></com.apppubs.ui.widget.widget.UserSelectionBar>
-
+                android:layout_height="50dp"
+                android:visibility="gone"
+                ></com.apppubs.ui.widget.UserSelectionBar>
+            <com.apppubs.ui.widget.deptselection.DeptSelectionBar
+                android:id="@+id/user_picker_dept_selection_bar"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:visibility="gone"
+                ></com.apppubs.ui.widget.deptselection.DeptSelectionBar>
         </LinearLayout>
 
         <ListView
