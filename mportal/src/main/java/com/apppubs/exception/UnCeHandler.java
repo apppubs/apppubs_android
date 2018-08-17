@@ -1,15 +1,9 @@
 package com.apppubs.exception;
 
-import android.app.AlarmManager;
-import android.app.PendingIntent;
-import android.content.Context;
-import android.content.Intent;
 import android.os.Looper;
 import android.widget.Toast;
 
-import com.apppubs.AppContext;
 import com.apppubs.MportalApplication;
-import com.apppubs.ui.start.StartUpActivity;
 import com.apppubs.util.LogM;
 
 import java.io.PrintWriter;
@@ -30,27 +24,7 @@ public class UnCeHandler implements UncaughtExceptionHandler {
 
     @Override
     public void uncaughtException(Thread thread, Throwable ex) {
-        if (!handleException(ex) && mDefaultHandler != null) {
-            //如果用户没有处理则让系统默认的异常处理器来处理    
-            mDefaultHandler.uncaughtException(thread, ex);
-        } else {
-            try {
-                Thread.sleep(2000);
-            } catch (InterruptedException e) {
-                StringWriter sw = new StringWriter();
-                PrintWriter pw = new PrintWriter(sw);
-                ex.printStackTrace(pw);
-            }
-            Intent intent = new Intent(application.getApplicationContext(), StartUpActivity.class);
-            PendingIntent restartIntent = PendingIntent.getActivity(
-                    application.getApplicationContext(), 0, intent,
-                    PendingIntent.FLAG_CANCEL_CURRENT);
-//            退出程序
-            AlarmManager mgr = (AlarmManager) application.getSystemService(Context.ALARM_SERVICE);
-            mgr.set(AlarmManager.RTC, System.currentTimeMillis() + 3000,
-                    restartIntent); // 1秒钟后重启应用
-            application.finishActivity();
-        }
+        handleException(ex);
     }
 
     /**
@@ -74,7 +48,7 @@ public class UnCeHandler implements UncaughtExceptionHandler {
             @Override
             public void run() {
                 Looper.prepare();
-                Toast.makeText(application.getApplicationContext(), "很抱歉,程序出现异常!",
+                Toast.makeText(application.getApplicationContext(), "系统异常!",
                         Toast.LENGTH_SHORT).show();
                 Looper.loop();
             }

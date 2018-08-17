@@ -40,6 +40,15 @@
         android:paddingLeft="@dimen/item_padding_left"
         android:textSize="@dimen/item_text_size"></TextView>
 
+    <ImageView
+        android:id="@+id/item_web_user_picker_arrow"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerVertical="true"
+        android:src="@drawable/arrow_right_thin"
+        android:layout_marginRight="12dp"
+        android:layout_alignParentRight="true"
+        />
     <View
         android:id="@+id/line"
         android:layout_width="match_parent"
