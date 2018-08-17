@@ -76,6 +76,8 @@ public class MportalApplication extends MultiDexApplication {
 			} else if (processName.contains(":ipc")) {
 			}
 		}
+
+		initDefaultExceptionHandler();
 	}
 
 	private void initAppForMainProcess() {

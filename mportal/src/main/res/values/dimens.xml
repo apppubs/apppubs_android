@@ -53,7 +53,7 @@
     <dimen name="text_padding">6dp</dimen>
     <dimen name="nullshow_hight">8dp</dimen>
     <dimen name="pepter_main_top">9dp</dimen>
-    <dimen name="progress_webview_progress_height">3dp</dimen>
+    <dimen name="progress_webview_progress_height">2dp</dimen>
     <dimen name="slide_pic_title_text_size">14dp</dimen>
     <dimen name="weather_gif_width">80dp</dimen>
     <dimen name="weather_gif_height">100dp</dimen>

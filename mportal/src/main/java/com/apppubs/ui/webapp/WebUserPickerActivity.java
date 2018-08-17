@@ -367,6 +367,12 @@ public class WebUserPickerActivity extends BaseActivity implements IWebUserPicke
                 if (isDeptSelect) {
                     holder.getView(R.id.item_web_user_picker_content_ll).setVisibility(View.VISIBLE);
                     ((TextView) holder.getView(R.id.item_web_user_picker_name_tv)).setText(bean.getName());
+                    ImageView arrow = holder.getView(R.id.item_web_user_picker_arrow);
+                    if (bean.isLeaf()){
+                        arrow.setVisibility(View.GONE);
+                    }else{
+                        arrow.setVisibility(View.VISIBLE);
+                    }
                     ImageView checkBtn = holder.getView(R.id.item_web_user_picker_check_btn);
                     checkCheckBtn(checkBtn, bean.isSelected(), false);
                     checkBtn.setOnClickListener(new View.OnClickListener() {

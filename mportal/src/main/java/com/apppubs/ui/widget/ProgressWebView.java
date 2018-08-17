@@ -1,13 +1,5 @@
 package com.apppubs.ui.widget;
 
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.UnsupportedEncodingException;
-import java.net.URLDecoder;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-
 import android.annotation.SuppressLint;
 import android.app.Dialog;
 import android.app.ProgressDialog;
@@ -31,21 +23,28 @@ import android.webkit.WebViewClient;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
-import com.apppubs.ui.webapp.WebAppFragment;
-import com.apppubs.util.LogM;
-import com.apppubs.d20.R;
 import com.apppubs.SkipActivity;
-import com.apppubs.ui.activity.BaseActivity;
-import com.apppubs.ui.activity.ContainerActivity;
-import com.apppubs.ui.home.HomeBaseActivity;
-import com.apppubs.ui.activity.ViewCourier;
 import com.apppubs.constant.Constants;
-import com.apppubs.ui.myfile.FilePreviewFragment;
-import com.apppubs.util.HttpRequestParser;
-import com.apppubs.util.WebUtils;
+import com.apppubs.d20.R;
 import com.apppubs.jsbridge.BridgeUtil;
 import com.apppubs.jsbridge.BridgeWebView;
 import com.apppubs.jsbridge.Message;
+import com.apppubs.ui.activity.BaseActivity;
+import com.apppubs.ui.activity.ContainerActivity;
+import com.apppubs.ui.home.HomeBaseActivity;
+import com.apppubs.ui.myfile.FilePreviewFragment;
+import com.apppubs.ui.webapp.WebAppFragment;
+import com.apppubs.util.HttpRequestParser;
+import com.apppubs.util.LogM;
+import com.apppubs.util.WebUtils;
+
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.UnsupportedEncodingException;
+import java.net.URLDecoder;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 @SuppressWarnings("deprecation")
 public class ProgressWebView extends BridgeWebView {
@@ -115,6 +114,7 @@ public class ProgressWebView extends BridgeWebView {
 			};
 		}
 		mCounterDownTimer.start();
+		this.setOverScrollMode(OVER_SCROLL_NEVER);
 	}
 
 	public void cancelNetworkError(){
