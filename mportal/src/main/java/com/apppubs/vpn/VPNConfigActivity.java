@@ -1,6 +1,5 @@
 package com.apppubs.vpn;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
@@ -11,11 +10,8 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
-import com.apppubs.constant.APError;
 import com.apppubs.d20.R;
-import com.apppubs.model.IAPCallback;
 import com.apppubs.ui.activity.BaseActivity;
 import com.apppubs.ui.activity.ViewCourier;
 import com.apppubs.ui.widget.ConfirmDialog;
@@ -26,15 +22,22 @@ import java.util.List;
 
 public class VPNConfigActivity extends BaseActivity implements IVPNConfigView {
 
+    public static final String EXTRA_BOOLEAN_SHOULD_CLOSE = "should_close";
+
     private VPNConfigPresenter mPresenter;
 
     private LinearLayout mLl;
 
     private String mReadmeURL;
 
+    private boolean shouldCloseAfterConfig;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        shouldCloseAfterConfig = getIntent().getBooleanExtra(EXTRA_BOOLEAN_SHOULD_CLOSE, false);
+
         setContentView(R.layout.act_vpnconfig);
         setTitle("VPN配置");
         mTitleBar.addRightBtnWithTextAndClickListener("说明", new View.OnClickListener
@@ -80,19 +83,7 @@ public class VPNConfigActivity extends BaseActivity implements IVPNConfigView {
                 @Override
                 public void onClick(View v) {
                     mPresenter.onConfirmClicked(VPNConfigActivity.this, item.getVpnId(), nameEt.getText().toString(),
-                            pwdEt.getText().toString(), new IAPCallback() {
-
-
-                                @Override
-                                public void onDone(Object obj) {
-                                    Toast.makeText(mContext, "验证成功！", Toast.LENGTH_LONG).show();
-                                }
-
-                                @Override
-                                public void onException(APError error) {
-                                    Toast.makeText(mContext, error.getMsg(), Toast.LENGTH_LONG).show();
-                                }
-                            });
+                            pwdEt.getText().toString());
                 }
             });
 
@@ -126,6 +117,16 @@ public class VPNConfigActivity extends BaseActivity implements IVPNConfigView {
     @Override
     public void setReadmeURL(String readmeURL) {
         mReadmeURL = readmeURL;
+    }
+
+    @Override
+    public void closeWindow() {
+        finish();
+    }
+
+    @Override
+    public boolean shouldCloseAfterConfirm() {
+        return shouldCloseAfterConfig;
     }
 
     @Override

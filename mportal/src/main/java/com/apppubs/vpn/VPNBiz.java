@@ -11,29 +11,40 @@ import com.apppubs.model.BaseBiz;
 import com.apppubs.model.IAPCallback;
 import com.apppubs.ui.activity.MainHandler;
 import com.apppubs.util.ACache;
+import com.apppubs.util.LogM;
 import com.sangfor.bugreport.logger.Log;
 import com.sangfor.ssl.BaseMessage;
 import com.sangfor.ssl.LoginResultListener;
+import com.sangfor.ssl.OnStatusChangedListener;
 import com.sangfor.ssl.SFException;
 import com.sangfor.ssl.SangforAuthManager;
+import com.sangfor.ssl.StatusChangedReason;
 import com.sangfor.ssl.common.ErrorCode;
 
 import java.net.MalformedURLException;
 import java.net.URL;
 
-public class VPNBiz extends BaseBiz implements LoginResultListener {
+public class VPNBiz extends BaseBiz implements LoginResultListener, OnStatusChangedListener {
 
     private final String CACHE_NAME_VPN = "vpn_pwd_cache";
 
     private static volatile VPNBiz sBiz;
     private SangforAuthManager mSFManager;
-    private IAPCallback mLoginCallback;
-    private boolean isVerify;
     private ACache mCache;
-    private VPNPwdInfo mCurPwdInfo;
     private int mCounter;
+    private boolean isVerify;
+    private LoginManager mLoginManager;
+    private VerifyManager mVerifyManager;
 
     private CounterChangeListener mCounterChangeListener;
+
+    @Override
+    public void onStatusCallback(VPNStatus vpnStatus, StatusChangedReason statusChangedReason) {
+        LogM.log(VPNBiz.class, "vpnStatus:" + vpnStatus + "reason:" + statusChangedReason.getReasonDes());
+        if (mLoginManager != null) {
+            mLoginManager.onStatusCallback(vpnStatus);
+        }
+    }
 
     public interface CounterChangeListener {
         void onCounterChanged(int preCounter, int curCounter);
@@ -51,10 +62,10 @@ public class VPNBiz extends BaseBiz implements LoginResultListener {
     private void initLoginParms() {
         // 1.构建SangforAuthManager对象
         mSFManager = SangforAuthManager.getInstance();
-
         // 2.设置VPN认证结果回调
         try {
             mSFManager.setLoginResultListener(this);
+            mSFManager.addStatusChangedListener(this);
         } catch (SFException e) {
             Log.info("VPNBiz", "SFException:%s", e);
         }
@@ -122,54 +133,195 @@ public class VPNBiz extends BaseBiz implements LoginResultListener {
     }
 
     public void verifyVPN(Activity activity, String url, String username, String pwd, IAPCallback callback) {
-        mLoginCallback = callback;
-        isVerify = true;
-        try {
-            mSFManager.startPasswordAuthLogin(activity.getApplication(), activity, VPNMode.L3VPN, new URL(url),
-                    username, pwd);
-        } catch (SFException e) {
-            e.printStackTrace();
-        } catch (MalformedURLException e) {
-            e.printStackTrace();
-        }
+        VerifyManager manager = new VerifyManager();
+        manager.setActivity(activity);
+        manager.setUrl(url);
+        manager.setUsername(username);
+        manager.setPwd(pwd);
+        manager.setCallback(callback);
+        mVerifyManager = manager;
+        manager.verify();
     }
 
     public void loginVPN(Activity activity, String vpnId, IAPCallback callback) {
-        mLoginCallback = callback;
-        VPNPwdInfo info = getPwdInfo(vpnId);
-        try {
-            mSFManager.startPasswordAuthLogin(activity.getApplication(), activity, VPNMode.L3VPN, new URL(info
-                            .getVpnURL()),
-                    info.getUsername(), info.getPwd());
-        } catch (SFException e) {
-            e.printStackTrace();
-        } catch (MalformedURLException e) {
-            e.printStackTrace();
+        mLoginManager = new LoginManager();
+        mLoginManager.setActivity(activity);
+        mLoginManager.setVpnId(vpnId);
+        mLoginManager.setCallback(callback);
+        mLoginManager.login();
+    }
+
+    private class VerifyManager {
+        private Activity activity;
+        private String url;
+        private String username;
+        private String pwd;
+        private IAPCallback callback;
+
+        public Activity getActivity() {
+            return activity;
+        }
+
+        public void setActivity(Activity activity) {
+            this.activity = activity;
+        }
+
+        public String getUrl() {
+            return url;
+        }
+
+        public void setUrl(String url) {
+            this.url = url;
+        }
+
+        public String getUsername() {
+            return username;
+        }
+
+        public void setUsername(String username) {
+            this.username = username;
+        }
+
+        public String getPwd() {
+            return pwd;
+        }
+
+        public void setPwd(String pwd) {
+            this.pwd = pwd;
+        }
+
+        public IAPCallback getCallback() {
+            return callback;
+        }
+
+        public void setCallback(IAPCallback callback) {
+            this.callback = callback;
+        }
+
+        public void verify() {
+            isVerify = true;
+            try {
+                mSFManager.startPasswordAuthLogin(activity.getApplication(), activity, VPNMode.L3VPN, new URL(url),
+                        username, pwd);
+            } catch (SFException e) {
+                e.printStackTrace();
+            } catch (MalformedURLException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    private class LoginManager {
+        private Activity activity;
+        private String vpnId;
+        private IAPCallback callback;
+        private boolean isPaddingLogin;
+        private VPNStatus mStatus;
+
+        public Activity getActivity() {
+            return activity;
+        }
+
+        public void setActivity(Activity activity) {
+            this.activity = activity;
+        }
+
+        public String getVpnId() {
+            return vpnId;
+        }
+
+        public void setVpnId(String vpnId) {
+            this.vpnId = vpnId;
+        }
+
+        public IAPCallback getCallback() {
+            return callback;
+        }
+
+        public void setCallback(IAPCallback callback) {
+            this.callback = callback;
+        }
+
+        public boolean isPaddingLogin() {
+            return isPaddingLogin;
+        }
+
+        public void setPaddingLogin(boolean paddingLogin) {
+            isPaddingLogin = paddingLogin;
+        }
+
+        public void login() {
+            if (null == mStatus || mStatus == VPNStatus.VPNOFFLINE) {
+                isPaddingLogin = false;
+                VPNPwdInfo info = getPwdInfo(vpnId);
+                try {
+                    mSFManager.startPasswordAuthLogin(activity.getApplication(), activity, VPNMode.L3VPN, new URL(info
+                                    .getVpnURL()),
+                            info.getUsername(), info.getPwd());
+                } catch (SFException e) {
+                    e.printStackTrace();
+                } catch (MalformedURLException e) {
+                    e.printStackTrace();
+                }
+            } else {
+                isPaddingLogin = true;
+            }
+        }
+
+        public void doProgressAuth() {
+            VPNPwdInfo info = getPwdInfo(vpnId);
+            try {
+                mSFManager.doPasswordAuth(info.getUsername(), info.getPwd());
+            } catch (SFException e) {
+                e.printStackTrace();
+            }
+        }
+
+        public void onStatusCallback(VPNStatus vpnStatus) {
+            mStatus = vpnStatus;
+            if (vpnStatus == VPNStatus.VPNOFFLINE && isPaddingLogin) {
+                login();
+            }
         }
     }
 
     public void logoutVPN() {
         mSFManager.vpnLogout();
+        if (!isVerify) {
+            mLoginManager.setPaddingLogin(false);
+        }
     }
 
     @Override
     public void onLoginFailed(ErrorCode errorCode, String s) {
-        mLoginCallback.onException(new APError(APErrorCode.GENERAL_ERROR, s));
-        isVerify = false;
+        if (isVerify) {
+            mVerifyManager.getCallback().onException(new APError(APErrorCode.GENERAL_ERROR, s));
+            isVerify = false;
+        } else {
+            mLoginManager.getCallback().onException(new APError(APErrorCode.GENERAL_ERROR, s));
+        }
     }
 
     @Override
     public void onLoginProcess(int i, BaseMessage baseMessage) {
-        mLoginCallback.onException(new APError(APErrorCode.GENERAL_ERROR, "code:" + i + "err:" + baseMessage));
+        if (isVerify) {
+            mVerifyManager.getCallback().onException(new APError(APErrorCode.GENERAL_ERROR, "code:" + i + "err:" +
+                    baseMessage));
+            isVerify = false;
+        } else {
+            mLoginManager.doProgressAuth();
+        }
     }
 
     @Override
     public void onLoginSuccess() {
-        mLoginCallback.onDone(null);
         if (isVerify) {
+            mVerifyManager.getCallback().onDone(null);
             mSFManager.vpnLogout();
+            isVerify = false;
+        } else {
+            mLoginManager.getCallback().onDone(null);
         }
-        isVerify = false;
     }
 
     public void savePwdInfo(VPNPwdInfo info) {
@@ -184,9 +336,9 @@ public class VPNBiz extends BaseBiz implements LoginResultListener {
         mCache.remove(getCacheKey(vpnId));
     }
 
-    private String getCacheKey(String vpnId){
+    private String getCacheKey(String vpnId) {
         String username = AppContext.getInstance(mContext).getCurrentUser().getUsername();
-        String cacheKey = "vpnKey:"+vpnId+"username:"+username;
+        String cacheKey = "vpnKey:" + vpnId + "username:" + username;
         return cacheKey;
     }
 

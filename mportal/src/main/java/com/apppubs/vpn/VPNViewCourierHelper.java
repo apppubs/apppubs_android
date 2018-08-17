@@ -6,7 +6,6 @@ import android.os.Bundle;
 import android.text.TextUtils;
 
 import com.apppubs.ui.activity.ContainerActivity;
-import com.apppubs.ui.activity.ViewCourier;
 import com.apppubs.ui.webapp.WebAppFragment;
 import com.apppubs.util.StringUtils;
 import com.apppubs.util.Utils;
@@ -45,6 +44,7 @@ public class VPNViewCourierHelper {
             VPNPwdInfo info = VPNBiz.getInstance(mContext).getPwdInfo(vpnId);
             if (null == info) {
                 Intent intent = new Intent(mContext, VPNConfigActivity.class);
+                intent.putExtra(VPNConfigActivity.EXTRA_BOOLEAN_SHOULD_CLOSE,true);
                 mContext.startActivity(intent);
             } else {
                 openWebApp(url, vpnId);

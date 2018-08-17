@@ -61,7 +61,7 @@ public class VPNConfigPresenter extends AbsPresenter<IVPNConfigView> {
         mView.showItems(viewData);
     }
 
-    public void onConfirmClicked(Activity activity,String vpnId,String username, String pwd, IAPCallback callback){
+    public void onConfirmClicked(Activity activity,String vpnId,String username, String pwd){
         mView.showLoading();
 
         VPNInfosResult.VPNInfoItem item = null;
@@ -84,6 +84,9 @@ public class VPNConfigPresenter extends AbsPresenter<IVPNConfigView> {
                 mBiz.savePwdInfo(info);
                 showItems(mVPNInfoList);
                 mView.showMessage("验证成功！");
+                if (mView.shouldCloseAfterConfirm()){
+                    mView.closeWindow();
+                }
             }
 
             @Override
