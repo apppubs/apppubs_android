@@ -9,6 +9,7 @@ public class SearchDeptHttpResult {
     private String id;
     private String name;
     private boolean isSelected;
+    private boolean isPreSelected;
 
 
     public String getId() {
@@ -34,5 +35,13 @@ public class SearchDeptHttpResult {
 
     public void setSelected(boolean selected) {
         isSelected = selected;
+    }
+
+    public boolean isPreSelected() {
+        return isPreSelected;
+    }
+
+    public void setPreSelected(boolean preSelected) {
+        isPreSelected = preSelected;
     }
 }

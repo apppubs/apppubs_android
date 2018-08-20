@@ -5,6 +5,7 @@ public class DeptModel {
     private String name;
     private boolean isLeaf;
     private boolean isSelected;
+    private boolean isPreselected;
 
     public String getId() {
         return id;
@@ -36,6 +37,14 @@ public class DeptModel {
 
     public void setSelected(boolean selected) {
         isSelected = selected;
+    }
+
+    public boolean isPreselected() {
+        return isPreselected;
+    }
+
+    public void setPreselected(boolean preselected) {
+        isPreselected = preselected;
     }
 
     public static DeptModel createFrom(DeptHttpModel httpModel){

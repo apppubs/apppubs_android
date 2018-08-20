@@ -2,7 +2,7 @@ package com.apppubs.bean.webapp;
 
 import java.io.Serializable;
 
-public class DeptPickerDTO implements Serializable{
+public class DeptPickerDTO implements Serializable {
 
     public static final int SELECT_MODE_MULTI = 1;
     public static final int SELECT_MODE_SINGLE = 0;
@@ -11,6 +11,7 @@ public class DeptPickerDTO implements Serializable{
     private String deptsURL;
     private String searchURL;
     private String rootDeptId;
+    private String preIds;
 
     public int getSelectMode() {
         return selectMode;
@@ -42,5 +43,13 @@ public class DeptPickerDTO implements Serializable{
 
     public void setRootDeptId(String rootDeptId) {
         this.rootDeptId = rootDeptId;
+    }
+
+    public String getPreIds() {
+        return preIds;
+    }
+
+    public void setPreIds(String preIds) {
+        this.preIds = preIds;
     }
 }
