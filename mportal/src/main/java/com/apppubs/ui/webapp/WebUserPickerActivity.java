@@ -374,7 +374,7 @@ public class WebUserPickerActivity extends BaseActivity implements IWebUserPicke
                         arrow.setVisibility(View.VISIBLE);
                     }
                     ImageView checkBtn = holder.getView(R.id.item_web_user_picker_check_btn);
-                    checkCheckBtn(checkBtn, bean.isSelected(), false);
+                    checkCheckBtn(checkBtn, bean.isSelected(), bean.isPreselected());
                     checkBtn.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
@@ -394,7 +394,7 @@ public class WebUserPickerActivity extends BaseActivity implements IWebUserPicke
                 titleTv.setText(user.getName());
 //				TextView desTv = holder.getView(R.id.item_user_picker_user_des_tv);
                 ImageView checkBtnIv = holder.getView(R.id.item_web_user_picker_check_btn);
-                checkCheckBtn(checkBtnIv, user.isSelected(), false);
+                checkCheckBtn(checkBtnIv, user.isSelected(), user.isPreSelected());
             }
         };
 
@@ -406,8 +406,7 @@ public class WebUserPickerActivity extends BaseActivity implements IWebUserPicke
                 TextView titleTv = holder.getView(R.id.item_user_picker_user_title_tv);
                 titleTv.setText(user.getName());
                 ImageView checkBtnIv = holder.getView(R.id.item_web_user_picker_check_btn);
-                checkCheckBtn(checkBtnIv, user.isSelected(), false);
-
+                checkCheckBtn(checkBtnIv, user.isSelected(), user.isPreSelected());
             }
         };
 
@@ -418,7 +417,7 @@ public class WebUserPickerActivity extends BaseActivity implements IWebUserPicke
                 holder.getView(R.id.item_web_user_picker_content_ll).setVisibility(View.VISIBLE);
                 ((TextView) holder.getView(R.id.item_web_user_picker_name_tv)).setText(bean.getName());
                 ImageView checkBtn = holder.getView(R.id.item_web_user_picker_check_btn);
-                checkCheckBtn(checkBtn, bean.isSelected(), false);
+                checkCheckBtn(checkBtn, bean.isSelected(), bean.isPreSelected());
             }
         };
     }

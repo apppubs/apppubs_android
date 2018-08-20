@@ -90,6 +90,7 @@ public class WebAppPresenter {
                     vo.setmUsersURL(jo.getString("usersURL"));
                     vo.setmSearchURL(jo.getString("searchURL"));
                     vo.setRootDeptId(jo.getString("rootDeptId"));
+                    vo.setPreIds(jo.getString("preIds"));
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
@@ -140,6 +141,7 @@ public class WebAppPresenter {
                     dto.setDeptsURL(jo.getString("deptsURL"));
                     dto.setSearchURL(jo.getString("searchURL"));
                     dto.setRootDeptId(jo.getString("rootDeptId"));
+                    dto.setPreIds(jo.getString("preIds"));
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }

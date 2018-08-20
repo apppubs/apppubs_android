@@ -1,6 +1,8 @@
 package com.apppubs.presenter;
 
 import android.content.Context;
+import android.support.annotation.NonNull;
+import android.text.TextUtils;
 
 import com.alibaba.fastjson.JSONObject;
 import com.apppubs.bean.webapp.DeptHttpModel;
@@ -23,6 +25,7 @@ import com.apppubs.util.JSONUtils;
 import com.apppubs.util.LogM;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -57,10 +60,13 @@ public class WebUserPickerPresenter {
         if (isDeptSelection) {
             DeptPickerDTO dto = mView.getDeptPickerDTO();
             loadDepts(dto.getDeptsURL(), dto.getRootDeptId());
-
         } else {
             UserPickerDTO vo = mView.getUserPickerVO();
-            loadDepts(vo.getDeptsURL(), vo.getRootDeptId());
+            if (TextUtils.isEmpty(vo.getDeptsURL())) {
+                loadUsers(vo.getRootDeptId());
+            } else {
+                loadDepts(vo.getDeptsURL(), vo.getRootDeptId());
+            }
         }
     }
 
@@ -68,6 +74,7 @@ public class WebUserPickerPresenter {
         if (isDeptSelection) {
             if (deptModel.isLeaf()) {
                 LogM.log(this.getClass(), "部门选择到叶子结点，暂时什么都不做！");
+                mView.showMessage("没有子部门！");
             } else {
                 DeptPickerDTO dto = mView.getDeptPickerDTO();
                 loadDepts(dto.getDeptsURL(), deptModel.getId());
@@ -83,6 +90,9 @@ public class WebUserPickerPresenter {
     }
 
     public void onUserItemClick(UserModel userModel) {
+        if (userModel.isPreSelected()) {
+            return;
+        }
         UserPickerDTO vo = mView.getUserPickerVO();
         if (vo.getmSelectMode() == UserPickerDTO.SELECT_MODE_MULTI) {
             if (!isUserSelected(userModel.getId())) {
@@ -101,6 +111,9 @@ public class WebUserPickerPresenter {
     }
 
     public void onSearchDeptItemClick(SearchDeptHttpResult searchDeptHttpResult) {
+        if (searchDeptHttpResult.isPreSelected()){
+            return;
+        }
         DeptPickerDTO dto = mView.getDeptPickerDTO();
         DeptModel deptModel = new DeptModel();
         deptModel.setName(searchDeptHttpResult.getName());
@@ -113,7 +126,7 @@ public class WebUserPickerPresenter {
                 removeSelectedDept(deptModel.getId());
                 mView.removeSelectedBarDept(deptModel.getId());
             }
-            refreshCurDept();
+            refreshDeptList();
             mView.hideSearchLv();
         } else {
             mSelectedDeptList.add(deptModel);
@@ -121,16 +134,10 @@ public class WebUserPickerPresenter {
         }
     }
 
-    private void refreshCurDept() {
-        for (DeptModel model: mDeptList){
-            if (isDeptSelected(model.getId())){
-                model.setSelected(true);
-            }
-        }
-        mView.setDepts(mDeptList);
-    }
-
     public void onSearchUserItemClick(SearchHttpResult searchHttpResult) {
+        if (searchHttpResult.isPreSelected()) {
+            return;
+        }
         UserPickerDTO vo = mView.getUserPickerVO();
         UserModel userModel = searchHttpResult.toUserVO();
         if (vo.getmSelectMode() == UserPickerDTO.SELECT_MODE_MULTI) {
@@ -166,7 +173,7 @@ public class WebUserPickerPresenter {
     public void onRemoveSelecedtUser(String userId) {
         removeSelectedUser(userId);
         mView.removeSelectedBarUser(userId);
-        mView.refreshUserList(resolveUsersVOListWithSelectedFlag(mUserList));
+        mView.refreshUserList(resolveUsersVOList(mUserList));
     }
 
     public void onDoneBtnClicked() {
@@ -211,15 +218,7 @@ public class WebUserPickerPresenter {
                         JSONObject result = jsonObj.getJSONObject("result");
                         final String deptName = result.getString("deptName");
                         String itemsStr = result.getString("items");
-                        List<DeptHttpModel> items = JSONUtils.parseListFromJson(itemsStr, DeptHttpModel.class);
-                        List<DeptModel> models = new ArrayList<>();
-                        for (DeptHttpModel httpModel : items) {
-                            DeptModel model = DeptModel.createFrom(httpModel);
-                            if (isDeptSelected(model.getId())) {
-                                model.setSelected(true);
-                            }
-                            models.add(model);
-                        }
+                        List<DeptModel> models = getDeptModels(itemsStr);
                         mDeptList = models;
                         MainHandler.getInstance().post(new Runnable() {
                             @Override
@@ -247,6 +246,29 @@ public class WebUserPickerPresenter {
                     });
                 }
             }
+
+            @NonNull
+            private List<DeptModel> getDeptModels(String itemsStr) {
+                List<DeptHttpModel> items = JSONUtils.parseListFromJson(itemsStr, DeptHttpModel.class);
+                List<DeptModel> models = new ArrayList<>();
+
+                for (DeptHttpModel httpModel : items) {
+                    DeptModel model = DeptModel.createFrom(httpModel);
+                    if (isDeptSelected(model.getId())) {
+                        model.setSelected(true);
+                    }
+                    models.add(model);
+                }
+
+                DeptPickerDTO dto = mView.getDeptPickerDTO();
+                if (dto != null && !TextUtils.isEmpty(dto.getPreIds())) {
+                    List<String> arr = Arrays.asList(dto.getPreIds().split(","));
+                    for (DeptModel model : models) {
+                        model.setPreselected(arr.contains(model.getId()));
+                    }
+                }
+                return models;
+            }
         });
     }
 
@@ -273,9 +295,8 @@ public class WebUserPickerPresenter {
                             public void run() {
                                 final String deptName = result.getString("deptName");
                                 String itemsStr = result.getString("items");
-                                mUserList = resolveUsersVOListWithSelectedFlag(JSONUtils.parseListFromJson(itemsStr,
+                                mUserList = resolveUsersVOList(JSONUtils.parseListFromJson(itemsStr,
                                         UserModel.class));
-
                                 MainHandler.getInstance().post(new Runnable() {
                                     @Override
                                     public void run() {
@@ -325,7 +346,7 @@ public class WebUserPickerPresenter {
                     if (APErrorCode.SUCCESS.getCode() == code) {
                         JSONObject result = jsonObj.getJSONObject("result");
                         String itemsStr = result.getString("items");
-                        mSearchList = resolveSearchUsersVOListWithSelectedFlag(JSONUtils.parseListFromJson(itemsStr,
+                        mSearchList = resolveSearchUsersVOList(JSONUtils.parseListFromJson(itemsStr,
                                 SearchHttpResult.class));
 
                         MainHandler.getInstance().post(new Runnable() {
@@ -374,14 +395,7 @@ public class WebUserPickerPresenter {
                     if (APErrorCode.SUCCESS.getCode() == code) {
                         JSONObject result = jsonObj.getJSONObject("result");
                         String itemsStr = result.getString("items");
-                        mSearchDeptList = JSONUtils.parseListFromJson(itemsStr,
-                                SearchDeptHttpResult.class);
-
-                        for (SearchDeptHttpResult item: mSearchDeptList){
-                            if(isDeptSelected(item.getId())){
-                                item.setSelected(true);
-                            }
-                        }
+                        mSearchDeptList = getSearchDepts(itemsStr);
                         MainHandler.getInstance().post(new Runnable() {
                             @Override
                             public void run() {
@@ -405,6 +419,28 @@ public class WebUserPickerPresenter {
                     });
                 }
             }
+
+            private List<SearchDeptHttpResult> getSearchDepts(String itemsStr) {
+                List<SearchDeptHttpResult> list = JSONUtils.parseListFromJson(itemsStr,
+                        SearchDeptHttpResult.class);
+
+                for (SearchDeptHttpResult item : list) {
+                    if (isDeptSelected(item.getId())) {
+                        item.setSelected(true);
+                    }
+                }
+
+                DeptPickerDTO dto = mView.getDeptPickerDTO();
+                String preIds = dto.getPreIds();
+                if (!TextUtils.isEmpty(preIds)) {
+                    List<String> idsList = Arrays.asList(preIds.split(","));
+                    for (SearchDeptHttpResult item : list) {
+                        item.setPreSelected(idsList.contains(item.getId()));
+                    }
+                }
+
+                return list;
+            }
         });
     }
 
@@ -426,21 +462,39 @@ public class WebUserPickerPresenter {
         return userIds;
     }
 
-    private List<UserModel> resolveUsersVOListWithSelectedFlag(List<UserModel> userList) {
+    private List<UserModel> resolveUsersVOList(List<UserModel> userList) {
         if (userList != null) {
             List<String> userIds = getSelectedUserId();
             for (UserModel uv : userList) {
                 uv.setSelected(userIds.contains(uv.getId()));
             }
+            UserPickerDTO vo = mView.getUserPickerVO();
+            String preIds = vo.getPreIds();
+            if (!TextUtils.isEmpty(preIds)) {
+                String[] preIdsArr = preIds.split(",");
+                List<String> idsList = Arrays.asList(preIdsArr);
+                for (UserModel um : userList) {
+                    um.setPreSelected(idsList.contains(um.getId()));
+                }
+            }
         }
         return userList;
     }
 
-    private List<SearchHttpResult> resolveSearchUsersVOListWithSelectedFlag(List<SearchHttpResult> userList) {
+    private List<SearchHttpResult> resolveSearchUsersVOList(List<SearchHttpResult> userList) {
         if (userList != null) {
             List<String> userIds = getSelectedUserId();
             for (SearchHttpResult uv : userList) {
                 uv.setSelected(userIds.contains(uv.getId()));
+            }
+            UserPickerDTO vo = mView.getUserPickerVO();
+            String preIds = vo.getPreIds();
+            if (!TextUtils.isEmpty(preIds)) {
+                String[] preIdsArr = preIds.split(",");
+                List<String> idsList = Arrays.asList(preIdsArr);
+                for (SearchHttpResult um : userList) {
+                    um.setPreSelected(idsList.contains(um.getId()));
+                }
             }
         }
         return userList;
@@ -470,8 +524,8 @@ public class WebUserPickerPresenter {
     }
 
     private void refreshUserAndSearchLv() {
-        mView.refreshUserList(resolveUsersVOListWithSelectedFlag(mUserList));
-        mView.resreshSearchUserList(resolveSearchUsersVOListWithSelectedFlag(mSearchList));
+        mView.refreshUserList(resolveUsersVOList(mUserList));
+        mView.resreshSearchUserList(resolveSearchUsersVOList(mSearchList));
     }
 
     public void onDeptCheckBtnClicked(DeptModel bean) {

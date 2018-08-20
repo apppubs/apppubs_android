@@ -10,6 +10,7 @@ public class SearchHttpResult {
 	private String name;
 	private String deptName;
 	private boolean isSelected;
+	private boolean isPreSelected;
 
 
 	public UserModel toUserVO() {
@@ -50,5 +51,13 @@ public class SearchHttpResult {
 
 	public void setSelected(boolean selected) {
 		isSelected = selected;
+	}
+
+	public boolean isPreSelected() {
+		return isPreSelected;
+	}
+
+	public void setPreSelected(boolean preSelected) {
+		isPreSelected = preSelected;
 	}
 }

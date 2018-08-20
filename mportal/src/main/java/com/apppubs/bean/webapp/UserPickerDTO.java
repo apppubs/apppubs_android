@@ -16,6 +16,7 @@ public class UserPickerDTO implements Serializable {
 	private String mUsersURL;
 	private String mSearchURL;
 	private String mRootDeptId;
+	private String preIds;
 	private int maxSelectedNum = -1;
 
 	public int getmSelectMode() {
@@ -64,5 +65,13 @@ public class UserPickerDTO implements Serializable {
 
 	public void setMaxSelectedNum(int maxSelectedNum) {
 		this.maxSelectedNum = maxSelectedNum;
+	}
+
+	public String getPreIds() {
+		return preIds;
+	}
+
+	public void setPreIds(String mPreIds) {
+		this.preIds = mPreIds;
 	}
 }
