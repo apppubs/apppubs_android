@@ -99,9 +99,9 @@ public class AdbookPresenter extends AbsPresenter<IAdbookView> {
     public void onUpdateConfirmed() {
         if (!isLoading) {
             startDownload();
-            Toast.makeText(mContext, "后台同步已开始，请在通知栏查看进度！", Toast.LENGTH_LONG).show();
+//            Toast.makeText(mContext, "后台同步已开始，请在通知栏查看进度！", Toast.LENGTH_LONG).show();
         } else {
-            Toast.makeText(mContext, "正在后台同步，请在通知栏查看进度！", Toast.LENGTH_LONG).show();
+//            Toast.makeText(mContext, "正在后台同步，请在通知栏查看进度！", Toast.LENGTH_LONG).show();
         }
     }
 

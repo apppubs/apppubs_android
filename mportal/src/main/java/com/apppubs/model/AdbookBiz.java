@@ -509,6 +509,8 @@ public class AdbookBiz extends BaseBiz {
         private void parseXML(File file) throws Exception {
             XmlPullParser parser = getParser(file);
             SQLiteDatabase db = SugarRecord.getDatabase();
+            db.beginTransaction();
+
             SugarRecord.deleteAll(TUser.class);
             SugarRecord.deleteAll(TDepartment.class);
             SugarRecord.deleteAll(TUserDeptLink.class);
@@ -518,6 +520,7 @@ public class AdbookBiz extends BaseBiz {
                     LogM.log(this.getClass(), "start_document");
                 } else if (eventType == parser.END_DOCUMENT) {
                     LogM.log(this.getClass(), "end_document");
+                    db.setTransactionSuccessful();
                     break;//此处跳出循环
                 } else if (eventType == parser.START_TAG) {
                     mCurPropertyName = parser.getName();
@@ -658,6 +661,7 @@ public class AdbookBiz extends BaseBiz {
                 }
                 eventType = parser.next();
             }
+            db.endTransaction();
         }
 
         private XmlPullParser getParser(File file) throws XmlPullParserException, FileNotFoundException {

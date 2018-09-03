@@ -309,31 +309,32 @@ public class AdbookFragement extends BaseFragment implements IAdbookView {
 
     @Override
     public void showSyncLoading() {
-        mBuilder.setContentText("同步中");
-        mNotifyManager.notify(1,mBuilder.build());
+//        mBuilder.setContentText("同步中");
+//        mNotifyManager.notify(1,mBuilder.build());
+        mProgressHUD = ProgressHUD.show(getContext(), "同步中...", true, false, null);
     }
 
     @Override
     public void setSyncProgress(Float progress) {
         NumberFormat nf = NumberFormat.getPercentInstance();
         nf.setMinimumFractionDigits(0);
-//        mProgressHUD.setMessage(nf.format(progress));
-        mBuilder.setProgress(100, (int) (progress*100), false);
-        // Displays the progress bar for the first time.
-        mNotifyManager.notify(1, mBuilder.build());
+        mProgressHUD.setMessage(nf.format(progress));
+//        mBuilder.setProgress(100, (int) (progress*100), false);
+//        // Displays the progress bar for the first time.
+//        mNotifyManager.notify(1, mBuilder.build());
     }
 
     @Override
     public void setSyncLoadText(String text) {
-//        mProgressHUD.setMessage(text);
-        mBuilder.setContentText(text);
-        mNotifyManager.notify(1, mBuilder.build());
+        mProgressHUD.setMessage(text);
+//        mBuilder.setContentText(text);
+//        mNotifyManager.notify(1, mBuilder.build());
     }
 
     @Override
     public void hideSyncLoading() {
-//        mProgressHUD.dismiss();
-        mNotifyManager.cancel(1);
+        mProgressHUD.dismiss();
+//        mNotifyManager.cancel(1);
     }
 
     @Override
@@ -374,13 +375,13 @@ public class AdbookFragement extends BaseFragment implements IAdbookView {
     @Override
     public void showParsingLoading() {
         setVisibilityOfViewByResId(mRootView,R.id.adbook_wait_tv,View.VISIBLE);
-//        mProgressHUD = ProgressHUD.show(getContext(), "解析中...", true, false, null);
+        mProgressHUD.setMessage("解析中...");
     }
 
     @Override
     public void hideParsingLoading() {
         setVisibilityOfViewByResId(mRootView,R.id.adbook_wait_tv,View.GONE);
-//        mProgressHUD.dismiss();
+        mProgressHUD.dismiss();
     }
 
 }
