@@ -23,6 +23,7 @@ import android.webkit.DownloadListener;
 import android.webkit.WebSettings;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.PopupWindow;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
@@ -61,12 +62,7 @@ import com.apppubs.util.Utils;
 import com.jelly.mango.ImageSelectListener;
 import com.jelly.mango.Mango;
 import com.jelly.mango.MultiplexImage;
-import com.tencent.mm.opensdk.modelmsg.SendMessageToWX;
-import com.tencent.mm.opensdk.modelmsg.WXMediaMessage;
-import com.tencent.mm.opensdk.modelmsg.WXTextObject;
 import com.tencent.mm.opensdk.modelpay.PayReq;
-import com.tencent.mm.opensdk.openapi.IWXAPI;
-import com.tencent.mm.opensdk.openapi.WXAPIFactory;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -90,6 +86,7 @@ public class WebAppFragment extends TitleBarFragment implements OnClickListener,
     public static final String ARGUMENT_STRING_URL = "url";
     public static final String ARGUMENT_STRING_MORE_MENUS = "more_menus";
     public static final String ARGUMENT_STRING_NEED_TITLEBAR = "fragment_title_bar";
+    public static final String ARGUMENT_BOOLEAN_NEED_TITLE_BAR_ARROW = "arg_need_title_bar_arrow";
 
     public static final int REQUEST_CODE_PICTURES = 100;
     public static final int REQUEST_CODE_QRCODE = 101;//二维码扫描接过
@@ -102,8 +99,10 @@ public class WebAppFragment extends TitleBarFragment implements OnClickListener,
     private String mPreviousURL;
     private String mApppubsMiddleURL;//中间url，访问中间url会重定向到目标url
     private String mMoreMenusStr;
+    private boolean isNeedActionBarArrow;
 
     private ProgressWebView mWebView;
+    private ImageView mTitleBarArrow;
     private View mRootView;
     private WebSettings mSettings;
 
@@ -158,10 +157,11 @@ public class WebAppFragment extends TitleBarFragment implements OnClickListener,
         if (TextUtils.isEmpty(mMoreMenusStr)) {
             mMoreMenusStr = "0";
         }
+        isNeedActionBarArrow = args.getBoolean(ARGUMENT_BOOLEAN_NEED_TITLE_BAR_ARROW, isNeedActionBarArrow);
         mHostActivity.setShouldInterceptBackClick(true);
     }
 
-    private void initURLs(String url){
+    private void initURLs(String url) {
         mUrl = url;
         mPreviousURL = extractPreviousFromUrl(mUrl);
         mApppubsMiddleURL = convertUrl(mUrl);
@@ -175,7 +175,7 @@ public class WebAppFragment extends TitleBarFragment implements OnClickListener,
      */
     private String convertUrl(String url) {
         try {
-            url = URLEncoder.encode(url,"utf-8");
+            url = URLEncoder.encode(url, "utf-8");
         } catch (UnsupportedEncodingException e) {
             e.printStackTrace();
         }
@@ -466,6 +466,15 @@ public class WebAppFragment extends TitleBarFragment implements OnClickListener,
             }
         });
 
+        mTitleBarArrow = (ImageView) mRootView.findViewById(R.id.webapp_arrow_iv);
+        mTitleBarArrow.setVisibility(isNeedActionBarArrow ? View.VISIBLE : View.GONE);
+        mTitleBarArrow.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ImageView iv = (ImageView) v;
+                iv.setImageResource(toggleTitleBar() ? R.drawable.header_arrow_up : R.drawable.header_arrow_down);
+            }
+        });
     }
 
     private void awakenAlipay(final String orderStr) {
@@ -623,21 +632,21 @@ public class WebAppFragment extends TitleBarFragment implements OnClickListener,
     }
 
     public void webviewGoBack() {
-        if (!Utils.isEmpty(mPreviousURL)){
-            if (mPreviousURL.equals("main")){
+        if (!Utils.isEmpty(mPreviousURL)) {
+            if (mPreviousURL.equals("main")) {
                 mHostActivity.finish();
-            }else{
+            } else {
                 mWebView.loadUrl(mPreviousURL);
             }
-        }else{
-             if (mWebView.canGoBack()) {
+        } else {
+            if (mWebView.canGoBack()) {
                 if (!isCloseButtonAdded) {
                     addClose();
                 }
-                 mWebView.goBack();
-            }else{
-                 mHostActivity.finish();
-             }
+                mWebView.goBack();
+            } else {
+                mHostActivity.finish();
+            }
         }
     }
 

@@ -89,6 +89,7 @@ public class ViewCourier {
             String titlebarFlag = StringUtils.getQueryParameter(url, "titlebar");
             if (!Utils.isEmpty(titlebarFlag)) {
                 args.putBoolean(WebAppFragment.ARGUMENT_STRING_NEED_TITLEBAR, Utils.compare(titlebarFlag, "1"));
+                args.putBoolean(WebAppFragment.ARGUMENT_BOOLEAN_NEED_TITLE_BAR_ARROW,Utils.compare(titlebarFlag,"2"));
             }
             ContainerActivity.startContainerActivity(mContext, WebAppFragment.class, args);
         } else if (ApppubsProtocol.isApppubsProtocol(url)) {
