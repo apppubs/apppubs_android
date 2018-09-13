@@ -36,7 +36,7 @@ import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.wang.avi.AVLoadingIndicatorView;
 
-public abstract class BaseFragment extends Fragment implements KeyEvent.Callback, OnClickListener,ICommonView{
+public abstract class BaseFragment extends Fragment implements KeyEvent.Callback, OnClickListener, ICommonView {
 
     public static final String ARGS_STRING_TITLE = "fragment_title";
 
@@ -92,7 +92,7 @@ public abstract class BaseFragment extends Fragment implements KeyEvent.Callback
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         Bundle args = getArguments();
-        if (args != null && !Utils.isEmpty(args.getString(ARGS_STRING_TITLE))){
+        if (args != null && !Utils.isEmpty(args.getString(ARGS_STRING_TITLE))) {
             mTitle = args.getString(ARGS_STRING_TITLE);
         }
     }
@@ -118,22 +118,32 @@ public abstract class BaseFragment extends Fragment implements KeyEvent.Callback
         emptyLP.gravity = Gravity.CENTER;
         contentFL.addView(mEmptyView);
 
-        View rootView = null;
-        if (isNeedTitleBar && mTitleBar != null) {
-            LinearLayout ll = new LinearLayout(mContext);
-            ll.setOrientation(LinearLayout.VERTICAL);
+
+        LinearLayout ll = new LinearLayout(mContext);
+        ll.setOrientation(LinearLayout.VERTICAL);
+
+        if (mTitleBar != null) {
             LinearLayout.LayoutParams titleBarLl = new LinearLayout.LayoutParams(LinearLayout
                     .LayoutParams.MATCH_PARENT, Utils.dip2px(mContext, 50));
+            ;
+            if (isNeedTitleBar) {
+                showTitleBar();
+            } else {
+                hideTitleBar();
+            }
             ll.addView(mTitleBar, titleBarLl);
-
-            LinearLayout.LayoutParams contentLP = new LinearLayout.LayoutParams(ViewGroup
-                    .LayoutParams.MATCH_PARENT, 0);
-            contentLP.weight = 1;
-            ll.addView(contentFL, contentLP);
-            rootView = ll;
-        } else {
-            rootView = contentFL;
         }
+
+        LinearLayout.LayoutParams contentLP = new LinearLayout.LayoutParams(ViewGroup
+                .LayoutParams.MATCH_PARENT, 0);
+        contentLP.weight = 1;
+        ll.addView(contentFL, contentLP);
+        View rootView = ll;
+//        if (isNeedTitleBar && mTitleBar != null) {
+//
+//        } else {
+//            rootView = contentFL;
+//        }
         return rootView;
     }
 
@@ -171,6 +181,27 @@ public abstract class BaseFragment extends Fragment implements KeyEvent.Callback
 
     protected TitleBar initTitleBar() {
         return null;
+    }
+
+    protected void showTitleBar() {
+        if (mTitleBar != null) {
+            mTitleBar.setVisibility(View.VISIBLE);
+        }
+    }
+
+    protected void hideTitleBar() {
+        if (mTitleBar != null) {
+            mTitleBar.setVisibility(View.GONE);
+        }
+    }
+
+    protected boolean toggleTitleBar() {
+        if (mTitleBar.getVisibility() == View.VISIBLE) {
+            hideTitleBar();
+        } else {
+            showTitleBar();
+        }
+        return mTitleBar.getVisibility() == View.VISIBLE;
     }
 
     public void setTitle(String title) {
@@ -316,18 +347,18 @@ public abstract class BaseFragment extends Fragment implements KeyEvent.Callback
         mLoadingView.setVisibility(View.GONE);
     }
 
-    public void showEmptyView(){
+    public void showEmptyView() {
         mEmptyView.setVisibility(View.VISIBLE);
     }
 
-    public void hideEmptyView(){
+    public void hideEmptyView() {
         mEmptyView.setVisibility(View.GONE);
     }
 
 
     @Override
     public void showMessage(String message) {
-        Toast.makeText(mContext,message,Toast.LENGTH_LONG).show();
+        Toast.makeText(mContext, message, Toast.LENGTH_LONG).show();
     }
 
     @Override
