@@ -30,11 +30,11 @@ public class VPNViewCourierHelper {
         return sHelper;
     }
 
-    public boolean needVPN(){
+    public boolean needVPN() {
         return needVPN;
     }
 
-    public void setNeedVPN(boolean need){
+    public void setNeedVPN(boolean need) {
         needVPN = need;
     }
 
@@ -44,7 +44,7 @@ public class VPNViewCourierHelper {
             VPNPwdInfo info = VPNBiz.getInstance(mContext).getPwdInfo(vpnId);
             if (null == info) {
                 Intent intent = new Intent(mContext, VPNConfigActivity.class);
-                intent.putExtra(VPNConfigActivity.EXTRA_BOOLEAN_SHOULD_CLOSE,true);
+                intent.putExtra(VPNConfigActivity.EXTRA_BOOLEAN_SHOULD_CLOSE, true);
                 mContext.startActivity(intent);
             } else {
                 openWebApp(url, vpnId);
@@ -67,6 +67,7 @@ public class VPNViewCourierHelper {
         String titlebarFlag = StringUtils.getQueryParameter(url, "titlebar");
         if (!Utils.isEmpty(titlebarFlag)) {
             args.putBoolean(WebAppFragment.ARGUMENT_STRING_NEED_TITLEBAR, Utils.compare(titlebarFlag, "1"));
+            args.putBoolean(WebAppFragment.ARGUMENT_BOOLEAN_NEED_TITLE_BAR_ARROW, Utils.compare(titlebarFlag, "2"));
         }
         args.putString(VPNWebAppFragment.ARGS_STRING_VPN_ID, vpnId);
         ContainerActivity.startContainerActivity(mContext, VPNWebAppFragment.class, args);
