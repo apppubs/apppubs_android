@@ -3,6 +3,7 @@ package com.apppubs.ui.widget;
 import android.content.Context;
 import android.graphics.Color;
 import android.util.AttributeSet;
+import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
@@ -143,20 +144,23 @@ public class UserSelectionBar extends ViewGroup implements View.OnClickListener{
     }
 
     public void addUser(UserBasicInfo userInfo){
-        CircleTextImageView iv = new CircleTextImageView(getContext());
-        ImageLoader.getInstance().displayImage(userInfo.getAtatarUrl(),iv);
-        iv.setText(userInfo.getTrueName());
-        iv.setTextColor(Color.WHITE);
-        int pxFor8dp = Utils.dip2px(getContext(),8);
-        iv.setTextSize((getHeight()-pxFor8dp*2-pxFor8dp)/3);
-        iv.setFillColor(getResources().getColor(R.color.common_btn_bg_gray));
-        LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(getHeight()-pxFor8dp*2,getHeight()-pxFor8dp*2);
+        TextView tv = new TextView(getContext());
+        int pxFor8dp = Utils.dip2px(getContext(), 8);
+        float fontSize = getResources().getDimension(R.dimen.item_text_size_small);
+        tv.setTextSize(TypedValue.COMPLEX_UNIT_PX,fontSize);
+        tv.setTextColor(getResources().getColor(R.color.common_text_gray));
+        tv.setGravity(Gravity.CENTER);
+        tv.setText(userInfo.getTrueName());
+        tv.setBackgroundResource(R.drawable.dept_selection_item_bg);
+        tv.setPadding(15,0,15,0);
+//        tv.setFillColor(getResources().getColor(R.color.common_btn_bg_gray));
+        LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(LayoutParams.WRAP_CONTENT, 48);
         lp.gravity = Gravity.CENTER_VERTICAL;
         lp.leftMargin = pxFor8dp;
-        mUserIconLl.addView(iv,lp);
-        iv.setTag(userInfo.getUserId());
-        iv.setOnClickListener(this);
-        mUserIconMap.put(userInfo.getUserId(),iv);
+        mUserIconLl.addView(tv, lp);
+        tv.setTag(userInfo.getUserId());
+        tv.setOnClickListener(this);
+        mUserIconMap.put(userInfo.getUserId(), tv);
         hideOrShowHintIfNeed();
         updateOkBtn();
         mUserIconSV.post(new Runnable() {

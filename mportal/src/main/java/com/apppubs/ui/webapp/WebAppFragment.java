@@ -294,6 +294,7 @@ public class WebAppFragment extends TitleBarFragment implements OnClickListener,
 
     @SuppressLint({"NewApi", "SetJavaScriptEnabled"})
     private void initComponent(View v) {
+        mTitleBar.setLeftBtnWithImageResourceId(R.drawable.close);
         mWebView = (ProgressWebView) mRootView.findViewById(R.id.webapp_wb);
         mWebView.setInitialScale(1);
         mWebView.setHostActivity(mHostActivity);
@@ -632,20 +633,24 @@ public class WebAppFragment extends TitleBarFragment implements OnClickListener,
     }
 
     public void webviewGoBack() {
-        if (!Utils.isEmpty(mPreviousURL)) {
-            if (mPreviousURL.equals("main")) {
-                mHostActivity.finish();
-            } else {
-                mWebView.loadUrl(mPreviousURL);
-            }
-        } else {
-            if (mWebView.canGoBack()) {
-                if (!isCloseButtonAdded) {
-                    addClose();
+        if (isNeedActionBarArrow){
+            mHostActivity.finish();
+        }else{
+            if (!Utils.isEmpty(mPreviousURL)) {
+                if (mPreviousURL.equals("main")) {
+                    mHostActivity.finish();
+                } else {
+                    mWebView.loadUrl(mPreviousURL);
                 }
-                mWebView.goBack();
             } else {
-                mHostActivity.finish();
+                if (mWebView.canGoBack()) {
+                    if (!isCloseButtonAdded) {
+                        addClose();
+                    }
+                    mWebView.goBack();
+                } else {
+                    mHostActivity.finish();
+                }
             }
         }
     }
