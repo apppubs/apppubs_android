@@ -13,6 +13,7 @@
         android:layout_width="76dp"
         android:layout_height="29dp"
         android:src="@drawable/header_arrow_down"
+        android:scaleType="fitStart"
         android:layout_centerHorizontal="true"
         android:paddingRight="15dp"
         android:paddingLeft="15dp"
