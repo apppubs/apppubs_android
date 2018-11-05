@@ -75,6 +75,9 @@ public class WebAppPresenter {
 
         //分享
         registerShare();
+
+        //OCR
+        registerOCR();
     }
 
 
@@ -365,6 +368,47 @@ public class WebAppPresenter {
                 }
             }
         });
+    }
+
+    private void registerOCR() {
+        mView.getBridgeWebView().registerHandler("startOCR", new BridgeHandler() {
+            @Override
+            public void handler(String data, CallBackFunction function) {
+                System.out.println("startOCR");
+                mPaddingCallbackFunction = function;
+                try {
+                    JSONObject jo = new JSONObject(data);
+                    if (jo.has("inputType")) {
+                        mView.startOCR("camera".equals(jo.getString("inputType")) ? 0 : 1);
+                    } else {
+                        mView.startOCR(0);
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+        });
+    }
+
+    public void onOCRComplete(List<String> resultList){
+
+        String strField[] = {"发票代码 ：", "发票号码 ：", "开票日期 ：", "购方识别号 ：", "销方识别号 ：",
+                "价税合计 ：", "金额合计 ：", "税额合计 ：", "校验码 ：", "购方名称 ：", "销方名称 ："
+                , "大写金额 ：", "货物名称 ：", "货物税率 ：", "打印发票代码 ：", "打印发票号码 ：", "发票联次 ：", "发票类型 ："};
+
+        JSONObject jo = new JSONObject();
+        try {
+            jo.put("code", 0);
+            jo.put("msg", "识别成功！");
+            JSONObject result = new JSONObject();
+            for (int i=-1;++i<strField.length;){
+                result.put(strField[i],resultList.get(i));
+            }
+            jo.put("result", result);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        mPaddingCallbackFunction.onCallBack(jo.toString());
     }
 
     public void onSignatureDone(String result) {

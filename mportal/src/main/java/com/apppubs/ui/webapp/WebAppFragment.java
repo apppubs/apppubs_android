@@ -61,6 +61,7 @@ import com.apppubs.util.SystemUtils;
 import com.apppubs.util.Utils;
 import com.apppubs.vpn.VPNBiz;
 import com.apppubs.vpn.VPNViewCourierHelper;
+import com.etop.VATDetectLine.activity.VatRecogActivity;
 import com.jelly.mango.ImageSelectListener;
 import com.jelly.mango.Mango;
 import com.jelly.mango.MultiplexImage;
@@ -96,6 +97,8 @@ public class WebAppFragment extends TitleBarFragment implements OnClickListener,
     private final String JS_MENU_ITEM_REFRESH = "menu_item_refresh";
 
     private static final int SDK_PAY_FLAG = 1;
+
+    private static final int REQUEST_CODE_OCR = 103;
 
     private String mUrl;
     private String mPreviousURL;
@@ -787,6 +790,9 @@ public class WebAppFragment extends TitleBarFragment implements OnClickListener,
         } else if (requestCode == REQUEST_CODE_QRCODE && resultCode == Activity.RESULT_OK) {
             String result = data.getStringExtra(CaptureActivity.EXTRA_NAME_STRING_RESULT);
             mPresenter.onQRCodeDone(result);
+        } else if(requestCode == REQUEST_CODE_OCR && resultCode == Activity.RESULT_OK){
+            List result = data.getStringArrayListExtra(VatRecogActivity.EXTRA_RESULT_STRING_LIST);
+            mPresenter.onOCRComplete(result);
         }
     }
 
@@ -935,6 +941,13 @@ public class WebAppFragment extends TitleBarFragment implements OnClickListener,
     @Override
     public void checkUpdate() {
         executeURL("apppubs://" + Constants.APPPUBS_PROTOCOL_TYPE_CHECK_VERSION);
+    }
+
+    @Override
+    public void startOCR(int type) {
+        Intent intent = new Intent(getContext(),VatRecogActivity.class);
+        intent.putExtra(VatRecogActivity.EXTRA_INT_TYPE,type);
+        startActivityForResult(intent,REQUEST_CODE_OCR);
     }
 
     private void dim() {

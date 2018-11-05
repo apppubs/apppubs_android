@@ -456,6 +456,8 @@
             android:name="com.apppubs.ui.activity.ServiceNOArticlesActivity"
             android:launchMode="singleTask"
             android:screenOrientation="portrait" />
+        <activity android:name="com.etop.VATDetectLine.activity.VatRecogActivity">
+        </activity>
 
         <!-- Required  SDK核心功能 -->
         <service

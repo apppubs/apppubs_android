@@ -24,4 +24,6 @@ public interface IWebAppView {
     void showScanQRCode(boolean needSelfResolve);
 
     void checkUpdate();
+
+    void startOCR(int type);
 }
