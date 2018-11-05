@@ -192,6 +192,7 @@ public class VatRecogActivity extends BaseActivity {
                         runOnUiThread(new Runnable() {
                             @Override
                             public void run() {
+                                mResultList = new ArrayList<>();
                                 // 0 ：代表识别成功
                                 if (nRet == 0) {
                                     for (int i = 1; i < 18; i++) {
