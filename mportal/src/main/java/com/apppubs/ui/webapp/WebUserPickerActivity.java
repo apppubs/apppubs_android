@@ -124,6 +124,7 @@ public class WebUserPickerActivity extends BaseActivity implements IWebUserPicke
                 }
             });
         }
+        showRightBtnText(false,false,"全选");
     }
 
     @Override
@@ -137,6 +138,8 @@ public class WebUserPickerActivity extends BaseActivity implements IWebUserPicke
                 mPresenter.onUserItemClick(mUsers.get(position));
             }
         });
+
+        showRightBtnText(true, true, isAllChecked(users) ? "取消" : "全选");
     }
 
     @Override
@@ -159,6 +162,18 @@ public class WebUserPickerActivity extends BaseActivity implements IWebUserPicke
             mUserAdapter.setData(users);
             mUserAdapter.notifyDataSetChanged();
         }
+
+        showRightBtnText(true, true, isAllChecked(users) ? "取消" : "全选");
+    }
+
+    private boolean isAllChecked(List<UserModel> users) {
+        boolean isALlUserChecked = true;
+        for (UserModel u : users) {
+            if (!u.isPreSelected() && !u.isSelected()) {
+                isALlUserChecked = false;
+            }
+        }
+        return isALlUserChecked;
     }
 
     @Override
@@ -308,9 +323,9 @@ public class WebUserPickerActivity extends BaseActivity implements IWebUserPicke
 
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                if (isDeptSelect){
+                if (isDeptSelect) {
                     mPresenter.onSearchDeptItemClick(mSearchDeptResults.get(position));
-                }else{
+                } else {
                     mPresenter.onSearchUserItemClick(mSearchResults.get(position));
                 }
             }
@@ -368,9 +383,9 @@ public class WebUserPickerActivity extends BaseActivity implements IWebUserPicke
                     holder.getView(R.id.item_web_user_picker_content_ll).setVisibility(View.VISIBLE);
                     ((TextView) holder.getView(R.id.item_web_user_picker_name_tv)).setText(bean.getName());
                     ImageView arrow = holder.getView(R.id.item_web_user_picker_arrow);
-                    if (bean.isLeaf()){
+                    if (bean.isLeaf()) {
                         arrow.setVisibility(View.GONE);
-                    }else{
+                    } else {
                         arrow.setVisibility(View.VISIBLE);
                     }
                     ImageView checkBtn = holder.getView(R.id.item_web_user_picker_check_btn);
@@ -427,7 +442,8 @@ public class WebUserPickerActivity extends BaseActivity implements IWebUserPicke
         mPresenter.onCreate();
     }
 
-    private boolean isUserListShow() {
+    @Override
+    public boolean isUserListShow() {
         return mLv.getAdapter() == mUserAdapter;
     }
 
@@ -443,6 +459,26 @@ public class WebUserPickerActivity extends BaseActivity implements IWebUserPicke
             } else {
                 checkBtnIv.setSelected(false);
                 checkBtnIv.clearColorFilter();
+            }
+        }
+    }
+
+    @Override
+    public void showRightBtnText(boolean isShow, boolean enable, String text) {
+        if (isShow) {
+            getTitleBar().setRightBtnWithText(text);
+            getTitleBar().getRightView().setVisibility(View.VISIBLE);
+            getTitleBar().setRightBtnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    mPresenter.onRightBtnClicked(text);
+                }
+            });
+        } else {
+
+            View view = getTitleBar().getRightView();
+            if (view != null) {
+                view.setVisibility(View.GONE);
             }
         }
     }

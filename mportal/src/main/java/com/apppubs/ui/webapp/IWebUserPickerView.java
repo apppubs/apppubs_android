@@ -58,4 +58,8 @@ public interface IWebUserPickerView extends ICommonView {
     WebUserPickerActivity.DeptPickerListener getDeptPickerListener();
 
     void finishActivity();
+
+    boolean isUserListShow();
+
+    void showRightBtnText(boolean isShow, boolean enable, String text);
 }

@@ -111,7 +111,7 @@ public class WebUserPickerPresenter {
     }
 
     public void onSearchDeptItemClick(SearchDeptHttpResult searchDeptHttpResult) {
-        if (searchDeptHttpResult.isPreSelected()){
+        if (searchDeptHttpResult.isPreSelected()) {
             return;
         }
         DeptPickerDTO dto = mView.getDeptPickerDTO();
@@ -172,7 +172,6 @@ public class WebUserPickerPresenter {
 
     public void onRemoveSelecedtUser(String userId) {
         removeSelectedUser(userId);
-        mView.removeSelectedBarUser(userId);
         mView.refreshUserList(resolveUsersVOList(mUserList));
     }
 
@@ -189,6 +188,24 @@ public class WebUserPickerPresenter {
             searchDept(searchText, 1, 20);
         } else {
             searchUsers(searchText, 1, 20);
+        }
+    }
+
+    public void onRightBtnClicked(String curText) {
+        if("全选".equals(curText)){
+            for (UserModel user : mUserList){
+                if (!user.isSelected()&&!user.isPreSelected()){
+                    addSelectedUser(user);
+                    mView.addSelectedBarUser(user);
+                }
+            }
+            refreshUserAndSearchLv();
+        }else{
+            for (UserModel user : mUserList){
+                removeSelectedUser(user.getId());
+                mView.removeSelectedBarUser(user.getId());
+            }
+            refreshUserAndSearchLv();
         }
     }
 
@@ -513,6 +530,10 @@ public class WebUserPickerPresenter {
             }
         }
         mSelectedUserList.remove(userWaitingRemove);
+    }
+
+    private void addSelectedUser(UserModel user){
+        mSelectedUserList.add(user);
     }
 
     private void done() {

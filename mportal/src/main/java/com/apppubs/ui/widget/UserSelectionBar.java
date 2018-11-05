@@ -23,6 +23,7 @@ import com.nostra13.universalimageloader.core.ImageLoader;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 /**
  * Created by zhangwen on 2017/1/7.
@@ -144,6 +145,9 @@ public class UserSelectionBar extends ViewGroup implements View.OnClickListener{
     }
 
     public void addUser(UserBasicInfo userInfo){
+        if (containsUser(userInfo.getUserId())){
+            return;
+        }
         TextView tv = new TextView(getContext());
         int pxFor8dp = Utils.dip2px(getContext(), 8);
         float fontSize = getResources().getDimension(R.dimen.item_text_size_small);
@@ -169,6 +173,11 @@ public class UserSelectionBar extends ViewGroup implements View.OnClickListener{
                 mUserIconSV.fullScroll(ScrollView.FOCUS_RIGHT);
             }
         });
+    }
+
+    private boolean containsUser(String userId) {
+        Set keys = mUserIconMap.keySet();
+        return keys.contains(userId);
     }
 
     public void addUsers(List<UserBasicInfo> users){

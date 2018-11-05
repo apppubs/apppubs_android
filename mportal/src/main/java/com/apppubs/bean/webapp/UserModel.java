@@ -8,6 +8,7 @@ public class UserModel {
 
     private String id;
     private String name;
+    private String extra;
     private boolean isSelected;
     private boolean isPreSelected;
 
@@ -25,6 +26,14 @@ public class UserModel {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public String getExtra() {
+        return extra;
+    }
+
+    public void setExtra(String extra) {
+        this.extra = extra;
     }
 
     public boolean isSelected() {

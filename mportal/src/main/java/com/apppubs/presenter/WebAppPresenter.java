@@ -119,6 +119,7 @@ public class WebAppPresenter {
                                 JSONObject j = new JSONObject();
                                 j.put("id", uv.getId());
                                 j.put("name", uv.getName());
+                                j.put("extra",uv.getExtra());
                                 items.put(j);
                             }
                             result.put("items", items);
