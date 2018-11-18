@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.support.annotation.NonNull;
+import android.widget.Toast;
 
 import com.apppubs.AppContext;
 import com.apppubs.AppManager;
@@ -18,6 +19,7 @@ import com.apppubs.model.SystemBiz;
 import com.apppubs.ui.webapp.IWebAppView;
 import com.apppubs.ui.webapp.WebUserPickerActivity;
 import com.apppubs.util.LogM;
+import com.google.gson.JsonObject;
 import com.jelly.mango.MultiplexImage;
 import com.tencent.mm.opensdk.modelmsg.SendMessageToWX;
 import com.tencent.mm.opensdk.modelmsg.WXMediaMessage;
@@ -78,6 +80,9 @@ public class WebAppPresenter {
 
         //OCR
         registerOCR();
+
+        //影像TIMS
+        registerTIMS();
     }
 
 
@@ -119,7 +124,7 @@ public class WebAppPresenter {
                                 JSONObject j = new JSONObject();
                                 j.put("id", uv.getId());
                                 j.put("name", uv.getName());
-                                j.put("extra",uv.getExtra());
+                                j.put("extra", uv.getExtra());
                                 items.put(j);
                             }
                             result.put("items", items);
@@ -391,7 +396,26 @@ public class WebAppPresenter {
         });
     }
 
-    public void onOCRComplete(List<String> resultList){
+    private void registerTIMS() {
+        mView.getBridgeWebView().registerHandler("startTIMS", new BridgeHandler() {
+            @Override
+            public void handler(String data, CallBackFunction function) {
+                System.out.println("startTIMS");
+                mPaddingCallbackFunction = function;
+                try {
+                    JSONObject jo = new JSONObject(data);
+                    JSONObject info = jo.getJSONObject("info");
+                    mView.startTIMS(jo.getString("serverURL"), info.getString("userNo"), info.getString
+                            ("bussinessNo"), info.getString("billNum"), info.getInt("authority"));
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                    Toast.makeText(mContext, "参数错误", Toast.LENGTH_LONG).show();
+                }
+            }
+        });
+    }
+
+    public void onOCRComplete(List<String> resultList) {
 
         String strField[] = {"发票代码 ：", "发票号码 ：", "开票日期 ：", "购方识别号 ：", "销方识别号 ：",
                 "价税合计 ：", "金额合计 ：", "税额合计 ：", "校验码 ：", "购方名称 ：", "销方名称 ："
@@ -402,8 +426,8 @@ public class WebAppPresenter {
             jo.put("code", 0);
             jo.put("msg", "识别成功！");
             JSONObject result = new JSONObject();
-            for (int i=-1;++i<strField.length;){
-                result.put(strField[i],resultList.get(i));
+            for (int i = -1; ++i < strField.length; ) {
+                result.put(strField[i], resultList.get(i));
             }
             jo.put("result", result);
         } catch (JSONException e) {

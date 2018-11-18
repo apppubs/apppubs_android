@@ -58,7 +58,7 @@ public class VatRecogActivity extends BaseActivity {
     private int type;
 
     private EInvoiceAPI eiapi = null;
-    private String UserID = VatConstantUtil.getUserId();
+    private String UserID;
     private ProgressDialog progress;
 
     private LinearLayout mContainerLL;
@@ -125,6 +125,7 @@ public class VatRecogActivity extends BaseActivity {
     private void initOCR() {
         //1.设置授权名称
         VatConstantUtil.setUserId("1D06FE3623544DC2D3A0");
+        UserID = VatConstantUtil.getUserId();
         //2.将授权文件写入到手机目录中，初始化核心必要操作
         try {
             VatStreamUtil.copyDataBase(this);

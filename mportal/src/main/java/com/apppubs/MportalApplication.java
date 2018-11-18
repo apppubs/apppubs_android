@@ -27,6 +27,8 @@ import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
 import com.orm.SugarContext;
+import com.tchzt.tchzt_caiji.ImagePicManager;
+import com.tchzt.yingxiangzhanshi.activity.TIMS_BusiOper;
 import com.tencent.mm.opensdk.openapi.IWXAPI;
 import com.tencent.mm.opensdk.openapi.WXAPIFactory;
 
@@ -78,6 +80,9 @@ public class MportalApplication extends MultiDexApplication {
 		}
 
 		initDefaultExceptionHandler();
+
+		ImagePicManager.getInstance().init("2549F474F2483E34");
+		TIMS_BusiOper.getInstance().init(this,"1520559958754");
 	}
 
 	private void initAppForMainProcess() {

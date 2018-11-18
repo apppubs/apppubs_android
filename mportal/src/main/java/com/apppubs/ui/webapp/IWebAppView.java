@@ -26,4 +26,6 @@ public interface IWebAppView {
     void checkUpdate();
 
     void startOCR(int type);
+
+    void startTIMS(String url, String userNum, String bussinessNum, String billNum, int authority);
 }

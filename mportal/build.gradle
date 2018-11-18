@@ -2,7 +2,7 @@ apply plugin: 'com.android.application'
 
 android {
     compileSdkVersion 23
-    buildToolsVersion '27.0.3'
+    buildToolsVersion '28.0.3'
 
     defaultConfig {
         applicationId "com.apppubs.d20"
@@ -76,6 +76,13 @@ android {
     lintOptions { checkReleaseBuilds false }
 }
 
+//添加
+repositories {
+    flatDir {
+        dirs 'libs','../yingxiangzhanshisdk/libs'
+    }
+}
+
 dependencies {
     implementation fileTree(include: ['*.jar'], dir: 'libs')
     implementation project(':sugar_orm')
@@ -138,4 +145,31 @@ dependencies {
     androidTestImplementation 'com.android.support.test:rules:0.5'
     androidTestImplementation 'com.android.support.test.espresso:espresso-core:2.2.2'
     implementation files('libs/SangforSDK.jar')
+    implementation fileTree(include: ['*.jar'], dir: 'libs')
+    implementation "com.android.support:appcompat-v7:{$ANDROID_SUPPORT_VERSION}"
+    implementation 'com.android.support.constraint:constraint-layout:1.0.2'
+    testImplementation 'junit:junit:4.12'
+    androidTestImplementation 'com.android.support.test:runner:1.0.1'
+    androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.1'
+    compile 'cn.carbswang.android:NumberPickerView:1.1.1'
+    compile 'com.google.code.gson:gson:2.2.4'
+    compile 'org.xutils:xutils:3.5.0'
+    compile 'org.greenrobot:eventbus:3.0.0'
+    compile 'org.xutils:xutils:3.5.0'
+    compile "com.android.support:recyclerview-v7:{$ANDROID_SUPPORT_VERSION}"
+    compile 'com.google.code.gson:gson:2.2.4'
+    compile 'com.github.hackware1993:MagicIndicator:1.4.0'
+    compile 'com.github.rey5137:material:1.2.2'
+    compile 'de.hdodenhof:circleimageview:2.1.0'
+
+    testCompile 'junit:junit:4.12'
+    compile 'com.github.lazylibrary:lazylibrary:1.0.2'
+    compile 'cn.carbswang.android:NumberPickerView:1.1.1'
+    compile 'net.yslibrary.keyboardvisibilityevent:keyboardvisibilityevent:2.0.0'
+    implementation(name: 'tchzt_caiji', ext: 'aar') {
+        exclude group: 'com.google.zxing', module: 'core'
+    }
+    compile(name: 'library', ext: 'aar')
+    compile(name: 'calendar', ext: 'aar')
+    implementation(name: 'TIMS_BusiOper', ext: 'aar')
 }

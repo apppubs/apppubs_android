@@ -65,6 +65,7 @@ import com.etop.VATDetectLine.activity.VatRecogActivity;
 import com.jelly.mango.ImageSelectListener;
 import com.jelly.mango.Mango;
 import com.jelly.mango.MultiplexImage;
+import com.tchzt.yingxiangzhanshi.activity.TIMS_BusiOper;
 import com.tencent.mm.opensdk.modelpay.PayReq;
 
 import org.json.JSONArray;
@@ -730,7 +731,7 @@ public class WebAppFragment extends TitleBarFragment implements OnClickListener,
     @Override
     public void onStart() {
         super.onStart();
-        if (VPNViewCourierHelper.getInstance(mContext).needVPN()){
+        if (VPNViewCourierHelper.getInstance(mContext).needVPN()) {
             VPNBiz.getInstance(mContext).addCounter();
         }
     }
@@ -746,7 +747,7 @@ public class WebAppFragment extends TitleBarFragment implements OnClickListener,
     public void onStop() {
         super.onStop();
 //		mWebView.stopLoading();
-        if (VPNViewCourierHelper.getInstance(mContext).needVPN()){
+        if (VPNViewCourierHelper.getInstance(mContext).needVPN()) {
             VPNBiz.getInstance(mContext).reduceCounter();
         }
     }
@@ -790,7 +791,7 @@ public class WebAppFragment extends TitleBarFragment implements OnClickListener,
         } else if (requestCode == REQUEST_CODE_QRCODE && resultCode == Activity.RESULT_OK) {
             String result = data.getStringExtra(CaptureActivity.EXTRA_NAME_STRING_RESULT);
             mPresenter.onQRCodeDone(result);
-        } else if(requestCode == REQUEST_CODE_OCR && resultCode == Activity.RESULT_OK){
+        } else if (requestCode == REQUEST_CODE_OCR && resultCode == Activity.RESULT_OK) {
             List result = data.getStringArrayListExtra(VatRecogActivity.EXTRA_RESULT_STRING_LIST);
             mPresenter.onOCRComplete(result);
         }
@@ -945,9 +946,14 @@ public class WebAppFragment extends TitleBarFragment implements OnClickListener,
 
     @Override
     public void startOCR(int type) {
-        Intent intent = new Intent(getContext(),VatRecogActivity.class);
-        intent.putExtra(VatRecogActivity.EXTRA_INT_TYPE,type);
-        startActivityForResult(intent,REQUEST_CODE_OCR);
+        Intent intent = new Intent(getContext(), VatRecogActivity.class);
+        intent.putExtra(VatRecogActivity.EXTRA_INT_TYPE, type);
+        startActivityForResult(intent, REQUEST_CODE_OCR);
+    }
+
+    @Override
+    public void startTIMS(String url, String userNum, String bussinessNum, String billNum, int authority) {
+        TIMS_BusiOper.getInstance().start(getContext(), url, userNum, bussinessNum, billNum, authority);
     }
 
     private void dim() {
