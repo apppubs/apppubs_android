@@ -1,13 +1,13 @@
 apply plugin: 'com.android.application'
 
 android {
-    compileSdkVersion 27
-    buildToolsVersion '27.0.3'
+    compileSdkVersion "${COMPILE_SDK_VERSION}"
+    buildToolsVersion '28.0.3'
 
     defaultConfig {
         applicationId "com.apppubs.d20"
         minSdkVersion 14
-        targetSdkVersion 22
+        targetSdkVersion "${TARGET_SDK_ERSION}"
         versionCode 20200001
         versionName "1.0.0"
         resValue "string", "app_name", "移动平台"
