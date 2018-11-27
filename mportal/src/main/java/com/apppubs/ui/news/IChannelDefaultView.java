@@ -7,5 +7,6 @@ import java.util.List;
 
 public interface IChannelDefaultView extends ICommonRefreshListView<TNewsInfo> {
 
+    boolean isDestoryed();
 
 }
