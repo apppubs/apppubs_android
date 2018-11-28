@@ -191,7 +191,7 @@ public class ServiceNOArticlesFragment extends TitleBarFragment implements IServ
 			String dotime = StringUtils.getCommmentDate1(history.getCreateTime(), new Date());
 			holder.comment.setText(dotime);
 			holder.sendTimeTv.setText(sdf.format(history.getCreateTime()));
-			if(history.getFlag() == TServiceNOInfo.TYPE_NONE_CONTENT){
+			if(TextUtils.isEmpty(history.getLinkURL())){
 				holder.detailLl.setVisibility(View.GONE);
 			}else{
 				holder.detailLl.setVisibility(View.VISIBLE);
@@ -203,13 +203,7 @@ public class ServiceNOArticlesFragment extends TitleBarFragment implements IServ
 				public void onClick(View arg0) {
 
 					// 需要根据不同类型进行不通动作
-					String url = null;
-					if (history.getFlag() == TServiceNOInfo.TYPE_NORMAL) {
-						url = String.format(URLs.URL_SERVICEINFO,URLs.baseURL,URLs.appCode) + "&serviceinfo_id=" + history.getArticleId() + "&service_id="
-								+ mServiceNoId;
-					} else if (history.getFlag() == TServiceNOInfo.TYPE_LINK) {
-						url = history.getLinkURL();
-					}
+					String url = history.getLinkURL();;
 					if (!TextUtils.isEmpty(url)) {
 						Bundle extras = new Bundle();
 						extras.putString(WebAppFragment.ARGUMENT_STRING_URL, url);

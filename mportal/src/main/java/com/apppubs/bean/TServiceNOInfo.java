@@ -9,10 +9,6 @@ import com.orm.dsl.Table;
 @Table(name="service_no_info")
 public class TServiceNOInfo extends SugarRecord {
 	
-	public static final int TYPE_NORMAL = 1;//图文
-	public static final int TYPE_LINK = 2;//链接
-	public static final int TYPE_NONE_CONTENT = 3;//没有正文
-	
 	/**
 	 * serviceinfo_id 消息ID 
 	 * serviceinfo_titl 消息标题
