@@ -30,7 +30,9 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Created by zhangwen on 2018/1/8.
@@ -415,20 +417,47 @@ public class WebAppPresenter {
         });
     }
 
-    public void onOCRComplete(List<String> resultList) {
+    public void onOCRComplete(int code, Map<String, String> resultMap) {
+        Map<Integer,String> errMsg = new HashMap<>();
+        errMsg.put(0,"识别成功！");
+        errMsg.put(1,"加载图像失败");
+        errMsg.put(2,"预处理失败");
+        errMsg.put(3,"识别失败");
+        errMsg.put(4,"装载核心失败");
+        errMsg.put(6,"裁切失败");
+        errMsg.put(31,"检测到的图像过小");
+        errMsg.put(33,"检线失败");
+        errMsg.put(20,"不支持的产品型号");
+        errMsg.put(21,"授权文件损坏");
+        errMsg.put(22,"此公司未授权");
+        errMsg.put(23,"无效的授权");
+        errMsg.put(24,"此项目未授权");
+        errMsg.put(25,"使用期限已到");
+        errMsg.put(32,"正在检线");
+        errMsg.put(34,"发票清晰度不够或不是发票");
+        JSONObject jo = new JSONObject();
+        try {
+            jo.put("code", code);
+            jo.put("msg", errMsg.get(code));
+            JSONObject result = new JSONObject();
+            if (resultMap != null) {
+                for (String key : resultMap.keySet()) {
+                    result.put(key, resultMap.get(key));
+                }
+            }
+            jo.put("result", result);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        mPaddingCallbackFunction.onCallBack(jo.toString());
+    }
 
-        String strField[] = {"发票代码 ：", "发票号码 ：", "开票日期 ：", "购方识别号 ：", "销方识别号 ：",
-                "价税合计 ：", "金额合计 ：", "税额合计 ：", "校验码 ：", "购方名称 ：", "销方名称 ："
-                , "大写金额 ：", "货物名称 ：", "货物税率 ：", "打印发票代码 ：", "打印发票号码 ：", "发票联次 ：", "发票类型 ："};
-
+    public void onTIMSComplete(){
         JSONObject jo = new JSONObject();
         try {
             jo.put("code", 0);
-            jo.put("msg", "识别成功！");
+            jo.put("msg", "提交完成");
             JSONObject result = new JSONObject();
-            for (int i = -1; ++i < strField.length; ) {
-                result.put(strField[i], resultList.get(i));
-            }
             jo.put("result", result);
         } catch (JSONException e) {
             e.printStackTrace();

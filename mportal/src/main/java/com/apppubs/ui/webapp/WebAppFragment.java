@@ -792,8 +792,9 @@ public class WebAppFragment extends TitleBarFragment implements OnClickListener,
             String result = data.getStringExtra(CaptureActivity.EXTRA_NAME_STRING_RESULT);
             mPresenter.onQRCodeDone(result);
         } else if (requestCode == REQUEST_CODE_OCR && resultCode == Activity.RESULT_OK) {
-            List result = data.getStringArrayListExtra(VatRecogActivity.EXTRA_RESULT_STRING_LIST);
-            mPresenter.onOCRComplete(result);
+            int code = data.getIntExtra(VatRecogActivity.EXTRA_RESULT_INTEGER_CODE,0);
+            Map<String,String> result = (Map<String, String>) data.getSerializableExtra(VatRecogActivity.EXTRA_RESULT_STRING_MAP);
+            mPresenter.onOCRComplete(code, result);
         }
     }
 
@@ -954,6 +955,12 @@ public class WebAppFragment extends TitleBarFragment implements OnClickListener,
     @Override
     public void startTIMS(String url, String userNum, String bussinessNum, String billNum, int authority) {
         TIMS_BusiOper.getInstance().start(getContext(), url, userNum, bussinessNum, billNum, authority);
+        TIMS_BusiOper.getInstance().setOnDestoryListener(new TIMS_BusiOper.onDestoryListener() {
+            @Override
+            public void onDestory() {
+                mPresenter.onTIMSComplete();
+            }
+        });
     }
 
     private void dim() {

@@ -5,10 +5,11 @@
     android:orientation="horizontal"
     android:paddingLeft="@dimen/app_padding_left"
     android:paddingRight="@dimen/app_padding_right"
+    android:paddingTop="10dp"
     >
     <TextView
         android:id="@+id/item_act_vat_recog_tv"
-        android:layout_width="110dp"
+        android:layout_width="90dp"
         android:layout_height="match_parent"
         android:text="标签"
         android:textSize="@dimen/item_text_size"

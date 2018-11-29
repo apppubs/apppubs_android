@@ -8,6 +8,7 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Debug;
 import android.os.Environment;
 import android.provider.MediaStore;
 import android.telephony.TelephonyManager;
@@ -33,7 +34,9 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * ocr识别
@@ -44,12 +47,14 @@ public class VatRecogActivity extends BaseActivity {
     public static final int TYPE_GALLERY = 1;
 
     public static final String EXTRA_INT_TYPE = "extra_int_type";
-    public static final String EXTRA_RESULT_STRING_LIST = "list_result";
+    public static final String EXTRA_RESULT_STRING_MAP = "list_result";
+    public static final String EXTRA_RESULT_INTEGER_CODE = "result_code";
 
     private final int REQUEST_CODE_TAKE_PHOTO = 1;
     private final int REQUEST_CODE_GET_IMG_FROM_GALLERY = 2;
 
-    private ArrayList<String> mResultList = null;
+    //    private ArrayList<String> mResultList = null;
+    private Map<String, String> mResultMap;
     private Bitmap compsBmp;
     private String fileImgPath;
     private File tempImgFile;
@@ -62,6 +67,12 @@ public class VatRecogActivity extends BaseActivity {
     private ProgressDialog progress;
 
     private LinearLayout mContainerLL;
+
+    String mRawKeyField[] = {"发票代码", "发票号码", "开票日期", "购方识别号", "销方识别号",
+            "价税合计", "开票金额", "开票税额", "校验码", "购方名称", "销方名称"
+            , "大写金额", "货物名称", "货物税率", "打印发票代码", "打印发票号码", "发票联次", "发票类型"};
+    private String mKeyFields[] = {"发票类型", "发票代码", "发票号码", "开票日期", "购方名称", "购方识别号", "销方名称", "销方识别号", "开票金额", "开票税额",
+            "价税合计", "校验码"};
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -81,12 +92,17 @@ public class VatRecogActivity extends BaseActivity {
         titlebar.setRightBtnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent();
-                intent.putStringArrayListExtra(EXTRA_RESULT_STRING_LIST, mResultList);
-                VatRecogActivity.this.setResult(RESULT_OK, intent);
-                VatRecogActivity.this.finish();
+                finishActivity(0, getDisplayResultMap());
             }
         });
+    }
+
+    private void finishActivity(int code, HashMap<String, String> result) {
+        Intent intent = new Intent();
+        intent.putExtra(EXTRA_RESULT_STRING_MAP, result);
+        intent.putExtra(EXTRA_RESULT_INTEGER_CODE, code);
+        VatRecogActivity.this.setResult(RESULT_OK, intent);
+        VatRecogActivity.this.finish();
     }
 
     private void startGetImg() {
@@ -193,7 +209,7 @@ public class VatRecogActivity extends BaseActivity {
                         runOnUiThread(new Runnable() {
                             @Override
                             public void run() {
-                                mResultList = new ArrayList<>();
+                                List mResultList = new ArrayList<>();
                                 // 0 ：代表识别成功
                                 if (nRet == 0) {
                                     for (int i = 1; i < 18; i++) {
@@ -210,10 +226,10 @@ public class VatRecogActivity extends BaseActivity {
                                     } else if (fplx.equals("10")) {
                                         mResultList.add("电子普通发票");
                                     }
-                                    displayResult(mResultList);
+                                    mResultMap = convert2Map(mResultList);
+                                    displayResult();
                                 } else {
-                                    Toast.makeText(VatRecogActivity.this,"识别失败，ErrorCode：" + nRet,Toast.LENGTH_LONG).show();
-                                    VatRecogActivity.this.finish();
+                                    finishActivity(nRet, null);
                                 }
                                 if (progress != null) progress.dismiss();
                             }
@@ -242,7 +258,8 @@ public class VatRecogActivity extends BaseActivity {
                 filePath = imageFileUri.getPath();
             }
             fileImgPath = filePath;
-            mResultList = new ArrayList<>();
+            List mResultList = new ArrayList<>();
+            mResultMap = new HashMap<>();
             if (eiapi != null) {
                 progress = ProgressDialog.show(VatRecogActivity.this, "", "正在识别...");
                 new Thread(new Runnable() {
@@ -269,12 +286,10 @@ public class VatRecogActivity extends BaseActivity {
                                     } else if (fplx.equals("10")) {
                                         mResultList.add("电子普通发票");
                                     }
-                                    Intent intent = new Intent();
-                                    intent.putStringArrayListExtra(EXTRA_RESULT_STRING_LIST, mResultList);
-                                    displayResult(mResultList);
+                                    mResultMap = convert2Map(mResultList);
+                                    displayResult();
                                 } else {
-                                    Toast.makeText(VatRecogActivity.this,"识别失败，ErrorCode：" + nRet,Toast.LENGTH_LONG).show();
-                                    VatRecogActivity.this.finish();
+                                    finishActivity(nRet, null);
                                 }
                                 if (progress != null) progress.dismiss();
                             }
@@ -287,17 +302,30 @@ public class VatRecogActivity extends BaseActivity {
         }
     }
 
-    private void displayResult(List<String> resultList) {
-        String strField[] = {"发票代码 ：", "发票号码 ：", "开票日期 ：", "购方识别号 ：", "销方识别号 ：",
-                "价税合计 ：", "金额合计 ：", "税额合计 ：", "校验码 ：", "购方名称 ：", "销方名称 ："
-                , "大写金额 ：", "货物名称 ：", "货物税率 ：", "打印发票代码 ：", "打印发票号码 ：", "发票联次 ：", "发票类型 ："};
-        for (int i = -1; ++i < strField.length; ) {
+    private Map<String, String> convert2Map(List<String> arr) {
+        Map<String, String> result = new HashMap<>();
+        for (int i = -1; ++i < arr.size(); ) {
+            result.put(mRawKeyField[i], arr.get(i));
+        }
+        return result;
+    }
+
+    private HashMap<String, String> getDisplayResultMap() {
+        HashMap<String, String> displayResultMap = new HashMap<>();
+        for (String key : mKeyFields) {
+            displayResultMap.put(key, mResultMap.get(key));
+        }
+        return displayResultMap;
+    }
+
+    private void displayResult() {
+        for (int i = -1; ++i < mKeyFields.length; ) {
             View item = LayoutInflater.from(this).inflate(R.layout.item_act_vat_recog_ll, null);
             TextView tv = (TextView) item.findViewById(R.id.item_act_vat_recog_tv);
-            tv.setText(strField[i]);
+            tv.setText(mKeyFields[i]);
             EditText et = (EditText) item.findViewById(R.id.item_act_vat_recog_et);
-            et.setText(resultList.get(i));
-            et.setTag(i);
+            et.setText(mResultMap.get(mKeyFields[i]));
+            et.setTag(mKeyFields[i]);
             et.addTextChangedListener(new TextWatcher() {
                 @Override
                 public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -311,7 +339,7 @@ public class VatRecogActivity extends BaseActivity {
 
                 @Override
                 public void afterTextChanged(Editable s) {
-                    mResultList.set(Integer.parseInt(et.getTag().toString()), s.toString());
+                    mResultMap.put(et.getTag().toString(), s.toString());
                 }
             });
             mContainerLL.addView(item);
