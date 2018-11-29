@@ -1,14 +1,14 @@
 apply plugin: 'com.android.application'
 
 android {
-    compileSdkVersion 27
-    buildToolsVersion '27.0.3'
+    compileSdkVersion "${COMPILE_SDK_VERSION}"
+    buildToolsVersion '28.0.3'
 
     defaultConfig {
         applicationId "com.apppubs.d20"
         minSdkVersion 14
-        targetSdkVersion 22
-        versionCode 20300003
+        targetSdkVersion "${TARGET_SDK_ERSION}"
+        versionCode 20300004
         versionName "3.3.0"
         resValue "string", "app_name", "国投移动门户"
         buildConfigField "boolean", "ENABLE_CHAT", "true"

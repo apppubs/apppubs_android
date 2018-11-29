@@ -205,11 +205,7 @@ public class PageFragment extends TitleMenuFragment implements OnClickListener, 
                     }
                 }
             }
-            try {
-                refreshFragmentsScrollView(urls);
-            } catch (JSONException e) {
-                e.printStackTrace();
-            }
+            refreshFragmentsScrollView(urls);
         }
     }
 
@@ -293,7 +289,7 @@ public class PageFragment extends TitleMenuFragment implements OnClickListener, 
 
     }
 
-    private void refreshFragmentsScrollView(List<String> urls) throws JSONException {
+    private void refreshFragmentsScrollView(List<String> urls) {
         mViewPager = new ViewPager(mContext);
         PageFragmentPagerAdapter mFragmentAdapter = new PageFragmentPagerAdapter
                 (getChildFragmentManager());

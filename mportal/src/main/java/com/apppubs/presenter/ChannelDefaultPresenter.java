@@ -49,6 +49,9 @@ public class ChannelDefaultPresenter extends AbsPresenter<IChannelDefaultView> {
 
                     @Override
                     public void onDone(ArticlePageResult obj) {
+                        if (mView.isDestoryed()){
+                            return;//如果view已经被销毁则直接返回
+                        }
                         mTotalNum = obj.getTotalNum();
                         List<TNewsInfo> infos = TNewsInfo.createFrom(obj);
                         if (mPageNum == 1) {

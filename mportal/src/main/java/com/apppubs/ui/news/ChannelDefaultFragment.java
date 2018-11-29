@@ -206,6 +206,11 @@ public class ChannelDefaultFragment extends ChannelFragment implements OnClickLi
         }
     }
 
+    @Override
+    public boolean isDestoryed() {
+        return mCommonLv==null;
+    }
+
     private class MyListAdapter extends BaseAdapter {
 
         @Override
