@@ -138,7 +138,7 @@ public class VatRecogActivity extends BaseActivity {
 
     private void initOCR() {
         //1.设置授权名称
-        VatConstantUtil.setUserId("1D06FE3623544DC2D3A0");
+        VatConstantUtil.setUserId("8BC84A9E4839C7C03BD6");
         UserID = VatConstantUtil.getUserId();
         //2.将授权文件写入到手机目录中，初始化核心必要操作
         try {
