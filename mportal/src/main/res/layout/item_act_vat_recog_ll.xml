@@ -1,25 +1,29 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:layout_height="wrap_content"
     android:orientation="horizontal"
     android:paddingLeft="@dimen/app_padding_left"
     android:paddingRight="@dimen/app_padding_right"
-    android:paddingTop="10dp"
+    android:background="@drawable/underline"
     >
     <TextView
         android:id="@+id/item_act_vat_recog_tv"
         android:layout_width="90dp"
-        android:layout_height="match_parent"
+        android:layout_height="50dp"
         android:text="标签"
         android:textSize="@dimen/item_text_size"
         android:textColor="@color/common_text"
+        android:gravity="center_vertical"
         />
     <EditText
         android:id="@+id/item_act_vat_recog_et"
         android:layout_weight="1"
         android:layout_width="0dp"
         android:layout_height="match_parent"
+        android:textColor="@color/common_text"
+        android:background="@null"
+        android:gravity="center_vertical"
         android:textSize="@dimen/item_text_size"
         />
 </LinearLayout>

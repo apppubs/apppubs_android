@@ -56,9 +56,7 @@ public class VatRecogActivity extends BaseActivity {
     //    private ArrayList<String> mResultList = null;
     private Map<String, String> mResultMap;
     private Bitmap compsBmp;
-    private String fileImgPath;
     private File tempImgFile;
-    private String imgFile;
 
     private int type;
 
@@ -175,7 +173,7 @@ public class VatRecogActivity extends BaseActivity {
                 compsBmp = BitmapFactory.decodeFile(tempImgFile.getPath(), options);
 
                 FileOutputStream fos = null;
-                imgFile = Environment.getExternalStorageDirectory()
+                String imgFile = Environment.getExternalStorageDirectory()
                         + "/alpha/VinCode/" + VatImgFileNameUtil.pictureName("VAT") + ".jpg";
                 try {
                     fos = new FileOutputStream(imgFile);
@@ -193,52 +191,11 @@ public class VatRecogActivity extends BaseActivity {
                         e.printStackTrace();
                     }
                 }
+                recognize(imgFile);
             } else {
                 tempImgFile.delete();
                 finish();
                 return;
-            }
-
-            try {
-                progress = ProgressDialog.show(this, "", "正在识别...");
-                new Thread(new Runnable() {
-                    @Override
-                    public void run() {
-                        //导入图像识别接口
-                        final int nRet = eiapi.EIRecognizeImagePath(imgFile);
-                        runOnUiThread(new Runnable() {
-                            @Override
-                            public void run() {
-                                List mResultList = new ArrayList<>();
-                                // 0 ：代表识别成功
-                                if (nRet == 0) {
-                                    for (int i = 1; i < 18; i++) {
-                                        //将识别完成后，获取识别结果，添加到集合中
-                                        mResultList.add(eiapi.EIGetResult(i));
-                                    }
-                                    String fplx = eiapi.EIGetResult(18);
-                                    if (fplx.equals("0")) {
-                                        mResultList.add("解析失败");
-                                    } else if (fplx.equals("1")) {
-                                        mResultList.add("专票");
-                                    } else if (fplx.equals("4")) {
-                                        mResultList.add("普票");
-                                    } else if (fplx.equals("10")) {
-                                        mResultList.add("电子普通发票");
-                                    }
-                                    mResultMap = convert2Map(mResultList);
-                                    displayResult();
-                                } else {
-                                    finishActivity(nRet, null);
-                                }
-                                if (progress != null) progress.dismiss();
-                            }
-                        });
-
-                    }
-                }).start();
-            } catch (Exception e) {
-                e.printStackTrace();
             }
         } else if (requestCode == REQUEST_CODE_GET_IMG_FROM_GALLERY) {
             if (data == null) {
@@ -257,48 +214,56 @@ public class VatRecogActivity extends BaseActivity {
             } else {
                 filePath = imageFileUri.getPath();
             }
-            fileImgPath = filePath;
-            List mResultList = new ArrayList<>();
-            mResultMap = new HashMap<>();
-            if (eiapi != null) {
-                progress = ProgressDialog.show(VatRecogActivity.this, "", "正在识别...");
-                new Thread(new Runnable() {
-                    @Override
-                    public void run() {
-                        //导入图像识别接口
-                        final int nRet = eiapi.EIRecognizeImagePath(fileImgPath);
-                        runOnUiThread(new Runnable() {
-                            @Override
-                            public void run() {
-                                // 0 ：代表识别成功
-                                if (nRet == 0) {
-                                    for (int i = 1; i < 18; i++) {
-                                        //将识别完成后，获取识别结果，添加到集合中
-                                        mResultList.add(eiapi.EIGetResult(i));
-                                    }
-                                    String fplx = eiapi.EIGetResult(18);
-                                    if (fplx.equals("0")) {
-                                        mResultList.add("解析失败");
-                                    } else if (fplx.equals("1")) {
-                                        mResultList.add("专票");
-                                    } else if (fplx.equals("4")) {
-                                        mResultList.add("普票");
-                                    } else if (fplx.equals("10")) {
-                                        mResultList.add("电子普通发票");
-                                    }
-                                    mResultMap = convert2Map(mResultList);
-                                    displayResult();
-                                } else {
-                                    finishActivity(nRet, null);
-                                }
-                                if (progress != null) progress.dismiss();
-                            }
-                        });
 
-                    }
-                }).start();
+            if (eiapi != null) {
+                recognize(filePath);
             }
 
+        }
+    }
+
+    private void recognize(String filePath) {
+        try {
+            progress = ProgressDialog.show(this, "", "正在识别...");
+            new Thread(new Runnable() {
+                @Override
+                public void run() {
+                    //导入图像识别接口
+                    final int nRet = eiapi.EIRecognizeImagePath(filePath);
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            List mResultList = new ArrayList<>();
+                            // 0 ：代表识别成功
+                            if (nRet == 0) {
+                                for (int i = 1; i < 18; i++) {
+                                    //将识别完成后，获取识别结果，添加到集合中
+                                    mResultList.add(eiapi.EIGetResult(i));
+                                }
+                                String fplx = eiapi.EIGetResult(18);
+                                if (fplx.equals("0")) {
+                                    mResultList.add("解析失败");
+                                } else if (fplx.equals("1")) {
+                                    mResultList.add("专票");
+                                } else if (fplx.equals("4")) {
+                                    mResultList.add("普票");
+                                } else if (fplx.equals("10")) {
+                                    mResultList.add("电子发票");
+                                }
+
+                                mResultMap = convert2Map(mResultList);
+                                displayResult();
+                            } else {
+                                finishActivity(nRet, null);
+                            }
+                            if (progress != null) progress.dismiss();
+                        }
+                    });
+
+                }
+            }).start();
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 
